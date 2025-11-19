@@ -7,9 +7,14 @@ on:
   workflow_dispatch:  # Allow manual triggering
 
 jobs:
+  cucumber-tests:
+    name: Run Cucumber Tests and Generate Screenshots
+    uses: ./.github/workflows/cucumber_tests.yml
+
   deploy-android:
     name: Deploy Android to Play Store
     runs-on: ubuntu-latest
+    needs: cucumber-tests
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -17,7 +22,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.9.2'
+          flutter-version: '3.38'
           channel: 'stable'
 
       - name: Setup Ruby
@@ -30,6 +35,13 @@ jobs:
         run: |
           flutter pub get
           bundle install
+
+      - name: Download screenshots from tests
+        uses: actions/download-artifact@v4
+        with:
+          name: test-screenshots
+          path: fastlane/screenshots/
+          if-no-files-found: warn
 
       - name: Setup Google Play Service Account
         run: |

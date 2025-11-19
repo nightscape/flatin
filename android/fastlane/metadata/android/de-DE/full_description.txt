@@ -1,0 +1,12 @@
+Latein Practice ist eine Lern-App zum Üben lateinischer Vokabeln, Deklinationen und Konjugationen.
+
+Mit dieser App kannst du:
+• Lateinische Nomen deklinieren üben
+• Lateinische Verben konjugieren üben
+• Wortklassifikation trainieren
+• Deinen Lernfortschritt mit dem FSRS-Algorithmus (Free Spaced Repetition Scheduler) verfolgen
+
+Die App verwendet intelligente Wiederholungsplanung, um dir zu helfen, lateinische Grammatik effektiv zu lernen und zu behalten. Alle Daten werden lokal auf deinem Gerät gespeichert - keine Internetverbindung erforderlich.
+
+Perfekt für Schüler, Studenten und alle, die ihre Lateinkenntnisse verbessern möchten.
+

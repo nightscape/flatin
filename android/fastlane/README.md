@@ -31,6 +31,22 @@ Build the Android release APK
 
 Build the Android App Bundle (AAB) for Play Store
 
+### android screenshots
+
+```sh
+[bundle exec] fastlane android screenshots
+```
+
+Run integration tests and collect screenshots
+
+### android cucumber_tests
+
+```sh
+[bundle exec] fastlane android cucumber_tests
+```
+
+Run Cucumber tests and collect screenshots
+
 ### android internal
 
 ```sh

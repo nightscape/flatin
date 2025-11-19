@@ -1,0 +1,60 @@
+{
+  "app": {
+    "title": "Latein Übung"
+  },
+  "home": {
+    "nouns": "Nomen (Deklination)",
+    "verbs": "Verben (Konjugation)",
+    "wordClassification": "Wortklassifikation",
+    "due": "fällig",
+    "error": "Fehler: {error}",
+    "noData": "Keine Daten verfügbar"
+  },
+  "practice": {
+    "translation": "Übersetzung:",
+    "check": "prüfen",
+    "hide": "verstecken",
+    "howWellDidYouKnow": "Wie gut kanntest du das?",
+    "rating": {
+      "again": "Nochmal",
+      "hard": "Schwer",
+      "good": "Gut",
+      "easy": "Einfach"
+    }
+  },
+  "settings": {
+    "title": "Einstellungen",
+    "enableAll": "Alle aktivieren",
+    "nouns": "Nomen (Deklination)",
+    "verbs": "Verben (Konjugation)",
+    "error": "Fehler: {error}"
+  },
+  "wordClassification": {
+    "declension": "Deklination",
+    "conjugation": "Konjugation",
+    "noWordsAvailable": "Keine Wörter verfügbar",
+    "addCombination": "Kombination hinzufügen",
+    "allCorrectCombinations": "Alle richtigen Kombinationen:",
+    "correct": "Richtig!",
+    "partiallyCorrect": "Teilweise richtig",
+    "incorrect": "Falsch. Versuche es erneut!",
+    "howWellDidYouKnow": "Wie gut kanntest du das?",
+    "check": "Prüfen",
+    "nextWord": "Nächstes Wort",
+    "rating": {
+      "again": "Nochmal",
+      "hard": "Schwer",
+      "good": "Gut",
+      "easy": "Einfach"
+    }
+  },
+  "drawer": {
+    "title": "Latein Übung",
+    "nouns": "Nomen (Deklination)",
+    "verbs": "Verben (Konjugation)",
+    "wordClassification": "Wortklassifikation",
+    "settings": "Einstellungen",
+    "errorLoadingData": "Fehler beim Laden der Daten"
+  }
+}
+

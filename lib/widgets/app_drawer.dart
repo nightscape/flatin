@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import '../screens/practice_screen.dart';
 import '../screens/word_classification_screen.dart';
 import '../screens/settings_screen.dart';
@@ -11,13 +12,13 @@ Widget buildAppDrawer(BuildContext context) {
     child: ListView(
       padding: EdgeInsets.zero,
       children: [
-        const DrawerHeader(
-          decoration: BoxDecoration(
+        DrawerHeader(
+          decoration: const BoxDecoration(
             color: Color(0xFFD0D0D0),
           ),
           child: Text(
-            'Latin Practice',
-            style: TextStyle(
+            FlutterI18n.translate(context, 'drawer.title'),
+            style: const TextStyle(
               color: Colors.black,
               fontSize: 28,
               fontWeight: FontWeight.bold,
@@ -25,10 +26,11 @@ Widget buildAppDrawer(BuildContext context) {
           ),
         ),
         ListTile(
+          key: const Key('drawer.nouns'),
           leading: const Icon(Icons.book, color: Colors.black),
-          title: const Text(
-            'Nomen (Deklination)',
-            style: TextStyle(color: Colors.black, fontSize: 18),
+          title: Text(
+            FlutterI18n.translate(context, 'drawer.nouns'),
+            style: const TextStyle(color: Colors.black, fontSize: 18),
           ),
           onTap: () {
             Navigator.pop(context);
@@ -43,8 +45,12 @@ Widget buildAppDrawer(BuildContext context) {
                       );
                     }
                     if (snapshot.hasError || !snapshot.hasData || snapshot.data!.isEmpty) {
-                      return const Scaffold(
-                        body: Center(child: Text('Error loading data')),
+                      return Scaffold(
+                        body: Center(
+                          child: Text(
+                            FlutterI18n.translate(context, 'drawer.errorLoadingData'),
+                          ),
+                        ),
                       );
                     }
                     return PracticeScreen(item: snapshot.data!.first);
@@ -55,10 +61,11 @@ Widget buildAppDrawer(BuildContext context) {
           },
         ),
         ListTile(
+          key: const Key('drawer.verbs'),
           leading: const Icon(Icons.auto_stories, color: Colors.black),
-          title: const Text(
-            'Verben (Konjugation)',
-            style: TextStyle(color: Colors.black, fontSize: 18),
+          title: Text(
+            FlutterI18n.translate(context, 'drawer.verbs'),
+            style: const TextStyle(color: Colors.black, fontSize: 18),
           ),
           onTap: () {
             Navigator.pop(context);
@@ -73,8 +80,12 @@ Widget buildAppDrawer(BuildContext context) {
                       );
                     }
                     if (snapshot.hasError || !snapshot.hasData || snapshot.data!.isEmpty) {
-                      return const Scaffold(
-                        body: Center(child: Text('Error loading data')),
+                      return Scaffold(
+                        body: Center(
+                          child: Text(
+                            FlutterI18n.translate(context, 'drawer.errorLoadingData'),
+                          ),
+                        ),
                       );
                     }
                     return PracticeScreen(item: snapshot.data!.first);
@@ -85,10 +96,11 @@ Widget buildAppDrawer(BuildContext context) {
           },
         ),
         ListTile(
+          key: const Key('drawer.wordClassification'),
           leading: const Icon(Icons.category, color: Colors.black),
-          title: const Text(
-            'Wortklassifikation',
-            style: TextStyle(color: Colors.black, fontSize: 18),
+          title: Text(
+            FlutterI18n.translate(context, 'drawer.wordClassification'),
+            style: const TextStyle(color: Colors.black, fontSize: 18),
           ),
           onTap: () {
             Navigator.pop(context);
@@ -101,10 +113,11 @@ Widget buildAppDrawer(BuildContext context) {
         ),
         const Divider(),
         ListTile(
+          key: const Key('drawer.settings'),
           leading: const Icon(Icons.settings, color: Colors.black),
-          title: const Text(
-            'Einstellungen',
-            style: TextStyle(color: Colors.black, fontSize: 18),
+          title: Text(
+            FlutterI18n.translate(context, 'drawer.settings'),
+            style: const TextStyle(color: Colors.black, fontSize: 18),
           ),
           onTap: () {
             Navigator.pop(context);

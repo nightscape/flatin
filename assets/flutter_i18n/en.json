@@ -1,0 +1,60 @@
+{
+  "app": {
+    "title": "Latin Practice"
+  },
+  "home": {
+    "nouns": "Nouns (Deklination)",
+    "verbs": "Verbs (Konjugation)",
+    "wordClassification": "Word Classification",
+    "due": "due",
+    "error": "Error: {error}",
+    "noData": "No data available"
+  },
+  "practice": {
+    "translation": "Translation:",
+    "check": "check",
+    "hide": "hide",
+    "howWellDidYouKnow": "How well did you know this?",
+    "rating": {
+      "again": "Again",
+      "hard": "Hard",
+      "good": "Good",
+      "easy": "Easy"
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "enableAll": "Enable All",
+    "nouns": "Nouns (Deklination)",
+    "verbs": "Verbs (Konjugation)",
+    "error": "Error: {error}"
+  },
+  "wordClassification": {
+    "declension": "Deklination",
+    "conjugation": "Konjugation",
+    "noWordsAvailable": "No words available",
+    "addCombination": "Add Combination",
+    "allCorrectCombinations": "All correct combinations:",
+    "correct": "Correct!",
+    "partiallyCorrect": "Partially correct",
+    "incorrect": "Incorrect. Try again!",
+    "howWellDidYouKnow": "How well did you know this?",
+    "check": "Check",
+    "nextWord": "Next Word",
+    "rating": {
+      "again": "Again",
+      "hard": "Hard",
+      "good": "Good",
+      "easy": "Easy"
+    }
+  },
+  "drawer": {
+    "title": "Latin Practice",
+    "nouns": "Nouns (Deklination)",
+    "verbs": "Verbs (Konjugation)",
+    "wordClassification": "Word Classification",
+    "settings": "Settings",
+    "errorLoadingData": "Error loading data"
+  }
+}
+

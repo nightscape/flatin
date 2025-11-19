@@ -1,4 +1,4 @@
-package dev.mauch.latin_practice
+package dev.mauch.flatin
 
 import io.flutter.embedding.android.FlutterActivity
 

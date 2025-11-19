@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:fsrs/fsrs.dart';
 import '../models/practice_item.dart';
 import '../providers/practice_providers.dart';
@@ -190,9 +191,9 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
                         if (state.isTranslationVisible)
                           Expanded(
                             flex: 1,
-                            child: const Text(
-                              'Translation:',
-                              style: TextStyle(
+                            child: Text(
+                              FlutterI18n.translate(context, 'practice.translation'),
+                              style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
                                 decoration: TextDecoration.underline,
@@ -385,9 +386,9 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
             child: _showRatingButtons && state.isChecked
                 ? Column(
                     children: [
-                      const Text(
-                        'How well did you know this?',
-                        style: TextStyle(
+                      Text(
+                        FlutterI18n.translate(context, 'practice.howWellDidYouKnow'),
+                        style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                           color: Colors.black,
@@ -397,17 +398,29 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          _buildRatingButton(Rating.again, 'Again', Colors.red),
+                          _buildRatingButton(
+                            Rating.again,
+                            FlutterI18n.translate(context, 'practice.rating.again'),
+                            Colors.red,
+                          ),
                           const SizedBox(width: 8),
                           _buildRatingButton(
                             Rating.hard,
-                            'Hard',
+                            FlutterI18n.translate(context, 'practice.rating.hard'),
                             Colors.orange,
                           ),
                           const SizedBox(width: 8),
-                          _buildRatingButton(Rating.good, 'Good', Colors.green),
+                          _buildRatingButton(
+                            Rating.good,
+                            FlutterI18n.translate(context, 'practice.rating.good'),
+                            Colors.green,
+                          ),
                           const SizedBox(width: 8),
-                          _buildRatingButton(Rating.easy, 'Easy', Colors.blue),
+                          _buildRatingButton(
+                            Rating.easy,
+                            FlutterI18n.translate(context, 'practice.rating.easy'),
+                            Colors.blue,
+                          ),
                         ],
                       ),
                     ],
@@ -416,6 +429,7 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       ElevatedButton(
+                        key: const Key('practice.check.button'),
                         onPressed: state.isChecked
                             ? _hideAnswers
                             : _checkAnswers,
@@ -432,7 +446,9 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
                           ),
                         ),
                         child: Text(
-                          state.isChecked ? 'hide' : 'check',
+                          state.isChecked
+                              ? FlutterI18n.translate(context, 'practice.hide')
+                              : FlutterI18n.translate(context, 'practice.check'),
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -449,7 +465,9 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
 
   Widget _buildRatingButton(Rating rating, String label, Color color) {
     final isSuggested = rating == _suggestedRating;
+    final key = Key('rating.${rating.name}');
     return ElevatedButton(
+      key: key,
       onPressed: () => _rateCard(rating),
       style: ElevatedButton.styleFrom(
         backgroundColor: isSuggested ? color : const Color(0xFFD0D0D0),

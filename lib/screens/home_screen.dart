@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import '../widgets/app_drawer.dart';
 import '../data/practice_data.dart';
 import '../models/practice_item.dart';
@@ -18,9 +19,10 @@ class HomeScreen extends ConsumerWidget {
       appBar: AppBar(
         backgroundColor: const Color(0xFFE5E5E5),
         elevation: 0,
-        title: const Text(
-          'Latin Practice',
-          style: TextStyle(
+        title: Text(
+          key: const Key('app.title'),
+          FlutterI18n.translate(context, 'app.title'),
+          style: const TextStyle(
             color: Colors.black,
             fontSize: 24,
             fontWeight: FontWeight.bold,
@@ -44,10 +46,16 @@ class HomeScreen extends ConsumerWidget {
                     return const CircularProgressIndicator();
                   }
                   if (snapshot.hasError) {
-                    return Text('Error: ${snapshot.error}');
+                    return Text(
+                      FlutterI18n.translate(
+                        context,
+                        'home.error',
+                        translationParams: {'error': snapshot.error.toString()},
+                      ),
+                    );
                   }
                   if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return const Text('No data available');
+                    return Text(FlutterI18n.translate(context, 'home.noData'));
                   }
                   return Consumer(
                     builder: (context, ref, child) {
@@ -66,6 +74,7 @@ class HomeScreen extends ConsumerWidget {
                             width: double.infinity,
                             height: 80,
                             child: ElevatedButton(
+                              key: const Key('home.nouns.button'),
                               onPressed: () {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
@@ -85,16 +94,19 @@ class HomeScreen extends ConsumerWidget {
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  const Text(
-                                    'Nouns (Deklination)',
-                                    style: TextStyle(
+                                  Text(
+                                    FlutterI18n.translate(
+                                      context,
+                                      'home.nouns',
+                                    ),
+                                    style: const TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                   if (dueCount > 0)
                                     Text(
-                                      '$dueCount due',
+                                      '$dueCount ${FlutterI18n.translate(context, 'home.due')}',
                                       style: const TextStyle(
                                         fontSize: 12,
                                         fontWeight: FontWeight.normal,
@@ -109,6 +121,7 @@ class HomeScreen extends ConsumerWidget {
                           width: double.infinity,
                           height: 80,
                           child: ElevatedButton(
+                            key: const Key('home_nouns_button'),
                             onPressed: () {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
@@ -126,9 +139,9 @@ class HomeScreen extends ConsumerWidget {
                                 borderRadius: BorderRadius.circular(8),
                               ),
                             ),
-                            child: const Text(
-                              'Nouns (Deklination)',
-                              style: TextStyle(
+                            child: Text(
+                              FlutterI18n.translate(context, 'home.nouns'),
+                              style: const TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -139,6 +152,7 @@ class HomeScreen extends ConsumerWidget {
                           width: double.infinity,
                           height: 80,
                           child: ElevatedButton(
+                            key: const Key('home_nouns_button'),
                             onPressed: () {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
@@ -156,9 +170,9 @@ class HomeScreen extends ConsumerWidget {
                                 borderRadius: BorderRadius.circular(8),
                               ),
                             ),
-                            child: const Text(
-                              'Nouns (Deklination)',
-                              style: TextStyle(
+                            child: Text(
+                              FlutterI18n.translate(context, 'home.nouns'),
+                              style: const TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -184,10 +198,16 @@ class HomeScreen extends ConsumerWidget {
                     return const CircularProgressIndicator();
                   }
                   if (snapshot.hasError) {
-                    return Text('Error: ${snapshot.error}');
+                    return Text(
+                      FlutterI18n.translate(
+                        context,
+                        'home.error',
+                        translationParams: {'error': snapshot.error.toString()},
+                      ),
+                    );
                   }
                   if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return const Text('No data available');
+                    return Text(FlutterI18n.translate(context, 'home.noData'));
                   }
                   return Consumer(
                     builder: (context, ref, child) {
@@ -206,6 +226,7 @@ class HomeScreen extends ConsumerWidget {
                             width: double.infinity,
                             height: 80,
                             child: ElevatedButton(
+                              key: const Key('home.verbs.button'),
                               onPressed: () {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
@@ -225,16 +246,19 @@ class HomeScreen extends ConsumerWidget {
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  const Text(
-                                    'Verbs (Konjugation)',
-                                    style: TextStyle(
+                                  Text(
+                                    FlutterI18n.translate(
+                                      context,
+                                      'home.verbs',
+                                    ),
+                                    style: const TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                   if (dueCount > 0)
                                     Text(
-                                      '$dueCount due',
+                                      '$dueCount ${FlutterI18n.translate(context, 'home.due')}',
                                       style: const TextStyle(
                                         fontSize: 12,
                                         fontWeight: FontWeight.normal,
@@ -249,6 +273,7 @@ class HomeScreen extends ConsumerWidget {
                           width: double.infinity,
                           height: 80,
                           child: ElevatedButton(
+                            key: const Key('home.verbs.button'),
                             onPressed: () {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
@@ -266,9 +291,9 @@ class HomeScreen extends ConsumerWidget {
                                 borderRadius: BorderRadius.circular(8),
                               ),
                             ),
-                            child: const Text(
-                              'Verbs (Konjugation)',
-                              style: TextStyle(
+                            child: Text(
+                              FlutterI18n.translate(context, 'home.verbs'),
+                              style: const TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -279,6 +304,7 @@ class HomeScreen extends ConsumerWidget {
                           width: double.infinity,
                           height: 80,
                           child: ElevatedButton(
+                            key: const Key('home.verbs.button'),
                             onPressed: () {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
@@ -296,9 +322,9 @@ class HomeScreen extends ConsumerWidget {
                                 borderRadius: BorderRadius.circular(8),
                               ),
                             ),
-                            child: const Text(
-                              'Verbs (Konjugation)',
-                              style: TextStyle(
+                            child: Text(
+                              FlutterI18n.translate(context, 'home.verbs'),
+                              style: const TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -321,6 +347,7 @@ class HomeScreen extends ConsumerWidget {
                 width: double.infinity,
                 height: 80,
                 child: ElevatedButton(
+                  key: const Key('home.wordClassification.button'),
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
@@ -336,9 +363,12 @@ class HomeScreen extends ConsumerWidget {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  child: const Text(
-                    'Wortklassifikation',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  child: Text(
+                    FlutterI18n.translate(context, 'home.wordClassification'),
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),

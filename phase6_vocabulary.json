@@ -1,0 +1,1412 @@
+{
+  "success": true,
+  "totalCards": 156,
+  "extracted": 156,
+  "vocabulary": [
+    {
+      "cardId": "ad65362c-d9ac-46f1-825a-24d83511f0ca",
+      "question": "et",
+      "answer": "und; auch; sogar",
+      "questionExample": "",
+      "answerExample": "etiam",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "3f175748-cac5-44a6-9a70-9b7408ac8c00",
+      "question": "intrāre",
+      "answer": "eintreten, betreten",
+      "questionExample": "",
+      "answerExample": "E. entrance, enter; S. entrar; F. entrer",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "4ad9a7dd-16bb-4ea0-8e5a-aa9e7c351ebc",
+      "question": "ecce!",
+      "answer": "sieh da! schau!",
+      "questionExample": "",
+      "answerExample": "",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "a8a1ec0e-d929-437d-80a2-55dab8f3888f",
+      "question": "aedificāre",
+      "answer": "bauen, erbauen",
+      "questionExample": "",
+      "answerExample": "aedificium; I. edificare",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "3a7a99ed-cdc6-4855-80bd-005016d15708",
+      "question": "statua",
+      "answer": "das Standbild, die Statue",
+      "questionExample": "",
+      "answerExample": "statisch",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "e1ba528e-98c9-44e2-877b-63f7130b0360",
+      "question": "necāre",
+      "answer": "töten",
+      "questionExample": "",
+      "answerExample": "necāre, necō",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "1b02e686-b56c-40e6-bd9f-490d0065094a",
+      "question": "deus",
+      "answer": "der Gott, die Gottheit",
+      "questionExample": "",
+      "answerExample": "I. Dio; S. Dios; F. Dieu",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "f0e8c949-5490-4f10-807b-0b633e1a4c0a",
+      "question": "paulō post",
+      "answer": "bald darauf, etwas später",
+      "questionExample": "",
+      "answerExample": "(Adv.)",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "ea6b9eb3-8cb2-491c-bfe7-65f3a424d958",
+      "question": "Tartarus",
+      "answer": "die Unterwelt; der Tartarus",
+      "questionExample": "",
+      "answerExample": "Tartarus, ī m.",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "e547c06e-a0e4-48f0-971e-d2cf838c77f6",
+      "question": "vīlla",
+      "answer": "das Haus, Landhaus",
+      "questionExample": "",
+      "answerExample": "vīlla, ae f.</br></br>Villa; E. village; F. la ville",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "32c09ae5-ec08-4251-b9a6-7c090562f452",
+      "question": "etiam",
+      "answer": "<div>auch; sogar</div>",
+      "questionExample": "",
+      "answerExample": "",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "f3854d7d-3d83-4e83-a9eb-5bf8a82f14e8",
+      "question": "statim",
+      "answer": "sofort, auf der Stelle",
+      "questionExample": "",
+      "answerExample": "(Adv.)",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "f692afbd-d536-4d9a-bdc3-1a53db662011",
+      "question": "basilica",
+      "answer": "die Gerichtshalle, Markthalle",
+      "questionExample": "",
+      "answerExample": "Basilika",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "adde10f8-a754-474f-9d48-57298ee929a4",
+      "question": "tacēre",
+      "answer": "schweigen, still sein",
+      "questionExample": "",
+      "answerExample": "",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "23496b6d-315f-4655-bfa4-4a9d25076fe6",
+      "question": "decem",
+      "answer": "zehn",
+      "questionExample": "",
+      "answerExample": "dezimieren; S. diez",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "60c5853f-d252-4162-935e-a1c76a3599cb",
+      "question": "mē",
+      "answer": "mich",
+      "questionExample": "",
+      "answerExample": "(Akk.)",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "9ef3a470-fd00-433a-82a0-0b86377281fb",
+      "question": "perīculum",
+      "answer": "die Gefahr, das Abenteuer",
+      "questionExample": "",
+      "answerExample": "I. il pericolo",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "0a39f0d4-cd0d-441b-9ca2-2346e83e495f",
+      "question": "puella",
+      "answer": "das Mädchen, die junge Frau",
+      "questionExample": "",
+      "answerExample": "",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "b937f466-169f-4029-9c38-50d36a49268a",
+      "question": "porta",
+      "answer": "die Tür, das Tor, der Eingang",
+      "questionExample": "",
+      "answerExample": "porta, ae f.</br></br>Pforte, Portal; S. la puerta; F. la porte",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "1632e971-f2a9-4e2c-82f8-80cadf931dcd",
+      "question": "umbra",
+      "answer": "der Schatten",
+      "questionExample": "",
+      "answerExample": "umbra, ae f.</br></br>I. l’ombra; S. la sombra; F. l’ombre",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "1f3cd1d3-661e-4e93-b300-d0132042286e",
+      "question": "nōn",
+      "answer": "nicht",
+      "questionExample": "",
+      "answerExample": "",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "b3c05ac1-1251-49e9-bc33-a2a7bdf1ca8b",
+      "question": "certē",
+      "answer": "sicher, gewiss",
+      "questionExample": "",
+      "answerExample": "(Adv.)</br></br>E. certain; I. certo; F. certain",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "4fe53715-4114-44ad-b12d-d4d6f71905cc",
+      "question": "explicāre",
+      "answer": "erklären, darlegen",
+      "questionExample": "",
+      "answerExample": "S. explicar; F. expliquer",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "209745f1-bd11-4db4-bdca-d81e8737e987",
+      "question": "hīc",
+      "answer": "hier",
+      "questionExample": "",
+      "answerExample": "(Adv.)",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "ad431325-ff45-4071-abd3-e384a2775640",
+      "question": "dēlectāre",
+      "answer": "(jmd.) erfreuen, unterhalten",
+      "questionExample": "",
+      "answerExample": "E. delight; S. la delectación",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "66902a57-0bd1-4eb7-9a92-7e1f5cd879b3",
+      "question": "sedēre<br>",
+      "answer": "sitzen",
+      "questionExample": "",
+      "answerExample": "<div>sedēre, sedeō</div><div><br></div><div>E. session</div>",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "28ccb48a-7025-4076-b01c-2864e1c41623",
+      "question": "hūc",
+      "answer": "hier(her)",
+      "questionExample": "",
+      "answerExample": "(Adv.)",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "d278f3d2-3fa7-444b-a1ff-acc3ced44946",
+      "question": "imprīmīs",
+      "answer": "vor allem, besonders",
+      "questionExample": "",
+      "answerExample": "(Adv.)",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "f1b03868-aee9-4172-8fff-2863447b0c89",
+      "question": "nunc",
+      "answer": "jetzt, nun",
+      "questionExample": "",
+      "answerExample": "(Adv.)",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "f918c954-1915-4f3a-b09c-72995ffa844b",
+      "question": "ergō",
+      "answer": "also, folglich",
+      "questionExample": "",
+      "answerExample": "(Adv.)",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "544b265a-eb54-4925-beea-afd677feacd5",
+      "question": "iam",
+      "answer": "schon, bereits; jetzt",
+      "questionExample": "",
+      "answerExample": "(Adv.)",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "16d9023c-8e4e-472d-9e0c-92f2723983a5",
+      "question": "placēre",
+      "answer": "gefallen",
+      "questionExample": "",
+      "answerExample": "E. please; I. piacere; S. placer",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "97bc660c-8ec8-43ed-b79e-fcf878e35e88",
+      "question": "venīre",
+      "answer": "kommen",
+      "questionExample": "",
+      "answerExample": "",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "b783457e-f943-44d0-84b7-494a35ea3b72",
+      "question": "sed",
+      "answer": "aber, sondern",
+      "questionExample": "",
+      "answerExample": "",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "daaf64de-49c5-4587-9d7a-466a724a203f",
+      "question": "aedificium",
+      "answer": "das Gebäude, Bauwerk",
+      "questionExample": "",
+      "answerExample": "F. l’édifice",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "6fdd780c-54e8-4722-9a2a-f077701ff7a0",
+      "question": "appārēre<br>",
+      "answer": "erscheinen, auftauchen, sich zeigen",
+      "questionExample": "",
+      "answerExample": "<div>appārēre, appāreō</div><div><br></div><div>E. (dis)appear ; S. aparecer</div>",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "97ad1114-ae9f-4945-bf6b-197b1e34ac7f",
+      "question": "equus",
+      "answer": "das Pferd",
+      "questionExample": "",
+      "answerExample": "",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "ca047c3a-1d49-4b98-8c09-26c060382676",
+      "question": "cūrāre",
+      "answer": "sorgen (für), sich kümmern (um)",
+      "questionExample": "",
+      "answerExample": "<div>cūrāre, cūrō</div><div><br></div><div>kurieren, Kur; S. curar</div>",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "195d6dbc-25d0-4942-83a7-75167a7db58d",
+      "question": "incendium",
+      "answer": "der Brand",
+      "questionExample": "",
+      "answerExample": "I. l’incendio; S. el incendio; F. l’incendie",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "7c834266-f928-4efe-939c-8e3de9b01bee",
+      "question": "temptāre",
+      "answer": "angreifen; versuchen, prüfen",
+      "questionExample": "",
+      "answerExample": "temptāre, temptō</br></br>E. attempt; I. tentare; S. tentar",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "675fba10-913f-4e6e-9b27-b3eb79c86e9e",
+      "question": "est",
+      "answer": "er, sie, es ist",
+      "questionExample": "",
+      "answerExample": "",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "16e37017-0029-4c9b-b101-3fb0cbc246e0",
+      "question": "tandem",
+      "answer": "endlich, schließlich",
+      "questionExample": "",
+      "answerExample": "(Adv.)",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "dc5e8c61-ceca-4ff6-8026-2695897b263c",
+      "question": "cēnāre",
+      "answer": "speisen, essen",
+      "questionExample": "",
+      "answerExample": "I. cenare; S. cenar",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "35c282b5-0d65-4679-8fbb-fcab12e2ce50",
+      "question": "saepe",
+      "answer": "oft",
+      "questionExample": "",
+      "answerExample": "(Adv.)",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "95798a66-5224-48fd-9261-a6a3bb4e3b68",
+      "question": "sunt",
+      "answer": "sie sind",
+      "questionExample": "",
+      "answerExample": "",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "8abb8a77-f874-4944-8858-1632000fd850",
+      "question": "amīcus",
+      "answer": "der Freund",
+      "questionExample": "",
+      "answerExample": "I. l’amico; S. el amigo; F. l’ami",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "632ae0c7-fb64-42d7-ad19-6a6a5e457786",
+      "question": "vīnum",
+      "answer": "der Wein",
+      "questionExample": "",
+      "answerExample": "E. wine; I. il vino; S. el vino; F. le vin",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "66aef8ec-7aed-4f82-b82b-cfc80fc37bcd",
+      "question": "pūgnāre",
+      "answer": "kämpfen, streiten",
+      "questionExample": "",
+      "answerExample": "pūgnāre, pūgnō",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "f6dc6ea8-17bc-4178-99cf-6ff1a217da58",
+      "question": "sacrificāre",
+      "answer": "opfern",
+      "questionExample": "",
+      "answerExample": "sacrificāre, sacrificō</br></br>E. sacrifice",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "52d761d0-2bea-405a-b0d5-7b13b0d14689",
+      "question": "tē",
+      "answer": "dich",
+      "questionExample": "",
+      "answerExample": "(Akk.)",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "d463f196-d279-4928-91f0-4205c0173649",
+      "question": "fīlia",
+      "answer": "die Tochter",
+      "questionExample": "",
+      "answerExample": "Filiale; I. la figlia; F. la fille",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "4e354c84-3b8d-46e1-b589-de6c686b8b76",
+      "question": "serva",
+      "answer": "die Sklavin",
+      "questionExample": "",
+      "answerExample": "",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "87926bdb-dcef-4e75-bc12-bfa36e514e5a",
+      "question": "cōnsilium habēre",
+      "answer": "eine Beratung abhalten, sich beraten",
+      "questionExample": "",
+      "answerExample": "",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "f237493a-1a3b-4920-8c14-156559a3a994",
+      "question": "monumentum",
+      "answer": "das Denkmal",
+      "questionExample": "",
+      "answerExample": "monumental; E. monument; I. il monumento; S. el monumento; F. le monument",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "661cd7d6-5562-496c-a6fb-9b384099d324",
+      "question": "taberna",
+      "answer": "der Laden, das Wirtshaus",
+      "questionExample": "",
+      "answerExample": "Taverne",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "ee9b0985-9e73-4877-b83d-6a2dc80b0b83",
+      "question": "autem",
+      "answer": "aber",
+      "questionExample": "(nachgestellt)",
+      "answerExample": "",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "229e477c-016a-44da-bb99-79f2e0867850",
+      "question": "itaque",
+      "answer": "daher, deshalb",
+      "questionExample": "",
+      "answerExample": "",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "ccf45408-296f-4674-86a0-ea3488624b08",
+      "question": "sex",
+      "answer": "sechs",
+      "questionExample": "",
+      "answerExample": "E. six; I. sei; S. seis; F. six",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "90371106-de83-4e90-a094-b049dc907874",
+      "question": "spectāculum",
+      "answer": "das Schauspiel",
+      "questionExample": "",
+      "answerExample": "spectāre; Spektakel, spektakulär",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "5928f721-7bbc-423f-aad9-936ab3cc3336",
+      "question": "tibi",
+      "answer": "dir",
+      "questionExample": "",
+      "answerExample": "(Dat.)",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "d6ece52a-5cd7-4144-9dfe-f9ca86d5cabf",
+      "question": "appropinquāre",
+      "answer": "sich nähern, herankommen",
+      "questionExample": "",
+      "answerExample": "",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "78a64ae4-9a24-493c-93df-f15d85edee1e",
+      "question": "dominus",
+      "answer": "der Herr, Hausherr",
+      "questionExample": "",
+      "answerExample": "",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "a11cf069-8c91-4f58-b845-c98192263dcc",
+      "question": "tabula",
+      "answer": "die Tafel, Schreibtafel",
+      "questionExample": "",
+      "answerExample": "E. table; I. la tavola; S. la tabla; F. la table",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "0b56de5f-c0ea-4933-8a65-e39fe16bfd26",
+      "question": "arēna",
+      "answer": "der Sand; die Arena, der Kampfplatz",
+      "questionExample": "",
+      "answerExample": "",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "14f1dfe9-09f9-4c23-8d2c-1c47e90f4955",
+      "question": "nōn iam",
+      "answer": "nicht mehr",
+      "questionExample": "",
+      "answerExample": "(Adv.)</br></br>nōn, iam",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "393424ed-d14e-44e7-a632-97775b53ff53",
+      "question": "convenīre",
+      "answer": "zusammenkommen, sich versammeln",
+      "questionExample": "",
+      "answerExample": "convenīre, conveniō</br></br>venīre; Konvent",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "21bbb668-9e42-45b5-a7c4-cef9f85718f7",
+      "question": "sapientia",
+      "answer": "die Weisheit, Klugheit",
+      "questionExample": "",
+      "answerExample": "",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "c3e2b74d-50f5-4689-bcc9-e8136521a55e",
+      "question": "turba",
+      "answer": "die Menschenmenge; die Unordnung; der Lärm",
+      "questionExample": "",
+      "answerExample": "turbulent",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "2d61e297-38cb-4451-8087-25ae7dc319ec",
+      "question": "manēre",
+      "answer": "bleiben, warten; erwarten",
+      "questionExample": "",
+      "answerExample": "manēre, maneō</br></br>permanent",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "9eff8d9e-86c7-43d8-addb-3ba6b8a581a6",
+      "question": "servīre",
+      "answer": "dienen",
+      "questionExample": "",
+      "answerExample": "servīre, serviō</br></br>servus; S./F. servir",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "4553b101-4a50-445e-8cbe-97eb8c8d842f",
+      "question": "diū",
+      "answer": "lange, lange Zeit",
+      "questionExample": "",
+      "answerExample": "(Adv.)",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "41ace909-3cbc-464e-a183-8784b8301976",
+      "question": "ambulāre",
+      "answer": "gehen, spazieren gehen",
+      "questionExample": "",
+      "answerExample": "Ambulanz; E. ambulance; S. l’ambulancia",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "5b773626-b3b1-4e65-a29b-d0591eeba3b8",
+      "question": "subitō",
+      "answer": "plötzlich",
+      "questionExample": "",
+      "answerExample": "(Adv.)</br></br>I. subito; S. súbito",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "d6c16ab5-e0b3-4604-9fcc-963575fd9eb0",
+      "question": "forum",
+      "answer": "der Marktplatz (das Forum)",
+      "questionExample": "",
+      "answerExample": "",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "deb451cc-c90a-435b-b39e-80e3e6eacd35",
+      "question": "lūdus",
+      "answer": "das Spiel, Schauspiel; die Schule",
+      "questionExample": "",
+      "answerExample": "",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "a4d7e0e0-6416-4ad6-bb6e-45c847cbef80",
+      "question": "Rōmānus",
+      "answer": "der Römer",
+      "questionExample": "",
+      "answerExample": "",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "88e0b883-9dd0-48e0-b3ae-b5db3c4dfe68",
+      "question": "dea",
+      "answer": "die Göttin",
+      "questionExample": "",
+      "answerExample": "deus",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "77e43183-ea4b-47cb-a339-7cb9b1297d2e",
+      "question": "hostia",
+      "answer": "das Opfer, Opfertier",
+      "questionExample": "",
+      "answerExample": "Hostie",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "1849777c-1a2a-4f9c-a1e2-1878add2f577",
+      "question": "perīculum prohibēre",
+      "answer": "eine Gefahr abwenden",
+      "questionExample": "",
+      "answerExample": "",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "a34c6846-d642-4c00-a172-e8276e1e8434",
+      "question": "mōnstrum",
+      "answer": "das Ungeheuer",
+      "questionExample": "",
+      "answerExample": "mōnstrum, ī n.</br></br>Monster, monströs",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "124e6d89-75e4-44be-a361-2588b585a247",
+      "question": "servus",
+      "answer": "der Sklave",
+      "questionExample": "",
+      "answerExample": "Servus!",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "86466079-647c-41fb-bc3f-3ef70445ad57",
+      "question": "hortus",
+      "answer": "der Garten",
+      "questionExample": "",
+      "answerExample": "",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "53d494ec-116a-4ae9-94ad-4cb2e781b2fe",
+      "question": "labōrāre",
+      "answer": "arbeiten, sich anstrengen",
+      "questionExample": "",
+      "answerExample": "Labor",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "0a74f238-5af8-4e19-a3de-ecbc442db647",
+      "question": "rogāre",
+      "answer": "fragen; bitten",
+      "questionExample": "",
+      "answerExample": "S. rogar",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "94496eee-51ad-46da-af62-1f63700d501d",
+      "question": "portāre",
+      "answer": "tragen, bringen",
+      "questionExample": "",
+      "answerExample": "transportieren; F. porter",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "7f16ee33-962a-4562-8169-db3adfbbd74b",
+      "question": "quattuor",
+      "answer": "vier",
+      "questionExample": "",
+      "answerExample": "I. quattro; S. cuatro; F. quatre",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "2cee89f9-cb0c-4f28-a9dd-dfd2a6467e7d",
+      "question": "amāre<br>",
+      "answer": "lieben, gern haben",
+      "questionExample": "",
+      "answerExample": "<div>amāre, amō</div><div><br></div><div>Amateur; I. amare; S. amar; F. aimer</div>",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "1b2c8a9f-0c94-4d01-9cb9-bd1c91bd6a1b",
+      "question": "populus",
+      "answer": "das Volk",
+      "questionExample": "",
+      "answerExample": "populär; E. people; S. el pueblo; F. le peuple",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "00317648-ea60-4dac-ace9-20b75cf29190",
+      "question": "imperāre",
+      "answer": "befehlen, (be)herrschen",
+      "questionExample": "",
+      "answerExample": "imperāre, imperō</br></br>Imperativ; I. imperare; S. imperar",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "8d197f0d-78c9-4952-9ecd-073b0fffc2de",
+      "question": "verbum",
+      "answer": "das Wort",
+      "questionExample": "",
+      "answerExample": "verbum, ī n.</br></br>Verb, verbal",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "09f96029-a8fc-4285-838c-06b42b29255d",
+      "question": "salūtāre",
+      "answer": "grüßen, begrüßen",
+      "questionExample": "",
+      "answerExample": "salutieren; E. salute; S. saludar",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "e305b8b6-a0c4-4d61-9bb9-d964d2c460b4",
+      "question": "clāmāre",
+      "answer": "rufen, schreien",
+      "questionExample": "",
+      "answerExample": "Reklame, Klamauk; S. clamar",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "99ea15c5-cdae-43d9-bcbc-1b606abaa837",
+      "question": "cūria",
+      "answer": "die Kurie (Versammlungsort des Senats)",
+      "questionExample": "",
+      "answerExample": "",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "f784ed41-e980-46da-9700-81d8bf3653d3",
+      "question": "frūmentum",
+      "answer": "das Getreide",
+      "questionExample": "",
+      "answerExample": "",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "e14e50a3-688d-4524-a9b9-e17bd14184b4",
+      "question": "bestia",
+      "answer": "das (wilde) Tier",
+      "questionExample": "",
+      "answerExample": "Bestie; E. beast; I./S. la bestia; F. la bête",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "9a4eacb3-3b6b-40f5-ba95-fe41a83da67c",
+      "question": "āra",
+      "answer": "der Altar",
+      "questionExample": "",
+      "answerExample": "",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "9dcd9eb0-35ee-4c57-a613-4f7e7ff3b1e6",
+      "question": "dōnum dare",
+      "answer": "ein Geschenk geben/eine Gabe darbringen",
+      "questionExample": "",
+      "answerExample": "",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "cf0b3ff8-ab84-4ae9-8286-84a6583cc367",
+      "question": "sacrificium",
+      "answer": "das Opfer",
+      "questionExample": "",
+      "answerExample": "sacrificāre; E. sacrifice; S. el sacrificio; F. le sacrifice",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "f4fb72f2-3e33-4318-9b74-4ce94978b2c2",
+      "question": "simulācrum",
+      "answer": "das Bild, Götterbild",
+      "questionExample": "",
+      "answerExample": "simulieren, Simulation",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "d18df0bd-be9b-4466-96d2-c3fa4a381a05",
+      "question": "valē!/valēte!",
+      "answer": "Leb wohl!/Lebt wohl!",
+      "questionExample": "",
+      "answerExample": "",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "7a9980f0-7189-4b66-8096-2bfbb34674ef",
+      "question": "fīlius",
+      "answer": "der Sohn",
+      "questionExample": "",
+      "answerExample": "I. il figlio; F. le fils",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "a6f155f7-b92f-4996-ae69-de9d7036bedf",
+      "question": "gaudēre",
+      "answer": "sich freuen",
+      "questionExample": "",
+      "answerExample": "",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "66438b37-8eb0-4906-ad30-ad0c719766e0",
+      "question": "dormīre",
+      "answer": "schlafen",
+      "questionExample": "",
+      "answerExample": "I. dormire; S. dormir; F. dormir",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "f5f91283-f2ab-439d-8106-b1ab4a3482e9",
+      "question": "respondēre",
+      "answer": "antworten, erwidern",
+      "questionExample": "",
+      "answerExample": "<div>E. respond; S. responder; F. répondre<br></div>",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "c4a54eeb-4c3c-4b25-9d87-dc77830e0c1b",
+      "question": "toga",
+      "answer": "das Obergewand (die Toga)",
+      "questionExample": "",
+      "answerExample": "",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "96c9c53b-5578-49da-bd63-5235ed0ef5c5",
+      "question": "audīre",
+      "answer": "hören",
+      "questionExample": "",
+      "answerExample": "Audio, Auditorium",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "3ac30b75-c5b5-4446-bb39-bbfd3f11020f",
+      "question": "dōnum",
+      "answer": "das Geschenk, die Gabe",
+      "questionExample": "",
+      "answerExample": "I. il dono",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "0746c2bf-4bda-450c-a864-9f61729445a5",
+      "question": "parāre",
+      "answer": "bereiten, vorbereiten, zubereiten",
+      "questionExample": "",
+      "answerExample": "<div>parāre, parō</div><div><br></div><div>parat, reparieren; E. repair</div>",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "4f0ebc76-b57e-4607-bfa5-fa3b539e074e",
+      "question": "servāre",
+      "answer": "schützen, retten, bewahren",
+      "questionExample": "",
+      "answerExample": "<div>servāre, servō</div><div><br></div><div>Konserve</div>",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "34aca378-6674-4568-ab5f-b4e7650cb4b5",
+      "question": "negōtium dare",
+      "answer": "(jmd.) eine Aufgabe stellen",
+      "questionExample": "",
+      "answerExample": "",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "a8a12d5a-55db-4391-b978-bcc7cddef90c",
+      "question": "cūr?",
+      "answer": "warum?",
+      "questionExample": "",
+      "answerExample": "",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "8dd966a0-7113-44e5-8086-f8d8ff367654",
+      "question": "rīdēre",
+      "answer": "lachen; über etw. lachen",
+      "questionExample": "",
+      "answerExample": "I. ridere; F. rire",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "e54535ee-7df5-4ad3-b377-c08d29d0e385",
+      "question": "vocāre",
+      "answer": "rufen, nennen",
+      "questionExample": "",
+      "answerExample": "Vokal; E. voice; S. vocear",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "da0efa0d-6dac-4602-be72-c9da40b26fb0",
+      "question": "cōnsilium",
+      "answer": "der Rat, Plan, Beschluss",
+      "questionExample": "",
+      "answerExample": "I. il consiglio; F. le conseil",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "41f60698-33b5-4158-8e06-0e28aaece5dc",
+      "question": "vidēre",
+      "answer": "sehen",
+      "questionExample": "",
+      "answerExample": "Video; I. vedere; S. ver",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "7d409380-0b0f-4b11-9e9a-40a5cb86e442",
+      "question": "amphitheātrum",
+      "answer": "das Amphitheater",
+      "questionExample": "",
+      "answerExample": "",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "c80d21c2-2196-4ba6-a94d-909dccd74fba",
+      "question": "-que",
+      "answer": "und",
+      "questionExample": "(angehängt)",
+      "answerExample": "",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "eb343f6d-ef97-4780-b5f3-19b7634cce38",
+      "question": "scīre",
+      "answer": "wissen, kennen, verstehen",
+      "questionExample": "",
+      "answerExample": "scīre, sciō</br></br>E. science; F. la science",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "2eeb2383-a974-4af9-af0f-09d99726a575",
+      "question": "adversārius",
+      "answer": "der Gegner, Feind",
+      "questionExample": "",
+      "answerExample": "adversārius, ī m.</br></br>I. il avversario; S. el adversario",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "9f4bbb3b-77c0-4ed2-9cf7-ce1b37543240",
+      "question": "quis?",
+      "answer": "wer?",
+      "questionExample": "",
+      "answerExample": "F. qui?",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "4c05097c-7678-42c3-8790-d3ededd63807",
+      "question": "cessāre",
+      "answer": "zögern, sich nicht beeilen",
+      "questionExample": "",
+      "answerExample": "F. cesser",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "1e2deeea-88c2-4159-91e2-bb4c5e489097",
+      "question": "familia",
+      "answer": "die Familie; die Hausgemeinschaft",
+      "questionExample": "",
+      "answerExample": "E. family; I. la famiglia; S. la familia; F. la famille",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "70c9d26f-3a51-4bac-b59e-17b4b5cf987d",
+      "question": "properāre",
+      "answer": "eilen, sich beeilen",
+      "questionExample": "",
+      "answerExample": "",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "524e5aa8-9697-46c5-bc08-ec57f07c8b8b",
+      "question": "habēre",
+      "answer": "haben, halten",
+      "questionExample": "",
+      "answerExample": "I. avere; S. haber; F. avoir",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "2c7312fa-1c5c-41e4-9ed3-c5d562facabe",
+      "question": "vīsitāre",
+      "answer": "besuchen",
+      "questionExample": "",
+      "answerExample": "Visite; E. visit; S. visitar; F. visiter",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "fbcad37c-7869-47f4-9983-7a5183b89aa7",
+      "question": "prohibēre",
+      "answer": "verhindern, hindern; abhalten",
+      "questionExample": "",
+      "answerExample": "prohibēre, prohibeō</br></br>E. prohibit; S. prohibir",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "6b04e063-52b6-460b-824f-cdff60a7520c",
+      "question": "negōtium",
+      "answer": "die Aufgabe, Beschäftigung",
+      "questionExample": "",
+      "answerExample": "negōtium, ī n.</br></br>I. il negozio; S. el negocio",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "5c9f6eb9-1455-4e74-8fab-080cd7fafa55",
+      "question": "pārēre",
+      "answer": "gehorchen",
+      "questionExample": "",
+      "answerExample": "pārēre, pāreō</br></br>parieren",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "5ef3b3de-d272-4151-b9ae-067e7b0594e7",
+      "question": "rēgnāre",
+      "answer": "König sein, herrschen",
+      "questionExample": "",
+      "answerExample": "rēgnāre, rēgnō</br></br>E. reign; S. reinar; F. régner",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "bf85df52-c271-4a64-bb2c-db28883e7554",
+      "question": "timēre",
+      "answer": "(sich) fürchten, Angst haben",
+      "questionExample": "",
+      "answerExample": "timēre, timeō</br></br>I. temere; S. temer",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "8b119859-b07c-464f-a6d9-0f709fa26f64",
+      "question": "exspectāre",
+      "answer": "warten, erwarten",
+      "questionExample": "",
+      "answerExample": "E. expect",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "195ffba7-1372-4f8d-b75e-d2c11daf4234",
+      "question": "quid?",
+      "answer": "was?",
+      "questionExample": "",
+      "answerExample": "",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "8c2529f3-64fa-4b54-941e-78a519dac76a",
+      "question": "spectāre",
+      "answer": "anschauen, betrachten",
+      "questionExample": "",
+      "answerExample": "Spektakel",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "0537f8e2-7cd7-499d-92da-78a91a090ecf",
+      "question": "fugāre",
+      "answer": "in die Flucht schlagen, vertreiben",
+      "questionExample": "",
+      "answerExample": "fugāre, fugō",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "6e50e4ef-a489-48b3-a854-180a442096cf",
+      "question": "probāre",
+      "answer": "(etwas) für gut befinden; prüfen, beweisen",
+      "questionExample": "",
+      "answerExample": "<div>probāre, probō</div><div><br></div><div>probieren; I. provare; S. probar</div>",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "38f2e8a2-de28-4b82-adc4-27be09011179",
+      "question": "valdē",
+      "answer": "sehr",
+      "questionExample": "",
+      "answerExample": "(Adv.)",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "2fa534dc-b30a-403d-84b7-e6207fd542a0",
+      "question": "amīcum cūrāre",
+      "answer": "für den Freund sorgen, sich um den Freund kümmern",
+      "questionExample": "",
+      "answerExample": "",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "2691b6d7-4372-42a3-bc11-70834d320a60",
+      "question": "dare",
+      "answer": "geben, schenken",
+      "questionExample": "",
+      "answerExample": "dare, dō</br></br>Dativ, Daten; I. dare; S. dar",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "f87b0160-2bcb-401d-894b-1d6e0fe8b878",
+      "question": "dēsīderāre",
+      "answer": "wünschen, verlangen; vermissen",
+      "questionExample": "",
+      "answerExample": "dēsīderāre, dēsīderō</br></br>E. desire; I. desiderare; F. désirer",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "abf1d3a6-01f1-45b4-8ec4-cfd1c62b5450",
+      "question": "vōs",
+      "answer": "euch",
+      "questionExample": "",
+      "answerExample": "(Akk.)",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "fd817c7f-f772-4b9a-bcd9-6769c04189a9",
+      "question": "domina",
+      "answer": "die Herrin, Ehefrau",
+      "questionExample": "",
+      "answerExample": "F. la dame; I. la donna",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "b17c5a47-4eb4-4a0e-bf94-9d3b7e490b71",
+      "question": "salvē!&nbsp;salvēte",
+      "answer": "Sei gegrüßt!/Seid gegrüßt!/Grüß dich!/Grüß euch!",
+      "questionExample": "",
+      "answerExample": "",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "315f0a32-9f9a-403e-8806-986ff7a7e4bd",
+      "question": "ubi?",
+      "answer": "wo?",
+      "questionExample": "",
+      "answerExample": "",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "66a1aa57-b02f-45b3-9a4b-07473b176015",
+      "question": "ibi",
+      "answer": "dort",
+      "questionExample": "",
+      "answerExample": "(Adv.)",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "f4b2a948-0018-4330-baa1-bfcf5f28085a",
+      "question": "nam",
+      "answer": "denn, nämlich",
+      "questionExample": "",
+      "answerExample": "",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "cd80e49a-299d-4c91-ae07-3c7560dc5cef",
+      "question": "Capitōlium",
+      "answer": "das Kapitol (einer der sieben Hügel Roms)",
+      "questionExample": "",
+      "answerExample": "",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "f030a30d-6559-4a14-94ce-f5a811968a38",
+      "question": "stupēre",
+      "answer": "staunen, verblüfft sein",
+      "questionExample": "",
+      "answerExample": "stupēre, stupeō",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "1dd45b00-7e56-4877-b495-a54f093a4d64",
+      "question": "apportāre",
+      "answer": "herbeibringen, hintragen",
+      "questionExample": "",
+      "answerExample": "apportāre, apportō</br></br>portāre; apportieren; F. apporter",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "45eb022a-c471-4f61-a19b-985f28e8fede",
+      "question": "fēmina",
+      "answer": "die Frau",
+      "questionExample": "",
+      "answerExample": "Femininum; E. female; F. la femme",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "2b73c9e2-faaf-4379-92d6-ebc1b48de2ee",
+      "question": "superāre",
+      "answer": "übertreffen, überwinden, besiegen",
+      "questionExample": "",
+      "answerExample": "superāre, superō</br></br>S. superar",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "7a8c08c1-41b5-4dc6-a49c-ee1c675d3f7d",
+      "question": "nam",
+      "answer": "denn, nämlich",
+      "questionExample": "",
+      "answerExample": "(Adv.)",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "433da4f6-2f21-4be9-8b13-8a5e0ff364bb",
+      "question": "tum",
+      "answer": "da, dann, damals",
+      "questionExample": "",
+      "answerExample": "(Adv.)",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "3bf8a4de-29c7-46b0-b1b7-827667f464ed",
+      "question": "cibus",
+      "answer": "die Nahrung, die Speise",
+      "questionExample": "",
+      "answerExample": "",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "fa2d9b5d-d2a7-4bef-8917-52c9a41b0757",
+      "question": "est/sunt",
+      "answer": "er, sie es ist/sie sind; es gibt",
+      "questionExample": "",
+      "answerExample": "",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "8d3ca87c-cb95-4f17-9577-1f4a2c82ea92",
+      "question": "templum",
+      "answer": "der Tempel",
+      "questionExample": "",
+      "answerExample": "E. temple; S. el templo; F. le temple",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    },
+    {
+      "cardId": "8e5ca4e6-a508-487f-8b90-5df24de8d450",
+      "question": "ut",
+      "answer": "wie",
+      "questionExample": "",
+      "answerExample": "",
+      "questionTranscription": "",
+      "answerTranscription": ""
+    }
+  ],
+  "errors": []
+}

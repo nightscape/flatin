@@ -1,11 +1,13 @@
-name: Deploy to GitHub Pages
+name: Deploy Flutter Web to GitHub Pages
 
 on:
   push:
     branches:
       - main
     paths:
-      - 'docs/**'
+      - 'lib/**'
+      - 'pubspec.yaml'
+      - 'assets/**'
       - '.github/workflows/pages.yml'
   workflow_dispatch:
 
@@ -28,13 +30,29 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.38'
+          channel: 'stable'
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build Flutter Web
+        run: flutter build web --release --base-href=/flatin/
+
+      - name: Copy privacy policy to web build
+        run: |
+          cp docs/privacy-policy.md build/web/privacy-policy.md
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './docs'
+          path: './build/web'
 
       - name: Deploy to GitHub Pages
         id: deployment

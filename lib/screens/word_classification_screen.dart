@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:fsrs/fsrs.dart';
 import '../models/practice_item.dart';
 import '../models/settings.dart';
@@ -326,7 +327,7 @@ class _WordClassificationScreenState
   }
 
   /// Build a combination selector widget
-  Widget _buildCombinationSelector(int index) {
+  Widget _buildCombinationSelector(int index, bool isMobile) {
     if (_currentItem == null) return const SizedBox();
 
     final combination = _selectedAnswers[index];
@@ -335,8 +336,8 @@ class _WordClassificationScreenState
         _isChecked && !isCorrect && combination.values.every((v) => v != null);
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      padding: const EdgeInsets.all(16),
+      margin: EdgeInsets.only(bottom: isMobile ? 12 : 16),
+      padding: EdgeInsets.all(isMobile ? 12 : 16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
@@ -353,20 +354,24 @@ class _WordClassificationScreenState
         children: [
           Expanded(
             child: Wrap(
-              spacing: 12,
-              runSpacing: 12,
+              spacing: isMobile ? 8 : 12,
+              runSpacing: isMobile ? 8 : 12,
               children: _currentItem!.classificationSections.map((section) {
                 final options = _getOptionsForSection(section);
                 final selectedValue = combination[section];
 
                 return SizedBox(
-                  width: 150,
+                  width: isMobile ? double.infinity : 150,
                   child: DropdownButtonFormField<String>(
                     value: selectedValue,
                     decoration: InputDecoration(
                       labelText: section,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
+                      ),
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: isMobile ? 12 : 16,
+                        vertical: isMobile ? 12 : 16,
                       ),
                     ),
                     items: [
@@ -411,6 +416,9 @@ class _WordClassificationScreenState
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = screenWidth < 600;
+
     // Watch settings and reload word if current form becomes disabled
     ref.listen<AsyncValue<Settings>>(settingsProvider, (previous, next) {
       if (previous != next &&
@@ -438,6 +446,14 @@ class _WordClassificationScreenState
       }
     });
 
+    // Responsive values
+    final horizontalPadding = isMobile ? 16.0 : 24.0;
+    final verticalPadding = isMobile ? 12.0 : 16.0;
+    final titleFontSize = isMobile ? 24.0 : 32.0;
+    final wordFontSize = isMobile ? 36.0 : 48.0;
+    final translationFontSize = isMobile ? 14.0 : 18.0;
+    final buttonPadding = isMobile ? 16.0 : 24.0;
+
     return Scaffold(
       backgroundColor: const Color(0xFFE5E5E5),
       drawer: buildAppDrawer(context),
@@ -454,21 +470,29 @@ class _WordClassificationScreenState
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : _currentItem == null || _displayedWord == null
-          ? const Center(
-              child: Text('No words available', style: TextStyle(fontSize: 18)),
+          ? Center(
+              child: Text(
+                FlutterI18n.translate(context, 'wordClassification.noWordsAvailable'),
+                style: TextStyle(fontSize: isMobile ? 16.0 : 18.0),
+              ),
             )
           : Column(
               children: [
                 // Title
                 Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 24.0,
-                    vertical: 16.0,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: horizontalPadding,
+                    vertical: verticalPadding,
                   ),
                   child: Text(
-                    _isNoun ? 'Deklination' : 'Konjugation',
-                    style: const TextStyle(
-                      fontSize: 32,
+                    key: Key(_isNoun
+                        ? 'wordClassification.declension'
+                        : 'wordClassification.conjugation'),
+                    _isNoun
+                        ? FlutterI18n.translate(context, 'wordClassification.declension')
+                        : FlutterI18n.translate(context, 'wordClassification.conjugation'),
+                    style: TextStyle(
+                      fontSize: titleFontSize,
                       fontWeight: FontWeight.bold,
                       color: Colors.black,
                     ),
@@ -477,13 +501,13 @@ class _WordClassificationScreenState
 
                 // Word display
                 Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 24.0,
-                    vertical: 24.0,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: horizontalPadding,
+                    vertical: isMobile ? 16.0 : 24.0,
                   ),
                   child: Container(
                     width: double.infinity,
-                    padding: const EdgeInsets.all(24.0),
+                    padding: EdgeInsets.all(isMobile ? 16.0 : 24.0),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(8),
@@ -493,8 +517,8 @@ class _WordClassificationScreenState
                       children: [
                         Text(
                           _displayedWord!,
-                          style: const TextStyle(
-                            fontSize: 48,
+                          style: TextStyle(
+                            fontSize: wordFontSize,
                             fontWeight: FontWeight.bold,
                             color: Colors.black,
                           ),
@@ -504,8 +528,8 @@ class _WordClassificationScreenState
                             padding: const EdgeInsets.only(top: 8.0),
                             child: Text(
                               _currentItem!.translation,
-                              style: const TextStyle(
-                                fontSize: 18,
+                              style: TextStyle(
+                                fontSize: translationFontSize,
                                 color: Colors.grey,
                               ),
                             ),
@@ -518,18 +542,18 @@ class _WordClassificationScreenState
                 // Combination selectors
                 Expanded(
                   child: SingleChildScrollView(
-                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                    padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // Display all combination selectors
                         ...List.generate(_selectedAnswers.length, (index) {
-                          return _buildCombinationSelector(index);
+                          return _buildCombinationSelector(index, isMobile);
                         }),
                         // Add button to add new combination
                         if (!_isChecked)
                           Padding(
-                            padding: const EdgeInsets.only(top: 8.0),
+                            padding: EdgeInsets.only(top: isMobile ? 8.0 : 8.0),
                             child: ElevatedButton.icon(
                               onPressed: () {
                                 setState(() {
@@ -542,15 +566,18 @@ class _WordClassificationScreenState
                                 });
                               },
                               icon: const Icon(Icons.add),
-                              label: const Text('Kombination hinzufügen'),
+                              label: Text(
+                                FlutterI18n.translate(context, 'wordClassification.addCombination'),
+                              ),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: const Color(0xFFD0D0D0),
                                 foregroundColor: Colors.black,
                                 elevation: 0,
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 16,
-                                  vertical: 12,
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: isMobile ? 12 : 16,
+                                  vertical: isMobile ? 10 : 12,
                                 ),
+                                minimumSize: Size(0, isMobile ? 44 : 48),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8),
                                 ),
@@ -565,9 +592,9 @@ class _WordClassificationScreenState
                 // Display all correct combinations
                 if (_isChecked && _correctAnswers.isNotEmpty)
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                    padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
                     child: Container(
-                      padding: const EdgeInsets.all(16.0),
+                      padding: EdgeInsets.all(isMobile ? 12.0 : 16.0),
                       decoration: BoxDecoration(
                         color: Colors.blue.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(8),
@@ -578,25 +605,28 @@ class _WordClassificationScreenState
                         children: [
                           Row(
                             children: [
-                              const Icon(
+                              Icon(
                                 Icons.info_outline,
                                 color: Colors.blue,
+                                size: isMobile ? 18 : 24,
                               ),
-                              const SizedBox(width: 8),
-                              const Text(
-                                'Alle richtigen Kombinationen:',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
+                              SizedBox(width: isMobile ? 6 : 8),
+                              Expanded(
+                                child: Text(
+                                  FlutterI18n.translate(context, 'wordClassification.allCorrectCombinations'),
+                                  style: TextStyle(
+                                    fontSize: isMobile ? 14.0 : 16.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
                                 ),
                               ),
                             ],
                           ),
-                          const SizedBox(height: 12),
+                          SizedBox(height: isMobile ? 8 : 12),
                           Wrap(
-                            spacing: 8,
-                            runSpacing: 8,
+                            spacing: isMobile ? 6 : 8,
+                            runSpacing: isMobile ? 6 : 8,
                             children: _correctAnswers.map((label) {
                               // Check if this combination was selected
                               final wasSelected = _selectedAnswers.any((
@@ -611,9 +641,9 @@ class _WordClassificationScreenState
                               });
 
                               return Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 12,
-                                  vertical: 8,
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: isMobile ? 10 : 12,
+                                  vertical: isMobile ? 6 : 8,
                                 ),
                                 decoration: BoxDecoration(
                                   color: wasSelected
@@ -631,22 +661,22 @@ class _WordClassificationScreenState
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     if (wasSelected)
-                                      const Icon(
+                                      Icon(
                                         Icons.check_circle,
                                         color: Colors.green,
-                                        size: 16,
+                                        size: isMobile ? 14 : 16,
                                       )
                                     else
-                                      const Icon(
+                                      Icon(
                                         Icons.radio_button_unchecked,
                                         color: Colors.grey,
-                                        size: 16,
+                                        size: isMobile ? 14 : 16,
                                       ),
-                                    const SizedBox(width: 6),
+                                    SizedBox(width: isMobile ? 4 : 6),
                                     Text(
                                       _formatFormLabel(label),
                                       style: TextStyle(
-                                        fontSize: 14,
+                                        fontSize: isMobile ? 12.0 : 14.0,
                                         fontWeight: wasSelected
                                             ? FontWeight.bold
                                             : FontWeight.normal,
@@ -666,12 +696,12 @@ class _WordClassificationScreenState
                 // Feedback message
                 if (_isChecked)
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 24.0,
-                      vertical: 8.0,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: horizontalPadding,
+                      vertical: isMobile ? 6.0 : 8.0,
                     ),
                     child: Container(
-                      padding: const EdgeInsets.all(16.0),
+                      padding: EdgeInsets.all(isMobile ? 12.0 : 16.0),
                       decoration: BoxDecoration(
                         color: _isCorrect
                             ? Colors.green.withOpacity(0.2)
@@ -693,17 +723,18 @@ class _WordClassificationScreenState
                                 : (_isPartiallyCorrect
                                       ? Colors.orange
                                       : Colors.red),
+                            size: isMobile ? 20 : 24,
                           ),
-                          const SizedBox(width: 12),
+                          SizedBox(width: isMobile ? 8 : 12),
                           Expanded(
                             child: Text(
                               _isCorrect
-                                  ? 'Richtig!'
+                                  ? FlutterI18n.translate(context, 'wordClassification.correct')
                                   : (_isPartiallyCorrect
-                                        ? 'Teilweise richtig'
-                                        : 'Falsch. Versuche es erneut!'),
+                                        ? FlutterI18n.translate(context, 'wordClassification.partiallyCorrect')
+                                        : FlutterI18n.translate(context, 'wordClassification.incorrect')),
                               style: TextStyle(
-                                fontSize: 16,
+                                fontSize: isMobile ? 14.0 : 16.0,
                                 fontWeight: FontWeight.bold,
                                 color: _isCorrect
                                     ? Colors.green
@@ -720,44 +751,47 @@ class _WordClassificationScreenState
 
                 // Rating buttons or check/next button
                 Padding(
-                  padding: const EdgeInsets.all(24.0),
+                  padding: EdgeInsets.all(buttonPadding),
                   child: _showRatingButtons && _isChecked
                       ? Column(
                           children: [
-                            const Text(
-                              'How well did you know this?',
+                            Text(
+                              FlutterI18n.translate(context, 'wordClassification.howWellDidYouKnow'),
                               style: TextStyle(
-                                fontSize: 16,
+                                fontSize: isMobile ? 14.0 : 16.0,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black,
                               ),
                             ),
-                            const SizedBox(height: 16),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
+                            SizedBox(height: isMobile ? 12.0 : 16.0),
+                            Wrap(
+                              alignment: WrapAlignment.center,
+                              spacing: isMobile ? 4.0 : 8.0,
+                              runSpacing: isMobile ? 8.0 : 0.0,
                               children: [
                                 _buildRatingButton(
                                   Rating.again,
-                                  'Again',
+                                  FlutterI18n.translate(context, 'wordClassification.rating.again'),
                                   Colors.red,
+                                  isMobile,
                                 ),
-                                const SizedBox(width: 8),
                                 _buildRatingButton(
                                   Rating.hard,
-                                  'Hard',
+                                  FlutterI18n.translate(context, 'wordClassification.rating.hard'),
                                   Colors.orange,
+                                  isMobile,
                                 ),
-                                const SizedBox(width: 8),
                                 _buildRatingButton(
                                   Rating.good,
-                                  'Good',
+                                  FlutterI18n.translate(context, 'wordClassification.rating.good'),
                                   Colors.green,
+                                  isMobile,
                                 ),
-                                const SizedBox(width: 8),
                                 _buildRatingButton(
                                   Rating.easy,
-                                  'Easy',
+                                  FlutterI18n.translate(context, 'wordClassification.rating.easy'),
                                   Colors.blue,
+                                  isMobile,
                                 ),
                               ],
                             ),
@@ -768,6 +802,7 @@ class _WordClassificationScreenState
                           children: [
                             if (!_isChecked)
                               ElevatedButton(
+                                key: const Key('wordClassification.check.button'),
                                 onPressed:
                                     _currentItem != null &&
                                         _selectedAnswers.any(
@@ -785,41 +820,44 @@ class _WordClassificationScreenState
                                   backgroundColor: const Color(0xFFD0D0D0),
                                   foregroundColor: Colors.black,
                                   elevation: 0,
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 48,
-                                    vertical: 12,
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: isMobile ? 32 : 48,
+                                    vertical: isMobile ? 10 : 12,
                                   ),
+                                  minimumSize: Size(0, isMobile ? 44 : 48),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                 ),
-                                child: const Text(
-                                  'Prüfen',
+                                child: Text(
+                                  FlutterI18n.translate(context, 'wordClassification.check'),
                                   style: TextStyle(
-                                    fontSize: 16,
+                                    fontSize: isMobile ? 14.0 : 16.0,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
                               )
                             else
                               ElevatedButton(
+                                key: const Key('wordClassification.nextWord.button'),
                                 onPressed: _nextWord,
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: const Color(0xFFD0D0D0),
                                   foregroundColor: Colors.black,
                                   elevation: 0,
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 48,
-                                    vertical: 12,
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: isMobile ? 32 : 48,
+                                    vertical: isMobile ? 10 : 12,
                                   ),
+                                  minimumSize: Size(0, isMobile ? 44 : 48),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                 ),
-                                child: const Text(
-                                  'Nächstes Wort',
+                                child: Text(
+                                  FlutterI18n.translate(context, 'wordClassification.nextWord'),
                                   style: TextStyle(
-                                    fontSize: 16,
+                                    fontSize: isMobile ? 14.0 : 16.0,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -832,15 +870,21 @@ class _WordClassificationScreenState
     );
   }
 
-  Widget _buildRatingButton(Rating rating, String label, Color color) {
+  Widget _buildRatingButton(Rating rating, String label, Color color, bool isMobile) {
     final isSuggested = rating == _suggestedRating;
+    final key = Key('rating.${rating.name}');
     return ElevatedButton(
+      key: key,
       onPressed: () => _rateCard(rating),
       style: ElevatedButton.styleFrom(
         backgroundColor: isSuggested ? color : const Color(0xFFD0D0D0),
         foregroundColor: isSuggested ? Colors.white : Colors.black,
         elevation: isSuggested ? 4 : 0,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        padding: EdgeInsets.symmetric(
+          horizontal: isMobile ? 12 : 16,
+          vertical: isMobile ? 10 : 12,
+        ),
+        minimumSize: Size(0, isMobile ? 44 : 48),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
           side: BorderSide(
@@ -852,7 +896,7 @@ class _WordClassificationScreenState
       child: Text(
         label,
         style: TextStyle(
-          fontSize: 14,
+          fontSize: isMobile ? 12.0 : 14.0,
           fontWeight: isSuggested ? FontWeight.bold : FontWeight.normal,
         ),
       ),

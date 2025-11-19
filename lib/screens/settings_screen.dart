@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import '../providers/settings_provider.dart';
 import '../data/practice_data.dart';
 
@@ -44,6 +45,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 children: [
                   Text(
                     title,
+                    key: Key('settings.section.$dataFileId'),
                     style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
@@ -55,9 +57,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       final notifier = ref.read(settingsProvider.notifier);
                       notifier.enableAllForms(dataFileId, metadata.formOrder);
                     },
-                    child: const Text(
-                      'Alle aktivieren',
-                      style: TextStyle(fontSize: 14),
+                    child: Text(
+                      FlutterI18n.translate(context, 'settings.enableAll'),
+                      style: const TextStyle(fontSize: 14),
                     ),
                   ),
                 ],
@@ -86,7 +88,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         );
       },
       loading: () => const Center(child: CircularProgressIndicator()),
-      error: (error, stack) => Text('Error: $error'),
+      error: (error, stack) => Text(
+        FlutterI18n.translate(
+          context,
+          'settings.error',
+          translationParams: {'error': error.toString()},
+        ),
+      ),
     );
   }
 
@@ -103,9 +111,10 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             Navigator.of(context).pop();
           },
         ),
-        title: const Text(
-          'Einstellungen',
-          style: TextStyle(
+        title: Text(
+          key: const Key('settings.title'),
+          FlutterI18n.translate(context, 'settings.title'),
+          style: const TextStyle(
             color: Colors.black,
             fontSize: 24,
             fontWeight: FontWeight.bold,
@@ -132,12 +141,12 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _buildFormSection(
-                      'Nomen (Deklination)',
+                      FlutterI18n.translate(context, 'settings.nouns'),
                       'nouns',
                       nounsSnapshot.data!,
                     ),
                     _buildFormSection(
-                      'Verben (Konjugation)',
+                      FlutterI18n.translate(context, 'settings.verbs'),
                       'verbs',
                       verbsSnapshot.data!,
                     ),

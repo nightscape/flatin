@@ -1,0 +1,47 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a237e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#283593;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffd700;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ffa000;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="512" height="512" rx="96" fill="url(#bgGradient)"/>
+
+  <!-- Decorative border pattern -->
+  <rect x="32" y="32" width="448" height="448" rx="80" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="2"/>
+  <rect x="48" y="48" width="416" height="416" rx="72" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+
+  <!-- Main text: FLatin -->
+  <text x="256" y="320"
+        font-family="Georgia, 'Times New Roman', serif"
+        font-size="140"
+        font-weight="bold"
+        text-anchor="middle"
+        fill="url(#textGradient)"
+        letter-spacing="-4">
+    <tspan x="256" dy="0">F</tspan>
+    <tspan fill="#ffffff" font-size="120">Latin</tspan>
+  </text>
+
+  <!-- Decorative accent line under text -->
+  <line x1="180" y1="360" x2="332" y2="360"
+        stroke="url(#textGradient)"
+        stroke-width="4"
+        stroke-linecap="round"/>
+
+  <!-- Small decorative elements (Roman-inspired) -->
+  <circle cx="140" cy="200" r="8" fill="rgba(255,215,0,0.6)"/>
+  <circle cx="372" cy="200" r="8" fill="rgba(255,215,0,0.6)"/>
+
+  <!-- Subtle pattern in corners -->
+  <path d="M 80 80 L 100 80 L 100 100 L 80 100 Z" fill="rgba(255,255,255,0.05)"/>
+  <path d="M 412 80 L 432 80 L 432 100 L 412 100 Z" fill="rgba(255,255,255,0.05)"/>
+  <path d="M 80 412 L 100 412 L 100 432 L 80 432 Z" fill="rgba(255,255,255,0.05)"/>
+  <path d="M 412 412 L 432 412 L 432 432 L 412 432 Z" fill="rgba(255,255,255,0.05)"/>
+</svg>

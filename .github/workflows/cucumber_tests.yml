@@ -1,0 +1,78 @@
+name: Cucumber Tests
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+  workflow_call:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.38'
+          channel: 'stable'
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Generate code with build_runner
+        run: flutter pub run build_runner build --delete-conflicting-outputs
+
+      - name: Verify generated files
+        run: |
+          if [ ! -f "test/step_definitions/app_steps.pickled.dart" ]; then
+            echo "Error: Generated file app_steps.pickled.dart not found"
+            exit 1
+          fi
+          echo "Generated files verified"
+
+      - name: Run Flutter analyzer
+        run: flutter analyze
+
+      - name: Start Android Emulator and Run Tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 29
+          arch: x86_64
+          profile: Nexus 6
+          script: |
+            flutter devices
+            flutter test integration_test/app_test.dart --reporter expanded
+
+            # Collect screenshots after tests
+            mkdir -p fastlane/screenshots
+            if [ -d "test_driver/screenshots" ]; then
+              cp -r test_driver/screenshots/* fastlane/screenshots/ || true
+            fi
+            if [ -d "integration_test/screenshots" ]; then
+              cp -r integration_test/screenshots/* fastlane/screenshots/ || true
+            fi
+            ls -la fastlane/screenshots/ || echo "No screenshots directory found"
+
+      - name: Upload screenshots
+        id: upload-screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-screenshots
+          path: fastlane/screenshots/
+          if-no-files-found: ignore
+        continue-on-error: true
+
