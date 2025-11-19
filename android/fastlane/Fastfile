@@ -1,0 +1,68 @@
+# Fastlane configuration for Android
+# Documentation: https://docs.fastlane.tools/getting-started/android/setup/
+
+default_platform(:android)
+
+# Get the project root directory (two levels up from fastlane directory)
+project_root = File.expand_path(File.join(File.dirname(__FILE__), "..", ".."))
+
+platform :android do
+  desc "Build the Android release APK"
+  lane :build do
+    sh("cd #{project_root} && flutter build apk --release")
+  end
+
+  desc "Build the Android App Bundle (AAB) for Play Store"
+  lane :build_bundle do
+    sh("cd #{project_root} && flutter build appbundle --release")
+  end
+
+  desc "Upload to Google Play Store Internal Testing"
+  lane :internal do
+    build_bundle
+    upload_to_play_store(
+      track: "internal",
+      aab: "#{project_root}/build/app/outputs/bundle/release/app-release.aab",
+      skip_upload_metadata: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true
+    )
+  end
+
+  desc "Upload to Google Play Store Alpha"
+  lane :alpha do
+    build_bundle
+    upload_to_play_store(
+      track: "alpha",
+      aab: "#{project_root}/build/app/outputs/bundle/release/app-release.aab",
+      skip_upload_metadata: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true
+    )
+  end
+
+  desc "Upload to Google Play Store Beta"
+  lane :beta do
+    build_bundle
+    upload_to_play_store(
+      track: "beta",
+      aab: "#{project_root}/build/app/outputs/bundle/release/app-release.aab",
+      skip_upload_metadata: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true
+    )
+  end
+
+  desc "Upload to Google Play Store Production"
+  lane :release do
+    build_bundle
+    upload_to_play_store(
+      track: "production",
+      aab: "#{project_root}/build/app/outputs/bundle/release/app-release.aab",
+      skip_upload_metadata: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true
+    )
+  end
+end
+

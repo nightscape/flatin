@@ -1,0 +1,9 @@
+# Appfile for Android
+# Documentation: https://docs.fastlane.tools/advanced/Appfile/
+
+# Use environment variable for the JSON key file path
+# For local development: export GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_PATH="~/.android/google-play-service-account.json"
+# For CI/CD: Set as a secret/environment variable
+json_key_file(ENV["GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_PATH"] || ENV["GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_FILE"] || "")
+package_name("dev.mauch.latin_practice")
+

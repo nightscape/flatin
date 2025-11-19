@@ -80,6 +80,23 @@ app.*.map.json
 # Coverage
 coverage/
 
+# Fastlane
+**/fastlane/report.xml
+**/fastlane/Preview.html
+**/fastlane/screenshots
+**/fastlane/test_output
+*.p8
+*.p12
+*.keystore
+*.jks
+key.properties
+google-play-service-account.json
+
+# Environment variables
+.env
+.env.local
+*.env
+
 # Exceptions to above rules.
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
 !/dev/ci/**/Gemfile.lock

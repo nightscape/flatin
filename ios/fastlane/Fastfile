@@ -1,0 +1,36 @@
+# Fastlane configuration for iOS
+# Documentation: https://docs.fastlane.tools/getting-started/ios/setup/
+
+default_platform(:ios)
+
+platform :ios do
+  desc "Build the iOS app"
+  lane :build do
+    increment_build_number(
+      xcodeproj: "Runner.xcodeproj"
+    )
+    sh("cd #{lane_context[:repository_root]} && flutter build ipa --release")
+  end
+
+  desc "Upload to TestFlight (Beta Testing)"
+  lane :beta do
+    build
+    upload_to_testflight(
+      skip_waiting_for_build_processing: true,
+      skip_submission: true,
+      distribute_external: false
+    )
+  end
+
+  desc "Upload to App Store (Production)"
+  lane :release do
+    build
+    upload_to_app_store(
+      skip_metadata: true,
+      skip_screenshots: true,
+      submit_for_review: false,
+      automatic_release: false
+    )
+  end
+end
+

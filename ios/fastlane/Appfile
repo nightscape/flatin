@@ -1,0 +1,7 @@
+# Appfile for iOS
+# Documentation: https://docs.fastlane.tools/advanced/Appfile/
+
+app_identifier("dev.mauch.latin-practice") # Your bundle identifier
+apple_id("") # Your Apple ID email
+team_id("") # Your Apple Developer Team ID
+

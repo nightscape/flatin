@@ -74,6 +74,21 @@ A Flutter application for learning and practicing Latin vocabulary using spaced 
 - **Windows**: `flutter build windows`
 - **Web**: `flutter build web`
 
+### Deployment
+
+This project uses [Fastlane](https://fastlane.tools/) for automated deployment to Google Play Store and Apple App Store.
+
+**Quick Start:**
+1. Install Fastlane: `bundle install` (or `brew install fastlane`)
+2. Configure credentials (see `FASTLANE_SETUP.md` for detailed instructions)
+3. Deploy:
+   - Android: `cd android && fastlane release`
+   - iOS: `cd ios && fastlane release`
+
+**CI/CD:** GitHub Actions workflow is configured (`.github/workflows/deploy.yml`) to automatically deploy on version tags.
+
+See `FASTLANE_SETUP.md` for complete setup instructions.
+
 ## Project Structure
 
 ```
