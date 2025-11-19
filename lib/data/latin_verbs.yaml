@@ -1,0 +1,466 @@
+# Data file identifier
+data_file_id: verbs
+
+classification_sections:
+  - Person
+  - Numerus
+
+# Default values for items
+defaults:
+  word_form: first_person_singular
+  base_form_label: Infinitiv
+
+# Type inference rules: how to infer possible types from word endings
+# Each rule defines a suffix pattern and the types it matches
+# Rules are checked in order - first match wins
+type_inference:
+  # Rules for infinitive (base_form) - checked first
+  infinitive_rules:
+    - suffix: "āre"
+      types:
+        - A-Konjugation
+    - suffix: "are"
+      min_length: 5
+      types:
+        - A-Konjugation
+    - suffix: "ēre"
+      types:
+        - E-Konjugation
+    - suffix: "īre"
+      types:
+        - I-Konjugation
+    - suffix: "ire"
+      min_length: 5
+      types:
+        - I-Konjugation
+    - suffix: "ere"
+      min_length: 5
+      types:
+        - E-Konjugation
+        - Mischkonjugation
+  # Rules for first person singular (word) - checked if infinitive not available
+  first_person_rules:
+    - suffix: "eō"
+      types:
+        - E-Konjugation
+    - suffix: "eo"
+      min_length: 4
+      types:
+        - E-Konjugation
+    - suffix: "iō"
+      types:
+        - I-Konjugation
+        - Mischkonjugation
+    - suffix: "io"
+      min_length: 4
+      types:
+        - I-Konjugation
+        - Mischkonjugation
+
+# Pattern definitions for inferring forms from a base word
+# Each pattern defines how to generate all forms from the first_person_singular or base_form
+type_patterns:
+  A-Konjugation:
+    # Pattern: infinitive ends in -are, first person singular ends in -o
+    # From first_person_singular (e.g., amo) or base_form (e.g., amare)
+    second_person_singular: "{stem}as"     # amas
+    third_person_singular: "{stem}at"      # amat
+    first_person_plural: "{stem}amus"      # amamus
+    second_person_plural: "{stem}atis"     # amatis
+    third_person_plural: "{stem}ant"        # amant
+    stem_extraction: "remove_suffix:o"     # Remove -o from first person singular
+    # Alternative: from infinitive (amare) -> remove -re or -āre to get stem (ama or am)
+    infinitive_stem_extraction: "remove_suffix:re,āre"  # Remove -re or -āre from infinitive
+    # Reconstruct first_person_singular from infinitive stem: ama + o = amo, or am + o = amo
+    reconstruction_from_alternative_stem: "{stem}o"
+
+  E-Konjugation:
+    # Pattern: infinitive ends in -ere, first person singular ends in -eo
+    # From first_person_singular (e.g., habeo) or base_form (e.g., habere)
+    second_person_singular: "{stem}es"     # habes
+    third_person_singular: "{stem}et"      # habet
+    first_person_plural: "{stem}emus"      # habemus
+    second_person_plural: "{stem}etis"     # habetis
+    third_person_plural: "{stem}ent"        # habent
+    stem_extraction: "remove_suffix:eo"    # Remove -eo from first person singular
+    infinitive_stem_extraction: "remove_suffix:re"  # Remove -re from infinitive
+    # Reconstruct first_person_singular from infinitive stem: habe + o = habeo
+    reconstruction_from_alternative_stem: "{stem}o"
+
+  I-Konjugation:
+    # Pattern: infinitive ends in -ire, first person singular ends in -io
+    # From first_person_singular (e.g., audio) or base_form (e.g., audire)
+    second_person_singular: "{stem}is"     # audis
+    third_person_singular: "{stem}it"      # audit
+    first_person_plural: "{stem}imus"      # audimus
+    second_person_plural: "{stem}itis"     # auditis
+    third_person_plural: "{stem}iunt"       # audiunt
+    stem_extraction: "remove_suffix:io"    # Remove -io from first person singular
+    infinitive_stem_extraction: "remove_suffix:re"  # Remove -re from infinitive
+    # Reconstruct first_person_singular from infinitive stem: audi + o = audio
+    reconstruction_from_alternative_stem: "{stem}o"
+
+  Mischkonjugation:
+    # Pattern: infinitive ends in -ere, first person singular ends in -io
+    # From first_person_singular (e.g., capio) or base_form (e.g., capere)
+    second_person_singular: "{stem}is"     # capis
+    third_person_singular: "{stem}it"      # capit
+    first_person_plural: "{stem}imus"     # capimus
+    second_person_plural: "{stem}itis"     # capitis
+    third_person_plural: "{stem}iunt"       # capiunt
+    stem_extraction: "remove_suffix:io"    # Remove -io from first person singular
+    infinitive_stem_extraction: "remove_suffix:re"  # Remove -re from infinitive
+    # Reconstruct first_person_singular from infinitive stem: audi + o = audio
+    reconstruction_from_alternative_stem: "{stem}o"
+
+form_labels:
+  first_person_singular:
+    name: 1. Person
+    number: Singular
+  second_person_singular:
+    name: 2. Person
+    number: Singular
+  third_person_singular:
+    name: 3. Person
+    number: Singular
+  first_person_plural:
+    name: 1. Person
+    number: Plural
+  second_person_plural:
+    name: 2. Person
+    number: Plural
+  third_person_plural:
+    name: 3. Person
+    number: Plural
+
+form_order:
+  - first_person_singular
+  - second_person_singular
+  - third_person_singular
+  - first_person_plural
+  - second_person_plural
+  - third_person_plural
+
+items:
+  # Example: Full form specification (explicit forms - still supported)
+  - type: A-Konjugation
+    translation: lieben
+    base_form: amare
+    base_form_label: Infinitiv
+    word_form: first_person_singular
+    word: amo
+    possible_types:
+      - A-Konjugation
+    forms:
+      first_person_singular: amo
+      second_person_singular: amas
+      third_person_singular: amat
+      first_person_plural: amamus
+      second_person_plural: amatis
+      third_person_plural: amant
+  - type: E-Konjugation
+    translation: haben
+    base_form: habere
+    base_form_label: Infinitiv
+    word_form: first_person_singular
+    word: habeo
+    possible_types:
+      - E-Konjugation
+    forms:
+      first_person_singular: habeo
+      second_person_singular: habes
+      third_person_singular: habet
+      first_person_plural: habemus
+      second_person_plural: habetis
+      third_person_plural: habent
+  - type: I-Konjugation
+    translation: hören
+    base_form: audire
+    base_form_label: Infinitiv
+    word_form: first_person_singular
+    word: audio
+    possible_types:
+      - I-Konjugation
+    forms:
+      first_person_singular: audio
+      second_person_singular: audis
+      third_person_singular: audit
+      first_person_plural: audimus
+      second_person_plural: auditis
+      third_person_plural: audiunt
+  - type: Mischkonjugation
+    translation: nehmen
+    base_form: capere
+    base_form_label: Infinitiv
+    word_form: first_person_singular
+    word: capio
+    possible_types:
+      - Mischkonjugation
+    forms:
+      first_person_singular: capio
+      second_person_singular: capis
+      third_person_singular: capit
+      first_person_plural: capimus
+      second_person_plural: capitis
+      third_person_plural: capiunt
+
+  # Example: Simplified form (forms will be inferred automatically)
+  # For regular conjugations, you only need to specify:
+  # - type: the conjugation type (can be inferred from word ending)
+  # - translation: the translation
+  # - word: the first person singular form (e.g., "laudo")
+  # OR base_form: the infinitive form (e.g., "laudare")
+  # - word_form: should be "first_person_singular"
+  # - possible_types: (optional, will be inferred from word ending)
+  # The forms and type will be automatically generated based on the type_patterns above
+  - type: A-Konjugation
+    translation: loben
+    base_form: laudare
+    base_form_label: Infinitiv
+    word_form: first_person_singular
+    word: laudo
+    possible_types:
+      - A-Konjugation
+    # forms: omitted - will be inferred as: laudo, laudas, laudat, laudamus, laudatis, laudant
+
+  # Example: Minimal form (type and possible_types inferred from word ending)
+  # Just specify base_form (infinitive) and translation - everything else is inferred!
+  # word_form defaults to "first_person_singular" and base_form_label defaults to "Infinitiv"
+
+  # Test cases: Words with macrons to verify automatic form generation
+  # These have explicit forms to serve as regression tests
+  - type: I-Konjugation
+    translation: hören
+    base_form: audīre
+    base_form_label: Infinitiv
+    word_form: first_person_singular
+    word: audio
+    verify_inference: true
+    possible_types:
+      - I-Konjugation
+    forms:
+      first_person_singular: audio
+      second_person_singular: audis
+      third_person_singular: audit
+      first_person_plural: audimus
+      second_person_plural: auditis
+      third_person_plural: audiunt
+  - type: I-Konjugation
+    translation: kommen
+    base_form: venīre
+    base_form_label: Infinitiv
+    word_form: first_person_singular
+    word: venio
+    verify_inference: true
+    possible_types:
+      - I-Konjugation
+    forms:
+      first_person_singular: venio
+      second_person_singular: venis
+      third_person_singular: venit
+      first_person_plural: venimus
+      second_person_plural: venitis
+      third_person_plural: veniunt
+  - type: I-Konjugation
+    translation: schlafen
+    base_form: dormīre
+    base_form_label: Infinitiv
+    word_form: first_person_singular
+    word: dormio
+    verify_inference: true
+    possible_types:
+      - I-Konjugation
+    forms:
+      first_person_singular: dormio
+      second_person_singular: dormis
+      third_person_singular: dormit
+      first_person_plural: dormimus
+      second_person_plural: dormitis
+      third_person_plural: dormiunt
+  - type: I-Konjugation
+    translation: dienen
+    base_form: servīre
+    base_form_label: Infinitiv
+    word_form: first_person_singular
+    word: servio
+    verify_inference: true
+    possible_types:
+      - I-Konjugation
+    forms:
+      first_person_singular: servio
+      second_person_singular: servis
+      third_person_singular: servit
+      first_person_plural: servimus
+      second_person_plural: servitis
+      third_person_plural: serviunt
+  - type: I-Konjugation
+    translation: zusammenkommen, sich versammeln
+    base_form: convenīre
+    base_form_label: Infinitiv
+    word_form: first_person_singular
+    word: convenio
+    verify_inference: true
+    possible_types:
+      - I-Konjugation
+    forms:
+      first_person_singular: convenio
+      second_person_singular: convenis
+      third_person_singular: convenit
+      first_person_plural: convenimus
+      second_person_plural: convenitis
+      third_person_plural: conveniunt
+  - type: A-Konjugation
+    translation: eintreten, betreten
+    base_form: intrāre
+    base_form_label: Infinitiv
+    word_form: first_person_singular
+    word: intro
+    verify_inference: true
+    possible_types:
+      - A-Konjugation
+    forms:
+      first_person_singular: intro
+      second_person_singular: intras
+      third_person_singular: intrat
+      first_person_plural: intramus
+      second_person_plural: intratis
+      third_person_plural: intrant
+  - type: A-Konjugation
+    translation: besuchen
+    base_form: vīsitāre
+    base_form_label: Infinitiv
+    word_form: first_person_singular
+    word: visito
+    verify_inference: true
+    possible_types:
+      - A-Konjugation
+    forms:
+      first_person_singular: visito
+      second_person_singular: visitas
+      third_person_singular: visitat
+      first_person_plural: visitamus
+      second_person_plural: visitatis
+      third_person_plural: visitant
+  - type: E-Konjugation
+    translation: erscheinen, auftauchen, sich zeigen
+    base_form: appārēre
+    base_form_label: Infinitiv
+    word_form: first_person_singular
+    word: appareo
+    verify_inference: true
+    possible_types:
+      - E-Konjugation
+    forms:
+      first_person_singular: appareo
+      second_person_singular: appares
+      third_person_singular: apparet
+      first_person_plural: apparemus
+      second_person_plural: apparetis
+      third_person_plural: apparent
+  - translation: bauen, erbauen
+    base_form: aedificāre
+  - translation: gehen, spazieren gehen
+    base_form: ambulāre
+  - translation: lieben, gern haben
+    base_form: amāre
+  - translation: herbeibringen, hintragen
+    base_form: apportāre
+  - translation: sich nähern, herankommen
+    base_form: appropinquāre
+  - translation: erscheinen, auftauchen, sich zeigen
+    base_form: appārēre
+  - translation: hören
+    base_form: audīre
+  - translation: zögern, sich nicht beeilen
+    base_form: cessāre
+  - translation: rufen, schreien
+    base_form: clāmāre
+  - translation: zusammenkommen, sich versammeln
+    base_form: convenīre
+  - translation: speisen, essen
+    base_form: cēnāre
+  - translation: sorgen (für), sich kümmern (um)
+    base_form: cūrāre
+  - type: A-Konjugation
+    translation: geben, schenken
+    base_form: dare
+  - translation: schlafen
+    base_form: dormīre
+  - translation: (jmd.) erfreuen, unterhalten
+    base_form: dēlectāre
+  - translation: wünschen, verlangen; vermissen
+    base_form: dēsīderāre
+  - translation: erklären, darlegen
+    base_form: explicāre
+  - translation: warten, erwarten
+    base_form: exspectāre
+  - translation: in die Flucht schlagen, vertreiben
+    base_form: fugāre
+  - translation: sich freuen
+    base_form: gaudēre
+  - translation: haben, halten
+    base_form: habēre
+  - translation: befehlen, (be)herrschen
+    base_form: imperāre
+  - translation: arbeiten, sich anstrengen
+    base_form: labōrāre
+  - translation: bleiben, warten; erwarten
+    base_form: manēre
+  - translation: töten
+    base_form: necāre
+  - translation: bereiten, vorbereiten, zubereiten
+    base_form: parāre
+  - translation: gefallen
+    base_form: placēre
+  - translation: tragen, bringen
+    base_form: portāre
+  - translation: (etwas) für gut befinden; prüfen, beweisen
+    base_form: probāre
+  - translation: verhindern, hindern; abhalten
+    base_form: prohibēre
+  - translation: eilen, sich beeilen
+    base_form: properāre
+  - translation: gehorchen
+    base_form: pārēre
+  - translation: kämpfen, streiten
+    base_form: pūgnāre
+  - translation: antworten, erwidern
+    base_form: respondēre
+  - translation: fragen; bitten
+    base_form: rogāre
+  - translation: König sein, herrschen
+    base_form: rēgnāre
+  - translation: lachen; über etw. lachen
+    base_form: rīdēre
+  - translation: opfern
+    base_form: sacrificāre
+  - translation: grüßen, begrüßen
+    base_form: salūtāre
+  - translation: wissen, kennen, verstehen
+    base_form: scīre
+  - translation: sitzen
+    base_form: sedēre
+  - translation: schützen, retten, bewahren
+    base_form: servāre
+  - translation: dienen
+    base_form: servīre
+  - translation: anschauen, betrachten
+    base_form: spectāre
+  - translation: staunen, verblüfft sein
+    base_form: stupēre
+  - translation: übertreffen, überwinden, besiegen
+    base_form: superāre
+  - translation: schweigen, still sein
+    base_form: tacēre
+  - translation: angreifen; versuchen, prüfen
+    base_form: temptāre
+  - translation: (sich) fürchten, Angst haben
+    base_form: timēre
+  - translation: kommen
+    base_form: venīre
+  - translation: sehen
+    base_form: vidēre
+  - translation: rufen, nennen
+    base_form: vocāre
+  - translation: besuchen
+    base_form: vīsitāre

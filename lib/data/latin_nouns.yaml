@@ -1,0 +1,434 @@
+# Data file identifier
+data_file_id: nouns
+
+classification_sections:
+  - Kasus
+  - Numerus
+
+# Default values for items
+defaults:
+  word_form: nominative_singular
+
+# Type inference rules: how to infer possible types from word endings
+# Each rule defines a suffix pattern and the types it matches
+# Rules are checked in order - first match wins
+# Format: suffix -> list of possible types
+type_inference:
+  rules:
+    - suffix: "us"
+      min_length: 3
+      types:
+        - O-Deklination
+    - suffix: "um"
+      min_length: 3
+      types:
+        - O-Deklination
+    - suffix: "a"
+      min_length: 2
+      types:
+        - A-Deklination
+    - suffix: "es"
+      min_length: 3
+      types:
+        - E-Deklination
+    - suffix: "is"
+      min_length: 3
+      types:
+        - E-Deklination
+
+# Pattern definitions for inferring forms from a base word
+# Each pattern defines how to generate all forms from the nominative_singular
+type_patterns:
+  O-Deklination:
+    # Pattern: base word ends in -us (masculine) or -um (neuter)
+    # From nominative_singular (e.g., dominus)
+    genitive_singular: "{stem}i"          # domini
+    dative_singular: "{stem}o"            # domino
+    accusative_singular: "{stem}um"        # dominum
+    ablative_singular: "{stem}o"            # domino
+    nominative_plural: "{stem}i"           # domini
+    genitive_plural: "{stem}orum"          # dominorum
+    dative_plural: "{stem}is"              # dominis
+    accusative_plural: "{stem}os"          # dominos
+    ablative_plural: "{stem}is"            # dominis
+    stem_extraction: "remove_suffix:us,um"  # Remove -us or -um to get stem
+
+  A-Deklination:
+    # Pattern: base word ends in -a
+    # From nominative_singular (e.g., rosa)
+    genitive_singular: "{stem}ae"          # rosae
+    dative_singular: "{stem}ae"            # rosae
+    accusative_singular: "{stem}am"        # rosam
+    ablative_singular: "{stem}a"           # rosa
+    nominative_plural: "{stem}ae"          # rosae
+    genitive_plural: "{stem}arum"          # rosarum
+    dative_plural: "{stem}is"              # rosis
+    accusative_plural: "{stem}as"          # rosas
+    ablative_plural: "{stem}is"            # rosis
+    stem_extraction: "remove_suffix:a"     # Remove -a to get stem
+
+  E-Deklination:
+    # Pattern: base word ends in -es or -is
+    # From nominative_singular (e.g., dies)
+    genitive_singular: "{stem}ei"          # diei
+    dative_singular: "{stem}ei"            # diei
+    accusative_singular: "{stem}em"        # diem
+    ablative_singular: "{stem}e"           # die
+    nominative_plural: "{stem}es"          # dies
+    genitive_plural: "{stem}erum"          # dierum
+    dative_plural: "{stem}ebus"            # diebus
+    accusative_plural: "{stem}es"          # dies
+    ablative_plural: "{stem}ebus"          # diebus
+    stem_extraction: "remove_suffix:es,is" # Remove -es or -is to get stem
+
+  U-Deklination:
+    # Pattern: base word ends in -us
+    # From nominative_singular (e.g., manus)
+    genitive_singular: "{stem}us"          # manus
+    dative_singular: "{stem}ui"            # manui
+    accusative_singular: "{stem}um"        # manum
+    ablative_singular: "{stem}u"           # manu
+    nominative_plural: "{stem}us"          # manus
+    genitive_plural: "{stem}uum"           # manuum
+    dative_plural: "{stem}ibus"            # manibus
+    accusative_plural: "{stem}us"          # manus
+    ablative_plural: "{stem}ibus"          # manibus
+    stem_extraction: "remove_suffix:us"    # Remove -us to get stem
+
+form_labels:
+  nominative_singular:
+    name: Nominativ
+    number: Singular
+  genitive_singular:
+    name: Genitiv
+    number: Singular
+  dative_singular:
+    name: Dativ
+    number: Singular
+  accusative_singular:
+    name: Akkusativ
+    number: Singular
+  ablative_singular:
+    name: Ablativ
+    number: Singular
+  nominative_plural:
+    name: Nominativ
+    number: Plural
+  genitive_plural:
+    name: Genitiv
+    number: Plural
+  dative_plural:
+    name: Dativ
+    number: Plural
+  accusative_plural:
+    name: Akkusativ
+    number: Plural
+  ablative_plural:
+    name: Ablativ
+    number: Plural
+
+form_order:
+  - nominative_singular
+  - genitive_singular
+  - dative_singular
+  - accusative_singular
+  - ablative_singular
+  - nominative_plural
+  - genitive_plural
+  - dative_plural
+  - accusative_plural
+  - ablative_plural
+
+items:
+  # Example: Full form specification (explicit forms - still supported)
+  - type: O-Deklination
+    translation: Der Hausherr/Herr
+    word_form: nominative_singular
+    word: dominus
+    possible_types:
+      - O-Deklination
+    forms:
+      nominative_singular: dominus
+      genitive_singular: domini
+      dative_singular: domino
+      accusative_singular: dominum
+      ablative_singular: domino
+      nominative_plural: domini
+      genitive_plural: dominorum
+      dative_plural: dominis
+      accusative_plural: dominos
+      ablative_plural: dominis
+  - type: A-Deklination
+    translation: Die Rose
+    word_form: nominative_singular
+    word: rosa
+    possible_types:
+      - A-Deklination
+    forms:
+      nominative_singular: rosa
+      genitive_singular: rosae
+      dative_singular: rosae
+      accusative_singular: rosam
+      ablative_singular: rosa
+      nominative_plural: rosae
+      genitive_plural: rosarum
+      dative_plural: rosis
+      accusative_plural: rosas
+      ablative_plural: rosis
+  - type: E-Deklination
+    translation: Der Tag
+    word_form: nominative_singular
+    word: dies
+    possible_types:
+      - E-Deklination
+    forms:
+      nominative_singular: dies
+      genitive_singular: diei
+      dative_singular: diei
+      accusative_singular: diem
+      ablative_singular: die
+      nominative_plural: dies
+      genitive_plural: dierum
+      dative_plural: diebus
+      accusative_plural: dies
+      ablative_plural: diebus
+  - type: U-Deklination
+    translation: Die Hand
+    word_form: nominative_singular
+    word: manus
+    possible_types:
+      - U-Deklination
+    forms:
+      nominative_singular: manus
+      genitive_singular: manus
+      dative_singular: ui
+      accusative_singular: um
+      ablative_singular: u
+      nominative_plural: us
+      genitive_plural: uum
+      dative_plural: ibus
+      accusative_plural: us
+      ablative_plural: ibus
+
+  # Example: Simplified form (forms will be inferred automatically)
+  # For regular declensions, you only need to specify:
+  # - type: the declension type (can be inferred from word ending)
+  # - translation: the translation
+  # - word: the nominative singular form
+  # - word_form: should be "nominative_singular"
+  # - possible_types: (optional, will be inferred from word ending)
+  # The forms and type will be automatically generated based on the type_patterns above
+  - type: O-Deklination
+    translation: Der Freund
+    word_form: nominative_singular
+    word: amicus
+    possible_types:
+      - O-Deklination
+    # forms: omitted - will be inferred as: amicus, amici, amico, amicum, amico, amici, amicorum, amicis, amicos, amicis
+
+  # Example: Minimal form (type and possible_types inferred from word ending)
+  # Just specify word and translation - everything else is inferred!
+  # word_form defaults to "nominative_singular" (from defaults section)
+  - translation: Der Gott
+    word: deus
+    # type: inferred as "O-Deklination" (from -us ending)
+    # possible_types: inferred as ["O-Deklination"]
+    # word_form: defaults to "nominative_singular"
+    # forms: inferred automatically
+
+  # Test cases: Nouns with macrons to verify automatic form generation
+  # These have explicit forms to serve as regression tests
+  - type: O-Deklination
+    translation: der Freund
+    word_form: nominative_singular
+    word: amīcus
+    verify_inference: true
+    possible_types:
+      - O-Deklination
+    forms:
+      nominative_singular: amicus
+      genitive_singular: amici
+      dative_singular: amico
+      accusative_singular: amicum
+      ablative_singular: amico
+      nominative_plural: amici
+      genitive_plural: amicorum
+      dative_plural: amicis
+      accusative_plural: amicos
+      ablative_plural: amicis
+  - type: O-Deklination
+    translation: der Römer
+    word_form: nominative_singular
+    word: Rōmānus
+    verify_inference: true
+    possible_types:
+      - O-Deklination
+    forms:
+      nominative_singular: Romanus
+      genitive_singular: Romani
+      dative_singular: Romano
+      accusative_singular: Romanum
+      ablative_singular: Romano
+      nominative_plural: Romani
+      genitive_plural: Romanorum
+      dative_plural: Romanis
+      accusative_plural: Romanos
+      ablative_plural: Romanis
+  - type: O-Deklination
+    translation: der Sohn
+    word_form: nominative_singular
+    word: fīlius
+    verify_inference: true
+    possible_types:
+      - O-Deklination
+    forms:
+      nominative_singular: filius
+      genitive_singular: filii
+      dative_singular: filio
+      accusative_singular: filium
+      ablative_singular: filio
+      nominative_plural: filii
+      genitive_plural: filiorum
+      dative_plural: filiis
+      accusative_plural: filios
+      ablative_plural: filiis
+  - type: A-Deklination
+    translation: die Tochter
+    word_form: nominative_singular
+    word: fīlia
+    verify_inference: true
+    possible_types:
+      - A-Deklination
+    forms:
+      nominative_singular: filia
+      genitive_singular: filiae
+      dative_singular: filiae
+      accusative_singular: filiam
+      ablative_singular: filia
+      nominative_plural: filiae
+      genitive_plural: filiarum
+      dative_plural: filiis
+      accusative_plural: filias
+      ablative_plural: filiis
+  - type: A-Deklination
+    translation: die Frau
+    word_form: nominative_singular
+    word: fēmina
+    verify_inference: true
+    possible_types:
+      - A-Deklination
+    forms:
+      nominative_singular: femina
+      genitive_singular: feminae
+      dative_singular: feminae
+      accusative_singular: feminam
+      ablative_singular: femina
+      nominative_plural: feminae
+      genitive_plural: feminarum
+      dative_plural: feminis
+      accusative_plural: feminas
+      ablative_plural: feminis
+  - translation: das Kapitol (einer der sieben Hügel Roms)
+    word: Capitōlium
+  - translation: der Römer
+    word: Rōmānus
+  - translation: die Unterwelt; der Tartarus
+    word: Tartarus
+  - translation: der Gegner, Feind
+    word: adversārius
+  - translation: das Gebäude, Bauwerk
+    word: aedificium
+  - translation: das Amphitheater
+    word: amphitheātrum
+  - translation: der Freund
+    word: amīcus
+  - translation: der Sand; die Arena, der Kampfplatz
+    word: arēna
+  - translation: die Gerichtshalle, Markthalle
+    word: basilica
+  - translation: das (wilde) Tier
+    word: bestia
+  - translation: die Nahrung, die Speise
+    word: cibus
+  - translation: der Rat, Plan, Beschluss
+    word: cōnsilium
+  - translation: die Kurie (Versammlungsort des Senats)
+    word: cūria
+  - translation: die Göttin
+    word: dea
+  - translation: die Herrin, Ehefrau
+    word: domina
+  - translation: das Geschenk, die Gabe
+    word: dōnum
+  - translation: das Pferd
+    word: equus
+  - translation: die Familie; die Hausgemeinschaft
+    word: familia
+  - translation: der Marktplatz (das Forum)
+    word: forum
+  - translation: das Getreide
+    word: frūmentum
+  - translation: die Frau
+    word: fēmina
+  - translation: die Tochter
+    word: fīlia
+  - translation: der Sohn
+    word: fīlius
+  - translation: der Garten
+    word: hortus
+  - translation: das Opfer, Opfertier
+    word: hostia
+  - translation: der Brand
+    word: incendium
+  - translation: das Spiel, Schauspiel; die Schule
+    word: lūdus
+  - translation: das Denkmal
+    word: monumentum
+  - translation: das Ungeheuer
+    word: mōnstrum
+  - translation: die Aufgabe, Beschäftigung
+    word: negōtium
+  - translation: die Gefahr, das Abenteuer
+    word: perīculum
+  - translation: das Volk
+    word: populus
+  - translation: die Tür, das Tor, der Eingang
+    word: porta
+  - translation: das Mädchen, die junge Frau
+    word: puella
+  - translation: das Opfer
+    word: sacrificium
+  - translation: die Weisheit, Klugheit
+    word: sapientia
+  - translation: die Sklavin
+    word: serva
+  - translation: der Sklave
+    word: servus
+  - translation: das Bild, Götterbild
+    word: simulācrum
+  - translation: das Schauspiel
+    word: spectāculum
+  - translation: das Standbild, die Statue
+    word: statua
+  - translation: der Laden, das Wirtshaus
+    word: taberna
+  - translation: die Tafel, Schreibtafel
+    word: tabula
+  - translation: der Tempel
+    word: templum
+  - translation: das Obergewand (die Toga)
+    word: toga
+  - translation: da, dann, damals
+    word: tum
+  - translation: die Menschenmenge; die Unordnung; der Lärm
+    word: turba
+  - translation: der Schatten
+    word: umbra
+  - translation: das Wort
+    word: verbum
+  - translation: das Haus, Landhaus
+    word: vīlla
+  - translation: der Wein
+    word: vīnum
+  - translation: der Altar
+    word: āra
