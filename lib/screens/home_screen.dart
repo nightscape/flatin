@@ -13,6 +13,14 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = screenWidth < 600;
+    final horizontalPadding = isMobile ? 16.0 : 24.0;
+    final verticalPadding = isMobile ? 8.0 : 12.0;
+    final titleFontSize = isMobile ? 20.0 : 24.0;
+    final buttonFontSize = isMobile ? 18.0 : 20.0;
+    final buttonHeight = isMobile ? 70.0 : 80.0;
+
     return Scaffold(
       backgroundColor: const Color(0xFFE5E5E5),
       drawer: buildAppDrawer(context),
@@ -22,9 +30,9 @@ class HomeScreen extends ConsumerWidget {
         title: Text(
           key: const Key('app.title'),
           FlutterI18n.translate(context, 'app.title'),
-          style: const TextStyle(
+          style: TextStyle(
             color: Colors.black,
-            fontSize: 24,
+            fontSize: titleFontSize,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -35,9 +43,9 @@ class HomeScreen extends ConsumerWidget {
           children: [
             // Nouns button
             Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 24.0,
-                vertical: 12.0,
+              padding: EdgeInsets.symmetric(
+                horizontal: horizontalPadding,
+                vertical: verticalPadding,
               ),
               child: FutureBuilder<List<PracticeItem>>(
                 future: loadPracticeItems('lib/data/latin_nouns.yaml'),
@@ -52,10 +60,14 @@ class HomeScreen extends ConsumerWidget {
                         'home.error',
                         translationParams: {'error': snapshot.error.toString()},
                       ),
+                      style: TextStyle(fontSize: isMobile ? 14.0 : 16.0),
                     );
                   }
                   if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return Text(FlutterI18n.translate(context, 'home.noData'));
+                    return Text(
+                      FlutterI18n.translate(context, 'home.noData'),
+                      style: TextStyle(fontSize: isMobile ? 14.0 : 16.0),
+                    );
                   }
                   return Consumer(
                     builder: (context, ref, child) {
@@ -72,7 +84,7 @@ class HomeScreen extends ConsumerWidget {
                           final itemToShow = nextItem ?? snapshot.data!.first;
                           return SizedBox(
                             width: double.infinity,
-                            height: 80,
+                            height: buttonHeight,
                             child: ElevatedButton(
                               key: const Key('home.nouns.button'),
                               onPressed: () {
@@ -99,16 +111,16 @@ class HomeScreen extends ConsumerWidget {
                                       context,
                                       'home.nouns',
                                     ),
-                                    style: const TextStyle(
-                                      fontSize: 20,
+                                    style: TextStyle(
+                                      fontSize: buttonFontSize,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                   if (dueCount > 0)
                                     Text(
                                       '$dueCount ${FlutterI18n.translate(context, 'home.due')}',
-                                      style: const TextStyle(
-                                        fontSize: 12,
+                                      style: TextStyle(
+                                        fontSize: isMobile ? 10.0 : 12.0,
                                         fontWeight: FontWeight.normal,
                                       ),
                                     ),
@@ -119,7 +131,7 @@ class HomeScreen extends ConsumerWidget {
                         },
                         loading: () => SizedBox(
                           width: double.infinity,
-                          height: 80,
+                          height: buttonHeight,
                           child: ElevatedButton(
                             key: const Key('home_nouns_button'),
                             onPressed: () {
@@ -141,8 +153,8 @@ class HomeScreen extends ConsumerWidget {
                             ),
                             child: Text(
                               FlutterI18n.translate(context, 'home.nouns'),
-                              style: const TextStyle(
-                                fontSize: 20,
+                              style: TextStyle(
+                                fontSize: buttonFontSize,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -150,7 +162,7 @@ class HomeScreen extends ConsumerWidget {
                         ),
                         error: (_, __) => SizedBox(
                           width: double.infinity,
-                          height: 80,
+                          height: buttonHeight,
                           child: ElevatedButton(
                             key: const Key('home_nouns_button'),
                             onPressed: () {
@@ -172,8 +184,8 @@ class HomeScreen extends ConsumerWidget {
                             ),
                             child: Text(
                               FlutterI18n.translate(context, 'home.nouns'),
-                              style: const TextStyle(
-                                fontSize: 20,
+                              style: TextStyle(
+                                fontSize: buttonFontSize,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -187,9 +199,9 @@ class HomeScreen extends ConsumerWidget {
             ),
             // Verbs button
             Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 24.0,
-                vertical: 12.0,
+              padding: EdgeInsets.symmetric(
+                horizontal: horizontalPadding,
+                vertical: verticalPadding,
               ),
               child: FutureBuilder<List<PracticeItem>>(
                 future: loadPracticeItems('lib/data/latin_verbs.yaml'),
@@ -204,10 +216,14 @@ class HomeScreen extends ConsumerWidget {
                         'home.error',
                         translationParams: {'error': snapshot.error.toString()},
                       ),
+                      style: TextStyle(fontSize: isMobile ? 14.0 : 16.0),
                     );
                   }
                   if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return Text(FlutterI18n.translate(context, 'home.noData'));
+                    return Text(
+                      FlutterI18n.translate(context, 'home.noData'),
+                      style: TextStyle(fontSize: isMobile ? 14.0 : 16.0),
+                    );
                   }
                   return Consumer(
                     builder: (context, ref, child) {
@@ -224,7 +240,7 @@ class HomeScreen extends ConsumerWidget {
                           final itemToShow = nextItem ?? snapshot.data!.first;
                           return SizedBox(
                             width: double.infinity,
-                            height: 80,
+                            height: buttonHeight,
                             child: ElevatedButton(
                               key: const Key('home.verbs.button'),
                               onPressed: () {
@@ -251,16 +267,16 @@ class HomeScreen extends ConsumerWidget {
                                       context,
                                       'home.verbs',
                                     ),
-                                    style: const TextStyle(
-                                      fontSize: 20,
+                                    style: TextStyle(
+                                      fontSize: buttonFontSize,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                   if (dueCount > 0)
                                     Text(
                                       '$dueCount ${FlutterI18n.translate(context, 'home.due')}',
-                                      style: const TextStyle(
-                                        fontSize: 12,
+                                      style: TextStyle(
+                                        fontSize: isMobile ? 10.0 : 12.0,
                                         fontWeight: FontWeight.normal,
                                       ),
                                     ),
@@ -271,7 +287,7 @@ class HomeScreen extends ConsumerWidget {
                         },
                         loading: () => SizedBox(
                           width: double.infinity,
-                          height: 80,
+                          height: buttonHeight,
                           child: ElevatedButton(
                             key: const Key('home.verbs.button'),
                             onPressed: () {
@@ -293,8 +309,8 @@ class HomeScreen extends ConsumerWidget {
                             ),
                             child: Text(
                               FlutterI18n.translate(context, 'home.verbs'),
-                              style: const TextStyle(
-                                fontSize: 20,
+                              style: TextStyle(
+                                fontSize: buttonFontSize,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -302,7 +318,7 @@ class HomeScreen extends ConsumerWidget {
                         ),
                         error: (_, __) => SizedBox(
                           width: double.infinity,
-                          height: 80,
+                          height: buttonHeight,
                           child: ElevatedButton(
                             key: const Key('home.verbs.button'),
                             onPressed: () {
@@ -324,8 +340,8 @@ class HomeScreen extends ConsumerWidget {
                             ),
                             child: Text(
                               FlutterI18n.translate(context, 'home.verbs'),
-                              style: const TextStyle(
-                                fontSize: 20,
+                              style: TextStyle(
+                                fontSize: buttonFontSize,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -339,13 +355,13 @@ class HomeScreen extends ConsumerWidget {
             ),
             // Word Classification button
             Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 24.0,
-                vertical: 12.0,
+              padding: EdgeInsets.symmetric(
+                horizontal: horizontalPadding,
+                vertical: verticalPadding,
               ),
               child: SizedBox(
                 width: double.infinity,
-                height: 80,
+                height: buttonHeight,
                 child: ElevatedButton(
                   key: const Key('home.wordClassification.button'),
                   onPressed: () {
@@ -365,8 +381,8 @@ class HomeScreen extends ConsumerWidget {
                   ),
                   child: Text(
                     FlutterI18n.translate(context, 'home.wordClassification'),
-                    style: const TextStyle(
-                      fontSize: 20,
+                    style: TextStyle(
+                      fontSize: buttonFontSize,
                       fontWeight: FontWeight.bold,
                     ),
                   ),

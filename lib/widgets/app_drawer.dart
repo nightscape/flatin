@@ -7,6 +7,11 @@ import '../data/practice_data.dart';
 import '../models/practice_item.dart';
 
 Widget buildAppDrawer(BuildContext context) {
+  final screenWidth = MediaQuery.of(context).size.width;
+  final isMobile = screenWidth < 600;
+  final headerFontSize = isMobile ? 22.0 : 28.0;
+  final itemFontSize = isMobile ? 16.0 : 18.0;
+
   return Drawer(
     backgroundColor: const Color(0xFFE5E5E5),
     child: ListView(
@@ -18,9 +23,9 @@ Widget buildAppDrawer(BuildContext context) {
           ),
           child: Text(
             FlutterI18n.translate(context, 'drawer.title'),
-            style: const TextStyle(
+            style: TextStyle(
               color: Colors.black,
-              fontSize: 28,
+              fontSize: headerFontSize,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -30,7 +35,7 @@ Widget buildAppDrawer(BuildContext context) {
           leading: const Icon(Icons.book, color: Colors.black),
           title: Text(
             FlutterI18n.translate(context, 'drawer.nouns'),
-            style: const TextStyle(color: Colors.black, fontSize: 18),
+            style: TextStyle(color: Colors.black, fontSize: itemFontSize),
           ),
           onTap: () {
             Navigator.pop(context);
@@ -65,7 +70,7 @@ Widget buildAppDrawer(BuildContext context) {
           leading: const Icon(Icons.auto_stories, color: Colors.black),
           title: Text(
             FlutterI18n.translate(context, 'drawer.verbs'),
-            style: const TextStyle(color: Colors.black, fontSize: 18),
+            style: TextStyle(color: Colors.black, fontSize: itemFontSize),
           ),
           onTap: () {
             Navigator.pop(context);
@@ -100,7 +105,7 @@ Widget buildAppDrawer(BuildContext context) {
           leading: const Icon(Icons.category, color: Colors.black),
           title: Text(
             FlutterI18n.translate(context, 'drawer.wordClassification'),
-            style: const TextStyle(color: Colors.black, fontSize: 18),
+            style: TextStyle(color: Colors.black, fontSize: itemFontSize),
           ),
           onTap: () {
             Navigator.pop(context);
@@ -117,7 +122,7 @@ Widget buildAppDrawer(BuildContext context) {
           leading: const Icon(Icons.settings, color: Colors.black),
           title: Text(
             FlutterI18n.translate(context, 'drawer.settings'),
-            style: const TextStyle(color: Colors.black, fontSize: 18),
+            style: TextStyle(color: Colors.black, fontSize: itemFontSize),
           ),
           onTap: () {
             Navigator.pop(context);

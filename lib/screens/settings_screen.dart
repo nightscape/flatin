@@ -26,6 +26,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     String title,
     String dataFileId,
     FormMetadata metadata,
+    bool isMobile,
   ) {
     final settingsAsync = ref.watch(settingsProvider);
 
@@ -39,17 +40,19 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              padding: EdgeInsets.symmetric(vertical: isMobile ? 12.0 : 16.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    title,
-                    key: Key('settings.section.$dataFileId'),
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
+                  Expanded(
+                    child: Text(
+                      title,
+                      key: Key('settings.section.$dataFileId'),
+                      style: TextStyle(
+                        fontSize: isMobile ? 20.0 : 24.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
                     ),
                   ),
                   TextButton(
@@ -59,7 +62,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     },
                     child: Text(
                       FlutterI18n.translate(context, 'settings.enableAll'),
-                      style: const TextStyle(fontSize: 14),
+                      style: TextStyle(fontSize: isMobile ? 12.0 : 14.0),
                     ),
                   ),
                 ],
@@ -70,9 +73,16 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               final isEnabled = enabledForms.contains(formKey);
 
               return CheckboxListTile(
+                contentPadding: EdgeInsets.symmetric(
+                  horizontal: isMobile ? 4.0 : 0.0,
+                  vertical: isMobile ? 4.0 : 0.0,
+                ),
                 title: Text(
                   formLabel.displayName,
-                  style: const TextStyle(fontSize: 16, color: Colors.black),
+                  style: TextStyle(
+                    fontSize: isMobile ? 14.0 : 16.0,
+                    color: Colors.black,
+                  ),
                 ),
                 value: isEnabled,
                 onChanged: (value) {
@@ -83,7 +93,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 checkColor: Colors.black,
               );
             }),
-            const SizedBox(height: 24),
+            SizedBox(height: isMobile ? 16 : 24),
           ],
         );
       },
@@ -94,12 +104,18 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           'settings.error',
           translationParams: {'error': error.toString()},
         ),
+        style: TextStyle(fontSize: isMobile ? 14.0 : 16.0),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = screenWidth < 600;
+    final horizontalPadding = isMobile ? 16.0 : 24.0;
+    final titleFontSize = isMobile ? 20.0 : 24.0;
+
     return Scaffold(
       backgroundColor: const Color(0xFFE5E5E5),
       appBar: AppBar(
@@ -114,9 +130,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         title: Text(
           key: const Key('settings.title'),
           FlutterI18n.translate(context, 'settings.title'),
-          style: const TextStyle(
+          style: TextStyle(
             color: Colors.black,
-            fontSize: 24,
+            fontSize: titleFontSize,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -136,7 +152,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               }
 
               return SingleChildScrollView(
-                padding: const EdgeInsets.all(24.0),
+                padding: EdgeInsets.all(horizontalPadding),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -144,11 +160,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       FlutterI18n.translate(context, 'settings.nouns'),
                       'nouns',
                       nounsSnapshot.data!,
+                      isMobile,
                     ),
                     _buildFormSection(
                       FlutterI18n.translate(context, 'settings.verbs'),
                       'verbs',
                       verbsSnapshot.data!,
+                      isMobile,
                     ),
                   ],
                 ),
