@@ -18,11 +18,11 @@ type_inference:
     - suffix: "us"
       min_length: 3
       types:
-        - O-Deklination
+        - O-Deklination-maskulinum
     - suffix: "um"
       min_length: 3
       types:
-        - O-Deklination
+        - O-Deklination-neutrum
     - suffix: "a"
       min_length: 2
       types:
@@ -39,19 +39,37 @@ type_inference:
 # Pattern definitions for inferring forms from a base word
 # Each pattern defines how to generate all forms from the nominative_singular
 type_patterns:
-  O-Deklination:
-    # Pattern: base word ends in -us (masculine) or -um (neuter)
+  O-Deklination-maskulinum:
+    # Pattern: base word ends in -us (masculine)
     # From nominative_singular (e.g., dominus)
-    genitive_singular: "{stem}i"          # domini
-    dative_singular: "{stem}o"            # domino
+    genitive_singular: "{stem}i"           # domini
+    dative_singular: "{stem}o"             # domino
     accusative_singular: "{stem}um"        # dominum
-    ablative_singular: "{stem}o"            # domino
+    ablative_singular: "{stem}o"           # domino
+    vocative_singular: "{stem}e"           # domine
     nominative_plural: "{stem}i"           # domini
     genitive_plural: "{stem}orum"          # dominorum
     dative_plural: "{stem}is"              # dominis
     accusative_plural: "{stem}os"          # dominos
     ablative_plural: "{stem}is"            # dominis
-    stem_extraction: "remove_suffix:us,um"  # Remove -us or -um to get stem
+    vocative_plural: "{stem}i"             # domini
+    stem_extraction: "remove_suffix:us"
+
+  O-Deklination-neutrum:
+    # Pattern: base word ends in -um (neuter)
+    # From nominative_singular (e.g., templum)
+    genitive_singular: "{stem}i"           # templi
+    dative_singular: "{stem}o"             # templo
+    accusative_singular: "{stem}um"        # templum (same as nominative)
+    ablative_singular: "{stem}o"           # templo
+    vocative_singular: "{stem}um"          # templum (same as nominative)
+    nominative_plural: "{stem}a"           # templa
+    genitive_plural: "{stem}orum"          # templorum
+    dative_plural: "{stem}is"              # templis
+    accusative_plural: "{stem}a"           # templa (same as nominative)
+    ablative_plural: "{stem}is"            # templis
+    vocative_plural: "{stem}a"             # templa (same as nominative)
+    stem_extraction: "remove_suffix:um"
 
   A-Deklination:
     # Pattern: base word ends in -a
@@ -60,11 +78,13 @@ type_patterns:
     dative_singular: "{stem}ae"            # rosae
     accusative_singular: "{stem}am"        # rosam
     ablative_singular: "{stem}a"           # rosa
+    vocative_singular: "{stem}a"           # rosa
     nominative_plural: "{stem}ae"          # rosae
     genitive_plural: "{stem}arum"          # rosarum
     dative_plural: "{stem}is"              # rosis
     accusative_plural: "{stem}as"          # rosas
     ablative_plural: "{stem}is"            # rosis
+    vocative_plural: "{stem}ae"            # rosae
     stem_extraction: "remove_suffix:a"     # Remove -a to get stem
 
   E-Deklination:
@@ -111,6 +131,9 @@ form_labels:
   ablative_singular:
     name: Ablativ
     number: Singular
+  vocative_singular:
+    name: Vokativ
+    number: Singular
   nominative_plural:
     name: Nominativ
     number: Plural
@@ -125,6 +148,9 @@ form_labels:
     number: Plural
   ablative_plural:
     name: Ablativ
+    number: Plural
+  vocative_plural:
+    name: Vokativ
     number: Plural
 
 form_order:
@@ -141,12 +167,12 @@ form_order:
 
 items:
   # Example: Full form specification (explicit forms - still supported)
-  - type: O-Deklination
+  - type: O-Deklination-maskulinum
     translation: Der Hausherr/Herr
     word_form: nominative_singular
     word: dominus
     possible_types:
-      - O-Deklination
+      - O-Deklination-maskulinum
     forms:
       nominative_singular: dominus
       genitive_singular: domini
@@ -196,19 +222,20 @@ items:
     translation: Die Hand
     word_form: nominative_singular
     word: manus
+    verify_inference: true
     possible_types:
       - U-Deklination
     forms:
       nominative_singular: manus
       genitive_singular: manus
-      dative_singular: ui
-      accusative_singular: um
-      ablative_singular: u
-      nominative_plural: us
-      genitive_plural: uum
-      dative_plural: ibus
-      accusative_plural: us
-      ablative_plural: ibus
+      dative_singular: manui
+      accusative_singular: manum
+      ablative_singular: manu
+      nominative_plural: manus
+      genitive_plural: manuum
+      dative_plural: manibus
+      accusative_plural: manus
+      ablative_plural: manibus
 
   # Example: Simplified form (forms will be inferred automatically)
   # For regular declensions, you only need to specify:
@@ -218,12 +245,12 @@ items:
   # - word_form: should be "nominative_singular"
   # - possible_types: (optional, will be inferred from word ending)
   # The forms and type will be automatically generated based on the type_patterns above
-  - type: O-Deklination
+  - type: O-Deklination-maskulinum
     translation: Der Freund
     word_form: nominative_singular
     word: amicus
     possible_types:
-      - O-Deklination
+      - O-Deklination-maskulinum
     # forms: omitted - will be inferred as: amicus, amici, amico, amicum, amico, amici, amicorum, amicis, amicos, amicis
 
   # Example: Minimal form (type and possible_types inferred from word ending)
@@ -238,13 +265,13 @@ items:
 
   # Test cases: Nouns with macrons to verify automatic form generation
   # These have explicit forms to serve as regression tests
-  - type: O-Deklination
+  - type: O-Deklination-maskulinum
     translation: der Freund
     word_form: nominative_singular
     word: amīcus
     verify_inference: true
     possible_types:
-      - O-Deklination
+      - O-Deklination-maskulinum
     forms:
       nominative_singular: amicus
       genitive_singular: amici
@@ -256,13 +283,13 @@ items:
       dative_plural: amicis
       accusative_plural: amicos
       ablative_plural: amicis
-  - type: O-Deklination
+  - type: O-Deklination-maskulinum
     translation: der Römer
     word_form: nominative_singular
     word: Rōmānus
     verify_inference: true
     possible_types:
-      - O-Deklination
+      - O-Deklination-maskulinum
     forms:
       nominative_singular: Romanus
       genitive_singular: Romani
@@ -274,13 +301,13 @@ items:
       dative_plural: Romanis
       accusative_plural: Romanos
       ablative_plural: Romanis
-  - type: O-Deklination
+  - type: O-Deklination-maskulinum
     translation: der Sohn
     word_form: nominative_singular
     word: fīlius
     verify_inference: true
     possible_types:
-      - O-Deklination
+      - O-Deklination-maskulinum
     forms:
       nominative_singular: filius
       genitive_singular: filii
@@ -414,12 +441,26 @@ items:
     word: taberna
   - translation: die Tafel, Schreibtafel
     word: tabula
-  - translation: der Tempel
+  - type: O-Deklination-neutrum
+    translation: der Tempel
+    word_form: nominative_singular
     word: templum
+    verify_inference: true
+    possible_types:
+      - O-Deklination-neutrum
+    forms:
+      nominative_singular: templum
+      genitive_singular: templi
+      dative_singular: templo
+      accusative_singular: templum
+      ablative_singular: templo
+      nominative_plural: templa
+      genitive_plural: templorum
+      dative_plural: templis
+      accusative_plural: templa
+      ablative_plural: templis
   - translation: das Obergewand (die Toga)
     word: toga
-  - translation: da, dann, damals
-    word: tum
   - translation: die Menschenmenge; die Unordnung; der Lärm
     word: turba
   - translation: der Schatten
