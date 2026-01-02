@@ -50,19 +50,22 @@ class PracticeItem {
   }
 }
 
-/// Form label (case, person, etc.)
+/// Form label (case, person, tense, etc.)
 class FormLabel {
   final String name;
   final String number;
+  final String? tense;
 
-  FormLabel({required this.name, required this.number});
+  FormLabel({required this.name, required this.number, this.tense});
 
-  String get displayName => '$name $number';
+  String get displayName =>
+      tense != null ? '$tense: $name $number' : '$name $number';
 
   factory FormLabel.fromMap(Map<String, dynamic> map) {
     return FormLabel(
       name: map['name'] as String,
       number: map['number'] as String,
+      tense: map['tense'] as String?,
     );
   }
 }

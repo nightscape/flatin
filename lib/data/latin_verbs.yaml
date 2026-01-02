@@ -2,12 +2,13 @@
 data_file_id: verbs
 
 classification_sections:
+  - Tempus
   - Person
   - Numerus
 
 # Default values for items
 defaults:
-  word_form: first_person_singular
+  word_form: praesens_first_person_singular
   base_form_label: Infinitiv
 
 # Type inference rules: how to infer possible types from word endings
@@ -61,302 +62,293 @@ type_inference:
 # Each pattern defines how to generate all forms from the first_person_singular or base_form
 type_patterns:
   A-Konjugation:
-    # Pattern: infinitive ends in -are, first person singular ends in -o
-    # From first_person_singular (e.g., amo) or base_form (e.g., amare)
-    second_person_singular: "{stem}as"     # amas
-    third_person_singular: "{stem}at"      # amat
-    first_person_plural: "{stem}amus"      # amamus
-    second_person_plural: "{stem}atis"     # amatis
-    third_person_plural: "{stem}ant"        # amant
-    stem_extraction: "remove_suffix:o"     # Remove -o from first person singular
-    # Alternative: from infinitive (amare) -> remove -re or -āre to get stem (ama or am)
-    infinitive_stem_extraction: "remove_suffix:re,āre"  # Remove -re or -āre from infinitive
-    # Reconstruct first_person_singular from infinitive stem: ama + o = amo, or am + o = amo
+    # Präsens
+    praesens_second_person_singular: "{stem}as"
+    praesens_third_person_singular: "{stem}at"
+    praesens_first_person_plural: "{stem}amus"
+    praesens_second_person_plural: "{stem}atis"
+    praesens_third_person_plural: "{stem}ant"
+    # Imperfekt
+    imperfekt_first_person_singular: "{stem}abam"
+    imperfekt_second_person_singular: "{stem}abas"
+    imperfekt_third_person_singular: "{stem}abat"
+    imperfekt_first_person_plural: "{stem}abamus"
+    imperfekt_second_person_plural: "{stem}abatis"
+    imperfekt_third_person_plural: "{stem}abant"
+    # Stem extraction
+    stem_extraction: "remove_suffix:o"
+    infinitive_stem_extraction: "remove_suffix:re,āre"
     reconstruction_from_alternative_stem: "{stem}o"
 
   E-Konjugation:
-    # Pattern: infinitive ends in -ere, first person singular ends in -eo
-    # From first_person_singular (e.g., habeo) or base_form (e.g., habere)
-    second_person_singular: "{stem}es"     # habes
-    third_person_singular: "{stem}et"      # habet
-    first_person_plural: "{stem}emus"      # habemus
-    second_person_plural: "{stem}etis"     # habetis
-    third_person_plural: "{stem}ent"        # habent
-    stem_extraction: "remove_suffix:eo"    # Remove -eo from first person singular
-    infinitive_stem_extraction: "remove_suffix:re"  # Remove -re from infinitive
-    # Reconstruct first_person_singular from infinitive stem: habe + o = habeo
+    # Präsens
+    praesens_second_person_singular: "{stem}es"
+    praesens_third_person_singular: "{stem}et"
+    praesens_first_person_plural: "{stem}emus"
+    praesens_second_person_plural: "{stem}etis"
+    praesens_third_person_plural: "{stem}ent"
+    # Imperfekt
+    imperfekt_first_person_singular: "{stem}ebam"
+    imperfekt_second_person_singular: "{stem}ebas"
+    imperfekt_third_person_singular: "{stem}ebat"
+    imperfekt_first_person_plural: "{stem}ebamus"
+    imperfekt_second_person_plural: "{stem}ebatis"
+    imperfekt_third_person_plural: "{stem}ebant"
+    # Stem extraction
+    stem_extraction: "remove_suffix:eo"
+    infinitive_stem_extraction: "remove_suffix:re"
     reconstruction_from_alternative_stem: "{stem}o"
 
   I-Konjugation:
-    # Pattern: infinitive ends in -ire, first person singular ends in -io
-    # From first_person_singular (e.g., audio) or base_form (e.g., audire)
-    second_person_singular: "{stem}is"     # audis
-    third_person_singular: "{stem}it"      # audit
-    first_person_plural: "{stem}imus"      # audimus
-    second_person_plural: "{stem}itis"     # auditis
-    third_person_plural: "{stem}iunt"       # audiunt
-    stem_extraction: "remove_suffix:io"    # Remove -io from first person singular
-    infinitive_stem_extraction: "remove_suffix:re"  # Remove -re from infinitive
-    # Reconstruct first_person_singular from infinitive stem: audi + o = audio
+    # Präsens
+    praesens_second_person_singular: "{stem}is"
+    praesens_third_person_singular: "{stem}it"
+    praesens_first_person_plural: "{stem}imus"
+    praesens_second_person_plural: "{stem}itis"
+    praesens_third_person_plural: "{stem}iunt"
+    # Imperfekt
+    imperfekt_first_person_singular: "{stem}iebam"
+    imperfekt_second_person_singular: "{stem}iebas"
+    imperfekt_third_person_singular: "{stem}iebat"
+    imperfekt_first_person_plural: "{stem}iebamus"
+    imperfekt_second_person_plural: "{stem}iebatis"
+    imperfekt_third_person_plural: "{stem}iebant"
+    # Stem extraction
+    stem_extraction: "remove_suffix:io"
+    infinitive_stem_extraction: "remove_suffix:re"
     reconstruction_from_alternative_stem: "{stem}o"
 
   Mischkonjugation:
-    # Pattern: infinitive ends in -ere, first person singular ends in -io
-    # From first_person_singular (e.g., capio) or base_form (e.g., capere)
-    second_person_singular: "{stem}is"     # capis
-    third_person_singular: "{stem}it"      # capit
-    first_person_plural: "{stem}imus"     # capimus
-    second_person_plural: "{stem}itis"     # capitis
-    third_person_plural: "{stem}iunt"       # capiunt
-    stem_extraction: "remove_suffix:io"    # Remove -io from first person singular
-    infinitive_stem_extraction: "remove_suffix:re"  # Remove -re from infinitive
-    # Reconstruct first_person_singular from infinitive stem: audi + o = audio
-    reconstruction_from_alternative_stem: "{stem}o"
+    # Präsens
+    praesens_second_person_singular: "{stem}is"
+    praesens_third_person_singular: "{stem}it"
+    praesens_first_person_plural: "{stem}imus"
+    praesens_second_person_plural: "{stem}itis"
+    praesens_third_person_plural: "{stem}iunt"
+    # Imperfekt (wie I-Konjugation)
+    imperfekt_first_person_singular: "{stem}iebam"
+    imperfekt_second_person_singular: "{stem}iebas"
+    imperfekt_third_person_singular: "{stem}iebat"
+    imperfekt_first_person_plural: "{stem}iebamus"
+    imperfekt_second_person_plural: "{stem}iebatis"
+    imperfekt_third_person_plural: "{stem}iebant"
+    # Stem extraction: capio -> cap, capere -> cap
+    stem_extraction: "remove_suffix:io"
+    infinitive_stem_extraction: "remove_suffix:ere"
+    reconstruction_from_alternative_stem: "{stem}io"
 
 form_labels:
-  first_person_singular:
+  praesens_first_person_singular:
     name: 1. Person
     number: Singular
-  second_person_singular:
+    tense: Präsens
+  praesens_second_person_singular:
     name: 2. Person
     number: Singular
-  third_person_singular:
+    tense: Präsens
+  praesens_third_person_singular:
     name: 3. Person
     number: Singular
-  first_person_plural:
+    tense: Präsens
+  praesens_first_person_plural:
     name: 1. Person
     number: Plural
-  second_person_plural:
+    tense: Präsens
+  praesens_second_person_plural:
     name: 2. Person
     number: Plural
-  third_person_plural:
+    tense: Präsens
+  praesens_third_person_plural:
     name: 3. Person
     number: Plural
+    tense: Präsens
+  imperfekt_first_person_singular:
+    name: 1. Person
+    number: Singular
+    tense: Imperfekt
+  imperfekt_second_person_singular:
+    name: 2. Person
+    number: Singular
+    tense: Imperfekt
+  imperfekt_third_person_singular:
+    name: 3. Person
+    number: Singular
+    tense: Imperfekt
+  imperfekt_first_person_plural:
+    name: 1. Person
+    number: Plural
+    tense: Imperfekt
+  imperfekt_second_person_plural:
+    name: 2. Person
+    number: Plural
+    tense: Imperfekt
+  imperfekt_third_person_plural:
+    name: 3. Person
+    number: Plural
+    tense: Imperfekt
 
 form_order:
-  - first_person_singular
-  - second_person_singular
-  - third_person_singular
-  - first_person_plural
-  - second_person_plural
-  - third_person_plural
+  - praesens_first_person_singular
+  - praesens_second_person_singular
+  - praesens_third_person_singular
+  - praesens_first_person_plural
+  - praesens_second_person_plural
+  - praesens_third_person_plural
+  - imperfekt_first_person_singular
+  - imperfekt_second_person_singular
+  - imperfekt_third_person_singular
+  - imperfekt_first_person_plural
+  - imperfekt_second_person_plural
+  - imperfekt_third_person_plural
 
 items:
-  # Example: Full form specification (explicit forms - still supported)
+  # Test cases for each conjugation type with explicit forms
   - type: A-Konjugation
     translation: lieben
     base_form: amare
-    base_form_label: Infinitiv
-    word_form: first_person_singular
     word: amo
-    possible_types:
-      - A-Konjugation
+    verify_inference: true
     forms:
-      first_person_singular: amo
-      second_person_singular: amas
-      third_person_singular: amat
-      first_person_plural: amamus
-      second_person_plural: amatis
-      third_person_plural: amant
+      praesens_first_person_singular: amo
+      praesens_second_person_singular: amas
+      praesens_third_person_singular: amat
+      praesens_first_person_plural: amamus
+      praesens_second_person_plural: amatis
+      praesens_third_person_plural: amant
+      imperfekt_first_person_singular: amabam
+      imperfekt_second_person_singular: amabas
+      imperfekt_third_person_singular: amabat
+      imperfekt_first_person_plural: amabamus
+      imperfekt_second_person_plural: amabatis
+      imperfekt_third_person_plural: amabant
   - type: E-Konjugation
     translation: haben
     base_form: habere
-    base_form_label: Infinitiv
-    word_form: first_person_singular
     word: habeo
-    possible_types:
-      - E-Konjugation
+    verify_inference: true
     forms:
-      first_person_singular: habeo
-      second_person_singular: habes
-      third_person_singular: habet
-      first_person_plural: habemus
-      second_person_plural: habetis
-      third_person_plural: habent
+      praesens_first_person_singular: habeo
+      praesens_second_person_singular: habes
+      praesens_third_person_singular: habet
+      praesens_first_person_plural: habemus
+      praesens_second_person_plural: habetis
+      praesens_third_person_plural: habent
+      imperfekt_first_person_singular: habebam
+      imperfekt_second_person_singular: habebas
+      imperfekt_third_person_singular: habebat
+      imperfekt_first_person_plural: habebamus
+      imperfekt_second_person_plural: habebatis
+      imperfekt_third_person_plural: habebant
   - type: I-Konjugation
     translation: hören
     base_form: audire
-    base_form_label: Infinitiv
-    word_form: first_person_singular
     word: audio
-    possible_types:
-      - I-Konjugation
+    verify_inference: true
     forms:
-      first_person_singular: audio
-      second_person_singular: audis
-      third_person_singular: audit
-      first_person_plural: audimus
-      second_person_plural: auditis
-      third_person_plural: audiunt
+      praesens_first_person_singular: audio
+      praesens_second_person_singular: audis
+      praesens_third_person_singular: audit
+      praesens_first_person_plural: audimus
+      praesens_second_person_plural: auditis
+      praesens_third_person_plural: audiunt
+      imperfekt_first_person_singular: audiebam
+      imperfekt_second_person_singular: audiebas
+      imperfekt_third_person_singular: audiebat
+      imperfekt_first_person_plural: audiebamus
+      imperfekt_second_person_plural: audiebatis
+      imperfekt_third_person_plural: audiebant
   - type: Mischkonjugation
     translation: nehmen
     base_form: capere
-    base_form_label: Infinitiv
-    word_form: first_person_singular
     word: capio
-    possible_types:
-      - Mischkonjugation
+    verify_inference: true
     forms:
-      first_person_singular: capio
-      second_person_singular: capis
-      third_person_singular: capit
-      first_person_plural: capimus
-      second_person_plural: capitis
-      third_person_plural: capiunt
-
-  # Example: Simplified form (forms will be inferred automatically)
-  # For regular conjugations, you only need to specify:
-  # - type: the conjugation type (can be inferred from word ending)
-  # - translation: the translation
-  # - word: the first person singular form (e.g., "laudo")
-  # OR base_form: the infinitive form (e.g., "laudare")
-  # - word_form: should be "first_person_singular"
-  # - possible_types: (optional, will be inferred from word ending)
-  # The forms and type will be automatically generated based on the type_patterns above
-  - type: A-Konjugation
-    translation: loben
-    base_form: laudare
-    base_form_label: Infinitiv
-    word_form: first_person_singular
-    word: laudo
-    possible_types:
-      - A-Konjugation
-    # forms: omitted - will be inferred as: laudo, laudas, laudat, laudamus, laudatis, laudant
-
-  # Example: Minimal form (type and possible_types inferred from word ending)
-  # Just specify base_form (infinitive) and translation - everything else is inferred!
-  # word_form defaults to "first_person_singular" and base_form_label defaults to "Infinitiv"
+      praesens_first_person_singular: capio
+      praesens_second_person_singular: capis
+      praesens_third_person_singular: capit
+      praesens_first_person_plural: capimus
+      praesens_second_person_plural: capitis
+      praesens_third_person_plural: capiunt
+      imperfekt_first_person_singular: capiebam
+      imperfekt_second_person_singular: capiebas
+      imperfekt_third_person_singular: capiebat
+      imperfekt_first_person_plural: capiebamus
+      imperfekt_second_person_plural: capiebatis
+      imperfekt_third_person_plural: capiebant
 
   # Test cases: Words with macrons to verify automatic form generation
-  # These have explicit forms to serve as regression tests
   - type: I-Konjugation
-    translation: hören
+    translation: hören (mit Makron)
     base_form: audīre
-    base_form_label: Infinitiv
-    word_form: first_person_singular
     word: audio
     verify_inference: true
-    possible_types:
-      - I-Konjugation
     forms:
-      first_person_singular: audio
-      second_person_singular: audis
-      third_person_singular: audit
-      first_person_plural: audimus
-      second_person_plural: auditis
-      third_person_plural: audiunt
+      praesens_first_person_singular: audio
+      praesens_second_person_singular: audis
+      praesens_third_person_singular: audit
+      praesens_first_person_plural: audimus
+      praesens_second_person_plural: auditis
+      praesens_third_person_plural: audiunt
+      imperfekt_first_person_singular: audiebam
+      imperfekt_second_person_singular: audiebas
+      imperfekt_third_person_singular: audiebat
+      imperfekt_first_person_plural: audiebamus
+      imperfekt_second_person_plural: audiebatis
+      imperfekt_third_person_plural: audiebant
   - type: I-Konjugation
     translation: kommen
     base_form: venīre
-    base_form_label: Infinitiv
-    word_form: first_person_singular
     word: venio
     verify_inference: true
-    possible_types:
-      - I-Konjugation
     forms:
-      first_person_singular: venio
-      second_person_singular: venis
-      third_person_singular: venit
-      first_person_plural: venimus
-      second_person_plural: venitis
-      third_person_plural: veniunt
-  - type: I-Konjugation
-    translation: schlafen
-    base_form: dormīre
-    base_form_label: Infinitiv
-    word_form: first_person_singular
-    word: dormio
-    verify_inference: true
-    possible_types:
-      - I-Konjugation
-    forms:
-      first_person_singular: dormio
-      second_person_singular: dormis
-      third_person_singular: dormit
-      first_person_plural: dormimus
-      second_person_plural: dormitis
-      third_person_plural: dormiunt
-  - type: I-Konjugation
-    translation: dienen
-    base_form: servīre
-    base_form_label: Infinitiv
-    word_form: first_person_singular
-    word: servio
-    verify_inference: true
-    possible_types:
-      - I-Konjugation
-    forms:
-      first_person_singular: servio
-      second_person_singular: servis
-      third_person_singular: servit
-      first_person_plural: servimus
-      second_person_plural: servitis
-      third_person_plural: serviunt
-  - type: I-Konjugation
-    translation: zusammenkommen, sich versammeln
-    base_form: convenīre
-    base_form_label: Infinitiv
-    word_form: first_person_singular
-    word: convenio
-    verify_inference: true
-    possible_types:
-      - I-Konjugation
-    forms:
-      first_person_singular: convenio
-      second_person_singular: convenis
-      third_person_singular: convenit
-      first_person_plural: convenimus
-      second_person_plural: convenitis
-      third_person_plural: conveniunt
+      praesens_first_person_singular: venio
+      praesens_second_person_singular: venis
+      praesens_third_person_singular: venit
+      praesens_first_person_plural: venimus
+      praesens_second_person_plural: venitis
+      praesens_third_person_plural: veniunt
+      imperfekt_first_person_singular: veniebam
+      imperfekt_second_person_singular: veniebas
+      imperfekt_third_person_singular: veniebat
+      imperfekt_first_person_plural: veniebamus
+      imperfekt_second_person_plural: veniebatis
+      imperfekt_third_person_plural: veniebant
   - type: A-Konjugation
     translation: eintreten, betreten
     base_form: intrāre
-    base_form_label: Infinitiv
-    word_form: first_person_singular
     word: intro
     verify_inference: true
-    possible_types:
-      - A-Konjugation
     forms:
-      first_person_singular: intro
-      second_person_singular: intras
-      third_person_singular: intrat
-      first_person_plural: intramus
-      second_person_plural: intratis
-      third_person_plural: intrant
-  - type: A-Konjugation
-    translation: besuchen
-    base_form: vīsitāre
-    base_form_label: Infinitiv
-    word_form: first_person_singular
-    word: visito
-    verify_inference: true
-    possible_types:
-      - A-Konjugation
-    forms:
-      first_person_singular: visito
-      second_person_singular: visitas
-      third_person_singular: visitat
-      first_person_plural: visitamus
-      second_person_plural: visitatis
-      third_person_plural: visitant
+      praesens_first_person_singular: intro
+      praesens_second_person_singular: intras
+      praesens_third_person_singular: intrat
+      praesens_first_person_plural: intramus
+      praesens_second_person_plural: intratis
+      praesens_third_person_plural: intrant
+      imperfekt_first_person_singular: intrabam
+      imperfekt_second_person_singular: intrabas
+      imperfekt_third_person_singular: intrabat
+      imperfekt_first_person_plural: intrabamus
+      imperfekt_second_person_plural: intrabatis
+      imperfekt_third_person_plural: intrabant
   - type: E-Konjugation
     translation: erscheinen, auftauchen, sich zeigen
     base_form: appārēre
-    base_form_label: Infinitiv
-    word_form: first_person_singular
     word: appareo
     verify_inference: true
-    possible_types:
-      - E-Konjugation
     forms:
-      first_person_singular: appareo
-      second_person_singular: appares
-      third_person_singular: apparet
-      first_person_plural: apparemus
-      second_person_plural: apparetis
-      third_person_plural: apparent
+      praesens_first_person_singular: appareo
+      praesens_second_person_singular: appares
+      praesens_third_person_singular: apparet
+      praesens_first_person_plural: apparemus
+      praesens_second_person_plural: apparetis
+      praesens_third_person_plural: apparent
+      imperfekt_first_person_singular: apparebam
+      imperfekt_second_person_singular: apparebas
+      imperfekt_third_person_singular: apparebat
+      imperfekt_first_person_plural: apparebamus
+      imperfekt_second_person_plural: apparebatis
+      imperfekt_third_person_plural: apparebant
   - translation: bauen, erbauen
     base_form: aedificāre
   - translation: gehen, spazieren gehen

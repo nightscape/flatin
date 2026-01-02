@@ -226,6 +226,7 @@ class _WordClassificationScreenState
 
   /// Extract unique options for a classification section from form labels
   /// For 'Numerus': extracts unique number values
+  /// For 'Tempus': extracts unique tense values
   /// For other sections (like 'Kasus', 'Person'): extracts unique name values
   List<String> _getOptionsForSection(String section) {
     if (_currentItem == null) return [];
@@ -255,6 +256,17 @@ class _WordClassificationScreenState
         return a.compareTo(b);
       });
       return numbers;
+    } else if (section == 'Tempus') {
+      // Extract unique tense values, preserving order (Präsens before Imperfekt)
+      final seen = <String>{};
+      final options = <String>[];
+      for (final label in availableFormLabels) {
+        if (label.tense != null && !seen.contains(label.tense)) {
+          seen.add(label.tense!);
+          options.add(label.tense!);
+        }
+      }
+      return options;
     } else {
       // Extract unique name values for sections like 'Kasus' or 'Person'
       // Preserve the order as they appear in formLabels (first occurrence)
@@ -293,6 +305,11 @@ class _WordClassificationScreenState
         }
         if (section == 'Numerus') {
           if (label.number != selectedValue) {
+            matches = false;
+            break;
+          }
+        } else if (section == 'Tempus') {
+          if (label.tense != selectedValue) {
             matches = false;
             break;
           }
