@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:fsrs/fsrs.dart';
 import '../models/practice_item.dart';
+import '../models/input_strategy.dart';
 import '../providers/practice_providers.dart';
 import '../providers/settings_provider.dart';
 import '../providers/fsrs_provider.dart';
@@ -18,44 +19,23 @@ class PracticeScreen extends ConsumerStatefulWidget {
 }
 
 class _PracticeScreenState extends ConsumerState<PracticeScreen> {
-  final List<TextEditingController> _controllers = [];
+  List<String> _userAnswers = [];
   List<String> _filteredForms = [];
   List<FormLabel> _filteredLabels = [];
+  List<String> _filteredInferredForms = [];
   Rating? _suggestedRating;
   bool _showRatingButtons = false;
 
-  @override
-  void initState() {
-    super.initState();
-    // Controllers will be initialized in build based on filtered forms
-  }
-
-  @override
-  void dispose() {
-    for (var controller in _controllers) {
-      controller.dispose();
-    }
-    super.dispose();
-  }
-
-  void _updateControllers(int newCount) {
-    // Dispose old controllers if count decreased
-    while (_controllers.length > newCount) {
-      _controllers.removeLast().dispose();
-    }
-    // Add new controllers if count increased
-    while (_controllers.length < newCount) {
-      _controllers.add(TextEditingController());
+  void _ensureAnswerSlots(int count) {
+    if (_userAnswers.length != count) {
+      _userAnswers = List.filled(count, '');
     }
   }
 
   void _checkAnswers() {
     final notifier = ref.read(practiceProvider(widget.item).notifier);
-    final userAnswers = _controllers.map((c) => c.text).toList();
-    final correctAnswers = _filteredForms;
-    notifier.checkAnswers(userAnswers, correctAnswers);
+    notifier.checkAnswers(_userAnswers, _filteredForms);
 
-    // Calculate auto-suggested rating based on results
     final state = ref.read(practiceProvider(widget.item));
     final results = state.validationResults;
     final totalAnswers = results.where((r) => r != null).length;
@@ -86,30 +66,20 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
   }
 
   Future<void> _rateCard(Rating rating) async {
-    // Review the card with FSRS
     await reviewCard(ref, widget.item, rating);
 
-    // Navigate to next due item or return to home
     final nextItem = await ref.read(
       nextDueItemProvider(widget.item.dataFileId).future,
     );
 
     if (mounted) {
       if (nextItem != null && nextItem != widget.item) {
-        // Navigate to next due item
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
-            builder: (context) {
-              if (widget.item.dataFileId == 'nouns') {
-                return PracticeScreen(item: nextItem);
-              } else {
-                return PracticeScreen(item: nextItem);
-              }
-            },
+            builder: (context) => PracticeScreen(item: nextItem),
           ),
         );
       } else {
-        // No more due items, return to home
         Navigator.of(context).pop();
       }
     }
@@ -131,12 +101,10 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
 
     // Filter forms based on settings
     final filteredData = settingsAsync.when(
-      data: (settings) {
-        final enabledForms =
-            settings.enabledForms[widget.item.dataFileId] ??
-            Set<String>.from(widget.item.formOrder);
-        return widget.item.filterForms(enabledForms);
-      },
+      data: (settings) => widget.item.filterForms(
+        settings.enabledForms[widget.item.dataFileId] ??
+            Set<String>.from(widget.item.formOrder),
+      ),
       loading: () =>
           widget.item.filterForms(Set<String>.from(widget.item.formOrder)),
       error: (_, __) =>
@@ -145,7 +113,15 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
 
     _filteredForms = filteredData.forms;
     _filteredLabels = filteredData.labels;
-    _updateControllers(_filteredForms.length);
+    _filteredInferredForms = filteredData.inferredForms;
+    _ensureAnswerSlots(_filteredForms.length);
+
+    final strategyId = settingsAsync.when(
+      data: (s) => s.getInputStrategyId(widget.item.dataFileId),
+      loading: () => 'text_field',
+      error: (_, __) => 'text_field',
+    );
+    final strategy = InputStrategy.byId(strategyId);
 
     // Responsive values
     final horizontalPadding = isMobile ? 16.0 : 24.0;
@@ -186,7 +162,7 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
             ),
           ),
 
-          // Practice table - Use Flexible instead of Expanded to prevent whitespace
+          // Practice table
           Flexible(
             child: SingleChildScrollView(
               padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
@@ -227,7 +203,7 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
                       ],
                     ),
                   ),
-                  // Base form row (if applicable, e.g., infinitive for verbs)
+                  // Base form row
                   if (widget.item.baseForm != null &&
                       widget.item.baseFormLabel != null)
                     Padding(
@@ -285,7 +261,7 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
                               bottom: isMobile ? 8.0 : 12.0,
                             ),
                             child: SizedBox(
-                              height: isMobile ? 36 : 40, // Match input field height
+                              height: isMobile ? 36 : 40,
                               child: state.isTranslationVisible
                                   ? Align(
                                       alignment: Alignment.centerLeft,
@@ -306,50 +282,22 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
                             child: Row(
                               children: [
                                 Expanded(
-                                  child: TextField(
-                                    controller: _controllers[index],
-                                    enabled: !state.isChecked,
-                                    style: TextStyle(
-                                      fontSize: labelFontSize,
-                                      color: Colors.black,
-                                    ),
-                                    decoration: InputDecoration(
-                                      filled: true,
-                                      fillColor: Colors.white,
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(4),
-                                        borderSide: BorderSide(
-                                          color: _getBorderColor(
-                                            index,
-                                            state,
-                                          ),
-                                          width: 2,
-                                        ),
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(4),
-                                        borderSide: BorderSide(
-                                          color: _getBorderColor(
-                                            index,
-                                            state,
-                                          ),
-                                          width: 2,
-                                        ),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(4),
-                                        borderSide: BorderSide(
-                                          color: _getBorderColor(
-                                            index,
-                                            state,
-                                          ),
-                                          width: 2,
-                                        ),
-                                      ),
-                                      contentPadding: EdgeInsets.symmetric(
-                                        horizontal: isMobile ? 10 : 12,
-                                        vertical: isMobile ? 6 : 8,
-                                      ),
+                                  child: strategy.buildInput(
+                                    InputContext(
+                                      index: index,
+                                      correctAnswer: correctAnswer,
+                                      allForms: _filteredForms,
+                                      inferredForms: _filteredInferredForms,
+                                      isChecked: state.isChecked,
+                                      borderColor: _getBorderColor(index, state),
+                                      labelFontSize: labelFontSize,
+                                      isMobile: isMobile,
+                                      currentValue: _userAnswers[index],
+                                      onChanged: (value) {
+                                        setState(() {
+                                          _userAnswers[index] = value;
+                                        });
+                                      },
                                     ),
                                   ),
                                 ),

@@ -75,6 +75,23 @@ type_patterns:
     imperfekt_first_person_plural: "{stem}abamus"
     imperfekt_second_person_plural: "{stem}abatis"
     imperfekt_third_person_plural: "{stem}abant"
+    # Perfekt (regelmäßig: Stamm + āv + Endung)
+    perfekt_first_person_singular: "{stem}avi"
+    perfekt_second_person_singular: "{stem}avisti"
+    perfekt_third_person_singular: "{stem}avit"
+    perfekt_first_person_plural: "{stem}avimus"
+    perfekt_second_person_plural: "{stem}avistis"
+    perfekt_third_person_plural: "{stem}averunt"
+    # Plusquamperfekt
+    plusquamperfekt_first_person_singular: "{stem}averam"
+    plusquamperfekt_second_person_singular: "{stem}averas"
+    plusquamperfekt_third_person_singular: "{stem}averat"
+    plusquamperfekt_first_person_plural: "{stem}averamus"
+    plusquamperfekt_second_person_plural: "{stem}averatis"
+    plusquamperfekt_third_person_plural: "{stem}averant"
+    # Imperativ
+    imperativ_singular: "{stem}a"
+    imperativ_plural: "{stem}ate"
     # Stem extraction
     stem_extraction: "remove_suffix:o"
     infinitive_stem_extraction: "remove_suffix:re,āre"
@@ -94,10 +111,57 @@ type_patterns:
     imperfekt_first_person_plural: "{stem}ebamus"
     imperfekt_second_person_plural: "{stem}ebatis"
     imperfekt_third_person_plural: "{stem}ebant"
+    # Perfekt (regelmäßig: Stamm + u + Endung)
+    perfekt_first_person_singular: "{stem}ui"
+    perfekt_second_person_singular: "{stem}uisti"
+    perfekt_third_person_singular: "{stem}uit"
+    perfekt_first_person_plural: "{stem}uimus"
+    perfekt_second_person_plural: "{stem}uistis"
+    perfekt_third_person_plural: "{stem}uerunt"
+    # Plusquamperfekt
+    plusquamperfekt_first_person_singular: "{stem}ueram"
+    plusquamperfekt_second_person_singular: "{stem}ueras"
+    plusquamperfekt_third_person_singular: "{stem}uerat"
+    plusquamperfekt_first_person_plural: "{stem}ueramus"
+    plusquamperfekt_second_person_plural: "{stem}ueratis"
+    plusquamperfekt_third_person_plural: "{stem}uerant"
+    # Imperativ
+    imperativ_singular: "{stem}e"
+    imperativ_plural: "{stem}ete"
     # Stem extraction
     stem_extraction: "remove_suffix:eo"
     infinitive_stem_extraction: "remove_suffix:re"
     reconstruction_from_alternative_stem: "{stem}o"
+
+  E-Konjugation (Stammperfekt):
+    inherits_from: E-Konjugation
+    perfekt_first_person_singular: "{stem}i"
+    perfekt_second_person_singular: "{stem}isti"
+    perfekt_third_person_singular: "{stem}it"
+    perfekt_first_person_plural: "{stem}imus"
+    perfekt_second_person_plural: "{stem}istis"
+    perfekt_third_person_plural: "{stem}erunt"
+    plusquamperfekt_first_person_singular: "{stem}eram"
+    plusquamperfekt_second_person_singular: "{stem}eras"
+    plusquamperfekt_third_person_singular: "{stem}erat"
+    plusquamperfekt_first_person_plural: "{stem}eramus"
+    plusquamperfekt_second_person_plural: "{stem}eratis"
+    plusquamperfekt_third_person_plural: "{stem}erant"
+
+  E-Konjugation (s-Perfekt):
+    inherits_from: E-Konjugation
+    perfekt_first_person_singular: "{stem}si"
+    perfekt_second_person_singular: "{stem}sisti"
+    perfekt_third_person_singular: "{stem}sit"
+    perfekt_first_person_plural: "{stem}simus"
+    perfekt_second_person_plural: "{stem}sistis"
+    perfekt_third_person_plural: "{stem}serunt"
+    plusquamperfekt_first_person_singular: "{stem}seram"
+    plusquamperfekt_second_person_singular: "{stem}seras"
+    plusquamperfekt_third_person_singular: "{stem}serat"
+    plusquamperfekt_first_person_plural: "{stem}seramus"
+    plusquamperfekt_second_person_plural: "{stem}seratis"
+    plusquamperfekt_third_person_plural: "{stem}serant"
 
   I-Konjugation:
     # Präsens
@@ -113,10 +177,42 @@ type_patterns:
     imperfekt_first_person_plural: "{stem}iebamus"
     imperfekt_second_person_plural: "{stem}iebatis"
     imperfekt_third_person_plural: "{stem}iebant"
+    # Perfekt (regelmäßig: Stamm + īv + Endung)
+    perfekt_first_person_singular: "{stem}ivi"
+    perfekt_second_person_singular: "{stem}ivisti"
+    perfekt_third_person_singular: "{stem}ivit"
+    perfekt_first_person_plural: "{stem}ivimus"
+    perfekt_second_person_plural: "{stem}ivistis"
+    perfekt_third_person_plural: "{stem}iverunt"
+    # Plusquamperfekt
+    plusquamperfekt_first_person_singular: "{stem}iveram"
+    plusquamperfekt_second_person_singular: "{stem}iveras"
+    plusquamperfekt_third_person_singular: "{stem}iverat"
+    plusquamperfekt_first_person_plural: "{stem}iveramus"
+    plusquamperfekt_second_person_plural: "{stem}iveratis"
+    plusquamperfekt_third_person_plural: "{stem}iverant"
+    # Imperativ
+    imperativ_singular: "{stem}i"
+    imperativ_plural: "{stem}ite"
     # Stem extraction
     stem_extraction: "remove_suffix:io"
     infinitive_stem_extraction: "remove_suffix:re"
     reconstruction_from_alternative_stem: "{stem}o"
+
+  I-Konjugation (Stammperfekt):
+    inherits_from: I-Konjugation
+    perfekt_first_person_singular: "{stem}i"
+    perfekt_second_person_singular: "{stem}isti"
+    perfekt_third_person_singular: "{stem}it"
+    perfekt_first_person_plural: "{stem}imus"
+    perfekt_second_person_plural: "{stem}istis"
+    perfekt_third_person_plural: "{stem}erunt"
+    plusquamperfekt_first_person_singular: "{stem}eram"
+    plusquamperfekt_second_person_singular: "{stem}eras"
+    plusquamperfekt_third_person_singular: "{stem}erat"
+    plusquamperfekt_first_person_plural: "{stem}eramus"
+    plusquamperfekt_second_person_plural: "{stem}eratis"
+    plusquamperfekt_third_person_plural: "{stem}erant"
 
   Mischkonjugation:
     # Präsens
@@ -132,6 +228,11 @@ type_patterns:
     imperfekt_first_person_plural: "{stem}iebamus"
     imperfekt_second_person_plural: "{stem}iebatis"
     imperfekt_third_person_plural: "{stem}iebant"
+    # Perfekt: unregelmäßig - muss pro Verb explizit angegeben werden
+    # (capio → cepi, facio → feci, rapio → rapui - kein einheitliches Muster)
+    # Imperativ
+    imperativ_singular: "{stem}e"
+    imperativ_plural: "{stem}ite"
     # Stem extraction: capio -> cap, capere -> cap
     stem_extraction: "remove_suffix:io"
     infinitive_stem_extraction: "remove_suffix:ere"
@@ -186,6 +287,62 @@ form_labels:
     name: 3. Person
     number: Plural
     tense: Imperfekt
+  perfekt_first_person_singular:
+    name: 1. Person
+    number: Singular
+    tense: Perfekt
+  perfekt_second_person_singular:
+    name: 2. Person
+    number: Singular
+    tense: Perfekt
+  perfekt_third_person_singular:
+    name: 3. Person
+    number: Singular
+    tense: Perfekt
+  perfekt_first_person_plural:
+    name: 1. Person
+    number: Plural
+    tense: Perfekt
+  perfekt_second_person_plural:
+    name: 2. Person
+    number: Plural
+    tense: Perfekt
+  perfekt_third_person_plural:
+    name: 3. Person
+    number: Plural
+    tense: Perfekt
+  plusquamperfekt_first_person_singular:
+    name: 1. Person
+    number: Singular
+    tense: Plusquamperfekt
+  plusquamperfekt_second_person_singular:
+    name: 2. Person
+    number: Singular
+    tense: Plusquamperfekt
+  plusquamperfekt_third_person_singular:
+    name: 3. Person
+    number: Singular
+    tense: Plusquamperfekt
+  plusquamperfekt_first_person_plural:
+    name: 1. Person
+    number: Plural
+    tense: Plusquamperfekt
+  plusquamperfekt_second_person_plural:
+    name: 2. Person
+    number: Plural
+    tense: Plusquamperfekt
+  plusquamperfekt_third_person_plural:
+    name: 3. Person
+    number: Plural
+    tense: Plusquamperfekt
+  imperativ_singular:
+    name: 2. Person
+    number: Singular
+    tense: Imperativ
+  imperativ_plural:
+    name: 2. Person
+    number: Plural
+    tense: Imperativ
 
 form_order:
   - praesens_first_person_singular
@@ -200,6 +357,20 @@ form_order:
   - imperfekt_first_person_plural
   - imperfekt_second_person_plural
   - imperfekt_third_person_plural
+  - perfekt_first_person_singular
+  - perfekt_second_person_singular
+  - perfekt_third_person_singular
+  - perfekt_first_person_plural
+  - perfekt_second_person_plural
+  - perfekt_third_person_plural
+  - plusquamperfekt_first_person_singular
+  - plusquamperfekt_second_person_singular
+  - plusquamperfekt_third_person_singular
+  - plusquamperfekt_first_person_plural
+  - plusquamperfekt_second_person_plural
+  - plusquamperfekt_third_person_plural
+  - imperativ_singular
+  - imperativ_plural
 
 items:
   # Test cases for each conjugation type with explicit forms
@@ -221,6 +392,20 @@ items:
       imperfekt_first_person_plural: amabamus
       imperfekt_second_person_plural: amabatis
       imperfekt_third_person_plural: amabant
+      perfekt_first_person_singular: amavi
+      perfekt_second_person_singular: amavisti
+      perfekt_third_person_singular: amavit
+      perfekt_first_person_plural: amavimus
+      perfekt_second_person_plural: amavistis
+      perfekt_third_person_plural: amaverunt
+      plusquamperfekt_first_person_singular: amaveram
+      plusquamperfekt_second_person_singular: amaveras
+      plusquamperfekt_third_person_singular: amaverat
+      plusquamperfekt_first_person_plural: amaveramus
+      plusquamperfekt_second_person_plural: amaveratis
+      plusquamperfekt_third_person_plural: amaverant
+      imperativ_singular: ama
+      imperativ_plural: amate
   - type: E-Konjugation
     translation: haben
     base_form: habere
@@ -239,6 +424,20 @@ items:
       imperfekt_first_person_plural: habebamus
       imperfekt_second_person_plural: habebatis
       imperfekt_third_person_plural: habebant
+      perfekt_first_person_singular: habui
+      perfekt_second_person_singular: habuisti
+      perfekt_third_person_singular: habuit
+      perfekt_first_person_plural: habuimus
+      perfekt_second_person_plural: habuistis
+      perfekt_third_person_plural: habuerunt
+      plusquamperfekt_first_person_singular: habueram
+      plusquamperfekt_second_person_singular: habueras
+      plusquamperfekt_third_person_singular: habuerat
+      plusquamperfekt_first_person_plural: habueramus
+      plusquamperfekt_second_person_plural: habueratis
+      plusquamperfekt_third_person_plural: habuerant
+      imperativ_singular: habe
+      imperativ_plural: habete
   - type: I-Konjugation
     translation: hören
     base_form: audire
@@ -257,6 +456,20 @@ items:
       imperfekt_first_person_plural: audiebamus
       imperfekt_second_person_plural: audiebatis
       imperfekt_third_person_plural: audiebant
+      perfekt_first_person_singular: audivi
+      perfekt_second_person_singular: audivisti
+      perfekt_third_person_singular: audivit
+      perfekt_first_person_plural: audivimus
+      perfekt_second_person_plural: audivistis
+      perfekt_third_person_plural: audiverunt
+      plusquamperfekt_first_person_singular: audiveram
+      plusquamperfekt_second_person_singular: audiveras
+      plusquamperfekt_third_person_singular: audiverat
+      plusquamperfekt_first_person_plural: audiveramus
+      plusquamperfekt_second_person_plural: audiveratis
+      plusquamperfekt_third_person_plural: audiverant
+      imperativ_singular: audi
+      imperativ_plural: audite
   - type: Mischkonjugation
     translation: nehmen
     base_form: capere
@@ -275,6 +488,20 @@ items:
       imperfekt_first_person_plural: capiebamus
       imperfekt_second_person_plural: capiebatis
       imperfekt_third_person_plural: capiebant
+      perfekt_first_person_singular: cepi
+      perfekt_second_person_singular: cepisti
+      perfekt_third_person_singular: cepit
+      perfekt_first_person_plural: cepimus
+      perfekt_second_person_plural: cepistis
+      perfekt_third_person_plural: ceperunt
+      plusquamperfekt_first_person_singular: ceperam
+      plusquamperfekt_second_person_singular: ceperas
+      plusquamperfekt_third_person_singular: ceperat
+      plusquamperfekt_first_person_plural: ceperamus
+      plusquamperfekt_second_person_plural: ceperatis
+      plusquamperfekt_third_person_plural: ceperant
+      imperativ_singular: cape
+      imperativ_plural: capite
 
   # Test cases: Words with macrons to verify automatic form generation
   - type: I-Konjugation
@@ -295,7 +522,21 @@ items:
       imperfekt_first_person_plural: audiebamus
       imperfekt_second_person_plural: audiebatis
       imperfekt_third_person_plural: audiebant
-  - type: I-Konjugation
+      perfekt_first_person_singular: audivi
+      perfekt_second_person_singular: audivisti
+      perfekt_third_person_singular: audivit
+      perfekt_first_person_plural: audivimus
+      perfekt_second_person_plural: audivistis
+      perfekt_third_person_plural: audiverunt
+      plusquamperfekt_first_person_singular: audiveram
+      plusquamperfekt_second_person_singular: audiveras
+      plusquamperfekt_third_person_singular: audiverat
+      plusquamperfekt_first_person_plural: audiveramus
+      plusquamperfekt_second_person_plural: audiveratis
+      plusquamperfekt_third_person_plural: audiverant
+      imperativ_singular: audi
+      imperativ_plural: audite
+  - type: I-Konjugation (Stammperfekt)
     translation: kommen
     base_form: venīre
     word: venio
@@ -313,6 +554,20 @@ items:
       imperfekt_first_person_plural: veniebamus
       imperfekt_second_person_plural: veniebatis
       imperfekt_third_person_plural: veniebant
+      perfekt_first_person_singular: veni
+      perfekt_second_person_singular: venisti
+      perfekt_third_person_singular: venit
+      perfekt_first_person_plural: venimus
+      perfekt_second_person_plural: venistis
+      perfekt_third_person_plural: venerunt
+      plusquamperfekt_first_person_singular: veneram
+      plusquamperfekt_second_person_singular: veneras
+      plusquamperfekt_third_person_singular: venerat
+      plusquamperfekt_first_person_plural: veneramus
+      plusquamperfekt_second_person_plural: veneratis
+      plusquamperfekt_third_person_plural: venerant
+      imperativ_singular: veni
+      imperativ_plural: venite
   - type: A-Konjugation
     translation: eintreten, betreten
     base_form: intrāre
@@ -331,6 +586,20 @@ items:
       imperfekt_first_person_plural: intrabamus
       imperfekt_second_person_plural: intrabatis
       imperfekt_third_person_plural: intrabant
+      perfekt_first_person_singular: intravi
+      perfekt_second_person_singular: intravisti
+      perfekt_third_person_singular: intravit
+      perfekt_first_person_plural: intravimus
+      perfekt_second_person_plural: intravistis
+      perfekt_third_person_plural: intraverunt
+      plusquamperfekt_first_person_singular: intraveram
+      plusquamperfekt_second_person_singular: intraveras
+      plusquamperfekt_third_person_singular: intraverat
+      plusquamperfekt_first_person_plural: intraveramus
+      plusquamperfekt_second_person_plural: intraveratis
+      plusquamperfekt_third_person_plural: intraverant
+      imperativ_singular: intra
+      imperativ_plural: intrate
   - type: E-Konjugation
     translation: erscheinen, auftauchen, sich zeigen
     base_form: appārēre
@@ -349,6 +618,20 @@ items:
       imperfekt_first_person_plural: apparebamus
       imperfekt_second_person_plural: apparebatis
       imperfekt_third_person_plural: apparebant
+      perfekt_first_person_singular: apparui
+      perfekt_second_person_singular: apparuisti
+      perfekt_third_person_singular: apparuit
+      perfekt_first_person_plural: apparuimus
+      perfekt_second_person_plural: apparuistis
+      perfekt_third_person_plural: apparuerunt
+      plusquamperfekt_first_person_singular: apparueram
+      plusquamperfekt_second_person_singular: apparueras
+      plusquamperfekt_third_person_singular: apparuerat
+      plusquamperfekt_first_person_plural: apparueramus
+      plusquamperfekt_second_person_plural: apparueratis
+      plusquamperfekt_third_person_plural: apparuerant
+      imperativ_singular: appare
+      imperativ_plural: apparete
   - translation: bauen, erbauen
     base_form: aedificāre
   - translation: gehen, spazieren gehen
@@ -367,7 +650,8 @@ items:
     base_form: cessāre
   - translation: rufen, schreien
     base_form: clāmāre
-  - translation: zusammenkommen, sich versammeln
+  - type: I-Konjugation (Stammperfekt)
+    translation: zusammenkommen, sich versammeln
     base_form: convenīre
   - translation: speisen, essen
     base_form: cēnāre
@@ -376,6 +660,19 @@ items:
   - type: A-Konjugation
     translation: geben, schenken
     base_form: dare
+    forms:
+      perfekt_first_person_singular: dedi
+      perfekt_second_person_singular: dedisti
+      perfekt_third_person_singular: dedit
+      perfekt_first_person_plural: dedimus
+      perfekt_second_person_plural: dedistis
+      perfekt_third_person_plural: dederunt
+      plusquamperfekt_first_person_singular: dederam
+      plusquamperfekt_second_person_singular: dederas
+      plusquamperfekt_third_person_singular: dederat
+      plusquamperfekt_first_person_plural: dederamus
+      plusquamperfekt_second_person_plural: dederatis
+      plusquamperfekt_third_person_plural: dederant
   - translation: schlafen
     base_form: dormīre
   - translation: (jmd.) erfreuen, unterhalten
@@ -388,15 +685,30 @@ items:
     base_form: exspectāre
   - translation: in die Flucht schlagen, vertreiben
     base_form: fugāre
+  # Semi-Deponent: aktive Formen im Präsensstamm, passive im Perfektstamm
   - translation: sich freuen
     base_form: gaudēre
+    forms:
+      perfekt_first_person_singular: gavisus sum
+      perfekt_second_person_singular: gavisus es
+      perfekt_third_person_singular: gavisus est
+      perfekt_first_person_plural: gavisi sumus
+      perfekt_second_person_plural: gavisi estis
+      perfekt_third_person_plural: gavisi sunt
+      plusquamperfekt_first_person_singular: gavisus eram
+      plusquamperfekt_second_person_singular: gavisus eras
+      plusquamperfekt_third_person_singular: gavisus erat
+      plusquamperfekt_first_person_plural: gavisi eramus
+      plusquamperfekt_second_person_plural: gavisi eratis
+      plusquamperfekt_third_person_plural: gavisi erant
   - translation: haben, halten
     base_form: habēre
   - translation: befehlen, (be)herrschen
     base_form: imperāre
   - translation: arbeiten, sich anstrengen
     base_form: labōrāre
-  - translation: bleiben, warten; erwarten
+  - type: E-Konjugation (s-Perfekt)
+    translation: bleiben, warten; erwarten
     base_form: manēre
   - translation: töten
     base_form: necāre
@@ -416,7 +728,8 @@ items:
     base_form: pārēre
   - translation: kämpfen, streiten
     base_form: pūgnāre
-  - translation: antworten, erwidern
+  - type: E-Konjugation (Stammperfekt)
+    translation: antworten, erwidern
     base_form: respondēre
   - translation: fragen; bitten
     base_form: rogāre
@@ -424,13 +737,27 @@ items:
     base_form: rēgnāre
   - translation: lachen; über etw. lachen
     base_form: rīdēre
+    forms:
+      perfekt_first_person_singular: risi
+      perfekt_second_person_singular: risisti
+      perfekt_third_person_singular: risit
+      perfekt_first_person_plural: risimus
+      perfekt_second_person_plural: risistis
+      perfekt_third_person_plural: riserunt
+      plusquamperfekt_first_person_singular: riseram
+      plusquamperfekt_second_person_singular: riseras
+      plusquamperfekt_third_person_singular: riserat
+      plusquamperfekt_first_person_plural: riseramus
+      plusquamperfekt_second_person_plural: riseratis
+      plusquamperfekt_third_person_plural: riserant
   - translation: opfern
     base_form: sacrificāre
   - translation: grüßen, begrüßen
     base_form: salūtāre
   - translation: wissen, kennen, verstehen
     base_form: scīre
-  - translation: sitzen
+  - type: E-Konjugation (Stammperfekt)
+    translation: sitzen
     base_form: sedēre
   - translation: schützen, retten, bewahren
     base_form: servāre
@@ -448,9 +775,11 @@ items:
     base_form: temptāre
   - translation: (sich) fürchten, Angst haben
     base_form: timēre
-  - translation: kommen
+  - type: I-Konjugation (Stammperfekt)
+    translation: kommen
     base_form: venīre
-  - translation: sehen
+  - type: E-Konjugation (Stammperfekt)
+    translation: sehen
     base_form: vidēre
   - translation: rufen, nennen
     base_form: vocāre

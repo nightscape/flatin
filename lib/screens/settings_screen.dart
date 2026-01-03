@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
+import '../models/input_strategy.dart';
 import '../providers/settings_provider.dart';
 import '../data/practice_data.dart';
 
@@ -63,6 +64,56 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     child: Text(
                       FlutterI18n.translate(context, 'settings.enableAll'),
                       style: TextStyle(fontSize: isMobile ? 12.0 : 14.0),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: isMobile ? 8.0 : 12.0),
+              child: Row(
+                children: [
+                  Text(
+                    FlutterI18n.translate(context, 'settings.inputMode'),
+                    style: TextStyle(
+                      fontSize: isMobile ? 14.0 : 16.0,
+                      color: Colors.black,
+                    ),
+                  ),
+                  SizedBox(width: isMobile ? 8 : 12),
+                  Expanded(
+                    child: DropdownButtonFormField<String>(
+                      value: settings.getInputStrategyId(dataFileId),
+                      items: InputStrategy.all
+                          .map(
+                            (s) => DropdownMenuItem(
+                              value: s.id,
+                              child: Text(
+                                s.displayName,
+                                style: TextStyle(
+                                  fontSize: isMobile ? 13.0 : 14.0,
+                                ),
+                              ),
+                            ),
+                          )
+                          .toList(),
+                      onChanged: (value) {
+                        if (value == null) return;
+                        ref
+                            .read(settingsProvider.notifier)
+                            .setInputStrategy(dataFileId, value);
+                      },
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: isMobile ? 10 : 12,
+                          vertical: isMobile ? 6 : 8,
+                        ),
+                      ),
                     ),
                   ),
                 ],

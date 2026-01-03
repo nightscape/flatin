@@ -27,7 +27,8 @@
     "enableAll": "Enable All",
     "nouns": "Nouns (Deklination)",
     "verbs": "Verbs (Konjugation)",
-    "error": "Error: {error}"
+    "error": "Error: {error}",
+    "inputMode": "Input mode:"
   },
   "wordClassification": {
     "declension": "Deklination",

@@ -165,7 +165,8 @@ class _WordClassificationScreenState
         if (_correctAnswers.any(
           (correctLabel) =>
               correctLabel.name == formLabel.name &&
-              correctLabel.number == formLabel.number,
+              correctLabel.number == formLabel.number &&
+              correctLabel.tense == formLabel.tense,
         )) {
           correctSelected++;
         } else {
@@ -327,8 +328,11 @@ class _WordClassificationScreenState
     return null;
   }
 
-  /// Format FormLabel for display (e.g., "Nominativ Plural")
+  /// Format FormLabel for display (e.g., "Nominativ Plural" or "Präsens 1. Person Singular")
   String _formatFormLabel(FormLabel label) {
+    if (label.tense != null) {
+      return '${label.tense} ${label.name} ${label.number}';
+    }
     return '${label.name} ${label.number}';
   }
 
@@ -339,7 +343,8 @@ class _WordClassificationScreenState
     return _correctAnswers.any(
       (correctLabel) =>
           correctLabel.name == formLabel.name &&
-          correctLabel.number == formLabel.number,
+          correctLabel.number == formLabel.number &&
+          correctLabel.tense == formLabel.tense,
     );
   }
 
@@ -654,7 +659,8 @@ class _WordClassificationScreenState
                                 );
                                 return formLabel != null &&
                                     formLabel.name == label.name &&
-                                    formLabel.number == label.number;
+                                    formLabel.number == label.number &&
+                                    formLabel.tense == label.tense;
                               });
 
                               return Container(

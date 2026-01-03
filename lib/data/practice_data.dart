@@ -210,6 +210,26 @@ List<String> _inferTypesFromRules(
   return types;
 }
 
+/// Resolve a type pattern, following inherits_from chains
+Map<String, dynamic>? _resolvePattern(
+  String type,
+  Map<String, dynamic> typePatterns,
+) {
+  final Map<String, dynamic>? pattern =
+      typePatterns[type] as Map<String, dynamic>?;
+  if (pattern == null) return null;
+
+  final String? parentType = pattern['inherits_from'] as String?;
+  if (parentType == null) return pattern;
+
+  final Map<String, dynamic>? parentPattern =
+      _resolvePattern(parentType, typePatterns);
+  if (parentPattern == null) return pattern;
+
+  // Parent first, then child overrides
+  return {...parentPattern, ...pattern};
+}
+
 /// Infer forms for an item based on type patterns
 /// [defaultWordForm] is the form key that the 'word' field represents (e.g., 'nominative_singular', 'first_person_singular')
 /// This function is public to allow testing inference logic.
@@ -220,11 +240,9 @@ Map<String, String> inferForms(
   String? defaultWordForm,
 ) {
   final String type = item['type'] as String;
-  final Map<String, dynamic>? pattern =
-      typePatterns[type] as Map<String, dynamic>?;
+  final Map<String, dynamic>? pattern = _resolvePattern(type, typePatterns);
 
   if (pattern == null) {
-    // No pattern available, return empty map (will require explicit forms)
     return {};
   }
 
@@ -346,11 +364,6 @@ Future<List<PracticeItem>> loadPracticeItems(String assetPath) async {
   final String? defaultBaseFormLabel =
       defaultsMap?['base_form_label'] as String?;
 
-  // Build ordered list of form labels
-  final List<FormLabel> formLabels = formOrder
-      .map((key) => formLabelsByKey[key]!)
-      .toList();
-
   // Get data file identifier (required)
   final String? dataFileIdValue = yamlMap['data_file_id'] as String?;
   if (dataFileIdValue == null || dataFileIdValue.isEmpty) {
@@ -451,37 +464,55 @@ Future<List<PracticeItem>> loadPracticeItems(String assetPath) async {
       );
     }
 
-    // Check if forms are explicitly provided
-    Map<String, dynamic>? formsMap = item['forms'] as Map<String, dynamic>?;
+    // Infer forms from type patterns
+    final itemWithType = Map<String, dynamic>.from(item)..['type'] = type;
+    final inferredForms = inferForms(
+      itemWithType,
+      typePatterns,
+      formOrder,
+      defaultWordForm,
+    );
 
-    // If forms are not provided, try to infer them
-    if (formsMap == null || formsMap.isEmpty) {
-      // Update item with inferred type for form inference
-      final itemWithType = Map<String, dynamic>.from(item)..['type'] = type;
-      final inferredForms = inferForms(
-        itemWithType,
-        typePatterns,
-        formOrder,
-        defaultWordForm,
-      );
-      if (inferredForms.isNotEmpty) {
-        formsMap = inferredForms.map((key, value) => MapEntry(key, value));
-
-        // If word is not set but we inferred forms, set it from the appropriate form
-        if (word == null && defaultWordForm != null) {
-          word = formsMap[defaultWordForm] as String?;
-        }
-      } else {
-        // If inference failed and no forms provided, throw an error
-        throw Exception(
-          'Item "${word ?? baseForm}" of type "$type" has no forms and cannot be inferred. Please provide forms explicitly.',
-        );
-      }
+    // Start with inferred forms, then overlay explicit forms as overrides
+    Map<String, dynamic> formsMap = inferredForms
+        .map((key, value) => MapEntry<String, dynamic>(key, value));
+    // Keep a copy of pure inferred forms before explicit overrides
+    final Map<String, dynamic> inferredOnlyMap = Map.from(formsMap);
+    final Map<String, dynamic>? explicitForms =
+        item['forms'] as Map<String, dynamic>?;
+    if (explicitForms != null && explicitForms.isNotEmpty) {
+      formsMap.addAll(explicitForms);
     }
 
+    if (formsMap.isEmpty) {
+      throw Exception(
+        'Item "${word ?? baseForm}" of type "$type" has no forms and cannot be inferred. Please provide forms explicitly.',
+      );
+    }
+
+    // If word is not set but we have forms, set it from the appropriate form
+    if (word == null && defaultWordForm != null) {
+      word = formsMap[defaultWordForm] as String?;
+    }
+
+    // Filter form_order to only include keys present in formsMap
+    final List<String> itemFormOrder = formOrder
+        .where((key) => formsMap!.containsKey(key))
+        .toList();
+
     // Extract forms from the forms map, ordered by form_order
-    final List<String> forms = formOrder
+    final List<String> forms = itemFormOrder
         .map((key) => formsMap![key] as String)
+        .toList();
+
+    // Extract inferred-only forms (before explicit overrides)
+    final List<String> inferredFormsList = itemFormOrder
+        .map((key) => (inferredOnlyMap[key] ?? formsMap[key]) as String)
+        .toList();
+
+    // Build per-item form labels (matching itemFormOrder)
+    final List<FormLabel> itemFormLabels = itemFormOrder
+        .map((key) => formLabelsByKey[key]!)
         .toList();
 
     // Apply defaults if not specified
@@ -495,13 +526,14 @@ Future<List<PracticeItem>> loadPracticeItems(String assetPath) async {
       baseForm: item['base_form'] as String?,
       baseFormLabel: baseFormLabel,
       forms: forms,
-      formLabels: formLabels,
+      formLabels: itemFormLabels,
       word: item['word'] as String?,
       wordForm: wordForm,
       possibleTypes: possibleTypes,
       classificationSections: classificationSections,
       dataFileId: dataFileId,
-      formOrder: formOrder,
+      formOrder: itemFormOrder,
+      inferredForms: inferredFormsList,
     );
   }).toList();
 }

@@ -21,16 +21,48 @@ class SettingsNotifier extends _$SettingsNotifier {
       final settingsJson = prefs.getString(_settingsKey);
 
       if (settingsJson == null) {
-        // Initialize with all forms enabled
         return await _initializeDefaultSettings();
       }
 
-      final json = jsonDecode(settingsJson) as Map<String, dynamic>;
-      return Settings.fromJson(json);
+      final settings = Settings.fromJson(
+        jsonDecode(settingsJson) as Map<String, dynamic>,
+      );
+
+      // Migrate: enable any new forms that were added to the YAML since
+      // the settings were last saved.
+      final migrated = await _migrateNewForms(settings);
+      if (migrated != settings) {
+        await _saveSettings(migrated);
+      }
+      return migrated;
     } catch (e) {
-      // If loading fails, return default settings
       return await _initializeDefaultSettings();
     }
+  }
+
+  Future<Settings> _migrateNewForms(Settings settings) async {
+    final yamlFiles = {
+      'nouns': 'lib/data/latin_nouns.yaml',
+      'verbs': 'lib/data/latin_verbs.yaml',
+    };
+
+    var migrated = settings;
+    for (final entry in yamlFiles.entries) {
+      final dataFileId = entry.key;
+      final savedForms = settings.enabledForms[dataFileId];
+      if (savedForms == null) continue;
+
+      final currentFormOrder = await _getFormOrder(entry.value);
+      final newKeys =
+          currentFormOrder.where((k) => !savedForms.contains(k)).toSet();
+      if (newKeys.isEmpty) continue;
+
+      final updated = Map<String, Set<String>>.from(migrated.enabledForms);
+      updated[dataFileId] = {...savedForms, ...newKeys};
+      migrated = migrated.copyWith(enabledForms: updated);
+    }
+
+    return migrated;
   }
 
   Future<Settings> _initializeDefaultSettings() async {
@@ -92,9 +124,22 @@ class SettingsNotifier extends _$SettingsNotifier {
   bool isFormEnabled(String dataFileId, String formKey) {
     final settingsValue = state;
     if (settingsValue is! AsyncData<Settings>) {
-      // Default to enabled if settings not loaded yet
       return true;
     }
     return settingsValue.value.isFormEnabled(dataFileId, formKey);
+  }
+
+  /// Set the input strategy for a data file
+  Future<void> setInputStrategy(
+    String dataFileId,
+    String strategyId,
+  ) async {
+    final currentSettings = await future;
+    final newSettings = currentSettings.setInputStrategy(
+      dataFileId,
+      strategyId,
+    );
+    state = AsyncValue.data(newSettings);
+    await _saveSettings(newSettings);
   }
 }
