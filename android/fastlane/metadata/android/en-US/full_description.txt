@@ -1,0 +1,11 @@
+FLatin is a learning app for practicing Latin vocabulary, declensions and conjugations.
+
+With this app you can:
+* Practice declining Latin nouns
+* Practice conjugating Latin verbs
+* Train word classification
+* Track your learning progress with the FSRS algorithm (Free Spaced Repetition Scheduler)
+
+The app uses intelligent spaced repetition to help you learn and retain Latin grammar effectively. All data is stored locally on your device - no internet connection required.
+
+Perfect for students and anyone looking to improve their Latin skills.

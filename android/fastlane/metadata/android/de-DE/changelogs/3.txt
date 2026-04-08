@@ -1,0 +1,4 @@
+* Perfekt, Plusquamperfekt und Imperativ hinzugefuegt
+* Imperfekt-Grammatik hinzugefuegt
+* O-Deklination in Maskulinum und Neutrum aufgeteilt
+* Reaktive Bildschirmgroessenanpassung

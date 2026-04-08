@@ -1,0 +1,4 @@
+* Added perfect, plusquamperfekt and imperative verb forms
+* Added imperfect grammar
+* Split O-Deklination into maskulinum and neutrum variants
+* Reactive screen size adaptation
