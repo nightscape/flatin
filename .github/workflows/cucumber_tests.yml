@@ -56,14 +56,9 @@ jobs:
             flutter devices
             flutter test integration_test/app_test.dart --reporter expanded
 
-            # Collect screenshots after tests
             mkdir -p fastlane/screenshots
-            if [ -d "test_driver/screenshots" ]; then
-              cp -r test_driver/screenshots/* fastlane/screenshots/ || true
-            fi
-            if [ -d "integration_test/screenshots" ]; then
-              cp -r integration_test/screenshots/* fastlane/screenshots/ || true
-            fi
+            if [ -d "test_driver/screenshots" ]; then cp -r test_driver/screenshots/* fastlane/screenshots/ || true; fi
+            if [ -d "integration_test/screenshots" ]; then cp -r integration_test/screenshots/* fastlane/screenshots/ || true; fi
             ls -la fastlane/screenshots/ || echo "No screenshots directory found"
 
       - name: Upload screenshots
