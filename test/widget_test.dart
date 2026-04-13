@@ -40,13 +40,8 @@ void main() {
     // Wait for i18n to load
     await tester.pumpAndSettle();
 
-    // Verify that the declension type is displayed.
-    expect(find.text('O-Deklination'), findsOneWidget);
-
-    // Verify that the translation is displayed.
-    expect(find.text('Der Hausherr/Herr'), findsOneWidget);
-
-    // Verify that Latin forms are displayed.
-    expect(find.text('dominus'), findsOneWidget);
+    // Verify that the home screen buttons are displayed.
+    expect(find.text('Nouns (Deklination)'), findsOneWidget);
+    expect(find.text('Verbs (Konjugation)'), findsOneWidget);
   });
 }

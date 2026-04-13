@@ -49,45 +49,67 @@ class SettingsNotifier extends _$SettingsNotifier {
     var migrated = settings;
     for (final entry in yamlFiles.entries) {
       final dataFileId = entry.key;
+      final metadata = await _getMetadata(entry.value);
+      if (metadata == null) continue;
+
+      // Migrate new form keys
       final savedForms = settings.enabledForms[dataFileId];
-      if (savedForms == null) continue;
+      if (savedForms != null) {
+        final newFormKeys =
+            metadata.formOrder.where((k) => !savedForms.contains(k)).toSet();
+        if (newFormKeys.isNotEmpty) {
+          final updated = Map<String, Set<String>>.from(migrated.enabledForms);
+          updated[dataFileId] = {...savedForms, ...newFormKeys};
+          migrated = migrated.copyWith(enabledForms: updated);
+        }
+      }
 
-      final currentFormOrder = await _getFormOrder(entry.value);
-      final newKeys =
-          currentFormOrder.where((k) => !savedForms.contains(k)).toSet();
-      if (newKeys.isEmpty) continue;
-
-      final updated = Map<String, Set<String>>.from(migrated.enabledForms);
-      updated[dataFileId] = {...savedForms, ...newKeys};
-      migrated = migrated.copyWith(enabledForms: updated);
+      // Migrate new types (enable by default)
+      final savedTypes = settings.enabledTypes[dataFileId];
+      if (savedTypes == null) {
+        // No types saved yet — enable all
+        final updated = Map<String, Set<String>>.from(migrated.enabledTypes);
+        updated[dataFileId] = Set<String>.from(metadata.availableTypes);
+        migrated = migrated.copyWith(enabledTypes: updated);
+      } else {
+        final newTypes = metadata.availableTypes
+            .where((t) => !savedTypes.contains(t))
+            .toSet();
+        if (newTypes.isNotEmpty) {
+          final updated = Map<String, Set<String>>.from(migrated.enabledTypes);
+          updated[dataFileId] = {...savedTypes, ...newTypes};
+          migrated = migrated.copyWith(enabledTypes: updated);
+        }
+      }
     }
 
     return migrated;
   }
 
   Future<Settings> _initializeDefaultSettings() async {
-    // Load form orders from both YAML files
-    final nounsFormOrder = await _getFormOrder('lib/data/latin_nouns.yaml');
-    final verbsFormOrder = await _getFormOrder('lib/data/latin_verbs.yaml');
+    final nounsMetadata = await _getMetadata('lib/data/latin_nouns.yaml');
+    final verbsMetadata = await _getMetadata('lib/data/latin_verbs.yaml');
 
     final defaultSettings = Settings(
       enabledForms: {
-        'nouns': Set<String>.from(nounsFormOrder),
-        'verbs': Set<String>.from(verbsFormOrder),
+        'nouns': Set<String>.from(nounsMetadata?.formOrder ?? []),
+        'verbs': Set<String>.from(verbsMetadata?.formOrder ?? []),
+      },
+      enabledTypes: {
+        'nouns': Set<String>.from(nounsMetadata?.availableTypes ?? []),
+        'verbs': Set<String>.from(verbsMetadata?.availableTypes ?? []),
       },
     );
 
-    // Save default settings
     await _saveSettings(defaultSettings);
     return defaultSettings;
   }
 
-  Future<List<String>> _getFormOrder(String assetPath) async {
+  Future<FormMetadata?> _getMetadata(String assetPath) async {
     try {
-      final formMetadata = await getFormMetadata(assetPath);
-      return formMetadata.formOrder;
+      return await getFormMetadata(assetPath);
     } catch (e) {
-      return [];
+      return null;
     }
   }
 
@@ -116,6 +138,25 @@ class SettingsNotifier extends _$SettingsNotifier {
   ) async {
     final currentSettings = await future;
     final newSettings = currentSettings.enableAllForms(dataFileId, allFormKeys);
+    state = AsyncValue.data(newSettings);
+    await _saveSettings(newSettings);
+  }
+
+  /// Toggle a type's enabled state
+  Future<void> toggleType(String dataFileId, String typeName) async {
+    final currentSettings = await future;
+    final newSettings = currentSettings.toggleType(dataFileId, typeName);
+    state = AsyncValue.data(newSettings);
+    await _saveSettings(newSettings);
+  }
+
+  /// Enable all types for a data file
+  Future<void> enableAllTypes(
+    String dataFileId,
+    List<String> allTypes,
+  ) async {
+    final currentSettings = await future;
+    final newSettings = currentSettings.enableAllTypes(dataFileId, allTypes);
     state = AsyncValue.data(newSettings);
     await _saveSettings(newSettings);
   }

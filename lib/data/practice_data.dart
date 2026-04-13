@@ -10,6 +10,7 @@ class FormMetadata {
   final String? dataFileId;
   final String? defaultWordForm;
   final List<String>? typeInferenceRuleSets;
+  final List<String> availableTypes;
 
   FormMetadata({
     required this.formOrder,
@@ -18,6 +19,7 @@ class FormMetadata {
     this.dataFileId,
     this.defaultWordForm,
     this.typeInferenceRuleSets,
+    this.availableTypes = const [],
   });
 }
 
@@ -87,6 +89,23 @@ Future<FormMetadata> getFormMetadata(String assetPath) async {
       yamlMap['type_inference'] as Map<String, dynamic>?;
   final List<String>? typeInferenceRuleSets = typeInferenceRules?.keys.toList();
 
+  // Collect all available types from type_patterns and items
+  final Set<String> typeSet = {};
+  final Map<String, dynamic>? typePatternsMap =
+      yamlMap['type_patterns'] as Map<String, dynamic>?;
+  if (typePatternsMap != null) {
+    typeSet.addAll(typePatternsMap.keys);
+  }
+  final List<dynamic>? itemsList = yamlMap['items'] as List<dynamic>?;
+  if (itemsList != null) {
+    for (final itemData in itemsList) {
+      final item = itemData as Map<String, dynamic>;
+      final type = item['type'] as String?;
+      if (type != null) typeSet.add(type);
+    }
+  }
+  final availableTypes = typeSet.toList()..sort();
+
   return FormMetadata(
     formOrder: formOrder,
     formLabelsByKey: formLabelsByKey,
@@ -94,6 +113,7 @@ Future<FormMetadata> getFormMetadata(String assetPath) async {
     dataFileId: dataFileId,
     defaultWordForm: defaultWordForm,
     typeInferenceRuleSets: typeInferenceRuleSets,
+    availableTypes: availableTypes,
   );
 }
 

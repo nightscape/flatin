@@ -269,6 +269,81 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 ],
               ),
             ),
+            // Type filter section
+            if (metadata.availableTypes.isNotEmpty) ...[
+              Padding(
+                padding: EdgeInsets.only(
+                  top: isMobile ? 8.0 : 12.0,
+                  bottom: isMobile ? 4.0 : 8.0,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      FlutterI18n.translate(context, 'settings.types'),
+                      style: TextStyle(
+                        fontSize: isMobile ? 16.0 : 18.0,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black,
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        ref.read(settingsProvider.notifier).enableAllTypes(
+                              dataFileId,
+                              metadata.availableTypes,
+                            );
+                      },
+                      child: Text(
+                        FlutterI18n.translate(context, 'settings.enableAll'),
+                        style: TextStyle(fontSize: isMobile ? 12.0 : 14.0),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              ...metadata.availableTypes.map((typeName) {
+                final enabledTypes =
+                    settings.enabledTypes[dataFileId] ??
+                    Set<String>.from(metadata.availableTypes);
+                final isEnabled = enabledTypes.contains(typeName);
+
+                return CheckboxListTile(
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: isMobile ? 4.0 : 0.0,
+                    vertical: isMobile ? 4.0 : 0.0,
+                  ),
+                  title: Text(
+                    typeName,
+                    style: TextStyle(
+                      fontSize: isMobile ? 14.0 : 16.0,
+                      color: Colors.black,
+                    ),
+                  ),
+                  value: isEnabled,
+                  onChanged: (value) {
+                    ref
+                        .read(settingsProvider.notifier)
+                        .toggleType(dataFileId, typeName);
+                  },
+                  activeColor: const Color(0xFFD0D0D0),
+                  checkColor: Colors.black,
+                );
+              }),
+            ],
+            Divider(height: isMobile ? 16 : 24),
+            // Form filter section
+            Padding(
+              padding: EdgeInsets.only(bottom: isMobile ? 4.0 : 8.0),
+              child: Text(
+                FlutterI18n.translate(context, 'settings.forms'),
+                style: TextStyle(
+                  fontSize: isMobile ? 16.0 : 18.0,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black,
+                ),
+              ),
+            ),
             ...metadata.formOrder.map((formKey) {
               final formLabel = metadata.formLabelsByKey[formKey]!;
               final isEnabled = enabledForms.contains(formKey);

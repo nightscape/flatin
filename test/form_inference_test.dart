@@ -289,9 +289,14 @@ Future<void> _testInferenceAgainstTestCases(String assetPath) async {
     final itemWithoutForms = Map<String, dynamic>.from(testCase);
     itemWithoutForms.remove('forms');
     itemWithoutForms.remove('verify_inference');
-    // Remove 'word' only if 'base_form' exists (for verbs) to force base_form inference
-    // For nouns, keep 'word' as it's the only source of information
-    if (itemWithoutForms['base_form'] != null) {
+    // Remove 'word' only if the pattern can reconstruct it from the alternative stem
+    // (e.g. verbs: infinitive stem + 'o' = first person singular)
+    // For consonant declension nouns, the nominative is irregular and must be kept
+    final itemType = itemWithoutForms['type'] as String?;
+    final pattern = itemType != null ? typePatterns[itemType] as Map? : null;
+    if (itemWithoutForms['base_form'] != null &&
+        pattern != null &&
+        pattern['reconstruction_from_alternative_stem'] != null) {
       itemWithoutForms.remove('word');
     }
 

@@ -1,10 +1,14 @@
 import '../data/lesson_data.dart';
 
-/// Settings model to hold enabled forms per data file
+/// Settings model to hold enabled forms and types per data file
 class Settings {
   /// Map of data file identifier to set of enabled form keys
   /// e.g., {"nouns": {"nominative_singular", "genitive_singular", ...}, ...}
   final Map<String, Set<String>> enabledForms;
+
+  /// Map of data file identifier to set of enabled type names
+  /// e.g., {"nouns": {"A-Deklination", "O-Deklination-maskulinum", ...}, ...}
+  final Map<String, Set<String>> enabledTypes;
 
   /// Map of data file identifier to input strategy id
   /// e.g., {"verbs": "dropdown_all_forms", "nouns": "text_field"}
@@ -18,19 +22,23 @@ class Settings {
 
   Settings({
     Map<String, Set<String>>? enabledForms,
+    Map<String, Set<String>>? enabledTypes,
     Map<String, String>? inputStrategyIds,
     Set<String>? selectedWords,
   })  : enabledForms = enabledForms ?? {},
+        enabledTypes = enabledTypes ?? {},
         inputStrategyIds = inputStrategyIds ?? {},
         selectedWords = selectedWords ?? {};
 
   Settings copyWith({
     Map<String, Set<String>>? enabledForms,
+    Map<String, Set<String>>? enabledTypes,
     Map<String, String>? inputStrategyIds,
     Set<String>? selectedWords,
   }) {
     return Settings(
       enabledForms: enabledForms ?? this.enabledForms,
+      enabledTypes: enabledTypes ?? this.enabledTypes,
       inputStrategyIds: inputStrategyIds ?? this.inputStrategyIds,
       selectedWords: selectedWords ?? this.selectedWords,
     );
@@ -41,6 +49,13 @@ class Settings {
     final forms = enabledForms[dataFileId];
     if (forms == null) return true;
     return forms.contains(formKey);
+  }
+
+  /// Check if a type is enabled for a given data file
+  bool isTypeEnabled(String dataFileId, String typeName) {
+    final types = enabledTypes[dataFileId];
+    if (types == null) return true;
+    return types.contains(typeName);
   }
 
   /// Get the input strategy id for a data file (default: text_field)
@@ -169,10 +184,35 @@ class Settings {
     return copyWith(selectedWords: <String>{});
   }
 
+  /// Toggle a type's enabled state for a given data file
+  Settings toggleType(String dataFileId, String typeName) {
+    final newEnabledTypes = Map<String, Set<String>>.from(enabledTypes);
+    final types = Set<String>.from(newEnabledTypes[dataFileId] ?? {});
+
+    if (types.contains(typeName)) {
+      types.remove(typeName);
+    } else {
+      types.add(typeName);
+    }
+
+    newEnabledTypes[dataFileId] = types;
+    return copyWith(enabledTypes: newEnabledTypes);
+  }
+
+  /// Set all types as enabled for a given data file
+  Settings enableAllTypes(String dataFileId, List<String> allTypes) {
+    final newEnabledTypes = Map<String, Set<String>>.from(enabledTypes);
+    newEnabledTypes[dataFileId] = Set<String>.from(allTypes);
+    return copyWith(enabledTypes: newEnabledTypes);
+  }
+
   /// Convert to JSON for storage
   Map<String, dynamic> toJson() {
     return {
       'enabledForms': enabledForms.map(
+        (key, value) => MapEntry(key, value.toList()),
+      ),
+      'enabledTypes': enabledTypes.map(
         (key, value) => MapEntry(key, value.toList()),
       ),
       'inputStrategyIds': inputStrategyIds,
@@ -183,6 +223,7 @@ class Settings {
   /// Create from JSON
   factory Settings.fromJson(Map<String, dynamic> json) {
     final enabledFormsMap = json['enabledForms'] as Map<String, dynamic>?;
+    final enabledTypesMap = json['enabledTypes'] as Map<String, dynamic>?;
     final strategyMap = json['inputStrategyIds'] as Map<String, dynamic>?;
     // Support both old key ('selectedLessons') and new key ('selectedWords').
     // Old lesson names cannot be migrated to words without lesson data, so
@@ -191,6 +232,10 @@ class Settings {
 
     return Settings(
       enabledForms: enabledFormsMap?.map(
+            (key, value) => MapEntry(key, Set<String>.from(value as List)),
+          ) ??
+          {},
+      enabledTypes: enabledTypesMap?.map(
             (key, value) => MapEntry(key, Set<String>.from(value as List)),
           ) ??
           {},

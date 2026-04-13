@@ -61,13 +61,14 @@ Future<Map<String, List<PracticeItem>>> dueItemsByType(Ref ref) async {
     itemsById[itemId] = item;
   }
 
-  // Group due items by dataFileId, filtering by selected lessons.
+  // Group due items by dataFileId, filtering by selected lessons and enabled types.
   final dueItemsByType = <String, List<PracticeItem>>{'nouns': [], 'verbs': []};
 
   for (final card in dueCardsList) {
     final item = itemsById[card.itemId];
     if (item == null) continue;
     if (!lessonData.includes(item, settings.selectedWords)) continue;
+    if (!settings.isTypeEnabled(item.dataFileId, item.type)) continue;
 
     final typeList = dueItemsByType[item.dataFileId];
     if (typeList != null) {

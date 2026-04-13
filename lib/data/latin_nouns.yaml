@@ -115,6 +115,36 @@ type_patterns:
     ablative_plural: "{stem}ibus"          # manibus
     stem_extraction: "remove_suffix:us"    # Remove -us to get stem
 
+  Konsonantische-Deklination-mf:
+    # Pattern: consonant stems (masculine/feminine)
+    # Stem derived from genitive singular (base_form): regis → reg-
+    # Nominative is irregular, provided as word
+    genitive_singular: "{stem}is"          # regis
+    dative_singular: "{stem}i"             # regi
+    accusative_singular: "{stem}em"        # regem
+    ablative_singular: "{stem}e"           # rege
+    nominative_plural: "{stem}es"          # reges
+    genitive_plural: "{stem}um"            # regum
+    dative_plural: "{stem}ibus"            # regibus
+    accusative_plural: "{stem}es"          # reges
+    ablative_plural: "{stem}ibus"          # regibus
+    genitive_stem_extraction: "remove_suffix:is"
+
+  Konsonantische-Deklination-n:
+    # Pattern: consonant stems (neuter)
+    # Stem derived from genitive singular (base_form): corporis → corpor-
+    # Nominative is irregular, provided as word
+    # accusative_singular = nominative (provide as explicit form per item)
+    genitive_singular: "{stem}is"          # corporis
+    dative_singular: "{stem}i"             # corpori
+    ablative_singular: "{stem}e"           # corpore
+    nominative_plural: "{stem}a"           # corpora
+    genitive_plural: "{stem}um"            # corporum
+    dative_plural: "{stem}ibus"            # corporibus
+    accusative_plural: "{stem}a"           # corpora
+    ablative_plural: "{stem}ibus"          # corporibus
+    genitive_stem_extraction: "remove_suffix:is"
+
 form_labels:
   nominative_singular:
     name: Nominativ
@@ -473,3 +503,118 @@ items:
     word: vīnum
   - translation: der Altar
     word: āra
+
+  # Konsonantische Deklination (m/f) — word + base_form (Genitiv) reicht
+  - type: Konsonantische-Deklination-mf
+    translation: der König
+    word_form: nominative_singular
+    word: rex
+    base_form: regis
+    verify_inference: true
+    possible_types:
+      - Konsonantische-Deklination-mf
+    forms:
+      nominative_singular: rex
+      genitive_singular: regis
+      dative_singular: regi
+      accusative_singular: regem
+      ablative_singular: rege
+      nominative_plural: reges
+      genitive_plural: regum
+      dative_plural: regibus
+      accusative_plural: reges
+      ablative_plural: regibus
+  - type: Konsonantische-Deklination-mf
+    translation: die Ehefrau
+    word_form: nominative_singular
+    word: uxor
+    base_form: uxoris
+    verify_inference: true
+    possible_types:
+      - Konsonantische-Deklination-mf
+    forms:
+      nominative_singular: uxor
+      genitive_singular: uxoris
+      dative_singular: uxori
+      accusative_singular: uxorem
+      ablative_singular: uxore
+      nominative_plural: uxores
+      genitive_plural: uxorum
+      dative_plural: uxoribus
+      accusative_plural: uxores
+      ablative_plural: uxoribus
+
+  # Konsonantische Deklination (n) — word + base_form (Genitiv) reicht
+  # accusative_singular = nominative (muss als explizite Form angegeben werden)
+  - type: Konsonantische-Deklination-n
+    translation: der Körper
+    word_form: nominative_singular
+    word: corpus
+    base_form: corporis
+    verify_inference: true
+    possible_types:
+      - Konsonantische-Deklination-n
+    forms:
+      nominative_singular: corpus
+      genitive_singular: corporis
+      dative_singular: corpori
+      accusative_singular: corpus
+      ablative_singular: corpore
+      nominative_plural: corpora
+      genitive_plural: corporum
+      dative_plural: corporibus
+      accusative_plural: corpora
+      ablative_plural: corporibus
+
+  # Pronomen: is, ea, id (dieser, diese, dieses)
+  - type: Pronomen-is-maskulinum
+    translation: dieser (m)
+    word_form: nominative_singular
+    word: is
+    possible_types:
+      - Pronomen-is-maskulinum
+    forms:
+      nominative_singular: is
+      genitive_singular: eius
+      dative_singular: ei
+      accusative_singular: eum
+      ablative_singular: eo
+      nominative_plural: ii
+      genitive_plural: eorum
+      dative_plural: iis
+      accusative_plural: eos
+      ablative_plural: iis
+  - type: Pronomen-is-femininum
+    translation: diese (f)
+    word_form: nominative_singular
+    word: ea
+    possible_types:
+      - Pronomen-is-femininum
+    forms:
+      nominative_singular: ea
+      genitive_singular: eius
+      dative_singular: ei
+      accusative_singular: eam
+      ablative_singular: ea
+      nominative_plural: eae
+      genitive_plural: earum
+      dative_plural: iis
+      accusative_plural: eas
+      ablative_plural: iis
+  - type: Pronomen-is-neutrum
+    translation: dieses (n)
+    word_form: nominative_singular
+    word: id
+    possible_types:
+      - Pronomen-is-neutrum
+    forms:
+      nominative_singular: id
+      genitive_singular: eius
+      dative_singular: ei
+      accusative_singular: id
+      ablative_singular: eo
+      nominative_plural: ea
+      genitive_plural: eorum
+      dative_plural: iis
+      accusative_plural: ea
+      ablative_plural: iis

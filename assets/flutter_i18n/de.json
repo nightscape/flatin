@@ -30,7 +30,9 @@
     "verbs": "Verben (Konjugation)",
     "error": "Fehler: {error}",
     "inputMode": "Eingabemodus:",
-    "lessons": "Lektionen"
+    "lessons": "Lektionen",
+    "types": "Typen",
+    "forms": "Formen"
   },
   "wordClassification": {
     "declension": "Deklination",
