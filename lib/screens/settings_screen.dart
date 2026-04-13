@@ -3,7 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import '../models/input_strategy.dart';
 import '../providers/settings_provider.dart';
+import '../providers/lesson_provider.dart';
 import '../data/practice_data.dart';
+import '../data/lesson_data.dart';
 
 class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});
@@ -21,6 +23,94 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     super.initState();
     _nounsMetadata = getFormMetadata('lib/data/latin_nouns.yaml');
     _verbsMetadata = getFormMetadata('lib/data/latin_verbs.yaml');
+  }
+
+  Widget _buildLessonSection(bool isMobile) {
+    final lessonsAsync = ref.watch(lessonDataProvider);
+    final settingsAsync = ref.watch(settingsProvider);
+
+    return lessonsAsync.when(
+      loading: () => const Padding(
+        padding: EdgeInsets.symmetric(vertical: 16),
+        child: Center(child: CircularProgressIndicator()),
+      ),
+      error: (error, _) => Text(
+        FlutterI18n.translate(
+          context,
+          'settings.error',
+          translationParams: {'error': error.toString()},
+        ),
+        style: TextStyle(fontSize: isMobile ? 14.0 : 16.0),
+      ),
+      data: (LessonData lessons) {
+        return settingsAsync.when(
+          loading: () => const SizedBox.shrink(),
+          error: (_, __) => const SizedBox.shrink(),
+          data: (settings) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding:
+                      EdgeInsets.symmetric(vertical: isMobile ? 12.0 : 16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          FlutterI18n.translate(context, 'settings.lessons'),
+                          key: const Key('settings.section.lessons'),
+                          style: TextStyle(
+                            fontSize: isMobile ? 20.0 : 24.0,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          ref
+                              .read(settingsProvider.notifier)
+                              .selectAllLessons();
+                        },
+                        child: Text(
+                          FlutterI18n.translate(context, 'settings.enableAll'),
+                          style: TextStyle(fontSize: isMobile ? 12.0 : 14.0),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                ...lessons.lessonNames.map((name) {
+                  return CheckboxListTile(
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: isMobile ? 4.0 : 0.0,
+                      vertical: isMobile ? 4.0 : 0.0,
+                    ),
+                    title: Text(
+                      name,
+                      style: TextStyle(
+                        fontSize: isMobile ? 14.0 : 16.0,
+                        color: Colors.black,
+                      ),
+                    ),
+                    value: settings.isLessonSelected(name),
+                    onChanged: (_) {
+                      ref
+                          .read(settingsProvider.notifier)
+                          .toggleLesson(name, lessons.lessonNames);
+                    },
+                    activeColor: const Color(0xFFD0D0D0),
+                    checkColor: Colors.black,
+                  );
+                }),
+                SizedBox(height: isMobile ? 16 : 24),
+              ],
+            );
+          },
+        );
+      },
+    );
   }
 
   Widget _buildFormSection(
@@ -83,6 +173,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   SizedBox(width: isMobile ? 8 : 12),
                   Expanded(
                     child: DropdownButtonFormField<String>(
+                      isExpanded: true,
                       value: settings.getInputStrategyId(dataFileId),
                       items: InputStrategy.all
                           .map(
@@ -219,6 +310,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       verbsSnapshot.data!,
                       isMobile,
                     ),
+                    _buildLessonSection(isMobile),
                   ],
                 ),
               );

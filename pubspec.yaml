@@ -78,6 +78,7 @@ flutter:
   assets:
     - lib/data/latin_nouns.yaml
     - lib/data/latin_verbs.yaml
+    - lib/data/agite_plus_bayern_1.yaml
     - assets/flutter_i18n/
 
   # An image asset can refer to one or more resolution-specific "variants", see

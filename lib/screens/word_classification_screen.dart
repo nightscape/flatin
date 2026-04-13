@@ -385,6 +385,7 @@ class _WordClassificationScreenState
                 return SizedBox(
                   width: isMobile ? double.infinity : 150,
                   child: DropdownButtonFormField<String>(
+                    isExpanded: true,
                     value: selectedValue,
                     decoration: InputDecoration(
                       labelText: section,

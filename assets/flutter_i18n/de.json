@@ -28,7 +28,8 @@
     "nouns": "Nomen (Deklination)",
     "verbs": "Verben (Konjugation)",
     "error": "Fehler: {error}",
-    "inputMode": "Eingabemodus:"
+    "inputMode": "Eingabemodus:",
+    "lessons": "Lektionen"
   },
   "wordClassification": {
     "declension": "Deklination",

@@ -142,4 +142,27 @@ class SettingsNotifier extends _$SettingsNotifier {
     state = AsyncValue.data(newSettings);
     await _saveSettings(newSettings);
   }
+
+  /// Toggle a lesson's selection state.
+  ///
+  /// [allLessons] is required because an empty selection means "all lessons",
+  /// so toggling one off from the "all" state needs to materialize the full
+  /// list first.
+  Future<void> toggleLesson(
+    String lessonName,
+    List<String> allLessons,
+  ) async {
+    final currentSettings = await future;
+    final newSettings = currentSettings.toggleLesson(lessonName, allLessons);
+    state = AsyncValue.data(newSettings);
+    await _saveSettings(newSettings);
+  }
+
+  /// Select every lesson (stored as the empty "no filter" state).
+  Future<void> selectAllLessons() async {
+    final currentSettings = await future;
+    final newSettings = currentSettings.selectAllLessons();
+    state = AsyncValue.data(newSettings);
+    await _saveSettings(newSettings);
+  }
 }

@@ -247,10 +247,14 @@ class AppSteps {
     await tester.pumpAndSettle(const Duration(seconds: 2));
     // Wait for dropdowns to appear
     int attempts = 0;
-    Finder dropdownFinder = find.byType(DropdownButtonFormField);
+    Finder dropdownFinder = find.byWidgetPredicate(
+      (w) => w is DropdownButtonFormField,
+    );
     while (dropdownFinder.evaluate().isEmpty && attempts < 30) {
       await tester.pump(const Duration(milliseconds: 200));
-      dropdownFinder = find.byType(DropdownButtonFormField);
+      dropdownFinder = find.byWidgetPredicate(
+        (w) => w is DropdownButtonFormField,
+      );
       attempts++;
     }
     await tester.pumpAndSettle(const Duration(seconds: 1));

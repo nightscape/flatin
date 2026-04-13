@@ -5,6 +5,8 @@ import '../models/practice_item.dart';
 import '../models/fsrs_card.dart';
 import '../services/fsrs_storage.dart';
 import '../data/practice_data.dart';
+import 'lesson_provider.dart';
+import 'settings_provider.dart';
 
 part 'fsrs_provider.g.dart';
 
@@ -42,6 +44,8 @@ Future<List<PracticeItemCard>> dueCards(Ref ref) async {
 @riverpod
 Future<Map<String, List<PracticeItem>>> dueItemsByType(Ref ref) async {
   final dueCardsList = await ref.watch(dueCardsProvider.future);
+  final lessonData = await ref.watch(lessonDataProvider.future);
+  final settings = await ref.watch(settingsProvider.future);
 
   // Load all items
   final nouns = await loadPracticeItems('lib/data/latin_nouns.yaml');
@@ -55,17 +59,17 @@ Future<Map<String, List<PracticeItem>>> dueItemsByType(Ref ref) async {
     itemsById[itemId] = item;
   }
 
-  // Group due items by dataFileId
+  // Group due items by dataFileId, filtering by selected lessons.
   final dueItemsByType = <String, List<PracticeItem>>{'nouns': [], 'verbs': []};
 
   for (final card in dueCardsList) {
     final item = itemsById[card.itemId];
-    if (item != null) {
-      final type = item.dataFileId;
-      final typeList = dueItemsByType[type];
-      if (typeList != null) {
-        typeList.add(item);
-      }
+    if (item == null) continue;
+    if (!lessonData.includes(item, settings.selectedLessons)) continue;
+
+    final typeList = dueItemsByType[item.dataFileId];
+    if (typeList != null) {
+      typeList.add(item);
     }
   }
 
