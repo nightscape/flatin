@@ -117,7 +117,7 @@ platform :android do
 
     set_github_release(
       repository_name: "nightscape/flatin",
-      api_token: ENV["GITHUB_TOKEN"],
+      api_bearer: ENV["GITHUB_TOKEN"],
       tag_name: tag_name,
       name: tag_name,
       description: "Automated release for #{tag_name}",
