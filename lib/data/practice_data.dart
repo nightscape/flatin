@@ -497,12 +497,12 @@ Future<List<PracticeItem>> loadPracticeItems(String assetPath) async {
 
     // Filter form_order to only include keys present in formsMap
     final List<String> itemFormOrder = formOrder
-        .where((key) => formsMap!.containsKey(key))
+        .where((key) => formsMap.containsKey(key))
         .toList();
 
     // Extract forms from the forms map, ordered by form_order
     final List<String> forms = itemFormOrder
-        .map((key) => formsMap![key] as String)
+        .map((key) => formsMap[key] as String)
         .toList();
 
     // Extract inferred-only forms (before explicit overrides)
