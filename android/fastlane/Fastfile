@@ -105,6 +105,26 @@ platform :android do
     )
   end
 
+  desc "Build APK and publish it as a GitHub Release asset"
+  lane :github_release do
+    tag_name = ENV["GITHUB_REF_NAME"] || ENV["TAG_NAME"]
+    UI.user_error!("GITHUB_REF_NAME or TAG_NAME must be set") if tag_name.nil? || tag_name.empty?
+
+    sh("cd #{project_root} && flutter build apk --release")
+    apk_path = "#{project_root}/build/app/outputs/flutter-apk/app-release.apk"
+    versioned_apk = "#{project_root}/build/app/outputs/flutter-apk/latin-practice-#{tag_name}.apk"
+    sh("cp #{apk_path} #{versioned_apk}")
+
+    set_github_release(
+      repository_name: "nightscape/flatin",
+      api_token: ENV["GITHUB_TOKEN"],
+      tag_name: tag_name,
+      name: tag_name,
+      description: "Automated release for #{tag_name}",
+      upload_assets: [versioned_apk]
+    )
+  end
+
   desc "Upload to Google Play Store Production"
   lane :release do
     build_bundle

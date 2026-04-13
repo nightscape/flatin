@@ -57,6 +57,40 @@ jobs:
           cd android
           bundle exec fastlane release
 
+  github-release:
+    name: Publish APK to GitHub Releases
+    runs-on: ubuntu-latest
+    needs: cucumber-tests
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.38'
+          channel: 'stable'
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.0'
+          bundler-cache: true
+
+      - name: Install dependencies
+        run: |
+          flutter pub get
+          bundle install
+
+      - name: Publish APK to GitHub Releases
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd android
+          bundle exec fastlane github_release
+
   deploy-ios:
     name: Deploy iOS to App Store
     runs-on: macos-latest
