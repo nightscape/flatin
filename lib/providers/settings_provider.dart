@@ -143,25 +143,47 @@ class SettingsNotifier extends _$SettingsNotifier {
     await _saveSettings(newSettings);
   }
 
-  /// Toggle a lesson's selection state.
+  /// Toggle a single word's selection state.
   ///
-  /// [allLessons] is required because an empty selection means "all lessons",
-  /// so toggling one off from the "all" state needs to materialize the full
-  /// list first.
-  Future<void> toggleLesson(
-    String lessonName,
-    List<String> allLessons,
+  /// [allNormalizedWords] is required to handle the "all selected" collapse.
+  Future<void> toggleWord(
+    String normalizedWord,
+    List<String> allNormalizedWords,
   ) async {
     final currentSettings = await future;
-    final newSettings = currentSettings.toggleLesson(lessonName, allLessons);
+    final newSettings =
+        currentSettings.toggleWord(normalizedWord, allNormalizedWords);
     state = AsyncValue.data(newSettings);
     await _saveSettings(newSettings);
   }
 
-  /// Select every lesson (stored as the empty "no filter" state).
-  Future<void> selectAllLessons() async {
+  /// Toggle all words in a lesson on or off.
+  Future<void> toggleLessonWords(
+    List<String> rawLessonWords,
+    List<String> allNormalizedWords,
+  ) async {
     final currentSettings = await future;
-    final newSettings = currentSettings.selectAllLessons();
+    final newSettings = currentSettings.toggleLessonWords(
+      rawLessonWords,
+      allNormalizedWords,
+    );
+    state = AsyncValue.data(newSettings);
+    await _saveSettings(newSettings);
+  }
+
+  /// Replace the entire word selection (e.g. from the statistics screen).
+  /// Pass an empty set to select all words.
+  Future<void> setSelectedWords(Set<String> normalizedWords) async {
+    final currentSettings = await future;
+    final newSettings = currentSettings.withSelectedWords(normalizedWords);
+    state = AsyncValue.data(newSettings);
+    await _saveSettings(newSettings);
+  }
+
+  /// Select every word (stored as the empty "no filter" state).
+  Future<void> selectAllWords() async {
+    final currentSettings = await future;
+    final newSettings = currentSettings.selectAllWords();
     state = AsyncValue.data(newSettings);
     await _saveSettings(newSettings);
   }

@@ -14,7 +14,14 @@ class LessonData {
   /// normalized word -> lesson name (first occurrence wins).
   final Map<String, String> wordToLesson;
 
-  const LessonData({required this.lessonNames, required this.wordToLesson});
+  /// lesson name -> raw (undiacriticized) word list, in YAML order, for display.
+  final Map<String, List<String>> lessonWords;
+
+  const LessonData({
+    required this.lessonNames,
+    required this.wordToLesson,
+    required this.lessonWords,
+  });
 
   /// Returns the lesson for a [PracticeItem], or null if no match.
   ///
@@ -25,13 +32,13 @@ class LessonData {
     return wordToLesson[normalizeDiacritics(key)];
   }
 
-  /// Whether [item] should be practiced given [selected] lessons.
-  /// An empty selection means "all lessons".
-  bool includes(PracticeItem item, Set<String> selected) {
-    if (selected.isEmpty) return true;
-    final lesson = lessonFor(item);
-    if (lesson == null) return false;
-    return selected.contains(lesson);
+  /// Whether [item] should be practiced given [selectedWords] (normalized).
+  /// An empty selection means "all words".
+  bool includes(PracticeItem item, Set<String> selectedWords) {
+    if (selectedWords.isEmpty) return true;
+    final key = item.baseForm ?? item.word;
+    if (key == null) return false;
+    return selectedWords.contains(normalizeDiacritics(key));
   }
 }
 
@@ -67,6 +74,7 @@ Future<LessonData> loadLessonData(String assetPath) async {
 
   final names = <String>[];
   final wordToLesson = <String, String>{};
+  final lessonWords = <String, List<String>>{};
 
   for (final entry in yaml) {
     final map = entry as YamlMap;
@@ -74,11 +82,19 @@ Future<LessonData> loadLessonData(String assetPath) async {
     names.add(name);
 
     final words = map['words'] as YamlList;
+    final rawWords = <String>[];
     for (final word in words) {
-      final normalized = normalizeDiacritics(word as String);
+      final raw = word as String;
+      rawWords.add(raw);
+      final normalized = normalizeDiacritics(raw);
       wordToLesson.putIfAbsent(normalized, () => name);
     }
+    lessonWords[name] = rawWords;
   }
 
-  return LessonData(lessonNames: names, wordToLesson: wordToLesson);
+  return LessonData(
+    lessonNames: names,
+    wordToLesson: wordToLesson,
+    lessonWords: lessonWords,
+  );
 }

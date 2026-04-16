@@ -1,3 +1,5 @@
+import '../data/lesson_data.dart';
+
 /// Settings model to hold enabled forms per data file
 class Settings {
   /// Map of data file identifier to set of enabled form keys
@@ -8,27 +10,29 @@ class Settings {
   /// e.g., {"verbs": "dropdown_all_forms", "nouns": "text_field"}
   final Map<String, String> inputStrategyIds;
 
-  /// Names of lessons selected for practice.
-  /// An empty set means "all lessons" (no filter).
-  final Set<String> selectedLessons;
+  /// Normalized words selected for practice.
+  /// An empty set means "all words" (no filter).
+  /// Can be set from either the settings screen (lesson-based) or the
+  /// statistics screen (performance-based).
+  final Set<String> selectedWords;
 
   Settings({
     Map<String, Set<String>>? enabledForms,
     Map<String, String>? inputStrategyIds,
-    Set<String>? selectedLessons,
+    Set<String>? selectedWords,
   })  : enabledForms = enabledForms ?? {},
         inputStrategyIds = inputStrategyIds ?? {},
-        selectedLessons = selectedLessons ?? {};
+        selectedWords = selectedWords ?? {};
 
   Settings copyWith({
     Map<String, Set<String>>? enabledForms,
     Map<String, String>? inputStrategyIds,
-    Set<String>? selectedLessons,
+    Set<String>? selectedWords,
   }) {
     return Settings(
       enabledForms: enabledForms ?? this.enabledForms,
       inputStrategyIds: inputStrategyIds ?? this.inputStrategyIds,
-      selectedLessons: selectedLessons ?? this.selectedLessons,
+      selectedWords: selectedWords ?? this.selectedWords,
     );
   }
 
@@ -73,36 +77,96 @@ class Settings {
     return copyWith(enabledForms: newEnabledForms);
   }
 
-  /// Whether a given lesson is currently selected for practice.
-  /// When no lessons are explicitly selected, everything is treated
-  /// as selected (no filter).
-  bool isLessonSelected(String lessonName) {
-    if (selectedLessons.isEmpty) return true;
-    return selectedLessons.contains(lessonName);
+  /// Whether a specific normalized word is selected.
+  /// When no words are explicitly selected, everything is treated as selected.
+  bool isWordSelected(String normalizedWord) {
+    if (selectedWords.isEmpty) return true;
+    return selectedWords.contains(normalizedWord);
   }
 
-  /// Toggle a lesson's selection state.
-  ///
-  /// Because an empty set means "all selected", toggling a single lesson
-  /// off from the "all" state first materializes the full list so only the
-  /// toggled one actually turns off.
-  Settings toggleLesson(String lessonName, List<String> allLessons) {
-    final Set<String> base = selectedLessons.isEmpty
-        ? Set<String>.from(allLessons)
-        : Set<String>.from(selectedLessons);
+  /// Whether all words in a lesson are selected.
+  bool isLessonFullySelected(String lessonName, List<String> rawWords) {
+    if (selectedWords.isEmpty) return true;
+    return rawWords.every(
+      (w) => selectedWords.contains(normalizeDiacritics(w)),
+    );
+  }
 
-    if (base.contains(lessonName)) {
-      base.remove(lessonName);
+  /// Whether some (but not all) words in a lesson are selected.
+  bool isLessonPartiallySelected(String lessonName, List<String> rawWords) {
+    if (selectedWords.isEmpty) return false;
+    final hasSelected = rawWords.any(
+      (w) => selectedWords.contains(normalizeDiacritics(w)),
+    );
+    final hasUnselected = rawWords.any(
+      (w) => !selectedWords.contains(normalizeDiacritics(w)),
+    );
+    return hasSelected && hasUnselected;
+  }
+
+  /// Toggle a single word's selection state.
+  ///
+  /// [allNormalizedWords] is the full list needed to materialize the set when
+  /// moving from "all selected" (empty set) to "all but one selected".
+  Settings toggleWord(String normalizedWord, List<String> allNormalizedWords) {
+    final Set<String> base = selectedWords.isEmpty
+        ? Set<String>.from(allNormalizedWords)
+        : Set<String>.from(selectedWords);
+
+    if (base.contains(normalizedWord)) {
+      base.remove(normalizedWord);
     } else {
-      base.add(lessonName);
+      base.add(normalizedWord);
     }
 
-    return copyWith(selectedLessons: base);
+    // Collapse back to "all" if every word is selected
+    if (base.length == allNormalizedWords.length &&
+        base.containsAll(allNormalizedWords)) {
+      return copyWith(selectedWords: <String>{});
+    }
+    return copyWith(selectedWords: base);
   }
 
-  /// Select every lesson (stored as an empty set meaning "no filter").
-  Settings selectAllLessons() {
-    return copyWith(selectedLessons: <String>{});
+  /// Toggle all words in a lesson.
+  ///
+  /// If all lesson words are selected, deselect them all.
+  /// Otherwise, select all of them.
+  /// [allNormalizedWords] is the full universe needed for the "all" collapse.
+  Settings toggleLessonWords(
+    List<String> rawLessonWords,
+    List<String> allNormalizedWords,
+  ) {
+    final lessonNormalized =
+        rawLessonWords.map(normalizeDiacritics).toList();
+
+    final allSelected = isLessonFullySelected('', rawLessonWords);
+
+    final Set<String> base = selectedWords.isEmpty
+        ? Set<String>.from(allNormalizedWords)
+        : Set<String>.from(selectedWords);
+
+    if (allSelected) {
+      base.removeAll(lessonNormalized);
+    } else {
+      base.addAll(lessonNormalized);
+    }
+
+    if (base.length == allNormalizedWords.length &&
+        base.containsAll(allNormalizedWords)) {
+      return copyWith(selectedWords: <String>{});
+    }
+    return copyWith(selectedWords: base);
+  }
+
+  /// Replace the entire selection with [words] (normalized).
+  /// Pass an empty set to select all words (no filter).
+  Settings withSelectedWords(Set<String> words) {
+    return copyWith(selectedWords: words);
+  }
+
+  /// Select every word (stored as an empty set meaning "no filter").
+  Settings selectAllWords() {
+    return copyWith(selectedWords: <String>{});
   }
 
   /// Convert to JSON for storage
@@ -112,7 +176,7 @@ class Settings {
         (key, value) => MapEntry(key, value.toList()),
       ),
       'inputStrategyIds': inputStrategyIds,
-      'selectedLessons': selectedLessons.toList(),
+      'selectedWords': selectedWords.toList(),
     };
   }
 
@@ -120,7 +184,10 @@ class Settings {
   factory Settings.fromJson(Map<String, dynamic> json) {
     final enabledFormsMap = json['enabledForms'] as Map<String, dynamic>?;
     final strategyMap = json['inputStrategyIds'] as Map<String, dynamic>?;
-    final lessonList = json['selectedLessons'] as List<dynamic>?;
+    // Support both old key ('selectedLessons') and new key ('selectedWords').
+    // Old lesson names cannot be migrated to words without lesson data, so
+    // when only the old key is present we fall back to "select all" (empty set).
+    final wordList = json['selectedWords'] as List<dynamic>?;
 
     return Settings(
       enabledForms: enabledFormsMap?.map(
@@ -130,8 +197,8 @@ class Settings {
       inputStrategyIds:
           strategyMap?.map((key, value) => MapEntry(key, value as String)) ??
               {},
-      selectedLessons: lessonList != null
-          ? Set<String>.from(lessonList.map((e) => e as String))
+      selectedWords: wordList != null
+          ? Set<String>.from(wordList.map((e) => e as String))
           : <String>{},
     );
   }
