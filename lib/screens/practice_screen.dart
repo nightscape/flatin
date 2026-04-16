@@ -9,6 +9,18 @@ import '../providers/settings_provider.dart';
 import '../providers/fsrs_provider.dart';
 import '../widgets/app_drawer.dart';
 
+/// A wrong translation forces [Rating.again]; otherwise the rating follows the
+/// share of correct form answers.
+Rating suggestRating(List<bool?> formResults, bool translationCorrect) {
+  if (!translationCorrect) return Rating.again;
+  final total = formResults.where((r) => r != null).length;
+  final correct = formResults.where((r) => r == true).length;
+  if (total == 0) return Rating.again;
+  if (correct == total) return Rating.good;
+  if (correct > 0) return Rating.hard;
+  return Rating.again;
+}
+
 class PracticeScreen extends ConsumerStatefulWidget {
   final PracticeItem item;
 
@@ -25,6 +37,7 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
   List<String> _filteredInferredForms = [];
   Rating? _suggestedRating;
   bool _showRatingButtons = false;
+  String? _selectedTranslation;
 
   void _ensureAnswerSlots(int count) {
     if (_userAnswers.length != count) {
@@ -34,22 +47,18 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
 
   void _checkAnswers() {
     final notifier = ref.read(practiceProvider(widget.item).notifier);
-    notifier.checkAnswers(_userAnswers, _filteredForms);
+    notifier.checkAnswers(
+      _userAnswers,
+      _filteredForms,
+      selectedTranslation: _selectedTranslation,
+      correctTranslation: widget.item.translation,
+    );
 
     final state = ref.read(practiceProvider(widget.item));
-    final results = state.validationResults;
-    final totalAnswers = results.where((r) => r != null).length;
-    final correctCount = results.where((r) => r == true).length;
-
-    if (totalAnswers == 0) {
-      _suggestedRating = Rating.again;
-    } else if (correctCount == totalAnswers) {
-      _suggestedRating = Rating.good;
-    } else if (correctCount > 0) {
-      _suggestedRating = Rating.hard;
-    } else {
-      _suggestedRating = Rating.again;
-    }
+    _suggestedRating = suggestRating(
+      state.validationResults,
+      state.translationCorrect!,
+    );
 
     setState(() {
       _showRatingButtons = true;
@@ -62,6 +71,7 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
     setState(() {
       _showRatingButtons = false;
       _suggestedRating = null;
+      _selectedTranslation = null;
     });
   }
 
@@ -92,10 +102,83 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
     return state.validationResults[index]! ? Colors.green : Colors.red;
   }
 
+  Color _getTranslationBorderColor(PracticeState state) {
+    if (!state.isChecked || state.translationCorrect == null) {
+      return Colors.grey;
+    }
+    return state.translationCorrect! ? Colors.green : Colors.red;
+  }
+
+  Widget _buildTranslationDropdown(
+    List<String> choices,
+    PracticeState state,
+    double labelFontSize,
+    bool isMobile,
+  ) {
+    final borderColor = _getTranslationBorderColor(state);
+    final border = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(4),
+      borderSide: BorderSide(color: borderColor, width: 2),
+    );
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        DropdownButtonFormField<String>(
+          initialValue: _selectedTranslation,
+          hint: Text(
+            FlutterI18n.translate(context, 'practice.chooseTranslation'),
+            style: TextStyle(fontSize: labelFontSize, color: Colors.grey),
+          ),
+          items: choices
+              .map(
+                (c) => DropdownMenuItem(
+                  value: c,
+                  child: Text(
+                    c,
+                    style:
+                        TextStyle(fontSize: labelFontSize, color: Colors.black),
+                  ),
+                ),
+              )
+              .toList(),
+          onChanged: state.isChecked
+              ? null
+              : (v) => setState(() => _selectedTranslation = v),
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: Colors.white,
+            border: border,
+            enabledBorder: border,
+            disabledBorder: border,
+            contentPadding: EdgeInsets.symmetric(
+              horizontal: isMobile ? 10 : 12,
+              vertical: isMobile ? 6 : 8,
+            ),
+          ),
+        ),
+        if (state.isChecked && state.translationCorrect == false)
+          Padding(
+            padding: const EdgeInsets.only(top: 4),
+            child: Text(
+              widget.item.translation,
+              style: TextStyle(
+                fontSize: labelFontSize,
+                color: Colors.red,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(practiceProvider(widget.item));
     final settingsAsync = ref.watch(settingsProvider);
+    final choicesAsync = ref.watch(translationChoicesProvider(widget.item));
     final screenWidth = MediaQuery.of(context).size.width;
     final isMobile = screenWidth < 600;
 
@@ -169,21 +252,28 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Header row
+                  // Translation dropdown row
                   Padding(
                     padding: EdgeInsets.only(bottom: verticalPadding),
                     child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         if (state.isTranslationVisible)
                           Expanded(
                             flex: 1,
-                            child: Text(
-                              FlutterI18n.translate(context, 'practice.translation'),
-                              style: TextStyle(
-                                fontSize: headerFontSize,
-                                fontWeight: FontWeight.bold,
-                                decoration: TextDecoration.underline,
-                                color: Colors.black,
+                            child: Padding(
+                              padding: EdgeInsets.only(
+                                top: isMobile ? 10 : 12,
+                              ),
+                              child: Text(
+                                FlutterI18n.translate(
+                                    context, 'practice.translation'),
+                                style: TextStyle(
+                                  fontSize: headerFontSize,
+                                  fontWeight: FontWeight.bold,
+                                  decoration: TextDecoration.underline,
+                                  color: Colors.black,
+                                ),
                               ),
                             ),
                           ),
@@ -191,12 +281,26 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
                           SizedBox(width: isMobile ? 12.0 : 24.0),
                         Expanded(
                           flex: state.isTranslationVisible ? 1 : 2,
-                          child: Text(
-                            widget.item.translation,
-                            style: TextStyle(
-                              fontSize: headerFontSize,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
+                          child: choicesAsync.when(
+                            data: (choices) => _buildTranslationDropdown(
+                              choices,
+                              state,
+                              labelFontSize,
+                              isMobile,
+                            ),
+                            loading: () => const SizedBox(
+                              height: 40,
+                              child: Center(
+                                child: CircularProgressIndicator(strokeWidth: 2),
+                              ),
+                            ),
+                            error: (_, __) => Text(
+                              widget.item.translation,
+                              style: TextStyle(
+                                fontSize: headerFontSize,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
                             ),
                           ),
                         ),

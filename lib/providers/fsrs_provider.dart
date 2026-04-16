@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fsrs/fsrs.dart';
@@ -119,6 +121,26 @@ Future<void> reviewCard(WidgetRef ref, PracticeItem item, Rating rating) async {
 
   // Invalidate providers to refresh UI
   ref.invalidate(fsrsCardsProvider);
+}
+
+/// Provides shuffled translation choices for a practice item:
+/// the correct translation plus 3 random distractors from the same data file.
+@riverpod
+Future<List<String>> translationChoices(Ref ref, PracticeItem item) async {
+  final yamlPath = 'lib/data/latin_${item.dataFileId}.yaml';
+  final allItems = await loadPracticeItems(yamlPath);
+
+  final seed = item.translation.hashCode;
+  final otherTranslations = allItems
+      .where((i) => i.translation != item.translation)
+      .map((i) => i.translation)
+      .toSet()
+      .toList()
+    ..shuffle(Random(seed));
+
+  final choices = [item.translation, ...otherTranslations.take(3)];
+  choices.shuffle(Random(seed + 1));
+  return choices;
 }
 
 /// Get retrievability for a card

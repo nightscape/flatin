@@ -275,3 +275,93 @@ final class NextDueItemFamily extends $Family
   @override
   String toString() => r'nextDueItemProvider';
 }
+
+/// Provides shuffled translation choices for a practice item:
+/// the correct translation plus 3 random distractors from the same data file.
+
+@ProviderFor(translationChoices)
+const translationChoicesProvider = TranslationChoicesFamily._();
+
+/// Provides shuffled translation choices for a practice item:
+/// the correct translation plus 3 random distractors from the same data file.
+
+final class TranslationChoicesProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<String>>,
+          List<String>,
+          FutureOr<List<String>>
+        >
+    with $FutureModifier<List<String>>, $FutureProvider<List<String>> {
+  /// Provides shuffled translation choices for a practice item:
+  /// the correct translation plus 3 random distractors from the same data file.
+  const TranslationChoicesProvider._({
+    required TranslationChoicesFamily super.from,
+    required PracticeItem super.argument,
+  }) : super(
+         retry: null,
+         name: r'translationChoicesProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
+
+  @override
+  String debugGetCreateSourceHash() => _$translationChoicesHash();
+
+  @override
+  String toString() {
+    return r'translationChoicesProvider'
+        ''
+        '($argument)';
+  }
+
+  @$internal
+  @override
+  $FutureProviderElement<List<String>> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<List<String>> create(Ref ref) {
+    final argument = this.argument as PracticeItem;
+    return translationChoices(ref, argument);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is TranslationChoicesProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
+String _$translationChoicesHash() =>
+    r'fadf71cc6e4a693b2204fb0256e72896f5760577';
+
+/// Provides shuffled translation choices for a practice item:
+/// the correct translation plus 3 random distractors from the same data file.
+
+final class TranslationChoicesFamily extends $Family
+    with $FunctionalFamilyOverride<FutureOr<List<String>>, PracticeItem> {
+  const TranslationChoicesFamily._()
+    : super(
+        retry: null,
+        name: r'translationChoicesProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  /// Provides shuffled translation choices for a practice item:
+  /// the correct translation plus 3 random distractors from the same data file.
+
+  TranslationChoicesProvider call(PracticeItem item) =>
+      TranslationChoicesProvider._(argument: item, from: this);
+
+  @override
+  String toString() => r'translationChoicesProvider';
+}

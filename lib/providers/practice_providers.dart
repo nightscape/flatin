@@ -8,22 +8,29 @@ class PracticeState {
   final bool isTranslationVisible;
   final bool isChecked;
   final List<bool?> validationResults;
+  final bool? translationCorrect;
 
   PracticeState({
     this.isTranslationVisible = true,
     this.isChecked = false,
     List<bool?>? validationResults,
+    this.translationCorrect,
   }) : validationResults = validationResults ?? [];
 
   PracticeState copyWith({
     bool? isTranslationVisible,
     bool? isChecked,
     List<bool?>? validationResults,
+    bool? translationCorrect,
+    bool clearTranslationCorrect = false,
   }) {
     return PracticeState(
       isTranslationVisible: isTranslationVisible ?? this.isTranslationVisible,
       isChecked: isChecked ?? this.isChecked,
       validationResults: validationResults ?? this.validationResults,
+      translationCorrect: clearTranslationCorrect
+          ? null
+          : (translationCorrect ?? this.translationCorrect),
     );
   }
 }
@@ -42,7 +49,12 @@ class PracticeNotifier extends _$PracticeNotifier {
     state = state.copyWith(isTranslationVisible: !state.isTranslationVisible);
   }
 
-  void checkAnswers(List<String> userAnswers, List<String> correctAnswers) {
+  void checkAnswers(
+    List<String> userAnswers,
+    List<String> correctAnswers, {
+    required String? selectedTranslation,
+    required String correctTranslation,
+  }) {
     final results = <bool?>[];
     for (int i = 0; i < userAnswers.length; i++) {
       final userAnswer = userAnswers[i].trim().toLowerCase();
@@ -55,18 +67,18 @@ class PracticeNotifier extends _$PracticeNotifier {
         results.add(null);
       }
     }
-    state = state.copyWith(isChecked: true, validationResults: results);
-  }
 
-  void resetAnswers(int formCount) {
+    final translationCorrect = selectedTranslation == correctTranslation;
+
     state = state.copyWith(
-      isChecked: false,
-      validationResults: List.filled(formCount, null),
+      isChecked: true,
+      validationResults: results,
+      translationCorrect: translationCorrect,
     );
   }
 
   void hideAnswers() {
-    state = state.copyWith(isChecked: false);
+    state = state.copyWith(isChecked: false, clearTranslationCorrect: true);
   }
 }
 
@@ -135,4 +147,3 @@ class WordClassificationNotifier extends _$WordClassificationNotifier {
     state = WordClassificationState();
   }
 }
-
