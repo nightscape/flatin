@@ -1,6 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/data/diagnosis.dart';
+import 'package:latin_practice/data/explanation.dart';
 import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/models/derivation.dart';
 import 'package:latin_practice/models/practice_item.dart';
@@ -100,7 +101,9 @@ void main() {
 
             expect(
               diagnose(item, formKey, 'xq${form.ending}'),
-              isA<WrongStem>().having((d) => d.usedStem, 'usedStem', 'xq'),
+              isA<WrongStem>()
+                  .having((d) => d.usedStem, 'usedStem', 'xq')
+                  .having((d) => d.stemName, 'stemName', form.stemName),
               reason: where,
             );
             expect(
@@ -109,11 +112,15 @@ void main() {
               reason: where,
             );
 
+            // Q11 A: the macrons are no wrong answer any more; the correct
+            // answer carries the marked spelling as an info line.
             final macronised = _macronise(item.forms[i]);
             if (macronised != null) {
+              expect(item.accepts(i, macronised), isTrue, reason: where);
               expect(
-                diagnose(item, formKey, macronised),
-                isA<OnlyDiacritics>(),
+                explainCorrectAnswer(item, formKey, macronised)
+                    .map((line) => line.params['result']),
+                [item.forms[i]],
                 reason: where,
               );
             }
@@ -163,7 +170,9 @@ void main() {
       );
       expect(
         result,
-        isA<WrongStem>().having((d) => d.usedStem, 'usedStem', 'dominus'),
+        isA<WrongStem>()
+            .having((d) => d.usedStem, 'usedStem', 'dominus')
+            .having((d) => d.stemName, 'stemName', 'stamm'),
       );
     });
 

@@ -2,12 +2,14 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:latin_practice/data/diagnosis.dart';
 import 'package:latin_practice/data/explanation.dart';
 import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/models/derivation.dart';
 import 'package:latin_practice/models/practice_item.dart';
 
 import 'support/test_axes.dart';
+import 'support/trace_fixtures.dart';
 
 const _nouns = 'lib/data/latin_nouns.yaml';
 const _verbs = 'lib/data/latin_verbs.yaml';
@@ -37,7 +39,7 @@ void main() {
         ],
         [
           'explain.stem',
-          {'stem': 'domin'},
+          {'display': 'Stamm', 'stem': 'domin'},
         ],
         [
           'explain.generated',
@@ -69,7 +71,10 @@ void main() {
           'explain.typeByRule',
           {'word': 'amāre', 'suffix': 'āre', 'type': 'A-Konjugation'},
         ],
-        ['explain.stem', {'stem': 'am'}],
+        [
+          'explain.stem',
+          {'display': 'Stamm', 'stem': 'am'},
+        ],
         [
           'explain.generated',
           {
@@ -93,7 +98,12 @@ void main() {
           ],
           [
             'explain.stemSource',
-            {'stem': 'reg', 'source': 'regis', 'suffix': 'is'},
+            {
+              'display': 'Stamm',
+              'stem': 'reg',
+              'source': 'regis',
+              'suffix': 'is',
+            },
           ],
         ],
       );
@@ -276,6 +286,233 @@ void main() {
     });
   });
 
+  group('T-expl-3 the 3.2 trace', () {
+    late Map<String, String> de;
+    setUp(() async => de = await germanTexts());
+
+    List<String> german(List<ExplanationLine> lines) =>
+        [for (final line in lines) renderDe(de, line)];
+
+    test('amō: school stem and the seam rule of the present', () {
+      final lines = explainWrongAnswer(amare(), 'ind.praes.akt.1.sg', 'amao');
+      expect(_pairs(lines).take(3), [
+        [
+          'explain.typeByRule',
+          {
+            'word': 'amāre, amāvī, amātum',
+            'suffix': 'āre',
+            'type': 'A-Konjugation',
+          },
+        ],
+        [
+          'explain.stemDefault',
+          {
+            'display': 'Präsensstamm',
+            'stem': 'amā',
+            'base': 'amāre − āre',
+            'rest': 'ā',
+          },
+        ],
+        [
+          'explain.sandhi',
+          {
+            'label': 'Präsens: 1. Person Singular',
+            'before': 'amā + ō',
+            'after': 'amō',
+            'rule': 'ā fällt vor Vokal aus',
+          },
+        ],
+      ]);
+      expect(german(lines).skip(1).take(2), [
+        'Präsensstamm amā- (amāre − āre + ā)',
+        'Präsens: 1. Person Singular: amā + ō = amō (ā fällt vor Vokal aus)',
+      ]);
+    });
+
+    test('capere: three candidate types and the seam of the infinitive', () {
+      final lines = explainWrongAnswer(capere(), 'inf.praes.akt', 'capīre');
+      expect(_pairs(lines).first, [
+        'explain.typeByRuleAmbiguous',
+        {
+          'word': 'capere',
+          'suffix': 'ere',
+          'candidates':
+              'Konsonantische-Konjugation, Mischkonjugation, E-Konjugation',
+          'type': 'Mischkonjugation',
+        },
+      ]);
+      expect(
+        german(lines)[2],
+        'Infinitiv Präsens: capi + re = capere (i wird vor r zu e)',
+      );
+    });
+
+    test('regit: the connecting vowel is part of the ending', () {
+      final lines = explainWrongAnswer(regere(), 'ind.praes.akt.3.sg', 'reget');
+      expect(german(lines)[2], 'Präsens: 3. Person Singular: reg + it = regit');
+    });
+
+    test('amantis: the PPA stem shortens the vowel before nt', () {
+      final lines =
+          explainWrongAnswer(amare(), 'part.praes.akt.gen.sg', 'amātis');
+      expect(
+        german(lines)[1],
+        'PPA-Stamm: amā + nt = amant (Vokal vor nt/nd wird kurz)',
+      );
+      expect(german(lines)[2], endsWith('amant + is = amantis'));
+    });
+
+    test('amātus essem: a composed form reads out its parts', () {
+      final lines =
+          explainWrongAnswer(amare(), 'konj.plusq.pass.1.sg', 'amātus eram');
+      expect(_pairs(lines)[1], [
+        'explain.composed',
+        {
+          'label': 'Konjunktiv Plusquamperfekt Passiv: 1. Person Singular',
+          'parts': 'amātus + essem',
+          'result': 'amātus essem',
+        },
+      ]);
+      expect(
+        german(explainForm(amare(), ['konj.plusq.pass.1.sg'])).last,
+        'Konjunktiv Plusquamperfekt Passiv: 1. Person Singular: '
+        'amātus + essem = amātus essem',
+      );
+    });
+
+    test('amātūrum esse: S17 names the form "Infinitiv Futur"', () {
+      final lines = explainWrongAnswer(amare(), 'inf.fut.akt', 'amāre esse');
+      expect(lines[1].params['label'], 'Infinitiv Futur');
+    });
+
+    test('possum: the affix seam rule explains the double s', () {
+      final lines = explainWrongAnswer(posse(), 'ind.praes.akt.1.sg', 'potsum');
+      expect(_pairs(lines)[1], [
+        'explain.sandhi',
+        {
+          'label': 'Präsens: 1. Person Singular',
+          'before': 'pot + sum',
+          'after': 'possum',
+          'rule': 't wird vor s zu s',
+        },
+      ]);
+      expect(
+        german(lines)[1],
+        'Präsens: 1. Person Singular: pot + sum = possum (t wird vor s zu s)',
+      );
+    });
+
+    test('potessem: the regular form of an irregular one is composed', () {
+      final item = posse();
+      expect(
+        item.derivation.forms['konj.plusq.akt.1.sg'],
+        isA<IrregularForm>().having(
+          (f) => f.regular,
+          'regular',
+          isA<ComposedForm>(),
+        ),
+      );
+      expect(
+        diagnose(item, 'konj.plusq.akt.1.sg', 'potessem'),
+        isA<RegularInsteadOfIrregular>(),
+      );
+      expect(
+        german(explainWrongAnswer(item, 'konj.plusq.akt.1.sg', 'potessem')).last,
+        'Du hast potessem geschrieben – das wäre die regelmäßige Form, '
+        'aber Konjunktiv Plusquamperfekt: 1. Person Singular ist hier '
+        'unregelmäßig',
+      );
+    });
+
+    test('fortiōris: a default stem with the ending of another type', () {
+      final lines = explainWrongAnswer(fortis(), 'komp.gen.sg', 'fortiōrae');
+      expect(_pairs(lines).take(3), [
+        [
+          'explain.typeDeclared',
+          {'word': 'fortis, forte', 'type': 'I-Deklination-mf'},
+        ],
+        [
+          'explain.stemDefault',
+          {
+            'display': 'Komparativstamm',
+            'stem': 'fortiōr',
+            'base': 'fortis − is',
+            'rest': 'iōr',
+          },
+        ],
+        [
+          'explain.generatedOtherType',
+          {
+            'label': 'Komparativ Genitiv Singular',
+            'stem': 'fortiōr',
+            'ending': 'is',
+            'result': 'fortiōris',
+            'endingType': 'Konsonantische-Deklination-mf',
+          },
+        ],
+      ]);
+      expect(german(lines)[1], 'Komparativstamm fortiōr- (fortis − is + iōr)');
+      expect(
+        german(lines)[2],
+        'Komparativ Genitiv Singular: fortiōr + is = fortiōris '
+        '(Endung der Konsonantische-Deklination-mf)',
+      );
+    });
+
+    test('hortor: a deponent says so before the form', () {
+      final lines =
+          explainWrongAnswer(hortari(), 'ind.praes.akt.1.sg', 'hortō');
+      expect(_pairs(lines)[1], [
+        'explain.deponent',
+        {'label': 'Präsens: 1. Person Singular'},
+      ]);
+      expect(
+        german(lines)[1],
+        'Präsens: 1. Person Singular ist ein Deponens: '
+        'passive Form, aktive Bedeutung',
+      );
+    });
+
+    test('amāvērunt: the other spelling is correct too', () {
+      final lines =
+          explainWrongAnswer(amare(), 'ind.perf.akt.3.pl', 'amāvērat');
+      expect(german(lines).take(4), [
+        'amāre, amāvī, amātum: Endung -āre → A-Konjugation',
+        'Perfektstamm amāv- (amāvī − ī)',
+        'Perfekt: 3. Person Plural: amāv + ērunt = amāvērunt',
+        'auch richtig: amāvēre',
+      ]);
+    });
+
+    test('afferō: both prefix spellings count', () {
+      final lines =
+          explainWrongAnswer(afferre(), 'ind.praes.akt.1.sg', 'afferu');
+      expect(german(lines)[3], 'auch richtig: adferō');
+    });
+
+    test('abiī: the perfect has two spellings in the data', () {
+      final lines = explainWrongAnswer(abire(), 'ind.perf.akt.1.sg', 'abiō');
+      expect(german(lines)[2], 'auch richtig: abīvī');
+    });
+
+    test('Q11 A: a correct answer without macrons gets the marked spelling',
+        () {
+      final item = amare();
+      expect(
+        german(explainCorrectAnswer(item, 'ind.perf.akt.3.pl', 'amaverunt')),
+        ['Richtig. Mit Längenzeichen: amāvērunt'],
+      );
+      expect(
+        explainCorrectAnswer(item, 'ind.perf.akt.3.pl', 'amāvērunt'),
+        isEmpty,
+      );
+      expect(
+        explainCorrectAnswer(item, 'ind.perf.akt.3.pl', 'amāvēre'),
+        isEmpty,
+      );
+    });
+  });
+
   test('T-expl-2 every line exists in de.json with all its params', () async {
     final texts = _flatten(
       jsonDecode(await rootBundle.loadString('assets/flutter_i18n/de.json'))
@@ -296,23 +533,25 @@ void main() {
       }
     }
 
-    for (final asset in [_nouns, _verbs]) {
-      for (final item in await loadPracticeItems(asset)) {
-        for (int i = 0; i < item.formOrder.length; i++) {
-          final key = item.formOrder[i];
-          final where = '${item.translation} $key';
-          for (final answer in _wrongAnswers(item, i)) {
-            for (final line in explainWrongAnswer(item, key, answer)) {
-              check(line, where);
-            }
-          }
-          for (final line in explainForm(item, [key])) {
+    final sweep = [
+      for (final asset in [_nouns, _verbs]) ...await loadPracticeItems(asset),
+      ...traceItems(),
+    ];
+    for (final item in sweep) {
+      for (int i = 0; i < item.formOrder.length; i++) {
+        final key = item.formOrder[i];
+        final where = '${item.translation} $key';
+        for (final answer in _wrongAnswers(item, i)) {
+          for (final line in explainWrongAnswer(item, key, answer)) {
             check(line, where);
           }
-          check(explainPickedLabel(item, item.formLabels[i], 'gewählt'), where);
         }
-        check(explainPickedLabel(item, null, 'gewählt'), item.translation);
+        for (final line in explainForm(item, [key])) {
+          check(line, where);
+        }
+        check(explainPickedLabel(item, item.formLabels[i], 'gewählt'), where);
       }
+      check(explainPickedLabel(item, null, 'gewählt'), item.translation);
     }
     expect(lineCount, greaterThan(0));
   });
@@ -346,9 +585,7 @@ List<String> _wrongAnswers(PracticeItem item, int index) {
     answers.add(form.regular!.result);
   }
 
-  return answers
-      .where((a) => a.toLowerCase() != correct.toLowerCase())
-      .toList();
+  return answers.where((a) => !item.accepts(index, a)).toList();
 }
 
 /// Key and params as a list: records compare maps by identity, lists by value.

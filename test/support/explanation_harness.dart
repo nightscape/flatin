@@ -21,18 +21,24 @@ const sampleLines = <ExplanationLine>[
     'word': 'manus',
     'type': 'U-Deklination',
   }),
-  ExplanationLine('explain.stem', params: {'stem': 'domin'}),
+  ExplanationLine('explain.stem', params: {
+    'display': 'Stamm',
+    'stem': 'domin',
+  }),
   ExplanationLine('explain.stemSource', params: {
+    'display': 'Stamm',
     'stem': 'domin',
     'source': 'dominus',
     'suffix': 'us',
   }),
   ExplanationLine('explain.stemDefault', params: {
+    'display': 'Präsensstamm',
     'stem': 'amā',
-    'template': 'wurzel + ā',
-    'base': 'am',
+    'base': 'amāre − āre',
+    'rest': 'ā',
   }),
   ExplanationLine('explain.sandhi', params: {
+    'label': 'Präsens: 1. Person Singular',
     'before': 'amā + ō',
     'after': 'amō',
     'rule': 'ā fällt vor Vokal aus',
@@ -55,6 +61,13 @@ const sampleLines = <ExplanationLine>[
     'ending': 'orum',
     'result': 'dominorum',
   }),
+  ExplanationLine('explain.generatedOtherType', params: {
+    'label': 'Komparativ Genitiv Singular',
+    'stem': 'fortiōr',
+    'ending': 'is',
+    'result': 'fortiōris',
+    'endingType': 'Konsonantische-Deklination-mf',
+  }),
   ExplanationLine('explain.given', params: {
     'result': 'dominus',
     'label': 'Nominativ Singular',
@@ -75,8 +88,6 @@ const sampleLines = <ExplanationLine>[
     'form': 'dominorum',
   }),
   ExplanationLine('explain.pickedMissing', params: {'picked': 'Vokativ Plural'}),
-  ExplanationLine('explain.diag.onlyDiacritics',
-      params: {'answer': 'dominōrum'}),
   ExplanationLine('explain.diag.regularInsteadOfIrregular', params: {
     'answer': 'deii',
     'label': 'Nominativ Plural',
@@ -92,6 +103,7 @@ const sampleLines = <ExplanationLine>[
   ExplanationLine('explain.diag.wrongStem', params: {
     'answer': 'dominusorum',
     'usedStem': 'dominus',
+    'display': 'Stamm',
     'stem': 'domin',
   }),
   ExplanationLine('explain.diag.noMatch', params: {'answer': 'zzz'}),
@@ -111,6 +123,7 @@ Future<void> pickOption(WidgetTester tester, int index, String value) async {
 /// [explainPickedLabel] while the logic lane is open, and records its calls.
 class ExplainerSpy {
   final List<(String formKey, String answer)> wrongAnswerCalls = [];
+  final List<(String formKey, String answer)> correctAnswerCalls = [];
   final List<List<String>> formCalls = [];
   final List<(FormLabel? picked, String pickedText)> pickedCalls = [];
 
@@ -119,6 +132,13 @@ class ExplainerSpy {
           wrongAnswerCalls.add((formKey, answer));
           return [
             ExplanationLine('explain.diag.noMatch', params: {'answer': answer}),
+          ];
+        },
+        correctAnswer: (PracticeItem item, String formKey, String answer) {
+          correctAnswerCalls.add((formKey, answer));
+          return [
+            ExplanationLine('explain.correctWithMacrons',
+                params: {'result': answer}),
           ];
         },
         form: (PracticeItem item, List<String> formKeys) {

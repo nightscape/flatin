@@ -6,11 +6,6 @@ sealed class Diagnosis {
   const Diagnosis();
 }
 
-/// `norm(answer) == norm(correct)`: only the macrons differ.
-final class OnlyDiacritics extends Diagnosis {
-  const OnlyDiacritics();
-}
-
 /// The answer is the regular form of a form that is irregular here.
 final class RegularInsteadOfIrregular extends Diagnosis {
   const RegularInsteadOfIrregular();
@@ -19,7 +14,7 @@ final class RegularInsteadOfIrregular extends Diagnosis {
 /// The answer is another form of the same word.
 final class OtherFormOfWord extends Diagnosis {
   /// The matching keys, in `form_order` order.
-  final List<String> formKeys;
+  final List<FormKey> formKeys;
 
   const OtherFormOfWord(this.formKeys);
 }
@@ -32,11 +27,14 @@ final class EndingOfOtherType extends Diagnosis {
   const EndingOfOtherType(this.types);
 }
 
-/// Own ending, but another stem.
+/// The ending the asked form uses, but on another stem.
 final class WrongStem extends Diagnosis {
   final String usedStem;
 
-  const WrongStem(this.usedStem);
+  /// The item-level name of the stem the form is built on.
+  final String stemName;
+
+  const WrongStem(this.usedStem, this.stemName);
 }
 
 final class NoMatch extends Diagnosis {
@@ -45,54 +43,60 @@ final class NoMatch extends Diagnosis {
 
 /// Classifies a wrong [answer] for [formKey] of [item].
 ///
-/// Precondition: [answer] is non-empty and counts as wrong by the screen's
-/// check (`answer.trim().toLowerCase() != correct.toLowerCase()`).
-Diagnosis diagnose(PracticeItem item, String formKey, String answer) {
+/// Precondition: [answer] is non-empty and no accepted spelling of [formKey]
+/// matches it ([PracticeItem.accepts]). An answer that differs only in
+/// quantity marks is correct (Q11 A) and gets [explainCorrectAnswer] instead.
+Diagnosis diagnose(PracticeItem item, FormKey formKey, String answer) {
   final int index = item.formOrder.indexOf(formKey);
   assert(index >= 0, '"$formKey" is not a form of "${item.translation}"');
-  final String correct = item.forms[index];
   assert(answer.trim().isNotEmpty);
-  assert(answer.trim().toLowerCase() != correct.toLowerCase());
+  assert(!item.accepts(index, answer), 'a correct answer has no diagnosis');
 
   final String given = norm(answer);
   final derivation = item.derivation;
-
-  if (given == norm(correct)) return const OnlyDiacritics();
-
   final asked = derivation.forms[formKey]!;
+
   if (asked is IrregularForm &&
       asked.regular != null &&
-      given == norm(asked.regular!.result)) {
+      asked.regular!.variants.any((spelling) => norm(spelling) == given)) {
     return const RegularInsteadOfIrregular();
   }
 
   final otherKeys = [
     for (int j = 0; j < item.formOrder.length; j++)
-      if (j != index && norm(item.forms[j]) == given) item.formOrder[j],
+      if (j != index && item.accepts(j, answer)) item.formOrder[j],
   ];
   if (otherKeys.isNotEmpty) return OtherFormOfWord(otherKeys);
 
-  final stem = derivation.stems.values.singleOrNull;
-  if (stem != null) {
-    final types = [
-      for (final entry in derivation.grammar.templatesByType.entries)
-        if (entry.key != derivation.type &&
-            entry.value[formKey] != null &&
-            norm(stem.stem + entry.value[formKey]!.endings.first) == given)
-          entry.key,
-    ];
-    if (types.isNotEmpty) return EndingOfOtherType(types);
+  final types = [
+    for (final entry in derivation.grammar.templatesByType.entries)
+      if (entry.key != derivation.type &&
+          _otherTypeForm(derivation, entry.value[formKey]) == given)
+        entry.key,
+  ];
+  if (types.isNotEmpty) return EndingOfOtherType(types);
 
-    if (asked is GeneratedForm) {
-      final ending = norm(asked.ending);
-      if (given.endsWith(ending)) {
-        final usedStem = given.substring(0, given.length - ending.length);
-        if (usedStem.isNotEmpty && usedStem != stem.stem) {
-          return WrongStem(usedStem);
-        }
+  if (asked is GeneratedForm) {
+    final String ending = norm(asked.ending);
+    if (given.endsWith(ending)) {
+      final usedStem = given.substring(0, given.length - ending.length);
+      final stem = derivation.stems[asked.stemName]!;
+      if (usedStem.isNotEmpty && usedStem != norm(stem.stem)) {
+        return WrongStem(usedStem, asked.stemName);
       }
     }
   }
 
   return const NoMatch();
+}
+
+/// The shown spelling [template] would give on this item's stems, normalized;
+/// null when the item has no stem of the template's name.
+String? _otherTypeForm(Derivation derivation, Template? template) {
+  if (template == null) return null;
+  final String? stemName = template.stemName;
+  if (stemName == null) return norm(template.endings.first);
+  final stem = derivation.stems[stemName];
+  if (stem == null) return null;
+  return norm(stem.stem + template.endings.first);
 }

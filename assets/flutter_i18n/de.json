@@ -67,11 +67,12 @@
     "typeByRule": "{word}: Endung -{suffix} → {type}",
     "typeByRuleAmbiguous": "{word}: Endung -{suffix} → {candidates}; hier: {type}",
     "typeDeclared": "{word}: {type}",
-    "stem": "Stamm {stem}-",
-    "stemSource": "Stamm {stem}- ({source} − {suffix})",
-    "stemDefault": "Stamm {stem}- (Standard {template} zu {base}-)",
+    "stem": "{display} {stem}-",
+    "stemSource": "{display} {stem}- ({source} − {suffix})",
+    "stemDefault": "{display} {stem}- ({base} + {rest})",
     "generated": "{label}: {stem} + {ending} = {result}",
-    "sandhi": "{before} → {after} ({rule})",
+    "generatedOtherType": "{label}: {stem} + {ending} = {result} (Endung der {endingType})",
+    "sandhi": "{label}: {before} = {after} ({rule})",
     "given": "{result} ist die Wörterbuchform ({label})",
     "irregular": "unregelmäßig – merken: {dictionary} · {label}: {result}",
     "composed": "{label}: {parts} = {result}",
@@ -82,11 +83,10 @@
     "pickedWouldBe": "Du hast {picked} gewählt – das wäre {form}",
     "pickedMissing": "{picked} gibt es bei diesem Wort nicht",
     "diag": {
-      "onlyDiacritics": "Du hast {answer} geschrieben – nur die Längenzeichen weichen ab",
       "regularInsteadOfIrregular": "Du hast {answer} geschrieben – das wäre die regelmäßige Form, aber {label} ist hier unregelmäßig",
       "otherForm": "Du hast {answer} geschrieben – das ist {labels}",
       "otherType": "Du hast {answer} geschrieben – Endung der {types}",
-      "wrongStem": "Du hast {answer} geschrieben – falscher Stamm {usedStem}- (richtig: {stem}-)",
+      "wrongStem": "Du hast {answer} geschrieben – falscher Stamm {usedStem}- (richtig: {display} {stem}-)",
       "noMatch": "Du hast {answer} geschrieben – das passt zu keiner bekannten Form"
     }
   }

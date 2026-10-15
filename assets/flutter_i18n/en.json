@@ -67,11 +67,12 @@
     "typeByRule": "{word}: ending -{suffix} → {type}",
     "typeByRuleAmbiguous": "{word}: ending -{suffix} → {candidates}; here: {type}",
     "typeDeclared": "{word}: {type}",
-    "stem": "Stem {stem}-",
-    "stemSource": "Stem {stem}- ({source} − {suffix})",
-    "stemDefault": "Stem {stem}- (default {template} of {base}-)",
+    "stem": "{display} {stem}-",
+    "stemSource": "{display} {stem}- ({source} − {suffix})",
+    "stemDefault": "{display} {stem}- ({base} + {rest})",
     "generated": "{label}: {stem} + {ending} = {result}",
-    "sandhi": "{before} → {after} ({rule})",
+    "generatedOtherType": "{label}: {stem} + {ending} = {result} (ending of {endingType})",
+    "sandhi": "{label}: {before} = {after} ({rule})",
     "given": "{result} is the dictionary form ({label})",
     "irregular": "irregular – memorise: {dictionary} · {label}: {result}",
     "composed": "{label}: {parts} = {result}",
@@ -82,11 +83,10 @@
     "pickedWouldBe": "You picked {picked} – that would be {form}",
     "pickedMissing": "{picked} does not exist for this word",
     "diag": {
-      "onlyDiacritics": "You wrote {answer} – only the macrons differ",
       "regularInsteadOfIrregular": "You wrote {answer} – that is the regular form, but {label} is irregular here",
       "otherForm": "You wrote {answer} – that is {labels}",
       "otherType": "You wrote {answer} – ending of {types}",
-      "wrongStem": "You wrote {answer} – wrong stem {usedStem}- (correct: {stem}-)",
+      "wrongStem": "You wrote {answer} – wrong stem {usedStem}- (correct: {display} {stem}-)",
       "noMatch": "You wrote {answer} – this matches no known form"
     }
   }
