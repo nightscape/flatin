@@ -1,0 +1,322 @@
+# Worked examples of schema 3.1 (plan sections 3.4-3.6) and one representative
+# of every S-rule that can be shown in valid data. The nouns data file; the
+# verbs one is grammar_examples_verbs.yaml and delegates into this one (S12).
+# test/grammar_schema_test.dart parses both and checks the labels, the key
+# round trip and describeLabels against them.
+data_file_id: nouns
+
+axes:
+  kasus:   {name: Kasus, values: {nom: Nominativ, gen: Genitiv, dat: Dativ, akk: Akkusativ, abl: Ablativ, vok: Vokativ}}
+  numerus: {name: Numerus, values: {sg: Singular, pl: Plural}}
+  genus:   {name: Genus, values: {m: maskulin, f: feminin, n: neutrum}}
+  adverb:  {name: Adverb, values: {adv: Adverb}}
+  grad:    {name: Grad, values: {pos: Positiv, komp: Komparativ, sup: Superlativ}, hidden_in_label: [pos]}
+
+label:
+  head: [adverb, grad, genus]
+  tail: [kasus, numerus]
+  merge_axis: kasus
+
+parts:
+  nom:        {label: Nominativ}
+  gen:        {label: Genitiv}
+  nom_f:      {label: Nominativ feminin}
+  nom_n:      {label: Nominativ neutrum}
+  komparativ: {label: Komparativ}
+  superlativ: {label: Superlativ}
+
+defaults:
+  given_part: nom
+  lemma_part: nom
+
+types:
+  a-o-Endungen:
+    abstract: true
+    forms:
+      nom.sg.m: "{stamm}us"
+      gen.sg.m: "{stamm}ī"
+      dat.sg.m: "{stamm}ō"
+      akk.sg.m: "{stamm}um"
+      abl.sg.m: "{stamm}ō"
+      vok.sg.m: "{stamm}e"
+      nom.pl.m: "{stamm}ī"
+      gen.pl.m: "{stamm}ōrum"
+      dat.pl.m: "{stamm}īs"
+      akk.pl.m: "{stamm}ōs"
+      abl.pl.m: "{stamm}īs"
+      vok.pl.m: "{stamm}ī"
+      nom.sg.f: "{stamm}a"
+      gen.sg.f: "{stamm}ae"
+      dat.sg.f: "{stamm}ae"
+      akk.sg.f: "{stamm}am"
+      abl.sg.f: "{stamm}ā"
+      vok.sg.f: "{stamm}a"
+      nom.pl.f: "{stamm}ae"
+      gen.pl.f: "{stamm}ārum"
+      dat.pl.f: "{stamm}īs"
+      akk.pl.f: "{stamm}ās"
+      abl.pl.f: "{stamm}īs"
+      vok.pl.f: "{stamm}ae"
+      nom.sg.n: "{stamm}um"
+      gen.sg.n: "{stamm}ī"
+      dat.sg.n: "{stamm}ō"
+      akk.sg.n: "{stamm}um"
+      abl.sg.n: "{stamm}ō"
+      vok.sg.n: "{stamm}um"
+      nom.pl.n: "{stamm}a"
+      gen.pl.n: "{stamm}ōrum"
+      dat.pl.n: "{stamm}īs"
+      akk.pl.n: "{stamm}a"
+      abl.pl.n: "{stamm}īs"
+      vok.pl.n: "{stamm}a"
+
+  a-o-er-Endungen:
+    abstract: true
+    inherits_from: a-o-Endungen
+    forms:
+      nom.sg.m: "{nom_m}"
+      vok.sg.m: "{nom_m}"
+
+  Komparativ-Endungen:
+    abstract: true
+    forms:
+      nom.sg.m: "{kstamm}ior"
+      gen.sg.m: "{kstamm}iōris"
+      dat.sg.m: "{kstamm}iōrī"
+      akk.sg.m: "{kstamm}iōrem"
+      abl.sg.m: "{kstamm}iōre"
+      vok.sg.m: "{kstamm}ior"
+      nom.pl.m: "{kstamm}iōrēs"
+      gen.pl.m: "{kstamm}iōrum"
+      dat.pl.m: "{kstamm}iōribus"
+      akk.pl.m: "{kstamm}iōrēs"
+      abl.pl.m: "{kstamm}iōribus"
+      vok.pl.m: "{kstamm}iōrēs"
+      nom.sg.f: "{kstamm}ior"
+      gen.sg.f: "{kstamm}iōris"
+      dat.sg.f: "{kstamm}iōrī"
+      akk.sg.f: "{kstamm}iōrem"
+      abl.sg.f: "{kstamm}iōre"
+      vok.sg.f: "{kstamm}ior"
+      nom.pl.f: "{kstamm}iōrēs"
+      gen.pl.f: "{kstamm}iōrum"
+      dat.pl.f: "{kstamm}iōribus"
+      akk.pl.f: "{kstamm}iōrēs"
+      abl.pl.f: "{kstamm}iōribus"
+      vok.pl.f: "{kstamm}iōrēs"
+      nom.sg.n: "{kstamm}ius"
+      gen.sg.n: "{kstamm}iōris"
+      dat.sg.n: "{kstamm}iōrī"
+      akk.sg.n: "{kstamm}ius"
+      abl.sg.n: "{kstamm}iōre"
+      vok.sg.n: "{kstamm}ius"
+      nom.pl.n: "{kstamm}iōra"
+      gen.pl.n: "{kstamm}iōrum"
+      dat.pl.n: "{kstamm}iōribus"
+      akk.pl.n: "{kstamm}iōra"
+      abl.pl.n: "{kstamm}iōribus"
+      vok.pl.n: "{kstamm}iōra"
+      adv: "{kstamm}ius"
+
+  3-Endungen:
+    abstract: true
+    forms:
+      nom.sg.m: "{nom_m}"
+      gen.sg.m: "{stamm}is"
+      dat.sg.m: "{stamm}ī"
+      akk.sg.m: "{stamm}em"
+      abl.sg.m: "{stamm}ī"
+      vok.sg.m: "{nom_m}"
+      nom.pl.m: "{stamm}ēs"
+      gen.pl.m: "{stamm}ium"
+      dat.pl.m: "{stamm}ibus"
+      akk.pl.m: ["{stamm}ēs", "{stamm}īs"]
+      abl.pl.m: "{stamm}ibus"
+      vok.pl.m: "{stamm}ēs"
+      nom.sg.f: "{nom_f}"
+      gen.sg.f: "{stamm}is"
+      dat.sg.f: "{stamm}ī"
+      akk.sg.f: "{stamm}em"
+      abl.sg.f: "{stamm}ī"
+      vok.sg.f: "{nom_f}"
+      nom.pl.f: "{stamm}ēs"
+      gen.pl.f: "{stamm}ium"
+      dat.pl.f: "{stamm}ibus"
+      akk.pl.f: ["{stamm}ēs", "{stamm}īs"]
+      abl.pl.f: "{stamm}ibus"
+      vok.pl.f: "{stamm}ēs"
+      nom.sg.n: "{nom_n}"
+      gen.sg.n: "{stamm}is"
+      dat.sg.n: "{stamm}ī"
+      akk.sg.n: "{nom_n}"
+      abl.sg.n: "{stamm}ī"
+      vok.sg.n: "{nom_n}"
+      nom.pl.n: "{stamm}ia"
+      gen.pl.n: "{stamm}ium"
+      dat.pl.n: "{stamm}ibus"
+      akk.pl.n: "{stamm}ia"
+      abl.pl.n: "{stamm}ibus"
+      vok.pl.n: "{stamm}ia"
+
+  3-Endungen-Partizip:
+    abstract: true
+    inherits_from: 3-Endungen
+    forms:
+      abl.sg.m: ["{stamm}e", "{stamm}ī"]
+      abl.sg.f: ["{stamm}e", "{stamm}ī"]
+      abl.sg.n: ["{stamm}e", "{stamm}ī"]
+      akk.pl.m: "{stamm}ēs"
+      akk.pl.f: "{stamm}ēs"
+
+  Adjektiv-a-o:
+    stems:
+      stamm:  {from: nom, remove: "us", display: Stamm}
+      kstamm: {from: komparativ, remove: "ior", default: "{stamm}", display: Komparativstamm}
+      sup:    {from: superlativ, remove: "us", default: "{stamm}issim", display: Superlativstamm}
+    delegate:
+      - {name: pos,  type: a-o-Endungen, bind: {stamm: stamm}, set: {grad: pos}}
+      - {name: komp, type: Komparativ-Endungen, bind: {kstamm: kstamm}, set: {grad: komp}}
+      - {name: sup,  type: a-o-Endungen, bind: {stamm: sup}, set: {grad: sup}}
+    forms:
+      adv.pos: "{stamm}ē"
+      adv.sup: "{sup}ē"
+
+  Adjektiv-a-o-er:
+    inherits_from: Adjektiv-a-o
+    stems:
+      stamm: {from: nom_f, remove: "a", display: Stamm}
+      nom_m: {from: nom, remove: "", display: Nominativ}
+      sup:   {from: superlativ, remove: "us", default: "{nom_m}rim", display: Superlativstamm}
+    delegate:
+      - {name: pos, type: a-o-er-Endungen, bind: {stamm: stamm, nom_m: nom_m}, set: {grad: pos}}
+
+  Adjektiv-3:
+    abstract: true
+    stems:
+      kstamm: {from: komparativ, remove: "ior", default: "{stamm}", display: Komparativstamm}
+      sup:    {from: superlativ, remove: "us", default: "{stamm}issim", display: Superlativstamm}
+    delegate:
+      - {name: pos,  type: 3-Endungen, bind: {stamm: stamm, nom_m: nom_m, nom_f: nom_f, nom_n: nom_n}, set: {grad: pos}}
+      - {name: komp, type: Komparativ-Endungen, bind: {kstamm: kstamm}, set: {grad: komp}}
+      - {name: sup,  type: a-o-Endungen, bind: {stamm: sup}, set: {grad: sup}}
+    forms:
+      adv.pos: "{stamm}iter"
+      adv.sup: "{sup}ē"
+
+  Adjektiv-zweiendig:
+    inherits_from: Adjektiv-3
+    stems:
+      stamm: {from: nom, remove: "is", display: Stamm}
+      nom_m: {from: nom, remove: "", display: Nominativ}
+      nom_f: {template: "{nom_m}", display: Nominativ}
+      nom_n: {from: nom_n, remove: "", display: Nominativ neutrum}
+
+  Adjektiv-dreiendig:
+    inherits_from: Adjektiv-3
+    stems:
+      stamm: {from: nom_f, remove: "is", display: Stamm}
+      nom_m: {from: nom, remove: "", display: Nominativ}
+      nom_f: {from: nom_f, remove: "", display: Nominativ feminin}
+      nom_n: {from: nom_n, remove: "", display: Nominativ neutrum}
+      sup:   {from: superlativ, remove: "us", default: "{nom_m}rim", display: Superlativstamm}
+
+  i-Deklination-mf:
+    required_stems: [stamm]
+    stems:
+      stamm: {from: gen, remove: "is", display: Stamm}
+      nom:   {from: nom, remove: "", display: Nominativ}
+    forms:
+      nom.sg: "{nom}"
+      gen.sg: "{stamm}is"
+      dat.sg: "{stamm}ī"
+      akk.sg: ["{stamm}im", "{stamm}em"]
+      abl.sg: ["{stamm}ī", "{stamm}e"]
+      vok.sg: "{nom}"
+      nom.pl: "{stamm}ēs"
+      gen.pl: "{stamm}ium"
+      dat.pl: "{stamm}ibus"
+      akk.pl: ["{stamm}ēs", "{stamm}īs"]
+      abl.pl: "{stamm}ibus"
+      vok.pl: "{stamm}ēs"
+
+  i-Deklination-n:
+    stems:
+      stamm: {from: gen, remove: "is", display: Stamm}
+      nom:   {from: nom, remove: "", display: Nominativ}
+    forms:
+      nom.sg: "{nom}"
+      gen.sg: "{stamm}is"
+      dat.sg: "{stamm}ī"
+      akk.sg: "{nom}"
+      abl.sg: "{stamm}ī"
+      vok.sg: "{nom}"
+      nom.pl: "{stamm}ia"
+      gen.pl: "{stamm}ium"
+      dat.pl: "{stamm}ibus"
+      akk.pl: "{stamm}ia"
+      abl.pl: "{stamm}ibus"
+      vok.pl: "{stamm}ia"
+
+  Pronomen: {}
+
+items:
+  - type: i-Deklination-mf
+    translation: Turm
+    parts: {nom: turris, gen: turris}
+
+  - type: i-Deklination-n
+    translation: Meer
+    parts: {nom: mare, gen: maris}
+
+  - type: Adjektiv-a-o
+    translation: gut
+    parts: {nom: bonus, nom_f: bona, nom_n: bonum, komparativ: melior, superlativ: [optimus, optumus]}
+    forms:
+      adv.pos: "bene"
+
+  - type: Adjektiv-a-o-er
+    translation: frei
+    parts: {nom: līber, nom_f: lībera, nom_n: līberum}
+
+  - type: Adjektiv-zweiendig
+    translation: tapfer
+    parts: {nom: fortis, nom_n: forte}
+
+  - type: Adjektiv-dreiendig
+    translation: scharf
+    parts: {nom: ācer, nom_f: ācris, nom_n: ācre}
+
+  - type: Pronomen
+    translation: dieser
+    parts: {nom: hic}
+    forms:
+      nom.sg.m: "hic"
+      gen.sg.m: "huius"
+      dat.sg.m: "huic"
+      akk.sg.m: "hunc"
+      abl.sg.m: "hōc"
+      nom.pl.m: "hī"
+      gen.pl.m: "hōrum"
+      dat.pl.m: "hīs"
+      akk.pl.m: "hōs"
+      abl.pl.m: "hīs"
+      nom.sg.f: "haec"
+      gen.sg.f: "huius"
+      dat.sg.f: "huic"
+      akk.sg.f: "hanc"
+      abl.sg.f: "hāc"
+      nom.pl.f: "hae"
+      gen.pl.f: "hārum"
+      dat.pl.f: "hīs"
+      akk.pl.f: "hās"
+      abl.pl.f: "hīs"
+      nom.sg.n: "hoc"
+      gen.sg.n: "huius"
+      dat.sg.n: "huic"
+      akk.sg.n: "hoc"
+      abl.sg.n: "hōc"
+      nom.pl.n: "haec"
+      gen.pl.n: "hōrum"
+      dat.pl.n: "hīs"
+      akk.pl.n: "haec"
+      abl.pl.n: "hīs"
