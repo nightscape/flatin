@@ -18,7 +18,6 @@ void main() {
         ),
       ],
     ));
-    await tester.runAsync(() => Future<void>.delayed(const Duration(seconds: 1)));
     await letItLoad(tester);
 
     expect(find.textContaining('broken lessons'), findsOneWidget);
