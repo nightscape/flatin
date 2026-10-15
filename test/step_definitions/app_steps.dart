@@ -207,6 +207,19 @@ class AppSteps {
     await tester.pumpAndSettle();
   }
 
+  @Then('I should see an explanation for a wrong answer')
+  @And('I should see an explanation for a wrong answer')
+  Future<void> iShouldSeeAnExplanation(WidgetTester tester) async {
+    // Every row explanation carries Key('explanation.<formKey>').
+    expect(
+      find.byWidgetPredicate((widget) {
+        final key = widget.key;
+        return key is ValueKey<String> && key.value.startsWith('explanation.');
+      }),
+      findsAtLeastNWidgets(1),
+    );
+  }
+
   @Then('I should see rating buttons')
   @And('I should see rating buttons')
   Future<void> iShouldSeeRatingButtons(WidgetTester tester) async {

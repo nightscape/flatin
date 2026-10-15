@@ -45,6 +45,18 @@ runFeatures() {
       await steps.iShouldSeeRatingButtons(widgetTester);
       await steps.iTakeScreenshot(widgetTester, 'practice_noun_rating');
     });
+    testWidgets('User sees an explanation for a wrong answer', (
+      WidgetTester widgetTester,
+    ) async {
+      await steps.theAppIsRunning(widgetTester);
+      await steps.iAmOnScreen(widgetTester, 'home');
+      await steps.iTapOn(widgetTester, 'home.nouns.button');
+      await steps.iWaitForPracticeScreen(widgetTester);
+      await steps.iEnterInInputFields(widgetTester, 'zzz');
+      await steps.iTapOnCheck(widgetTester);
+      await steps.iShouldSeeAnExplanation(widgetTester);
+      await steps.iTakeScreenshot(widgetTester, 'practice_noun_explanation');
+    });
     testWidgets('User practices a verb', (WidgetTester widgetTester) async {
       await steps.theAppIsRunning(widgetTester);
       await steps.iAmOnScreen(widgetTester, 'home');

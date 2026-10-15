@@ -32,6 +32,16 @@ Feature: Practice Screen
     Then I should see rating buttons
     And I take a screenshot named "practice_noun_rating"
 
+  Scenario: User sees an explanation for a wrong answer
+    Given the app is running
+    When I am on the "home" screen
+    And I tap on "home.nouns.button"
+    And I wait for the practice screen to load
+    And I enter "zzz" in the input fields
+    And I tap on check
+    Then I should see an explanation for a wrong answer
+    And I take a screenshot named "practice_noun_explanation"
+
   Scenario: User practices a verb
     Given the app is running
     When I am on the "home" screen

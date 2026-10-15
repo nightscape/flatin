@@ -11,7 +11,13 @@ import '../widgets/explanation_lines.dart';
 import 'dart:math';
 
 class WordClassificationScreen extends ConsumerStatefulWidget {
-  const WordClassificationScreen({super.key});
+  /// Test seam: when given, these replace the random item and form pick.
+  final PracticeItem? item;
+  final String? formKey;
+
+  const WordClassificationScreen({super.key, this.item, this.formKey})
+      : assert((item == null) == (formKey == null),
+            'item and formKey are given together');
 
   @override
   ConsumerState<WordClassificationScreen> createState() =>
@@ -81,9 +87,10 @@ class _WordClassificationScreenState
 
       // Pick from due items if available, otherwise random
       final random = Random();
-      final item = allDueItems.isNotEmpty
-          ? allDueItems[random.nextInt(allDueItems.length)]
-          : allItems[random.nextInt(allItems.length)];
+      final item = widget.item ??
+          (allDueItems.isNotEmpty
+              ? allDueItems[random.nextInt(allDueItems.length)]
+              : allItems[random.nextInt(allItems.length)]);
       _isNoun = item.dataFileId == 'nouns';
 
       // Filter forms based on settings
@@ -101,8 +108,9 @@ class _WordClassificationScreenState
       }
 
       // Pick a random form from filtered forms
-      final filteredFormIndex = random.nextInt(filteredData.forms.length);
-      _displayedWord = filteredData.forms[filteredFormIndex];
+      _displayedWord = widget.formKey != null
+          ? item.forms[item.formOrder.indexOf(widget.formKey!)]
+          : filteredData.forms[random.nextInt(filteredData.forms.length)];
 
       // Find ALL enabled forms in the item that match the displayed word string
       _correctFormIndices = [];
