@@ -1,10 +1,34 @@
 # Data file identifier
 data_file_id: verbs
 
-classification_sections:
-  - Tempus
-  - Person
-  - Numerus
+# Feature axes: a label reads out one value per axis. The classification
+# screen offers one selector per axis, in this order.
+axes:
+  tempus:
+    name: Tempus
+    values:
+      praes: Präsens
+      impf: Imperfekt
+      fut: Futur I
+      perf: Perfekt
+      plusq: Plusquamperfekt
+      imp: Imperativ
+  person:
+    name: Person
+    values:
+      "1": 1. Person
+      "2": 2. Person
+      "3": 3. Person
+  numerus:
+    name: Numerus
+    values:
+      sg: Singular
+      pl: Plural
+
+label:
+  head: [tempus]
+  tail: [person, numerus]
+  merge_axis: person
 
 # Default values for items
 defaults:
@@ -298,135 +322,40 @@ type_patterns:
     infinitive_stem_extraction: "remove_suffix:ere"
     reconstruction_from_alternative_stem: "{stem}o"
 
+# Form key -> its feature bundle.
 form_labels:
-  praesens_first_person_singular:
-    name: 1. Person
-    number: Singular
-    tense: Präsens
-  praesens_second_person_singular:
-    name: 2. Person
-    number: Singular
-    tense: Präsens
-  praesens_third_person_singular:
-    name: 3. Person
-    number: Singular
-    tense: Präsens
-  praesens_first_person_plural:
-    name: 1. Person
-    number: Plural
-    tense: Präsens
-  praesens_second_person_plural:
-    name: 2. Person
-    number: Plural
-    tense: Präsens
-  praesens_third_person_plural:
-    name: 3. Person
-    number: Plural
-    tense: Präsens
-  imperfekt_first_person_singular:
-    name: 1. Person
-    number: Singular
-    tense: Imperfekt
-  imperfekt_second_person_singular:
-    name: 2. Person
-    number: Singular
-    tense: Imperfekt
-  imperfekt_third_person_singular:
-    name: 3. Person
-    number: Singular
-    tense: Imperfekt
-  imperfekt_first_person_plural:
-    name: 1. Person
-    number: Plural
-    tense: Imperfekt
-  imperfekt_second_person_plural:
-    name: 2. Person
-    number: Plural
-    tense: Imperfekt
-  imperfekt_third_person_plural:
-    name: 3. Person
-    number: Plural
-    tense: Imperfekt
-  futur_first_person_singular:
-    name: 1. Person
-    number: Singular
-    tense: Futur I
-  futur_second_person_singular:
-    name: 2. Person
-    number: Singular
-    tense: Futur I
-  futur_third_person_singular:
-    name: 3. Person
-    number: Singular
-    tense: Futur I
-  futur_first_person_plural:
-    name: 1. Person
-    number: Plural
-    tense: Futur I
-  futur_second_person_plural:
-    name: 2. Person
-    number: Plural
-    tense: Futur I
-  futur_third_person_plural:
-    name: 3. Person
-    number: Plural
-    tense: Futur I
-  perfekt_first_person_singular:
-    name: 1. Person
-    number: Singular
-    tense: Perfekt
-  perfekt_second_person_singular:
-    name: 2. Person
-    number: Singular
-    tense: Perfekt
-  perfekt_third_person_singular:
-    name: 3. Person
-    number: Singular
-    tense: Perfekt
-  perfekt_first_person_plural:
-    name: 1. Person
-    number: Plural
-    tense: Perfekt
-  perfekt_second_person_plural:
-    name: 2. Person
-    number: Plural
-    tense: Perfekt
-  perfekt_third_person_plural:
-    name: 3. Person
-    number: Plural
-    tense: Perfekt
-  plusquamperfekt_first_person_singular:
-    name: 1. Person
-    number: Singular
-    tense: Plusquamperfekt
-  plusquamperfekt_second_person_singular:
-    name: 2. Person
-    number: Singular
-    tense: Plusquamperfekt
-  plusquamperfekt_third_person_singular:
-    name: 3. Person
-    number: Singular
-    tense: Plusquamperfekt
-  plusquamperfekt_first_person_plural:
-    name: 1. Person
-    number: Plural
-    tense: Plusquamperfekt
-  plusquamperfekt_second_person_plural:
-    name: 2. Person
-    number: Plural
-    tense: Plusquamperfekt
-  plusquamperfekt_third_person_plural:
-    name: 3. Person
-    number: Plural
-    tense: Plusquamperfekt
-  imperativ_singular:
-    name: 2. Person
-    number: Singular
-    tense: Imperativ
-  imperativ_plural:
-    name: 2. Person
-    number: Plural
-    tense: Imperativ
+  praesens_first_person_singular: {tempus: praes, person: "1", numerus: sg}
+  praesens_second_person_singular: {tempus: praes, person: "2", numerus: sg}
+  praesens_third_person_singular: {tempus: praes, person: "3", numerus: sg}
+  praesens_first_person_plural: {tempus: praes, person: "1", numerus: pl}
+  praesens_second_person_plural: {tempus: praes, person: "2", numerus: pl}
+  praesens_third_person_plural: {tempus: praes, person: "3", numerus: pl}
+  imperfekt_first_person_singular: {tempus: impf, person: "1", numerus: sg}
+  imperfekt_second_person_singular: {tempus: impf, person: "2", numerus: sg}
+  imperfekt_third_person_singular: {tempus: impf, person: "3", numerus: sg}
+  imperfekt_first_person_plural: {tempus: impf, person: "1", numerus: pl}
+  imperfekt_second_person_plural: {tempus: impf, person: "2", numerus: pl}
+  imperfekt_third_person_plural: {tempus: impf, person: "3", numerus: pl}
+  futur_first_person_singular: {tempus: fut, person: "1", numerus: sg}
+  futur_second_person_singular: {tempus: fut, person: "2", numerus: sg}
+  futur_third_person_singular: {tempus: fut, person: "3", numerus: sg}
+  futur_first_person_plural: {tempus: fut, person: "1", numerus: pl}
+  futur_second_person_plural: {tempus: fut, person: "2", numerus: pl}
+  futur_third_person_plural: {tempus: fut, person: "3", numerus: pl}
+  perfekt_first_person_singular: {tempus: perf, person: "1", numerus: sg}
+  perfekt_second_person_singular: {tempus: perf, person: "2", numerus: sg}
+  perfekt_third_person_singular: {tempus: perf, person: "3", numerus: sg}
+  perfekt_first_person_plural: {tempus: perf, person: "1", numerus: pl}
+  perfekt_second_person_plural: {tempus: perf, person: "2", numerus: pl}
+  perfekt_third_person_plural: {tempus: perf, person: "3", numerus: pl}
+  plusquamperfekt_first_person_singular: {tempus: plusq, person: "1", numerus: sg}
+  plusquamperfekt_second_person_singular: {tempus: plusq, person: "2", numerus: sg}
+  plusquamperfekt_third_person_singular: {tempus: plusq, person: "3", numerus: sg}
+  plusquamperfekt_first_person_plural: {tempus: plusq, person: "1", numerus: pl}
+  plusquamperfekt_second_person_plural: {tempus: plusq, person: "2", numerus: pl}
+  plusquamperfekt_third_person_plural: {tempus: plusq, person: "3", numerus: pl}
+  imperativ_singular: {tempus: imp, person: "2", numerus: sg}
+  imperativ_plural: {tempus: imp, person: "2", numerus: pl}
 
 form_order:
   - praesens_first_person_singular

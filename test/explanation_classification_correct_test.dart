@@ -33,8 +33,8 @@ void main() {
         .data;
     final correct = item.formLabels[item.forms.indexOf(shown!)];
 
-    await pickOption(tester, 0, correct.name);
-    await pickOption(tester, 1, correct.number);
+    await pickOption(tester, 0, correct.display('kasus')!);
+    await pickOption(tester, 1, correct.display('numerus')!);
     await tester.tap(find.byKey(const Key('wordClassification.check.button')));
     await tester.pumpAndSettle();
 

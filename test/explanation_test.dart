@@ -7,6 +7,8 @@ import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/models/derivation.dart';
 import 'package:latin_practice/models/practice_item.dart';
 
+import 'support/test_axes.dart';
+
 const _nouns = 'lib/data/latin_nouns.yaml';
 const _verbs = 'lib/data/latin_verbs.yaml';
 
@@ -23,7 +25,7 @@ void main() {
     });
 
     test('dominus: rule, stem, ending, and what dominis is', () {
-      final item = nouns.firstWhere((i) => i.word == 'dominus');
+      final item = nouns.firstWhere((i) => i.lemma == 'dominus');
       expect(_pairs(explainWrongAnswer(item, 'genitive_plural', 'dominis')), [
         [
           'explain.typeByRule',
@@ -53,8 +55,10 @@ void main() {
       ]);
     });
 
-    test('amāre: the stem comes from the reconstructed first person', () {
-      final item = verbs.firstWhere((i) => i.baseForm == 'amāre');
+    // The infinitive is the only principal part, so the stem is one cut from
+    // it and the explanation names no intermediate form.
+    test('amāre: the stem is cut from the infinitive', () {
+      final item = verbs.firstWhere((i) => i.lemma == 'amāre');
       final lines = explainWrongAnswer(
         item,
         'praesens_third_person_singular',
@@ -65,15 +69,7 @@ void main() {
           'explain.typeByRule',
           {'word': 'amāre', 'suffix': 'āre', 'type': 'A-Konjugation'},
         ],
-        [
-          'explain.stemReconstructed',
-          {
-            'stem': 'am',
-            'source': 'amāre',
-            'reconstructed': 'amo',
-            'suffix': 'o',
-          },
-        ],
+        ['explain.stem', {'stem': 'am'}],
         [
           'explain.generated',
           {
@@ -87,7 +83,7 @@ void main() {
     });
 
     test('rex: the stem comes from the genitive, no rule names the type', () {
-      final item = nouns.firstWhere((i) => i.word == 'rex');
+      final item = nouns.firstWhere((i) => i.lemma == 'regis');
       expect(
         _pairs(explainWrongAnswer(item, 'dative_singular', 'rexi')).take(2),
         [
@@ -106,7 +102,7 @@ void main() {
     // "capere" matches the macron-blind "ēre" rule first, which names only
     // E-Konjugation, so no rule confirms the declared Mischkonjugation.
     test('capio: the type is declared and the Perfekt has no template', () {
-      final item = verbs.firstWhere((i) => i.word == 'capio');
+      final item = verbs.firstWhere((i) => i.lemma == 'capere');
       expect(
         _pairs(
           explainWrongAnswer(item, 'perfekt_first_person_singular', 'capi'),
@@ -129,8 +125,8 @@ void main() {
     });
 
     test('is: a type without pattern explains nothing but the forms', () {
-      final item = nouns.firstWhere((i) => i.word == 'is');
-      expect(item.derivation.stem, isNull);
+      final item = nouns.firstWhere((i) => i.lemma == 'is');
+      expect(item.derivation.stems, isEmpty);
       expect(
         _pairs(explainWrongAnswer(item, 'genitive_singular', 'ii')).take(2),
         [
@@ -147,7 +143,7 @@ void main() {
     });
 
     test('manus: the -us rule disagrees with the declared type', () {
-      final item = nouns.firstWhere((i) => i.word == 'manus');
+      final item = nouns.firstWhere((i) => i.lemma == 'manus');
       expect(
         _pairs(explainWrongAnswer(item, 'dative_singular', 'mano')).first,
         [
@@ -163,7 +159,7 @@ void main() {
       'an explicit form that differs from the rule keeps the rule',
       () async {
         final verbs = await loadPracticeItems(_verbs);
-        final item = verbs.firstWhere((i) => i.baseForm == 'gaudēre');
+        final item = verbs.firstWhere((i) => i.lemma == 'gaudēre');
         final form =
             item.derivation.forms['perfekt_first_person_singular']!
                 as IrregularForm;
@@ -181,15 +177,14 @@ void main() {
     // names one type. The branch still has to be true when data changes.
     test('a rule with several candidates names them all', () {
       final item = PracticeItem(
+        id: 'verbs:capio',
+        lemma: 'capio',
         type: 'Mischkonjugation',
         translation: 'nehmen',
-        word: 'capio',
-        wordForm: 'praesens_first_person_singular',
-        forms: ['capio'],
-        formLabels: [
-          FormLabel(name: '1. Person', number: 'Singular', tense: 'Präsens'),
-        ],
-        classificationSections: const ['Tempus'],
+        principalParts: const [('', 'capio')],
+        forms: const ['capio'],
+        acceptedForms: const [['capio']],
+        formLabels: [verbLabel('praes', '1', 'sg')],
         dataFileId: 'verbs',
         formOrder: const ['praesens_first_person_singular'],
         derivation: Derivation(
@@ -199,10 +194,10 @@ void main() {
             suffix: 'io',
             candidateTypes: ['I-Konjugation', 'Mischkonjugation'],
           ),
-          forms: const {
+          forms: {
             'praesens_first_person_singular': GivenForm(
               formKey: 'praesens_first_person_singular',
-              result: 'capio',
+              variants: const ['capio'],
             ),
           },
           grammar: const Grammar({}),
@@ -246,7 +241,7 @@ void main() {
   group('classification lines', () {
     test('the shown form is traced back to the rule', () async {
       final nouns = await loadPracticeItems(_nouns);
-      final item = nouns.firstWhere((i) => i.word == 'dominus');
+      final item = nouns.firstWhere((i) => i.lemma == 'dominus');
       expect(
         _pairs(explainForm(item, ['dative_plural', 'ablative_plural'])).last,
         [
@@ -263,7 +258,7 @@ void main() {
 
     test('a picked label names the form it would be', () async {
       final nouns = await loadPracticeItems(_nouns);
-      final item = nouns.firstWhere((i) => i.word == 'dominus');
+      final item = nouns.firstWhere((i) => i.lemma == 'dominus');
       final picked = item.formLabels[item.formOrder.indexOf('genitive_plural')];
       expect(_pair(explainPickedLabel(item, picked, 'Genitiv Plural')), [
         'explain.pickedWouldBe',
@@ -273,7 +268,7 @@ void main() {
 
     test('a label the word does not have says so', () async {
       final nouns = await loadPracticeItems(_nouns);
-      final item = nouns.firstWhere((i) => i.word == 'dominus');
+      final item = nouns.firstWhere((i) => i.lemma == 'dominus');
       expect(_pair(explainPickedLabel(item, null, 'Vokativ Plural')), [
         'explain.pickedMissing',
         {'picked': 'Vokativ Plural'},
@@ -337,12 +332,12 @@ List<String> _wrongAnswers(PracticeItem item, int index) {
   final form = item.derivation.forms[item.formOrder[index]]!;
   if (form is GeneratedForm) answers.add('xq${form.ending}');
 
-  final stem = item.derivation.stem;
+  final stem = item.derivation.stems.values.singleOrNull;
   if (stem != null) {
     for (final entry in item.derivation.grammar.templatesByType.entries) {
       final template = entry.value[item.formOrder[index]];
       if (entry.key == item.type || template == null) continue;
-      final candidate = template.replaceAll('{stem}', stem.stem);
+      final candidate = stem.stem + template.endings.first;
       if (norm(candidate) != norm(correct)) answers.add(candidate);
     }
   }

@@ -447,6 +447,11 @@ final class GrammarFile {
 
 // ---------------------------------------------------------------- parsing
 
+/// The `axes:` and `label:` blocks of one data file, with their S1 and S17
+/// checks. The v1 loader needs these without the rest of the schema.
+Axes parseAxes(YamlMap root, {required String path}) =>
+    _FileParser(path, root)._axes();
+
 /// Parses one data file. Use [parseGrammarFiles] when types cross file
 /// borders (S12).
 GrammarFile parseGrammarFile(String source, {required String path}) =>

@@ -127,7 +127,7 @@ class _WordClassificationScreenState
 
       // Initialize selected answers with one empty combination
       final emptyCombination = <String, String?>{};
-      for (final section in item.classificationSections) {
+      for (final section in _sectionsOf(item)) {
         emptyCombination[section] = null;
       }
       _selectedAnswers = [emptyCombination];
@@ -147,9 +147,8 @@ class _WordClassificationScreenState
 
     // Check if at least one combination is fully selected
     bool atLeastOneComplete = _selectedAnswers.any(
-      (combination) => _currentItem!.classificationSections.every(
-        (section) => combination[section] != null,
-      ),
+      (combination) =>
+          _sections.every((section) => combination[section] != null),
     );
 
     if (!atLeastOneComplete) return;
@@ -160,20 +159,14 @@ class _WordClassificationScreenState
 
     for (final combination in _selectedAnswers) {
       // Only check complete combinations
-      final isComplete = _currentItem!.classificationSections.every(
-        (section) => combination[section] != null,
-      );
+      final isComplete =
+          _sections.every((section) => combination[section] != null);
 
       if (!isComplete) continue;
 
       final formLabel = _combinationToFormLabel(combination);
       if (formLabel != null) {
-        if (_correctAnswers.any(
-          (correctLabel) =>
-              correctLabel.name == formLabel.name &&
-              correctLabel.number == formLabel.number &&
-              correctLabel.tense == formLabel.tense,
-        )) {
+        if (_correctAnswers.contains(formLabel)) {
           correctSelected++;
         } else {
           incorrectSelected++;
@@ -233,10 +226,14 @@ class _WordClassificationScreenState
     _loadRandomWord();
   }
 
-  /// Extract unique options for a classification section from form labels
-  /// For 'Numerus': extracts unique number values
-  /// For 'Tempus': extracts unique tense values
-  /// For other sections (like 'Kasus', 'Person'): extracts unique name values
+  /// The feature axes of [item], in the order the selectors appear.
+  static List<String> _sectionsOf(PracticeItem item) =>
+      item.formLabels.first.axes.axes.map((axis) => axis.id).toList();
+
+  List<String> get _sections => _sectionsOf(_currentItem!);
+
+  /// The value texts a selector offers, in the order the enabled forms first
+  /// name them.
   List<String> _getOptionsForSection(String section) {
     if (_currentItem == null) return [];
 
@@ -254,43 +251,12 @@ class _WordClassificationScreenState
     final filteredData = _currentItem!.filterForms(enabledForms);
     final availableFormLabels = filteredData.labels;
 
-    if (section == 'Numerus') {
-      // Extract unique number values, preserving order (Singular before Plural)
-      final numbers = availableFormLabels
-          .map((label) => label.number)
-          .toSet()
-          .toList();
-      numbers.sort((a, b) {
-        // Ensure Singular comes before Plural
-        if (a == 'Singular' && b == 'Plural') return -1;
-        if (a == 'Plural' && b == 'Singular') return 1;
-        return a.compareTo(b);
-      });
-      return numbers;
-    } else if (section == 'Tempus') {
-      // Extract unique tense values, preserving order (Präsens before Imperfekt)
-      final seen = <String>{};
-      final options = <String>[];
-      for (final label in availableFormLabels) {
-        if (label.tense != null && !seen.contains(label.tense)) {
-          seen.add(label.tense!);
-          options.add(label.tense!);
-        }
-      }
-      return options;
-    } else {
-      // Extract unique name values for sections like 'Kasus' or 'Person'
-      // Preserve the order as they appear in formLabels (first occurrence)
-      final seen = <String>{};
-      final options = <String>[];
-      for (final label in availableFormLabels) {
-        if (!seen.contains(label.name)) {
-          seen.add(label.name);
-          options.add(label.name);
-        }
-      }
-      return options;
+    final options = <String>[];
+    for (final label in availableFormLabels) {
+      final text = label.display(section);
+      if (text != null && !options.contains(text)) options.add(text);
     }
+    return options;
   }
 
   void _nextWord() {
@@ -307,31 +273,9 @@ class _WordClassificationScreenState
 
     // Find matching FormLabel
     for (final label in _currentItem!.formLabels) {
-      bool matches = true;
-      for (final section in _currentItem!.classificationSections) {
-        final selectedValue = combination[section];
-        if (selectedValue == null) {
-          matches = false;
-          break;
-        }
-        if (section == 'Numerus') {
-          if (label.number != selectedValue) {
-            matches = false;
-            break;
-          }
-        } else if (section == 'Tempus') {
-          if (label.tense != selectedValue) {
-            matches = false;
-            break;
-          }
-        } else {
-          if (label.name != selectedValue) {
-            matches = false;
-            break;
-          }
-        }
-      }
-      if (matches) {
+      if (_sections.every(
+        (section) => label.display(section) == combination[section],
+      )) {
         return label;
       }
     }
@@ -339,38 +283,26 @@ class _WordClassificationScreenState
   }
 
   /// Format FormLabel for display (e.g., "Nominativ Plural" or "Präsens 1. Person Singular")
-  String _formatFormLabel(FormLabel label) {
-    if (label.tense != null) {
-      return '${label.tense} ${label.name} ${label.number}';
-    }
-    return '${label.name} ${label.number}';
-  }
+  String _formatFormLabel(FormLabel label) =>
+      _sections.map(label.display).nonNulls.join(' ');
 
   /// Check if a combination is correct
   bool _isCombinationCorrect(Map<String, String?> combination) {
     final formLabel = _combinationToFormLabel(combination);
-    if (formLabel == null) return false;
-    return _correctAnswers.any(
-      (correctLabel) =>
-          correctLabel.name == formLabel.name &&
-          correctLabel.number == formLabel.number &&
-          correctLabel.tense == formLabel.tense,
-    );
+    return formLabel != null && _correctAnswers.contains(formLabel);
   }
 
   /// Complete combinations the learner got wrong, including those that map to
   /// no label at all.
   List<Map<String, String?>> get _wrongCombinations => _selectedAnswers
-      .where((combination) => _currentItem!.classificationSections
-          .every((section) => combination[section] != null))
+      .where((combination) =>
+          _sections.every((section) => combination[section] != null))
       .where((combination) => !_isCombinationCorrect(combination))
       .toList();
 
   /// A combination as the screen shows it, e.g. "Vokativ Plural".
-  String _combinationText(Map<String, String?> combination) => _currentItem!
-      .classificationSections
-      .map((section) => combination[section]!)
-      .join(' ');
+  String _combinationText(Map<String, String?> combination) =>
+      _sections.map((section) => combination[section]!).join(' ');
 
   Widget _buildExplanationBox(bool isMobile, double horizontalPadding) {
     final item = _currentItem!;
@@ -440,7 +372,7 @@ class _WordClassificationScreenState
             child: Wrap(
               spacing: isMobile ? 8 : 12,
               runSpacing: isMobile ? 8 : 12,
-              children: _currentItem!.classificationSections.map((section) {
+              children: _sections.map((section) {
                 final options = _getOptionsForSection(section);
                 final selectedValue = combination[section];
 
@@ -450,7 +382,9 @@ class _WordClassificationScreenState
                     isExpanded: true,
                     value: selectedValue,
                     decoration: InputDecoration(
-                      labelText: section,
+                      labelText: _currentItem!.formLabels.first.axes
+                          .byId(section)
+                          .name,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -645,8 +579,7 @@ class _WordClassificationScreenState
                               onPressed: () {
                                 setState(() {
                                   final newCombination = <String, String?>{};
-                                  for (final section
-                                      in _currentItem!.classificationSections) {
+                                  for (final section in _sections) {
                                     newCombination[section] = null;
                                   }
                                   _selectedAnswers.add(newCombination);
@@ -722,10 +655,7 @@ class _WordClassificationScreenState
                                 final formLabel = _combinationToFormLabel(
                                   combination,
                                 );
-                                return formLabel != null &&
-                                    formLabel.name == label.name &&
-                                    formLabel.number == label.number &&
-                                    formLabel.tense == label.tense;
+                                return formLabel == label;
                               });
 
                               return Container(
@@ -899,13 +829,10 @@ class _WordClassificationScreenState
                                 onPressed:
                                     _currentItem != null &&
                                         _selectedAnswers.any(
-                                          (combination) => _currentItem!
-                                              .classificationSections
-                                              .every(
-                                                (section) =>
-                                                    combination[section] !=
-                                                    null,
-                                              ),
+                                          (combination) => _sections.every(
+                                            (section) =>
+                                                combination[section] != null,
+                                          ),
                                         )
                                     ? _checkAnswers
                                     : null,

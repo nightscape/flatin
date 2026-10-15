@@ -1,17 +1,22 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:latin_practice/data/lesson_data.dart' show normalizeDiacritics;
 import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/models/derivation.dart';
 import 'package:latin_practice/models/fsrs_card.dart';
 import 'package:latin_practice/models/practice_item.dart';
 
-PracticeItem _item(String dataFileId, String word, String translation) =>
+import 'support/test_axes.dart';
+
+PracticeItem _item(String dataFileId, String lemma, String translation) =>
     PracticeItem(
+      id: '$dataFileId:${normalizeDiacritics(lemma).toLowerCase()}',
+      lemma: lemma,
       type: 'A-Deklination',
       translation: translation,
-      word: word,
+      principalParts: [('', lemma)],
       forms: const ['x'],
-      formLabels: [FormLabel(name: 'Nominativ', number: 'Singular')],
-      classificationSections: const [],
+      acceptedForms: const [['x']],
+      formLabels: [nounLabel('nom', 'sg')],
       dataFileId: dataFileId,
       formOrder: const ['nominative_singular'],
       derivation: Derivation(

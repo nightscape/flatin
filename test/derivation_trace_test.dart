@@ -58,7 +58,7 @@ void main() {
 
           if (form is GeneratedForm) {
             generatedCount++;
-            final stem = item.derivation.stem!.stem;
+            final stem = item.derivation.stems[form.stemName]!.stem;
             expect(form.ending, isNotEmpty, reason: where);
             expect(norm(stem + form.ending), norm(form.result), reason: where);
             expect(norm(form.result), norm(inferred[key]!), reason: where);
@@ -112,29 +112,27 @@ void main() {
     for (final asset in _assets) {
       test(asset, () async {
         final items = await loadPracticeItems(asset);
-        int reconstructed = 0;
         for (final item in items) {
-          final stem = item.derivation.stem;
-          if (stem == null) continue;
+          final stem = item.derivation.stems.values.singleOrNull;
+          if (stem is! StemFromPart) continue;
+          final where =
+              '${item.translation}: ${stem.sourceWord} / ${stem.removedSuffix}';
           expect(
-            norm(stem.sourceWord).endsWith(norm(stem.removedSuffix)),
+            stem.sourceWord.endsWith(stem.removedSuffix),
             isTrue,
-            reason:
-                '${item.translation}: ${stem.sourceWord} '
-                '/ ${stem.removedSuffix}',
+            reason: where,
           );
-          if (stem.reconstructedWord == null) continue;
-          reconstructed++;
-          final word = stem.reconstructedWord!;
-          final suffix = stem.reconstructedSuffix!;
-          expect(word.endsWith(suffix), isTrue, reason: item.translation);
           expect(
-            norm(word.substring(0, word.length - suffix.length)),
-            stem.stem,
-            reason: item.translation,
+            norm(
+              stem.sourceWord.substring(
+                0,
+                stem.sourceWord.length - stem.removedSuffix.length,
+              ),
+            ),
+            norm(stem.stem),
+            reason: where,
           );
         }
-        if (asset.contains('verbs')) expect(reconstructed, greaterThan(0));
       });
     }
   });

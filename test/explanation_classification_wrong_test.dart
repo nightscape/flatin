@@ -36,9 +36,9 @@ void main() {
     // A label of another form of the same word: wrong, but it exists.
     final wrong = item.formLabels[item.forms.indexWhere((f) => f != shown)];
 
-    await pickOption(tester, 0, wrong.tense!);
-    await pickOption(tester, 1, wrong.name);
-    await pickOption(tester, 2, wrong.number);
+    await pickOption(tester, 0, wrong.display('tempus')!);
+    await pickOption(tester, 1, wrong.display('person')!);
+    await pickOption(tester, 2, wrong.display('numerus')!);
     await tester.tap(find.byIcon(Icons.add));
     await tester.pumpAndSettle();
     // Imperativ exists only for the 2nd person, so this maps to no label.

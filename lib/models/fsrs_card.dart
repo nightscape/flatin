@@ -1,5 +1,4 @@
 import 'package:fsrs/fsrs.dart';
-import '../data/lesson_data.dart';
 import 'practice_item.dart';
 
 /// Wrapper class that links a PracticeItem to an FSRS Card
@@ -27,10 +26,7 @@ class PracticeItemCard {
   ///
   /// Only the lemma identifies the item, so correcting a form, a translation
   /// or a type keeps the learner's review history.
-  static String generateItemId(PracticeItem item) {
-    final lemma = item.baseForm ?? item.word!;
-    return '${item.dataFileId}:${normalizeDiacritics(lemma).toLowerCase()}';
-  }
+  static String generateItemId(PracticeItem item) => item.id;
 
   /// Throws when two items would share an id and silently merge their cards.
   static void assertUniqueItemIds(List<PracticeItem> items) {

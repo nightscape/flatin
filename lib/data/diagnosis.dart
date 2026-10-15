@@ -72,14 +72,13 @@ Diagnosis diagnose(PracticeItem item, String formKey, String answer) {
   ];
   if (otherKeys.isNotEmpty) return OtherFormOfWord(otherKeys);
 
-  final stem = derivation.stem;
+  final stem = derivation.stems.values.singleOrNull;
   if (stem != null) {
     final types = [
       for (final entry in derivation.grammar.templatesByType.entries)
         if (entry.key != derivation.type &&
             entry.value[formKey] != null &&
-            norm(entry.value[formKey]!.replaceAll('{stem}', stem.stem)) ==
-                given)
+            norm(stem.stem + entry.value[formKey]!.endings.first) == given)
           entry.key,
     ];
     if (types.isNotEmpty) return EndingOfOtherType(types);

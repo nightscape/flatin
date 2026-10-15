@@ -11,7 +11,7 @@ void main() {
       (tester) async {
     SharedPreferences.setMockInitialValues({});
     final items = await loadPracticeItems('lib/data/latin_nouns.yaml');
-    final dominus = items.firstWhere((i) => i.word == 'dominus');
+    final dominus = items.firstWhere((i) => i.lemma == 'dominus');
     final row = dominus.formOrder.indexOf('genitive_plural');
 
     await tester.pumpWidget(wrapInApp(

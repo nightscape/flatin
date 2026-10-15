@@ -3,7 +3,11 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/data/practice_data.dart';
+import 'package:latin_practice/models/derivation.dart';
+import 'package:latin_practice/models/form_label.dart';
 import 'package:latin_practice/models/practice_item.dart';
+
+import 'support/test_axes.dart';
 
 const _yamlFiles = ['lib/data/latin_nouns.yaml', 'lib/data/latin_verbs.yaml'];
 
@@ -31,7 +35,7 @@ void main() {
         expect(items, isNotEmpty);
 
         for (final item in items) {
-          final label = item.word ?? item.baseForm ?? item.translation;
+          final label = item.lemma;
 
           expect(
             item.derivation.forms.keys.toList(),
@@ -42,10 +46,21 @@ void main() {
 
           for (int i = 0; i < item.formOrder.length; i++) {
             final key = item.formOrder[i];
+            final form = item.derivation.forms[key]!;
             expect(
-              item.derivation.forms[key]!.result,
+              form.result,
               item.forms[i],
               reason: '$label / $key: trace must match the answer',
+            );
+            expect(
+              form.variants.first,
+              form.result,
+              reason: '$label / $key: the first variant is the shown one',
+            );
+            expect(
+              item.acceptedForms[i],
+              form.variants,
+              reason: '$label / $key: the item accepts what the trace gives',
             );
           }
         }
@@ -56,7 +71,7 @@ void main() {
         final items = await loadPracticeItems(assetPath);
 
         for (final item in items) {
-          final label = item.word ?? item.baseForm ?? item.translation;
+          final label = item.lemma;
 
           expect(
             item.filterForms(item.formOrder.toSet()).keys,
@@ -75,12 +90,9 @@ void main() {
   });
 
   group('describeLabels', () {
-    test('merges labels that share tense and number', () {
+    test('merges labels that differ only in the merge axis', () {
       expect(
-        describeLabels([
-          FormLabel(name: 'Dativ', number: 'Plural'),
-          FormLabel(name: 'Ablativ', number: 'Plural'),
-        ]),
+        describeLabels([nounLabel('dat', 'pl'), nounLabel('abl', 'pl')]),
         'Dativ/Ablativ Plural',
       );
     });
@@ -88,16 +100,94 @@ void main() {
     test('keeps tenses apart', () {
       expect(
         describeLabels([
-          FormLabel(name: '3. Person', number: 'Singular', tense: 'Präsens'),
-          FormLabel(name: '3. Person', number: 'Singular', tense: 'Perfekt'),
+          verbLabel('praes', '3', 'sg'),
+          verbLabel('perf', '3', 'sg'),
         ]),
         'Präsens: 3. Person Singular, Perfekt: 3. Person Singular',
       );
     });
 
     test('a single label reads like its displayName', () {
-      final label = FormLabel(name: 'Genitiv', number: 'Plural');
+      final label = nounLabel('gen', 'pl');
       expect(describeLabels([label]), label.displayName);
+    });
+  });
+
+  // The L6 engine must be able to state these three cases; the loader of this
+  // lane produces none of them yet.
+  group('the derivation types carry the cases the engine must express', () {
+    final praesensStem = StemFromPart(
+      name: 'praesens',
+      display: 'Präsensstamm',
+      variants: ['amā'],
+      part: 'Infinitiv',
+      sourceWord: 'amāre',
+      removedSuffix: 're',
+    );
+
+    Derivation derivationOf(Map<FormKey, FormDerivation> forms) => Derivation(
+      type: 'A-Konjugation',
+      recognition: const TypeDeclared(),
+      stems: {praesensStem.name: praesensStem},
+      forms: forms,
+      grammar: const Grammar({}),
+    );
+
+    test('an ending may be empty', () {
+      final form = GeneratedForm(
+        formKey: 'imp.2.sg',
+        variants: ['amā'],
+        stemName: 'praesens',
+        ending: '',
+        endingType: 'A-Konjugation',
+      );
+      expect(derivationOf({'imp.2.sg': form}).forms['imp.2.sg'], same(form));
+    });
+
+    test('a sandhi rule carries a seam the spelling does not show', () {
+      // amā + ō = amō, so only the rule makes stem and ending agree with the
+      // result; without it the I2 assertion would fire.
+      final form = GeneratedForm(
+        formKey: 'praes.1.sg',
+        variants: ['amō'],
+        stemName: 'praesens',
+        ending: 'ō',
+        endingType: 'A-Konjugation',
+        sandhiRule: const SandhiRule(
+          id: 'a_ausfall',
+          explain: 'ā fällt vor Vokal aus',
+        ),
+      );
+      expect(derivationOf({'praes.1.sg': form}).forms['praes.1.sg']!.result,
+          'amō');
+    });
+
+    test('an irregular form may hold a composed regular form', () {
+      final composed = ComposedForm(
+        formKey: 'perf.1.sg',
+        variants: ['amātus sum'],
+        parts: [
+          AffixPart(stemName: 'ppp', text: 'amātus'),
+          LexemeFormPart(
+            lexemeId: 'verbs:esse',
+            key: 'praes.1.sg',
+            derivation: GivenForm(formKey: 'praes.1.sg', variants: ['sum']),
+          ),
+        ],
+        join: ' ',
+      );
+      final irregular = IrregularForm(
+        formKey: 'perf.1.sg',
+        variants: ['amāvī'],
+        regular: composed,
+      );
+
+      expect(
+        derivationOf({'perf.1.sg': irregular}).forms['perf.1.sg'],
+        same(irregular),
+      );
+      expect(composed.parts.map((p) => p.text).join(composed.join),
+          composed.result);
     });
   });
 

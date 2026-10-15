@@ -22,8 +22,7 @@ Future<List<String>> wordsOutsideLessons(Ref ref) async {
 
   final words = <String>[];
   for (final item in [...nouns, ...verbs]) {
-    final raw = item.baseForm ?? item.word;
-    if (raw == null) continue;
+    final raw = item.lemma;
     if (lessons.wordToLesson.containsKey(normalizeDiacritics(raw))) continue;
     if (!words.contains(raw)) words.add(raw);
   }

@@ -28,7 +28,10 @@ List<ExplanationLine> explainWrongAnswer(
 /// The dictionary entry of the item: nominative and genitive, or 1st person
 /// and infinitive, whichever the data gives.
 String _headword(PracticeItem item) =>
-    [item.word, item.baseForm].whereType<String>().join(', ');
+    item.principalParts.map((part) => part.$2).join(', ');
+
+/// The one stem the v1 loader builds.
+StemDerivation _theStem(PracticeItem item) => item.derivation.stems.values.single;
 
 FormLabel _labelOf(PracticeItem item, String formKey) {
   final int index = item.formOrder.indexOf(formKey);
@@ -72,8 +75,8 @@ List<ExplanationLine> _formLines(
   final derivation = item.derivation;
   final form = derivation.forms[formKey]!;
   switch (form) {
-    case GeneratedForm(:final ending, :final result):
-      final stem = derivation.stem!;
+    case GeneratedForm(:final ending, :final result, :final stemName):
+      final stem = derivation.stems[stemName]!;
       return [
         _stemLine(item, stem),
         ExplanationLine('explain.generated', params: {
@@ -98,26 +101,31 @@ List<ExplanationLine> _formLines(
           'label': label,
         }),
       ];
+    case ComposedForm():
+      throw UnimplementedError('a composed form reads out its parts');
   }
 }
 
 ExplanationLine _stemLine(PracticeItem item, StemDerivation stem) {
-  if (stem.reconstructedWord != null) {
-    return ExplanationLine('explain.stemReconstructed', params: {
-      'stem': stem.stem,
-      'source': stem.sourceWord,
-      'reconstructed': stem.reconstructedWord!,
-      'suffix': stem.reconstructedSuffix!,
-    });
+  switch (stem) {
+    // Naming the part the stem comes from only helps when it is not the first
+    // spelling the learner sees anyway.
+    case StemFromPart(:final sourceWord, :final removedSuffix)
+        when sourceWord != item.principalParts.first.$2:
+      return ExplanationLine('explain.stemSource', params: {
+        'stem': stem.stem,
+        'source': sourceWord,
+        'suffix': removedSuffix,
+      });
+    case StemFromPart():
+      return ExplanationLine('explain.stem', params: {'stem': stem.stem});
+    case StemFromDefault(:final template, :final base):
+      return ExplanationLine('explain.stemDefault', params: {
+        'stem': stem.stem,
+        'template': template,
+        'base': base.stem,
+      });
   }
-  if (stem.sourceWord != item.word) {
-    return ExplanationLine('explain.stemSource', params: {
-      'stem': stem.stem,
-      'source': stem.sourceWord,
-      'suffix': stem.removedSuffix,
-    });
-  }
-  return ExplanationLine('explain.stem', params: {'stem': stem.stem});
 }
 
 ExplanationLine _diagnosisLine(
@@ -152,7 +160,7 @@ ExplanationLine _diagnosisLine(
       return ExplanationLine('explain.diag.wrongStem', params: {
         'answer': answer,
         'usedStem': usedStem,
-        'stem': item.derivation.stem!.stem,
+        'stem': _theStem(item).stem,
       });
     case NoMatch():
       return ExplanationLine('explain.diag.noMatch', params: {
@@ -173,10 +181,10 @@ List<ExplanationLine> explainForm(PracticeItem item, List<String> formKeys) {
     _typeLine(item),
     switch (form) {
       // Here the derivation runs backwards: from the shown form to the rule.
-      GeneratedForm(:final ending, :final result) =>
+      GeneratedForm(:final ending, :final result, :final stemName) =>
         ExplanationLine('explain.formBackToRule', params: {
           'result': result,
-          'stem': item.derivation.stem!.stem,
+          'stem': item.derivation.stems[stemName]!.stem,
           'ending': ending,
           'labels': labels,
         }),
@@ -190,6 +198,8 @@ List<ExplanationLine> explainForm(PracticeItem item, List<String> formKeys) {
           'result': result,
           'label': labels,
         }),
+      ComposedForm() =>
+        throw UnimplementedError('a composed form reads out its parts'),
     },
   ];
 }
@@ -210,16 +220,12 @@ ExplanationLine explainPickedLabel(
     });
   }
 
-  final int index = item.formLabels.indexWhere(
-    (label) =>
-        label.name == picked.name &&
-        label.number == picked.number &&
-        label.tense == picked.tense,
-  );
+  final int index = item.formLabels.indexOf(picked);
   assert(index >= 0, '"$pickedText" is not a form of "${item.translation}"');
   final form = item.derivation.forms[item.formOrder[index]]!;
   final String text = form is GeneratedForm
-      ? '${form.result} (${item.derivation.stem!.stem} + ${form.ending})'
+      ? '${form.result} '
+          '(${item.derivation.stems[form.stemName]!.stem} + ${form.ending})'
       : form.result;
 
   return ExplanationLine('explain.pickedWouldBe', params: {

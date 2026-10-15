@@ -25,7 +25,7 @@ void main() {
           for (final item in items)
             {
               'id': PracticeItemCard.generateItemId(item),
-              'lemma': item.baseForm ?? item.word,
+              'lemma': item.lemma,
               'type': item.type,
               'formOrder': item.formOrder,
               'forms': item.forms,

@@ -211,12 +211,21 @@ final class FormLabel {
   String? display(String axisId) =>
       features.containsKey(axisId) ? axes.displayOf(axisId, features) : null;
 
+  /// Labels of two data files are never compared: one axis set is in play at
+  /// a time, so a second [Axes] instance is a programming error, not a
+  /// mismatch.
   @override
-  bool operator ==(Object other) =>
-      other is FormLabel && other.key == key && other.axes == axes;
+  bool operator ==(Object other) {
+    if (other is! FormLabel) return false;
+    assert(
+      identical(other.axes, axes),
+      'comparing labels built on two Axes instances',
+    );
+    return other.key == key;
+  }
 
   @override
-  int get hashCode => Object.hash(key, axes);
+  int get hashCode => key.hashCode;
 
   @override
   String toString() => 'FormLabel($key)';

@@ -313,9 +313,9 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
                       ],
                     ),
                   ),
-                  // Base form row
-                  if (widget.item.baseForm != null &&
-                      widget.item.baseFormLabel != null)
+                  // One row per principal part the data names
+                  for (final part in widget.item.principalParts
+                      .where((part) => part.$1.isNotEmpty))
                     Padding(
                       padding: EdgeInsets.only(bottom: verticalPadding),
                       child: Row(
@@ -324,7 +324,7 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
                             Expanded(
                               flex: 1,
                               child: Text(
-                                '${widget.item.baseFormLabel}:',
+                                '${part.$1}:',
                                 style: TextStyle(
                                   fontSize: labelFontSize,
                                   color: Colors.black,
@@ -336,7 +336,7 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
                           Expanded(
                             flex: state.isTranslationVisible ? 1 : 2,
                             child: Text(
-                              widget.item.baseForm!,
+                              part.$2,
                               style: TextStyle(
                                 fontSize: labelFontSize,
                                 fontWeight: FontWeight.bold,

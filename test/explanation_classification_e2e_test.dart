@@ -11,7 +11,7 @@ void main() {
       (tester) async {
     await seedNothingDue({});
     final items = await loadPracticeItems('lib/data/latin_nouns.yaml');
-    final dominus = items.firstWhere((i) => i.word == 'dominus');
+    final dominus = items.firstWhere((i) => i.lemma == 'dominus');
     tester.view.physicalSize = const Size(1200, 2400);
     tester.view.devicePixelRatio = 1.0;
     addTearDown(tester.view.reset);

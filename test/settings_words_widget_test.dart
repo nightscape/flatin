@@ -49,7 +49,7 @@ void main() {
     final practicable =
         await reloaded.read(practicableItemsByTypeProvider.future);
     final practisedWords = [...practicable['nouns']!, ...practicable['verbs']!]
-        .map((item) => normalizeDiacritics(item.baseForm ?? item.word!))
+        .map((item) => normalizeDiacritics(item.lemma))
         .toSet();
     expect(practisedWords, isNot(contains(word)));
     reloaded.dispose();

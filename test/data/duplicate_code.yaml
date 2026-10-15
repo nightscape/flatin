@@ -1,0 +1,17 @@
+# The code "sg" is declared by two axes, which S1 forbids.
+axes:
+  numerus:
+    name: Numerus
+    values:
+      sg: Singular
+      pl: Plural
+  genus:
+    name: Genus
+    values:
+      sg: Singular
+      f: Femininum
+
+label:
+  head: []
+  tail: [numerus, genus]
+  merge_axis: numerus

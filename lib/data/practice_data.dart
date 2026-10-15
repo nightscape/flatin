@@ -1,14 +1,19 @@
 import 'package:flutter/services.dart';
 import 'package:yaml/yaml.dart';
+import '../grammar/schema.dart' show parseAxes;
 import '../models/derivation.dart';
 import '../models/practice_item.dart';
 import 'lesson_data.dart' show normalizeDiacritics;
+
+/// The one stem the v1 loader knows. The engine of L1 names several.
+const _stemName = 'stamm';
+const _stemDisplay = 'Stamm';
 
 /// Form metadata extracted from YAML
 class FormMetadata {
   final List<String> formOrder;
   final Map<String, FormLabel> formLabelsByKey;
-  final List<String> classificationSections;
+  final Axes axes;
   final String? dataFileId;
   final String? defaultWordForm;
   final List<String>? typeInferenceRuleSets;
@@ -17,7 +22,7 @@ class FormMetadata {
   FormMetadata({
     required this.formOrder,
     required this.formLabelsByKey,
-    required this.classificationSections,
+    required this.axes,
     this.dataFileId,
     this.defaultWordForm,
     this.typeInferenceRuleSets,
@@ -53,24 +58,24 @@ Future<FormMetadata> getFormMetadata(String assetPath) async {
   final yaml = loadYaml(yamlString) as YamlMap;
   final Map<String, dynamic> yamlMap = _yamlMapToMap(yaml);
 
-  // Extract form labels from top level
-  final Map<String, dynamic> formLabelsMap =
-      yamlMap['form_labels'] as Map<String, dynamic>;
-  final Map<String, FormLabel> formLabelsByKey = formLabelsMap.map(
-    (key, value) =>
-        MapEntry(key, FormLabel.fromMap(value as Map<String, dynamic>)),
-  );
+  final axes = parseAxes(yaml, path: assetPath);
+  final Map<String, FormLabel> formLabelsByKey =
+      (yamlMap['form_labels'] as Map<String, dynamic>).map(
+        (key, value) => MapEntry(
+          key,
+          FormLabel(
+            features: {
+              for (final feature in (value as Map<String, dynamic>).entries)
+                feature.key: '${feature.value}',
+            },
+            axes: axes,
+          ),
+        ),
+      );
 
   // Extract form order from top level
   final List<dynamic> formOrderList = yamlMap['form_order'] as List<dynamic>;
   final List<String> formOrder = formOrderList.map((v) => v as String).toList();
-
-  // Extract classification sections from top level
-  final List<dynamic> classificationSectionsList =
-      yamlMap['classification_sections'] as List<dynamic>;
-  final List<String> classificationSections = classificationSectionsList
-      .map((v) => v as String)
-      .toList();
 
   // Extract data file identifier (required)
   final String? dataFileIdValue = yamlMap['data_file_id'] as String?;
@@ -111,7 +116,7 @@ Future<FormMetadata> getFormMetadata(String assetPath) async {
   return FormMetadata(
     formOrder: formOrder,
     formLabelsByKey: formLabelsByKey,
-    classificationSections: classificationSections,
+    axes: axes,
     dataFileId: dataFileId,
     defaultWordForm: defaultWordForm,
     typeInferenceRuleSets: typeInferenceRuleSets,
@@ -315,6 +320,19 @@ String? _inheritedTemplate(
   return _resolvePattern(parentType, typePatterns)?[formKey] as String?;
 }
 
+/// The type in [type]'s chain whose own pattern declares [formKey].
+String _templateOwner(
+  String type,
+  String formKey,
+  Map<String, dynamic> typePatterns,
+) {
+  final pattern = typePatterns[type] as Map<String, dynamic>?;
+  if (pattern != null && pattern.containsKey(formKey)) return type;
+  final parentType = pattern?['inherits_from'] as String?;
+  assert(parentType != null, 'no type above $type declares $formKey');
+  return _templateOwner(parentType!, formKey, typePatterns);
+}
+
 /// Infer forms for an item based on type patterns
 /// [defaultWordForm] is the form key that the 'word' field represents (e.g., 'nominative_singular', 'first_person_singular')
 /// This function is public to allow testing inference logic.
@@ -369,10 +387,13 @@ Map<String, String> inferForms(
     final String stemPattern = pattern['stem_extraction'] as String? ?? '';
     if (stemPattern.isNotEmpty) {
       final cut = _extractStem(baseWord, stemPattern);
-      stem = StemDerivation(
+      stem = StemFromPart(
+        name: _stemName,
+        display: _stemDisplay,
+        variants: [normalizeDiacritics(cut.stem)],
+        part: wordForm,
         sourceWord: baseWord,
         removedSuffix: cut.removedSuffix,
-        stem: normalizeDiacritics(cut.stem),
       );
     }
   }
@@ -404,19 +425,30 @@ Map<String, String> inferForms(
         baseWord = reconstructionPattern.replaceAll('{stem}', alternativeStem);
         // A pattern that reconstructs the word form always cuts the stem again
         final cut = _extractStem(baseWord, pattern['stem_extraction'] as String);
-        stem = StemDerivation(
+        final String finalStem = normalizeDiacritics(cut.stem);
+        // The detour over the reconstructed word form only shortens the first
+        // cut, so the result still reads as one cut from the base form.
+        assert(
+          normalizeDiacritics(baseForm).startsWith(finalStem),
+          'the stem "$finalStem" is no prefix of "$baseForm"',
+        );
+        stem = StemFromPart(
+          name: _stemName,
+          display: _stemDisplay,
+          variants: [finalStem],
+          part: 'base_form',
           sourceWord: baseForm,
-          removedSuffix: altCut.removedSuffix,
-          reconstructedWord: baseWord,
-          reconstructedSuffix: cut.removedSuffix,
-          stem: normalizeDiacritics(cut.stem),
+          removedSuffix: baseForm.substring(finalStem.length),
         );
       } else {
         // The alternative stem is the stem (consonant declension: regis → reg)
-        stem = StemDerivation(
+        stem = StemFromPart(
+          name: _stemName,
+          display: _stemDisplay,
+          variants: [alternativeStem],
+          part: 'base_form',
           sourceWord: baseForm,
           removedSuffix: altCut.removedSuffix,
-          stem: alternativeStem,
         );
       }
     }
@@ -438,8 +470,10 @@ Map<String, String> inferForms(
       forms[formKey] = result;
       generated[formKey] = GeneratedForm(
         formKey: formKey,
-        result: result,
+        variants: [result],
+        stemName: _stemName,
         ending: template.replaceAll('{stem}', ''),
+        endingType: _templateOwner(type, formKey, typePatterns),
       );
     }
   }
@@ -458,18 +492,20 @@ FormDerivation _classifyForm(
   GeneratedForm? generated,
 ) {
   if (formKey == wordForm) {
-    return GivenForm(formKey: formKey, result: result);
+    return GivenForm(formKey: formKey, variants: [result]);
   }
   if (generated != null && norm(result) == norm(generated.result)) {
     return GeneratedForm(
       formKey: formKey,
-      result: result,
+      variants: [result],
+      stemName: generated.stemName,
       ending: generated.ending,
+      endingType: generated.endingType,
     );
   }
   return IrregularForm(
     formKey: formKey,
-    result: result,
+    variants: [result],
     regular: generated,
   );
 }
@@ -480,24 +516,12 @@ Future<List<PracticeItem>> loadPracticeItems(String assetPath) async {
   final yaml = loadYaml(yamlString) as YamlMap;
   final Map<String, dynamic> yamlMap = _yamlMapToMap(yaml);
 
-  // Extract form labels from top level
-  final Map<String, dynamic> formLabelsMap =
-      yamlMap['form_labels'] as Map<String, dynamic>;
-  final Map<String, FormLabel> formLabelsByKey = formLabelsMap.map(
-    (key, value) =>
-        MapEntry(key, FormLabel.fromMap(value as Map<String, dynamic>)),
-  );
+  final Map<String, FormLabel> formLabelsByKey =
+      (await getFormMetadata(assetPath)).formLabelsByKey;
 
   // Extract form order from top level
   final List<dynamic> formOrderList = yamlMap['form_order'] as List<dynamic>;
   final List<String> formOrder = formOrderList.map((v) => v as String).toList();
-
-  // Extract classification sections from top level
-  final List<dynamic> classificationSectionsList =
-      yamlMap['classification_sections'] as List<dynamic>;
-  final List<String> classificationSections = classificationSectionsList
-      .map((v) => v as String)
-      .toList();
 
   // Extract type patterns from top level (if present)
   final Map<String, dynamic>? typePatternsMap =
@@ -537,7 +561,10 @@ Future<List<PracticeItem>> loadPracticeItems(String assetPath) async {
               entry.value is String &&
               (entry.value as String).contains('{stem}') &&
               entry.value != _inheritedTemplate(type, entry.key, typePatterns))
-            entry.key: entry.value as String,
+            entry.key: Template(
+              stemName: _stemName,
+              endings: [(entry.value as String).replaceAll('{stem}', '')],
+            ),
       },
   });
 
@@ -637,7 +664,7 @@ Future<List<PracticeItem>> loadPracticeItems(String assetPath) async {
               candidateTypes: ruleMatch.types,
             )
           : const TypeDeclared(),
-      stem: derived.stem,
+      stems: {if (derived.stem != null) _stemName: derived.stem!},
       forms: {
         for (int i = 0; i < itemFormOrder.length; i++)
           itemFormOrder[i]: _classifyForm(
@@ -650,17 +677,25 @@ Future<List<PracticeItem>> loadPracticeItems(String assetPath) async {
       grammar: grammar,
     );
 
+    // The spellings the file gives, in file order. A part without a label is
+    // shown without one; `word` never carries a label in v1 data.
+    final String? givenWord = item['word'] as String?;
+    final principalParts = <(String, String)>[
+      if (givenWord != null) ('', givenWord),
+      if (baseForm != null) (baseFormLabel ?? '', baseForm),
+    ];
+    final String lemma = baseForm ?? givenWord!;
+
     return PracticeItem(
+      id: '$dataFileId:${normalizeDiacritics(lemma).toLowerCase()}',
+      lemma: lemma,
       type: type,
       translation: item['translation'] as String,
-      baseForm: item['base_form'] as String?,
-      baseFormLabel: baseFormLabel,
+      principalParts: principalParts,
       forms: forms,
+      acceptedForms: [for (final form in forms) [form]],
       formLabels: itemFormLabels,
-      word: item['word'] as String?,
-      wordForm: wordForm,
       possibleTypes: possibleTypes,
-      classificationSections: classificationSections,
       dataFileId: dataFileId,
       formOrder: itemFormOrder,
       derivation: derivation,

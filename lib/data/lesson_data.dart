@@ -27,21 +27,14 @@ class LessonData {
   });
 
   /// Returns the lesson for a [PracticeItem], or null if no match.
-  ///
-  /// For verbs the `base_form` is the canonical key; for nouns it's `word`.
-  String? lessonFor(PracticeItem item) {
-    final key = item.baseForm ?? item.word;
-    if (key == null) return null;
-    return wordToLesson[normalizeDiacritics(key)];
-  }
+  String? lessonFor(PracticeItem item) =>
+      wordToLesson[normalizeDiacritics(item.lemma)];
 
   /// Whether [item] should be practiced; words in [deselectedWords]
   /// (normalized) are the ones the user switched off.
   bool includes(PracticeItem item, Set<String> deselectedWords) {
     if (deselectedWords.isEmpty) return true;
-    final key = item.baseForm ?? item.word;
-    if (key == null) return true;
-    return !deselectedWords.contains(normalizeDiacritics(key));
+    return !deselectedWords.contains(normalizeDiacritics(item.lemma));
   }
 }
 

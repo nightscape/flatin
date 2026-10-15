@@ -131,20 +131,15 @@ Future<void> _testFormInference(String assetPath) async {
 
     // Load practice items normally (they'll use explicit forms)
     final loadedItems = await loadPracticeItems(assetPath);
-    // Match by translation and base_form/word to handle duplicates
-    final testCaseBaseForm = testCase['base_form'] as String?;
-    final testCaseWord = testCase['word'] as String?;
+    // Match by translation and lemma to handle duplicates
+    final testCaseLemma =
+        (testCase['base_form'] ?? testCase['word']) as String?;
     final loadedItem = loadedItems.firstWhere(
-      (item) {
-        if (item.translation != translation) return false;
-        if (testCaseBaseForm != null && item.baseForm != testCaseBaseForm)
-          return false;
-        if (testCaseWord != null && item.word != testCaseWord) return false;
-        return true;
-      },
+      (item) =>
+          item.translation == translation &&
+          (testCaseLemma == null || item.lemma == testCaseLemma),
       orElse: () => throw Exception(
-        'Could not find item: $translation '
-        '(base_form: $testCaseBaseForm, word: $testCaseWord)',
+        'Could not find item: $translation (lemma: $testCaseLemma)',
       ),
     );
 

@@ -27,11 +27,27 @@ const sampleLines = <ExplanationLine>[
     'source': 'dominus',
     'suffix': 'us',
   }),
-  ExplanationLine('explain.stemReconstructed', params: {
-    'stem': 'hab',
-    'source': 'habēre',
-    'reconstructed': 'habeo',
-    'suffix': 'eo',
+  ExplanationLine('explain.stemDefault', params: {
+    'stem': 'amā',
+    'template': 'wurzel + ā',
+    'base': 'am',
+  }),
+  ExplanationLine('explain.sandhi', params: {
+    'before': 'amā + ō',
+    'after': 'amō',
+    'rule': 'ā fällt vor Vokal aus',
+  }),
+  ExplanationLine('explain.composed', params: {
+    'label': 'Perfekt: 1. Person Singular',
+    'parts': 'amātus + sum',
+    'result': 'amātus sum',
+  }),
+  ExplanationLine('explain.deponent', params: {
+    'label': 'Präsens: 1. Person Singular',
+  }),
+  ExplanationLine('explain.variants', params: {'variants': 'dominūm'}),
+  ExplanationLine('explain.correctWithMacrons', params: {
+    'result': 'dominōrum',
   }),
   ExplanationLine('explain.generated', params: {
     'label': 'Genitiv Plural',

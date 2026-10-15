@@ -49,7 +49,7 @@ void main() {
         int checked = 0;
         final parents = await _parentTypes(asset);
         for (final item in await loadPracticeItems(asset)) {
-          final stem = item.derivation.stem;
+          final stem = item.derivation.stems.values.singleOrNull;
           if (stem == null) continue;
           for (final formKey in item.formOrder) {
             final asked = item.derivation.forms[formKey]!;
@@ -58,7 +58,7 @@ void main() {
               if (entry.key == item.type) continue;
               final template = entry.value[formKey];
               if (template == null) continue;
-              final candidate = template.replaceAll('{stem}', stem.stem);
+              final candidate = stem.stem + template.endings.first;
               // Earlier steps own these answers: they are a form of the word
               // itself, or the regular variant of an irregular form.
               if (item.forms.any((f) => norm(f) == norm(candidate))) continue;
@@ -129,7 +129,7 @@ void main() {
     setUp(() async => nouns = await loadPracticeItems(_assets.first));
 
     PracticeItem byWord(String word) =>
-        nouns.firstWhere((item) => item.word == word);
+        nouns.firstWhere((item) => item.lemma == word);
 
     test('dominis is the dative/ablative plural, not the genitive', () {
       final result = diagnose(byWord('dominus'), 'genitive_plural', 'dominis');
@@ -169,7 +169,7 @@ void main() {
 
     test('an inherited ending names only the parent type', () async {
       final verbs = await loadPracticeItems(_assets.last);
-      final item = verbs.firstWhere((i) => i.baseForm == 'amāre');
+      final item = verbs.firstWhere((i) => i.lemma == 'amāre');
       final result = diagnose(item, 'praesens_second_person_singular', 'ames');
       expect(
         result,

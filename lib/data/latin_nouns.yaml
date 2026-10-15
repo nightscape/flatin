@@ -1,9 +1,28 @@
 # Data file identifier
 data_file_id: nouns
 
-classification_sections:
-  - Kasus
-  - Numerus
+# Feature axes: a label reads out one value per axis. The classification
+# screen offers one selector per axis, in this order.
+axes:
+  kasus:
+    name: Kasus
+    values:
+      nom: Nominativ
+      gen: Genitiv
+      dat: Dativ
+      akk: Akkusativ
+      abl: Ablativ
+      vok: Vokativ
+  numerus:
+    name: Numerus
+    values:
+      sg: Singular
+      pl: Plural
+
+label:
+  head: []
+  tail: [kasus, numerus]
+  merge_axis: kasus
 
 # Default values for items
 defaults:
@@ -159,43 +178,20 @@ type_patterns:
     genitive_plural: "{stem}ium"           # marium
     accusative_plural: "{stem}ia"          # maria
 
+# Form key -> its feature bundle.
 form_labels:
-  nominative_singular:
-    name: Nominativ
-    number: Singular
-  genitive_singular:
-    name: Genitiv
-    number: Singular
-  dative_singular:
-    name: Dativ
-    number: Singular
-  accusative_singular:
-    name: Akkusativ
-    number: Singular
-  ablative_singular:
-    name: Ablativ
-    number: Singular
-  vocative_singular:
-    name: Vokativ
-    number: Singular
-  nominative_plural:
-    name: Nominativ
-    number: Plural
-  genitive_plural:
-    name: Genitiv
-    number: Plural
-  dative_plural:
-    name: Dativ
-    number: Plural
-  accusative_plural:
-    name: Akkusativ
-    number: Plural
-  ablative_plural:
-    name: Ablativ
-    number: Plural
-  vocative_plural:
-    name: Vokativ
-    number: Plural
+  nominative_singular: {kasus: nom, numerus: sg}
+  genitive_singular: {kasus: gen, numerus: sg}
+  dative_singular: {kasus: dat, numerus: sg}
+  accusative_singular: {kasus: akk, numerus: sg}
+  ablative_singular: {kasus: abl, numerus: sg}
+  vocative_singular: {kasus: vok, numerus: sg}
+  nominative_plural: {kasus: nom, numerus: pl}
+  genitive_plural: {kasus: gen, numerus: pl}
+  dative_plural: {kasus: dat, numerus: pl}
+  accusative_plural: {kasus: akk, numerus: pl}
+  ablative_plural: {kasus: abl, numerus: pl}
+  vocative_plural: {kasus: vok, numerus: pl}
 
 form_order:
   - nominative_singular

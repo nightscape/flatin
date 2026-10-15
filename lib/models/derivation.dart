@@ -1,9 +1,10 @@
-/// How every form of a practice item follows from the dictionary form.
+/// How every form of a practice item follows from its principal parts.
 /// Produced while the forms are computed, so the trace can never contradict
 /// the answer.
 library;
 
 import '../data/lesson_data.dart' show normalizeDiacritics;
+import 'form_label.dart' show FormKey;
 
 /// The comparison form of a Latin word: trimmed, lower case, macron-free.
 String norm(String text) => normalizeDiacritics(text.trim().toLowerCase());
@@ -15,7 +16,7 @@ sealed class TypeRecognition {
 
 /// A `type_inference` rule produced or confirms the type.
 final class TypeByRule extends TypeRecognition {
-  /// `word` or `base_form`, as spelled in the YAML.
+  /// The spelling the rule matched.
   final String sourceWord;
 
   /// The matched rule suffix, e.g. "us", "āre".
@@ -36,87 +37,212 @@ final class TypeDeclared extends TypeRecognition {
   const TypeDeclared();
 }
 
-final class StemDerivation {
-  /// The word the stem rule was applied to (`word` or `base_form`).
-  final String sourceWord;
+/// A sound rule that fires at a stem seam (S16).
+final class SandhiRule {
+  final String id;
 
-  /// The suffix that was cut from [sourceWord].
-  final String removedSuffix;
+  /// The German text the explanation shows, e.g. "ā fällt vor Vokal aus".
+  final String explain;
 
-  /// Verbs: amāre → "amo" (`reconstruction_from_alternative_stem`).
-  final String? reconstructedWord;
+  const SandhiRule({required this.id, required this.explain});
+}
 
-  /// The suffix cut from [reconstructedWord], e.g. "o".
-  final String? reconstructedSuffix;
+/// One named stem of an item, e.g. "praesens" = amā-.
+sealed class StemDerivation {
+  /// The item-level stem name, e.g. "perfekt".
+  final String name;
 
-  /// Macron-free, exactly the value used in the templates.
+  /// The shown spelling; `variants.first`.
   final String stem;
 
-  const StemDerivation({
+  /// What the stem is called to the learner, e.g. "Perfektstamm".
+  final String display;
+
+  /// All spellings of this stem (S9); the first is [stem].
+  final List<String> variants;
+
+  StemDerivation({
+    required this.name,
+    required this.display,
+    required this.variants,
+  })  : stem = variants.first,
+        assert(variants.isNotEmpty),
+        assert(
+          variants.map(norm).toSet().length == variants.length,
+          'stem $name: two variants differ only in quantity marks',
+        );
+}
+
+/// Cut from a principal part the item gives (S3).
+final class StemFromPart extends StemDerivation {
+  /// The name of the principal part the stem was cut from.
+  final String part;
+
+  /// The part's first spelling.
+  final String sourceWord;
+
+  /// The entry of `remove` that matched [sourceWord].
+  final String removedSuffix;
+
+  StemFromPart({
+    required super.name,
+    required super.display,
+    required super.variants,
+    required this.part,
     required this.sourceWord,
     required this.removedSuffix,
-    this.reconstructedWord,
-    this.reconstructedSuffix,
-    required this.stem,
-  }) : assert((reconstructedWord == null) == (reconstructedSuffix == null));
-}
-
-sealed class FormDerivation {
-  const FormDerivation();
-
-  String get formKey;
-  String get result;
-}
-
-/// The dictionary word itself.
-final class GivenForm extends FormDerivation {
-  @override
-  final String formKey;
-  @override
-  final String result;
-
-  const GivenForm({required this.formKey, required this.result});
-}
-
-/// Built from stem plus template ending.
-final class GeneratedForm extends FormDerivation {
-  @override
-  final String formKey;
-  @override
-  final String result;
-
-  /// The template with "{stem}" removed.
-  final String ending;
-
-  const GeneratedForm({
-    required this.formKey,
-    required this.result,
-    required this.ending,
-  }) : assert(ending.length > 0);
-}
-
-/// Explicit and different from the rule, or no template at all.
-final class IrregularForm extends FormDerivation {
-  @override
-  final String formKey;
-  @override
-  final String result;
-
-  /// What the rule would have produced, if there is a rule.
-  final GeneratedForm? regular;
-
-  const IrregularForm({
-    required this.formKey,
-    required this.result,
-    this.regular,
   });
 }
 
-/// The endings of one YAML file, shared by all its items.
+/// Built from another stem by a template, e.g. praesens = `{wurzel}ā` (S18 b).
+final class StemFromDefault extends StemDerivation {
+  final String template;
+  final StemDerivation base;
+
+  /// The rule that fired at the `{base}`/rest seam, if any.
+  final SandhiRule? sandhiRule;
+
+  StemFromDefault({
+    required super.name,
+    required super.display,
+    required super.variants,
+    required this.template,
+    required this.base,
+    this.sandhiRule,
+  });
+}
+
+sealed class FormDerivation {
+  final FormKey formKey;
+
+  /// The shown spelling; `variants.first`.
+  final String result;
+
+  /// Every accepted spelling (S9); the first is [result].
+  final List<String> variants;
+
+  FormDerivation({required this.formKey, required this.variants})
+      : result = variants.first,
+        assert(variants.isNotEmpty),
+        assert(
+          variants.map(norm).toSet().length == variants.length,
+          'form $formKey: two variants differ only in quantity marks',
+        );
+}
+
+/// A principal part the item gives, shown as it stands.
+final class GivenForm extends FormDerivation {
+  GivenForm({required super.formKey, required super.variants});
+}
+
+/// Stem plus template ending.
+final class GeneratedForm extends FormDerivation {
+  /// The item-level stem name after `bind`: "ppp", not the target's "stamm".
+  final String stemName;
+
+  /// The template with "{stemName}" removed; may be empty (S2).
+  final String ending;
+
+  /// The type that wrote the template; differs from the item's type under
+  /// delegation and inheritance.
+  final String endingType;
+
+  /// The rule that fired at the stem/ending seam of [result] (S18 a).
+  final SandhiRule? sandhiRule;
+
+  GeneratedForm({
+    required super.formKey,
+    required super.variants,
+    required this.stemName,
+    required this.ending,
+    required this.endingType,
+    this.sandhiRule,
+  });
+}
+
+/// Several forms joined, e.g. amātus + est (S13).
+final class ComposedForm extends FormDerivation {
+  final List<FormPart> parts;
+  final String join;
+
+  ComposedForm({
+    required super.formKey,
+    required super.variants,
+    required this.parts,
+    required this.join,
+  }) : assert(parts.isNotEmpty);
+}
+
+/// Explicit and different from the rule, or no rule at all.
+final class IrregularForm extends FormDerivation {
+  /// What the rules give for this key, if they give anything.
+  final FormDerivation? regular;
+
+  IrregularForm({
+    required super.formKey,
+    required super.variants,
+    this.regular,
+  }) : assert(
+          regular == null ||
+              (regular.formKey == formKey && regular.result != variants.first),
+          'the regular derivation must be another spelling of the same key',
+        );
+}
+
+/// One piece of a [ComposedForm].
+sealed class FormPart {
+  String get text;
+}
+
+/// A stem used as an affix, e.g. "pos" from "pot" by rule t_s.
+final class AffixPart extends FormPart {
+  final String stemName;
+
+  @override
+  final String text;
+
+  /// The rule that fired at the seam to the next part (S18 c).
+  final SandhiRule? sandhiRule;
+
+  AffixPart({required this.stemName, required this.text, this.sandhiRule});
+}
+
+/// A form of an item, either another one or the composing item itself.
+final class LexemeFormPart extends FormPart {
+  /// The composing item's own id for a `self:` part.
+  final String lexemeId;
+
+  /// For a `self:` part the delegated key after the delegate's `set`.
+  final FormKey key;
+
+  final FormDerivation derivation;
+
+  LexemeFormPart({
+    required this.lexemeId,
+    required this.key,
+    required this.derivation,
+  });
+
+  @override
+  String get text => derivation.result;
+}
+
+/// One form template of a type: a stem name and the spellings of its ending.
+final class Template {
+  /// Null for a literal template.
+  final String? stemName;
+
+  /// The endings, first = shown.
+  final List<String> endings;
+
+  const Template({this.stemName, required this.endings});
+}
+
+/// The templates of one YAML file, shared by all its items.
 final class Grammar {
-  /// Type → form key → "{stem}" template. A type that inherits keeps only the
-  /// endings it changes, so a diagnosis names the parent rather than both.
-  final Map<String, Map<String, String>> templatesByType;
+  /// Type → form key → template. A type that inherits keeps only the endings
+  /// it changes, so a diagnosis names the parent rather than both.
+  final Map<String, Map<FormKey, Template>> templatesByType;
 
   const Grammar(this.templatesByType);
 }
@@ -125,28 +251,53 @@ final class Derivation {
   final String type;
   final TypeRecognition recognition;
 
-  /// Null iff the type has no pattern.
-  final StemDerivation? stem;
+  /// The item's named stems; empty when the type has no pattern.
+  final Map<String, StemDerivation> stems;
 
   /// Exactly the keys of `item.formOrder`, in that order.
-  final Map<String, FormDerivation> forms;
+  final Map<FormKey, FormDerivation> forms;
+
+  /// Keys moved from a passive key to the active one (S10).
+  final Set<FormKey> deponentKeys;
+
+  /// Forms with `emit: false` (S8): for compositions and the oracle, never
+  /// practised.
+  final Map<FormKey, FormDerivation> internal;
 
   final Grammar grammar;
 
   Derivation({
     required this.type,
     required this.recognition,
-    this.stem,
+    this.stems = const {},
     required this.forms,
+    this.deponentKeys = const {},
+    this.internal = const {},
     required this.grammar,
   })  : assert(forms.entries.every((e) => e.key == e.value.formKey)),
-        assert(stem != null || !forms.values.any((f) => f is GeneratedForm)),
-        assert(forms.values.every((f) => switch (f) {
-              GeneratedForm(:final ending, :final result) =>
-                norm(stem!.stem + ending) == norm(result),
-              IrregularForm(regular: final r) => r == null ||
-                  (r.formKey == f.formKey &&
-                      norm(stem!.stem + r.ending) == norm(r.result)),
-              GivenForm() => true,
-            }));
+        assert(
+          stems.entries.every((e) => e.key == e.value.name),
+          'a stem is filed under another name than its own',
+        ),
+        // I5: no stem, no generated or composed form.
+        assert(
+          stems.isNotEmpty ||
+              !forms.values.any(
+                (f) =>
+                    f is GeneratedForm ||
+                    (f is ComposedForm && f.parts.any((p) => p is AffixPart)),
+              ),
+        ),
+        // I2, as far as it holds without the sandhi function: a seam rule may
+        // change the stem, so only a rule-free seam concatenates exactly.
+        assert(
+          forms.values.every(
+            (f) => switch (f) {
+              GeneratedForm(sandhiRule: final rule) when rule != null => true,
+              GeneratedForm(:final stemName, :final ending, :final result) =>
+                norm(stems[stemName]!.stem + ending) == norm(result),
+              _ => true,
+            },
+          ),
+        );
 }
