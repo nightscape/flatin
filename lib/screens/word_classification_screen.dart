@@ -7,6 +7,7 @@ import '../models/settings.dart';
 import '../providers/settings_provider.dart';
 import '../providers/fsrs_provider.dart';
 import '../widgets/app_drawer.dart';
+import '../widgets/explanation_lines.dart';
 import 'dart:math';
 
 class WordClassificationScreen extends ConsumerStatefulWidget {
@@ -344,6 +345,58 @@ class _WordClassificationScreenState
           correctLabel.name == formLabel.name &&
           correctLabel.number == formLabel.number &&
           correctLabel.tense == formLabel.tense,
+    );
+  }
+
+  /// Complete combinations the learner got wrong, including those that map to
+  /// no label at all.
+  List<Map<String, String?>> get _wrongCombinations => _selectedAnswers
+      .where((combination) => _currentItem!.classificationSections
+          .every((section) => combination[section] != null))
+      .where((combination) => !_isCombinationCorrect(combination))
+      .toList();
+
+  /// A combination as the screen shows it, e.g. "Vokativ Plural".
+  String _combinationText(Map<String, String?> combination) => _currentItem!
+      .classificationSections
+      .map((section) => combination[section]!)
+      .join(' ');
+
+  Widget _buildExplanationBox(bool isMobile, double horizontalPadding) {
+    final item = _currentItem!;
+    final explainer = ref.watch(explainerProvider);
+    final shownKeys =
+        _correctFormIndices.map((i) => item.formOrder[i]).toList();
+
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        horizontal: horizontalPadding,
+        vertical: isMobile ? 6.0 : 8.0,
+      ),
+      child: Container(
+        key: const Key('explanation.classification'),
+        padding: EdgeInsets.all(isMobile ? 12.0 : 16.0),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: Colors.grey, width: 1),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ExplanationLines(explainer.form(item, shownKeys)),
+            ..._wrongCombinations.map(
+              (combination) => ExplanationLines([
+                explainer.pickedLabel(
+                  item,
+                  _combinationToFormLabel(combination),
+                  _combinationText(combination),
+                ),
+              ]),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -717,6 +770,11 @@ class _WordClassificationScreenState
                       ),
                     ),
                   ),
+
+                // How the shown form follows from the rule, and what the wrong
+                // picks would have been
+                if (_isChecked && _wrongCombinations.isNotEmpty)
+                  _buildExplanationBox(isMobile, horizontalPadding),
 
                 // Feedback message
                 if (_isChecked)

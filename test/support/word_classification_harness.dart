@@ -10,14 +10,24 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/models/fsrs_card.dart';
 import 'package:latin_practice/services/fsrs_storage.dart';
+import 'package:latin_practice/widgets/explanation_lines.dart';
 
-Widget wrapInApp(Widget home) => ProviderScope(
+Widget wrapInApp(
+  Widget home, {
+  Explainer? explainer,
+  Locale? forcedLocale,
+}) =>
+    ProviderScope(
+      overrides: [
+        if (explainer != null) explainerProvider.overrideWithValue(explainer),
+      ],
       child: MaterialApp(
         localizationsDelegates: [
           FlutterI18nDelegate(
             translationLoader: FileTranslationLoader(
               basePath: 'assets/flutter_i18n',
               fallbackFile: 'en',
+              forcedLocale: forcedLocale,
               useCountryCode: false,
             ),
           ),

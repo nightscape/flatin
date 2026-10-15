@@ -8,6 +8,7 @@ import '../providers/practice_providers.dart';
 import '../providers/settings_provider.dart';
 import '../providers/fsrs_provider.dart';
 import '../widgets/app_drawer.dart';
+import '../widgets/explanation_lines.dart';
 
 /// A wrong translation forces [Rating.again]; otherwise the rating follows the
 /// share of correct form answers.
@@ -35,6 +36,7 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
   List<String> _filteredForms = [];
   List<FormLabel> _filteredLabels = [];
   List<String> _filteredInferredForms = [];
+  List<String> _filteredKeys = [];
   Rating? _suggestedRating;
   bool _showRatingButtons = false;
   String? _selectedTranslation;
@@ -196,6 +198,7 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
     _filteredForms = filteredData.forms;
     _filteredLabels = filteredData.labels;
     _filteredInferredForms = filteredData.inferredForms;
+    _filteredKeys = filteredData.keys;
     _ensureAnswerSlots(_filteredForms.length);
 
     final strategyId = settingsAsync.when(
@@ -382,45 +385,62 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
                           // Right column - Input field and answer
                           Padding(
                             padding: EdgeInsets.only(bottom: isMobile ? 8.0 : 12.0),
-                            child: Row(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Expanded(
-                                  child: strategy.buildInput(
-                                    InputContext(
-                                      index: index,
-                                      correctAnswer: correctAnswer,
-                                      allForms: _filteredForms,
-                                      inferredForms: _filteredInferredForms,
-                                      isChecked: state.isChecked,
-                                      borderColor: _getBorderColor(index, state),
-                                      labelFontSize: labelFontSize,
-                                      isMobile: isMobile,
-                                      currentValue: _userAnswers[index],
-                                      onChanged: (value) {
-                                        setState(() {
-                                          _userAnswers[index] = value;
-                                        });
-                                      },
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: strategy.buildInput(
+                                        InputContext(
+                                          index: index,
+                                          correctAnswer: correctAnswer,
+                                          allForms: _filteredForms,
+                                          inferredForms: _filteredInferredForms,
+                                          isChecked: state.isChecked,
+                                          borderColor: _getBorderColor(index, state),
+                                          labelFontSize: labelFontSize,
+                                          isMobile: isMobile,
+                                          currentValue: _userAnswers[index],
+                                          onChanged: (value) {
+                                            setState(() {
+                                              _userAnswers[index] = value;
+                                            });
+                                          },
+                                        ),
+                                      ),
                                     ),
-                                  ),
+                                    if (state.isChecked &&
+                                        index < state.validationResults.length &&
+                                        state.validationResults[index] != null)
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                          left: isMobile ? 8.0 : 12.0,
+                                        ),
+                                        child: Text(
+                                          correctAnswer,
+                                          style: TextStyle(
+                                            fontSize: labelFontSize,
+                                            color: state.validationResults[index]!
+                                                ? Colors.green
+                                                : Colors.red,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                  ],
                                 ),
                                 if (state.isChecked &&
                                     index < state.validationResults.length &&
-                                    state.validationResults[index] != null)
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                      left: isMobile ? 8.0 : 12.0,
-                                    ),
-                                    child: Text(
-                                      correctAnswer,
-                                      style: TextStyle(
-                                        fontSize: labelFontSize,
-                                        color: state.validationResults[index]!
-                                            ? Colors.green
-                                            : Colors.red,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
+                                    state.validationResults[index] == false)
+                                  ExplanationLines(
+                                    key: Key(
+                                        'explanation.${_filteredKeys[index]}'),
+                                    ref.watch(explainerProvider).wrongAnswer(
+                                          widget.item,
+                                          _filteredKeys[index],
+                                          _userAnswers[index],
+                                        ),
                                   ),
                               ],
                             ),
