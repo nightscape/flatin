@@ -1,5 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:yaml/yaml.dart';
+import '../models/derivation.dart';
 import '../models/practice_item.dart';
 
 /// Form metadata extracted from YAML
@@ -393,6 +394,19 @@ Future<List<PracticeItem>> loadPracticeItems(String assetPath) async {
   }
   final String dataFileId = dataFileIdValue;
 
+  // The endings of this file: resolved templates per type, practised keys only.
+  final grammar = Grammar({
+    for (final type in typePatterns.keys)
+      type: {
+        for (final entry in (_resolvePattern(type, typePatterns) ?? const {})
+            .entries)
+          if (formOrder.contains(entry.key) &&
+              entry.value is String &&
+              (entry.value as String).contains('{stem}'))
+            entry.key: entry.value as String,
+      },
+  });
+
   // Extract items
   final List<dynamic> itemsList = yamlMap['items'] as List<dynamic>;
 
@@ -540,6 +554,19 @@ Future<List<PracticeItem>> loadPracticeItems(String assetPath) async {
     final String? baseFormLabel =
         item['base_form_label'] as String? ?? defaultBaseFormLabel;
 
+    // Placeholder trace: the real one is produced by the inference itself (L1).
+    final derivation = Derivation(
+      type: type,
+      recognition: const TypeDeclared(),
+      forms: {
+        for (int i = 0; i < itemFormOrder.length; i++)
+          itemFormOrder[i]: itemFormOrder[i] == wordForm
+              ? GivenForm(formKey: itemFormOrder[i], result: forms[i])
+              : IrregularForm(formKey: itemFormOrder[i], result: forms[i]),
+      },
+      grammar: grammar,
+    );
+
     return PracticeItem(
       type: type,
       translation: item['translation'] as String,
@@ -553,6 +580,7 @@ Future<List<PracticeItem>> loadPracticeItems(String assetPath) async {
       classificationSections: classificationSections,
       dataFileId: dataFileId,
       formOrder: itemFormOrder,
+      derivation: derivation,
       inferredForms: inferredFormsList,
     );
   }).toList();

@@ -1,3 +1,5 @@
+import 'derivation.dart';
+
 /// Generic practice item loaded directly from YAML
 class PracticeItem {
   final String type;
@@ -18,6 +20,9 @@ class PracticeItem {
   /// "regular" variants that the pattern would produce.
   final List<String> inferredForms;
 
+  /// How every form of this item follows from the dictionary form.
+  final Derivation derivation;
+
   PracticeItem({
     required this.type,
     required this.translation,
@@ -31,6 +36,7 @@ class PracticeItem {
     required this.classificationSections,
     required this.dataFileId,
     required this.formOrder,
+    required this.derivation,
     List<String>? inferredForms,
   }) : inferredForms = inferredForms ?? forms;
 
@@ -38,11 +44,16 @@ class PracticeItem {
   List<String> get allForms => forms;
 
   /// Filter forms and labels based on enabled form keys
-  ({List<String> forms, List<FormLabel> labels, List<String> inferredForms})
-      filterForms(Set<String> enabledFormKeys) {
+  ({
+    List<String> forms,
+    List<FormLabel> labels,
+    List<String> inferredForms,
+    List<String> keys,
+  }) filterForms(Set<String> enabledFormKeys) {
     final filteredForms = <String>[];
     final filteredLabels = <FormLabel>[];
     final filteredInferred = <String>[];
+    final filteredKeys = <String>[];
 
     for (int i = 0; i < formOrder.length; i++) {
       final formKey = formOrder[i];
@@ -50,6 +61,7 @@ class PracticeItem {
         filteredForms.add(forms[i]);
         filteredLabels.add(formLabels[i]);
         filteredInferred.add(inferredForms[i]);
+        filteredKeys.add(formKey);
       }
     }
 
@@ -57,6 +69,7 @@ class PracticeItem {
       forms: filteredForms,
       labels: filteredLabels,
       inferredForms: filteredInferred,
+      keys: filteredKeys,
     );
   }
 }
@@ -79,4 +92,23 @@ class FormLabel {
       tense: map['tense'] as String?,
     );
   }
+}
+
+/// Names several labels in one phrase, merging those that share tense and
+/// number: [Dativ Plural, Ablativ Plural] → "Dativ/Ablativ Plural".
+String describeLabels(List<FormLabel> labels) {
+  assert(labels.isNotEmpty);
+
+  final groups = <(String?, String), List<String>>{};
+  for (final label in labels) {
+    groups
+        .putIfAbsent((label.tense, label.number), () => <String>[])
+        .add(label.name);
+  }
+
+  return groups.entries.map((group) {
+    final (tense, number) = group.key;
+    final names = group.value.join('/');
+    return tense != null ? '$tense: $names $number' : '$names $number';
+  }).join(', ');
 }

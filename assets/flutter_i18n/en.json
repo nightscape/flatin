@@ -61,6 +61,27 @@
     "wordClassification": "Word Classification",
     "settings": "Settings",
     "errorLoadingData": "Error loading data"
+  },
+  "explain": {
+    "typeByRule": "{word}: ending -{suffix} → {type}",
+    "typeByRuleAmbiguous": "{word}: ending -{suffix} → {candidates}; here: {type}",
+    "typeDeclared": "{word}: {type}",
+    "stem": "Stem {stem}-",
+    "stemSource": "Stem {stem}- ({source} − {suffix})",
+    "stemReconstructed": "Stem {stem}- ({source} → {reconstructed} − {suffix})",
+    "generated": "{label}: {stem} + {ending} = {result}",
+    "given": "{result} is the dictionary form ({label})",
+    "irregular": "irregular – memorise: {dictionary} · {label}: {result}",
+    "formBackToRule": "{result} = {stem} + {ending} → {labels}",
+    "pickedWouldBe": "You picked {picked} – that would be {form}",
+    "pickedMissing": "{picked} does not exist for this word",
+    "diag": {
+      "onlyDiacritics": "You wrote {answer} – only the macrons differ",
+      "regularInsteadOfIrregular": "You wrote {answer} – that is the regular form, but {label} is irregular here",
+      "otherForm": "You wrote {answer} – that is {labels}",
+      "otherType": "You wrote {answer} – ending of {types}",
+      "wrongStem": "You wrote {answer} – wrong stem {usedStem}- (correct: {stem}-)",
+      "noMatch": "You wrote {answer} – this matches no known form"
+    }
   }
 }
-

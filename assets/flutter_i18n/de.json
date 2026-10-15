@@ -61,6 +61,27 @@
     "wordClassification": "Wortklassifikation",
     "settings": "Einstellungen",
     "errorLoadingData": "Fehler beim Laden der Daten"
+  },
+  "explain": {
+    "typeByRule": "{word}: Endung -{suffix} → {type}",
+    "typeByRuleAmbiguous": "{word}: Endung -{suffix} → {candidates}; hier: {type}",
+    "typeDeclared": "{word}: {type}",
+    "stem": "Stamm {stem}-",
+    "stemSource": "Stamm {stem}- ({source} − {suffix})",
+    "stemReconstructed": "Stamm {stem}- ({source} → {reconstructed} − {suffix})",
+    "generated": "{label}: {stem} + {ending} = {result}",
+    "given": "{result} ist die Wörterbuchform ({label})",
+    "irregular": "unregelmäßig – merken: {dictionary} · {label}: {result}",
+    "formBackToRule": "{result} = {stem} + {ending} → {labels}",
+    "pickedWouldBe": "Du hast {picked} gewählt – das wäre {form}",
+    "pickedMissing": "{picked} gibt es bei diesem Wort nicht",
+    "diag": {
+      "onlyDiacritics": "Du hast {answer} geschrieben – nur die Längenzeichen weichen ab",
+      "regularInsteadOfIrregular": "Du hast {answer} geschrieben – das wäre die regelmäßige Form, aber {label} ist hier unregelmäßig",
+      "otherForm": "Du hast {answer} geschrieben – das ist {labels}",
+      "otherType": "Du hast {answer} geschrieben – Endung der {types}",
+      "wrongStem": "Du hast {answer} geschrieben – falscher Stamm {usedStem}- (richtig: {stem}-)",
+      "noMatch": "Du hast {answer} geschrieben – das passt zu keiner bekannten Form"
+    }
   }
 }
-
