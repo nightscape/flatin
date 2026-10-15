@@ -1,4 +1,5 @@
 import '../data/lesson_data.dart';
+import 'form_label.dart';
 
 /// Settings model holding the user's practice selection.
 ///
@@ -8,6 +9,11 @@ class Settings {
   /// Map of data file identifier to set of form keys the user switched off
   /// e.g., {"nouns": {"genitive_singular", ...}, ...}
   final Map<String, Set<String>> disabledForms;
+
+  /// Data file identifier → axis id → the value codes the user switched off,
+  /// e.g. {"verbs": {"genus_verbi": {"pass"}}}. Switching off one value hides
+  /// every form that names it.
+  final Map<String, Map<String, Set<String>>> disabledFeatures;
 
   /// Map of data file identifier to set of type names the user switched off
   /// e.g., {"nouns": {"O-Deklination-maskulinum", ...}, ...}
@@ -24,31 +30,43 @@ class Settings {
 
   Settings({
     Map<String, Set<String>>? disabledForms,
+    Map<String, Map<String, Set<String>>>? disabledFeatures,
     Map<String, Set<String>>? disabledTypes,
     Map<String, String>? inputStrategyIds,
     Set<String>? deselectedWords,
   })  : disabledForms = disabledForms ?? {},
+        disabledFeatures = disabledFeatures ?? {},
         disabledTypes = disabledTypes ?? {},
         inputStrategyIds = inputStrategyIds ?? {},
         deselectedWords = deselectedWords ?? {};
 
   Settings copyWith({
     Map<String, Set<String>>? disabledForms,
+    Map<String, Map<String, Set<String>>>? disabledFeatures,
     Map<String, Set<String>>? disabledTypes,
     Map<String, String>? inputStrategyIds,
     Set<String>? deselectedWords,
   }) {
     return Settings(
       disabledForms: disabledForms ?? this.disabledForms,
+      disabledFeatures: disabledFeatures ?? this.disabledFeatures,
       disabledTypes: disabledTypes ?? this.disabledTypes,
       inputStrategyIds: inputStrategyIds ?? this.inputStrategyIds,
       deselectedWords: deselectedWords ?? this.deselectedWords,
     );
   }
 
-  /// Check if a form is enabled for a given data file
-  bool isFormEnabled(String dataFileId, String formKey) {
-    return !(disabledForms[dataFileId]?.contains(formKey) ?? false);
+  /// Whether one value of one axis is practised, e.g. the Passive voice
+  bool isFeatureEnabled(String dataFileId, String axisId, String code) {
+    return !(disabledFeatures[dataFileId]?[axisId]?.contains(code) ?? false);
+  }
+
+  /// Whether a form is practised: its key must be on, and every feature it
+  /// names must be on.
+  bool isFormEnabled(String dataFileId, FormKey formKey, FormLabel label) {
+    if (disabledForms[dataFileId]?.contains(formKey) ?? false) return false;
+    return label.features.entries
+        .every((f) => isFeatureEnabled(dataFileId, f.key, f.value));
   }
 
   /// Check if a type is enabled for a given data file
@@ -56,9 +74,19 @@ class Settings {
     return !(disabledTypes[dataFileId]?.contains(typeName) ?? false);
   }
 
-  /// The enabled subset of [allFormKeys] for a given data file
-  Set<String> enabledFormsOf(String dataFileId, List<String> allFormKeys) {
-    return allFormKeys.where((k) => isFormEnabled(dataFileId, k)).toSet();
+  /// The enabled subset of [allFormKeys], which [labels] describes in the same
+  /// order.
+  Set<FormKey> enabledFormsOf(
+    String dataFileId,
+    List<FormKey> allFormKeys,
+    List<FormLabel> labels,
+  ) {
+    assert(allFormKeys.length == labels.length);
+    return {
+      for (int i = 0; i < allFormKeys.length; i++)
+        if (isFormEnabled(dataFileId, allFormKeys[i], labels[i]))
+          allFormKeys[i],
+    };
   }
 
   /// Get the input strategy id for a data file (default: text_field)
@@ -80,11 +108,35 @@ class Settings {
     );
   }
 
-  /// Enable every form for a given data file
+  /// Toggle one axis value for a given data file
+  Settings toggleFeature(String dataFileId, String axisId, String code) {
+    final next = {
+      for (final file in disabledFeatures.entries)
+        file.key: {
+          for (final axis in file.value.entries)
+            axis.key: Set<String>.from(axis.value),
+        },
+    };
+    final codes = next
+        .putIfAbsent(dataFileId, () => {})
+        .putIfAbsent(axisId, () => <String>{});
+    if (!codes.remove(code)) {
+      codes.add(code);
+    }
+    return copyWith(disabledFeatures: next);
+  }
+
+  /// Enable every form for a given data file, by key and by feature
   Settings enableAllForms(String dataFileId) {
     final newDisabledForms = Map<String, Set<String>>.from(disabledForms);
     newDisabledForms.remove(dataFileId);
-    return copyWith(disabledForms: newDisabledForms);
+    final newDisabledFeatures =
+        Map<String, Map<String, Set<String>>>.from(disabledFeatures);
+    newDisabledFeatures.remove(dataFileId);
+    return copyWith(
+      disabledForms: newDisabledForms,
+      disabledFeatures: newDisabledFeatures,
+    );
   }
 
   /// Toggle a type's enabled state for a given data file
@@ -155,6 +207,12 @@ class Settings {
       'disabledForms': disabledForms.map(
         (key, value) => MapEntry(key, value.toList()),
       ),
+      'disabledFeatures': disabledFeatures.map(
+        (file, axes) => MapEntry(
+          file,
+          axes.map((axis, codes) => MapEntry(axis, codes.toList())),
+        ),
+      ),
       'disabledTypes': disabledTypes.map(
         (key, value) => MapEntry(key, value.toList()),
       ),
@@ -166,6 +224,7 @@ class Settings {
   /// Create from JSON
   factory Settings.fromJson(Map<String, dynamic> json) {
     final disabledFormsMap = json['disabledForms'] as Map<String, dynamic>?;
+    final featureMap = json['disabledFeatures'] as Map<String, dynamic>?;
     final disabledTypesMap = json['disabledTypes'] as Map<String, dynamic>?;
     final strategyMap = json['inputStrategyIds'] as Map<String, dynamic>?;
     final wordList = json['deselectedWords'] as List<dynamic>?;
@@ -173,6 +232,16 @@ class Settings {
     return Settings(
       disabledForms: disabledFormsMap?.map(
             (key, value) => MapEntry(key, Set<String>.from(value as List)),
+          ) ??
+          {},
+      disabledFeatures: featureMap?.map(
+            (file, axes) => MapEntry(
+              file,
+              (axes as Map<String, dynamic>).map(
+                (axis, codes) =>
+                    MapEntry(axis, Set<String>.from(codes as List)),
+              ),
+            ),
           ) ??
           {},
       disabledTypes: disabledTypesMap?.map(

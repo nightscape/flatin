@@ -8,6 +8,8 @@ import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/providers/lesson_provider.dart';
 import 'package:latin_practice/providers/settings_provider.dart';
 
+import 'support/test_axes.dart';
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -26,12 +28,18 @@ void main() {
 
     final second = ProviderContainer();
     final loaded = await second.read(settingsProvider.future);
-    expect(loaded.isFormEnabled('nouns', 'genitive_singular'), isFalse);
+    expect(
+      loaded.isFormEnabled('nouns', 'genitive_singular', nounLabel('gen', 'sg')),
+      isFalse,
+    );
     expect(loaded.isTypeEnabled('nouns', 'A-Deklination'), isFalse);
     expect(loaded.isWordSelected(word), isFalse);
     // Entries that appear in the YAML later are not in the stored disabled
     // sets, so they are on.
-    expect(loaded.isFormEnabled('nouns', 'brand_new_form'), isTrue);
+    expect(
+      loaded.isFormEnabled('nouns', 'brand_new_form', nounLabel('nom', 'pl')),
+      isTrue,
+    );
     expect(loaded.isTypeEnabled('nouns', 'Brand-New-Deklination'), isTrue);
     expect(loaded.isWordSelected('brandnovus'), isTrue);
     second.dispose();

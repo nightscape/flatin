@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:fsrs/fsrs.dart';
+import '../models/derivation.dart' show norm;
 import '../models/practice_item.dart';
 import '../models/settings.dart';
 import '../providers/settings_provider.dart';
@@ -9,6 +10,101 @@ import '../providers/fsrs_provider.dart';
 import '../widgets/app_drawer.dart';
 import '../widgets/explanation_lines.dart';
 import 'dart:math';
+
+/// The pick that says "this form has no value on that axis", e.g. the Person
+/// of an Infinitiv.
+const String absentValue = '';
+
+/// The dropdowns the classification screen shows for one item: one per axis
+/// whose value varies among the forms the learner may be asked about. An axis
+/// the enabled forms agree on is not asked, it is [fixed].
+class Selectors {
+  final Axes axes;
+
+  /// The axis ids with a dropdown, in axis order.
+  final List<String> sections;
+
+  /// Per shown axis, the codes it offers in axis order; [absentValue] comes
+  /// first when some enabled form has no value on that axis.
+  final Map<String, List<String>> options;
+
+  /// Axis id → the single code every enabled form has; part of every pick.
+  final Map<String, String> fixed;
+
+  const Selectors({
+    required this.axes,
+    required this.sections,
+    required this.options,
+    required this.fixed,
+  });
+
+  /// The text of one option: the axis value's own text, never a label override
+  /// (S17), so the Tempus dropdown reads "Futur I" under an Infinitiv too.
+  String optionText(String section, String code) =>
+      code == absentValue ? '—' : axes.byId(section).display(code);
+
+  bool isComplete(Map<String, String?> picks) =>
+      sections.every((section) => picks[section] != null);
+
+  /// The label of [labels] that [picks] names, or null if there is none.
+  FormLabel? labelFor(Map<String, String?> picks, List<FormLabel> labels) {
+    assert(isComplete(picks));
+    final features = {
+      ...fixed,
+      for (final section in sections)
+        if (picks[section] != absentValue) section: picks[section]!,
+    };
+    final key = axes.formatKey(features);
+    for (final label in labels) {
+      if (label.key == key) return label;
+    }
+    return null;
+  }
+
+  /// A pick in the words of the dropdowns, e.g. "Futur I 3. Person Singular".
+  String textOf(Map<String, String?> picks) => [
+        for (final section in sections)
+          if (picks[section] != absentValue)
+            optionText(section, picks[section]!),
+      ].join(' ');
+
+  /// [label] in the words of the dropdowns.
+  String textOfLabel(FormLabel label) => textOf({
+        for (final section in sections)
+          section: label.features[section] ?? absentValue,
+      });
+}
+
+/// The selectors for the forms the learner may be asked about.
+Selectors selectorsFor(List<FormLabel> enabledLabels) {
+  assert(enabledLabels.isNotEmpty);
+  final axes = enabledLabels.first.axes;
+  final sections = <String>[];
+  final options = <String, List<String>>{};
+  final fixed = <String, String>{};
+
+  for (final axis in axes.axes) {
+    final used = {
+      for (final label in enabledLabels) label.features[axis.id] ?? absentValue,
+    };
+    if (used.length == 1) {
+      if (used.single != absentValue) fixed[axis.id] = used.single;
+      continue;
+    }
+    sections.add(axis.id);
+    options[axis.id] = [
+      if (used.contains(absentValue)) absentValue,
+      ...axis.codes.where(used.contains),
+    ];
+  }
+
+  return Selectors(
+    axes: axes,
+    sections: sections,
+    options: options,
+    fixed: fixed,
+  );
+}
 
 class WordClassificationScreen extends ConsumerStatefulWidget {
   /// Test seam: when given, these replace the random item and form pick.
@@ -94,8 +190,11 @@ class _WordClassificationScreenState
       _isNoun = item.dataFileId == 'nouns';
 
       // Filter forms based on settings
-      final enabledForms =
-          settings.enabledFormsOf(item.dataFileId, item.formOrder);
+      final enabledForms = settings.enabledFormsOf(
+        item.dataFileId,
+        item.formOrder,
+        item.formLabels,
+      );
       final filteredData = item.filterForms(enabledForms);
 
       if (filteredData.forms.isEmpty) {
@@ -116,23 +215,18 @@ class _WordClassificationScreenState
       _correctFormIndices = [];
       _correctAnswers = [];
 
+      // Every enabled form that the shown spelling can stand for
       for (int i = 0; i < item.forms.length; i++) {
         final formKey = item.formOrder[i];
-        // Only include forms that are enabled in settings
-        if (item.forms[i] == _displayedWord && enabledForms.contains(formKey)) {
+        if (!enabledForms.contains(formKey)) continue;
+        if (item.acceptedForms[i].any((f) => norm(f) == norm(_displayedWord!))) {
           _correctFormIndices.add(i);
           _correctAnswers.add(item.formLabels[i]);
         }
       }
 
-      // Initialize selected answers with one empty combination
-      final emptyCombination = <String, String?>{};
-      for (final section in _sectionsOf(item)) {
-        emptyCombination[section] = null;
-      }
-      _selectedAnswers = [emptyCombination];
-
       _currentItem = item;
+      _selectedAnswers = [_emptyCombination()];
     } catch (e) {
       print('Error loading word: $e');
     } finally {
@@ -145,24 +239,15 @@ class _WordClassificationScreenState
   void _checkAnswers() {
     if (_currentItem == null || _correctAnswers.isEmpty) return;
 
-    // Check if at least one combination is fully selected
-    bool atLeastOneComplete = _selectedAnswers.any(
-      (combination) =>
-          _sections.every((section) => combination[section] != null),
-    );
-
-    if (!atLeastOneComplete) return;
+    final selectors = _selectors;
+    if (!_selectedAnswers.any(selectors.isComplete)) return;
 
     // Count correct and incorrect combinations
     int correctSelected = 0;
     int incorrectSelected = 0;
 
     for (final combination in _selectedAnswers) {
-      // Only check complete combinations
-      final isComplete =
-          _sections.every((section) => combination[section] != null);
-
-      if (!isComplete) continue;
+      if (!selectors.isComplete(combination)) continue;
 
       final formLabel = _combinationToFormLabel(combination);
       if (formLabel != null) {
@@ -226,38 +311,25 @@ class _WordClassificationScreenState
     _loadRandomWord();
   }
 
-  /// The feature axes of [item], in the order the selectors appear.
-  static List<String> _sectionsOf(PracticeItem item) =>
-      item.formLabels.first.axes.axes.map((axis) => axis.id).toList();
-
-  List<String> get _sections => _sectionsOf(_currentItem!);
-
-  /// The value texts a selector offers, in the order the enabled forms first
-  /// name them.
-  List<String> _getOptionsForSection(String section) {
-    if (_currentItem == null) return [];
-
-    // Filter form labels based on settings
+  /// The form keys the settings leave on for [item].
+  Set<String> _enabledFormsOf(PracticeItem item) {
     final settingsValue = ref.read(settingsProvider);
-    Settings? settings;
-    if (settingsValue is AsyncData<Settings>) {
-      settings = settingsValue.value;
+    if (settingsValue is! AsyncData<Settings>) {
+      return Set<String>.from(item.formOrder);
     }
-    final enabledForms = settings?.enabledFormsOf(
-          _currentItem!.dataFileId,
-          _currentItem!.formOrder,
-        ) ??
-        Set<String>.from(_currentItem!.formOrder);
-    final filteredData = _currentItem!.filterForms(enabledForms);
-    final availableFormLabels = filteredData.labels;
-
-    final options = <String>[];
-    for (final label in availableFormLabels) {
-      final text = label.display(section);
-      if (text != null && !options.contains(text)) options.add(text);
-    }
-    return options;
+    return settingsValue.value
+        .enabledFormsOf(item.dataFileId, item.formOrder, item.formLabels);
   }
+
+  /// The labels the learner may be asked about right now.
+  List<FormLabel> get _enabledLabels =>
+      _currentItem!.filterForms(_enabledFormsOf(_currentItem!)).labels;
+
+  Selectors get _selectors => selectorsFor(_enabledLabels);
+
+  Map<String, String?> _emptyCombination() => {
+        for (final section in _selectors.sections) section: null,
+      };
 
   void _nextWord() {
     setState(() {
@@ -267,24 +339,9 @@ class _WordClassificationScreenState
     _loadRandomWord();
   }
 
-  /// Convert a combination Map to FormLabel for comparison
-  FormLabel? _combinationToFormLabel(Map<String, String?> combination) {
-    if (_currentItem == null) return null;
-
-    // Find matching FormLabel
-    for (final label in _currentItem!.formLabels) {
-      if (_sections.every(
-        (section) => label.display(section) == combination[section],
-      )) {
-        return label;
-      }
-    }
-    return null;
-  }
-
-  /// Format FormLabel for display (e.g., "Nominativ Plural" or "Präsens 1. Person Singular")
-  String _formatFormLabel(FormLabel label) =>
-      _sections.map(label.display).nonNulls.join(' ');
+  /// The form the learner picked, or null if the item has no such form.
+  FormLabel? _combinationToFormLabel(Map<String, String?> combination) =>
+      _selectors.labelFor(combination, _currentItem!.formLabels);
 
   /// Check if a combination is correct
   bool _isCombinationCorrect(Map<String, String?> combination) {
@@ -295,14 +352,9 @@ class _WordClassificationScreenState
   /// Complete combinations the learner got wrong, including those that map to
   /// no label at all.
   List<Map<String, String?>> get _wrongCombinations => _selectedAnswers
-      .where((combination) =>
-          _sections.every((section) => combination[section] != null))
+      .where(_selectors.isComplete)
       .where((combination) => !_isCombinationCorrect(combination))
       .toList();
-
-  /// A combination as the screen shows it, e.g. "Vokativ Plural".
-  String _combinationText(Map<String, String?> combination) =>
-      _sections.map((section) => combination[section]!).join(' ');
 
   Widget _buildExplanationBox(bool isMobile, double horizontalPadding) {
     final item = _currentItem!;
@@ -332,7 +384,7 @@ class _WordClassificationScreenState
                 explainer.pickedLabel(
                   item,
                   _combinationToFormLabel(combination),
-                  _combinationText(combination),
+                  _selectors.textOf(combination),
                 ),
               ]),
             ),
@@ -346,10 +398,12 @@ class _WordClassificationScreenState
   Widget _buildCombinationSelector(int index, bool isMobile) {
     if (_currentItem == null) return const SizedBox();
 
+    final selectors = _selectors;
     final combination = _selectedAnswers[index];
-    final isCorrect = _isChecked && _isCombinationCorrect(combination);
-    final isIncorrect =
-        _isChecked && !isCorrect && combination.values.every((v) => v != null);
+    final isComplete = selectors.isComplete(combination);
+    final isCorrect =
+        _isChecked && isComplete && _isCombinationCorrect(combination);
+    final isIncorrect = _isChecked && !isCorrect && isComplete;
 
     return Container(
       margin: EdgeInsets.only(bottom: isMobile ? 12 : 16),
@@ -372,19 +426,15 @@ class _WordClassificationScreenState
             child: Wrap(
               spacing: isMobile ? 8 : 12,
               runSpacing: isMobile ? 8 : 12,
-              children: _sections.map((section) {
-                final options = _getOptionsForSection(section);
-                final selectedValue = combination[section];
-
+              children: selectors.sections.map((section) {
                 return SizedBox(
                   width: isMobile ? double.infinity : 150,
                   child: DropdownButtonFormField<String>(
+                    key: Key('classification.$index.$section'),
                     isExpanded: true,
-                    value: selectedValue,
+                    value: combination[section],
                     decoration: InputDecoration(
-                      labelText: _currentItem!.formLabels.first.axes
-                          .byId(section)
-                          .name,
+                      labelText: selectors.axes.byId(section).name,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -398,10 +448,10 @@ class _WordClassificationScreenState
                         value: null,
                         child: Text('--'),
                       ),
-                      ...options.map(
-                        (option) => DropdownMenuItem<String>(
-                          value: option,
-                          child: Text(option),
+                      ...selectors.options[section]!.map(
+                        (code) => DropdownMenuItem<String>(
+                          value: code,
+                          child: Text(selectors.optionText(section, code)),
                         ),
                       ),
                     ],
@@ -448,6 +498,7 @@ class _WordClassificationScreenState
         final enabledForms = settings.enabledFormsOf(
           _currentItem!.dataFileId,
           _currentItem!.formOrder,
+          _currentItem!.formLabels,
         );
 
         // Check if any of the current forms are still enabled
@@ -578,11 +629,7 @@ class _WordClassificationScreenState
                             child: ElevatedButton.icon(
                               onPressed: () {
                                 setState(() {
-                                  final newCombination = <String, String?>{};
-                                  for (final section in _sections) {
-                                    newCombination[section] = null;
-                                  }
-                                  _selectedAnswers.add(newCombination);
+                                  _selectedAnswers.add(_emptyCombination());
                                 });
                               },
                               icon: const Icon(Icons.add),
@@ -648,15 +695,11 @@ class _WordClassificationScreenState
                             spacing: isMobile ? 6 : 8,
                             runSpacing: isMobile ? 6 : 8,
                             children: _correctAnswers.map((label) {
-                              // Check if this combination was selected
-                              final wasSelected = _selectedAnswers.any((
-                                combination,
-                              ) {
-                                final formLabel = _combinationToFormLabel(
-                                  combination,
-                                );
-                                return formLabel == label;
-                              });
+                              final wasSelected = _selectedAnswers
+                                  .where(_selectors.isComplete)
+                                  .any((combination) =>
+                                      _combinationToFormLabel(combination) ==
+                                      label);
 
                               return Container(
                                 padding: EdgeInsets.symmetric(
@@ -692,7 +735,7 @@ class _WordClassificationScreenState
                                       ),
                                     SizedBox(width: isMobile ? 4 : 6),
                                     Text(
-                                      _formatFormLabel(label),
+                                      _selectors.textOfLabel(label),
                                       style: TextStyle(
                                         fontSize: isMobile ? 12.0 : 14.0,
                                         fontWeight: wasSelected
@@ -827,13 +870,7 @@ class _WordClassificationScreenState
                               ElevatedButton(
                                 key: const Key('wordClassification.check.button'),
                                 onPressed:
-                                    _currentItem != null &&
-                                        _selectedAnswers.any(
-                                          (combination) => _sections.every(
-                                            (section) =>
-                                                combination[section] != null,
-                                          ),
-                                        )
+                                    _selectedAnswers.any(_selectors.isComplete)
                                     ? _checkAnswers
                                     : null,
                                 style: ElevatedButton.styleFrom(

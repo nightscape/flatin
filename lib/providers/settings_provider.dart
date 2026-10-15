@@ -108,6 +108,18 @@ class SettingsNotifier extends _$SettingsNotifier {
     await _saveSettings(newSettings);
   }
 
+  /// Toggle one axis value, e.g. the Passive voice of the verbs
+  Future<void> toggleFeature(
+    String dataFileId,
+    String axisId,
+    String code,
+  ) async {
+    final currentSettings = await future;
+    final newSettings = currentSettings.toggleFeature(dataFileId, axisId, code);
+    state = AsyncValue.data(newSettings);
+    await _saveSettings(newSettings);
+  }
+
   /// Enable all forms for a data file
   Future<void> enableAllForms(String dataFileId) async {
     final currentSettings = await future;
@@ -130,15 +142,6 @@ class SettingsNotifier extends _$SettingsNotifier {
     final newSettings = currentSettings.enableAllTypes(dataFileId);
     state = AsyncValue.data(newSettings);
     await _saveSettings(newSettings);
-  }
-
-  /// Check if a form is enabled
-  bool isFormEnabled(String dataFileId, String formKey) {
-    final settingsValue = state;
-    if (settingsValue is! AsyncData<Settings>) {
-      return true;
-    }
-    return settingsValue.value.isFormEnabled(dataFileId, formKey);
   }
 
   /// Set the input strategy for a data file

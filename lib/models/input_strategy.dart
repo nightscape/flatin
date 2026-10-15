@@ -2,6 +2,19 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+import 'derivation.dart' show norm;
+
+/// The spellings of [forms] in order, dropping every one that only differs
+/// from an earlier one in its macrons: the dropdown must not ask the learner
+/// to tell two spellings of the same word apart.
+List<String> _firstSpellings(Iterable<String> forms) {
+  final seen = <String>{};
+  return [
+    for (final form in forms)
+      if (seen.add(norm(form))) form,
+  ];
+}
+
 /// All data a strategy might need to render its input widget.
 class InputContext {
   final int index;
@@ -85,7 +98,7 @@ class AllFormsDropdownStrategy extends InputStrategy {
 
   @override
   Widget buildInput(InputContext ctx) {
-    final options = ctx.allForms.toSet().toList()..sort();
+    final options = _firstSpellings(ctx.allForms)..sort();
     return _DropdownInput(
       options: options,
       currentValue: ctx.currentValue,
@@ -108,8 +121,9 @@ class DistractorDropdownStrategy extends InputStrategy {
 
   @override
   Widget buildInput(InputContext ctx) {
-    final distractors =
-        ctx.allForms.where((f) => f != ctx.correctAnswer).toSet().toList();
+    final distractors = _firstSpellings(
+      ctx.allForms.where((f) => norm(f) != norm(ctx.correctAnswer)),
+    );
     distractors.shuffle(Random(ctx.correctAnswer.hashCode ^ ctx.index));
     final options = [ctx.correctAnswer, ...distractors.take(3)];
     options.shuffle(Random(ctx.index * 37 + ctx.correctAnswer.length));
@@ -141,13 +155,15 @@ class RegularFormDistractorStrategy extends InputStrategy {
 
     // Add the inferred (regular) form if it differs from the correct answer
     final inferredForm = ctx.inferredForms[ctx.index];
-    if (inferredForm.toLowerCase() != ctx.correctAnswer.toLowerCase()) {
+    if (norm(inferredForm) != norm(ctx.correctAnswer)) {
       options.add(inferredForm);
     }
 
     // Fill up to 4 options with other forms
-    final others =
-        ctx.allForms.where((f) => !options.contains(f)).toSet().toList();
+    final taken = options.map(norm).toSet();
+    final others = _firstSpellings(
+      ctx.allForms.where((f) => !taken.contains(norm(f))),
+    );
     others.shuffle(Random(ctx.correctAnswer.hashCode ^ ctx.index));
     for (final o in others) {
       if (options.length >= 4) break;

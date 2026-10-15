@@ -49,23 +49,25 @@ class PracticeNotifier extends _$PracticeNotifier {
     state = state.copyWith(isTranslationVisible: !state.isTranslationVisible);
   }
 
+  /// Grades [userAnswers], which answer the forms [formKeys] in the same order.
+  ///
+  /// An answer counts as right when the item accepts it, so a spelling without
+  /// macrons passes; the screen then shows the marked spelling.
   void checkAnswers(
     List<String> userAnswers,
-    List<String> correctAnswers, {
+    List<FormKey> formKeys, {
     required String? selectedTranslation,
     required String correctTranslation,
   }) {
+    assert(userAnswers.length == formKeys.length);
     final results = <bool?>[];
     for (int i = 0; i < userAnswers.length; i++) {
-      final userAnswer = userAnswers[i].trim().toLowerCase();
-      final correctAnswer = correctAnswers[i].toLowerCase();
-
-      // Only validate non-empty fields
-      if (userAnswer.isNotEmpty) {
-        results.add(userAnswer == correctAnswer);
-      } else {
+      final userAnswer = userAnswers[i].trim();
+      if (userAnswer.isEmpty) {
         results.add(null);
+        continue;
       }
+      results.add(item.accepts(item.formOrder.indexOf(formKeys[i]), userAnswer));
     }
 
     final translationCorrect = selectedTranslation == correctTranslation;

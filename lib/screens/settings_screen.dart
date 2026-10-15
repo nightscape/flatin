@@ -196,8 +196,11 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
     return settingsAsync.when(
       data: (settings) {
+        final labels = [
+          for (final key in metadata.formOrder) metadata.formLabelsByKey[key]!,
+        ];
         final enabledForms =
-            settings.enabledFormsOf(dataFileId, metadata.formOrder);
+            settings.enabledFormsOf(dataFileId, metadata.formOrder, labels);
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -342,6 +345,63 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               }),
             ],
             Divider(height: isMobile ? 16 : 24),
+            // Feature filter section: one switch per axis value, e.g. Passiv
+            Padding(
+              padding: EdgeInsets.only(bottom: isMobile ? 4.0 : 8.0),
+              child: Text(
+                FlutterI18n.translate(context, 'settings.features'),
+                style: TextStyle(
+                  fontSize: isMobile ? 16.0 : 18.0,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+            ...metadata.axes.axes.expand(
+              (axis) => [
+                Padding(
+                  padding: EdgeInsets.only(top: isMobile ? 4.0 : 8.0),
+                  child: Text(
+                    axis.name,
+                    style: TextStyle(
+                      fontSize: isMobile ? 14.0 : 16.0,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+                ...axis.values.map(
+                  (value) => CheckboxListTile(
+                    key: Key('feature.$dataFileId.${axis.id}.${value.$1}'),
+                    contentPadding: EdgeInsets.only(
+                      left: isMobile ? 20.0 : 16.0,
+                      right: isMobile ? 4.0 : 0.0,
+                    ),
+                    title: Text(
+                      value.$2,
+                      style: TextStyle(
+                        fontSize: isMobile ? 14.0 : 16.0,
+                        color: Colors.black,
+                      ),
+                    ),
+                    value: settings.isFeatureEnabled(
+                      dataFileId,
+                      axis.id,
+                      value.$1,
+                    ),
+                    onChanged: (_) {
+                      ref
+                          .read(settingsProvider.notifier)
+                          .toggleFeature(dataFileId, axis.id, value.$1);
+                    },
+                    activeColor: const Color(0xFFD0D0D0),
+                    checkColor: Colors.black,
+                    dense: true,
+                  ),
+                ),
+              ],
+            ),
+            Divider(height: isMobile ? 16 : 24),
             // Form filter section
             Padding(
               padding: EdgeInsets.only(bottom: isMobile ? 4.0 : 8.0),
@@ -359,6 +419,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               final isEnabled = enabledForms.contains(formKey);
 
               return CheckboxListTile(
+                key: Key('form.$dataFileId.$formKey'),
                 contentPadding: EdgeInsets.symmetric(
                   horizontal: isMobile ? 4.0 : 0.0,
                   vertical: isMobile ? 4.0 : 0.0,

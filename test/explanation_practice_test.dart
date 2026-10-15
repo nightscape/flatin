@@ -37,8 +37,12 @@ void main() {
     expect(wrongRow, findsOneWidget);
     expect(correctRow, findsNothing);
     expect(emptyRow, findsNothing);
-    expect(find.byType(ExplanationLines), findsOneWidget);
+    // The right row gets the spelling line instead of a diagnosis.
+    expect(find.byKey(const Key('macrons.nominative_singular')),
+        findsOneWidget);
+    expect(find.byType(ExplanationLines), findsNWidgets(2));
     expect(spy.wrongAnswerCalls, [('genitive_singular', 'dominis')]);
+    expect(spy.correctAnswerCalls, [('nominative_singular', 'dominus')]);
     expect(
       find.text('Du hast dominis geschrieben – das passt zu keiner '
           'bekannten Form'),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:fsrs/fsrs.dart';
+import '../data/explanation.dart' show ExplanationLine;
 import '../models/practice_item.dart';
 import '../models/input_strategy.dart';
 import '../providers/practice_providers.dart';
@@ -51,7 +52,7 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
     final notifier = ref.read(practiceProvider(widget.item).notifier);
     notifier.checkAnswers(
       _userAnswers,
-      _filteredForms,
+      _filteredKeys,
       selectedTranslation: _selectedTranslation,
       correctTranslation: widget.item.translation,
     );
@@ -191,7 +192,11 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
     // Filter forms based on settings
     final filteredData = settingsAsync.when(
       data: (settings) => widget.item.filterForms(
-        settings.enabledFormsOf(widget.item.dataFileId, widget.item.formOrder),
+        settings.enabledFormsOf(
+          widget.item.dataFileId,
+          widget.item.formOrder,
+          widget.item.formLabels,
+        ),
       ),
       loading: () =>
           widget.item.filterForms(Set<String>.from(widget.item.formOrder)),
@@ -360,6 +365,15 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
                           },
                     children: List.generate(_filteredForms.length, (index) {
                       final correctAnswer = _filteredForms[index];
+                      final correctLines = state.isChecked &&
+                              index < state.validationResults.length &&
+                              state.validationResults[index] == true
+                          ? ref.watch(explainerProvider).correctAnswer(
+                                widget.item,
+                                _filteredKeys[index],
+                                _userAnswers[index],
+                              )
+                          : const <ExplanationLine>[];
                       return TableRow(
                         children: [
                           // Left column - Form label
@@ -445,6 +459,12 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
                                           _filteredKeys[index],
                                           _userAnswers[index],
                                         ),
+                                  ),
+                                if (correctLines.isNotEmpty)
+                                  ExplanationLines(
+                                    key:
+                                        Key('macrons.${_filteredKeys[index]}'),
+                                    correctLines,
                                   ),
                               ],
                             ),
