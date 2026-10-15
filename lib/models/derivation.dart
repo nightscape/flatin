@@ -3,6 +3,11 @@
 /// the answer.
 library;
 
+import '../data/lesson_data.dart' show normalizeDiacritics;
+
+/// The comparison form of a Latin word: trimmed, lower case, macron-free.
+String norm(String text) => normalizeDiacritics(text.trim().toLowerCase());
+
 /// How the item's type was established.
 sealed class TypeRecognition {
   const TypeRecognition();
@@ -109,7 +114,8 @@ final class IrregularForm extends FormDerivation {
 
 /// The endings of one YAML file, shared by all its items.
 final class Grammar {
-  /// Resolved (`inherits_from` applied) type → form key → "{stem}" template.
+  /// Type → form key → "{stem}" template. A type that inherits keeps only the
+  /// endings it changes, so a diagnosis names the parent rather than both.
   final Map<String, Map<String, String>> templatesByType;
 
   const Grammar(this.templatesByType);
@@ -134,5 +140,13 @@ final class Derivation {
     required this.forms,
     required this.grammar,
   })  : assert(forms.entries.every((e) => e.key == e.value.formKey)),
-        assert(stem != null || !forms.values.any((f) => f is GeneratedForm));
+        assert(stem != null || !forms.values.any((f) => f is GeneratedForm)),
+        assert(forms.values.every((f) => switch (f) {
+              GeneratedForm(:final ending, :final result) =>
+                norm(stem!.stem + ending) == norm(result),
+              IrregularForm(regular: final r) => r == null ||
+                  (r.formKey == f.formKey &&
+                      norm(stem!.stem + r.ending) == norm(r.result)),
+              GivenForm() => true,
+            }));
 }

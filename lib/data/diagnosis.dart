@@ -1,3 +1,4 @@
+import '../models/derivation.dart';
 import '../models/practice_item.dart';
 
 /// What a wrong answer is, as far as the item's own derivation can tell.
@@ -47,5 +48,52 @@ final class NoMatch extends Diagnosis {
 /// Precondition: [answer] is non-empty and counts as wrong by the screen's
 /// check (`answer.trim().toLowerCase() != correct.toLowerCase()`).
 Diagnosis diagnose(PracticeItem item, String formKey, String answer) {
-  throw UnimplementedError('L1 logic lane');
+  final int index = item.formOrder.indexOf(formKey);
+  assert(index >= 0, '"$formKey" is not a form of "${item.translation}"');
+  final String correct = item.forms[index];
+  assert(answer.trim().isNotEmpty);
+  assert(answer.trim().toLowerCase() != correct.toLowerCase());
+
+  final String given = norm(answer);
+  final derivation = item.derivation;
+
+  if (given == norm(correct)) return const OnlyDiacritics();
+
+  final asked = derivation.forms[formKey]!;
+  if (asked is IrregularForm &&
+      asked.regular != null &&
+      given == norm(asked.regular!.result)) {
+    return const RegularInsteadOfIrregular();
+  }
+
+  final otherKeys = [
+    for (int j = 0; j < item.formOrder.length; j++)
+      if (j != index && norm(item.forms[j]) == given) item.formOrder[j],
+  ];
+  if (otherKeys.isNotEmpty) return OtherFormOfWord(otherKeys);
+
+  final stem = derivation.stem;
+  if (stem != null) {
+    final types = [
+      for (final entry in derivation.grammar.templatesByType.entries)
+        if (entry.key != derivation.type &&
+            entry.value[formKey] != null &&
+            norm(entry.value[formKey]!.replaceAll('{stem}', stem.stem)) ==
+                given)
+          entry.key,
+    ];
+    if (types.isNotEmpty) return EndingOfOtherType(types);
+
+    if (asked is GeneratedForm) {
+      final ending = norm(asked.ending);
+      if (given.endsWith(ending)) {
+        final usedStem = given.substring(0, given.length - ending.length);
+        if (usedStem.isNotEmpty && usedStem != stem.stem) {
+          return WrongStem(usedStem);
+        }
+      }
+    }
+  }
+
+  return const NoMatch();
 }

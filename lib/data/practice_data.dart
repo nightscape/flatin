@@ -2,6 +2,7 @@ import 'package:flutter/services.dart';
 import 'package:yaml/yaml.dart';
 import '../models/derivation.dart';
 import '../models/practice_item.dart';
+import 'lesson_data.dart' show normalizeDiacritics;
 
 /// Form metadata extracted from YAML
 class FormMetadata {
@@ -118,51 +119,38 @@ Future<FormMetadata> getFormMetadata(String assetPath) async {
   );
 }
 
-/// Normalize Latin diacritics (macrons) for comparison
-/// Removes macrons from vowels: ā→a, ē→e, ī→i, ō→o, ū→u
-String _normalizeDiacritics(String text) {
-  return text
-      .replaceAll('ā', 'a')
-      .replaceAll('ē', 'e')
-      .replaceAll('ī', 'i')
-      .replaceAll('ō', 'o')
-      .replaceAll('ū', 'u')
-      .replaceAll('Ā', 'A')
-      .replaceAll('Ē', 'E')
-      .replaceAll('Ī', 'I')
-      .replaceAll('Ō', 'O')
-      .replaceAll('Ū', 'U');
-}
-
-/// Extract stem from a word based on pattern definition
-String _extractStem(String word, String pattern) {
+/// Extract stem from a word based on pattern definition, with the suffix that
+/// was cut off.
+({String stem, String removedSuffix}) _extractStem(String word, String pattern) {
   // Pattern format: "remove_suffix:suffix1,suffix2,..."
-  if (pattern.startsWith('remove_suffix:')) {
-    final suffixes = pattern.substring('remove_suffix:'.length).split(',');
-    final normalizedWord = _normalizeDiacritics(word);
+  assert(pattern.startsWith('remove_suffix:'), 'unknown stem rule "$pattern"');
+  final suffixes = pattern.substring('remove_suffix:'.length).split(',');
+  final normalizedWord = normalizeDiacritics(word);
 
-    // Sort suffixes by length (longest first) to match longer suffixes before shorter ones
-    // This ensures "āre" is matched before "re" for words like "intrāre"
-    final sortedSuffixes = suffixes.toList()
-      ..sort((a, b) {
-        final normA = _normalizeDiacritics(a);
-        final normB = _normalizeDiacritics(b);
-        return normB.length.compareTo(normA.length); // Descending order
-      });
+  // Sort suffixes by length (longest first) to match longer suffixes before shorter ones
+  // This ensures "āre" is matched before "re" for words like "intrāre"
+  final sortedSuffixes = suffixes.toList()
+    ..sort((a, b) {
+      final normA = normalizeDiacritics(a);
+      final normB = normalizeDiacritics(b);
+      return normB.length.compareTo(normA.length); // Descending order
+    });
 
-    for (final suffix in sortedSuffixes) {
-      final normalizedSuffix = _normalizeDiacritics(suffix);
-      if (normalizedWord.endsWith(normalizedSuffix)) {
-        // Use the original suffix length (not normalized) to determine how many characters to remove
-        // This correctly handles macrons: "āre" is 3 chars, "re" is 2 chars
-        final suffixLength = suffix.length;
-        if (word.length >= suffixLength) {
-          return word.substring(0, word.length - suffixLength);
-        }
+  for (final suffix in sortedSuffixes) {
+    final normalizedSuffix = normalizeDiacritics(suffix);
+    if (normalizedWord.endsWith(normalizedSuffix)) {
+      // Use the original suffix length (not normalized) to determine how many characters to remove
+      // This correctly handles macrons: "āre" is 3 chars, "re" is 2 chars
+      final suffixLength = suffix.length;
+      if (word.length >= suffixLength) {
+        return (
+          stem: word.substring(0, word.length - suffixLength),
+          removedSuffix: suffix,
+        );
       }
     }
   }
-  return word; // Fallback: return word as-is
+  throw StateError('Stem rule "$pattern" matches no suffix of "$word"');
 }
 
 /// Generate a form from a stem using a pattern template
@@ -170,19 +158,20 @@ String _generateForm(String stem, String template) {
   return template.replaceAll('{stem}', stem);
 }
 
+/// The `type_inference` rule that a word matched.
+typedef RuleMatch = ({String sourceWord, String suffix, List<String> types});
+
 /// Generic type inference using rules from YAML
-/// Returns list of possible types based on word ending
+/// Returns the first matching rule, or null if no rule matches [word]
 /// [ruleSet] specifies which rule set to check (if null, checks all available rule sets)
 /// [availableRuleSets] is the list of rule set names available in the YAML
-List<String> _inferTypesFromRules(
+RuleMatch? _inferTypesFromRules(
   String word,
   Map<String, dynamic>? typeInferenceRules,
   List<String>? availableRuleSets, {
   String? ruleSet,
 }) {
-  final List<String> types = [];
-
-  if (typeInferenceRules == null || availableRuleSets == null) return types;
+  if (typeInferenceRules == null || availableRuleSets == null) return null;
 
   // Determine which rule sets to check
   final List<String> ruleSetsToCheck;
@@ -207,28 +196,91 @@ List<String> _inferTypesFromRules(
       final List<dynamic> ruleTypes = rule['types'] as List<dynamic>;
 
       // Check if word matches this rule (normalize diacritics for comparison)
-      final normalizedWord = _normalizeDiacritics(word);
-      final normalizedSuffix = _normalizeDiacritics(suffix);
+      final normalizedWord = normalizeDiacritics(word);
+      final normalizedSuffix = normalizeDiacritics(suffix);
       if (normalizedWord.endsWith(normalizedSuffix)) {
         if (minLength == null || word.length >= minLength) {
-          // Add all types from this rule
-          for (final type in ruleTypes) {
-            types.add(type as String);
-          }
           // First match wins for this rule set
-          break;
+          return (
+            sourceWord: word,
+            suffix: suffix,
+            types: ruleTypes.map((t) => t as String).toList(),
+          );
         }
       }
     }
+  }
 
-    // If we found types and we're checking a specific rule set, stop
-    // Otherwise continue to next rule set
-    if (types.isNotEmpty && ruleSet != null) {
-      break;
+  return null;
+}
+
+/// The item's possible types and, if a `type_inference` rule fired, that rule.
+///
+/// The rules run even when the item declares its types, so the trace can tell
+/// whether a rule agrees with the declared type.
+({List<String>? possibleTypes, RuleMatch? ruleMatch}) _recognizeType(
+  Map<String, dynamic> item,
+  Map<String, dynamic>? typeInferenceRules,
+  List<String>? typeInferenceRuleSets,
+) {
+  final String? word = item['word'] as String?;
+  final String? baseForm = item['base_form'] as String?;
+
+  RuleMatch? ruleMatch;
+  if (typeInferenceRules != null && typeInferenceRuleSets != null) {
+    // Determine which fields to check based on available rule sets
+    // If we have a single rule set (like 'rules'), check 'word' field
+    // If we have multiple rule sets (like 'infinitive_rules', 'first_person_rules'),
+    // check 'base_form' first, then 'word'
+    if (typeInferenceRuleSets.length == 1) {
+      if (word != null) {
+        ruleMatch = _inferTypesFromRules(
+          word,
+          typeInferenceRules,
+          typeInferenceRuleSets,
+        );
+      }
+    } else {
+      // Rule set names indicate which field to check
+      // (e.g. 'infinitive_rules' -> base_form, 'first_person_rules' -> word)
+      if (baseForm != null) {
+        final infinitiveRuleSet = typeInferenceRuleSets.firstWhere(
+          (rs) => rs.contains('infinitive') || rs.contains('base'),
+          orElse: () => typeInferenceRuleSets.first,
+        );
+        ruleMatch = _inferTypesFromRules(
+          baseForm,
+          typeInferenceRules,
+          typeInferenceRuleSets,
+          ruleSet: infinitiveRuleSet,
+        );
+      }
+      if (ruleMatch == null && word != null) {
+        final wordRuleSet = typeInferenceRuleSets.firstWhere(
+          (rs) =>
+              rs.contains('first_person') ||
+              rs.contains('word') ||
+              rs.contains('person'),
+          orElse: () => typeInferenceRuleSets.last,
+        );
+        ruleMatch = _inferTypesFromRules(
+          word,
+          typeInferenceRules,
+          typeInferenceRuleSets,
+          ruleSet: wordRuleSet,
+        );
+      }
     }
   }
 
-  return types;
+  final List<dynamic>? declared = item['possible_types'] as List<dynamic>?;
+  if (declared != null) {
+    return (
+      possibleTypes: declared.map((v) => v as String).toList(),
+      ruleMatch: ruleMatch,
+    );
+  }
+  return (possibleTypes: ruleMatch?.types, ruleMatch: ruleMatch);
 }
 
 /// Resolve a type pattern, following inherits_from chains
@@ -251,6 +303,18 @@ Map<String, dynamic>? _resolvePattern(
   return {...parentPattern, ...pattern};
 }
 
+/// The template [type]'s parent chain gives for [formKey], if any.
+String? _inheritedTemplate(
+  String type,
+  String formKey,
+  Map<String, dynamic> typePatterns,
+) {
+  final pattern = typePatterns[type] as Map<String, dynamic>?;
+  final parentType = pattern?['inherits_from'] as String?;
+  if (parentType == null) return null;
+  return _resolvePattern(parentType, typePatterns)?[formKey] as String?;
+}
+
 /// Infer forms for an item based on type patterns
 /// [defaultWordForm] is the form key that the 'word' field represents (e.g., 'nominative_singular', 'first_person_singular')
 /// This function is public to allow testing inference logic.
@@ -259,22 +323,44 @@ Map<String, String> inferForms(
   Map<String, dynamic> typePatterns,
   List<String> formOrder,
   String? defaultWordForm,
+) =>
+    deriveForms(item, typePatterns, formOrder, defaultWordForm).forms;
+
+/// Infer forms for an item and record how each one was built.
+///
+/// [generated] holds a [GeneratedForm] for every key that a template produced;
+/// the word form itself and keys without a template are absent.
+({
+  Map<String, String> forms,
+  StemDerivation? stem,
+  Map<String, GeneratedForm> generated,
+}) deriveForms(
+  Map<String, dynamic> item,
+  Map<String, dynamic> typePatterns,
+  List<String> formOrder,
+  String? defaultWordForm,
 ) {
+  const empty = (
+    forms: <String, String>{},
+    stem: null,
+    generated: <String, GeneratedForm>{},
+  );
+
   final String type = item['type'] as String;
   final Map<String, dynamic>? pattern = _resolvePattern(type, typePatterns);
 
   if (pattern == null) {
-    return {};
+    return empty;
   }
 
   // Determine which form the 'word' field represents
   final String? wordForm = defaultWordForm;
   if (wordForm == null) {
     // Cannot infer forms without knowing what 'word' represents
-    return {};
+    return empty;
   }
 
-  String? stem;
+  StemDerivation? stem;
   String? baseWord = item['word'] as String?;
   String? baseForm = item['base_form'] as String?;
 
@@ -282,7 +368,12 @@ Map<String, String> inferForms(
   if (baseWord != null) {
     final String stemPattern = pattern['stem_extraction'] as String? ?? '';
     if (stemPattern.isNotEmpty) {
-      stem = _normalizeDiacritics(_extractStem(baseWord, stemPattern));
+      final cut = _extractStem(baseWord, stemPattern);
+      stem = StemDerivation(
+        sourceWord: baseWord,
+        removedSuffix: cut.removedSuffix,
+        stem: normalizeDiacritics(cut.stem),
+      );
     }
   }
 
@@ -300,9 +391,9 @@ Map<String, String> inferForms(
     }
 
     if (alternativeStemPattern != null && alternativeStemPattern.isNotEmpty) {
-      String alternativeStem = _extractStem(baseForm, alternativeStemPattern);
+      final altCut = _extractStem(baseForm, alternativeStemPattern);
       // Normalize the alternative stem to remove diacritics
-      alternativeStem = _normalizeDiacritics(alternativeStem);
+      final String alternativeStem = normalizeDiacritics(altCut.stem);
 
       // Try to reconstruct the base word from the alternative stem
       // This is pattern-specific: for verbs, infinitive stem + 'o' = first person singular
@@ -311,24 +402,31 @@ Map<String, String> inferForms(
           pattern['reconstruction_from_alternative_stem'] as String?;
       if (reconstructionPattern != null) {
         baseWord = reconstructionPattern.replaceAll('{stem}', alternativeStem);
-        // Now extract stem from reconstructed base word
-        final String stemPattern = pattern['stem_extraction'] as String? ?? '';
-        if (stemPattern.isNotEmpty) {
-          stem = _normalizeDiacritics(_extractStem(baseWord, stemPattern));
-        } else {
-          stem = alternativeStem;
-        }
+        // A pattern that reconstructs the word form always cuts the stem again
+        final cut = _extractStem(baseWord, pattern['stem_extraction'] as String);
+        stem = StemDerivation(
+          sourceWord: baseForm,
+          removedSuffix: altCut.removedSuffix,
+          reconstructedWord: baseWord,
+          reconstructedSuffix: cut.removedSuffix,
+          stem: normalizeDiacritics(cut.stem),
+        );
       } else {
-        // Fallback: use alternative stem directly
-        stem = alternativeStem;
+        // The alternative stem is the stem (consonant declension: regis → reg)
+        stem = StemDerivation(
+          sourceWord: baseForm,
+          removedSuffix: altCut.removedSuffix,
+          stem: alternativeStem,
+        );
       }
     }
   }
 
-  if (stem == null || baseWord == null) return {};
+  if (stem == null || baseWord == null) return empty;
 
   // Build forms map starting with the word form
   final Map<String, String> forms = {wordForm: baseWord};
+  final Map<String, GeneratedForm> generated = {};
 
   // Generate other forms from pattern
   for (final formKey in formOrder) {
@@ -336,11 +434,44 @@ Map<String, String> inferForms(
 
     final String? template = pattern[formKey] as String?;
     if (template != null) {
-      forms[formKey] = _generateForm(stem, template);
+      final String result = _generateForm(stem.stem, template);
+      forms[formKey] = result;
+      generated[formKey] = GeneratedForm(
+        formKey: formKey,
+        result: result,
+        ending: template.replaceAll('{stem}', ''),
+      );
     }
   }
 
-  return forms;
+  return (forms: forms, stem: stem, generated: generated);
+}
+
+/// How [result], the final value of [formKey], came about.
+///
+/// An explicit value that the rule also produces stays a [GeneratedForm]: the
+/// rule explains it.
+FormDerivation _classifyForm(
+  String formKey,
+  String result,
+  String? wordForm,
+  GeneratedForm? generated,
+) {
+  if (formKey == wordForm) {
+    return GivenForm(formKey: formKey, result: result);
+  }
+  if (generated != null && norm(result) == norm(generated.result)) {
+    return GeneratedForm(
+      formKey: formKey,
+      result: result,
+      ending: generated.ending,
+    );
+  }
+  return IrregularForm(
+    formKey: formKey,
+    result: result,
+    regular: generated,
+  );
 }
 
 /// Load practice items from a YAML file
@@ -395,6 +526,8 @@ Future<List<PracticeItem>> loadPracticeItems(String assetPath) async {
   final String dataFileId = dataFileIdValue;
 
   // The endings of this file: resolved templates per type, practised keys only.
+  // A type that inherits keeps only the endings it changes, so a diagnosis
+  // names the parent rule instead of both (R1).
   final grammar = Grammar({
     for (final type in typePatterns.keys)
       type: {
@@ -402,7 +535,8 @@ Future<List<PracticeItem>> loadPracticeItems(String assetPath) async {
             .entries)
           if (formOrder.contains(entry.key) &&
               entry.value is String &&
-              (entry.value as String).contains('{stem}'))
+              (entry.value as String).contains('{stem}') &&
+              entry.value != _inheritedTemplate(type, entry.key, typePatterns))
             entry.key: entry.value as String,
       },
   });
@@ -416,75 +550,12 @@ Future<List<PracticeItem>> loadPracticeItems(String assetPath) async {
     // Infer possible_types from word ending if not provided
     String? word = item['word'] as String?;
     final String? baseForm = item['base_form'] as String?;
-    List<String>? possibleTypes;
-
-    if (item['possible_types'] != null) {
-      final List<dynamic> possibleTypesList =
-          item['possible_types'] as List<dynamic>;
-      possibleTypes = possibleTypesList.map((v) => v as String).toList();
-    } else {
-      // Infer possible_types from word ending using YAML rules
-      if (typeInferenceRules != null && typeInferenceRuleSets != null) {
-        // Determine which fields to check based on available rule sets
-        // If we have a single rule set (like 'rules'), check 'word' field
-        // If we have multiple rule sets (like 'infinitive_rules', 'first_person_rules'),
-        // check 'base_form' first, then 'word'
-        if (typeInferenceRuleSets.length == 1) {
-          // Single rule set: check word field
-          if (word != null) {
-            final inferredTypes = _inferTypesFromRules(
-              word,
-              typeInferenceRules,
-              typeInferenceRuleSets,
-            );
-            if (inferredTypes.isNotEmpty) {
-              possibleTypes = inferredTypes;
-            }
-          }
-        } else {
-          // Multiple rule sets: check base_form first, then word
-          // Rule set names typically indicate which field to check
-          // (e.g., 'infinitive_rules' -> base_form, 'first_person_rules' -> word)
-          if (baseForm != null) {
-            // Find rule set that suggests infinitive/base_form
-            final infinitiveRuleSet = typeInferenceRuleSets.firstWhere(
-              (rs) => rs.contains('infinitive') || rs.contains('base'),
-              orElse: () => typeInferenceRuleSets.first,
-            );
-            final inferredTypes = _inferTypesFromRules(
-              baseForm,
-              typeInferenceRules,
-              typeInferenceRuleSets,
-              ruleSet: infinitiveRuleSet,
-            );
-            if (inferredTypes.isNotEmpty) {
-              possibleTypes = inferredTypes;
-            }
-          }
-          // If no match from base_form, try word field
-          if ((possibleTypes == null || possibleTypes.isEmpty) &&
-              word != null) {
-            // Find rule set that suggests word field (e.g., first_person_rules)
-            final wordRuleSet = typeInferenceRuleSets.firstWhere(
-              (rs) =>
-                  rs.contains('first_person') ||
-                  rs.contains('word') ||
-                  rs.contains('person'),
-              orElse: () => typeInferenceRuleSets.last,
-            );
-            final inferredTypes = _inferTypesFromRules(
-              word,
-              typeInferenceRules,
-              typeInferenceRuleSets,
-              ruleSet: wordRuleSet,
-            );
-            if (inferredTypes.isNotEmpty) {
-              possibleTypes = inferredTypes;
-            }
-          }
-        }
-      }
-    }
+    final recognized = _recognizeType(
+      item,
+      typeInferenceRules,
+      typeInferenceRuleSets,
+    );
+    final List<String>? possibleTypes = recognized.possibleTypes;
 
     // Infer type if not provided (use first from possible_types)
     String type = item['type'] as String? ?? '';
@@ -500,12 +571,13 @@ Future<List<PracticeItem>> loadPracticeItems(String assetPath) async {
 
     // Infer forms from type patterns
     final itemWithType = Map<String, dynamic>.from(item)..['type'] = type;
-    final inferredForms = inferForms(
+    final derived = deriveForms(
       itemWithType,
       typePatterns,
       formOrder,
       defaultWordForm,
     );
+    final inferredForms = derived.forms;
 
     // Start with inferred forms, then overlay explicit forms as overrides
     Map<String, dynamic> formsMap = inferredForms
@@ -554,15 +626,26 @@ Future<List<PracticeItem>> loadPracticeItems(String assetPath) async {
     final String? baseFormLabel =
         item['base_form_label'] as String? ?? defaultBaseFormLabel;
 
-    // Placeholder trace: the real one is produced by the inference itself (L1).
+    final ruleMatch = recognized.ruleMatch;
     final derivation = Derivation(
       type: type,
-      recognition: const TypeDeclared(),
+      // A rule is only shown when it agrees with the type that is practised.
+      recognition: ruleMatch != null && ruleMatch.types.contains(type)
+          ? TypeByRule(
+              sourceWord: ruleMatch.sourceWord,
+              suffix: ruleMatch.suffix,
+              candidateTypes: ruleMatch.types,
+            )
+          : const TypeDeclared(),
+      stem: derived.stem,
       forms: {
         for (int i = 0; i < itemFormOrder.length; i++)
-          itemFormOrder[i]: itemFormOrder[i] == wordForm
-              ? GivenForm(formKey: itemFormOrder[i], result: forms[i])
-              : IrregularForm(formKey: itemFormOrder[i], result: forms[i]),
+          itemFormOrder[i]: _classifyForm(
+            itemFormOrder[i],
+            forms[i],
+            wordForm,
+            derived.generated[itemFormOrder[i]],
+          ),
       },
       grammar: grammar,
     );
