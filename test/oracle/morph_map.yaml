@@ -1,0 +1,66 @@
+# How a Collatinus morph number becomes one of our feature keys.
+#
+# `morphos.en` gives every morph number 1-416 a text such as "perfect
+# indicative active 1st singular". Each word below contributes one axis value;
+# the words of a morph together make the feature bundle, and the data file's
+# axes order it into a key (S1). A morph whose text uses a word this file does
+# not list makes the oracle throw, so a Collatinus update cannot be read as a
+# wrong key.
+
+# Matched in the text before it is split into words.
+phrases:
+  future perfect: {tempus: fut2}
+
+words:
+  present: {tempus: praes}
+  imperfect: {tempus: impf}
+  future: {tempus: fut}
+  perfect: {tempus: perf}
+  pluperfect: {tempus: plusq}
+  indicative: {modus: ind}
+  subjunctive: {modus: konj}
+  imperative: {modus: imp}
+  infinitive: {modus: inf}
+  participle: {modus: part}
+  gerund: {modus: ger}
+  gerundive: {modus: gerv}
+  supine: {modus: sup}
+  active: {genus_verbi: akt}
+  passive: {genus_verbi: pass}
+  1st: {person: "1"}
+  2nd: {person: "2"}
+  3rd: {person: "3"}
+  singular: {numerus: sg}
+  plural: {numerus: pl}
+  nominative: {kasus: nom}
+  vocative: {kasus: vok}
+  accusative: {kasus: akk}
+  genitive: {kasus: gen}
+  dative: {kasus: dat}
+  ablative: {kasus: abl}
+  masculine: {genus: m}
+  feminine: {genus: f}
+  neuter: {genus: n}
+  comparative: {grad: komp}
+  superlative: {grad: sup}
+  positive: {grad: pos}
+  # "supine in -um" / "supine in -u"
+  in: {}
+  -um: {kasus: akk}
+  -u: {kasus: abl}
+
+# Morphs outside our axes.
+ignored:
+  413: locative
+  416: inv.
+
+# Comparison and the adverb only reach us through a separate Collatinus adverb
+# lemma (bĕnĕ, fortĭter, lībĕrē, ācrĭter), which the sample maps to the
+# adjective item. These morphs are therefore read from that second lemma only,
+# and never from the adjective's own lemma.
+adverb_morphs: [411, 412, 414]
+adverb_features: {adverb: adv}
+
+# Axes a modus of ours does not carry, although the Collatinus text names them.
+drop_axes:
+  gerv: [tempus]

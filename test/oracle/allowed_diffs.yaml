@@ -1,0 +1,70 @@
+# The form differences the oracle accepts, with the reason each one is the
+# Collatinus data's and not ours. Any other form difference fails the run;
+# an entry that no longer happens fails it too. Matching is on item, key and
+# the two spellings as written here.
+
+- item: bonus
+  key: adv.komp
+  ours: "melius"
+  theirs: "bĕnĭŭs"
+  reason: "the Collatinus model `adve` grades the adverb regularly and ignores the suppletive radicals of its lemma"
+- item: bonus
+  key: adv.sup
+  ours: "optimē / optumē"
+  theirs: "bĕnīssĭmē"
+  reason: "the Collatinus model `adve` grades the adverb regularly and ignores the suppletive radicals of its lemma"
+- item: capere
+  key: imp.fut.akt.3.pl
+  ours: "capiuntō"
+  theirs: "căpūntō"
+  reason: "the Collatinus model `capio` leaves this morph to `lego`, which drops the stem i"
+- item: audire
+  key: imp.fut.akt.3.pl
+  ours: "audiuntō"
+  theirs: "āudūntō"
+  reason: "the Collatinus model `audio` leaves this morph to `lego`, which drops the stem i"
+- item: ferre
+  key: imp.praes.pass.2.sg
+  ours: "ferre"
+  theirs: "fĕrĕrĕ"
+  reason: "the Collatinus model `fero` does not override this morph of `lego`, so it keeps the unsyncopated form"
+- item: ferre
+  key: imp.fut.akt.2.sg
+  ours: "fertō"
+  theirs: "fĕrĭtō"
+  reason: "the Collatinus model `fero` does not override this morph of `lego`, so it keeps the unsyncopated form"
+- item: ferre
+  key: imp.fut.akt.2.pl
+  ours: "fertōte"
+  theirs: "fĕrĭtōtĕ"
+  reason: "the Collatinus model `fero` does not override this morph of `lego`, so it keeps the unsyncopated form"
+- item: ferre
+  key: imp.fut.akt.3.sg
+  ours: "fertō"
+  theirs: "fĕrĭtō"
+  reason: "the Collatinus model `fero` does not override this morph of `lego`, so it keeps the unsyncopated form"
+- item: afferre
+  key: ind.praes.pass.2.sg
+  ours: "afferris"
+  theirs: "affĕrĕrĭs / affĕrĕrĕ"
+  reason: "Collatinus files the syncopated ferris as an irregular of `fero` alone, so the compound keeps the regular form"
+- item: afferre
+  key: imp.praes.pass.2.sg
+  ours: "afferre"
+  theirs: "affĕrĕrĕ"
+  reason: "inherited from `fero`, which does not override this morph of `lego`"
+- item: afferre
+  key: imp.fut.akt.2.sg
+  ours: "affertō"
+  theirs: "affĕrĭtō"
+  reason: "inherited from `fero`, which does not override this morph of `lego`"
+- item: afferre
+  key: imp.fut.akt.2.pl
+  ours: "affertōte"
+  theirs: "affĕrĭtōtĕ"
+  reason: "inherited from `fero`, which does not override this morph of `lego`"
+- item: afferre
+  key: imp.fut.akt.3.sg
+  ours: "affertō"
+  theirs: "affĕrĭtō"
+  reason: "inherited from `fero`, which does not override this morph of `lego`"

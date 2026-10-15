@@ -1,0 +1,65 @@
+# Which Collatinus lemma every item of ours is compared with, and which of our
+# types a Collatinus model stands for.
+
+# Item id -> Collatinus lemma keys. The first is the item's own lemma. A second
+# one is the separate adverb lemma that supplies morphs 411/412/414 for an
+# adjective (see morph_map.yaml).
+sample:
+  nouns:
+    turris: [turris]
+    mare: [mărĕ]
+    bonus: [bŏnus, bĕnĕ]
+    liber: [līber, lībĕrē]
+    fortis: [fortis, fortĭter]
+    acer: [ācer, ācrĭter]
+    hic: [hīc]
+  verbs:
+    esse: [sŭm]
+    amare: [ămo]
+    agere: [ăgo]
+    capere: [căpĭo]
+    hortari: [hortor]
+    pati: [pătĭor]
+    largiri: [largĭor]
+    monere: [mŏnĕo]
+    audire: [audĭo]
+    regere: [rĕgo]
+    audere: [audĕo]
+    posse: [possŭm]
+    prodesse: [prōsŭm]
+    ire: [ĕo]
+    abire: [ăbĕo]
+    redire: [rĕdĕo]
+    ferre: [fĕro]
+    afferre: [adfĕro]
+
+# Collatinus model -> the types of ours it stands for. The oracle checks the
+# type of every sampled item against its own lemma's model, so a lemma paired
+# with the wrong item is caught. A model covers several types of ours where we
+# split a paradigm that Collatinus keeps in one model (compounds).
+models:
+  amo: [A-Konjugation]
+  moneo: [E-Konjugation]
+  audio: [I-Konjugation]
+  lego: [Konsonantische]
+  capio: [Mischkonjugation]
+  imitor: [A-Konjugation]
+  patior: [Mischkonjugation]
+  potior: [I-Konjugation]
+  sum: [esse-Typ]
+  possum: [esse-Kompositum]
+  prosum: [esse-Kompositum]
+  eo: [Unregelmäßig, ire-Kompositum]
+  fero: [Konsonantische, ferre-Kompositum]
+  turris: [i-Deklination-mf]
+  mare: [i-Deklination-n]
+  doctus: [Adjektiv-a-o]
+  miser: [Adjektiv-a-o-er]
+  fortis: [Adjektiv-zweiendig]
+  acer: [Adjektiv-dreiendig]
+  hic: [Pronomen]
+
+# Collatinus spells the ad- compound unassimilated (adferō, adtulī, adlātum).
+# Its variants are rewritten at the start of a word before the comparison.
+spelling:
+  afferre: {adf: aff, adt: att, adl: all}

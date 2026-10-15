@@ -1,0 +1,8 @@
+tags:
+  # The oracle needs third-party data that is not in the repo, so it is skipped
+  # by default and run with
+  #   tool/oracle/fetch_collatinus.sh && flutter test --tags oracle --run-skipped
+  # `exclude_tags` would be simpler but `flutter test --tags oracle` is unioned
+  # with it, which leaves no way to run the oracle at all.
+  oracle:
+    skip: "run tool/oracle/fetch_collatinus.sh, then flutter test --tags oracle --run-skipped"
