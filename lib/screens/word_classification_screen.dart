@@ -4,7 +4,6 @@ import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:fsrs/fsrs.dart';
 import '../models/practice_item.dart';
 import '../models/settings.dart';
-import '../data/practice_data.dart';
 import '../providers/settings_provider.dart';
 import '../providers/fsrs_provider.dart';
 import '../widgets/app_drawer.dart';
@@ -65,10 +64,9 @@ class _WordClassificationScreenState
         ...(dueItemsByType['verbs'] ?? []),
       ];
 
-      // Load all items as fallback
-      final nouns = await loadPracticeItems('lib/data/latin_nouns.yaml');
-      final verbs = await loadPracticeItems('lib/data/latin_verbs.yaml');
-      final allItems = [...nouns, ...verbs];
+      // Fall back to the same filtered items the due list is drawn from
+      final practicable = await ref.read(practicableItemsByTypeProvider.future);
+      final allItems = [...practicable['nouns']!, ...practicable['verbs']!];
 
       if (allItems.isEmpty) {
         setState(() {
@@ -85,7 +83,7 @@ class _WordClassificationScreenState
       final item = allDueItems.isNotEmpty
           ? allDueItems[random.nextInt(allDueItems.length)]
           : allItems[random.nextInt(allItems.length)];
-      _isNoun = nouns.contains(item);
+      _isNoun = item.dataFileId == 'nouns';
 
       // Filter forms based on settings
       final enabledForms =
@@ -541,6 +539,7 @@ class _WordClassificationScreenState
                     child: Column(
                       children: [
                         Text(
+                          key: const Key('wordClassification.word'),
                           _displayedWord!,
                           style: TextStyle(
                             fontSize: wordFontSize,

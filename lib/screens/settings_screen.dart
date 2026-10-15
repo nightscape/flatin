@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import '../models/input_strategy.dart';
+import '../models/settings.dart';
 import '../providers/settings_provider.dart';
 import '../providers/lesson_provider.dart';
 import '../data/practice_data.dart';
@@ -79,86 +80,109 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     ],
                   ),
                 ),
-                ...lessons.lessonNames.map((lessonName) {
-                  final rawWords = lessons.lessonWords[lessonName] ?? [];
-                  final fullySelected =
-                      settings.isLessonFullySelected(rawWords);
-                  final partiallySelected =
-                      settings.isLessonPartiallySelected(rawWords);
-                  // tristate: true=all, null=some, false=none
-                  final checkboxValue =
-                      fullySelected ? true : (partiallySelected ? null : false);
-
-                  return Theme(
-                    data: Theme.of(context).copyWith(
-                      dividerColor: Colors.transparent,
-                    ),
-                    child: ExpansionTile(
-                      key: Key('lesson.$lessonName'),
-                      tilePadding: EdgeInsets.symmetric(
-                        horizontal: isMobile ? 4.0 : 0.0,
-                      ),
-                      leading: Checkbox(
-                        tristate: true,
-                        value: checkboxValue,
-                        onChanged: (_) {
-                          ref
-                              .read(settingsProvider.notifier)
-                              .toggleLessonWords(rawWords);
-                        },
-                        activeColor: const Color(0xFFD0D0D0),
-                        checkColor: Colors.black,
-                      ),
-                      title: GestureDetector(
-                        onTap: () {
-                          ref
-                              .read(settingsProvider.notifier)
-                              .toggleLessonWords(rawWords);
-                        },
-                        child: Text(
-                          lessonName,
-                          style: TextStyle(
-                            fontSize: isMobile ? 14.0 : 16.0,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                      children: rawWords.map((rawWord) {
-                        final normalized = normalizeDiacritics(rawWord);
-                        final isSelected = settings.isWordSelected(normalized);
-                        return CheckboxListTile(
-                          contentPadding: EdgeInsets.only(
-                            left: isMobile ? 52.0 : 48.0,
-                            right: isMobile ? 4.0 : 0.0,
-                          ),
-                          title: Text(
-                            rawWord,
-                            style: TextStyle(
-                              fontSize: isMobile ? 13.0 : 15.0,
-                              color: Colors.black,
-                            ),
-                          ),
-                          value: isSelected,
-                          onChanged: (_) {
-                            ref
-                                .read(settingsProvider.notifier)
-                                .toggleWord(normalized);
-                          },
-                          activeColor: const Color(0xFFD0D0D0),
-                          checkColor: Colors.black,
-                          dense: true,
-                        );
-                      }).toList(),
-                    ),
-                  );
-                }),
+                ...lessons.lessonNames.map(
+                  (lessonName) => _buildWordGroup(
+                    groupKey: Key('lesson.$lessonName'),
+                    title: lessonName,
+                    rawWords: lessons.lessonWords[lessonName] ?? [],
+                    settings: settings,
+                    isMobile: isMobile,
+                  ),
+                ),
+                _buildOtherWordsGroup(settings, isMobile),
                 SizedBox(height: isMobile ? 16 : 24),
               ],
             );
           },
         );
       },
+    );
+  }
+
+  /// The practisable words no lesson lists; without this group they have no
+  /// checkbox at all.
+  Widget _buildOtherWordsGroup(Settings settings, bool isMobile) {
+    final wordsAsync = ref.watch(wordsOutsideLessonsProvider);
+
+    return wordsAsync.maybeWhen(
+      orElse: () => const SizedBox.shrink(),
+      data: (rawWords) => rawWords.isEmpty
+          ? const SizedBox.shrink()
+          : _buildWordGroup(
+              groupKey: const Key('lesson.other'),
+              title: FlutterI18n.translate(context, 'settings.otherWords'),
+              rawWords: rawWords,
+              settings: settings,
+              isMobile: isMobile,
+            ),
+    );
+  }
+
+  Widget _buildWordGroup({
+    required Key groupKey,
+    required String title,
+    required List<String> rawWords,
+    required Settings settings,
+    required bool isMobile,
+  }) {
+    final fullySelected = settings.isLessonFullySelected(rawWords);
+    final partiallySelected = settings.isLessonPartiallySelected(rawWords);
+    // tristate: true=all, null=some, false=none
+    final checkboxValue =
+        fullySelected ? true : (partiallySelected ? null : false);
+
+    return Theme(
+      data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+      child: ExpansionTile(
+        key: groupKey,
+        tilePadding: EdgeInsets.symmetric(horizontal: isMobile ? 4.0 : 0.0),
+        leading: Checkbox(
+          tristate: true,
+          value: checkboxValue,
+          onChanged: (_) {
+            ref.read(settingsProvider.notifier).toggleLessonWords(rawWords);
+          },
+          activeColor: const Color(0xFFD0D0D0),
+          checkColor: Colors.black,
+        ),
+        title: GestureDetector(
+          onTap: () {
+            ref.read(settingsProvider.notifier).toggleLessonWords(rawWords);
+          },
+          child: Text(
+            title,
+            style: TextStyle(
+              fontSize: isMobile ? 14.0 : 16.0,
+              color: Colors.black,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+        children: rawWords.map((rawWord) {
+          final normalized = normalizeDiacritics(rawWord);
+          return CheckboxListTile(
+            key: Key('word.$normalized'),
+            contentPadding: EdgeInsets.only(
+              left: isMobile ? 52.0 : 48.0,
+              right: isMobile ? 4.0 : 0.0,
+            ),
+            title: Text(
+              rawWord,
+              style: TextStyle(
+                fontSize: isMobile ? 13.0 : 15.0,
+                color: Colors.black,
+              ),
+            ),
+            value: settings.isWordSelected(normalized),
+            onChanged: (_) {
+              ref.read(settingsProvider.notifier).toggleWord(normalized);
+            },
+            activeColor: const Color(0xFFD0D0D0),
+            checkColor: Colors.black,
+            dense: true,
+          );
+        }).toList(),
+      ),
     );
   }
 

@@ -42,38 +42,47 @@ Future<List<PracticeItemCard>> dueCards(Ref ref) async {
     ..sort((a, b) => a.due.compareTo(b.due));
 }
 
+/// Every item the user can practise, by exercise type.
+///
+/// The one place the word and type selections are applied, so that no consumer
+/// can route around them.
+@riverpod
+Future<Map<String, List<PracticeItem>>> practicableItemsByType(Ref ref) async {
+  final lessonData = await ref.watch(lessonDataProvider.future);
+  final settings = await ref.watch(settingsProvider.future);
+
+  final nouns = await loadPracticeItems('lib/data/latin_nouns.yaml');
+  final verbs = await loadPracticeItems('lib/data/latin_verbs.yaml');
+
+  final itemsByType = <String, List<PracticeItem>>{'nouns': [], 'verbs': []};
+  for (final item in [...nouns, ...verbs]) {
+    if (!lessonData.includes(item, settings.deselectedWords)) continue;
+    if (!settings.isTypeEnabled(item.dataFileId, item.type)) continue;
+    itemsByType[item.dataFileId]!.add(item);
+  }
+
+  return itemsByType;
+}
+
 /// Provider for due items by exercise type
 @riverpod
 Future<Map<String, List<PracticeItem>>> dueItemsByType(Ref ref) async {
   final dueCardsList = await ref.watch(dueCardsProvider.future);
-  final lessonData = await ref.watch(lessonDataProvider.future);
-  final settings = await ref.watch(settingsProvider.future);
+  final practicable = await ref.watch(practicableItemsByTypeProvider.future);
 
-  // Load all items
-  final nouns = await loadPracticeItems('lib/data/latin_nouns.yaml');
-  final verbs = await loadPracticeItems('lib/data/latin_verbs.yaml');
-  final allItems = [...nouns, ...verbs];
-
-  // Create a map of itemId -> PracticeItem
   final itemsById = <String, PracticeItem>{};
-  for (final item in allItems) {
-    final itemId = PracticeItemCard.generateItemId(item);
-    itemsById[itemId] = item;
+  for (final items in practicable.values) {
+    for (final item in items) {
+      itemsById[PracticeItemCard.generateItemId(item)] = item;
+    }
   }
 
-  // Group due items by dataFileId, filtering by selected lessons and enabled types.
   final dueItemsByType = <String, List<PracticeItem>>{'nouns': [], 'verbs': []};
-
   for (final card in dueCardsList) {
+    // Cards exist for items the current selection filters out, too.
     final item = itemsById[card.itemId];
     if (item == null) continue;
-    if (!lessonData.includes(item, settings.deselectedWords)) continue;
-    if (!settings.isTypeEnabled(item.dataFileId, item.type)) continue;
-
-    final typeList = dueItemsByType[item.dataFileId];
-    if (typeList != null) {
-      typeList.add(item);
-    }
+    dueItemsByType[item.dataFileId]!.add(item);
   }
 
   return dueItemsByType;

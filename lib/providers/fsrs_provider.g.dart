@@ -146,6 +146,62 @@ final class DueCardsProvider
 
 String _$dueCardsHash() => r'dfe7b43bb0a8a1d79b7a8140b4baceedcd310365';
 
+/// Every item the user can practise, by exercise type.
+///
+/// The one place the word and type selections are applied, so that no consumer
+/// can route around them.
+
+@ProviderFor(practicableItemsByType)
+const practicableItemsByTypeProvider = PracticableItemsByTypeProvider._();
+
+/// Every item the user can practise, by exercise type.
+///
+/// The one place the word and type selections are applied, so that no consumer
+/// can route around them.
+
+final class PracticableItemsByTypeProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<Map<String, List<PracticeItem>>>,
+          Map<String, List<PracticeItem>>,
+          FutureOr<Map<String, List<PracticeItem>>>
+        >
+    with
+        $FutureModifier<Map<String, List<PracticeItem>>>,
+        $FutureProvider<Map<String, List<PracticeItem>>> {
+  /// Every item the user can practise, by exercise type.
+  ///
+  /// The one place the word and type selections are applied, so that no consumer
+  /// can route around them.
+  const PracticableItemsByTypeProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'practicableItemsByTypeProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$practicableItemsByTypeHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<Map<String, List<PracticeItem>>> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<Map<String, List<PracticeItem>>> create(Ref ref) {
+    return practicableItemsByType(ref);
+  }
+}
+
+String _$practicableItemsByTypeHash() =>
+    r'a6af2e0bfd586199261820a86e2b68132bb63649';
+
 /// Provider for due items by exercise type
 
 @ProviderFor(dueItemsByType)
@@ -190,7 +246,7 @@ final class DueItemsByTypeProvider
   }
 }
 
-String _$dueItemsByTypeHash() => r'6f5af8ef2a6b122d4b54342944fd3b23b26b62e3';
+String _$dueItemsByTypeHash() => r'949517a59cf37a3b731235668277fa34a6333df3';
 
 /// Get next due item for a specific exercise type
 

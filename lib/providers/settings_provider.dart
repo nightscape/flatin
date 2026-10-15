@@ -30,7 +30,7 @@ class SettingsNotifier extends _$SettingsNotifier {
     }
 
     final json = jsonDecode(settingsJson) as Map<String, dynamic>;
-    if (json.containsKey('enabledForms')) {
+    if (!json.containsKey('disabledForms')) {
       final converted = await _convertEnabledSets(json);
       await _saveSettings(converted);
       return converted;

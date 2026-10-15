@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:latin_practice/data/lesson_data.dart';
 import 'package:latin_practice/data/practice_data.dart';
+import 'package:latin_practice/providers/lesson_provider.dart';
 import 'package:latin_practice/providers/settings_provider.dart';
 
 void main() {
@@ -73,6 +74,34 @@ void main() {
     // Nothing was stored for verbs, so verbs stay fully enabled.
     expect(loaded.disabledForms['verbs'], isNull);
     expect(loaded.isTypeEnabled('verbs', 'A-Konjugation'), isTrue);
+    container.dispose();
+  });
+
+  test('conversion leaves words outside the lessons enabled', () async {
+    final lessons = await loadLessonData(lessonDataAsset);
+    final lessonWords = lessons.lessonNames
+        .expand((name) => lessons.lessonWords[name]!)
+        .map(normalizeDiacritics)
+        .toList();
+
+    SharedPreferences.setMockInitialValues({
+      'practice_settings': jsonEncode({
+        'selectedWords': [lessonWords.first],
+      }),
+    });
+
+    final container = ProviderContainer();
+    final outside = await container.read(wordsOutsideLessonsProvider.future);
+    final loaded = await container.read(settingsProvider.future);
+
+    // The old format had no checkbox for these, so no user ever turned them
+    // off.
+    expect(outside, isNotEmpty);
+    for (final word in outside) {
+      expect(loaded.isWordSelected(normalizeDiacritics(word)), isTrue,
+          reason: word);
+    }
+    expect(loaded.deselectedWords, lessonWords.skip(1).toSet());
     container.dispose();
   });
 }
