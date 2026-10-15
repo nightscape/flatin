@@ -1,0 +1,269 @@
+data_file_id: nouns
+
+axes:
+  kasus:   {name: Kasus, values: {nom: Nominativ, gen: Genitiv, dat: Dativ, akk: Akkusativ, abl: Ablativ, vok: Vokativ}}
+  numerus: {name: Numerus, values: {sg: Singular, pl: Plural}}
+  genus:   {name: Genus, values: {m: maskulin, f: feminin, n: neutrum}}
+
+label:
+  head: [genus]
+  tail: [kasus, numerus]
+  merge_axis: kasus
+
+parts:
+  nom: {label: Nominativ}
+  gen: {label: Genitiv}
+
+defaults:
+  given_part: nom
+  lemma_part: nom
+
+type_inference:
+  nom:
+    - {suffix: "us", min_length: 3, types: [O-Deklination-maskulinum]}
+    - {suffix: "um", min_length: 3, types: [O-Deklination-neutrum]}
+    - {suffix: "a", min_length: 2, types: [A-Deklination]}
+    - {suffix: "ēs", min_length: 3, types: [E-Deklination]}
+
+types:
+  # Ending tables. Leaf types (no delegate, no compose, S14); the verb file
+  # delegates its participles to them.
+  a-o-Endungen:
+    abstract: true
+    forms:
+      nom.sg.m: "{stamm}us"
+      gen.sg.m: "{stamm}ī"
+      dat.sg.m: "{stamm}ō"
+      akk.sg.m: "{stamm}um"
+      abl.sg.m: "{stamm}ō"
+      vok.sg.m: "{stamm}e"
+      nom.pl.m: "{stamm}ī"
+      gen.pl.m: "{stamm}ōrum"
+      dat.pl.m: "{stamm}īs"
+      akk.pl.m: "{stamm}ōs"
+      abl.pl.m: "{stamm}īs"
+      vok.pl.m: "{stamm}ī"
+      nom.sg.f: "{stamm}a"
+      gen.sg.f: "{stamm}ae"
+      dat.sg.f: "{stamm}ae"
+      akk.sg.f: "{stamm}am"
+      abl.sg.f: "{stamm}ā"
+      vok.sg.f: "{stamm}a"
+      nom.pl.f: "{stamm}ae"
+      gen.pl.f: "{stamm}ārum"
+      dat.pl.f: "{stamm}īs"
+      akk.pl.f: "{stamm}ās"
+      abl.pl.f: "{stamm}īs"
+      vok.pl.f: "{stamm}ae"
+      nom.sg.n: "{stamm}um"
+      gen.sg.n: "{stamm}ī"
+      dat.sg.n: "{stamm}ō"
+      akk.sg.n: "{stamm}um"
+      abl.sg.n: "{stamm}ō"
+      vok.sg.n: "{stamm}um"
+      nom.pl.n: "{stamm}a"
+      gen.pl.n: "{stamm}ōrum"
+      dat.pl.n: "{stamm}īs"
+      akk.pl.n: "{stamm}a"
+      abl.pl.n: "{stamm}īs"
+      vok.pl.n: "{stamm}a"
+
+  3-Endungen:
+    abstract: true
+    forms:
+      nom.sg.m: "{nom_m}"
+      gen.sg.m: "{stamm}is"
+      dat.sg.m: "{stamm}ī"
+      akk.sg.m: "{stamm}em"
+      abl.sg.m: "{stamm}ī"
+      vok.sg.m: "{nom_m}"
+      nom.pl.m: "{stamm}ēs"
+      gen.pl.m: "{stamm}ium"
+      dat.pl.m: "{stamm}ibus"
+      akk.pl.m: ["{stamm}ēs", "{stamm}īs"]
+      abl.pl.m: "{stamm}ibus"
+      vok.pl.m: "{stamm}ēs"
+      nom.sg.f: "{nom_f}"
+      gen.sg.f: "{stamm}is"
+      dat.sg.f: "{stamm}ī"
+      akk.sg.f: "{stamm}em"
+      abl.sg.f: "{stamm}ī"
+      vok.sg.f: "{nom_f}"
+      nom.pl.f: "{stamm}ēs"
+      gen.pl.f: "{stamm}ium"
+      dat.pl.f: "{stamm}ibus"
+      akk.pl.f: ["{stamm}ēs", "{stamm}īs"]
+      abl.pl.f: "{stamm}ibus"
+      vok.pl.f: "{stamm}ēs"
+      nom.sg.n: "{nom_n}"
+      gen.sg.n: "{stamm}is"
+      dat.sg.n: "{stamm}ī"
+      akk.sg.n: "{nom_n}"
+      abl.sg.n: "{stamm}ī"
+      vok.sg.n: "{nom_n}"
+      nom.pl.n: "{stamm}ia"
+      gen.pl.n: "{stamm}ium"
+      dat.pl.n: "{stamm}ibus"
+      akk.pl.n: "{stamm}ia"
+      abl.pl.n: "{stamm}ibus"
+      vok.pl.n: "{stamm}ia"
+
+  3-Endungen-Partizip:
+    abstract: true
+    inherits_from: 3-Endungen
+    forms:
+      abl.sg.m: ["{stamm}e", "{stamm}ī"]
+      abl.sg.f: ["{stamm}e", "{stamm}ī"]
+      abl.sg.n: ["{stamm}e", "{stamm}ī"]
+      akk.pl.m: "{stamm}ēs"
+      akk.pl.f: "{stamm}ēs"
+
+  # Declensions. One gender per type, so their keys carry no genus.
+  O-Deklination-maskulinum:
+    stems:
+      stamm: {from: nom, remove: "us", display: Stamm}
+    forms:
+      nom.sg: "{stamm}us"
+      gen.sg: "{stamm}ī"
+      dat.sg: "{stamm}ō"
+      akk.sg: "{stamm}um"
+      abl.sg: "{stamm}ō"
+      vok.sg: "{stamm}e"
+      nom.pl: "{stamm}ī"
+      gen.pl: "{stamm}ōrum"
+      dat.pl: "{stamm}īs"
+      akk.pl: "{stamm}ōs"
+      abl.pl: "{stamm}īs"
+      vok.pl: "{stamm}ī"
+
+  O-Deklination-neutrum:
+    stems:
+      stamm: {from: nom, remove: "um", display: Stamm}
+    forms:
+      nom.sg: "{stamm}um"
+      gen.sg: "{stamm}ī"
+      dat.sg: "{stamm}ō"
+      akk.sg: "{stamm}um"
+      abl.sg: "{stamm}ō"
+      vok.sg: "{stamm}um"
+      nom.pl: "{stamm}a"
+      gen.pl: "{stamm}ōrum"
+      dat.pl: "{stamm}īs"
+      akk.pl: "{stamm}a"
+      abl.pl: "{stamm}īs"
+      vok.pl: "{stamm}a"
+
+  A-Deklination:
+    stems:
+      stamm: {from: nom, remove: "a", display: Stamm}
+    forms:
+      nom.sg: "{stamm}a"
+      gen.sg: "{stamm}ae"
+      dat.sg: "{stamm}ae"
+      akk.sg: "{stamm}am"
+      abl.sg: "{stamm}ā"
+      vok.sg: "{stamm}a"
+      nom.pl: "{stamm}ae"
+      gen.pl: "{stamm}ārum"
+      dat.pl: "{stamm}īs"
+      akk.pl: "{stamm}ās"
+      abl.pl: "{stamm}īs"
+      vok.pl: "{stamm}ae"
+
+  E-Deklination:
+    stems:
+      stamm: {from: nom, remove: "ēs", display: Stamm}
+    forms:
+      nom.sg: "{stamm}ēs"
+      gen.sg: "{stamm}ēī"
+      dat.sg: "{stamm}ēī"
+      akk.sg: "{stamm}em"
+      abl.sg: "{stamm}ē"
+      vok.sg: "{stamm}ēs"
+      nom.pl: "{stamm}ēs"
+      gen.pl: "{stamm}ērum"
+      dat.pl: "{stamm}ēbus"
+      akk.pl: "{stamm}ēs"
+      abl.pl: "{stamm}ēbus"
+      vok.pl: "{stamm}ēs"
+
+  U-Deklination:
+    stems:
+      stamm: {from: nom, remove: "us", display: Stamm}
+    forms:
+      nom.sg: "{stamm}us"
+      gen.sg: "{stamm}ūs"
+      dat.sg: "{stamm}uī"
+      akk.sg: "{stamm}um"
+      abl.sg: "{stamm}ū"
+      vok.sg: "{stamm}us"
+      nom.pl: "{stamm}ūs"
+      gen.pl: "{stamm}uum"
+      dat.pl: "{stamm}ibus"
+      akk.pl: "{stamm}ūs"
+      abl.pl: "{stamm}ibus"
+      vok.pl: "{stamm}ūs"
+
+  Konsonantische-Deklination-mf:
+    stems:
+      stamm:  {from: gen, remove: "is", display: Stamm}
+      nom_sg: {from: nom, remove: "", display: Nominativ}
+    forms:
+      nom.sg: "{nom_sg}"
+      gen.sg: "{stamm}is"
+      dat.sg: "{stamm}ī"
+      akk.sg: "{stamm}em"
+      abl.sg: "{stamm}e"
+      vok.sg: "{nom_sg}"
+      nom.pl: "{stamm}ēs"
+      gen.pl: "{stamm}um"
+      dat.pl: "{stamm}ibus"
+      akk.pl: "{stamm}ēs"
+      abl.pl: "{stamm}ibus"
+      vok.pl: "{stamm}ēs"
+
+  Konsonantische-Deklination-n:
+    stems:
+      stamm:  {from: gen, remove: "is", display: Stamm}
+      nom_sg: {from: nom, remove: "", display: Nominativ}
+    forms:
+      nom.sg: "{nom_sg}"
+      gen.sg: "{stamm}is"
+      dat.sg: "{stamm}ī"
+      akk.sg: "{nom_sg}"
+      abl.sg: "{stamm}e"
+      vok.sg: "{nom_sg}"
+      nom.pl: "{stamm}a"
+      gen.pl: "{stamm}um"
+      dat.pl: "{stamm}ibus"
+      akk.pl: "{stamm}a"
+      abl.pl: "{stamm}ibus"
+      vok.pl: "{stamm}a"
+
+  Konsonantische-Deklination-i-mf:
+    inherits_from: Konsonantische-Deklination-mf
+    forms:
+      gen.pl: "{stamm}ium"
+
+  Konsonantische-Deklination-i-n:
+    inherits_from: Konsonantische-Deklination-n
+    forms:
+      abl.sg: "{stamm}ī"
+      nom.pl: "{stamm}ia"
+      gen.pl: "{stamm}ium"
+      akk.pl: "{stamm}ia"
+
+  # Pronouns and numerals: one type per lexeme, every form on the item.
+  Pronomen-personal: {}
+  Pronomen-is: {}
+  Pronomen-idem: {}
+  Pronomen-hic: {}
+  Pronomen-ille: {}
+  Pronomen-iste: {}
+  Pronomen-ipse: {}
+  Pronomen-qui: {}
+  Pronomen-quis: {}
+  Numerale-unus: {}
+  Numerale-duo: {}
+  Numerale-tres: {}
+  Numerale-milia: {}

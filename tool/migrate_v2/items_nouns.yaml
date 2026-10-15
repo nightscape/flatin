@@ -1,0 +1,393 @@
+# Noun items whose forms no type generates: pronouns and numerals.
+# `_old_ids` lists the item ids of the old data this item replaces (Q3 merges
+# the three gender items of a pronoun into one). An item without `_old_ids` is
+# new in this migration.
+items:
+  - _old_ids: [nouns:ego]
+    type: Pronomen-personal
+    translation: ich
+    parts: {nom: ego}
+    forms:
+      nom.sg: "ego"
+      gen.sg: "meī"
+      dat.sg: "mihi"
+      akk.sg: "mē"
+      abl.sg: "mē"
+
+  - _old_ids: [nouns:tu]
+    type: Pronomen-personal
+    translation: du
+    parts: {nom: tū}
+    forms:
+      nom.sg: "tū"
+      gen.sg: "tuī"
+      dat.sg: "tibi"
+      akk.sg: "tē"
+      abl.sg: "tē"
+
+  - _old_ids: [nouns:nos]
+    type: Pronomen-personal
+    translation: wir
+    parts: {nom: nōs}
+    forms:
+      nom.pl: "nōs"
+      gen.pl: "nostrum"
+      dat.pl: "nōbīs"
+      akk.pl: "nōs"
+      abl.pl: "nōbīs"
+
+  - _old_ids: [nouns:vos]
+    type: Pronomen-personal
+    translation: ihr
+    parts: {nom: vōs}
+    forms:
+      nom.pl: "vōs"
+      gen.pl: "vestrum"
+      dat.pl: "vōbīs"
+      akk.pl: "vōs"
+      abl.pl: "vōbīs"
+
+  - _old_ids: [nouns:is, nouns:ea, nouns:id]
+    type: Pronomen-is
+    translation: dieser, diese, dieses; er, sie, es
+    parts: {nom: is}
+    forms:
+      nom.sg.m: "is"
+      gen.sg.m: "eius"
+      dat.sg.m: "eī"
+      akk.sg.m: "eum"
+      abl.sg.m: "eō"
+      nom.pl.m: ["iī", "eī"]
+      gen.pl.m: "eōrum"
+      dat.pl.m: ["iīs", "eīs"]
+      akk.pl.m: "eōs"
+      abl.pl.m: ["iīs", "eīs"]
+      nom.sg.f: "ea"
+      gen.sg.f: "eius"
+      dat.sg.f: "eī"
+      akk.sg.f: "eam"
+      abl.sg.f: "eā"
+      nom.pl.f: "eae"
+      gen.pl.f: "eārum"
+      dat.pl.f: ["iīs", "eīs"]
+      akk.pl.f: "eās"
+      abl.pl.f: ["iīs", "eīs"]
+      nom.sg.n: "id"
+      gen.sg.n: "eius"
+      dat.sg.n: "eī"
+      akk.sg.n: "id"
+      abl.sg.n: "eō"
+      nom.pl.n: "ea"
+      gen.pl.n: "eōrum"
+      dat.pl.n: ["iīs", "eīs"]
+      akk.pl.n: "ea"
+      abl.pl.n: ["iīs", "eīs"]
+
+  - type: Pronomen-idem
+    translation: derselbe, dieselbe, dasselbe
+    parts: {nom: īdem}
+    forms:
+      nom.sg.m: "īdem"
+      gen.sg.m: "eiusdem"
+      dat.sg.m: "eīdem"
+      akk.sg.m: "eundem"
+      abl.sg.m: "eōdem"
+      nom.pl.m: "eīdem"
+      gen.pl.m: "eōrundem"
+      dat.pl.m: "eīsdem"
+      akk.pl.m: "eōsdem"
+      abl.pl.m: "eīsdem"
+      nom.sg.f: "eadem"
+      gen.sg.f: "eiusdem"
+      dat.sg.f: "eīdem"
+      akk.sg.f: "eandem"
+      abl.sg.f: "eādem"
+      nom.pl.f: "eaedem"
+      gen.pl.f: "eārundem"
+      dat.pl.f: "eīsdem"
+      akk.pl.f: "eāsdem"
+      abl.pl.f: "eīsdem"
+      nom.sg.n: "idem"
+      gen.sg.n: "eiusdem"
+      dat.sg.n: "eīdem"
+      akk.sg.n: "idem"
+      abl.sg.n: "eōdem"
+      nom.pl.n: "eadem"
+      gen.pl.n: "eōrundem"
+      dat.pl.n: "eīsdem"
+      akk.pl.n: "eadem"
+      abl.pl.n: "eīsdem"
+
+  - _old_ids: [nouns:hic, nouns:haec, nouns:hoc]
+    type: Pronomen-hic
+    translation: dieser hier, diese hier, dieses hier
+    parts: {nom: hic}
+    forms:
+      nom.sg.m: "hic"
+      gen.sg.m: "huius"
+      dat.sg.m: "huic"
+      akk.sg.m: "hunc"
+      abl.sg.m: "hōc"
+      nom.pl.m: "hī"
+      gen.pl.m: "hōrum"
+      dat.pl.m: "hīs"
+      akk.pl.m: "hōs"
+      abl.pl.m: "hīs"
+      nom.sg.f: "haec"
+      gen.sg.f: "huius"
+      dat.sg.f: "huic"
+      akk.sg.f: "hanc"
+      abl.sg.f: "hāc"
+      nom.pl.f: "hae"
+      gen.pl.f: "hārum"
+      dat.pl.f: "hīs"
+      akk.pl.f: "hās"
+      abl.pl.f: "hīs"
+      nom.sg.n: "hoc"
+      gen.sg.n: "huius"
+      dat.sg.n: "huic"
+      akk.sg.n: "hoc"
+      abl.sg.n: "hōc"
+      nom.pl.n: "haec"
+      gen.pl.n: "hōrum"
+      dat.pl.n: "hīs"
+      akk.pl.n: "haec"
+      abl.pl.n: "hīs"
+
+  - _old_ids: [nouns:ille, nouns:illa, nouns:illud]
+    type: Pronomen-ille
+    translation: jener, jene, jenes
+    parts: {nom: ille}
+    forms:
+      nom.sg.m: "ille"
+      gen.sg.m: "illīus"
+      dat.sg.m: "illī"
+      akk.sg.m: "illum"
+      abl.sg.m: "illō"
+      nom.pl.m: "illī"
+      gen.pl.m: "illōrum"
+      dat.pl.m: "illīs"
+      akk.pl.m: "illōs"
+      abl.pl.m: "illīs"
+      nom.sg.f: "illa"
+      gen.sg.f: "illīus"
+      dat.sg.f: "illī"
+      akk.sg.f: "illam"
+      abl.sg.f: "illā"
+      nom.pl.f: "illae"
+      gen.pl.f: "illārum"
+      dat.pl.f: "illīs"
+      akk.pl.f: "illās"
+      abl.pl.f: "illīs"
+      nom.sg.n: "illud"
+      gen.sg.n: "illīus"
+      dat.sg.n: "illī"
+      akk.sg.n: "illud"
+      abl.sg.n: "illō"
+      nom.pl.n: "illa"
+      gen.pl.n: "illōrum"
+      dat.pl.n: "illīs"
+      akk.pl.n: "illa"
+      abl.pl.n: "illīs"
+
+  - _old_ids: [nouns:iste, nouns:ista, nouns:istud]
+    type: Pronomen-iste
+    translation: dieser da, diese da, dieses da
+    parts: {nom: iste}
+    forms:
+      nom.sg.m: "iste"
+      gen.sg.m: "istīus"
+      dat.sg.m: "istī"
+      akk.sg.m: "istum"
+      abl.sg.m: "istō"
+      nom.pl.m: "istī"
+      gen.pl.m: "istōrum"
+      dat.pl.m: "istīs"
+      akk.pl.m: "istōs"
+      abl.pl.m: "istīs"
+      nom.sg.f: "ista"
+      gen.sg.f: "istīus"
+      dat.sg.f: "istī"
+      akk.sg.f: "istam"
+      abl.sg.f: "istā"
+      nom.pl.f: "istae"
+      gen.pl.f: "istārum"
+      dat.pl.f: "istīs"
+      akk.pl.f: "istās"
+      abl.pl.f: "istīs"
+      nom.sg.n: "istud"
+      gen.sg.n: "istīus"
+      dat.sg.n: "istī"
+      akk.sg.n: "istud"
+      abl.sg.n: "istō"
+      nom.pl.n: "ista"
+      gen.pl.n: "istōrum"
+      dat.pl.n: "istīs"
+      akk.pl.n: "ista"
+      abl.pl.n: "istīs"
+
+  - _old_ids: [nouns:ipse, nouns:ipsa, nouns:ipsum]
+    type: Pronomen-ipse
+    translation: selbst
+    parts: {nom: ipse}
+    forms:
+      nom.sg.m: "ipse"
+      gen.sg.m: "ipsīus"
+      dat.sg.m: "ipsī"
+      akk.sg.m: "ipsum"
+      abl.sg.m: "ipsō"
+      nom.pl.m: "ipsī"
+      gen.pl.m: "ipsōrum"
+      dat.pl.m: "ipsīs"
+      akk.pl.m: "ipsōs"
+      abl.pl.m: "ipsīs"
+      nom.sg.f: "ipsa"
+      gen.sg.f: "ipsīus"
+      dat.sg.f: "ipsī"
+      akk.sg.f: "ipsam"
+      abl.sg.f: "ipsā"
+      nom.pl.f: "ipsae"
+      gen.pl.f: "ipsārum"
+      dat.pl.f: "ipsīs"
+      akk.pl.f: "ipsās"
+      abl.pl.f: "ipsīs"
+      nom.sg.n: "ipsum"
+      gen.sg.n: "ipsīus"
+      dat.sg.n: "ipsī"
+      akk.sg.n: "ipsum"
+      abl.sg.n: "ipsō"
+      nom.pl.n: "ipsa"
+      gen.pl.n: "ipsōrum"
+      dat.pl.n: "ipsīs"
+      akk.pl.n: "ipsa"
+      abl.pl.n: "ipsīs"
+
+  - _old_ids: [nouns:qui, nouns:quae, nouns:quod]
+    type: Pronomen-qui
+    translation: welcher, welche, welches; der, die, das
+    parts: {nom: quī}
+    forms:
+      nom.sg.m: "quī"
+      gen.sg.m: "cuius"
+      dat.sg.m: "cui"
+      akk.sg.m: "quem"
+      abl.sg.m: "quō"
+      nom.pl.m: "quī"
+      gen.pl.m: "quōrum"
+      dat.pl.m: "quibus"
+      akk.pl.m: "quōs"
+      abl.pl.m: "quibus"
+      nom.sg.f: "quae"
+      gen.sg.f: "cuius"
+      dat.sg.f: "cui"
+      akk.sg.f: "quam"
+      abl.sg.f: "quā"
+      nom.pl.f: "quae"
+      gen.pl.f: "quārum"
+      dat.pl.f: "quibus"
+      akk.pl.f: "quās"
+      abl.pl.f: "quibus"
+      nom.sg.n: "quod"
+      gen.sg.n: "cuius"
+      dat.sg.n: "cui"
+      akk.sg.n: "quod"
+      abl.sg.n: "quō"
+      nom.pl.n: "quae"
+      gen.pl.n: "quōrum"
+      dat.pl.n: "quibus"
+      akk.pl.n: "quae"
+      abl.pl.n: "quibus"
+
+  - _old_ids: [nouns:quis, nouns:quid]
+    type: Pronomen-quis
+    translation: wer?, was?
+    parts: {nom: quis}
+    forms:
+      nom.sg.m: "quis"
+      gen.sg.m: "cuius"
+      dat.sg.m: "cui"
+      akk.sg.m: "quem"
+      abl.sg.m: "quō"
+      nom.sg.f: "quis"
+      gen.sg.f: "cuius"
+      dat.sg.f: "cui"
+      akk.sg.f: "quem"
+      abl.sg.f: "quō"
+      nom.sg.n: "quid"
+      gen.sg.n: "cuius"
+      dat.sg.n: "cui"
+      akk.sg.n: "quid"
+      abl.sg.n: "quō"
+
+  - _old_ids: [nouns:unus, nouns:una, nouns:unum]
+    type: Numerale-unus
+    translation: ein, eine, ein
+    parts: {nom: ūnus}
+    forms:
+      nom.sg.m: "ūnus"
+      gen.sg.m: "ūnīus"
+      dat.sg.m: "ūnī"
+      akk.sg.m: "ūnum"
+      abl.sg.m: "ūnō"
+      nom.sg.f: "ūna"
+      gen.sg.f: "ūnīus"
+      dat.sg.f: "ūnī"
+      akk.sg.f: "ūnam"
+      abl.sg.f: "ūnā"
+      nom.sg.n: "ūnum"
+      gen.sg.n: "ūnīus"
+      dat.sg.n: "ūnī"
+      akk.sg.n: "ūnum"
+      abl.sg.n: "ūnō"
+
+  - type: Numerale-duo
+    translation: zwei
+    parts: {nom: duo}
+    forms:
+      nom.pl.m: "duo"
+      gen.pl.m: "duōrum"
+      dat.pl.m: "duōbus"
+      akk.pl.m: "duōs"
+      abl.pl.m: "duōbus"
+      nom.pl.f: "duae"
+      gen.pl.f: "duārum"
+      dat.pl.f: "duābus"
+      akk.pl.f: "duās"
+      abl.pl.f: "duābus"
+      nom.pl.n: "duo"
+      gen.pl.n: "duōrum"
+      dat.pl.n: "duōbus"
+      akk.pl.n: "duo"
+      abl.pl.n: "duōbus"
+
+  - _old_ids: [nouns:tres, nouns:tria]
+    type: Numerale-tres
+    translation: drei
+    parts: {nom: trēs}
+    forms:
+      nom.pl.m: "trēs"
+      gen.pl.m: "trium"
+      dat.pl.m: "tribus"
+      akk.pl.m: "trēs"
+      abl.pl.m: "tribus"
+      nom.pl.f: "trēs"
+      gen.pl.f: "trium"
+      dat.pl.f: "tribus"
+      akk.pl.f: "trēs"
+      abl.pl.f: "tribus"
+      nom.pl.n: "tria"
+      gen.pl.n: "trium"
+      dat.pl.n: "tribus"
+      akk.pl.n: "tria"
+      abl.pl.n: "tribus"
+
+  - _old_ids: [nouns:milia]
+    type: Numerale-milia
+    translation: Tausende
+    parts: {nom: mīlia}
+    forms:
+      nom.pl: "mīlia"
+      gen.pl: "mīlium"
+      dat.pl: "mīlibus"
+      akk.pl: "mīlia"
+      abl.pl: "mīlibus"

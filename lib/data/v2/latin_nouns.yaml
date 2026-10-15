@@ -1,0 +1,764 @@
+data_file_id: nouns
+
+axes:
+  kasus:   {name: Kasus, values: {nom: Nominativ, gen: Genitiv, dat: Dativ, akk: Akkusativ, abl: Ablativ, vok: Vokativ}}
+  numerus: {name: Numerus, values: {sg: Singular, pl: Plural}}
+  genus:   {name: Genus, values: {m: maskulin, f: feminin, n: neutrum}}
+
+label:
+  head: [genus]
+  tail: [kasus, numerus]
+  merge_axis: kasus
+
+parts:
+  nom: {label: Nominativ}
+  gen: {label: Genitiv}
+
+defaults:
+  given_part: nom
+  lemma_part: nom
+
+type_inference:
+  nom:
+    - {suffix: "us", min_length: 3, types: [O-Deklination-maskulinum]}
+    - {suffix: "um", min_length: 3, types: [O-Deklination-neutrum]}
+    - {suffix: "a", min_length: 2, types: [A-Deklination]}
+    - {suffix: "ēs", min_length: 3, types: [E-Deklination]}
+
+types:
+  # Ending tables. Leaf types (no delegate, no compose, S14); the verb file
+  # delegates its participles to them.
+  a-o-Endungen:
+    abstract: true
+    forms:
+      nom.sg.m: "{stamm}us"
+      gen.sg.m: "{stamm}ī"
+      dat.sg.m: "{stamm}ō"
+      akk.sg.m: "{stamm}um"
+      abl.sg.m: "{stamm}ō"
+      vok.sg.m: "{stamm}e"
+      nom.pl.m: "{stamm}ī"
+      gen.pl.m: "{stamm}ōrum"
+      dat.pl.m: "{stamm}īs"
+      akk.pl.m: "{stamm}ōs"
+      abl.pl.m: "{stamm}īs"
+      vok.pl.m: "{stamm}ī"
+      nom.sg.f: "{stamm}a"
+      gen.sg.f: "{stamm}ae"
+      dat.sg.f: "{stamm}ae"
+      akk.sg.f: "{stamm}am"
+      abl.sg.f: "{stamm}ā"
+      vok.sg.f: "{stamm}a"
+      nom.pl.f: "{stamm}ae"
+      gen.pl.f: "{stamm}ārum"
+      dat.pl.f: "{stamm}īs"
+      akk.pl.f: "{stamm}ās"
+      abl.pl.f: "{stamm}īs"
+      vok.pl.f: "{stamm}ae"
+      nom.sg.n: "{stamm}um"
+      gen.sg.n: "{stamm}ī"
+      dat.sg.n: "{stamm}ō"
+      akk.sg.n: "{stamm}um"
+      abl.sg.n: "{stamm}ō"
+      vok.sg.n: "{stamm}um"
+      nom.pl.n: "{stamm}a"
+      gen.pl.n: "{stamm}ōrum"
+      dat.pl.n: "{stamm}īs"
+      akk.pl.n: "{stamm}a"
+      abl.pl.n: "{stamm}īs"
+      vok.pl.n: "{stamm}a"
+
+  3-Endungen:
+    abstract: true
+    forms:
+      nom.sg.m: "{nom_m}"
+      gen.sg.m: "{stamm}is"
+      dat.sg.m: "{stamm}ī"
+      akk.sg.m: "{stamm}em"
+      abl.sg.m: "{stamm}ī"
+      vok.sg.m: "{nom_m}"
+      nom.pl.m: "{stamm}ēs"
+      gen.pl.m: "{stamm}ium"
+      dat.pl.m: "{stamm}ibus"
+      akk.pl.m: ["{stamm}ēs", "{stamm}īs"]
+      abl.pl.m: "{stamm}ibus"
+      vok.pl.m: "{stamm}ēs"
+      nom.sg.f: "{nom_f}"
+      gen.sg.f: "{stamm}is"
+      dat.sg.f: "{stamm}ī"
+      akk.sg.f: "{stamm}em"
+      abl.sg.f: "{stamm}ī"
+      vok.sg.f: "{nom_f}"
+      nom.pl.f: "{stamm}ēs"
+      gen.pl.f: "{stamm}ium"
+      dat.pl.f: "{stamm}ibus"
+      akk.pl.f: ["{stamm}ēs", "{stamm}īs"]
+      abl.pl.f: "{stamm}ibus"
+      vok.pl.f: "{stamm}ēs"
+      nom.sg.n: "{nom_n}"
+      gen.sg.n: "{stamm}is"
+      dat.sg.n: "{stamm}ī"
+      akk.sg.n: "{nom_n}"
+      abl.sg.n: "{stamm}ī"
+      vok.sg.n: "{nom_n}"
+      nom.pl.n: "{stamm}ia"
+      gen.pl.n: "{stamm}ium"
+      dat.pl.n: "{stamm}ibus"
+      akk.pl.n: "{stamm}ia"
+      abl.pl.n: "{stamm}ibus"
+      vok.pl.n: "{stamm}ia"
+
+  3-Endungen-Partizip:
+    abstract: true
+    inherits_from: 3-Endungen
+    forms:
+      abl.sg.m: ["{stamm}e", "{stamm}ī"]
+      abl.sg.f: ["{stamm}e", "{stamm}ī"]
+      abl.sg.n: ["{stamm}e", "{stamm}ī"]
+      akk.pl.m: "{stamm}ēs"
+      akk.pl.f: "{stamm}ēs"
+
+  # Declensions. One gender per type, so their keys carry no genus.
+  O-Deklination-maskulinum:
+    stems:
+      stamm: {from: nom, remove: "us", display: Stamm}
+    forms:
+      nom.sg: "{stamm}us"
+      gen.sg: "{stamm}ī"
+      dat.sg: "{stamm}ō"
+      akk.sg: "{stamm}um"
+      abl.sg: "{stamm}ō"
+      vok.sg: "{stamm}e"
+      nom.pl: "{stamm}ī"
+      gen.pl: "{stamm}ōrum"
+      dat.pl: "{stamm}īs"
+      akk.pl: "{stamm}ōs"
+      abl.pl: "{stamm}īs"
+      vok.pl: "{stamm}ī"
+
+  O-Deklination-neutrum:
+    stems:
+      stamm: {from: nom, remove: "um", display: Stamm}
+    forms:
+      nom.sg: "{stamm}um"
+      gen.sg: "{stamm}ī"
+      dat.sg: "{stamm}ō"
+      akk.sg: "{stamm}um"
+      abl.sg: "{stamm}ō"
+      vok.sg: "{stamm}um"
+      nom.pl: "{stamm}a"
+      gen.pl: "{stamm}ōrum"
+      dat.pl: "{stamm}īs"
+      akk.pl: "{stamm}a"
+      abl.pl: "{stamm}īs"
+      vok.pl: "{stamm}a"
+
+  A-Deklination:
+    stems:
+      stamm: {from: nom, remove: "a", display: Stamm}
+    forms:
+      nom.sg: "{stamm}a"
+      gen.sg: "{stamm}ae"
+      dat.sg: "{stamm}ae"
+      akk.sg: "{stamm}am"
+      abl.sg: "{stamm}ā"
+      vok.sg: "{stamm}a"
+      nom.pl: "{stamm}ae"
+      gen.pl: "{stamm}ārum"
+      dat.pl: "{stamm}īs"
+      akk.pl: "{stamm}ās"
+      abl.pl: "{stamm}īs"
+      vok.pl: "{stamm}ae"
+
+  E-Deklination:
+    stems:
+      stamm: {from: nom, remove: "ēs", display: Stamm}
+    forms:
+      nom.sg: "{stamm}ēs"
+      gen.sg: "{stamm}ēī"
+      dat.sg: "{stamm}ēī"
+      akk.sg: "{stamm}em"
+      abl.sg: "{stamm}ē"
+      vok.sg: "{stamm}ēs"
+      nom.pl: "{stamm}ēs"
+      gen.pl: "{stamm}ērum"
+      dat.pl: "{stamm}ēbus"
+      akk.pl: "{stamm}ēs"
+      abl.pl: "{stamm}ēbus"
+      vok.pl: "{stamm}ēs"
+
+  U-Deklination:
+    stems:
+      stamm: {from: nom, remove: "us", display: Stamm}
+    forms:
+      nom.sg: "{stamm}us"
+      gen.sg: "{stamm}ūs"
+      dat.sg: "{stamm}uī"
+      akk.sg: "{stamm}um"
+      abl.sg: "{stamm}ū"
+      vok.sg: "{stamm}us"
+      nom.pl: "{stamm}ūs"
+      gen.pl: "{stamm}uum"
+      dat.pl: "{stamm}ibus"
+      akk.pl: "{stamm}ūs"
+      abl.pl: "{stamm}ibus"
+      vok.pl: "{stamm}ūs"
+
+  Konsonantische-Deklination-mf:
+    stems:
+      stamm:  {from: gen, remove: "is", display: Stamm}
+      nom_sg: {from: nom, remove: "", display: Nominativ}
+    forms:
+      nom.sg: "{nom_sg}"
+      gen.sg: "{stamm}is"
+      dat.sg: "{stamm}ī"
+      akk.sg: "{stamm}em"
+      abl.sg: "{stamm}e"
+      vok.sg: "{nom_sg}"
+      nom.pl: "{stamm}ēs"
+      gen.pl: "{stamm}um"
+      dat.pl: "{stamm}ibus"
+      akk.pl: "{stamm}ēs"
+      abl.pl: "{stamm}ibus"
+      vok.pl: "{stamm}ēs"
+
+  Konsonantische-Deklination-n:
+    stems:
+      stamm:  {from: gen, remove: "is", display: Stamm}
+      nom_sg: {from: nom, remove: "", display: Nominativ}
+    forms:
+      nom.sg: "{nom_sg}"
+      gen.sg: "{stamm}is"
+      dat.sg: "{stamm}ī"
+      akk.sg: "{nom_sg}"
+      abl.sg: "{stamm}e"
+      vok.sg: "{nom_sg}"
+      nom.pl: "{stamm}a"
+      gen.pl: "{stamm}um"
+      dat.pl: "{stamm}ibus"
+      akk.pl: "{stamm}a"
+      abl.pl: "{stamm}ibus"
+      vok.pl: "{stamm}a"
+
+  Konsonantische-Deklination-i-mf:
+    inherits_from: Konsonantische-Deklination-mf
+    forms:
+      gen.pl: "{stamm}ium"
+
+  Konsonantische-Deklination-i-n:
+    inherits_from: Konsonantische-Deklination-n
+    forms:
+      abl.sg: "{stamm}ī"
+      nom.pl: "{stamm}ia"
+      gen.pl: "{stamm}ium"
+      akk.pl: "{stamm}ia"
+
+  # Pronouns and numerals: one type per lexeme, every form on the item.
+  Pronomen-personal: {}
+  Pronomen-is: {}
+  Pronomen-idem: {}
+  Pronomen-hic: {}
+  Pronomen-ille: {}
+  Pronomen-iste: {}
+  Pronomen-ipse: {}
+  Pronomen-qui: {}
+  Pronomen-quis: {}
+  Numerale-unus: {}
+  Numerale-duo: {}
+  Numerale-tres: {}
+  Numerale-milia: {}
+
+items:
+  - translation: "Der Hausherr/Herr"
+    parts: {nom: "dominus"}
+  - translation: "Die Rose"
+    parts: {nom: "rosa"}
+  - translation: "Der Tag"
+    parts: {nom: "diēs"}
+  - type: U-Deklination
+    translation: "Die Hand"
+    parts: {nom: "manus"}
+  - translation: "Der Gott"
+    parts: {nom: "deus"}
+  - translation: "das Kapitol (einer der sieben Hügel Roms)"
+    parts: {nom: "Capitōlium"}
+  - translation: "der Römer"
+    parts: {nom: "Rōmānus"}
+  - translation: "die Unterwelt; der Tartarus"
+    parts: {nom: "Tartarus"}
+  - translation: "der Gegner, Feind"
+    parts: {nom: "adversārius"}
+  - translation: "das Gebäude, Bauwerk"
+    parts: {nom: "aedificium"}
+  - translation: "das Amphitheater"
+    parts: {nom: "amphitheātrum"}
+  - translation: "der Freund"
+    parts: {nom: "amīcus"}
+  - translation: "der Sand; die Arena, der Kampfplatz"
+    parts: {nom: "arēna"}
+  - translation: "die Gerichtshalle, Markthalle"
+    parts: {nom: "basilica"}
+  - translation: "das (wilde) Tier"
+    parts: {nom: "bēstia"}
+  - translation: "die Nahrung, die Speise"
+    parts: {nom: "cibus"}
+  - translation: "der Rat, Plan, Beschluss"
+    parts: {nom: "cōnsilium"}
+  - translation: "die Kurie (Versammlungsort des Senats)"
+    parts: {nom: "cūria"}
+  - translation: "die Göttin"
+    parts: {nom: "dea"}
+  - translation: "die Herrin, Ehefrau"
+    parts: {nom: "domina"}
+  - translation: "das Geschenk, die Gabe"
+    parts: {nom: "dōnum"}
+  - translation: "das Pferd"
+    parts: {nom: "equus"}
+  - translation: "die Familie; die Hausgemeinschaft"
+    parts: {nom: "familia"}
+  - translation: "der Marktplatz (das Forum)"
+    parts: {nom: "forum"}
+  - translation: "das Getreide"
+    parts: {nom: "frūmentum"}
+  - translation: "die Frau"
+    parts: {nom: "fēmina"}
+  - translation: "die Tochter"
+    parts: {nom: "fīlia"}
+  - translation: "der Sohn"
+    parts: {nom: "fīlius"}
+  - translation: "der Garten"
+    parts: {nom: "hortus"}
+  - translation: "das Opfer, Opfertier"
+    parts: {nom: "hostia"}
+  - translation: "der Brand"
+    parts: {nom: "incendium"}
+  - translation: "das Spiel, Schauspiel; die Schule"
+    parts: {nom: "lūdus"}
+  - translation: "das Denkmal"
+    parts: {nom: "monumentum"}
+  - translation: "das Ungeheuer"
+    parts: {nom: "mōnstrum"}
+  - translation: "die Aufgabe, Beschäftigung"
+    parts: {nom: "negōtium"}
+  - translation: "die Gefahr, das Abenteuer"
+    parts: {nom: "perīculum"}
+  - translation: "das Volk"
+    parts: {nom: "populus"}
+  - translation: "die Tür, das Tor, der Eingang"
+    parts: {nom: "porta"}
+  - translation: "das Mädchen, die junge Frau"
+    parts: {nom: "puella"}
+  - translation: "das Opfer"
+    parts: {nom: "sacrificium"}
+  - translation: "die Weisheit, Klugheit"
+    parts: {nom: "sapientia"}
+  - translation: "die Sklavin"
+    parts: {nom: "serva"}
+  - translation: "der Sklave"
+    parts: {nom: "servus"}
+  - translation: "das Bild, Götterbild"
+    parts: {nom: "simulācrum"}
+  - translation: "das Schauspiel"
+    parts: {nom: "spectāculum"}
+  - translation: "das Standbild, die Statue"
+    parts: {nom: "statua"}
+  - translation: "der Laden, das Wirtshaus"
+    parts: {nom: "taberna"}
+  - translation: "die Tafel, Schreibtafel"
+    parts: {nom: "tabula"}
+  - translation: "der Tempel"
+    parts: {nom: "templum"}
+  - translation: "das Obergewand (die Toga)"
+    parts: {nom: "toga"}
+  - translation: "die Menschenmenge; die Unordnung; der Lärm"
+    parts: {nom: "turba"}
+  - translation: "der Schatten"
+    parts: {nom: "umbra"}
+  - translation: "das Wort"
+    parts: {nom: "verbum"}
+  - translation: "das Haus, Landhaus"
+    parts: {nom: "vīlla"}
+  - translation: "der Wein"
+    parts: {nom: "vīnum"}
+  - translation: "der Altar"
+    parts: {nom: "āra"}
+  - type: Konsonantische-Deklination-mf
+    translation: "der König"
+    parts: {nom: "rēx", gen: "rēgis"}
+  - type: Konsonantische-Deklination-mf
+    translation: "die Ehefrau"
+    parts: {nom: "uxor", gen: "uxōris"}
+  - type: Konsonantische-Deklination-n
+    translation: "der Körper"
+    parts: {nom: "corpus", gen: "corporis"}
+  - type: Pronomen-is
+    translation: "dieser, diese, dieses; er, sie, es"
+    parts: {nom: "is"}
+    forms:
+      nom.sg.m: "is"
+      gen.sg.m: "eius"
+      dat.sg.m: "eī"
+      akk.sg.m: "eum"
+      abl.sg.m: "eō"
+      nom.pl.m: ["iī", "eī"]
+      gen.pl.m: "eōrum"
+      dat.pl.m: ["iīs", "eīs"]
+      akk.pl.m: "eōs"
+      abl.pl.m: ["iīs", "eīs"]
+      nom.sg.f: "ea"
+      gen.sg.f: "eius"
+      dat.sg.f: "eī"
+      akk.sg.f: "eam"
+      abl.sg.f: "eā"
+      nom.pl.f: "eae"
+      gen.pl.f: "eārum"
+      dat.pl.f: ["iīs", "eīs"]
+      akk.pl.f: "eās"
+      abl.pl.f: ["iīs", "eīs"]
+      nom.sg.n: "id"
+      gen.sg.n: "eius"
+      dat.sg.n: "eī"
+      akk.sg.n: "id"
+      abl.sg.n: "eō"
+      nom.pl.n: "ea"
+      gen.pl.n: "eōrum"
+      dat.pl.n: ["iīs", "eīs"]
+      akk.pl.n: "ea"
+      abl.pl.n: ["iīs", "eīs"]
+  - type: Konsonantische-Deklination-i-mf
+    translation: "die Stadt"
+    parts: {nom: "urbs", gen: "urbis"}
+  - type: Konsonantische-Deklination-i-mf
+    translation: "der Teil"
+    parts: {nom: "pars", gen: "partis"}
+  - type: Konsonantische-Deklination-i-n
+    translation: "das Meer"
+    parts: {nom: "mare", gen: "maris"}
+  - type: Konsonantische-Deklination-i-n
+    translation: "das Tier, Lebewesen"
+    parts: {nom: "animal", gen: "animālis"}
+  - type: Pronomen-personal
+    translation: "ich"
+    parts: {nom: "ego"}
+    forms:
+      nom.sg: "ego"
+      gen.sg: "meī"
+      dat.sg: "mihi"
+      akk.sg: "mē"
+      abl.sg: "mē"
+  - type: Pronomen-personal
+    translation: "du"
+    parts: {nom: "tū"}
+    forms:
+      nom.sg: "tū"
+      gen.sg: "tuī"
+      dat.sg: "tibi"
+      akk.sg: "tē"
+      abl.sg: "tē"
+  - type: Pronomen-personal
+    translation: "wir"
+    parts: {nom: "nōs"}
+    forms:
+      nom.pl: "nōs"
+      gen.pl: "nostrum"
+      dat.pl: "nōbīs"
+      akk.pl: "nōs"
+      abl.pl: "nōbīs"
+  - type: Pronomen-personal
+    translation: "ihr"
+    parts: {nom: "vōs"}
+    forms:
+      nom.pl: "vōs"
+      gen.pl: "vestrum"
+      dat.pl: "vōbīs"
+      akk.pl: "vōs"
+      abl.pl: "vōbīs"
+  - type: Pronomen-hic
+    translation: "dieser hier, diese hier, dieses hier"
+    parts: {nom: "hic"}
+    forms:
+      nom.sg.m: "hic"
+      gen.sg.m: "huius"
+      dat.sg.m: "huic"
+      akk.sg.m: "hunc"
+      abl.sg.m: "hōc"
+      nom.pl.m: "hī"
+      gen.pl.m: "hōrum"
+      dat.pl.m: "hīs"
+      akk.pl.m: "hōs"
+      abl.pl.m: "hīs"
+      nom.sg.f: "haec"
+      gen.sg.f: "huius"
+      dat.sg.f: "huic"
+      akk.sg.f: "hanc"
+      abl.sg.f: "hāc"
+      nom.pl.f: "hae"
+      gen.pl.f: "hārum"
+      dat.pl.f: "hīs"
+      akk.pl.f: "hās"
+      abl.pl.f: "hīs"
+      nom.sg.n: "hoc"
+      gen.sg.n: "huius"
+      dat.sg.n: "huic"
+      akk.sg.n: "hoc"
+      abl.sg.n: "hōc"
+      nom.pl.n: "haec"
+      gen.pl.n: "hōrum"
+      dat.pl.n: "hīs"
+      akk.pl.n: "haec"
+      abl.pl.n: "hīs"
+  - type: Pronomen-ille
+    translation: "jener, jene, jenes"
+    parts: {nom: "ille"}
+    forms:
+      nom.sg.m: "ille"
+      gen.sg.m: "illīus"
+      dat.sg.m: "illī"
+      akk.sg.m: "illum"
+      abl.sg.m: "illō"
+      nom.pl.m: "illī"
+      gen.pl.m: "illōrum"
+      dat.pl.m: "illīs"
+      akk.pl.m: "illōs"
+      abl.pl.m: "illīs"
+      nom.sg.f: "illa"
+      gen.sg.f: "illīus"
+      dat.sg.f: "illī"
+      akk.sg.f: "illam"
+      abl.sg.f: "illā"
+      nom.pl.f: "illae"
+      gen.pl.f: "illārum"
+      dat.pl.f: "illīs"
+      akk.pl.f: "illās"
+      abl.pl.f: "illīs"
+      nom.sg.n: "illud"
+      gen.sg.n: "illīus"
+      dat.sg.n: "illī"
+      akk.sg.n: "illud"
+      abl.sg.n: "illō"
+      nom.pl.n: "illa"
+      gen.pl.n: "illōrum"
+      dat.pl.n: "illīs"
+      akk.pl.n: "illa"
+      abl.pl.n: "illīs"
+  - type: Pronomen-iste
+    translation: "dieser da, diese da, dieses da"
+    parts: {nom: "iste"}
+    forms:
+      nom.sg.m: "iste"
+      gen.sg.m: "istīus"
+      dat.sg.m: "istī"
+      akk.sg.m: "istum"
+      abl.sg.m: "istō"
+      nom.pl.m: "istī"
+      gen.pl.m: "istōrum"
+      dat.pl.m: "istīs"
+      akk.pl.m: "istōs"
+      abl.pl.m: "istīs"
+      nom.sg.f: "ista"
+      gen.sg.f: "istīus"
+      dat.sg.f: "istī"
+      akk.sg.f: "istam"
+      abl.sg.f: "istā"
+      nom.pl.f: "istae"
+      gen.pl.f: "istārum"
+      dat.pl.f: "istīs"
+      akk.pl.f: "istās"
+      abl.pl.f: "istīs"
+      nom.sg.n: "istud"
+      gen.sg.n: "istīus"
+      dat.sg.n: "istī"
+      akk.sg.n: "istud"
+      abl.sg.n: "istō"
+      nom.pl.n: "ista"
+      gen.pl.n: "istōrum"
+      dat.pl.n: "istīs"
+      akk.pl.n: "ista"
+      abl.pl.n: "istīs"
+  - type: Pronomen-ipse
+    translation: "selbst"
+    parts: {nom: "ipse"}
+    forms:
+      nom.sg.m: "ipse"
+      gen.sg.m: "ipsīus"
+      dat.sg.m: "ipsī"
+      akk.sg.m: "ipsum"
+      abl.sg.m: "ipsō"
+      nom.pl.m: "ipsī"
+      gen.pl.m: "ipsōrum"
+      dat.pl.m: "ipsīs"
+      akk.pl.m: "ipsōs"
+      abl.pl.m: "ipsīs"
+      nom.sg.f: "ipsa"
+      gen.sg.f: "ipsīus"
+      dat.sg.f: "ipsī"
+      akk.sg.f: "ipsam"
+      abl.sg.f: "ipsā"
+      nom.pl.f: "ipsae"
+      gen.pl.f: "ipsārum"
+      dat.pl.f: "ipsīs"
+      akk.pl.f: "ipsās"
+      abl.pl.f: "ipsīs"
+      nom.sg.n: "ipsum"
+      gen.sg.n: "ipsīus"
+      dat.sg.n: "ipsī"
+      akk.sg.n: "ipsum"
+      abl.sg.n: "ipsō"
+      nom.pl.n: "ipsa"
+      gen.pl.n: "ipsōrum"
+      dat.pl.n: "ipsīs"
+      akk.pl.n: "ipsa"
+      abl.pl.n: "ipsīs"
+  - type: Pronomen-qui
+    translation: "welcher, welche, welches; der, die, das"
+    parts: {nom: "quī"}
+    forms:
+      nom.sg.m: "quī"
+      gen.sg.m: "cuius"
+      dat.sg.m: "cui"
+      akk.sg.m: "quem"
+      abl.sg.m: "quō"
+      nom.pl.m: "quī"
+      gen.pl.m: "quōrum"
+      dat.pl.m: "quibus"
+      akk.pl.m: "quōs"
+      abl.pl.m: "quibus"
+      nom.sg.f: "quae"
+      gen.sg.f: "cuius"
+      dat.sg.f: "cui"
+      akk.sg.f: "quam"
+      abl.sg.f: "quā"
+      nom.pl.f: "quae"
+      gen.pl.f: "quārum"
+      dat.pl.f: "quibus"
+      akk.pl.f: "quās"
+      abl.pl.f: "quibus"
+      nom.sg.n: "quod"
+      gen.sg.n: "cuius"
+      dat.sg.n: "cui"
+      akk.sg.n: "quod"
+      abl.sg.n: "quō"
+      nom.pl.n: "quae"
+      gen.pl.n: "quōrum"
+      dat.pl.n: "quibus"
+      akk.pl.n: "quae"
+      abl.pl.n: "quibus"
+  - type: Pronomen-quis
+    translation: "wer?, was?"
+    parts: {nom: "quis"}
+    forms:
+      nom.sg.m: "quis"
+      gen.sg.m: "cuius"
+      dat.sg.m: "cui"
+      akk.sg.m: "quem"
+      abl.sg.m: "quō"
+      nom.sg.f: "quis"
+      gen.sg.f: "cuius"
+      dat.sg.f: "cui"
+      akk.sg.f: "quem"
+      abl.sg.f: "quō"
+      nom.sg.n: "quid"
+      gen.sg.n: "cuius"
+      dat.sg.n: "cui"
+      akk.sg.n: "quid"
+      abl.sg.n: "quō"
+  - type: Numerale-unus
+    translation: "ein, eine, ein"
+    parts: {nom: "ūnus"}
+    forms:
+      nom.sg.m: "ūnus"
+      gen.sg.m: "ūnīus"
+      dat.sg.m: "ūnī"
+      akk.sg.m: "ūnum"
+      abl.sg.m: "ūnō"
+      nom.sg.f: "ūna"
+      gen.sg.f: "ūnīus"
+      dat.sg.f: "ūnī"
+      akk.sg.f: "ūnam"
+      abl.sg.f: "ūnā"
+      nom.sg.n: "ūnum"
+      gen.sg.n: "ūnīus"
+      dat.sg.n: "ūnī"
+      akk.sg.n: "ūnum"
+      abl.sg.n: "ūnō"
+  - type: Numerale-tres
+    translation: "drei"
+    parts: {nom: "trēs"}
+    forms:
+      nom.pl.m: "trēs"
+      gen.pl.m: "trium"
+      dat.pl.m: "tribus"
+      akk.pl.m: "trēs"
+      abl.pl.m: "tribus"
+      nom.pl.f: "trēs"
+      gen.pl.f: "trium"
+      dat.pl.f: "tribus"
+      akk.pl.f: "trēs"
+      abl.pl.f: "tribus"
+      nom.pl.n: "tria"
+      gen.pl.n: "trium"
+      dat.pl.n: "tribus"
+      akk.pl.n: "tria"
+      abl.pl.n: "tribus"
+  - type: Numerale-milia
+    translation: "Tausende"
+    parts: {nom: "mīlia"}
+    forms:
+      nom.pl: "mīlia"
+      gen.pl: "mīlium"
+      dat.pl: "mīlibus"
+      akk.pl: "mīlia"
+      abl.pl: "mīlibus"
+  - type: Pronomen-idem
+    translation: "derselbe, dieselbe, dasselbe"
+    parts: {nom: "īdem"}
+    forms:
+      nom.sg.m: "īdem"
+      gen.sg.m: "eiusdem"
+      dat.sg.m: "eīdem"
+      akk.sg.m: "eundem"
+      abl.sg.m: "eōdem"
+      nom.pl.m: "eīdem"
+      gen.pl.m: "eōrundem"
+      dat.pl.m: "eīsdem"
+      akk.pl.m: "eōsdem"
+      abl.pl.m: "eīsdem"
+      nom.sg.f: "eadem"
+      gen.sg.f: "eiusdem"
+      dat.sg.f: "eīdem"
+      akk.sg.f: "eandem"
+      abl.sg.f: "eādem"
+      nom.pl.f: "eaedem"
+      gen.pl.f: "eārundem"
+      dat.pl.f: "eīsdem"
+      akk.pl.f: "eāsdem"
+      abl.pl.f: "eīsdem"
+      nom.sg.n: "idem"
+      gen.sg.n: "eiusdem"
+      dat.sg.n: "eīdem"
+      akk.sg.n: "idem"
+      abl.sg.n: "eōdem"
+      nom.pl.n: "eadem"
+      gen.pl.n: "eōrundem"
+      dat.pl.n: "eīsdem"
+      akk.pl.n: "eadem"
+      abl.pl.n: "eīsdem"
+  - type: Numerale-duo
+    translation: "zwei"
+    parts: {nom: "duo"}
+    forms:
+      nom.pl.m: "duo"
+      gen.pl.m: "duōrum"
+      dat.pl.m: "duōbus"
+      akk.pl.m: "duōs"
+      abl.pl.m: "duōbus"
+      nom.pl.f: "duae"
+      gen.pl.f: "duārum"
+      dat.pl.f: "duābus"
+      akk.pl.f: "duās"
+      abl.pl.f: "duābus"
+      nom.pl.n: "duo"
+      gen.pl.n: "duōrum"
+      dat.pl.n: "duōbus"
+      akk.pl.n: "duo"
+      abl.pl.n: "duōbus"
