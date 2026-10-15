@@ -373,11 +373,11 @@ form_order:
   - imperativ_plural
 
 items:
-  # Test cases for each conjugation type with explicit forms
+  # Items with verify_inference: true carry their inferred forms explicitly as
+  # regression goldens for test/form_inference_test.dart.
   - type: A-Konjugation
-    translation: lieben
-    base_form: amare
-    word: amo
+    translation: lieben, gern haben
+    base_form: amāre
     verify_inference: true
     forms:
       praesens_first_person_singular: amo
@@ -407,9 +407,8 @@ items:
       imperativ_singular: ama
       imperativ_plural: amate
   - type: E-Konjugation
-    translation: haben
-    base_form: habere
-    word: habeo
+    translation: haben, halten
+    base_form: habēre
     verify_inference: true
     forms:
       praesens_first_person_singular: habeo
@@ -440,8 +439,7 @@ items:
       imperativ_plural: habete
   - type: I-Konjugation
     translation: hören
-    base_form: audire
-    word: audio
+    base_form: audīre
     verify_inference: true
     forms:
       praesens_first_person_singular: audio
@@ -503,43 +501,9 @@ items:
       imperativ_singular: cape
       imperativ_plural: capite
 
-  # Test cases: Words with macrons to verify automatic form generation
-  - type: I-Konjugation
-    translation: hören (mit Makron)
-    base_form: audīre
-    word: audio
-    verify_inference: true
-    forms:
-      praesens_first_person_singular: audio
-      praesens_second_person_singular: audis
-      praesens_third_person_singular: audit
-      praesens_first_person_plural: audimus
-      praesens_second_person_plural: auditis
-      praesens_third_person_plural: audiunt
-      imperfekt_first_person_singular: audiebam
-      imperfekt_second_person_singular: audiebas
-      imperfekt_third_person_singular: audiebat
-      imperfekt_first_person_plural: audiebamus
-      imperfekt_second_person_plural: audiebatis
-      imperfekt_third_person_plural: audiebant
-      perfekt_first_person_singular: audivi
-      perfekt_second_person_singular: audivisti
-      perfekt_third_person_singular: audivit
-      perfekt_first_person_plural: audivimus
-      perfekt_second_person_plural: audivistis
-      perfekt_third_person_plural: audiverunt
-      plusquamperfekt_first_person_singular: audiveram
-      plusquamperfekt_second_person_singular: audiveras
-      plusquamperfekt_third_person_singular: audiverat
-      plusquamperfekt_first_person_plural: audiveramus
-      plusquamperfekt_second_person_plural: audiveratis
-      plusquamperfekt_third_person_plural: audiverant
-      imperativ_singular: audi
-      imperativ_plural: audite
   - type: I-Konjugation (Stammperfekt)
     translation: kommen
     base_form: venīre
-    word: venio
     verify_inference: true
     forms:
       praesens_first_person_singular: venio
@@ -603,7 +567,6 @@ items:
   - type: E-Konjugation
     translation: erscheinen, auftauchen, sich zeigen
     base_form: appārēre
-    word: appareo
     verify_inference: true
     forms:
       praesens_first_person_singular: appareo
@@ -636,16 +599,10 @@ items:
     base_form: aedificāre
   - translation: gehen, spazieren gehen
     base_form: ambulāre
-  - translation: lieben, gern haben
-    base_form: amāre
   - translation: herbeibringen, hintragen
     base_form: apportāre
   - translation: sich nähern, herankommen
     base_form: appropinquāre
-  - translation: erscheinen, auftauchen, sich zeigen
-    base_form: appārēre
-  - translation: hören
-    base_form: audīre
   - translation: zögern, sich nicht beeilen
     base_form: cessāre
   - translation: rufen, schreien
@@ -701,8 +658,6 @@ items:
       plusquamperfekt_first_person_plural: gavisi eramus
       plusquamperfekt_second_person_plural: gavisi eratis
       plusquamperfekt_third_person_plural: gavisi erant
-  - translation: haben, halten
-    base_form: habēre
   - translation: befehlen, (be)herrschen
     base_form: imperāre
   - translation: arbeiten, sich anstrengen
@@ -775,9 +730,6 @@ items:
     base_form: temptāre
   - translation: (sich) fürchten, Angst haben
     base_form: timēre
-  - type: I-Konjugation (Stammperfekt)
-    translation: kommen
-    base_form: venīre
   - type: E-Konjugation (Stammperfekt)
     translation: sehen
     base_form: vidēre

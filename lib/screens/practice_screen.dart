@@ -128,6 +128,8 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
       mainAxisSize: MainAxisSize.min,
       children: [
         DropdownButtonFormField<String>(
+          // Translations run long; without this they overflow the field.
+          isExpanded: true,
           initialValue: _selectedTranslation,
           hint: Text(
             FlutterI18n.translate(context, 'practice.chooseTranslation'),

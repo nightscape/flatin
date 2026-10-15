@@ -267,22 +267,6 @@ items:
       accusative_plural: manus
       ablative_plural: manibus
 
-  # Example: Simplified form (forms will be inferred automatically)
-  # For regular declensions, you only need to specify:
-  # - type: the declension type (can be inferred from word ending)
-  # - translation: the translation
-  # - word: the nominative singular form
-  # - word_form: should be "nominative_singular"
-  # - possible_types: (optional, will be inferred from word ending)
-  # The forms and type will be automatically generated based on the type_patterns above
-  - type: O-Deklination-maskulinum
-    translation: Der Freund
-    word_form: nominative_singular
-    word: amicus
-    possible_types:
-      - O-Deklination-maskulinum
-    # forms: omitted - will be inferred as: amicus, amici, amico, amicum, amico, amici, amicorum, amicis, amicos, amicis
-
   # Example: Minimal form (type and possible_types inferred from word ending)
   # Just specify word and translation - everything else is inferred!
   # word_form defaults to "nominative_singular" (from defaults section)
@@ -293,35 +277,16 @@ items:
     # word_form: defaults to "nominative_singular"
     # forms: inferred automatically
 
-  # Test cases: Nouns with macrons to verify automatic form generation
-  # These have explicit forms to serve as regression tests
-  - type: O-Deklination-maskulinum
-    translation: der Freund
-    word_form: nominative_singular
-    word: amīcus
-    verify_inference: true
-    possible_types:
-      - O-Deklination-maskulinum
-    forms:
-      nominative_singular: amicus
-      genitive_singular: amici
-      dative_singular: amico
-      accusative_singular: amicum
-      ablative_singular: amico
-      nominative_plural: amici
-      genitive_plural: amicorum
-      dative_plural: amicis
-      accusative_plural: amicos
-      ablative_plural: amicis
+  - translation: das Kapitol (einer der sieben Hügel Roms)
+    word: Capitōlium
+  # Items with verify_inference: true carry their inferred forms explicitly as
+  # regression goldens for test/form_inference_test.dart.
   - type: O-Deklination-maskulinum
     translation: der Römer
-    word_form: nominative_singular
     word: Rōmānus
     verify_inference: true
-    possible_types:
-      - O-Deklination-maskulinum
     forms:
-      nominative_singular: Romanus
+      nominative_singular: Rōmānus
       genitive_singular: Romani
       dative_singular: Romano
       accusative_singular: Romanum
@@ -331,64 +296,6 @@ items:
       dative_plural: Romanis
       accusative_plural: Romanos
       ablative_plural: Romanis
-  - type: O-Deklination-maskulinum
-    translation: der Sohn
-    word_form: nominative_singular
-    word: fīlius
-    verify_inference: true
-    possible_types:
-      - O-Deklination-maskulinum
-    forms:
-      nominative_singular: filius
-      genitive_singular: filii
-      dative_singular: filio
-      accusative_singular: filium
-      ablative_singular: filio
-      nominative_plural: filii
-      genitive_plural: filiorum
-      dative_plural: filiis
-      accusative_plural: filios
-      ablative_plural: filiis
-  - type: A-Deklination
-    translation: die Tochter
-    word_form: nominative_singular
-    word: fīlia
-    verify_inference: true
-    possible_types:
-      - A-Deklination
-    forms:
-      nominative_singular: filia
-      genitive_singular: filiae
-      dative_singular: filiae
-      accusative_singular: filiam
-      ablative_singular: filia
-      nominative_plural: filiae
-      genitive_plural: filiarum
-      dative_plural: filiis
-      accusative_plural: filias
-      ablative_plural: filiis
-  - type: A-Deklination
-    translation: die Frau
-    word_form: nominative_singular
-    word: fēmina
-    verify_inference: true
-    possible_types:
-      - A-Deklination
-    forms:
-      nominative_singular: femina
-      genitive_singular: feminae
-      dative_singular: feminae
-      accusative_singular: feminam
-      ablative_singular: femina
-      nominative_plural: feminae
-      genitive_plural: feminarum
-      dative_plural: feminis
-      accusative_plural: feminas
-      ablative_plural: feminis
-  - translation: das Kapitol (einer der sieben Hügel Roms)
-    word: Capitōlium
-  - translation: der Römer
-    word: Rōmānus
   - translation: die Unterwelt; der Tartarus
     word: Tartarus
   - translation: der Gegner, Feind
@@ -397,8 +304,21 @@ items:
     word: aedificium
   - translation: das Amphitheater
     word: amphitheātrum
-  - translation: der Freund
+  - type: O-Deklination-maskulinum
+    translation: der Freund
     word: amīcus
+    verify_inference: true
+    forms:
+      nominative_singular: amīcus
+      genitive_singular: amici
+      dative_singular: amico
+      accusative_singular: amicum
+      ablative_singular: amico
+      nominative_plural: amici
+      genitive_plural: amicorum
+      dative_plural: amicis
+      accusative_plural: amicos
+      ablative_plural: amicis
   - translation: der Sand; die Arena, der Kampfplatz
     word: arēna
   - translation: die Gerichtshalle, Markthalle
@@ -425,12 +345,51 @@ items:
     word: forum
   - translation: das Getreide
     word: frūmentum
-  - translation: die Frau
+  - type: A-Deklination
+    translation: die Frau
     word: fēmina
-  - translation: die Tochter
+    verify_inference: true
+    forms:
+      nominative_singular: fēmina
+      genitive_singular: feminae
+      dative_singular: feminae
+      accusative_singular: feminam
+      ablative_singular: femina
+      nominative_plural: feminae
+      genitive_plural: feminarum
+      dative_plural: feminis
+      accusative_plural: feminas
+      ablative_plural: feminis
+  - type: A-Deklination
+    translation: die Tochter
     word: fīlia
-  - translation: der Sohn
+    verify_inference: true
+    forms:
+      nominative_singular: fīlia
+      genitive_singular: filiae
+      dative_singular: filiae
+      accusative_singular: filiam
+      ablative_singular: filia
+      nominative_plural: filiae
+      genitive_plural: filiarum
+      dative_plural: filiis
+      accusative_plural: filias
+      ablative_plural: filiis
+  - type: O-Deklination-maskulinum
+    translation: der Sohn
     word: fīlius
+    verify_inference: true
+    forms:
+      nominative_singular: fīlius
+      genitive_singular: filii
+      dative_singular: filio
+      accusative_singular: filium
+      ablative_singular: filio
+      nominative_plural: filii
+      genitive_plural: filiorum
+      dative_plural: filiis
+      accusative_plural: filios
+      ablative_plural: filiis
   - translation: der Garten
     word: hortus
   - translation: das Opfer, Opfertier

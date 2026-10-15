@@ -2,49 +2,85 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import '../models/practice_item.dart';
 import '../models/fsrs_card.dart';
+import 'fsrs_legacy_ids.dart';
 
 class FsrsStorage {
   static const String _storageKey = 'fsrs_cards';
-  static const String _currentVersion = '1.0';
+  static const String _currentVersion = '2.0';
 
-  /// Load all FSRS cards from storage
-  static Future<Map<String, PracticeItemCard>> loadCards() async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      final cardsJson = prefs.getString(_storageKey);
+  /// Load all FSRS cards from storage, converting pre-2.0 ids on the way.
+  ///
+  /// [currentItems] is what the stored content hashes are resolved against, so
+  /// the conversion must happen before [syncCards] fills in missing cards.
+  ///
+  /// A read, parse or conversion error throws: an empty map would make
+  /// [syncCards] overwrite the learner's whole review history with new cards.
+  static Future<Map<String, PracticeItemCard>> loadCards(
+    List<PracticeItem> currentItems,
+  ) async {
+    final prefs = await SharedPreferences.getInstance();
+    final cardsJson = prefs.getString(_storageKey);
 
-      if (cardsJson == null) {
-        return {};
-      }
-
-      final json = jsonDecode(cardsJson) as Map<String, dynamic>;
-
-      // Check version for future migrations
-      final version = json['version'] as String? ?? '0.0';
-      if (version != _currentVersion) {
-        // Handle version migration if needed in the future
-      }
-
-      final cardsList = json['cards'] as List<dynamic>? ?? [];
-      final cardsMap = <String, PracticeItemCard>{};
-
-      for (final cardData in cardsList) {
-        try {
-          final card = PracticeItemCard.fromMap(
-            cardData as Map<String, dynamic>,
-          );
-          cardsMap[card.itemId] = card;
-        } catch (e) {
-          // Skip invalid cards
-          print('Error loading card: $e');
-        }
-      }
-
-      return cardsMap;
-    } catch (e) {
-      print('Error loading FSRS cards: $e');
+    if (cardsJson == null) {
       return {};
     }
+
+    final json = jsonDecode(cardsJson) as Map<String, dynamic>;
+    final version = json['version'] as String? ?? '0.0';
+
+    final cardsList = json['cards'] as List<dynamic>;
+    final cardsMap = <String, PracticeItemCard>{};
+
+    for (final cardData in cardsList) {
+      final card = PracticeItemCard.fromMap(cardData as Map<String, dynamic>);
+      cardsMap[card.itemId] = card;
+    }
+
+    if (version == _currentVersion) {
+      return cardsMap;
+    }
+
+    final converted = _convertLegacyIds(cardsMap, currentItems);
+    await saveCards(converted);
+    return converted;
+  }
+
+  /// Re-keys cards stored under the pre-2.0 content hash to the item id.
+  ///
+  /// Where several old cards land on one item, the one reviewed last wins;
+  /// a hash that matches no current item keeps its key and is ignored as today.
+  static Map<String, PracticeItemCard> _convertLegacyIds(
+    Map<String, PracticeItemCard> storedCards,
+    List<PracticeItem> currentItems,
+  ) {
+    final itemIdByLegacyId = Map<String, String>.from(deletedDuplicateIds);
+    for (final item in currentItems) {
+      itemIdByLegacyId[PracticeItemCard.legacyHashId(item)] =
+          PracticeItemCard.generateItemId(item);
+    }
+
+    final converted = <String, PracticeItemCard>{};
+    for (final entry in storedCards.entries) {
+      final itemId = itemIdByLegacyId[entry.key];
+      if (itemId == null) {
+        converted[entry.key] = entry.value;
+        continue;
+      }
+      converted[itemId] = _lastReviewed(
+        converted[itemId],
+        entry.value,
+      ).copyWith(itemId: itemId);
+    }
+    return converted;
+  }
+
+  static PracticeItemCard _lastReviewed(
+    PracticeItemCard? kept,
+    PracticeItemCard candidate,
+  ) {
+    if (kept == null || kept.lastReview == null) return candidate;
+    if (candidate.lastReview == null) return kept;
+    return candidate.lastReview!.isAfter(kept.lastReview!) ? candidate : kept;
   }
 
   /// Save all FSRS cards to storage
@@ -66,7 +102,9 @@ class FsrsStorage {
   static Future<Map<String, PracticeItemCard>> syncCards(
     List<PracticeItem> currentItems,
   ) async {
-    final storedCards = await loadCards();
+    PracticeItemCard.assertUniqueItemIds(currentItems);
+
+    final storedCards = await loadCards(currentItems);
     final syncedCards = Map<String, PracticeItemCard>.from(storedCards);
 
     // Check each current item
@@ -86,20 +124,6 @@ class FsrsStorage {
     }
 
     return syncedCards;
-  }
-
-  /// Get a card for a specific item
-  static Future<PracticeItemCard?> getCardForItem(PracticeItem item) async {
-    final cards = await loadCards();
-    final itemId = PracticeItemCard.generateItemId(item);
-    return cards[itemId];
-  }
-
-  /// Update a specific card
-  static Future<void> updateCard(PracticeItemCard card) async {
-    final cards = await loadCards();
-    cards[card.itemId] = card;
-    await saveCards(cards);
   }
 
   /// Clear all cards (for testing/reset)

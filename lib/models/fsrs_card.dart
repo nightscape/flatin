@@ -1,6 +1,7 @@
 import 'package:fsrs/fsrs.dart';
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
+import '../data/lesson_data.dart';
 import 'practice_item.dart';
 
 /// Wrapper class that links a PracticeItem to an FSRS Card
@@ -24,8 +25,34 @@ class PracticeItemCard {
     required this.due,
   });
 
-  /// Generate a stable ID for a PracticeItem based on its content
+  /// The id of a practice item: `<dataFileId>:<lemma>`, e.g. `verbs:amare`.
+  ///
+  /// Only the lemma identifies the item, so correcting a form, a translation
+  /// or a type keeps the learner's review history.
   static String generateItemId(PracticeItem item) {
+    final lemma = item.baseForm ?? item.word!;
+    return '${item.dataFileId}:${normalizeDiacritics(lemma).toLowerCase()}';
+  }
+
+  /// Throws when two items would share an id and silently merge their cards.
+  static void assertUniqueItemIds(List<PracticeItem> items) {
+    final firstByItemId = <String, (int, PracticeItem)>{};
+    for (var index = 0; index < items.length; index++) {
+      final itemId = generateItemId(items[index]);
+      final first = firstByItemId[itemId];
+      if (first != null) {
+        throw StateError(
+          'Duplicate practice item id "$itemId": '
+          'item ${first.$1} "${first.$2.translation}" and '
+          'item $index "${items[index].translation}"',
+        );
+      }
+      firstByItemId[itemId] = (index, items[index]);
+    }
+  }
+
+  /// The id scheme used before storage version 2.0, kept to convert old cards.
+  static String legacyHashId(PracticeItem item) {
     // Create a stable identifier from item content
     // Include: dataFileId, type, translation, and all forms
     final content = StringBuffer();
