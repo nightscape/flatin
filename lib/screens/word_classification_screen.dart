@@ -217,7 +217,9 @@ class _WordClassificationScreenState
     if (_currentItem == null) return;
 
     // Review the card with FSRS
-    await reviewCard(ref, _currentItem!, rating);
+    if (!await reviewCardReportingErrors(context, ref, _currentItem!, rating)) {
+      return;
+    }
 
     // Load next word
     _loadRandomWord();

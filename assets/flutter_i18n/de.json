@@ -16,6 +16,7 @@
     "check": "prüfen",
     "hide": "verstecken",
     "howWellDidYouKnow": "Wie gut kanntest du das?",
+    "saveError": "Fortschritt nicht gespeichert: {error}",
     "rating": {
       "again": "Nochmal",
       "hard": "Schwer",

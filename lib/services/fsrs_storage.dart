@@ -85,17 +85,13 @@ class FsrsStorage {
 
   /// Save all FSRS cards to storage
   static Future<void> saveCards(Map<String, PracticeItemCard> cards) async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      final cardsList = cards.values.map((card) => card.toMap()).toList();
+    final prefs = await SharedPreferences.getInstance();
+    final cardsList = cards.values.map((card) => card.toMap()).toList();
 
-      final json = {'version': _currentVersion, 'cards': cardsList};
+    final json = {'version': _currentVersion, 'cards': cardsList};
 
-      final cardsJson = jsonEncode(json);
-      await prefs.setString(_storageKey, cardsJson);
-    } catch (e) {
-      print('Error saving FSRS cards: $e');
-    }
+    final cardsJson = jsonEncode(json);
+    await prefs.setString(_storageKey, cardsJson);
   }
 
   /// Sync cards with current YAML items - creates new cards for new items
@@ -128,11 +124,7 @@ class FsrsStorage {
 
   /// Clear all cards (for testing/reset)
   static Future<void> clearCards() async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.remove(_storageKey);
-    } catch (e) {
-      print('Error clearing FSRS cards: $e');
-    }
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_storageKey);
   }
 }

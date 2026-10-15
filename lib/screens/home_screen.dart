@@ -119,12 +119,14 @@ class _PracticeTypeButton extends ConsumerWidget {
     final buttonHeight = isMobile ? 70.0 : 80.0;
 
     final practicableAsync = ref.watch(practicableItemsByTypeProvider);
-    if (practicableAsync.hasError) {
+    final dueAsync = ref.watch(dueItemsByTypeProvider);
+    final error = practicableAsync.error ?? dueAsync.error;
+    if (error != null) {
       return Text(
         FlutterI18n.translate(
           context,
           'home.error',
-          translationParams: {'error': practicableAsync.error.toString()},
+          translationParams: {'error': error.toString()},
         ),
         style: TextStyle(fontSize: isMobile ? 14.0 : 16.0),
       );
@@ -132,8 +134,7 @@ class _PracticeTypeButton extends ConsumerWidget {
 
     final practicable =
         practicableAsync.value?[dataFileId] ?? const <PracticeItem>[];
-    final due = ref.watch(dueItemsByTypeProvider).value?[dataFileId] ??
-        const <PracticeItem>[];
+    final due = dueAsync.value?[dataFileId] ?? const <PracticeItem>[];
     final itemToShow = due.isNotEmpty
         ? due.first
         : (practicable.isEmpty ? null : practicable.first);

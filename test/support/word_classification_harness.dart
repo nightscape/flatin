@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fsrs/fsrs.dart' as fsrs;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:latin_practice/data/practice_data.dart';
+import 'package:latin_practice/main.dart' show noRetry;
 import 'package:latin_practice/models/fsrs_card.dart';
 import 'package:latin_practice/services/fsrs_storage.dart';
 import 'package:latin_practice/widgets/explanation_lines.dart';
@@ -16,10 +18,13 @@ Widget wrapInApp(
   Widget home, {
   Explainer? explainer,
   Locale? forcedLocale,
+  List<Override> overrides = const [],
 }) =>
     ProviderScope(
+      retry: noRetry,
       overrides: [
         if (explainer != null) explainerProvider.overrideWithValue(explainer),
+        ...overrides,
       ],
       child: MaterialApp(
         localizationsDelegates: [

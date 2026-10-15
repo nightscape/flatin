@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fsrs/fsrs.dart';
@@ -131,6 +133,35 @@ Future<void> reviewCard(WidgetRef ref, PracticeItem item, Rating rating) async {
 
   // Invalidate providers to refresh UI
   ref.invalidate(fsrsCardsProvider);
+}
+
+/// Reviews the card and tells the learner when the progress could not be
+/// stored. Returns false in that case, so the caller keeps the item open.
+Future<bool> reviewCardReportingErrors(
+  BuildContext context,
+  WidgetRef ref,
+  PracticeItem item,
+  Rating rating,
+) async {
+  try {
+    await reviewCard(ref, item, rating);
+    return true;
+  } catch (e) {
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            FlutterI18n.translate(
+              context,
+              'practice.saveError',
+              translationParams: {'error': e.toString()},
+            ),
+          ),
+        ),
+      );
+    }
+    return false;
+  }
 }
 
 /// Provides shuffled translation choices for a practice item:

@@ -78,7 +78,9 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
   }
 
   Future<void> _rateCard(Rating rating) async {
-    await reviewCard(ref, widget.item, rating);
+    if (!await reviewCardReportingErrors(context, ref, widget.item, rating)) {
+      return;
+    }
 
     final nextItem = await ref.read(
       nextDueItemProvider(widget.item.dataFileId).future,

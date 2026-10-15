@@ -5,8 +5,13 @@ import 'package:flutter_i18n/flutter_i18n_delegate.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'screens/home_screen.dart';
 
+/// Nothing here is loaded over a network: a read that fails fails again, and
+/// Riverpod's default retries would keep the screens in their loading state
+/// for a minute instead of showing the learner the error.
+Duration? noRetry(int retryCount, Object error) => null;
+
 void main() {
-  runApp(const ProviderScope(child: LatinPracticeApp()));
+  runApp(ProviderScope(retry: noRetry, child: const LatinPracticeApp()));
 }
 
 class LatinPracticeApp extends StatelessWidget {

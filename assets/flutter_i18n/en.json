@@ -16,6 +16,7 @@
     "check": "check",
     "hide": "hide",
     "howWellDidYouKnow": "How well did you know this?",
+    "saveError": "Progress not saved: {error}",
     "rating": {
       "again": "Again",
       "hard": "Hard",
