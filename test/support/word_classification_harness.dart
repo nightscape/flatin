@@ -31,7 +31,17 @@ Widget wrapInApp(Widget home) => ProviderScope(
 
 /// Disable the given types and put every card far in the future, so the
 /// screens have to take their empty-due fallback.
-Future<void> seedNothingDue(Map<String, Set<String>> disabledTypes) async {
+Future<void> seedNothingDue(Map<String, Set<String>> disabledTypes) =>
+    _seed(disabledTypes, DateTime.now().toUtc().add(const Duration(days: 30)));
+
+/// Disable the given types and make every card due, so the screens take their
+/// due path.
+Future<void> seedEverythingDue(Map<String, Set<String>> disabledTypes) =>
+    _seed(
+        disabledTypes, DateTime.now().toUtc().subtract(const Duration(days: 1)));
+
+Future<void> _seed(
+    Map<String, Set<String>> disabledTypes, DateTime due) async {
   SharedPreferences.setMockInitialValues({
     'practice_settings': jsonEncode({
       'disabledForms': <String, List<String>>{},
@@ -46,7 +56,6 @@ Future<void> seedNothingDue(Map<String, Set<String>> disabledTypes) async {
     ...await loadPracticeItems('lib/data/latin_nouns.yaml'),
     ...await loadPracticeItems('lib/data/latin_verbs.yaml'),
   ];
-  final due = DateTime.now().toUtc().add(const Duration(days: 30));
   await FsrsStorage.saveCards({
     for (final item in items)
       PracticeItemCard.generateItemId(item): PracticeItemCard(

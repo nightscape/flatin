@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../screens/practice_screen.dart';
 import '../screens/word_classification_screen.dart';
 import '../screens/settings_screen.dart';
-import '../data/practice_data.dart';
 import '../models/practice_item.dart';
+import '../providers/fsrs_provider.dart';
 
 Widget buildAppDrawer(BuildContext context) {
   final screenWidth = MediaQuery.of(context).size.width;
@@ -30,75 +31,19 @@ Widget buildAppDrawer(BuildContext context) {
             ),
           ),
         ),
-        ListTile(
-          key: const Key('drawer.nouns'),
-          leading: const Icon(Icons.book, color: Colors.black),
-          title: Text(
-            FlutterI18n.translate(context, 'drawer.nouns'),
-            style: TextStyle(color: Colors.black, fontSize: itemFontSize),
-          ),
-          onTap: () {
-            Navigator.pop(context);
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => FutureBuilder<List<PracticeItem>>(
-                  future: loadPracticeItems('lib/data/latin_nouns.yaml'),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Scaffold(
-                        body: Center(child: CircularProgressIndicator()),
-                      );
-                    }
-                    if (snapshot.hasError || !snapshot.hasData || snapshot.data!.isEmpty) {
-                      return Scaffold(
-                        body: Center(
-                          child: Text(
-                            FlutterI18n.translate(context, 'drawer.errorLoadingData'),
-                          ),
-                        ),
-                      );
-                    }
-                    return PracticeScreen(item: snapshot.data!.first);
-                  },
-                ),
-              ),
-            );
-          },
+        _practiceTile(
+          tileKey: const Key('drawer.nouns'),
+          dataFileId: 'nouns',
+          labelKey: 'drawer.nouns',
+          icon: Icons.book,
+          fontSize: itemFontSize,
         ),
-        ListTile(
-          key: const Key('drawer.verbs'),
-          leading: const Icon(Icons.auto_stories, color: Colors.black),
-          title: Text(
-            FlutterI18n.translate(context, 'drawer.verbs'),
-            style: TextStyle(color: Colors.black, fontSize: itemFontSize),
-          ),
-          onTap: () {
-            Navigator.pop(context);
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => FutureBuilder<List<PracticeItem>>(
-                  future: loadPracticeItems('lib/data/latin_verbs.yaml'),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Scaffold(
-                        body: Center(child: CircularProgressIndicator()),
-                      );
-                    }
-                    if (snapshot.hasError || !snapshot.hasData || snapshot.data!.isEmpty) {
-                      return Scaffold(
-                        body: Center(
-                          child: Text(
-                            FlutterI18n.translate(context, 'drawer.errorLoadingData'),
-                          ),
-                        ),
-                      );
-                    }
-                    return PracticeScreen(item: snapshot.data!.first);
-                  },
-                ),
-              ),
-            );
-          },
+        _practiceTile(
+          tileKey: const Key('drawer.verbs'),
+          dataFileId: 'verbs',
+          labelKey: 'drawer.verbs',
+          icon: Icons.auto_stories,
+          fontSize: itemFontSize,
         ),
         ListTile(
           key: const Key('drawer.wordClassification'),
@@ -138,3 +83,40 @@ Widget buildAppDrawer(BuildContext context) {
   );
 }
 
+/// Opens a practicable item of the given type; disabled while the type has
+/// none, either because it is switched off or because nothing has loaded yet.
+Widget _practiceTile({
+  required Key tileKey,
+  required String dataFileId,
+  required String labelKey,
+  required IconData icon,
+  required double fontSize,
+}) {
+  return Consumer(
+    builder: (context, ref, child) {
+      final practicable =
+          ref.watch(practicableItemsByTypeProvider).value?[dataFileId] ??
+              const <PracticeItem>[];
+      final enabled = practicable.isNotEmpty;
+      final color = enabled ? Colors.black : Theme.of(context).disabledColor;
+
+      return ListTile(
+        key: tileKey,
+        enabled: enabled,
+        leading: Icon(icon, color: color),
+        title: Text(
+          FlutterI18n.translate(context, labelKey),
+          style: TextStyle(color: color, fontSize: fontSize),
+        ),
+        onTap: () {
+          Navigator.pop(context);
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => PracticeScreen(item: practicable.first),
+            ),
+          );
+        },
+      );
+    },
+  );
+}

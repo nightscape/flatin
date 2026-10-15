@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import '../widgets/app_drawer.dart';
-import '../data/practice_data.dart';
 import '../models/practice_item.dart';
 import '../providers/fsrs_provider.dart';
 import 'word_classification_screen.dart';
@@ -20,6 +19,10 @@ class HomeScreen extends ConsumerWidget {
     final titleFontSize = isMobile ? 20.0 : 24.0;
     final buttonFontSize = isMobile ? 18.0 : 20.0;
     final buttonHeight = isMobile ? 70.0 : 80.0;
+    final buttonPadding = EdgeInsets.symmetric(
+      horizontal: horizontalPadding,
+      vertical: verticalPadding,
+    );
 
     return Scaffold(
       backgroundColor: const Color(0xFFE5E5E5),
@@ -41,324 +44,24 @@ class HomeScreen extends ConsumerWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Nouns button
             Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: horizontalPadding,
-                vertical: verticalPadding,
-              ),
-              child: FutureBuilder<List<PracticeItem>>(
-                future: loadPracticeItems('lib/data/latin_nouns.yaml'),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const CircularProgressIndicator();
-                  }
-                  if (snapshot.hasError) {
-                    return Text(
-                      FlutterI18n.translate(
-                        context,
-                        'home.error',
-                        translationParams: {'error': snapshot.error.toString()},
-                      ),
-                      style: TextStyle(fontSize: isMobile ? 14.0 : 16.0),
-                    );
-                  }
-                  if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return Text(
-                      FlutterI18n.translate(context, 'home.noData'),
-                      style: TextStyle(fontSize: isMobile ? 14.0 : 16.0),
-                    );
-                  }
-                  return Consumer(
-                    builder: (context, ref, child) {
-                      final nextDueItemAsync = ref.watch(
-                        nextDueItemProvider('nouns'),
-                      );
-                      return nextDueItemAsync.when(
-                        data: (nextItem) {
-                          final dueItemsAsync = ref.watch(
-                            dueItemsByTypeProvider,
-                          );
-                          final dueCount =
-                              dueItemsAsync.value?['nouns']?.length ?? 0;
-                          final itemToShow = nextItem ?? snapshot.data!.first;
-                          return SizedBox(
-                            width: double.infinity,
-                            height: buttonHeight,
-                            child: ElevatedButton(
-                              key: const Key('home.nouns.button'),
-                              onPressed: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        PracticeScreen(item: itemToShow),
-                                  ),
-                                );
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFFD0D0D0),
-                                foregroundColor: Colors.black,
-                                elevation: 0,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                              ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    FlutterI18n.translate(
-                                      context,
-                                      'home.nouns',
-                                    ),
-                                    style: TextStyle(
-                                      fontSize: buttonFontSize,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  if (dueCount > 0)
-                                    Text(
-                                      '$dueCount ${FlutterI18n.translate(context, 'home.due')}',
-                                      style: TextStyle(
-                                        fontSize: isMobile ? 10.0 : 12.0,
-                                        fontWeight: FontWeight.normal,
-                                      ),
-                                    ),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                        loading: () => SizedBox(
-                          width: double.infinity,
-                          height: buttonHeight,
-                          child: ElevatedButton(
-                            key: const Key('home_nouns_button'),
-                            onPressed: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => PracticeScreen(
-                                    item: snapshot.data!.first,
-                                  ),
-                                ),
-                              );
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFFD0D0D0),
-                              foregroundColor: Colors.black,
-                              elevation: 0,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                            ),
-                            child: Text(
-                              FlutterI18n.translate(context, 'home.nouns'),
-                              style: TextStyle(
-                                fontSize: buttonFontSize,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
-                        error: (_, __) => SizedBox(
-                          width: double.infinity,
-                          height: buttonHeight,
-                          child: ElevatedButton(
-                            key: const Key('home_nouns_button'),
-                            onPressed: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => PracticeScreen(
-                                    item: snapshot.data!.first,
-                                  ),
-                                ),
-                              );
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFFD0D0D0),
-                              foregroundColor: Colors.black,
-                              elevation: 0,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                            ),
-                            child: Text(
-                              FlutterI18n.translate(context, 'home.nouns'),
-                              style: TextStyle(
-                                fontSize: buttonFontSize,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  );
-                },
+              padding: buttonPadding,
+              child: const _PracticeTypeButton(
+                dataFileId: 'nouns',
+                labelKey: 'home.nouns',
+                buttonKey: Key('home.nouns.button'),
               ),
             ),
-            // Verbs button
             Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: horizontalPadding,
-                vertical: verticalPadding,
-              ),
-              child: FutureBuilder<List<PracticeItem>>(
-                future: loadPracticeItems('lib/data/latin_verbs.yaml'),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const CircularProgressIndicator();
-                  }
-                  if (snapshot.hasError) {
-                    return Text(
-                      FlutterI18n.translate(
-                        context,
-                        'home.error',
-                        translationParams: {'error': snapshot.error.toString()},
-                      ),
-                      style: TextStyle(fontSize: isMobile ? 14.0 : 16.0),
-                    );
-                  }
-                  if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return Text(
-                      FlutterI18n.translate(context, 'home.noData'),
-                      style: TextStyle(fontSize: isMobile ? 14.0 : 16.0),
-                    );
-                  }
-                  return Consumer(
-                    builder: (context, ref, child) {
-                      final nextDueItemAsync = ref.watch(
-                        nextDueItemProvider('verbs'),
-                      );
-                      return nextDueItemAsync.when(
-                        data: (nextItem) {
-                          final dueItemsAsync = ref.watch(
-                            dueItemsByTypeProvider,
-                          );
-                          final dueCount =
-                              dueItemsAsync.value?['verbs']?.length ?? 0;
-                          final itemToShow = nextItem ?? snapshot.data!.first;
-                          return SizedBox(
-                            width: double.infinity,
-                            height: buttonHeight,
-                            child: ElevatedButton(
-                              key: const Key('home.verbs.button'),
-                              onPressed: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        PracticeScreen(item: itemToShow),
-                                  ),
-                                );
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFFD0D0D0),
-                                foregroundColor: Colors.black,
-                                elevation: 0,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                              ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    FlutterI18n.translate(
-                                      context,
-                                      'home.verbs',
-                                    ),
-                                    style: TextStyle(
-                                      fontSize: buttonFontSize,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  if (dueCount > 0)
-                                    Text(
-                                      '$dueCount ${FlutterI18n.translate(context, 'home.due')}',
-                                      style: TextStyle(
-                                        fontSize: isMobile ? 10.0 : 12.0,
-                                        fontWeight: FontWeight.normal,
-                                      ),
-                                    ),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                        loading: () => SizedBox(
-                          width: double.infinity,
-                          height: buttonHeight,
-                          child: ElevatedButton(
-                            key: const Key('home.verbs.button'),
-                            onPressed: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => PracticeScreen(
-                                    item: snapshot.data!.first,
-                                  ),
-                                ),
-                              );
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFFD0D0D0),
-                              foregroundColor: Colors.black,
-                              elevation: 0,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                            ),
-                            child: Text(
-                              FlutterI18n.translate(context, 'home.verbs'),
-                              style: TextStyle(
-                                fontSize: buttonFontSize,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
-                        error: (_, __) => SizedBox(
-                          width: double.infinity,
-                          height: buttonHeight,
-                          child: ElevatedButton(
-                            key: const Key('home.verbs.button'),
-                            onPressed: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => PracticeScreen(
-                                    item: snapshot.data!.first,
-                                  ),
-                                ),
-                              );
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFFD0D0D0),
-                              foregroundColor: Colors.black,
-                              elevation: 0,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                            ),
-                            child: Text(
-                              FlutterI18n.translate(context, 'home.verbs'),
-                              style: TextStyle(
-                                fontSize: buttonFontSize,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  );
-                },
+              padding: buttonPadding,
+              child: const _PracticeTypeButton(
+                dataFileId: 'verbs',
+                labelKey: 'home.verbs',
+                buttonKey: Key('home.verbs.button'),
               ),
             ),
-            // Word Classification button
             Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: horizontalPadding,
-                vertical: verticalPadding,
-              ),
+              padding: buttonPadding,
               child: SizedBox(
                 width: double.infinity,
                 height: buttonHeight,
@@ -389,6 +92,92 @@ class HomeScreen extends ConsumerWidget {
                 ),
               ),
             ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Entry point for one exercise type: opens the next due item, or any
+/// practicable one, and is disabled while the type has none.
+class _PracticeTypeButton extends ConsumerWidget {
+  const _PracticeTypeButton({
+    required this.dataFileId,
+    required this.labelKey,
+    required this.buttonKey,
+  });
+
+  final String dataFileId;
+  final String labelKey;
+  final Key buttonKey;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isMobile = MediaQuery.of(context).size.width < 600;
+    final buttonFontSize = isMobile ? 18.0 : 20.0;
+    final buttonHeight = isMobile ? 70.0 : 80.0;
+
+    final practicableAsync = ref.watch(practicableItemsByTypeProvider);
+    if (practicableAsync.hasError) {
+      return Text(
+        FlutterI18n.translate(
+          context,
+          'home.error',
+          translationParams: {'error': practicableAsync.error.toString()},
+        ),
+        style: TextStyle(fontSize: isMobile ? 14.0 : 16.0),
+      );
+    }
+
+    final practicable =
+        practicableAsync.value?[dataFileId] ?? const <PracticeItem>[];
+    final due = ref.watch(dueItemsByTypeProvider).value?[dataFileId] ??
+        const <PracticeItem>[];
+    final itemToShow = due.isNotEmpty
+        ? due.first
+        : (practicable.isEmpty ? null : practicable.first);
+
+    return SizedBox(
+      width: double.infinity,
+      height: buttonHeight,
+      child: ElevatedButton(
+        key: buttonKey,
+        onPressed: itemToShow == null
+            ? null
+            : () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => PracticeScreen(item: itemToShow),
+                  ),
+                );
+              },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: const Color(0xFFD0D0D0),
+          foregroundColor: Colors.black,
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              FlutterI18n.translate(context, labelKey),
+              style: TextStyle(
+                fontSize: buttonFontSize,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            if (due.isNotEmpty)
+              Text(
+                '${due.length} ${FlutterI18n.translate(context, 'home.due')}',
+                style: TextStyle(
+                  fontSize: isMobile ? 10.0 : 12.0,
+                  fontWeight: FontWeight.normal,
+                ),
+              ),
           ],
         ),
       ),
