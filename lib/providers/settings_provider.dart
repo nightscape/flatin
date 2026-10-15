@@ -2,9 +2,15 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import '../models/settings.dart';
+import '../data/lesson_data.dart';
 import '../data/practice_data.dart';
 
 part 'settings_provider.g.dart';
+
+const Map<String, String> _yamlFiles = {
+  'nouns': 'lib/data/latin_nouns.yaml',
+  'verbs': 'lib/data/latin_verbs.yaml',
+};
 
 @riverpod
 class SettingsNotifier extends _$SettingsNotifier {
@@ -16,111 +22,82 @@ class SettingsNotifier extends _$SettingsNotifier {
   }
 
   Future<Settings> _loadSettings() async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      final settingsJson = prefs.getString(_settingsKey);
+    final prefs = await SharedPreferences.getInstance();
+    final settingsJson = prefs.getString(_settingsKey);
 
-      if (settingsJson == null) {
-        return await _initializeDefaultSettings();
-      }
-
-      final settings = Settings.fromJson(
-        jsonDecode(settingsJson) as Map<String, dynamic>,
-      );
-
-      // Migrate: enable any new forms that were added to the YAML since
-      // the settings were last saved.
-      final migrated = await _migrateNewForms(settings);
-      if (migrated != settings) {
-        await _saveSettings(migrated);
-      }
-      return migrated;
-    } catch (e) {
-      return await _initializeDefaultSettings();
+    if (settingsJson == null) {
+      return Settings();
     }
+
+    final json = jsonDecode(settingsJson) as Map<String, dynamic>;
+    if (json.containsKey('enabledForms')) {
+      final converted = await _convertEnabledSets(json);
+      await _saveSettings(converted);
+      return converted;
+    }
+    return Settings.fromJson(json);
   }
 
-  Future<Settings> _migrateNewForms(Settings settings) async {
-    final yamlFiles = {
-      'nouns': 'lib/data/latin_nouns.yaml',
-      'verbs': 'lib/data/latin_verbs.yaml',
-    };
+  /// Convert settings written in the old enabled-set format.
+  ///
+  /// The old format cannot tell "the user switched this off" apart from "this
+  /// entry is new in the YAML", so anything missing from a stored enabled set
+  /// becomes disabled.
+  Future<Settings> _convertEnabledSets(Map<String, dynamic> json) async {
+    final enabledForms = _storedSets(json['enabledForms']);
+    final enabledTypes = _storedSets(json['enabledTypes']);
 
-    var migrated = settings;
-    for (final entry in yamlFiles.entries) {
-      final dataFileId = entry.key;
-      final metadata = await _getMetadata(entry.value);
-      if (metadata == null) continue;
-
-      // Migrate new form keys
-      final savedForms = settings.enabledForms[dataFileId];
-      if (savedForms != null) {
-        final newFormKeys =
-            metadata.formOrder.where((k) => !savedForms.contains(k)).toSet();
-        if (newFormKeys.isNotEmpty) {
-          final updated = Map<String, Set<String>>.from(migrated.enabledForms);
-          updated[dataFileId] = {...savedForms, ...newFormKeys};
-          migrated = migrated.copyWith(enabledForms: updated);
-        }
+    final disabledForms = <String, Set<String>>{};
+    final disabledTypes = <String, Set<String>>{};
+    for (final entry in _yamlFiles.entries) {
+      final metadata = await getFormMetadata(entry.value);
+      final forms = enabledForms[entry.key];
+      if (forms != null) {
+        disabledForms[entry.key] =
+            metadata.formOrder.where((k) => !forms.contains(k)).toSet();
       }
-
-      // Migrate new types (enable by default)
-      final savedTypes = settings.enabledTypes[dataFileId];
-      if (savedTypes == null) {
-        // No types saved yet — enable all
-        final updated = Map<String, Set<String>>.from(migrated.enabledTypes);
-        updated[dataFileId] = Set<String>.from(metadata.availableTypes);
-        migrated = migrated.copyWith(enabledTypes: updated);
-      } else {
-        final newTypes = metadata.availableTypes
-            .where((t) => !savedTypes.contains(t))
-            .toSet();
-        if (newTypes.isNotEmpty) {
-          final updated = Map<String, Set<String>>.from(migrated.enabledTypes);
-          updated[dataFileId] = {...savedTypes, ...newTypes};
-          migrated = migrated.copyWith(enabledTypes: updated);
-        }
+      final types = enabledTypes[entry.key];
+      if (types != null) {
+        disabledTypes[entry.key] =
+            metadata.availableTypes.where((t) => !types.contains(t)).toSet();
       }
     }
 
-    return migrated;
-  }
-
-  Future<Settings> _initializeDefaultSettings() async {
-    final nounsMetadata = await _getMetadata('lib/data/latin_nouns.yaml');
-    final verbsMetadata = await _getMetadata('lib/data/latin_verbs.yaml');
-
-    final defaultSettings = Settings(
-      enabledForms: {
-        'nouns': Set<String>.from(nounsMetadata?.formOrder ?? []),
-        'verbs': Set<String>.from(verbsMetadata?.formOrder ?? []),
-      },
-      enabledTypes: {
-        'nouns': Set<String>.from(nounsMetadata?.availableTypes ?? []),
-        'verbs': Set<String>.from(verbsMetadata?.availableTypes ?? []),
-      },
+    final selectedWords = Set<String>.from(
+      (json['selectedWords'] as List<dynamic>? ?? const [])
+          .map((e) => e as String),
     );
+    final deselectedWords = <String>{};
+    if (selectedWords.isNotEmpty) {
+      final lessons = await loadLessonData(lessonDataAsset);
+      for (final name in lessons.lessonNames) {
+        for (final word in lessons.lessonWords[name]!) {
+          final normalized = normalizeDiacritics(word);
+          if (!selectedWords.contains(normalized)) {
+            deselectedWords.add(normalized);
+          }
+        }
+      }
+    }
 
-    await _saveSettings(defaultSettings);
-    return defaultSettings;
+    return Settings.fromJson(json).copyWith(
+      disabledForms: disabledForms,
+      disabledTypes: disabledTypes,
+      deselectedWords: deselectedWords,
+    );
   }
 
-  Future<FormMetadata?> _getMetadata(String assetPath) async {
-    try {
-      return await getFormMetadata(assetPath);
-    } catch (e) {
-      return null;
-    }
+  Map<String, Set<String>> _storedSets(dynamic stored) {
+    final map = stored as Map<String, dynamic>?;
+    if (map == null) return {};
+    return map.map(
+      (key, value) => MapEntry(key, Set<String>.from(value as List)),
+    );
   }
 
   Future<void> _saveSettings(Settings settings) async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      final settingsJson = jsonEncode(settings.toJson());
-      await prefs.setString(_settingsKey, settingsJson);
-    } catch (e) {
-      // Ignore save errors
-    }
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_settingsKey, jsonEncode(settings.toJson()));
   }
 
   /// Toggle a form's enabled state
@@ -132,12 +109,9 @@ class SettingsNotifier extends _$SettingsNotifier {
   }
 
   /// Enable all forms for a data file
-  Future<void> enableAllForms(
-    String dataFileId,
-    List<String> allFormKeys,
-  ) async {
+  Future<void> enableAllForms(String dataFileId) async {
     final currentSettings = await future;
-    final newSettings = currentSettings.enableAllForms(dataFileId, allFormKeys);
+    final newSettings = currentSettings.enableAllForms(dataFileId);
     state = AsyncValue.data(newSettings);
     await _saveSettings(newSettings);
   }
@@ -151,12 +125,9 @@ class SettingsNotifier extends _$SettingsNotifier {
   }
 
   /// Enable all types for a data file
-  Future<void> enableAllTypes(
-    String dataFileId,
-    List<String> allTypes,
-  ) async {
+  Future<void> enableAllTypes(String dataFileId) async {
     final currentSettings = await future;
-    final newSettings = currentSettings.enableAllTypes(dataFileId, allTypes);
+    final newSettings = currentSettings.enableAllTypes(dataFileId);
     state = AsyncValue.data(newSettings);
     await _saveSettings(newSettings);
   }
@@ -185,43 +156,22 @@ class SettingsNotifier extends _$SettingsNotifier {
   }
 
   /// Toggle a single word's selection state.
-  ///
-  /// [allNormalizedWords] is required to handle the "all selected" collapse.
-  Future<void> toggleWord(
-    String normalizedWord,
-    List<String> allNormalizedWords,
-  ) async {
+  Future<void> toggleWord(String normalizedWord) async {
     final currentSettings = await future;
-    final newSettings =
-        currentSettings.toggleWord(normalizedWord, allNormalizedWords);
+    final newSettings = currentSettings.toggleWord(normalizedWord);
     state = AsyncValue.data(newSettings);
     await _saveSettings(newSettings);
   }
 
   /// Toggle all words in a lesson on or off.
-  Future<void> toggleLessonWords(
-    List<String> rawLessonWords,
-    List<String> allNormalizedWords,
-  ) async {
+  Future<void> toggleLessonWords(List<String> rawLessonWords) async {
     final currentSettings = await future;
-    final newSettings = currentSettings.toggleLessonWords(
-      rawLessonWords,
-      allNormalizedWords,
-    );
+    final newSettings = currentSettings.toggleLessonWords(rawLessonWords);
     state = AsyncValue.data(newSettings);
     await _saveSettings(newSettings);
   }
 
-  /// Replace the entire word selection (e.g. from the statistics screen).
-  /// Pass an empty set to select all words.
-  Future<void> setSelectedWords(Set<String> normalizedWords) async {
-    final currentSettings = await future;
-    final newSettings = currentSettings.withSelectedWords(normalizedWords);
-    state = AsyncValue.data(newSettings);
-    await _saveSettings(newSettings);
-  }
-
-  /// Select every word (stored as the empty "no filter" state).
+  /// Select every word.
   Future<void> selectAllWords() async {
     final currentSettings = await future;
     final newSettings = currentSettings.selectAllWords();

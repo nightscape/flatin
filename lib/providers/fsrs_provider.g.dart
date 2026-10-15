@@ -190,7 +190,7 @@ final class DueItemsByTypeProvider
   }
 }
 
-String _$dueItemsByTypeHash() => r'd4ce9f7499c81a1e129ae04682f15f7c6c2cd2a8';
+String _$dueItemsByTypeHash() => r'6f5af8ef2a6b122d4b54342944fd3b23b26b62e3';
 
 /// Get next due item for a specific exercise type
 

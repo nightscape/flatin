@@ -61,7 +61,7 @@ final class PracticeNotifierProvider
   }
 }
 
-String _$practiceNotifierHash() => r'ffac656d43cc092620931c87ddd106f88ba88767';
+String _$practiceNotifierHash() => r'25983628018fffa7c7f3cde26646ed2b49ada922';
 
 /// Generic notifier for managing practice screen state
 

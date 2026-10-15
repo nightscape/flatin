@@ -49,4 +49,4 @@ final class LessonDataProvider
   }
 }
 
-String _$lessonDataHash() => r'66dcc347cfd91271a204f3e27fe12c6bcfce83a5';
+String _$lessonDataHash() => r'8b6da263b82a9bc0f27c637d477d07af87babc40';

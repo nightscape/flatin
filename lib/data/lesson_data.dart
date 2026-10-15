@@ -2,6 +2,9 @@ import 'package:flutter/services.dart';
 import 'package:yaml/yaml.dart';
 import '../models/practice_item.dart';
 
+/// The lesson word list of the currently-configured textbook.
+const String lessonDataAsset = 'lib/data/agite_plus_bayern_1.yaml';
+
 /// Maps each Latin word to the lesson in which it was introduced.
 ///
 /// Lookup is diacritic-insensitive: words are normalized by stripping macrons
@@ -32,13 +35,13 @@ class LessonData {
     return wordToLesson[normalizeDiacritics(key)];
   }
 
-  /// Whether [item] should be practiced given [selectedWords] (normalized).
-  /// An empty selection means "all words".
-  bool includes(PracticeItem item, Set<String> selectedWords) {
-    if (selectedWords.isEmpty) return true;
+  /// Whether [item] should be practiced; words in [deselectedWords]
+  /// (normalized) are the ones the user switched off.
+  bool includes(PracticeItem item, Set<String> deselectedWords) {
+    if (deselectedWords.isEmpty) return true;
     final key = item.baseForm ?? item.word;
-    if (key == null) return false;
-    return selectedWords.contains(normalizeDiacritics(key));
+    if (key == null) return true;
+    return !deselectedWords.contains(normalizeDiacritics(key));
   }
 }
 

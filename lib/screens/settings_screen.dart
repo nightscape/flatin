@@ -25,15 +25,6 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     _verbsMetadata = getFormMetadata('lib/data/latin_verbs.yaml');
   }
 
-  /// All normalized words across every lesson — needed to handle "all selected"
-  /// collapse when toggling a single word.
-  List<String> _allNormalizedWords(LessonData lessons) {
-    return lessons.lessonNames
-        .expand<String>((name) => lessons.lessonWords[name] ?? [])
-        .map<String>(normalizeDiacritics)
-        .toList();
-  }
-
   Widget _buildLessonSection(bool isMobile) {
     final lessonsAsync = ref.watch(lessonDataProvider);
     final settingsAsync = ref.watch(settingsProvider);
@@ -56,7 +47,6 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           loading: () => const SizedBox.shrink(),
           error: (_, __) => const SizedBox.shrink(),
           data: (settings) {
-            final allWords = _allNormalizedWords(lessons);
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -92,9 +82,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 ...lessons.lessonNames.map((lessonName) {
                   final rawWords = lessons.lessonWords[lessonName] ?? [];
                   final fullySelected =
-                      settings.isLessonFullySelected(lessonName, rawWords);
+                      settings.isLessonFullySelected(rawWords);
                   final partiallySelected =
-                      settings.isLessonPartiallySelected(lessonName, rawWords);
+                      settings.isLessonPartiallySelected(rawWords);
                   // tristate: true=all, null=some, false=none
                   final checkboxValue =
                       fullySelected ? true : (partiallySelected ? null : false);
@@ -114,7 +104,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                         onChanged: (_) {
                           ref
                               .read(settingsProvider.notifier)
-                              .toggleLessonWords(rawWords, allWords);
+                              .toggleLessonWords(rawWords);
                         },
                         activeColor: const Color(0xFFD0D0D0),
                         checkColor: Colors.black,
@@ -123,7 +113,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                         onTap: () {
                           ref
                               .read(settingsProvider.notifier)
-                              .toggleLessonWords(rawWords, allWords);
+                              .toggleLessonWords(rawWords);
                         },
                         child: Text(
                           lessonName,
@@ -153,7 +143,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                           onChanged: (_) {
                             ref
                                 .read(settingsProvider.notifier)
-                                .toggleWord(normalized, allWords);
+                                .toggleWord(normalized);
                           },
                           activeColor: const Color(0xFFD0D0D0),
                           checkColor: Colors.black,
@@ -183,8 +173,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     return settingsAsync.when(
       data: (settings) {
         final enabledForms =
-            settings.enabledForms[dataFileId] ??
-            Set<String>.from(metadata.formOrder);
+            settings.enabledFormsOf(dataFileId, metadata.formOrder);
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -208,7 +197,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   TextButton(
                     onPressed: () {
                       final notifier = ref.read(settingsProvider.notifier);
-                      notifier.enableAllForms(dataFileId, metadata.formOrder);
+                      notifier.enableAllForms(dataFileId);
                     },
                     child: Text(
                       FlutterI18n.translate(context, 'settings.enableAll'),
@@ -289,10 +278,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     ),
                     TextButton(
                       onPressed: () {
-                        ref.read(settingsProvider.notifier).enableAllTypes(
-                              dataFileId,
-                              metadata.availableTypes,
-                            );
+                        ref
+                            .read(settingsProvider.notifier)
+                            .enableAllTypes(dataFileId);
                       },
                       child: Text(
                         FlutterI18n.translate(context, 'settings.enableAll'),
@@ -303,10 +291,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 ),
               ),
               ...metadata.availableTypes.map((typeName) {
-                final enabledTypes =
-                    settings.enabledTypes[dataFileId] ??
-                    Set<String>.from(metadata.availableTypes);
-                final isEnabled = enabledTypes.contains(typeName);
+                final isEnabled =
+                    settings.isTypeEnabled(dataFileId, typeName);
 
                 return CheckboxListTile(
                   contentPadding: EdgeInsets.symmetric(

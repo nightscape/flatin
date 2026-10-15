@@ -89,8 +89,7 @@ class _WordClassificationScreenState
 
       // Filter forms based on settings
       final enabledForms =
-          settings.enabledForms[item.dataFileId] ??
-          Set<String>.from(item.formOrder);
+          settings.enabledFormsOf(item.dataFileId, item.formOrder);
       final filteredData = item.filterForms(enabledForms);
 
       if (filteredData.forms.isEmpty) {
@@ -238,8 +237,10 @@ class _WordClassificationScreenState
     if (settingsValue is AsyncData<Settings>) {
       settings = settingsValue.value;
     }
-    final enabledForms =
-        settings?.enabledForms[_currentItem!.dataFileId] ??
+    final enabledForms = settings?.enabledFormsOf(
+          _currentItem!.dataFileId,
+          _currentItem!.formOrder,
+        ) ??
         Set<String>.from(_currentItem!.formOrder);
     final filteredData = _currentItem!.filterForms(enabledForms);
     final availableFormLabels = filteredData.labels;
@@ -449,9 +450,10 @@ class _WordClassificationScreenState
           _currentItem != null &&
           _correctFormIndices.isNotEmpty) {
         final settings = next.value;
-        final enabledForms =
-            settings.enabledForms[_currentItem!.dataFileId] ??
-            Set<String>.from(_currentItem!.formOrder);
+        final enabledForms = settings.enabledFormsOf(
+          _currentItem!.dataFileId,
+          _currentItem!.formOrder,
+        );
 
         // Check if any of the current forms are still enabled
         bool anyFormEnabled = _correctFormIndices.any((index) {

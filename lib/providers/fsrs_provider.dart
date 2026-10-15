@@ -67,7 +67,7 @@ Future<Map<String, List<PracticeItem>>> dueItemsByType(Ref ref) async {
   for (final card in dueCardsList) {
     final item = itemsById[card.itemId];
     if (item == null) continue;
-    if (!lessonData.includes(item, settings.selectedWords)) continue;
+    if (!lessonData.includes(item, settings.deselectedWords)) continue;
     if (!settings.isTypeEnabled(item.dataFileId, item.type)) continue;
 
     final typeList = dueItemsByType[item.dataFileId];
