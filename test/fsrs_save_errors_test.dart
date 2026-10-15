@@ -12,17 +12,21 @@ import 'support/word_classification_harness.dart';
 /// Rates one item, which is all the review flow of the real screens does
 /// before it reports a storage failure.
 class _RateButton extends ConsumerWidget {
-  const _RateButton(this.item);
+  const _RateButton(this.item, this.onRated);
 
   final PracticeItem item;
+
+  /// Hands the review future to the test, which awaits it instead of
+  /// guessing how long the failing save takes.
+  final void Function(Future<bool>) onRated;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       body: Center(
         child: ElevatedButton(
-          onPressed: () =>
-              reviewCardReportingErrors(context, ref, item, Rating.good),
+          onPressed: () => onRated(
+              reviewCardReportingErrors(context, ref, item, Rating.good)),
           child: const Text('rate'),
         ),
       ),
@@ -37,8 +41,10 @@ void main() {
     final item = (await loadPracticeItems('lib/data/latin_nouns.yaml')).first;
     final itemId = PracticeItemCard.generateItemId(item);
 
+    Future<bool>? rated;
+
     await tester.pumpWidget(wrapInApp(
-      _RateButton(item),
+      _RateButton(item, (future) => rated = future),
       overrides: [
         fsrsCardsProvider.overrideWith(
           (ref) async => {itemId: PracticeItemCard.createNew(item)},
@@ -49,7 +55,7 @@ void main() {
 
     await tester.runAsync(() async {
       await tester.tap(find.text('rate'));
-      await Future<void>.delayed(const Duration(milliseconds: 50));
+      expect(await rated!, isFalse);
     });
     await letItLoad(tester);
 
