@@ -20,7 +20,8 @@ flutter test integration_test/               # Run integration tests
 dart run build_runner build --delete-conflicting-outputs
 
 # Run Cucumber-style BDD tests
-flutter test test/features/                  # Unit-level Cucumber tests
+# Cucumber scenarios (test/features/) run only through integration_test/app_test.dart on a device;
+# `flutter test test/features/` finds no Dart test there and runs the whole unit suite instead
 
 # Deploy (Fastlane)
 cd android && fastlane release
@@ -66,7 +67,7 @@ Uses `flutter_i18n` with JSON translation files in `assets/flutter_i18n/` (en.js
 ### Testing
 
 - **Unit tests** (`test/`) — form inference validation against YAML data
-- **Cucumber/BDD tests** (`test/features/`, `test/step_definitions/`) — uses `pickled_cucumber`
+- **Cucumber/BDD tests** (`test/features/`, `test/step_definitions/`) — uses `pickled_cucumber` — scenarios run only via `integration_test/` on a device, not under `flutter test`
 - **Integration tests** (`integration_test/`) — full app tests with screenshot capture for Fastlane
 
 ### Adding New Vocabulary
