@@ -46,7 +46,7 @@ void main() {
 
   test('corrupted stored JSON throws and leaves the stored bytes alone',
       () async {
-    const corrupted = '{"version": "1.0", "cards": [';
+    const corrupted = '{"version": "2.0", "cards": [';
     await _seed(corrupted);
     final items = await _allItems();
 
@@ -61,13 +61,13 @@ void main() {
       () async {
     final items = await _allItems();
     final healthy = _storedCard(
-      PracticeItemCard.legacyHashId(items.first),
+      PracticeItemCard.generateItemId(items.first),
       DateTime.utc(2030),
     );
     final malformed = _storedCard('deadbeef', DateTime.utc(2030))
       ..['due'] = 'not-a-date';
     final raw = jsonEncode({
-      'version': '1.0',
+      'version': '2.0',
       'cards': [healthy, malformed],
     });
     await _seed(raw);

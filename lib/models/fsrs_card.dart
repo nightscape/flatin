@@ -1,6 +1,4 @@
 import 'package:fsrs/fsrs.dart';
-import 'dart:convert';
-import 'package:crypto/crypto.dart';
 import '../data/lesson_data.dart';
 import 'practice_item.dart';
 
@@ -49,31 +47,6 @@ class PracticeItemCard {
       }
       firstByItemId[itemId] = (index, items[index]);
     }
-  }
-
-  /// The id scheme used before storage version 2.0, kept to convert old cards.
-  static String legacyHashId(PracticeItem item) {
-    // Create a stable identifier from item content
-    // Include: dataFileId, type, translation, and all forms
-    final content = StringBuffer();
-    content.write(item.dataFileId);
-    content.write('|');
-    content.write(item.type);
-    content.write('|');
-    content.write(item.translation);
-    content.write('|');
-    content.write(item.baseForm ?? '');
-    content.write('|');
-    // Include all forms in order
-    for (final form in item.forms) {
-      content.write(form);
-      content.write('|');
-    }
-
-    // Create SHA-256 hash for stable ID
-    final bytes = utf8.encode(content.toString());
-    final digest = sha256.convert(bytes);
-    return digest.toString();
   }
 
   /// Create a new card for a PracticeItem (due immediately)

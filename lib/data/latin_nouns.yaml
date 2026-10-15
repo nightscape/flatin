@@ -145,6 +145,20 @@ type_patterns:
     ablative_plural: "{stem}ibus"          # corporibus
     genitive_stem_extraction: "remove_suffix:is"
 
+  Konsonantische-Deklination-i-mf:
+    # i-Stämme (m/f): wie die konsonantische Deklination, aber Genitiv Plural -ium
+    inherits_from: Konsonantische-Deklination-mf
+    genitive_plural: "{stem}ium"           # urbium
+
+  Konsonantische-Deklination-i-n:
+    # i-Stämme (n): mare, maris — Ablativ Singular -i, Plural -ia/-ium
+    # accusative_singular = nominative (als explizite Form pro Item)
+    inherits_from: Konsonantische-Deklination-n
+    ablative_singular: "{stem}i"           # mari
+    nominative_plural: "{stem}ia"          # maria
+    genitive_plural: "{stem}ium"           # marium
+    accusative_plural: "{stem}ia"          # maria
+
 form_labels:
   nominative_singular:
     name: Nominativ
@@ -577,3 +591,402 @@ items:
       dative_plural: iis
       accusative_plural: ea
       ablative_plural: iis
+
+  # i-Stämme der konsonantischen Deklination: Genitiv Plural auf -ium
+  - type: Konsonantische-Deklination-i-mf
+    translation: die Stadt
+    word_form: nominative_singular
+    word: urbs
+    base_form: urbis
+    verify_inference: true
+    forms:
+      nominative_singular: urbs
+      genitive_singular: urbis
+      dative_singular: urbi
+      accusative_singular: urbem
+      ablative_singular: urbe
+      nominative_plural: urbes
+      genitive_plural: urbium
+      dative_plural: urbibus
+      accusative_plural: urbes
+      ablative_plural: urbibus
+  - type: Konsonantische-Deklination-i-mf
+    translation: der Teil
+    word: pars
+    base_form: partis
+  - type: Konsonantische-Deklination-i-n
+    translation: das Meer
+    word_form: nominative_singular
+    word: mare
+    base_form: maris
+    verify_inference: true
+    forms:
+      nominative_singular: mare
+      genitive_singular: maris
+      dative_singular: mari
+      accusative_singular: mare
+      ablative_singular: mari
+      nominative_plural: maria
+      genitive_plural: marium
+      dative_plural: maribus
+      accusative_plural: maria
+      ablative_plural: maribus
+  - type: Konsonantische-Deklination-i-n
+    translation: das Tier, Lebewesen
+    word: animal
+    base_form: animalis
+    forms:
+      accusative_singular: animal
+
+  # Personalpronomen: ego/tu stehen nur im Singular, nos/vos nur im Plural
+  - type: Pronomen-personal
+    translation: ich
+    word_form: nominative_singular
+    word: ego
+    forms:
+      nominative_singular: ego
+      genitive_singular: mei
+      dative_singular: mihi
+      accusative_singular: me
+      ablative_singular: me
+  - type: Pronomen-personal
+    translation: du
+    word_form: nominative_singular
+    word: tu
+    forms:
+      nominative_singular: tu
+      genitive_singular: tui
+      dative_singular: tibi
+      accusative_singular: te
+      ablative_singular: te
+  - type: Pronomen-personal
+    translation: wir
+    word_form: nominative_plural
+    word: nos
+    forms:
+      nominative_plural: nos
+      genitive_plural: nostrum
+      dative_plural: nobis
+      accusative_plural: nos
+      ablative_plural: nobis
+  - type: Pronomen-personal
+    translation: ihr
+    word_form: nominative_plural
+    word: vos
+    forms:
+      nominative_plural: vos
+      genitive_plural: vestrum
+      dative_plural: vobis
+      accusative_plural: vos
+      ablative_plural: vobis
+
+  # Demonstrativpronomen: je ein Item pro Genus (wie is/ea/id)
+  - type: Pronomen-hic-maskulinum
+    translation: dieser hier (m)
+    word_form: nominative_singular
+    word: hic
+    forms:
+      nominative_singular: hic
+      genitive_singular: huius
+      dative_singular: huic
+      accusative_singular: hunc
+      ablative_singular: hoc
+      nominative_plural: hi
+      genitive_plural: horum
+      dative_plural: his
+      accusative_plural: hos
+      ablative_plural: his
+  - type: Pronomen-hic-femininum
+    translation: dieser hier (f)
+    word_form: nominative_singular
+    word: haec
+    forms:
+      nominative_singular: haec
+      genitive_singular: huius
+      dative_singular: huic
+      accusative_singular: hanc
+      ablative_singular: hac
+      nominative_plural: hae
+      genitive_plural: harum
+      dative_plural: his
+      accusative_plural: has
+      ablative_plural: his
+  - type: Pronomen-hic-neutrum
+    translation: dieser hier (n)
+    word_form: nominative_singular
+    word: hoc
+    forms:
+      nominative_singular: hoc
+      genitive_singular: huius
+      dative_singular: huic
+      accusative_singular: hoc
+      ablative_singular: hoc
+      nominative_plural: haec
+      genitive_plural: horum
+      dative_plural: his
+      accusative_plural: haec
+      ablative_plural: his
+  - type: Pronomen-ille-maskulinum
+    translation: jener (m)
+    word_form: nominative_singular
+    word: ille
+    forms:
+      nominative_singular: ille
+      genitive_singular: illius
+      dative_singular: illi
+      accusative_singular: illum
+      ablative_singular: illo
+      nominative_plural: illi
+      genitive_plural: illorum
+      dative_plural: illis
+      accusative_plural: illos
+      ablative_plural: illis
+  - type: Pronomen-ille-femininum
+    translation: jener (f)
+    word_form: nominative_singular
+    word: illa
+    forms:
+      nominative_singular: illa
+      genitive_singular: illius
+      dative_singular: illi
+      accusative_singular: illam
+      ablative_singular: illa
+      nominative_plural: illae
+      genitive_plural: illarum
+      dative_plural: illis
+      accusative_plural: illas
+      ablative_plural: illis
+  - type: Pronomen-ille-neutrum
+    translation: jener (n)
+    word_form: nominative_singular
+    word: illud
+    forms:
+      nominative_singular: illud
+      genitive_singular: illius
+      dative_singular: illi
+      accusative_singular: illud
+      ablative_singular: illo
+      nominative_plural: illa
+      genitive_plural: illorum
+      dative_plural: illis
+      accusative_plural: illa
+      ablative_plural: illis
+  - type: Pronomen-iste-maskulinum
+    translation: dieser da (m)
+    word_form: nominative_singular
+    word: iste
+    forms:
+      nominative_singular: iste
+      genitive_singular: istius
+      dative_singular: isti
+      accusative_singular: istum
+      ablative_singular: isto
+      nominative_plural: isti
+      genitive_plural: istorum
+      dative_plural: istis
+      accusative_plural: istos
+      ablative_plural: istis
+  - type: Pronomen-iste-femininum
+    translation: dieser da (f)
+    word_form: nominative_singular
+    word: ista
+    forms:
+      nominative_singular: ista
+      genitive_singular: istius
+      dative_singular: isti
+      accusative_singular: istam
+      ablative_singular: ista
+      nominative_plural: istae
+      genitive_plural: istarum
+      dative_plural: istis
+      accusative_plural: istas
+      ablative_plural: istis
+  - type: Pronomen-iste-neutrum
+    translation: dieser da (n)
+    word_form: nominative_singular
+    word: istud
+    forms:
+      nominative_singular: istud
+      genitive_singular: istius
+      dative_singular: isti
+      accusative_singular: istud
+      ablative_singular: isto
+      nominative_plural: ista
+      genitive_plural: istorum
+      dative_plural: istis
+      accusative_plural: ista
+      ablative_plural: istis
+  - type: Pronomen-ipse-maskulinum
+    translation: selbst (m)
+    word_form: nominative_singular
+    word: ipse
+    forms:
+      nominative_singular: ipse
+      genitive_singular: ipsius
+      dative_singular: ipsi
+      accusative_singular: ipsum
+      ablative_singular: ipso
+      nominative_plural: ipsi
+      genitive_plural: ipsorum
+      dative_plural: ipsis
+      accusative_plural: ipsos
+      ablative_plural: ipsis
+  - type: Pronomen-ipse-femininum
+    translation: selbst (f)
+    word_form: nominative_singular
+    word: ipsa
+    forms:
+      nominative_singular: ipsa
+      genitive_singular: ipsius
+      dative_singular: ipsi
+      accusative_singular: ipsam
+      ablative_singular: ipsa
+      nominative_plural: ipsae
+      genitive_plural: ipsarum
+      dative_plural: ipsis
+      accusative_plural: ipsas
+      ablative_plural: ipsis
+  - type: Pronomen-ipse-neutrum
+    translation: selbst (n)
+    word_form: nominative_singular
+    word: ipsum
+    forms:
+      nominative_singular: ipsum
+      genitive_singular: ipsius
+      dative_singular: ipsi
+      accusative_singular: ipsum
+      ablative_singular: ipso
+      nominative_plural: ipsa
+      genitive_plural: ipsorum
+      dative_plural: ipsis
+      accusative_plural: ipsa
+      ablative_plural: ipsis
+
+  # Relativpronomen qui, quae, quod und Interrogativpronomen quis, quid
+  - type: Pronomen-qui-maskulinum
+    translation: welcher, der (m)
+    word_form: nominative_singular
+    word: qui
+    forms:
+      nominative_singular: qui
+      genitive_singular: cuius
+      dative_singular: cui
+      accusative_singular: quem
+      ablative_singular: quo
+      nominative_plural: qui
+      genitive_plural: quorum
+      dative_plural: quibus
+      accusative_plural: quos
+      ablative_plural: quibus
+  - type: Pronomen-qui-femininum
+    translation: welcher, der (f)
+    word_form: nominative_singular
+    word: quae
+    forms:
+      nominative_singular: quae
+      genitive_singular: cuius
+      dative_singular: cui
+      accusative_singular: quam
+      ablative_singular: qua
+      nominative_plural: quae
+      genitive_plural: quarum
+      dative_plural: quibus
+      accusative_plural: quas
+      ablative_plural: quibus
+  - type: Pronomen-qui-neutrum
+    translation: welcher, der (n)
+    word_form: nominative_singular
+    word: quod
+    forms:
+      nominative_singular: quod
+      genitive_singular: cuius
+      dative_singular: cui
+      accusative_singular: quod
+      ablative_singular: quo
+      nominative_plural: quae
+      genitive_plural: quorum
+      dative_plural: quibus
+      accusative_plural: quae
+      ablative_plural: quibus
+  - type: Pronomen-quis-maskulinum-femininum
+    translation: wer? (m/f)
+    word_form: nominative_singular
+    word: quis
+    forms:
+      nominative_singular: quis
+      genitive_singular: cuius
+      dative_singular: cui
+      accusative_singular: quem
+      ablative_singular: quo
+  - type: Pronomen-quis-neutrum
+    translation: was? (n)
+    word_form: nominative_singular
+    word: quid
+    forms:
+      nominative_singular: quid
+      genitive_singular: cuius
+      dative_singular: cui
+      accusative_singular: quid
+      ablative_singular: quo
+
+  # Zahlwörter: unus nur im Singular, tres und milia nur im Plural
+  - type: Numerale-unus-maskulinum
+    translation: ein, einer (m)
+    word_form: nominative_singular
+    word: unus
+    forms:
+      nominative_singular: unus
+      genitive_singular: unius
+      dative_singular: uni
+      accusative_singular: unum
+      ablative_singular: uno
+  - type: Numerale-unus-femininum
+    translation: ein, einer (f)
+    word_form: nominative_singular
+    word: una
+    forms:
+      nominative_singular: una
+      genitive_singular: unius
+      dative_singular: uni
+      accusative_singular: unam
+      ablative_singular: una
+  - type: Numerale-unus-neutrum
+    translation: ein, einer (n)
+    word_form: nominative_singular
+    word: unum
+    forms:
+      nominative_singular: unum
+      genitive_singular: unius
+      dative_singular: uni
+      accusative_singular: unum
+      ablative_singular: uno
+  - type: Numerale-tres-maskulinum-femininum
+    translation: drei (m/f)
+    word_form: nominative_plural
+    word: tres
+    forms:
+      nominative_plural: tres
+      genitive_plural: trium
+      dative_plural: tribus
+      accusative_plural: tres
+      ablative_plural: tribus
+  - type: Numerale-tres-neutrum
+    translation: drei (n)
+    word_form: nominative_plural
+    word: tria
+    forms:
+      nominative_plural: tria
+      genitive_plural: trium
+      dative_plural: tribus
+      accusative_plural: tria
+      ablative_plural: tribus
+  - type: Numerale-milia
+    translation: Tausende
+    word_form: nominative_plural
+    word: milia
+    forms:
+      nominative_plural: milia
+      genitive_plural: milium
+      dative_plural: milibus
+      accusative_plural: milia
+      ablative_plural: milibus
