@@ -313,6 +313,7 @@ types:
       nom.pl: "{stamm}ia"
       gen.pl: "{stamm}ium"
       akk.pl: "{stamm}ia"
+      vok.pl: "{stamm}ia"
 
   # Adjectives. Every grade is a delegate into an ending table, so the three
   # grades share one key space and the adverb sits beside them.

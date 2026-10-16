@@ -8,7 +8,6 @@ diffs:
   - {lemma: ire, features: ["konj.plusq.akt.2.pl"], engine: "iissētis", reason: "engine: the perfect-system subjunctive and infinitive of ire show the uncontracted iiss-/iisse as the first spelling; the print has the contracted īss-/īsse (#51)"}
   - {lemma: ire, features: ["konj.plusq.akt.3.pl"], engine: "iissent", reason: "engine: the perfect-system subjunctive and infinitive of ire show the uncontracted iiss-/iisse as the first spelling; the print has the contracted īss-/īsse (#51)"}
   - {lemma: ire, features: ["inf.perf.akt"], engine: "iisse", reason: "engine: the perfect-system subjunctive and infinitive of ire show the uncontracted iiss-/iisse as the first spelling; the print has the contracted īss-/īsse (#51)"}
-  - {lemma: mare, features: ["vok.pl.n"], engine: "mara", reason: "engine: the neuter i-stem vocative plural is mara, the print has maria (#49)"}
   - {lemma: ego, features: ["1.abl.sg"], engine: "mē", reason: "print shows a prepositional phrase; bare ablative is the form"}
   - {lemma: tu, features: ["2.abl.sg"], engine: "tē", reason: "print shows a prepositional phrase; bare ablative is the form"}
 
