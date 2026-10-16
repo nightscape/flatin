@@ -1,3 +1,5 @@
+import 'dart:io';
+
 // IMPORTANT: ⚠️ only import annotations ⚠️
 import 'package:pickled_cucumber/src/annotations.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -473,6 +475,8 @@ class AppSteps {
   @Then('I take a screenshot named {string}')
   @And('I take a screenshot named {string}')
   Future<void> iTakeScreenshot(WidgetTester tester, String name) async {
+    // The integration_test screenshot channel exists only on Android and iOS.
+    if (!Platform.isAndroid && !Platform.isIOS) return;
     try {
       final binding = IntegrationTestWidgetsFlutterBinding.instance;
       await binding.convertFlutterSurfaceToImage();
