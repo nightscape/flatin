@@ -1,19 +1,20 @@
 # Keys that only one side has. `direction: ours` lists keys Collatinus has and
 # we do not practise; `direction: theirs` lists keys we have and Collatinus
 # does not. Every entry names its keys, in which `*` stands for one segment.
-# A key outside this file fails the run; so does an entry that matches
-# nothing any more.
+# A key outside this file fails the run; so does a key pattern that matches
+# nothing any more. `deponent: full` is for a word that is deponent in every
+# tempus, `deponent: some` also for a semi-deponent.
 
 - direction: ours
   keys: [imp.fut.pass.*.*]
   reason: "we practise no future imperative of the passive"
 - direction: ours
   keys: [imp.fut.akt.*.*]
-  deponent: true
+  deponent: full
   reason: "a deponent has the future imperative in -tor only; the table gives it no active imperative to practise"
 - direction: theirs
   keys: [gerv.*.*.*]
-  deponent: true
+  deponent: full
   reason: "Collatinus files the deponent gerundive under the participle, not under a gerundive morph"
 - direction: ours
   item: audere

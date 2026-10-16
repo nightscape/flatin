@@ -46,6 +46,9 @@ sample:
 #   noun:      `ends`: the nominative must end so; the genitive is the radical 1 of the line, or the nominative
 #              without its last `cut` letters, plus `genitive`
 #   adjective: `ends` and the stem as for a noun, plus the feminine `f` and neuter `n` endings
+# Such a model gives `lemmasPerModel` lemmas. `lemmas:` is the exact smaller
+# number a model gives whose corpus holds no more; it is asserted, so a model
+# that loses or gains a lemma is reported.
 models:
   amo: {types: [A-Konjugation], verb: {strip: o, infinitive: āre}}
   moneo: {types: [E-Konjugation], verb: {strip: eo, infinitive: ēre}}
@@ -68,12 +71,12 @@ models:
   ciuis: {types: [Konsonantische-Deklination-i-mf], noun: {ends: is, cut: 0, genitive: is}}
   manus: {types: [U-Deklination], noun: {ends: us, cut: 2, genitive: ūs}}
   dies: {types: [E-Deklination], noun: {ends: es, cut: 2, genitive: ēī}}
-  turris: {types: [i-Deklination-mf], noun: {ends: is, cut: 2, genitive: is}}
+  turris: {types: [i-Deklination-mf], lemmas: 6, noun: {ends: is, cut: 2, genitive: is}}
   mare: {types: [i-Deklination-n, Konsonantische-Deklination-i-n], noun: {ends: e, cut: 1, genitive: is}}
   doctus: {types: [Adjektiv-a-o], adjective: {ends: us, cut: 2, f: a, n: um}}
   miser: {types: [Adjektiv-a-o-er], adjective: {ends: er, cut: 0, f: a, n: um}}
   fortis: {types: [Adjektiv-zweiendig], adjective: {ends: is, cut: 2, n: e}}
-  acer: {types: [Adjektiv-dreiendig], adjective: {ends: er, cut: 2, f: ris, n: re, radical: none}}
+  acer: {types: [Adjektiv-dreiendig], lemmas: 4, adjective: {ends: er, cut: 2, f: ris, n: re, radical: none}}
   hic: {types: [Pronomen]}
 
 # Collatinus spells the ad- compound unassimilated (adferō, adtulī, adlātum).

@@ -157,10 +157,14 @@ void main() {
       reason: 'see build/oracle_report.md',
     );
     expect(
-      result.stale(allowed).map((a) => a.describe).toList(),
+      result.stale(allowed).map((s) => s.describe).toList(),
       isEmpty,
       reason: 'allowed_diffs.yaml lists differences that no longer happen',
     );
+  });
+
+  test('every mapped model reaches the lemma floor', () {
+    expect(modelsOffFloor([fixtures.sample, real.sample], typeMap), isEmpty);
   });
 
   test('the sample covers the deponents of section 15', () {
@@ -203,7 +207,27 @@ void main() {
         keys: ['no.such.key'],
         reason: 'x',
       );
-      expect(result.stale([bogus]), [bogus]);
+      expect(result.stale([bogus]).single.entry, bogus);
+    });
+
+    test('a dead pattern of an otherwise live entry is stale', () {
+      final live = result.of(DiffCategory.missingOurs).first;
+      final mixed = AllowedDiff(
+        category: DiffCategory.missingOurs,
+        keys: [live.key, 'no.such.key'],
+        reason: 'x',
+      );
+      expect(mixed.covers(live), isTrue);
+      expect(result.stale([mixed]).single.patterns, ['no.such.key']);
+    });
+
+    test('a sample that drops a model below the floor is reported', () {
+      final nounsOnly = buildSample(
+        sources: {_real.first: File(_real.first).readAsStringSync()},
+        collatinus: collatinus,
+        typeMap: typeMap,
+      );
+      expect(modelsOffFloor([nounsOnly], typeMap), isNotEmpty);
     });
 
     test('a missing-key entry without keys is refused', () {
@@ -226,28 +250,40 @@ void main() {
         theirs: const ['x'],
         synthetic: ire.synthetic,
         deponent: false,
+        fullDeponent: false,
       );
       expect(result.unlisted(allowed).length, 0);
       expect(allowed.any((a) => a.covers(other)), isFalse);
     });
 
-    test('a deponent reason does not cover an item that is not a deponent', () {
+    test('a deponent reason covers neither an active verb nor a semi-deponent',
+        () {
       final moved = result.diffs.firstWhere((d) =>
           d.category == DiffCategory.missingOurs &&
           d.key.startsWith('imp.fut.akt.') &&
-          d.deponent);
-      final active = Diff(
-        category: moved.category,
-        item: 'amare',
-        type: moved.type,
-        key: moved.key,
-        ours: moved.ours,
-        theirs: moved.theirs,
-        synthetic: false,
-        deponent: false,
-      );
+          d.fullDeponent);
+      Diff like(String item, {required bool deponent}) => Diff(
+            category: moved.category,
+            item: item,
+            type: moved.type,
+            key: moved.key,
+            ours: moved.ours,
+            theirs: moved.theirs,
+            synthetic: false,
+            deponent: deponent,
+            fullDeponent: false,
+          );
+
+      final active = like('amare', deponent: false);
+      final semi = like('audere', deponent: true);
       expect(allowed.any((a) => a.covers(moved)), isTrue);
       expect(allowed.any((a) => a.covers(active)), isFalse);
+      expect(allowed.any((a) => a.covers(semi)), isFalse);
+      // The semi-deponent is what a widened selector would let through.
+      final widened = AllowedDiff.parse(
+        '- {direction: ours, keys: [${moved.key}], deponent: some, reason: x}',
+      );
+      expect(widened.single.covers(semi), isTrue);
     });
 
     test('a shrunk or empty sample is not the whole sample', () {

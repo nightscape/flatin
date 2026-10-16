@@ -38,7 +38,35 @@ final class Sample {
   final Map<String, String> sources;
   final List<SampleEntry> entries;
 
-  Sample(this.sources, this.entries);
+  /// Collatinus model -> lemmas this sample took for it. A mapped model the
+  /// sample leaves to another corpus is absent.
+  final Map<String, int> lemmasByModel;
+
+  Sample(this.sources, this.entries, this.lemmasByModel);
+}
+
+/// Mapped model -> its lemmas across [samples], for every model that builds
+/// its items. A model no sample built is 0.
+Map<String, int> lemmasByModel(Iterable<Sample> samples, TypeMap typeMap) => {
+      for (final model in typeMap.builds.keys)
+        model: samples.fold(0, (n, s) => n + (s.lemmasByModel[model] ?? 0)),
+    };
+
+/// Mapped model -> its lemmas, for every model that misses its floor across
+/// [samples]: [lemmasPerModel], or exactly the `lemmas` a model declares
+/// whose corpus holds fewer. Declaring the floor away is refused.
+Map<String, int> modelsOffFloor(Iterable<Sample> samples, TypeMap typeMap) {
+  final off = <String, int>{};
+  for (final e in lemmasByModel(samples, typeMap).entries) {
+    final declared = typeMap.models[e.key]!.lemmas;
+    if (declared != null && declared >= lemmasPerModel) {
+      throw StateError('type_map.yaml: ${e.key} declares $declared lemmas, '
+          'which is not below the floor of $lemmasPerModel');
+    }
+    final met = declared == null ? e.value >= lemmasPerModel : e.value == declared;
+    if (!met) off[e.key] = e.value;
+  }
+  return off;
 }
 
 /// A Collatinus spelling as our data writes it: macrons stay, breves go, `j`
@@ -174,9 +202,11 @@ Sample buildSample({
   final takenLemmas = {for (final e in entries) ...e.lemmas};
 
   final extra = <String, StringBuffer>{};
+  final taken = <String, int>{};
   for (final model in typeMap.builds.entries) {
     final spec = model.value;
     if (spec.types.any(coveredTypes.contains)) continue;
+    taken[model.key] = 0;
     final owner = declared.entries
         .where((f) => spec.types.any(f.value.$2.contains))
         .firstOrNull;
@@ -214,25 +244,34 @@ Sample buildSample({
       takenLemmas.add(candidate.key);
       count++;
     }
+    taken[model.key] = count;
   }
 
   return Sample({
     for (final entry in sources.entries)
       entry.key: '${entry.value}\n${extra[entry.key] ?? ''}',
-  }, entries);
+  }, entries, taken);
 }
 
 /// Our forms of every entry, as the engine derives them.
 List<ItemForms> engineForms(Sample sample) {
   final files = parseGrammarFiles(sample.sources);
   final engine = GrammarEngine(files);
+
+  /// S10: the item is deponent in every tempus, not only in some.
+  bool fullDeponent(GrammarFile file, String itemId, String type) {
+    final spec = file.item(itemId).deponent ??
+        files.firstWhere((f) => f.types.containsKey(type)).types[type]!.deponent;
+    return spec?.all ?? false;
+  }
+
   return [
     for (final entry in sample.entries)
       () {
+        final file =
+            files.singleWhere((f) => f.dataFileId == entry.dataFileId);
         final itemId = entry.itemId ??
-            files
-                .singleWhere((f) => f.dataFileId == entry.dataFileId)
-                .items
+            file.items
                 .singleWhere((i) => i.translation == entry.lemmas.single)
                 .id;
         final derivation = engine.of(entry.dataFileId, itemId);
@@ -243,6 +282,7 @@ List<ItemForms> engineForms(Sample sample) {
           lemmas: entry.lemmas,
           synthetic: entry.synthetic,
           deponent: derivation.deponentKeys.isNotEmpty,
+          fullDeponent: fullDeponent(file, itemId, derivation.type),
           emitted: {
             for (final f in derivation.forms.entries) f.key: f.value.variants,
           },

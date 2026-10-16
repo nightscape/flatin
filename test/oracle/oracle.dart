@@ -97,6 +97,10 @@ final class ItemForms {
   /// Some passive key of the item is a deponent move (S10).
   final bool deponent;
 
+  /// The item is deponent in every tempus, not only in some (S10). A
+  /// semi-deponent keeps the passive keys the move leaves alone.
+  final bool fullDeponent;
+
   /// Key -> accepted spellings, the shown one first (S9).
   final Map<FormKey, List<String>> emitted;
   final Map<FormKey, List<String>> internal;
@@ -108,6 +112,7 @@ final class ItemForms {
     required this.lemmas,
     required this.synthetic,
     required this.deponent,
+    required this.fullDeponent,
     required this.emitted,
     required this.internal,
   });
@@ -203,7 +208,11 @@ final class ModelSpec {
   final String? kind;
   final Map<String, String> build;
 
-  ModelSpec(this.types, this.kind, this.build);
+  /// The lemmas this model has to give, for a model whose corpus holds fewer
+  /// than the floor; null for a model that reaches the floor.
+  final int? lemmas;
+
+  ModelSpec(this.types, this.kind, this.build, this.lemmas);
 }
 
 /// `type_map.yaml`.
@@ -242,6 +251,7 @@ final class TypeMap {
                 for (final e in (node[kind] as YamlMap).entries)
                   '${e.key}': '${e.value}',
               },
+        node['lemmas'] as int?,
       );
     }
 
@@ -283,6 +293,26 @@ final class TypeMap {
   }
 }
 
+/// Which deponents an entry of the allow-list is for (S10).
+enum DeponentKind {
+  /// Deponent in some tempus: a semi-deponent counts.
+  some,
+
+  /// Deponent in every tempus.
+  full;
+
+  static DeponentKind parse(Object? node) => switch (node) {
+    'some' => DeponentKind.some,
+    'full' => DeponentKind.full,
+    final other => throw FormatException('deponent $other, not some or full'),
+  };
+
+  bool matches(Diff diff) => switch (this) {
+    DeponentKind.some => diff.deponent,
+    DeponentKind.full => diff.fullDeponent,
+  };
+}
+
 /// One entry of `allowed_diffs.yaml` or `allowed_missing.yaml`. It covers a
 /// diff when every field it names matches; `key` is a pattern whose `*`
 /// stands for exactly one dot-separated segment.
@@ -295,8 +325,8 @@ final class AllowedDiff {
   /// True: only items the sample made up; null: any item.
   final bool? synthetic;
 
-  /// True: only deponent items; null: any item.
-  final bool? deponent;
+  /// Null: any item, deponent or not.
+  final DeponentKind? deponent;
   final String? ours;
   final String? theirs;
   final String reason;
@@ -313,15 +343,31 @@ final class AllowedDiff {
     required this.reason,
   });
 
-  bool covers(Diff diff) {
+  bool covers(Diff diff) =>
+      _matchesBesidesKeys(diff) &&
+      (keys == null || keys!.any((k) => _keyMatches(k, diff.key)));
+
+  /// How much of this entry [diffs] no longer needs: null while every part of
+  /// it is live, else the dead key patterns, empty for an entry without keys
+  /// that covers nothing.
+  List<String>? dead(Iterable<Diff> diffs) {
+    if (keys == null) return diffs.any(covers) ? null : const [];
+    final dead = [
+      for (final pattern in keys!)
+        if (!diffs.any(
+          (d) => _matchesBesidesKeys(d) && _keyMatches(pattern, d.key),
+        ))
+          pattern,
+    ];
+    return dead.isEmpty ? null : dead;
+  }
+
+  bool _matchesBesidesKeys(Diff diff) {
     if (diff.category != category) return false;
     if (item != null && item != diff.item) return false;
     if (types != null && !types!.contains(diff.type)) return false;
     if (synthetic != null && synthetic != diff.synthetic) return false;
-    if (deponent != null && deponent != diff.deponent) return false;
-    if (keys != null && !keys!.any((k) => _keyMatches(k, diff.key))) {
-      return false;
-    }
+    if (deponent != null && !deponent!.matches(diff)) return false;
     if (ours != null && ours != diff.ours.join(' / ')) return false;
     if (theirs != null && theirs != diff.theirs.join(' / ')) return false;
     return true;
@@ -336,8 +382,8 @@ final class AllowedDiff {
     return true;
   }
 
-  String get describe =>
-      '${category.id} item=$item keys=$keys types=$types ours=$ours theirs=$theirs';
+  String get describe => '${category.id} item=$item keys=$keys types=$types '
+      'deponent=${deponent?.name} ours=$ours theirs=$theirs';
 
   static List<AllowedDiff> parse(String source) => [
     for (final entry in loadYaml(source) as YamlList)
@@ -360,7 +406,9 @@ final class AllowedDiff {
             ? null
             : [for (final t in entry['types'] as YamlList) '$t'],
         synthetic: entry['synthetic'] as bool?,
-        deponent: entry['deponent'] as bool?,
+        deponent: entry['deponent'] == null
+            ? null
+            : DeponentKind.parse(entry['deponent']),
         ours: entry['ours'] == null ? null : '${entry['ours']}',
         theirs: entry['theirs'] == null ? null : '${entry['theirs']}',
         reason: '${entry['reason']}',
@@ -397,6 +445,7 @@ final class Diff {
   final List<String> theirs;
   final bool synthetic;
   final bool deponent;
+  final bool fullDeponent;
 
   Diff({
     required this.category,
@@ -407,10 +456,25 @@ final class Diff {
     required this.theirs,
     required this.synthetic,
     required this.deponent,
+    required this.fullDeponent,
   });
 
   String get signature =>
       '$item $key: ${ours.join(" / ")} / ${theirs.join(" / ")}';
+}
+
+/// An allow-list entry that is no longer needed in full or in part.
+final class Stale {
+  final AllowedDiff entry;
+
+  /// The key patterns that cover nothing; empty when the whole entry does.
+  final List<String> patterns;
+
+  Stale(this.entry, this.patterns);
+
+  String get describe => patterns.isEmpty
+      ? entry.describe
+      : '${entry.describe} dead patterns: ${patterns.join(", ")}';
 }
 
 final class OracleResult {
@@ -441,9 +505,11 @@ final class OracleResult {
       .where((d) => !allowed.any((a) => a.covers(d)))
       .toList();
 
-  /// Entries of [allowed] that cover no diff any more.
-  List<AllowedDiff> stale(List<AllowedDiff> allowed) =>
-      allowed.where((a) => !diffs.any(a.covers)).toList();
+  /// The parts of [allowed] that cover no diff any more.
+  List<Stale> stale(List<AllowedDiff> allowed) => [
+    for (final entry in allowed)
+      if (entry.dead(diffs) case final patterns?) Stale(entry, patterns),
+  ];
 }
 
 /// Whether the run compared every entry of a sample of [entries] items.
@@ -529,6 +595,7 @@ OracleResult runOracle({
           theirs: t,
           synthetic: item.synthetic,
           deponent: item.deponent,
+          fullDeponent: item.fullDeponent,
         ));
 
     final keys = [
