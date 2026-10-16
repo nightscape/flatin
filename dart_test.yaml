@@ -6,3 +6,7 @@ tags:
   # with it, which leaves no way to run the oracle at all.
   oracle:
     skip: "run tool/oracle/fetch_collatinus.sh, then flutter test --tags oracle --run-skipped"
+
+  # Needs a private paradigm file: see test/printed/README.md. The group
+  # skips itself unless PRINTED_PARADIGMS is set.
+  printed: {}

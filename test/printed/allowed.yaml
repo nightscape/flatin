@@ -1,0 +1,26 @@
+matched_lemmas: 31
+
+diffs:
+  - {lemma: ire, features: ["konj.plusq.akt.1.sg"], engine: "iissem", reason: "engine: the perfect-system subjunctive and infinitive of ire show the uncontracted iiss-/iisse as the first spelling; the print has the contracted īss-/īsse (#51)"}
+  - {lemma: ire, features: ["konj.plusq.akt.2.sg"], engine: "iissēs", reason: "engine: the perfect-system subjunctive and infinitive of ire show the uncontracted iiss-/iisse as the first spelling; the print has the contracted īss-/īsse (#51)"}
+  - {lemma: ire, features: ["konj.plusq.akt.3.sg"], engine: "iisset", reason: "engine: the perfect-system subjunctive and infinitive of ire show the uncontracted iiss-/iisse as the first spelling; the print has the contracted īss-/īsse (#51)"}
+  - {lemma: ire, features: ["konj.plusq.akt.1.pl"], engine: "iissēmus", reason: "engine: the perfect-system subjunctive and infinitive of ire show the uncontracted iiss-/iisse as the first spelling; the print has the contracted īss-/īsse (#51)"}
+  - {lemma: ire, features: ["konj.plusq.akt.2.pl"], engine: "iissētis", reason: "engine: the perfect-system subjunctive and infinitive of ire show the uncontracted iiss-/iisse as the first spelling; the print has the contracted īss-/īsse (#51)"}
+  - {lemma: ire, features: ["konj.plusq.akt.3.pl"], engine: "iissent", reason: "engine: the perfect-system subjunctive and infinitive of ire show the uncontracted iiss-/iisse as the first spelling; the print has the contracted īss-/īsse (#51)"}
+  - {lemma: ire, features: ["inf.perf.akt"], engine: "iisse", reason: "engine: the perfect-system subjunctive and infinitive of ire show the uncontracted iiss-/iisse as the first spelling; the print has the contracted īss-/īsse (#51)"}
+  - {lemma: mare, features: ["vok.pl.n"], engine: "mara", reason: "engine: the neuter i-stem vocative plural is mara, the print has maria (#49)"}
+  - {lemma: ego, features: ["1.abl.sg"], engine: "mē", reason: "print shows a prepositional phrase; bare ablative is the form"}
+  - {lemma: tu, features: ["2.abl.sg"], engine: "tē", reason: "print shows a prepositional phrase; bare ablative is the form"}
+  - {lemma: res, features: ["gen.sg"], engine: "rēī", reason: "engine: the e-declension genitive and dative singular of res is rēī, the print has reī (#52)"}
+  - {lemma: res, features: ["dat.sg"], engine: "rēī", reason: "engine: the e-declension genitive and dative singular of res is rēī, the print has reī (#52)"}
+
+missing:
+  - {lemma: vocare, features: ["*.*.pass.*.*.f|n", "inf.perf.pass.f|n"], reason: "design: perfect passive practised in one (masc.) form"}
+  - {lemma: habere, features: ["*.*.pass.*.*.f|n", "inf.perf.pass.f|n"], reason: "design: perfect passive practised in one (masc.) form"}
+  - {lemma: audire, features: ["*.*.pass.*.*.f|n", "inf.perf.pass.f|n"], reason: "design: perfect passive practised in one (masc.) form"}
+  - {lemma: capere, features: ["*.*.pass.*.*.f|n", "inf.perf.pass.f|n"], reason: "design: perfect passive practised in one (masc.) form"}
+  - {lemma: agere, features: ["*.*.pass.*.*.f|n", "inf.perf.pass.f|n"], reason: "design: perfect passive practised in one (masc.) form"}
+  - {lemma: ferre, features: ["*.praes.pass.*.*", "*.impf.pass.*.*", "ind.fut.pass.*.*", "*.*.pass.*.*.m|f|n", "inf.perf.pass.m|f|n", "part.perf.pass.nom.sg.f"], reason: "engine: ferre has no passive forms (#50)"}
+  - {lemma: ire, features: ["part.perf.pass.nom.sg.m|f|n"], reason: "engine: ire has no perfect passive participle (#50)"}
+  - {lemma: ego, features: ["1.*.pl"], reason: "design: the plural of the personal pronoun is the separate item nos"}
+  - {lemma: tu, features: ["2.*.pl"], reason: "design: the plural of the personal pronoun is the separate item vos"}
