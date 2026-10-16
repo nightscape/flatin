@@ -35,7 +35,8 @@
     "otherWords": "Other words",
     "types": "Types",
     "forms": "Forms",
-    "features": "Features"
+    "features": "Features",
+    "featureOff": "{value} is switched off"
   },
   "wordClassification": {
     "declension": "Deklination",

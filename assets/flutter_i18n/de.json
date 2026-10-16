@@ -35,7 +35,8 @@
     "otherWords": "Weitere Wörter",
     "types": "Typen",
     "forms": "Formen",
-    "features": "Merkmale"
+    "features": "Merkmale",
+    "featureOff": "{value} ist ausgeschaltet"
   },
   "wordClassification": {
     "declension": "Deklination",

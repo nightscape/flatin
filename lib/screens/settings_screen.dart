@@ -52,8 +52,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding:
-                      EdgeInsets.symmetric(vertical: isMobile ? 12.0 : 16.0),
+                  padding: EdgeInsets.symmetric(
+                    vertical: isMobile ? 12.0 : 16.0,
+                  ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -128,8 +129,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     final fullySelected = settings.isLessonFullySelected(rawWords);
     final partiallySelected = settings.isLessonPartiallySelected(rawWords);
     // tristate: true=all, null=some, false=none
-    final checkboxValue =
-        fullySelected ? true : (partiallySelected ? null : false);
+    final checkboxValue = fullySelected
+        ? true
+        : (partiallySelected ? null : false);
 
     return Theme(
       data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
@@ -196,12 +198,6 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
     return settingsAsync.when(
       data: (settings) {
-        final labels = [
-          for (final key in metadata.formOrder) metadata.formLabelsByKey[key]!,
-        ];
-        final enabledForms =
-            settings.enabledFormsOf(dataFileId, labels);
-
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -318,8 +314,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 ),
               ),
               ...metadata.availableTypes.map((typeName) {
-                final isEnabled =
-                    settings.isTypeEnabled(dataFileId, typeName);
+                final isEnabled = settings.isTypeEnabled(dataFileId, typeName);
 
                 return CheckboxListTile(
                   contentPadding: EdgeInsets.symmetric(
@@ -416,7 +411,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             ),
             ...metadata.formOrder.map((formKey) {
               final formLabel = metadata.formLabelsByKey[formKey]!;
-              final isEnabled = enabledForms.contains(formKey);
+              final offFeatures = settings.offFeaturesOf(dataFileId, formLabel);
 
               return CheckboxListTile(
                 key: Key('form.$dataFileId.$formKey'),
@@ -428,14 +423,36 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   formLabel.displayName,
                   style: TextStyle(
                     fontSize: isMobile ? 14.0 : 16.0,
-                    color: Colors.black,
+                    color: offFeatures.isEmpty
+                        ? Colors.black
+                        : Theme.of(context).disabledColor,
                   ),
                 ),
-                value: isEnabled,
-                onChanged: (value) {
-                  final notifier = ref.read(settingsProvider.notifier);
-                  notifier.toggleForm(dataFileId, formKey);
-                },
+                subtitle: offFeatures.isEmpty
+                    ? null
+                    : Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          for (final (axisId, code) in offFeatures)
+                            Text(
+                              FlutterI18n.translate(
+                                context,
+                                'settings.featureOff',
+                                translationParams: {
+                                  'value': metadata.axes
+                                      .byId(axisId)
+                                      .display(code),
+                                },
+                              ),
+                            ),
+                        ],
+                      ),
+                value: settings.isFormSwitchedOn(dataFileId, formKey),
+                onChanged: offFeatures.isEmpty
+                    ? (_) => ref
+                          .read(settingsProvider.notifier)
+                          .toggleForm(dataFileId, formKey)
+                    : null,
                 activeColor: const Color(0xFFD0D0D0),
                 checkColor: Colors.black,
               );

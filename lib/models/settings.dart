@@ -63,12 +63,26 @@ class Settings {
     return !(disabledFeatures[dataFileId]?[axisId]?.contains(code) ?? false);
   }
 
+  /// Whether the form's own switch is on, whatever its features say.
+  bool isFormSwitchedOn(String dataFileId, FormKey formKey) {
+    return !(disabledForms[dataFileId]?.contains(formKey) ?? false);
+  }
+
+  /// The (axis id, value code) pairs the label names that are switched off.
+  List<(String axisId, String code)> offFeaturesOf(
+    String dataFileId,
+    FormLabel label,
+  ) =>
+      [
+        for (final f in label.features.entries)
+          if (!isFeatureEnabled(dataFileId, f.key, f.value)) (f.key, f.value),
+      ];
+
   /// Whether a form is practised: its key must be on, and every feature it
   /// names must be on.
   bool isFormEnabled(String dataFileId, FormLabel label) {
-    if (disabledForms[dataFileId]?.contains(label.key) ?? false) return false;
-    return label.features.entries
-        .every((f) => isFeatureEnabled(dataFileId, f.key, f.value));
+    return isFormSwitchedOn(dataFileId, label.key) &&
+        offFeaturesOf(dataFileId, label).isEmpty;
   }
 
   /// Check if a type is enabled for a given data file
