@@ -39,12 +39,12 @@ void main() {
   test('a feature set without a form of ours is missing', () {
     final r = compare(
       lemma(
-        'ferre',
+        'ire',
         '{modus: ind, tempus: praes, genus_verbi: pass, person: 1, numerus: sg}',
-        'feror',
+        'eor',
       ),
     );
-    expect(r.missing.single.describe, 'ferre ind.praes.pass.1.sg (missing)');
+    expect(r.missing.single.describe, 'ire ind.praes.pass.1.sg (missing)');
   });
 
   test('the perfect passive of ours is the masculine only', () {

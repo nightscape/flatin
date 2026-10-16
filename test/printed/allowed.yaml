@@ -17,7 +17,6 @@ missing:
   - {lemma: audire, features: ["*.*.pass.*.*.f|n", "inf.perf.pass.f|n"], reason: "design: perfect passive practised in one (masc.) form"}
   - {lemma: capere, features: ["*.*.pass.*.*.f|n", "inf.perf.pass.f|n"], reason: "design: perfect passive practised in one (masc.) form"}
   - {lemma: agere, features: ["*.*.pass.*.*.f|n", "inf.perf.pass.f|n"], reason: "design: perfect passive practised in one (masc.) form"}
-  - {lemma: ferre, features: ["*.praes.pass.*.*", "*.impf.pass.*.*", "ind.fut.pass.*.*", "*.*.pass.*.*.m|f|n", "inf.perf.pass.m|f|n", "part.perf.pass.nom.sg.f"], reason: "engine: ferre has no passive forms (#50)"}
-  - {lemma: ire, features: ["part.perf.pass.nom.sg.m|f|n"], reason: "engine: ire has no perfect passive participle (#50)"}
+  - {lemma: ferre, features: ["*.*.pass.*.*.f|n", "inf.perf.pass.f|n"], reason: "design: perfect passive practised in one (masc.) form"}
   - {lemma: ego, features: ["1.*.pl"], reason: "design: the plural of the personal pronoun is the separate item nos"}
   - {lemma: tu, features: ["2.*.pl"], reason: "design: the plural of the personal pronoun is the separate item vos"}
