@@ -441,6 +441,10 @@ items:
   - type: Mischkonjugation
     translation: "nehmen"
     parts: {infinitiv: "capere", praesens_1sg: "capiō", perfekt_1sg: "cēpī", supinum: "captum"}
+  - id: parere2
+    type: Mischkonjugation
+    translation: "gebären; hervorbringen"
+    parts: {infinitiv: "parere", praesens_1sg: "pariō", perfekt_1sg: "peperī", supinum: "partum"}
   - translation: "kommen"
     parts: {infinitiv: "venīre", praesens_1sg: "veniō", perfekt_1sg: "vēnī", supinum: "ventum"}
   - translation: "eintreten, betreten"
