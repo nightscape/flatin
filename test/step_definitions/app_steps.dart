@@ -7,8 +7,19 @@ import 'package:flutter/material.dart';
 import 'package:latin_practice/main.dart' as app;
 import 'package:integration_test/integration_test.dart';
 
+/// A widget that can be found again by key after a rebuild.
+bool _isKeyed(Widget widget) => widget.key is ValueKey<String>;
+
+bool _hasKeyPrefix(Widget widget, String prefix) =>
+    _isKeyed(widget) && (widget.key as ValueKey<String>).value.startsWith(prefix);
+
 @StepDefinition()
 class AppSteps {
+  /// The checkbox `I toggle a form checkbox` tapped, and its value before the
+  /// tap, so that `the checkbox state should change` can see the flip.
+  Key? _toggledCheckbox;
+  bool? _valueBeforeToggle;
+
   // Navigation steps
   @Given('the app is running')
   Future<void> theAppIsRunning(WidgetTester tester) async {
@@ -207,6 +218,17 @@ class AppSteps {
   @And('I should see validation results')
   Future<void> iShouldSeeValidationResults(WidgetTester tester) async {
     await tester.pumpAndSettle();
+    // A checked row shows the correct form next to the answer, green or red.
+    expect(
+      find.byWidgetPredicate(
+        (widget) =>
+            widget is Text &&
+            (widget.style?.color == Colors.green ||
+                widget.style?.color == Colors.red),
+        description: 'a form marked right or wrong',
+      ),
+      findsAtLeastNWidgets(1),
+    );
   }
 
   @Then('I should see an explanation for a wrong answer')
@@ -254,6 +276,7 @@ class AppSteps {
   @And('I should see a word displayed')
   Future<void> iShouldSeeWordDisplayed(WidgetTester tester) async {
     await tester.pumpAndSettle();
+    expect(find.byKey(const Key('wordClassification.word')), findsOneWidget);
   }
 
   @Then('I should see classification dropdowns')
@@ -309,38 +332,50 @@ class AppSteps {
   @And('the checkbox state should change')
   Future<void> checkboxStateShouldChange(WidgetTester tester) async {
     await tester.pumpAndSettle();
+    final tile = tester.widget<CheckboxListTile>(
+      find.byKey(_toggledCheckbox!),
+    );
+    expect(tile.value, isNot(_valueBeforeToggle));
   }
 
   @Then('I should see validation feedback')
   @And('I should see validation feedback')
   Future<void> iShouldSeeValidationFeedback(WidgetTester tester) async {
     await tester.pumpAndSettle();
+    // Checking replaces the check button with the rating or next-word buttons.
+    expect(
+      find.byKey(const Key('wordClassification.check.button')),
+      findsNothing,
+    );
   }
 
   // Interaction steps
   @When('I enter {string} in the input fields')
   @And('I enter {string} in the input fields')
   Future<void> iEnterInInputFields(WidgetTester tester, String text) async {
-    final textFields = find.byType(TextField);
-    final textFieldWidgets = textFields.evaluate();
-
-    for (int i = 0; i < textFieldWidgets.length && i < 3; i++) {
-      final field = textFields.at(i);
-      await tester.enterText(field, text);
-      await tester.pumpAndSettle();
-    }
+    await _fillInputFields(tester, text);
   }
 
   @When('I enter answers in the input fields')
   @And('I enter answers in the input fields')
   Future<void> iEnterAnswers(WidgetTester tester) async {
-    final textFields = find.byType(TextField);
-    final textFieldWidgets = textFields.evaluate();
+    await _fillInputFields(tester, 'test');
+  }
 
-    for (int i = 0; i < textFieldWidgets.length && i < 3; i++) {
-      final field = textFields.at(i);
-      await tester.enterText(field, 'test');
+  /// Types [text] into the first three input fields and reads it back, so a
+  /// screen that offers no field, or swallows the text, fails here.
+  Future<void> _fillInputFields(WidgetTester tester, String text) async {
+    final textFields = find.byType(TextField);
+    expect(textFields, findsAtLeastNWidgets(1));
+
+    final found = textFields.evaluate().length;
+    final count = found < 3 ? found : 3;
+    for (int i = 0; i < count; i++) {
+      await tester.enterText(textFields.at(i), text);
       await tester.pumpAndSettle();
+    }
+    for (int i = 0; i < count; i++) {
+      expect(tester.widget<TextField>(textFields.at(i)).controller!.text, text);
     }
   }
 
@@ -379,20 +414,33 @@ class AppSteps {
   @When('I select classification options')
   @And('I select classification options')
   Future<void> iSelectClassificationOptions(WidgetTester tester) async {
-    final dropdowns = find.byType(DropdownButtonFormField);
-    final dropdownWidgets = dropdowns.evaluate();
+    // The check button stays disabled until one row is answered in full, so
+    // every section of the first row gets an option.
+    final sections = find.byWidgetPredicate(
+      (widget) => _hasKeyPrefix(widget, 'classification.0.'),
+      description: 'a classification dropdown of the first row',
+    );
+    expect(sections, findsAtLeastNWidgets(1));
 
-    for (int i = 0; i < dropdownWidgets.length && i < 3; i++) {
-      final dropdown = dropdowns.at(i);
-      await tester.tap(dropdown);
+    for (int i = 0; i < sections.evaluate().length; i++) {
+      await tester.ensureVisible(sections.at(i));
+      await tester.pumpAndSettle();
+      await tester.tap(sections.at(i));
       await tester.pumpAndSettle();
 
-      final options = find.byType(DropdownMenuItem);
-      if (options.evaluate().length > 1) {
-        await tester.tap(options.at(1));
-        await tester.pumpAndSettle();
-      }
+      // The open menu sits above the page in the overlay, so its items come
+      // last; its last one is an option, the empty "--" being the first.
+      final option = find.byType(DropdownMenuItem<String>).last;
+      await tester.ensureVisible(option);
+      await tester.pumpAndSettle();
+      await tester.tap(option);
+      await tester.pumpAndSettle();
     }
+
+    final check = tester.widget<ElevatedButton>(
+      find.byKey(const Key('wordClassification.check.button')),
+    );
+    expect(check.onPressed, isNotNull);
   }
 
   @When('I wait for {string} to load')
@@ -430,21 +478,29 @@ class AppSteps {
   @When('I toggle a form checkbox')
   @And('I toggle a form checkbox')
   Future<void> iToggleCheckbox(WidgetTester tester) async {
-    final checkboxes = find.byType(CheckboxListTile);
-    if (checkboxes.evaluate().isNotEmpty) {
-      await tester.tap(checkboxes.first);
-      await tester.pumpAndSettle();
-    }
+    final checkboxes = find.byWidgetPredicate(
+      (widget) => widget is CheckboxListTile && _isKeyed(widget),
+      description: 'a checkbox for a practice option',
+    );
+    expect(checkboxes, findsAtLeastNWidgets(1));
+
+    final tile = tester.widget<CheckboxListTile>(checkboxes.first);
+    _toggledCheckbox = tile.key;
+    _valueBeforeToggle = tile.value;
+
+    await tester.ensureVisible(checkboxes.first);
+    await tester.pumpAndSettle();
+    await tester.tap(checkboxes.first);
+    await tester.pumpAndSettle();
   }
 
   @When('I tap on the {string} button')
   @And('I tap on the {string} button')
   Future<void> iTapOnButton(WidgetTester tester, String buttonText) async {
     final button = find.text(buttonText);
-    if (button.evaluate().isNotEmpty) {
-      await tester.tap(button);
-      await tester.pumpAndSettle(const Duration(seconds: 2));
-    }
+    expect(button, findsAtLeastNWidgets(1));
+    await tester.tap(button.first);
+    await tester.pumpAndSettle(const Duration(seconds: 2));
   }
 
   @When('I tap on check')
@@ -452,10 +508,9 @@ class AppSteps {
   Future<void> iTapOnCheck(WidgetTester tester) async {
     // Find check button by Key (language-agnostic)
     final checkButton = find.byKey(const Key('practice.check.button'));
-    if (checkButton.evaluate().isNotEmpty) {
-      await tester.tap(checkButton);
-      await tester.pumpAndSettle(const Duration(seconds: 2));
-    }
+    expect(checkButton, findsOneWidget);
+    await tester.tap(checkButton);
+    await tester.pumpAndSettle(const Duration(seconds: 2));
   }
 
   @When('I tap on Prüfen')
@@ -465,10 +520,9 @@ class AppSteps {
     final checkButton = find.byKey(
       const Key('wordClassification.check.button'),
     );
-    if (checkButton.evaluate().isNotEmpty) {
-      await tester.tap(checkButton);
-      await tester.pumpAndSettle(const Duration(seconds: 2));
-    }
+    expect(checkButton, findsOneWidget);
+    await tester.tap(checkButton);
+    await tester.pumpAndSettle(const Duration(seconds: 2));
   }
 
   // Screenshot steps

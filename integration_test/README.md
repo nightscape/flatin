@@ -1,80 +1,30 @@
-# Integration Tests with Screenshots
+# Integration tests
 
-This directory contains Cucumber-style integration tests for the Latin Practice app, along with screenshot functionality for Fastlane.
+`app_test.dart` runs the BDD scenarios in the real app through the
+`integration_test` binding. The scenarios themselves live outside this
+directory — see `CUCUMBER_TESTS.md` for the full setup.
 
 ## Structure
 
-- `features/` - Gherkin feature files describing test scenarios
-- `step_definitions/` - Step definitions for Cucumber tests (using flutter_gherkin)
-- `test_driver/` - Alternative test driver using flutter_gherkin
-- `app_test.dart` - Main integration test file using integration_test directly
+- `app_test.dart` — the runner; calls `runFeatures()` from
+  `test/step_definitions/app_steps.pickled.dart`
+- `run_5x_macos.sh` — runs the macOS suite five times and reports the failures;
+  use it after touching a step definition
+- scenarios: `test/features/*.feature`
+- steps: `test/step_definitions/app_steps.dart`
 
-## Running Tests
-
-### Option 1: Direct Integration Tests (Recommended)
-
-Run the integration tests directly:
+## Running
 
 ```bash
-flutter test integration_test/app_test.dart
+flutter test integration_test/ -d macos
 ```
 
-This will:
-- Run all test scenarios
-- Take screenshots at key points
-- Save screenshots to `fastlane/screenshots/`
-
-### Option 2: Using Fastlane
-
-Run tests and collect screenshots via Fastlane:
-
-```bash
-cd android
-fastlane screenshots
-```
-
-This will:
-- Build the debug APK
-- Run integration tests
-- Collect screenshots in `fastlane/screenshots/`
-
-### Option 3: Cucumber Tests (Advanced)
-
-If you want to use the full Cucumber/Gherkin setup:
-
-```bash
-cd android
-fastlane cucumber_tests
-```
-
-Note: This requires proper setup of flutter_gherkin and may need additional configuration.
+The same scenarios also run headless, without a device, through
+`test/features_test.dart`.
 
 ## Screenshots
 
-Screenshots are automatically taken at key points in the tests:
-- `home_screen` - Initial home screen
-- `home_screen_drawer` - Home screen with drawer open
-- `settings_screen` - Settings screen
-- `practice_noun_initial` - Noun practice screen (initial state)
-- `practice_noun_checked` - Noun practice screen (after checking answers)
-- `practice_noun_rating` - Noun practice screen (with rating buttons)
-- `practice_verb_initial` - Verb practice screen
-- `word_classification_initial` - Word classification screen (initial state)
-- `word_classification_checked` - Word classification screen (after checking)
-
-Screenshots are saved to `fastlane/screenshots/` and can be used by Fastlane for Play Store uploads.
-
-## Writing New Tests
-
-To add new test scenarios:
-
-1. Add a new test in `app_test.dart` following the existing pattern
-2. Optionally add a corresponding feature file in `features/`
-3. Use `takeScreenshot(tester, 'screenshot_name')` to capture screenshots
-
-## Requirements
-
-- Flutter SDK
-- A connected device or emulator for running tests
-- Fastlane (for automated screenshot collection)
-
+The `integration_test` screenshot channel exists only on Android and iOS, so
+`I take a screenshot named ...` is a no-op on macOS and in the headless run.
+On a mobile device the shots are collected into `fastlane/screenshots/` for the
+Play Store upload lanes.

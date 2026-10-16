@@ -352,17 +352,14 @@ class _WordClassificationScreenState
       .where((combination) => !_isCombinationCorrect(combination))
       .toList();
 
-  Widget _buildExplanationBox(bool isMobile, double horizontalPadding) {
+  Widget _buildExplanationBox(bool isMobile) {
     final item = _currentItem!;
     final explainer = ref.watch(explainerProvider);
     final shownKeys =
         _correctFormIndices.map((i) => item.formOrder[i]).toList();
 
     return Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: horizontalPadding,
-        vertical: isMobile ? 6.0 : 8.0,
-      ),
+      padding: EdgeInsets.symmetric(vertical: isMobile ? 6.0 : 8.0),
       child: Container(
         key: const Key('explanation.classification'),
         padding: EdgeInsets.all(isMobile ? 12.0 : 16.0),
@@ -643,169 +640,167 @@ class _WordClassificationScreenState
                               ),
                             ),
                           ),
-                      ],
-                    ),
-                  ),
-                ),
 
-                // Display all correct combinations
-                if (_isChecked && _correctAnswers.isNotEmpty)
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
-                    child: Container(
-                      padding: EdgeInsets.all(isMobile ? 12.0 : 16.0),
-                      decoration: BoxDecoration(
-                        color: Colors.blue.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: Colors.blue, width: 1),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.info_outline,
-                                color: Colors.blue,
-                                size: isMobile ? 18 : 24,
-                              ),
-                              SizedBox(width: isMobile ? 6 : 8),
-                              Expanded(
-                                child: Text(
-                                  FlutterI18n.translate(context, 'wordClassification.allCorrectCombinations'),
-                                  style: TextStyle(
-                                    fontSize: isMobile ? 14.0 : 16.0,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: isMobile ? 8 : 12),
-                          Wrap(
-                            spacing: isMobile ? 6 : 8,
-                            runSpacing: isMobile ? 6 : 8,
-                            children: _correctAnswers.map((label) {
-                              final wasSelected = _selectedAnswers
-                                  .where(_selectors.isComplete)
-                                  .any((combination) =>
-                                      _combinationToFormLabel(combination) ==
-                                      label);
-
-                              return Container(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: isMobile ? 10 : 12,
-                                  vertical: isMobile ? 6 : 8,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: wasSelected
-                                      ? Colors.green.withOpacity(0.2)
-                                      : Colors.grey.withOpacity(0.1),
-                                  borderRadius: BorderRadius.circular(8),
-                                  border: Border.all(
-                                    color: wasSelected
-                                        ? Colors.green
-                                        : Colors.grey,
-                                    width: wasSelected ? 2 : 1,
-                                  ),
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
+                        // Display all correct combinations
+                        if (_isChecked && _correctAnswers.isNotEmpty)
+                          Container(
+                            padding: EdgeInsets.all(isMobile ? 12.0 : 16.0),
+                            decoration: BoxDecoration(
+                              color: Colors.blue.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(color: Colors.blue, width: 1),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
                                   children: [
-                                    if (wasSelected)
-                                      Icon(
-                                        Icons.check_circle,
-                                        color: Colors.green,
-                                        size: isMobile ? 14 : 16,
-                                      )
-                                    else
-                                      Icon(
-                                        Icons.radio_button_unchecked,
-                                        color: Colors.grey,
-                                        size: isMobile ? 14 : 16,
-                                      ),
-                                    SizedBox(width: isMobile ? 4 : 6),
-                                    Text(
-                                      _selectors.textOfLabel(label),
-                                      style: TextStyle(
-                                        fontSize: isMobile ? 12.0 : 14.0,
-                                        fontWeight: wasSelected
-                                            ? FontWeight.bold
-                                            : FontWeight.normal,
-                                        color: Colors.black,
+                                    Icon(
+                                      Icons.info_outline,
+                                      color: Colors.blue,
+                                      size: isMobile ? 18 : 24,
+                                    ),
+                                    SizedBox(width: isMobile ? 6 : 8),
+                                    Expanded(
+                                      child: Text(
+                                        FlutterI18n.translate(context, 'wordClassification.allCorrectCombinations'),
+                                        style: TextStyle(
+                                          fontSize: isMobile ? 14.0 : 16.0,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black,
+                                        ),
                                       ),
                                     ),
                                   ],
                                 ),
-                              );
-                            }).toList(),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                                SizedBox(height: isMobile ? 8 : 12),
+                                Wrap(
+                                  spacing: isMobile ? 6 : 8,
+                                  runSpacing: isMobile ? 6 : 8,
+                                  children: _correctAnswers.map((label) {
+                                    final wasSelected = _selectedAnswers
+                                        .where(_selectors.isComplete)
+                                        .any((combination) =>
+                                            _combinationToFormLabel(combination) ==
+                                            label);
 
-                // How the shown form follows from the rule, and what the wrong
-                // picks would have been
-                if (_isChecked && _wrongCombinations.isNotEmpty)
-                  _buildExplanationBox(isMobile, horizontalPadding),
-
-                // Feedback message
-                if (_isChecked)
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: horizontalPadding,
-                      vertical: isMobile ? 6.0 : 8.0,
-                    ),
-                    child: Container(
-                      padding: EdgeInsets.all(isMobile ? 12.0 : 16.0),
-                      decoration: BoxDecoration(
-                        color: _isCorrect
-                            ? Colors.green.withOpacity(0.2)
-                            : (_isPartiallyCorrect
-                                  ? Colors.orange.withOpacity(0.2)
-                                  : Colors.red.withOpacity(0.2)),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(
-                            _isCorrect
-                                ? Icons.check_circle
-                                : (_isPartiallyCorrect
-                                      ? Icons.info
-                                      : Icons.cancel),
-                            color: _isCorrect
-                                ? Colors.green
-                                : (_isPartiallyCorrect
-                                      ? Colors.orange
-                                      : Colors.red),
-                            size: isMobile ? 20 : 24,
+                                    return Container(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: isMobile ? 10 : 12,
+                                        vertical: isMobile ? 6 : 8,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: wasSelected
+                                            ? Colors.green.withOpacity(0.2)
+                                            : Colors.grey.withOpacity(0.1),
+                                        borderRadius: BorderRadius.circular(8),
+                                        border: Border.all(
+                                          color: wasSelected
+                                              ? Colors.green
+                                              : Colors.grey,
+                                          width: wasSelected ? 2 : 1,
+                                        ),
+                                      ),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          if (wasSelected)
+                                            Icon(
+                                              Icons.check_circle,
+                                              color: Colors.green,
+                                              size: isMobile ? 14 : 16,
+                                            )
+                                          else
+                                            Icon(
+                                              Icons.radio_button_unchecked,
+                                              color: Colors.grey,
+                                              size: isMobile ? 14 : 16,
+                                            ),
+                                          SizedBox(width: isMobile ? 4 : 6),
+                                          Flexible(
+                                            child: Text(
+                                              _selectors.textOfLabel(label),
+                                              style: TextStyle(
+                                                fontSize: isMobile ? 12.0 : 14.0,
+                                                fontWeight: wasSelected
+                                                    ? FontWeight.bold
+                                                    : FontWeight.normal,
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  }).toList(),
+                                ),
+                              ],
+                            ),
                           ),
-                          SizedBox(width: isMobile ? 8 : 12),
-                          Expanded(
-                            child: Text(
-                              _isCorrect
-                                  ? FlutterI18n.translate(context, 'wordClassification.correct')
-                                  : (_isPartiallyCorrect
-                                        ? FlutterI18n.translate(context, 'wordClassification.partiallyCorrect')
-                                        : FlutterI18n.translate(context, 'wordClassification.incorrect')),
-                              style: TextStyle(
-                                fontSize: isMobile ? 14.0 : 16.0,
-                                fontWeight: FontWeight.bold,
+
+                        // How the shown form follows from the rule, and what the wrong
+                        // picks would have been
+                        if (_isChecked && _wrongCombinations.isNotEmpty)
+                          _buildExplanationBox(isMobile),
+
+                        // Feedback message
+                        if (_isChecked)
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                              vertical: isMobile ? 6.0 : 8.0,
+                            ),
+                            child: Container(
+                              padding: EdgeInsets.all(isMobile ? 12.0 : 16.0),
+                              decoration: BoxDecoration(
                                 color: _isCorrect
-                                    ? Colors.green
+                                    ? Colors.green.withOpacity(0.2)
                                     : (_isPartiallyCorrect
-                                          ? Colors.orange
-                                          : Colors.red),
+                                          ? Colors.orange.withOpacity(0.2)
+                                          : Colors.red.withOpacity(0.2)),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    _isCorrect
+                                        ? Icons.check_circle
+                                        : (_isPartiallyCorrect
+                                              ? Icons.info
+                                              : Icons.cancel),
+                                    color: _isCorrect
+                                        ? Colors.green
+                                        : (_isPartiallyCorrect
+                                              ? Colors.orange
+                                              : Colors.red),
+                                    size: isMobile ? 20 : 24,
+                                  ),
+                                  SizedBox(width: isMobile ? 8 : 12),
+                                  Expanded(
+                                    child: Text(
+                                      _isCorrect
+                                          ? FlutterI18n.translate(context, 'wordClassification.correct')
+                                          : (_isPartiallyCorrect
+                                                ? FlutterI18n.translate(context, 'wordClassification.partiallyCorrect')
+                                                : FlutterI18n.translate(context, 'wordClassification.incorrect')),
+                                      style: TextStyle(
+                                        fontSize: isMobile ? 14.0 : 16.0,
+                                        fontWeight: FontWeight.bold,
+                                        color: _isCorrect
+                                            ? Colors.green
+                                            : (_isPartiallyCorrect
+                                                  ? Colors.orange
+                                                  : Colors.red),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
-                        ],
-                      ),
+                      ],
                     ),
                   ),
+                ),
 
                 // Rating buttons or check/next button
                 Padding(

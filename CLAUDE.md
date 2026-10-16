@@ -13,8 +13,7 @@ flutter pub get                              # Install dependencies
 flutter run                                  # Run the app
 flutter analyze                              # Lint
 flutter test                                 # Run unit tests
-flutter test test/form_inference_test.dart    # Run a single test file
-flutter test integration_test/               # Run integration tests
+flutter test test/grammar_engine_test.dart   # Run a single test file
 
 # Regenerate Riverpod code (after modifying @riverpod annotated providers)
 dart run build_runner build --delete-conflicting-outputs
@@ -66,7 +65,7 @@ Uses `flutter_i18n` with JSON translation files in `assets/flutter_i18n/` (en.js
 
 ### Testing
 
-- **Unit tests** (`test/`) — form inference validation against YAML data
+- **Unit and widget tests** (`test/`) — the grammar engine against its goldens in `test/fixtures/`, plus providers, storage and screens
 - **Cucumber/BDD tests** (`test/features/`, `test/step_definitions/`) — uses `pickled_cucumber` — scenarios run via `test/features_test.dart` and `integration_test/app_test.dart`
 - **Integration tests** (`integration_test/`) — full app tests with screenshot capture for Fastlane
 
@@ -78,4 +77,4 @@ Add items to the appropriate YAML file under `items:`. If the word's type can be
 
 1. Add the pattern under `type_patterns` in the YAML file with `stem_extraction` and form templates
 2. Add type inference rules under `type_inference` if the type can be guessed from word endings
-3. Run `flutter test test/form_inference_test.dart` to verify inference works correctly
+3. Run `flutter test test/grammar_engine_test.dart` to verify the generated forms
