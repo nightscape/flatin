@@ -1,4 +1,4 @@
-import 'package:flutter/services.dart';
+import 'package:latin_practice/data/asset_text.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/data/diagnosis.dart';
 import 'package:latin_practice/data/explanation.dart';
@@ -205,7 +205,7 @@ void main() {
 
 /// Type → the type it inherits from, for the types of one YAML file.
 Future<Map<String, String>> _parentTypes(String asset) async {
-  final yaml = loadYaml(await rootBundle.loadString(asset)) as YamlMap;
+  final yaml = loadYaml(await loadAssetText(asset)) as YamlMap;
   return {
     for (final entry in (yaml['types'] as YamlMap).entries)
       if ((entry.value as YamlMap)['inherits_from'] != null)

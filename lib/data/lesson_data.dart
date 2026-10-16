@@ -1,5 +1,5 @@
-import 'package:flutter/services.dart';
 import 'package:yaml/yaml.dart';
+import 'asset_text.dart';
 import '../models/practice_item.dart';
 
 /// The lesson word lists of the configured volumes, in reading order.
@@ -76,7 +76,7 @@ Future<LessonData> loadLessonData(List<String> assetPaths) async {
   final lessonWords = <String, List<String>>{};
 
   for (final assetPath in assetPaths) {
-    final yamlString = await rootBundle.loadString(assetPath);
+    final yamlString = await loadAssetText(assetPath);
     final yaml = loadYaml(yamlString) as YamlList;
 
     for (final entry in yaml) {

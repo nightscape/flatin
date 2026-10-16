@@ -17,7 +17,7 @@ void main() {
           verbs.availableTypes.where((t) => t != 'Mischkonjugation').toSet(),
     });
     final item = (await loadPracticeItems('lib/data/latin_verbs.yaml'))
-        .singleWhere((i) => i.type == 'Mischkonjugation');
+        .singleWhere((i) => i.id == 'verbs:capere');
     // Its macron-free spelling is also the spelling of the ablative.
     const shownKey = 'part.fut.akt.sg.nom.f';
     final spy = ExplainerSpy();

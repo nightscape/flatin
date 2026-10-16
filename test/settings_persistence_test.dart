@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:flutter/services.dart';
+import 'package:latin_practice/data/asset_text.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -48,7 +48,7 @@ void main() {
 
   test('settings stored as enabled sets convert to disabled sets', () async {
     final map = MigrationMap.parse(
-      await rootBundle.loadString('lib/data/migration_v2.yaml'),
+      await loadAssetText('lib/data/migration_v2.yaml'),
     );
     final oldType = map.types['nouns']!.keys.first;
     final newType = map.types['nouns']![oldType]!;

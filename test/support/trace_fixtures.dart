@@ -6,7 +6,7 @@ library;
 
 import 'dart:convert';
 
-import 'package:flutter/services.dart';
+import 'package:latin_practice/data/asset_text.dart';
 import 'package:latin_practice/data/explanation.dart';
 import 'package:latin_practice/models/derivation.dart';
 import 'package:latin_practice/models/practice_item.dart';
@@ -630,7 +630,7 @@ Future<Map<String, String>> germanTexts() async {
   }
 
   return flatten(
-    jsonDecode(await rootBundle.loadString('assets/flutter_i18n/de.json'))
+    jsonDecode(await loadAssetText('assets/flutter_i18n/de.json'))
         as Map<String, dynamic>,
     '',
   );

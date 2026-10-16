@@ -1,4 +1,4 @@
-import 'package:flutter/services.dart';
+import 'asset_text.dart';
 import '../grammar/engine.dart';
 import '../grammar/schema.dart';
 import '../models/derivation.dart';
@@ -49,7 +49,7 @@ Future<_Loaded> _load() => _loaded ??= _parse();
 
 Future<_Loaded> _parse() async {
   final sources = {
-    for (final path in _assets.values) path: await rootBundle.loadString(path),
+    for (final path in _assets.values) path: await loadAssetText(path),
   };
   return _Loaded(GrammarEngine(parseGrammarFiles(sources)));
 }

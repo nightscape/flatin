@@ -1,8 +1,8 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
-import 'package:flutter/services.dart';
 import '../models/settings.dart';
+import '../data/asset_text.dart';
 import '../data/lesson_data.dart';
 import '../data/settings_conversion.dart';
 
@@ -37,7 +37,7 @@ class SettingsNotifier extends _$SettingsNotifier {
   /// Reads settings of the v0 or v1 format against the current data.
   Future<Map<String, dynamic>> _convert(Map<String, dynamic> json) async {
     final map = MigrationMap.parse(
-      await rootBundle.loadString('lib/data/migration_v2.yaml'),
+      await loadAssetText('lib/data/migration_v2.yaml'),
     );
     final converted = convertSettingsV2(json, map);
     final isV0 = !json.containsKey('disabledForms');

@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:flutter/services.dart';
+import 'package:latin_practice/data/asset_text.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/data/diagnosis.dart';
 import 'package:latin_practice/data/explanation.dart';
@@ -508,7 +508,7 @@ void main() {
 
   test('T-expl-2 every line exists in de.json with all its params', () async {
     final texts = _flatten(
-      jsonDecode(await rootBundle.loadString('assets/flutter_i18n/de.json'))
+      jsonDecode(await loadAssetText('assets/flutter_i18n/de.json'))
           as Map<String, dynamic>,
     );
 

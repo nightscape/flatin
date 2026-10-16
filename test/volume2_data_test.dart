@@ -19,6 +19,81 @@ const _explicitTypes = [
   'Numerale-milia',
 ];
 
+/// The verb item ids of volume 1. A card keeps its review history only as long
+/// as its id stays, so none of these may disappear.
+const _volume1VerbIds = [
+  'verbs:aedificare',
+  'verbs:agere',
+  'verbs:amare',
+  'verbs:ambulare',
+  'verbs:apparere',
+  'verbs:apportare',
+  'verbs:appropinquare',
+  'verbs:audire',
+  'verbs:capere',
+  'verbs:cenare',
+  'verbs:cessare',
+  'verbs:clamare',
+  'verbs:convenire',
+  'verbs:curare',
+  'verbs:dare',
+  'verbs:delectare',
+  'verbs:desiderare',
+  'verbs:dicere',
+  'verbs:dormire',
+  'verbs:ducere',
+  'verbs:esse',
+  'verbs:explicare',
+  'verbs:exspectare',
+  'verbs:ferre',
+  'verbs:fugare',
+  'verbs:gaudere',
+  'verbs:habere',
+  'verbs:imperare',
+  'verbs:intrare',
+  'verbs:ire',
+  'verbs:laborare',
+  'verbs:legere',
+  'verbs:malle',
+  'verbs:manere',
+  'verbs:mittere',
+  'verbs:necare',
+  'verbs:nolle',
+  'verbs:parare',
+  'verbs:parere',
+  'verbs:placere',
+  'verbs:ponere',
+  'verbs:portare',
+  'verbs:posse',
+  'verbs:probare',
+  'verbs:prohibere',
+  'verbs:properare',
+  'verbs:pugnare',
+  'verbs:regnare',
+  'verbs:respondere',
+  'verbs:ridere',
+  'verbs:rogare',
+  'verbs:sacrificare',
+  'verbs:salutare',
+  'verbs:scire',
+  'verbs:scribere',
+  'verbs:sedere',
+  'verbs:servare',
+  'verbs:servire',
+  'verbs:spectare',
+  'verbs:stupere',
+  'verbs:superare',
+  'verbs:tacere',
+  'verbs:temptare',
+  'verbs:timere',
+  'verbs:velle',
+  'verbs:venire',
+  'verbs:videre',
+  'verbs:vincere',
+  'verbs:visitare',
+  'verbs:vocare',
+];
+
 List<String> _keys(List<String> numbers, {bool genus = false}) => [
       for (final number in numbers)
         for (final kasus in ['nom', 'gen', 'dat', 'akk', 'abl'])
@@ -92,5 +167,31 @@ void main() {
         expect(item.forms[item.formOrder.indexOf(key)], isNotEmpty);
       }
     }
+  });
+
+  test('no verb of volume 1 lost its item id', () {
+    expect(verbs.map((i) => i.id).toSet(), containsAll(_volume1VerbIds));
+  });
+
+  test('every verb item generates forms', () {
+    for (final item in verbs) {
+      expect(item.formOrder, isNotEmpty, reason: item.id);
+      expect(item.forms, everyElement(isNotEmpty), reason: item.id);
+      expect(item.forms.length, item.formOrder.length, reason: item.id);
+    }
+  });
+
+  test('a compound follows its irregular base', () {
+    String form(String itemId, String key) {
+      final item = byId(verbs, itemId);
+      return item.forms[item.formOrder.indexOf(key)];
+    }
+
+    expect(form('verbs:afferre', 'ind.praes.akt.2.sg'), 'affers');
+    expect(form('verbs:afferre', 'ind.perf.akt.1.sg'), 'attulī');
+    expect(form('verbs:abire', 'ind.praes.akt.3.pl'), 'abeunt');
+    expect(form('verbs:abire', 'inf.praes.akt'), 'abīre');
+    expect(form('verbs:praeesse', 'ind.praes.akt.1.sg'), 'praesum');
+    expect(form('verbs:praeesse', 'konj.impf.akt.3.sg'), 'praeesset');
   });
 }
