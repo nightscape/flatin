@@ -144,21 +144,69 @@ List<ExplanationLine> _formLines(
   }
 }
 
-/// S18 a: a seam rule explains itself in place of the plain sum; S14: an
-/// ending from another type names that type, also next to a seam rule.
+/// S14: per item class, the types whose endings its school grammar really
+/// borrows — participle and comparative endings, the consonant endings of the
+/// i-stems, the I-Konjugation endings of `capiō`. An unlisted pair is an
+/// engine detail the learner is never told, so the form is named after its own
+/// class: `habeō` is an E-Konjugation form, and the perfect endings belong to
+/// no class at all.
+const _borrowedEndings = <String, Set<String>>{
+  'A-Konjugation': {'3-Endungen', '3-Endungen-Partizip', 'a-o-Endungen'},
+  'E-Konjugation': {'3-Endungen', '3-Endungen-Partizip', 'a-o-Endungen'},
+  'I-Konjugation': {'3-Endungen', '3-Endungen-Partizip', 'a-o-Endungen'},
+  'Konsonantische': {'3-Endungen', '3-Endungen-Partizip', 'a-o-Endungen'},
+  'Mischkonjugation': {
+    'I-Konjugation',
+    '3-Endungen',
+    '3-Endungen-Partizip',
+    'a-o-Endungen',
+  },
+  'Unregelmäßig': {'3-Endungen', '3-Endungen-Partizip', 'a-o-Endungen'},
+  'esse-Typ': {'3-Endungen', '3-Endungen-Partizip', 'a-o-Endungen'},
+  'Adjektiv-a-o': {'Komparativ-Endungen', 'a-o-Endungen'},
+  'Adjektiv-a-o-er': {
+    'Adjektiv-a-o',
+    'Komparativ-Endungen',
+    'a-o-Endungen',
+    'a-o-er-Endungen',
+  },
+  'Adjektiv-dreiendig': {
+    'Adjektiv-3',
+    'Komparativ-Endungen',
+    '3-Endungen',
+    'a-o-Endungen',
+  },
+  'Adjektiv-zweiendig': {
+    'Adjektiv-3',
+    'Komparativ-Endungen',
+    '3-Endungen',
+    'a-o-Endungen',
+  },
+  'I-Deklination-mf': {'Konsonantische-Deklination-mf'},
+  'Konsonantische-Deklination-i-mf': {'Konsonantische-Deklination-mf'},
+  'Konsonantische-Deklination-i-n': {'Konsonantische-Deklination-n'},
+  'E-Deklination-Konsonantstamm': {'E-Deklination'},
+};
+
+/// S18 a: a seam rule explains itself in place of the plain sum; S14: a
+/// borrowed ending names the type it is borrowed from, also next to a seam
+/// rule.
 ExplanationLine _generatedLine(
   PracticeItem item,
   GeneratedForm form,
   String label,
 ) {
   final String stem = item.derivation.stems[form.stemName]!.stem;
+  final bool borrowed =
+      _borrowedEndings[item.type]?.contains(form.endingType) ?? false;
+  final String? endingType = borrowed ? form.endingType : null;
   if (form.sandhiRule != null) {
     return _sandhiLine(
       label: label,
       before: '$stem + ${form.ending}',
       after: form.result,
       rule: form.sandhiRule!,
-      endingType: form.endingType == item.type ? null : form.endingType,
+      endingType: endingType,
     );
   }
   final params = {
@@ -167,12 +215,12 @@ ExplanationLine _generatedLine(
     'ending': form.ending,
     'result': form.result,
   };
-  if (form.endingType == item.type) {
+  if (endingType == null) {
     return ExplanationLine('explain.generated', params: params);
   }
   return ExplanationLine(
     'explain.generatedOtherType',
-    params: {...params, 'endingType': form.endingType},
+    params: {...params, 'endingType': endingType},
   );
 }
 
