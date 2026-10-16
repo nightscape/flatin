@@ -919,7 +919,7 @@ items:
   - translation: "der Kampf, die Schlacht"
     parts: {nom: "pūgna", gen: "pūgnae"}
   - translation: "die Sache, das Ding"
-    parts: {nom: "rēs", gen: "rēī"}
+    parts: {nom: "rēs", gen: "reī"}
   - type: Adjektiv-a-o
     translation: "entgegengesetzt, feindlich"
     parts: {nom: "adversus", nom_f: "adversa", nom_n: "adversum"}
@@ -928,14 +928,14 @@ items:
   - translation: "die Flucht"
     parts: {nom: "fuga", gen: "fugae"}
   - translation: "die Hoffnung"
-    parts: {nom: "spēs", gen: "spēī"}
+    parts: {nom: "spēs", gen: "speī"}
   - translation: "der Himmel"
     parts: {nom: "caelum", gen: "caelī"}
   - type: Adjektiv-zweiendig
     translation: "unglaublich"
     parts: {nom: "incrēdibilis", nom_n: "incrēdibile"}
   - translation: "die Treue, das Vertrauen"
-    parts: {nom: "fidēs", gen: "fidēī"}
+    parts: {nom: "fidēs", gen: "fideī"}
   - type: Adjektiv-a-o
     translation: "mittlerer, in der Mitte"
     parts: {nom: "medius", nom_f: "media", nom_n: "medium"}
