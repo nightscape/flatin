@@ -4,15 +4,21 @@ axes:
   kasus:   {name: Kasus, values: {nom: Nominativ, gen: Genitiv, dat: Dativ, akk: Akkusativ, abl: Ablativ, vok: Vokativ}}
   numerus: {name: Numerus, values: {sg: Singular, pl: Plural}}
   genus:   {name: Genus, values: {m: maskulin, f: feminin, n: neutrum}}
+  adverb:  {name: Adverb, values: {adv: Adverb}}
+  grad:    {name: Grad, values: {pos: Positiv, komp: Komparativ, sup: Superlativ}, hidden_in_label: [pos]}
 
 label:
-  head: [genus]
+  head: [adverb, grad, genus]
   tail: [kasus, numerus]
   merge_axis: kasus
 
 parts:
-  nom: {label: Nominativ}
-  gen: {label: Genitiv}
+  nom:        {label: Nominativ}
+  gen:        {label: Genitiv}
+  nom_f:      {label: Nominativ feminin}
+  nom_n:      {label: Nominativ neutrum}
+  komparativ: {label: Komparativ}
+  superlativ: {label: Superlativ}
 
 defaults:
   given_part: nom
@@ -67,6 +73,54 @@ types:
       akk.pl.n: "{stamm}a"
       abl.pl.n: "{stamm}īs"
       vok.pl.n: "{stamm}a"
+
+  a-o-er-Endungen:
+    abstract: true
+    inherits_from: a-o-Endungen
+    forms:
+      nom.sg.m: "{nom_m}"
+      vok.sg.m: "{nom_m}"
+
+  Komparativ-Endungen:
+    abstract: true
+    forms:
+      nom.sg.m: "{kstamm}ior"
+      gen.sg.m: "{kstamm}iōris"
+      dat.sg.m: "{kstamm}iōrī"
+      akk.sg.m: "{kstamm}iōrem"
+      abl.sg.m: "{kstamm}iōre"
+      vok.sg.m: "{kstamm}ior"
+      nom.pl.m: "{kstamm}iōrēs"
+      gen.pl.m: "{kstamm}iōrum"
+      dat.pl.m: "{kstamm}iōribus"
+      akk.pl.m: "{kstamm}iōrēs"
+      abl.pl.m: "{kstamm}iōribus"
+      vok.pl.m: "{kstamm}iōrēs"
+      nom.sg.f: "{kstamm}ior"
+      gen.sg.f: "{kstamm}iōris"
+      dat.sg.f: "{kstamm}iōrī"
+      akk.sg.f: "{kstamm}iōrem"
+      abl.sg.f: "{kstamm}iōre"
+      vok.sg.f: "{kstamm}ior"
+      nom.pl.f: "{kstamm}iōrēs"
+      gen.pl.f: "{kstamm}iōrum"
+      dat.pl.f: "{kstamm}iōribus"
+      akk.pl.f: "{kstamm}iōrēs"
+      abl.pl.f: "{kstamm}iōribus"
+      vok.pl.f: "{kstamm}iōrēs"
+      nom.sg.n: "{kstamm}ius"
+      gen.sg.n: "{kstamm}iōris"
+      dat.sg.n: "{kstamm}iōrī"
+      akk.sg.n: "{kstamm}ius"
+      abl.sg.n: "{kstamm}iōre"
+      vok.sg.n: "{kstamm}ius"
+      nom.pl.n: "{kstamm}iōra"
+      gen.pl.n: "{kstamm}iōrum"
+      dat.pl.n: "{kstamm}iōribus"
+      akk.pl.n: "{kstamm}iōra"
+      abl.pl.n: "{kstamm}iōribus"
+      vok.pl.n: "{kstamm}iōra"
+      adv: "{kstamm}ius"
 
   3-Endungen:
     abstract: true
@@ -252,6 +306,60 @@ types:
       nom.pl: "{stamm}ia"
       gen.pl: "{stamm}ium"
       akk.pl: "{stamm}ia"
+
+  # Adjectives. Every grade is a delegate into an ending table, so the three
+  # grades share one key space and the adverb sits beside them.
+  Adjektiv-a-o:
+    stems:
+      stamm:  {from: nom, remove: "us", display: Stamm}
+      kstamm: {from: komparativ, remove: "ior", default: "{stamm}", display: Komparativstamm}
+      sup:    {from: superlativ, remove: "us", default: "{stamm}issim", display: Superlativstamm}
+    delegate:
+      - {name: pos,  type: a-o-Endungen, bind: {stamm: stamm}, set: {grad: pos}}
+      - {name: komp, type: Komparativ-Endungen, bind: {kstamm: kstamm}, set: {grad: komp}}
+      - {name: sup,  type: a-o-Endungen, bind: {stamm: sup}, set: {grad: sup}}
+    forms:
+      adv.pos: "{stamm}ē"
+      adv.sup: "{sup}ē"
+
+  Adjektiv-a-o-er:
+    inherits_from: Adjektiv-a-o
+    stems:
+      stamm: {from: nom_f, remove: "a", display: Stamm}
+      nom_m: {from: nom, remove: "", display: Nominativ}
+      sup:   {from: superlativ, remove: "us", default: "{nom_m}rim", display: Superlativstamm}
+    delegate:
+      - {name: pos, type: a-o-er-Endungen, bind: {stamm: stamm, nom_m: nom_m}, set: {grad: pos}}
+
+  Adjektiv-3:
+    abstract: true
+    stems:
+      kstamm: {from: komparativ, remove: "ior", default: "{stamm}", display: Komparativstamm}
+      sup:    {from: superlativ, remove: "us", default: "{stamm}issim", display: Superlativstamm}
+    delegate:
+      - {name: pos,  type: 3-Endungen, bind: {stamm: stamm, nom_m: nom_m, nom_f: nom_f, nom_n: nom_n}, set: {grad: pos}}
+      - {name: komp, type: Komparativ-Endungen, bind: {kstamm: kstamm}, set: {grad: komp}}
+      - {name: sup,  type: a-o-Endungen, bind: {stamm: sup}, set: {grad: sup}}
+    forms:
+      adv.pos: "{stamm}iter"
+      adv.sup: "{sup}ē"
+
+  Adjektiv-zweiendig:
+    inherits_from: Adjektiv-3
+    stems:
+      stamm: {from: nom, remove: "is", display: Stamm}
+      nom_m: {from: nom, remove: "", display: Nominativ}
+      nom_f: {template: "{nom_m}", display: Nominativ}
+      nom_n: {from: nom_n, remove: "", display: Nominativ neutrum}
+
+  Adjektiv-dreiendig:
+    inherits_from: Adjektiv-3
+    stems:
+      stamm: {from: nom_f, remove: "is", display: Stamm}
+      nom_m: {from: nom, remove: "", display: Nominativ}
+      nom_f: {from: nom_f, remove: "", display: Nominativ feminin}
+      nom_n: {from: nom_n, remove: "", display: Nominativ neutrum}
+      sup:   {from: superlativ, remove: "us", default: "{nom_m}rim", display: Superlativstamm}
 
   # Pronouns and numerals: one type per lexeme, every form on the item.
   Pronomen-personal: {}
@@ -762,3 +870,477 @@ items:
       dat.pl.n: "duōbus"
       akk.pl.n: "duo"
       abl.pl.n: "duōbus"
+  - type: Konsonantische-Deklination-mf
+    translation: "die Liebe"
+    parts: {nom: "amor", gen: "amōris"}
+  - type: Konsonantische-Deklination-mf
+    translation: "das Wohlergehen, die Rettung"
+    parts: {nom: "salūs", gen: "salūtis"}
+  - type: Konsonantische-Deklination-mf
+    translation: "die Angst, die Furcht"
+    parts: {nom: "timor", gen: "timōris"}
+  - translation: "der Stier"
+    parts: {nom: "taurus", gen: "taurī"}
+  - translation: "die Form, die Gestalt, die Schönheit"
+    parts: {nom: "fōrma", gen: "fōrmae"}
+  - translation: "die rechte Hand"
+    parts: {nom: "dextra", gen: "dextrae"}
+  - type: Konsonantische-Deklination-mf
+    translation: "die Blume, die Blüte"
+    parts: {nom: "flōs", gen: "flōris"}
+  - type: Konsonantische-Deklination-mf
+    translation: "das junge Mädchen"
+    parts: {nom: "virgō", gen: "virginis"}
+  - translation: "die Insel"
+    parts: {nom: "īnsula", gen: "īnsulae"}
+  - type: Konsonantische-Deklination-mf
+    translation: "der Schmerz"
+    parts: {nom: "dolor", gen: "dolōris"}
+  - type: Adjektiv-a-o
+    translation: "wunderbar"
+    parts: {nom: "mīrus", nom_f: "mīra", nom_n: "mīrum"}
+  - type: Adjektiv-a-o
+    translation: "hoch"
+    parts: {nom: "altus", nom_f: "alta", nom_n: "altum"}
+  - type: Adjektiv-zweiendig
+    translation: "grausam, gefühllos"
+    parts: {nom: "crūdēlis", nom_n: "crūdēle"}
+  - type: Konsonantische-Deklination-mf
+    translation: "das Geschrei"
+    parts: {nom: "clāmor", gen: "clāmōris"}
+  - translation: "der Kampf, die Schlacht"
+    parts: {nom: "pūgna", gen: "pūgnae"}
+  - translation: "die Sache, das Ding"
+    parts: {nom: "rēs", gen: "rēī"}
+    forms:
+      dat.sg: "reī"
+      gen.sg: "reī"
+  - type: Adjektiv-a-o
+    translation: "entgegengesetzt, feindlich"
+    parts: {nom: "adversus", nom_f: "adversa", nom_n: "adversum"}
+  - translation: "das Verderben, der Untergang"
+    parts: {nom: "perniciēs", gen: "perniciēī"}
+  - translation: "die Flucht"
+    parts: {nom: "fuga", gen: "fugae"}
+  - translation: "die Hoffnung"
+    parts: {nom: "spēs", gen: "spēī"}
+    forms:
+      dat.sg: "speī"
+      gen.sg: "speī"
+  - translation: "der Himmel"
+    parts: {nom: "caelum", gen: "caelī"}
+  - type: Adjektiv-zweiendig
+    translation: "unglaublich"
+    parts: {nom: "incrēdibilis", nom_n: "incrēdibile"}
+  - translation: "die Treue, das Vertrauen"
+    parts: {nom: "fidēs", gen: "fidēī"}
+    forms:
+      dat.sg: "fideī"
+      gen.sg: "fideī"
+  - type: Adjektiv-a-o
+    translation: "mittlerer, in der Mitte"
+    parts: {nom: "medius", nom_f: "media", nom_n: "medium"}
+  - type: Konsonantische-Deklination-mf
+    translation: "das Lob, der Ruhm"
+    parts: {nom: "laus", gen: "laudis"}
+  - translation: "das Unrecht, die Beleidigung"
+    parts: {nom: "iniūria", gen: "iniūriae"}
+  - type: Konsonantische-Deklination-mf
+    translation: "der Mensch"
+    parts: {nom: "homō", gen: "hominis"}
+  - type: Adjektiv-a-o
+    translation: "bekannt, berühmt"
+    parts: {nom: "nōtus", nom_f: "nōta", nom_n: "nōtum"}
+  - type: Adjektiv-a-o
+    translation: "wahr"
+    parts: {nom: "vērus", nom_f: "vēra", nom_n: "vērum"}
+  - type: Konsonantische-Deklination-mf
+    translation: "der Staub"
+    parts: {nom: "pulvis", gen: "pulveris"}
+  - type: Konsonantische-Deklination-mf
+    translation: "der Wächter/die Wächterin"
+    parts: {nom: "cūstōs", gen: "cūstōdis"}
+  - type: Konsonantische-Deklination-mf
+    translation: "das Gesetz"
+    parts: {nom: "lēx", gen: "lēgis"}
+  - translation: "das Schicksal, Glück"
+    parts: {nom: "fortūna", gen: "fortūnae"}
+  - type: Adjektiv-a-o
+    translation: "gestorben, tot"
+    parts: {nom: "mortuus", nom_f: "mortua", nom_n: "mortuum"}
+  - type: Konsonantische-Deklination-i-mf
+    translation: "der Tod"
+    parts: {nom: "mors", gen: "mortis"}
+  - type: Konsonantische-Deklination-mf
+    translation: "die Begierde, das Verlangen"
+    parts: {nom: "cupiditās", gen: "cupiditātis"}
+  - type: Adjektiv-a-o
+    translation: "glücklich"
+    parts: {nom: "beātus", nom_f: "beāta", nom_n: "beātum"}
+  - type: Adjektiv-a-o
+    translation: "der höchste, der oberste"
+    parts: {nom: "summus", nom_f: "summa", nom_n: "summum"}
+  - type: Adjektiv-zweiendig
+    translation: "derartig, ein solcher, (so) beschaffen"
+    parts: {nom: "tālis", nom_n: "tāle"}
+  - translation: "der Philosoph"
+    parts: {nom: "philosophus", gen: "philosophī"}
+  - type: Konsonantische-Deklination-mf
+    translation: "der Hund"
+    parts: {nom: "canis", gen: "canis"}
+  - translation: "die Antwort"
+    parts: {nom: "respōnsum", gen: "respōnsī"}
+  - type: Konsonantische-Deklination-mf
+    translation: "der Urheber"
+    parts: {nom: "auctor", gen: "auctōris"}
+  - translation: "das Gedächtnis, die Erinnerung"
+    parts: {nom: "memoria", gen: "memoriae"}
+  - translation: "der Hass, die Abneigung"
+    parts: {nom: "odium", gen: "odiī"}
+  - type: Konsonantische-Deklination-mf
+    translation: "die Würde"
+    parts: {nom: "dignitās", gen: "dignitātis"}
+  - type: Konsonantische-Deklination-i-mf
+    translation: "das Gebäude, der Tempel"
+    parts: {nom: "aedis", gen: "aedis"}
+  - type: Konsonantische-Deklination-n
+    translation: "die Macht (eines Gottes)"
+    parts: {nom: "nūmen", gen: "nūminis"}
+  - translation: "das Maß"
+    parts: {nom: "modus", gen: "modī"}
+  - type: Adjektiv-a-o
+    translation: "hell, klar"
+    parts: {nom: "clārus", nom_f: "clāra", nom_n: "clārum"}
+  - type: Konsonantische-Deklination-mf
+    translation: "der Sturm, das Unwetter"
+    parts: {nom: "tempestās", gen: "tempestātis"}
+  - translation: "der Seemann, Matrose"
+    parts: {nom: "nauta", gen: "nautae"}
+  - type: Konsonantische-Deklination-mf
+    translation: "die Gelegenheit"
+    parts: {nom: "occāsiō", gen: "occāsiōnis"}
+  - type: Adjektiv-a-o
+    translation: "gesund, unverletzt"
+    parts: {nom: "salvus", nom_f: "salva", nom_n: "salvum"}
+  - type: Adjektiv-a-o
+    translation: "feindlich, bedrohlich"
+    parts: {nom: "īnfēstus", nom_f: "īnfēsta", nom_n: "īnfēstum"}
+  - translation: "der Ort"
+    parts: {nom: "locus", gen: "locī"}
+  - type: Konsonantische-Deklination-n
+    translation: "das Verbrechen"
+    parts: {nom: "scelus", gen: "sceleris"}
+  - translation: "der Arzt"
+    parts: {nom: "medicus", gen: "medicī"}
+  - translation: "der Anfang, Beginn"
+    parts: {nom: "initium", gen: "initiī"}
+  - translation: "die Krankheit"
+    parts: {nom: "morbus", gen: "morbī"}
+  - translation: "das Eisen, Schwert"
+    parts: {nom: "ferrum", gen: "ferrī"}
+  - translation: "die Meinung, Ansicht"
+    parts: {nom: "sententia", gen: "sententiae"}
+  - type: Konsonantische-Deklination-mf
+    translation: "der Brauch, die Sitte"
+    parts: {nom: "mōs", gen: "mōris"}
+  - type: Konsonantische-Deklination-i-mf
+    translation: "die Familie"
+    parts: {nom: "gēns", gen: "gentis"}
+  - type: Adjektiv-a-o
+    translation: "ausländisch, barbarisch"
+    parts: {nom: "barbarus", nom_f: "barbara", nom_n: "barbarum"}
+  - type: Konsonantische-Deklination-i-mf
+    translation: "der Kreis, Kreislauf"
+    parts: {nom: "orbis", gen: "orbis"}
+  - type: Konsonantische-Deklination-mf
+    translation: "M. Tullius Cicero (römischer Schriftstel"
+    parts: {nom: "Cicerō", gen: "Cicerōnis"}
+  - translation: "die Provinz"
+    parts: {nom: "prōvincia", gen: "prōvinciae"}
+  - translation: "das Grab"
+    parts: {nom: "sepulcrum", gen: "sepulcrī"}
+  - translation: "das Wissen, die Kenntnis"
+    parts: {nom: "scientia", gen: "scientiae"}
+  - translation: "der Eifer, die Beschäftigung"
+    parts: {nom: "studium", gen: "studiī"}
+  - type: Konsonantische-Deklination-mf
+    translation: "der Feldherr"
+    parts: {nom: "imperātor", gen: "imperātōris"}
+  - type: Konsonantische-Deklination-mf
+    translation: "der alte Mann"
+    parts: {nom: "senex", gen: "senis"}
+  - translation: "das Schwert"
+    parts: {nom: "gladius", gen: "gladiī"}
+  - type: Konsonantische-Deklination-mf
+    translation: "der Führer, Anführer"
+    parts: {nom: "dux", gen: "ducis"}
+  - translation: "die Schlacht, das Gefecht"
+    parts: {nom: "proelium", gen: "proeliī"}
+  - translation: "der Sieg"
+    parts: {nom: "victōria", gen: "victōriae"}
+  - type: Konsonantische-Deklination-i-mf
+    translation: "die Niederlage"
+    parts: {nom: "clādēs", gen: "clādis"}
+  - type: Adjektiv-a-o
+    translation: "sehr groß, der Größte"
+    parts: {nom: "māximus", nom_f: "māxima", nom_n: "māximum"}
+  - translation: "der Bote"
+    parts: {nom: "nūntius", gen: "nūntiī"}
+  - type: Konsonantische-Deklination-mf
+    translation: "die Macht, Herrschaft"
+    parts: {nom: "potestās", gen: "potestātis"}
+  - type: Konsonantische-Deklination-n
+    translation: "der Unterschied"
+    parts: {nom: "discrīmen", gen: "discrīminis"}
+  - type: Adjektiv-a-o
+    translation: "lebendig, lebend"
+    parts: {nom: "vīvus", nom_f: "vīva", nom_n: "vīvum"}
+  - type: Adjektiv-a-o
+    translation: "ungewiss, unsicher"
+    parts: {nom: "incertus", nom_f: "incerta", nom_n: "incertum"}
+  - type: Konsonantische-Deklination-mf
+    translation: "die Legion (Heeresabteilung von 4 200 -"
+    parts: {nom: "legiō", gen: "legiōnis"}
+  - translation: "das Schweigen, die Stille"
+    parts: {nom: "silentium", gen: "silentiī"}
+  - type: Konsonantische-Deklination-mf
+    translation: "Gaius Iulius Caesar"
+    parts: {nom: "Caesar", gen: "Caesaris"}
+  - type: U-Deklination
+    translation: "die Flut, Welle"
+    parts: {nom: "flūctus", gen: "flūctūs"}
+  - type: Konsonantische-Deklination-i-mf
+    translation: "die Flotte"
+    parts: {nom: "classis", gen: "classis"}
+  - type: U-Deklination
+    translation: "der Anblick"
+    parts: {nom: "cōnspectus", gen: "cōnspectūs"}
+  - type: U-Deklination
+    translation: "die Angst, Furcht"
+    parts: {nom: "metus", gen: "metūs"}
+  - type: U-Deklination
+    translation: "das Seufzen, Brüllen"
+    parts: {nom: "gemitus", gen: "gemitūs"}
+  - type: U-Deklination
+    translation: "der Lauf"
+    parts: {nom: "cursus", gen: "cursūs"}
+  - type: U-Deklination
+    translation: "der Angriff"
+    parts: {nom: "impetus", gen: "impetūs"}
+  - type: Konsonantische-Deklination-mf
+    translation: "der Begleiter, Gefährte/die Begleiterin"
+    parts: {nom: "comes", gen: "comitis"}
+  - translation: "das Geld, die Summe, das Vermögen"
+    parts: {nom: "pecūnia", gen: "pecūniae"}
+  - type: Konsonantische-Deklination-n
+    translation: "der Kopf"
+    parts: {nom: "caput", gen: "capitis"}
+  - type: U-Deklination
+    translation: "der Vers, die Zeile"
+    parts: {nom: "versus", gen: "versūs"}
+  - type: Adjektiv-a-o
+    translation: "frevelhaft, verwerflich, kriminell"
+    parts: {nom: "scelerātus", nom_f: "scelerāta", nom_n: "scelerātum"}
+  - type: Konsonantische-Deklination-n
+    translation: "die Tat, Untat, das Verbrechen"
+    parts: {nom: "facinus", gen: "facinoris"}
+  - type: Adjektiv-a-o
+    translation: "(einer Sache) unwürdig"
+    parts: {nom: "indignus", nom_f: "indigna", nom_n: "indignum"}
+  - type: Konsonantische-Deklination-mf
+    translation: "das Bild"
+    parts: {nom: "imāgō", gen: "imāginis"}
+  - type: Adjektiv-a-o
+    translation: "golden, aus Gold"
+    parts: {nom: "aureus", nom_f: "aurea", nom_n: "aureum"}
+  - translation: "die Königin"
+    parts: {nom: "rēgīna", gen: "rēgīnae"}
+  - type: U-Deklination
+    translation: "der Sinn"
+    parts: {nom: "sēnsus", gen: "sēnsūs"}
+  - type: Adjektiv-a-o
+    translation: "wie viel, wie groß"
+    parts: {nom: "quantus", nom_f: "quanta", nom_n: "quantum"}
+  - translation: "der Stolz, Hochmut"
+    parts: {nom: "superbia", gen: "superbiae"}
+  - type: U-Deklination
+    translation: "das Gesicht, der Gesichtsausdruck"
+    parts: {nom: "vultus", gen: "vultūs"}
+  - translation: "die Kraft, Macht, Herrschaft"
+    parts: {nom: "potentia", gen: "potentiae"}
+  - type: Adjektiv-a-o
+    translation: "öffentlich"
+    parts: {nom: "pūblicus", nom_f: "pūblica", nom_n: "pūblicum"}
+  - type: Konsonantische-Deklination-mf
+    translation: "die Freiheit"
+    parts: {nom: "lībertās", gen: "lībertātis"}
+  - type: Konsonantische-Deklination-mf
+    translation: "das Ansehen, der Einfluss, die Macht"
+    parts: {nom: "auctōritās", gen: "auctōritātis"}
+  - type: U-Deklination
+    translation: "der Senat"
+    parts: {nom: "senātus", gen: "senātūs"}
+  - type: Konsonantische-Deklination-mf
+    translation: "der Konsul"
+    parts: {nom: "cōnsul", gen: "cōnsulis"}
+  - translation: "der Gesandte"
+    parts: {nom: "lēgātus", gen: "lēgātī"}
+  - type: Konsonantische-Deklination-n
+    translation: "die Reise, der Weg, Marsch"
+    parts: {nom: "iter", gen: "itineris"}
+  - translation: "(die römische Provinz) Gallien"
+    parts: {nom: "Gallia", gen: "Galliae"}
+  - type: U-Deklination
+    translation: "das Heer"
+    parts: {nom: "exercitus", gen: "exercitūs"}
+  - type: Konsonantische-Deklination-mf
+    translation: "der Schrecken"
+    parts: {nom: "terror", gen: "terrōris"}
+  - type: U-Deklination
+    translation: "die Ankunft"
+    parts: {nom: "adventus", gen: "adventūs"}
+  - type: Adjektiv-dreiendig
+    translation: "schnell"
+    parts: {nom: "celer", nom_f: "celeris", nom_n: "celere"}
+  - type: Adjektiv-a-o
+    translation: "leer"
+    parts: {nom: "vāstus", nom_f: "vāsta", nom_n: "vāstum"}
+  - type: Adjektiv-a-o
+    translation: "bitter"
+    parts: {nom: "acerbus", nom_f: "acerba", nom_n: "acerbum"}
+  - type: Adjektiv-a-o
+    translation: "gottlos"
+    parts: {nom: "nefārius", nom_f: "nefāria", nom_n: "nefārium"}
+  - translation: "die Schärfe"
+    parts: {nom: "aciēs", gen: "aciēī"}
+  - type: Adjektiv-a-o-er
+    translation: "grob"
+    parts: {nom: "asper", nom_f: "aspera", nom_n: "asperum"}
+  - type: Adjektiv-a-o
+    translation: "bewaffnet, gerüstet"
+    parts: {nom: "armātus", nom_f: "armāta", nom_n: "armātum"}
+  - translation: "die Verbannung, das Exil"
+    parts: {nom: "exilium", gen: "exiliī"}
+  - translation: "die Gnade"
+    parts: {nom: "venia", gen: "veniae"}
+  - type: U-Deklination
+    translation: "die Rückkehr"
+    parts: {nom: "reditus", gen: "reditūs"}
+  - type: Konsonantische-Deklination-mf
+    translation: "die Erhabenheit, das Ansehen"
+    parts: {nom: "māiestās", gen: "māiestātis"}
+  - type: U-Deklination
+    translation: "die Wasserleitung, der Aquädukt"
+    parts: {nom: "aquaeductus", gen: "aquaeductūs"}
+  - type: Konsonantische-Deklination-i-mf
+    translation: "die Brücke"
+    parts: {nom: "pōns", gen: "pontis"}
+  - type: Konsonantische-Deklination-mf
+    translation: "der Ranghöchste, Anführer"
+    parts: {nom: "prīnceps", gen: "prīncipis"}
+  - type: Konsonantische-Deklination-n
+    translation: "die Aufgabe"
+    parts: {nom: "mūnus", gen: "mūneris"}
+  - type: Konsonantische-Deklination-i-mf
+    translation: "die Grenze"
+    parts: {nom: "fīnis", gen: "fīnis"}
+  - translation: "die Milde"
+    parts: {nom: "clēmentia", gen: "clēmentiae"}
+  - translation: "die Gerechtigkeit"
+    parts: {nom: "iūstitia", gen: "iūstitiae"}
+  - type: Konsonantische-Deklination-mf
+    translation: "das Pflichtbewusstsein"
+    parts: {nom: "pietās", gen: "pietātis"}
+  - translation: "der Grund"
+    parts: {nom: "causa", gen: "causae"}
+  - type: U-Deklination
+    translation: "das Amt des Konsuls, Konsulat"
+    parts: {nom: "cōnsulātus", gen: "cōnsulātūs"}
+  - translation: "der (gute/schlechte) Ruf"
+    parts: {nom: "fāma", gen: "fāmae"}
+  - translation: "der Jähzorn, Wutanfall"
+    parts: {nom: "īrācundia", gen: "īrācundiae"}
+  - type: Adjektiv-a-o
+    translation: "schlau"
+    parts: {nom: "callidus", nom_f: "callida", nom_n: "callidum"}
+  - type: Konsonantische-Deklination-n
+    translation: "das Bündnis, der Vertrag"
+    parts: {nom: "foedus", gen: "foederis"}
+  - translation: "die Freundschaft"
+    parts: {nom: "amīcitia", gen: "amīcitiae"}
+  - translation: "der Wald"
+    parts: {nom: "silva", gen: "silvae"}
+  - type: Konsonantische-Deklination-mf
+    translation: "das Unglück, die Niederlage"
+    parts: {nom: "calamitās", gen: "calamitātis"}
+  - type: Adjektiv-a-o
+    translation: "lieb, teuer"
+    parts: {nom: "cārus", nom_f: "cāra", nom_n: "cārum"}
+  - type: Adjektiv-zweiendig
+    translation: "schlimm, unanständig"
+    parts: {nom: "turpis", nom_n: "turpe"}
+  - type: Konsonantische-Deklination-n
+    translation: "das Herz"
+    parts: {nom: "cor", gen: "cordis"}
+    forms:
+      gen.pl: "cordium"
+  - translation: "der Spott"
+    parts: {nom: "lūdibrium", gen: "lūdibriī"}
+  - type: Konsonantische-Deklination-mf
+    translation: "die Lust, das Vergnügen"
+    parts: {nom: "voluptās", gen: "voluptātis"}
+  - type: Konsonantische-Deklination-mf
+    translation: "die Schönheit"
+    parts: {nom: "pulchritūdō", gen: "pulchritūdinis"}
+  - type: Konsonantische-Deklination-n
+    translation: "der Mund"
+    parts: {nom: "ōs", gen: "ōris"}
+  - translation: "der Finger"
+    parts: {nom: "digitus", gen: "digitī"}
+  - type: Konsonantische-Deklination-mf
+    translation: "der Fuß"
+    parts: {nom: "pēs", gen: "pedis"}
+  - type: Konsonantische-Deklination-i-mf
+    translation: "das Ohr"
+    parts: {nom: "auris", gen: "auris"}
+  - type: Adjektiv-zweiendig
+    translation: "weich, empfindsam"
+    parts: {nom: "mollis", nom_n: "molle"}
+  - translation: "das Gold"
+    parts: {nom: "aurum", gen: "aurī"}
+  - translation: "der Schmuck, das Schmuckstück"
+    parts: {nom: "ōrnāmentum", gen: "ōrnāmentī"}
+  - type: Adjektiv-a-o
+    translation: "zornig"
+    parts: {nom: "īrātus", nom_f: "īrāta", nom_n: "īrātum"}
+  - type: Konsonantische-Deklination-mf
+    translation: "das Lebensalter, das Zeitalter, die Zeit"
+    parts: {nom: "aetās", gen: "aetātis"}
+  - translation: "die Ehe"
+    parts: {nom: "mātrimōnium", gen: "mātrimōniī"}
+  - type: Konsonantische-Deklination-mf
+    translation: "das Gespräch, die Unterhaltung"
+    parts: {nom: "sermō", gen: "sermōnis"}
+  - translation: "der Kuss"
+    parts: {nom: "ōsculum", gen: "ōsculī"}
+  - type: Konsonantische-Deklination-mf
+    translation: "der Baum"
+    parts: {nom: "arbor", gen: "arboris"}
+  - type: U-Deklination
+    translation: "die Frucht, der Ertrag"
+    parts: {nom: "frūctus", gen: "frūctūs"}
+  - type: Adjektiv-a-o
+    translation: "weiß, hell"
+    parts: {nom: "albus", nom_f: "alba", nom_n: "album"}
+  - type: Adjektiv-a-o
+    translation: "blutig, blutverschmiert"
+    parts: {nom: "cruentus", nom_f: "cruenta", nom_n: "cruentum"}
+  - type: Konsonantische-Deklination-mf
+    translation: "das Blut"
+    parts: {nom: "sanguis", gen: "sanguinis"}
+  - type: Konsonantische-Deklination-n
+    translation: "die Wunde, Verletzung"
+    parts: {nom: "vulnus", gen: "vulneris"}
+  - type: Konsonantische-Deklination-i-mf
+    translation: "der Mord, das Blutbad"
+    parts: {nom: "caedēs", gen: "caedis"}

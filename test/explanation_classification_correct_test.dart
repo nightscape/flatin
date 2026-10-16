@@ -14,8 +14,8 @@ void main() {
       'nouns': nouns.availableTypes.where((t) => t != 'U-Deklination').toSet(),
       'verbs': verbs.availableTypes.toSet(),
     });
-    final item = (await loadPracticeItems('lib/data/latin_nouns.yaml'))
-        .singleWhere((i) => i.type == 'U-Deklination');
+    final items = (await loadPracticeItems('lib/data/latin_nouns.yaml'))
+        .where((i) => i.type == 'U-Deklination');
     final spy = ExplainerSpy();
     tester.view.physicalSize = const Size(1200, 2400);
     tester.view.devicePixelRatio = 1.0;
@@ -31,6 +31,7 @@ void main() {
     final shown = tester
         .widget<Text>(find.byKey(const Key('wordClassification.word')))
         .data;
+    final item = items.singleWhere((i) => i.forms.contains(shown));
     final correct = item.formLabels[item.forms.indexOf(shown!)];
 
     await pickOption(tester, 0, correct.display('kasus')!);
