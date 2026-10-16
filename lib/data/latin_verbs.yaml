@@ -542,6 +542,7 @@ items:
     parts: {infinitiv: "temptāre", praesens_1sg: "temptō"}
   - translation: "(sich) fürchten, Angst haben"
     parts: {infinitiv: "timēre", praesens_1sg: "timeō"}
+    absent: &ohne_supinum [{genus_verbi: pass, tempus: perf}, {genus_verbi: pass, tempus: plusq}, {genus_verbi: pass, tempus: fut2}, {modus: inf, tempus: fut}, {modus: part, tempus: fut}, {modus: sup}]
   - translation: "sehen"
     parts: {infinitiv: "vidēre", praesens_1sg: "videō", perfekt_1sg: "vīdī", supinum: "vīsum"}
   - translation: "rufen, nennen"
@@ -915,6 +916,7 @@ items:
     parts: {infinitiv: "prōvidēre", praesens_1sg: "prōvideō", perfekt_1sg: "prōvīdī", supinum: "prōvīsum"}
   - translation: "erregen, beunruhigen"
     parts: {infinitiv: "sollicitāre", praesens_1sg: "sollicitō", perfekt_1sg: "sollicitāvī"}
+    absent: *ohne_supinum
   - type: Konsonantische
     translation: "an etw./jmd. heranrücken"
     parts: {infinitiv: "incēdere", praesens_1sg: "incēdō", perfekt_1sg: "incessī"}
@@ -1142,6 +1144,7 @@ items:
       inf.praes.akt: "auferre"
   - translation: "verändern, verwandeln"
     parts: {infinitiv: "mūtāre", praesens_1sg: "mūtō", perfekt_1sg: "mūtāvī"}
+    absent: *ohne_supinum
   - type: Unregelmäßig
     translation: "ertragen, aushalten"
     parts: {infinitiv: "perferre", praesens_1sg: "perferō", perfekt_1sg: "pertulī", supinum: "perlātum", ppa_nom: "perferēns", ppa_gen: "perferentis", gerundiv: "perferendus"}
@@ -1191,6 +1194,7 @@ items:
     parts: {infinitiv: "retinēre", praesens_1sg: "retineō", perfekt_1sg: "retinuī", supinum: "retentum"}
   - translation: "aushalten, ertragen"
     parts: {infinitiv: "sustinēre", praesens_1sg: "sustineō", perfekt_1sg: "sustinuī"}
+    absent: *ohne_supinum
   - translation: "bitten, beten"
     parts: {infinitiv: "ōrāre", praesens_1sg: "ōrō", perfekt_1sg: "ōrāvī", supinum: "ōrātum"}
   - translation: "befestigen"
@@ -1205,6 +1209,7 @@ items:
     parts: {infinitiv: "cōnfirmāre", praesens_1sg: "cōnfirmō", perfekt_1sg: "cōnfirmāvī", supinum: "cōnfirmātum"}
   - translation: "hinhalten"
     parts: {infinitiv: "praebēre", praesens_1sg: "praebeō", perfekt_1sg: "praebuī"}
+    absent: *ohne_supinum
   - translation: "übergeben, anvertrauen"
     parts: {infinitiv: "mandāre", praesens_1sg: "mandō", perfekt_1sg: "mandāvī", supinum: "mandātum"}
   - translation: "zeigen"
@@ -1484,8 +1489,10 @@ items:
       inf.praes.akt: "praeesse"
   - translation: "stehen, sich befinden"
     parts: {infinitiv: "stāre", praesens_1sg: "stō", perfekt_1sg: "stetī"}
+    absent: *ohne_supinum
   - translation: "sich bemühen, streben"
     parts: {infinitiv: "studēre", praesens_1sg: "studeō", perfekt_1sg: "studuī"}
+    absent: *ohne_supinum
   - type: Konsonantische
     translation: "verteidigen"
     parts: {infinitiv: "dēfendere", praesens_1sg: "dēfendō", perfekt_1sg: "dēfendī", supinum: "dēfēnsum"}
@@ -1636,6 +1643,7 @@ items:
     parts: {infinitiv: "ēripere", praesens_1sg: "ēripiō", perfekt_1sg: "ēripuī", supinum: "ēreptum"}
   - translation: "nicht wissen, nicht verstehen"
     parts: {infinitiv: "nescīre", praesens_1sg: "nesciō", perfekt_1sg: "nescīvī"}
+    absent: *ohne_supinum
   - translation: "belagern, besetzt halten"
     parts: {infinitiv: "obsidēre", praesens_1sg: "obsideō", perfekt_1sg: "obsēdī", supinum: "obsessum"}
   - type: Mischkonjugation
@@ -1647,6 +1655,7 @@ items:
     parts: {infinitiv: "pervenīre", praesens_1sg: "perveniō", perfekt_1sg: "pervēnī", supinum: "perventum"}
   - translation: "abwehren"
     parts: {infinitiv: "arcēre", praesens_1sg: "arceō", perfekt_1sg: "arcuī"}
+    absent: *ohne_supinum
   - translation: "zusammenhalten, festhalten"
     parts: {infinitiv: "continēre", praesens_1sg: "contineō", perfekt_1sg: "continuī", supinum: "contentum"}
   - type: Konsonantische
