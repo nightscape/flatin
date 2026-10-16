@@ -724,6 +724,12 @@ items:
       konj.impf.akt.1.pl: "īrēmus"
       konj.impf.akt.2.pl: "īrētis"
       konj.impf.akt.3.pl: "īrent"
+      konj.plusq.akt.1.sg: ["īssem", "iissem", "īvissem"]
+      konj.plusq.akt.2.sg: ["īssēs", "iissēs", "īvissēs"]
+      konj.plusq.akt.3.sg: ["īsset", "iisset", "īvisset"]
+      konj.plusq.akt.1.pl: ["īssēmus", "iissēmus", "īvissēmus"]
+      konj.plusq.akt.2.pl: ["īssētis", "iissētis", "īvissētis"]
+      konj.plusq.akt.3.pl: ["īssent", "iissent", "īvissent"]
       imp.praes.akt.2.sg: "ī"
       imp.praes.akt.2.pl: "īte"
       imp.fut.akt.2.sg: "ītō"
@@ -731,6 +737,7 @@ items:
       imp.fut.akt.2.pl: "ītōte"
       imp.fut.akt.3.pl: "euntō"
       inf.praes.akt: "īre"
+      inf.perf.akt: ["īsse", "iisse", "īvisse"]
       ger.gen: "eundī"
       ger.dat: "eundō"
       ger.akk: "eundum"
@@ -992,6 +999,12 @@ items:
       konj.impf.akt.1.pl: "abīrēmus"
       konj.impf.akt.2.pl: "abīrētis"
       konj.impf.akt.3.pl: "abīrent"
+      konj.plusq.akt.1.sg: ["abīssem", "abiissem"]
+      konj.plusq.akt.2.sg: ["abīssēs", "abiissēs"]
+      konj.plusq.akt.3.sg: ["abīsset", "abiisset"]
+      konj.plusq.akt.1.pl: ["abīssēmus", "abiissēmus"]
+      konj.plusq.akt.2.pl: ["abīssētis", "abiissētis"]
+      konj.plusq.akt.3.pl: ["abīssent", "abiissent"]
       imp.praes.akt.2.sg: "abī"
       imp.praes.akt.2.pl: "abīte"
       imp.fut.akt.2.sg: "abītō"
@@ -999,6 +1012,7 @@ items:
       imp.fut.akt.2.pl: "abītōte"
       imp.fut.akt.3.pl: "abeuntō"
       inf.praes.akt: "abīre"
+      inf.perf.akt: ["abīsse", "abiisse"]
       ger.gen: "abeundī"
       ger.dat: "abeundō"
       ger.akk: "abeundum"
@@ -1407,6 +1421,12 @@ items:
       konj.impf.akt.1.pl: "inīrēmus"
       konj.impf.akt.2.pl: "inīrētis"
       konj.impf.akt.3.pl: "inīrent"
+      konj.plusq.akt.1.sg: ["inīssem", "iniissem"]
+      konj.plusq.akt.2.sg: ["inīssēs", "iniissēs"]
+      konj.plusq.akt.3.sg: ["inīsset", "iniisset"]
+      konj.plusq.akt.1.pl: ["inīssēmus", "iniissēmus"]
+      konj.plusq.akt.2.pl: ["inīssētis", "iniissētis"]
+      konj.plusq.akt.3.pl: ["inīssent", "iniissent"]
       imp.praes.akt.2.sg: "inī"
       imp.praes.akt.2.pl: "inīte"
       imp.fut.akt.2.sg: "inītō"
@@ -1414,6 +1434,7 @@ items:
       imp.fut.akt.2.pl: "inītōte"
       imp.fut.akt.3.pl: "ineuntō"
       inf.praes.akt: "inīre"
+      inf.perf.akt: ["inīsse", "iniisse"]
       ger.gen: "ineundī"
       ger.dat: "ineundō"
       ger.akk: "ineundum"
