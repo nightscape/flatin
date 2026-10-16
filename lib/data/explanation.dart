@@ -145,7 +145,7 @@ List<ExplanationLine> _formLines(
 }
 
 /// S18 a: a seam rule explains itself in place of the plain sum; S14: an
-/// ending from another type names that type.
+/// ending from another type names that type, also next to a seam rule.
 ExplanationLine _generatedLine(
   PracticeItem item,
   GeneratedForm form,
@@ -158,6 +158,7 @@ ExplanationLine _generatedLine(
       before: '$stem + ${form.ending}',
       after: form.result,
       rule: form.sandhiRule!,
+      endingType: form.endingType == item.type ? null : form.endingType,
     );
   }
   final params = {
@@ -211,13 +212,18 @@ ExplanationLine _sandhiLine({
   required String before,
   required String after,
   required SandhiRule rule,
+  String? endingType,
 }) =>
-    ExplanationLine('explain.sandhi', params: {
-      'label': label,
-      'before': before,
-      'after': after,
-      'rule': rule.explain,
-    });
+    ExplanationLine(
+      endingType == null ? 'explain.sandhi' : 'explain.sandhiOtherType',
+      params: {
+        'label': label,
+        'before': before,
+        'after': after,
+        'rule': rule.explain,
+        'endingType': ?endingType,
+      },
+    );
 
 ExplanationLine _stemLine(PracticeItem item, StemDerivation stem) {
   switch (stem) {

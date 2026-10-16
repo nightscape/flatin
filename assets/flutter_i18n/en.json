@@ -75,6 +75,7 @@
     "generated": "{label}: {stem} + {ending} = {result}",
     "generatedOtherType": "{label}: {stem} + {ending} = {result} (ending of {endingType})",
     "sandhi": "{label}: {before} = {after} ({rule})",
+    "sandhiOtherType": "{label}: {before} = {after} ({rule}; ending of {endingType})",
     "given": "{result} is the dictionary form ({label})",
     "irregular": "irregular – memorise: {dictionary} · {label}: {result}",
     "composed": "{label}: {parts} = {result}",
