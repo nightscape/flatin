@@ -2,37 +2,28 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/grammar/schema.dart';
-import 'package:latin_practice/models/form_label.dart';
+import 'package:latin_practice/data/practice_data.dart';
 import 'package:yaml/yaml.dart';
 
 YamlMap _read(String path) =>
     loadYaml(File(path).readAsStringSync()) as YamlMap;
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   for (final path in const [
     'lib/data/latin_nouns.yaml',
     'lib/data/latin_verbs.yaml',
   ]) {
-    test('$path passes the axes and label checks of the schema', () {
-      final root = _read(path);
-      final axes = parseAxes(root, path: path);
+    test('$path passes the axes and label checks of the schema', () async {
+      final axes = parseAxes(_read(path), path: path);
+      final metadata = await getFormMetadata(path);
 
-      final labels = (root['form_labels'] as YamlMap).map(
-        (key, value) => MapEntry(
-          '$key',
-          FormLabel(
-            features: {
-              for (final feature in (value as YamlMap).entries)
-                '${feature.key}': '${feature.value}',
-            },
-            axes: axes,
-          ),
-        ),
-      );
-
-      expect(labels, isNotEmpty);
-      for (final label in labels.values) {
-        expect(axes.parseKey(label.key), label.features);
+      expect(metadata.formOrder, isNotEmpty);
+      for (final key in metadata.formOrder) {
+        final label = metadata.formLabelsByKey[key]!;
+        expect(label.key, key);
+        expect(axes.parseKey(key), label.features);
         expect(label.displayName, isNotEmpty);
       }
     });

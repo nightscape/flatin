@@ -17,11 +17,8 @@ Future<LessonData> lessonData(Ref ref) async {
 @riverpod
 Future<List<String>> wordsOutsideLessons(Ref ref) async {
   final lessons = await ref.watch(lessonDataProvider.future);
-  final nouns = await loadPracticeItems('lib/data/latin_nouns.yaml');
-  final verbs = await loadPracticeItems('lib/data/latin_verbs.yaml');
-
   final words = <String>[];
-  for (final item in [...nouns, ...verbs]) {
+  for (final item in await loadAllPracticeItems()) {
     final raw = item.lemma;
     if (lessons.wordToLesson.containsKey(normalizeDiacritics(raw))) continue;
     if (!words.contains(raw)) words.add(raw);

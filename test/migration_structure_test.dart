@@ -4,15 +4,10 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/data/settings_conversion.dart';
 import 'package:latin_practice/grammar/schema.dart';
-import 'package:yaml/yaml.dart';
 
 const _oldPaths = {
   'nouns': 'lib/data/latin_nouns.yaml',
   'verbs': 'lib/data/latin_verbs.yaml',
-};
-const _newPaths = {
-  'nouns': 'lib/data/v2/latin_nouns.yaml',
-  'verbs': 'lib/data/v2/latin_verbs.yaml',
 };
 
 /// One item of the legacy golden.
@@ -37,10 +32,12 @@ Map<String, List<LegacyItem>> _legacy() {
   };
 }
 
-List<String> _oldFormKeys(String file) {
-  final old = loadYaml(File(_oldPaths[file]!).readAsStringSync()) as YamlMap;
-  return (old['form_labels'] as YamlMap).keys.cast<String>().toList();
-}
+Map<String, dynamic> _golden(String file) =>
+    (jsonDecode(File('test/golden/legacy_v1.json').readAsStringSync())
+        as Map<String, dynamic>)[_oldPaths[file]!] as Map<String, dynamic>;
+
+List<String> _oldFormKeys(String file) =>
+    (_golden(file)['formLabelKeys'] as List).cast<String>();
 
 void main() {
   final legacy = _legacy();
@@ -48,7 +45,7 @@ void main() {
       MigrationMap.parse(File('lib/data/migration_v2.yaml').readAsStringSync());
   final files = {
     for (final file in parseGrammarFiles({
-      for (final e in _newPaths.entries) e.value: File(e.value).readAsStringSync(),
+      for (final path in _oldPaths.values) path: File(path).readAsStringSync(),
     }))
       file.dataFileId: file,
   };
@@ -85,8 +82,7 @@ void main() {
 
   test('the v0 key universe is what the old settings screen offered', () {
     for (final file in _oldPaths.keys) {
-      final old = loadYaml(File(_oldPaths[file]!).readAsStringSync()) as YamlMap;
-      expect(map.v0FormUniverse[file], (old['form_order'] as YamlList).toList(),
+      expect(map.v0FormUniverse[file], _golden(file)['formOrderAll'],
           reason: file);
       for (final key in map.v0FormUniverse[file]!) {
         expect(map.formKeys[file], contains(key), reason: '$file $key');

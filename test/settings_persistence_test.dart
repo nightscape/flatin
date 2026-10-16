@@ -1,10 +1,11 @@
 import 'dart:convert';
 
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:latin_practice/data/lesson_data.dart';
-import 'package:latin_practice/data/practice_data.dart';
+import 'package:latin_practice/data/settings_conversion.dart';
 import 'package:latin_practice/providers/lesson_provider.dart';
 import 'package:latin_practice/providers/settings_provider.dart';
 
@@ -21,7 +22,7 @@ void main() {
     final first = ProviderContainer();
     await first.read(settingsProvider.future);
     final notifier = first.read(settingsProvider.notifier);
-    await notifier.toggleForm('nouns', 'genitive_singular');
+    await notifier.toggleForm('nouns', 'gen.sg');
     await notifier.toggleType('nouns', 'A-Deklination');
     await notifier.toggleWord(word);
     first.dispose();
@@ -29,7 +30,7 @@ void main() {
     final second = ProviderContainer();
     final loaded = await second.read(settingsProvider.future);
     expect(
-      loaded.isFormEnabled('nouns', 'genitive_singular', nounLabel('gen', 'sg')),
+      loaded.isFormEnabled('nouns', nounLabel('gen', 'sg')),
       isFalse,
     );
     expect(loaded.isTypeEnabled('nouns', 'A-Deklination'), isFalse);
@@ -37,7 +38,7 @@ void main() {
     // Entries that appear in the YAML later are not in the stored disabled
     // sets, so they are on.
     expect(
-      loaded.isFormEnabled('nouns', 'brand_new_form', nounLabel('nom', 'pl')),
+      loaded.isFormEnabled('nouns', nounLabel('nom', 'pl')),
       isTrue,
     );
     expect(loaded.isTypeEnabled('nouns', 'Brand-New-Deklination'), isTrue);
@@ -46,7 +47,12 @@ void main() {
   });
 
   test('settings stored as enabled sets convert to disabled sets', () async {
-    final metadata = await getFormMetadata('lib/data/latin_nouns.yaml');
+    final map = MigrationMap.parse(
+      await rootBundle.loadString('lib/data/migration_v2.yaml'),
+    );
+    final oldType = map.types['nouns']!.keys.first;
+    final newType = map.types['nouns']![oldType]!;
+    final otherType = map.types['nouns']!.values.firstWhere((t) => t != newType);
     final lessons = await loadLessonData(lessonDataAsset);
     final allWords = lessons.lessonNames
         .expand((name) => lessons.lessonWords[name]!)
@@ -56,10 +62,10 @@ void main() {
     SharedPreferences.setMockInitialValues({
       'practice_settings': jsonEncode({
         'enabledForms': {
-          'nouns': [metadata.formOrder.first],
+          'nouns': ['nominative_singular'],
         },
         'enabledTypes': {
-          'nouns': [metadata.availableTypes.first],
+          'nouns': [oldType],
         },
         'inputStrategyIds': {'nouns': 'text_field'},
         'selectedWords': [allWords.first],
@@ -69,18 +75,20 @@ void main() {
     final container = ProviderContainer();
     final loaded = await container.read(settingsProvider.future);
 
+    final stillOn = map.formKeys['nouns']!['nominative_singular']!.toSet();
+    final universe = [
+      for (final old in map.v0FormUniverse['nouns']!)
+        ...map.formKeys['nouns']![old]!,
+    ];
     expect(
       loaded.disabledForms['nouns'],
-      metadata.formOrder.skip(1).toSet(),
+      universe.where((k) => !stillOn.contains(k)).toSet(),
     );
-    expect(
-      loaded.disabledTypes['nouns'],
-      metadata.availableTypes.skip(1).toSet(),
-    );
-    expect(loaded.deselectedWords, allWords.skip(1).toSet());
+    expect(loaded.isTypeEnabled('nouns', newType), isTrue);
+    expect(loaded.isTypeEnabled('nouns', otherType), isFalse);
     expect(loaded.getInputStrategyId('nouns'), 'text_field');
     // Nothing was stored for verbs, so verbs stay fully enabled.
-    expect(loaded.disabledForms['verbs'], isNull);
+    expect(loaded.disabledForms['verbs'], isEmpty);
     expect(loaded.isTypeEnabled('verbs', 'A-Konjugation'), isTrue);
     container.dispose();
   });

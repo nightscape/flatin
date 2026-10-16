@@ -339,6 +339,16 @@ void main() {
       );
     });
 
+    test('S10: deponent in a file without a genus_verbi axis', () {
+      _expectRejected(
+        'S10',
+        _fixtureWith(
+          '    translation: Turm\n',
+          '    translation: Turm\n    deponent: all\n',
+        ),
+      );
+    });
+
     test('S11: an ambiguous rule without a declared type', () {
       _expectRejected(
         'S11',

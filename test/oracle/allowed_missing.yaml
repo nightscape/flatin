@@ -1,0 +1,49 @@
+# Keys that only one side has. `direction: ours` lists keys Collatinus has and
+# we do not practise; `direction: theirs` lists keys we have and Collatinus
+# does not. Every entry names its keys, in which `*` stands for one segment.
+# A key outside this file fails the run; so does an entry that matches
+# nothing any more.
+
+- direction: ours
+  keys: [imp.fut.pass.*.*]
+  reason: "we practise no future imperative of the passive"
+- direction: ours
+  keys: [imp.fut.akt.*.*]
+  deponent: true
+  reason: "a deponent has the future imperative in -tor only; the table gives it no active imperative to practise"
+- direction: theirs
+  keys: [gerv.*.*.*]
+  deponent: true
+  reason: "Collatinus files the deponent gerundive under the participle, not under a gerundive morph"
+- direction: ours
+  item: audere
+  keys:
+    - ind.praes.pass.*.*
+    - ind.impf.pass.*.*
+    - ind.fut.pass.*.*
+    - konj.praes.pass.*.*
+    - konj.impf.pass.*.*
+    - imp.praes.pass.*.*
+    - inf.praes.pass
+    - part.perf.pass.*.*.*
+  reason: "Collatinus lists the passive and perfect participle forms of audeo that the semi-deponent never uses"
+- direction: theirs
+  item: audere
+  keys: [part.perf.akt.*.*.*]
+  reason: "Collatinus gives audeo no perfect participle; ausus belongs to the semi-deponent perfect"
+- direction: ours
+  item: ire
+  keys: [ind.praes.pass.2.sg, ind.impf.pass.3.sg]
+  reason: "Collatinus lists the impersonal passive of eo (itur), which we do not practise"
+- direction: ours
+  item: abire
+  keys: [ind.praes.pass.2.sg, ind.impf.pass.3.sg]
+  reason: "Collatinus lists the impersonal passive of eo (itur), which we do not practise"
+- direction: ours
+  item: redire
+  keys: [ind.praes.pass.2.sg, ind.impf.pass.3.sg]
+  reason: "Collatinus lists the impersonal passive of eo (itur), which we do not practise"
+- direction: theirs
+  item: ferire
+  keys: [part.fut.akt.*.*.*, part.perf.pass.*.*.*, sup.akk, sup.abl]
+  reason: "Collatinus gives ferio no supine and no participles built on it"

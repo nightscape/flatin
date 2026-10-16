@@ -13,7 +13,7 @@ final class RegularInsteadOfIrregular extends Diagnosis {
 
 /// The answer is another form of the same word.
 final class OtherFormOfWord extends Diagnosis {
-  /// The matching keys, in `form_order` order.
+  /// The matching keys, in formOrder order.
   final List<FormKey> formKeys;
 
   const OtherFormOfWord(this.formKeys);

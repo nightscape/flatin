@@ -3635,6 +3635,32 @@
           "Ablativ Plural"
         ]
       }
+    ],
+    "formLabelKeys": [
+      "nominative_singular",
+      "genitive_singular",
+      "dative_singular",
+      "accusative_singular",
+      "ablative_singular",
+      "vocative_singular",
+      "nominative_plural",
+      "genitive_plural",
+      "dative_plural",
+      "accusative_plural",
+      "ablative_plural",
+      "vocative_plural"
+    ],
+    "formOrderAll": [
+      "nominative_singular",
+      "genitive_singular",
+      "dative_singular",
+      "accusative_singular",
+      "ablative_singular",
+      "nominative_plural",
+      "genitive_plural",
+      "dative_plural",
+      "accusative_plural",
+      "ablative_plural"
     ]
   },
   "lib/data/latin_verbs.yaml": {
@@ -11005,6 +11031,74 @@
           "Plusquamperfekt: 3. Person Plural"
         ]
       }
+    ],
+    "formLabelKeys": [
+      "praesens_first_person_singular",
+      "praesens_second_person_singular",
+      "praesens_third_person_singular",
+      "praesens_first_person_plural",
+      "praesens_second_person_plural",
+      "praesens_third_person_plural",
+      "imperfekt_first_person_singular",
+      "imperfekt_second_person_singular",
+      "imperfekt_third_person_singular",
+      "imperfekt_first_person_plural",
+      "imperfekt_second_person_plural",
+      "imperfekt_third_person_plural",
+      "futur_first_person_singular",
+      "futur_second_person_singular",
+      "futur_third_person_singular",
+      "futur_first_person_plural",
+      "futur_second_person_plural",
+      "futur_third_person_plural",
+      "perfekt_first_person_singular",
+      "perfekt_second_person_singular",
+      "perfekt_third_person_singular",
+      "perfekt_first_person_plural",
+      "perfekt_second_person_plural",
+      "perfekt_third_person_plural",
+      "plusquamperfekt_first_person_singular",
+      "plusquamperfekt_second_person_singular",
+      "plusquamperfekt_third_person_singular",
+      "plusquamperfekt_first_person_plural",
+      "plusquamperfekt_second_person_plural",
+      "plusquamperfekt_third_person_plural",
+      "imperativ_singular",
+      "imperativ_plural"
+    ],
+    "formOrderAll": [
+      "praesens_first_person_singular",
+      "praesens_second_person_singular",
+      "praesens_third_person_singular",
+      "praesens_first_person_plural",
+      "praesens_second_person_plural",
+      "praesens_third_person_plural",
+      "imperfekt_first_person_singular",
+      "imperfekt_second_person_singular",
+      "imperfekt_third_person_singular",
+      "imperfekt_first_person_plural",
+      "imperfekt_second_person_plural",
+      "imperfekt_third_person_plural",
+      "futur_first_person_singular",
+      "futur_second_person_singular",
+      "futur_third_person_singular",
+      "futur_first_person_plural",
+      "futur_second_person_plural",
+      "futur_third_person_plural",
+      "perfekt_first_person_singular",
+      "perfekt_second_person_singular",
+      "perfekt_third_person_singular",
+      "perfekt_first_person_plural",
+      "perfekt_second_person_plural",
+      "perfekt_third_person_plural",
+      "plusquamperfekt_first_person_singular",
+      "plusquamperfekt_second_person_singular",
+      "plusquamperfekt_third_person_singular",
+      "plusquamperfekt_first_person_plural",
+      "plusquamperfekt_second_person_plural",
+      "plusquamperfekt_third_person_plural",
+      "imperativ_singular",
+      "imperativ_plural"
     ]
   }
 }

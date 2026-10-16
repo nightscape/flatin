@@ -1,1173 +1,858 @@
-# Data file identifier
 data_file_id: verbs
 
-# Feature axes: a label reads out one value per axis. The classification
-# screen offers one selector per axis, in this order.
 axes:
-  tempus:
-    name: Tempus
-    values:
-      praes: Präsens
-      impf: Imperfekt
-      fut: Futur I
-      perf: Perfekt
-      plusq: Plusquamperfekt
-      imp: Imperativ
-  person:
-    name: Person
-    values:
-      "1": 1. Person
-      "2": 2. Person
-      "3": 3. Person
-  numerus:
-    name: Numerus
-    values:
-      sg: Singular
-      pl: Plural
+  modus:       {name: Modus, values: {ind: Indikativ, konj: Konjunktiv, imp: Imperativ, inf: Infinitiv, part: Partizip, ger: Gerundium, gerv: Gerundivum, sup: Supinum}, hidden_in_label: [ind]}
+  tempus:      {name: Tempus, values: {praes: Präsens, impf: Imperfekt, fut: Futur I, perf: Perfekt, plusq: Plusquamperfekt, fut2: Futur II}}
+  genus_verbi: {name: Genus verbi, values: {akt: Aktiv, pass: Passiv}, hidden_in_label: [akt]}
+  person:      {name: Person, values: {"1": 1. Person, "2": 2. Person, "3": 3. Person}}
+  numerus:     {name: Numerus, values: {sg: Singular, pl: Plural}}
+  kasus:       {name: Kasus, values: {nom: Nominativ, gen: Genitiv, dat: Dativ, akk: Akkusativ, abl: Ablativ, vok: Vokativ}}
+  genus:       {name: Genus, values: {m: maskulin, f: feminin, n: neutrum}}
 
 label:
-  head: [tempus]
-  tail: [person, numerus]
+  head: [modus, tempus, genus_verbi]
+  tail: [person, numerus, kasus, genus]
   merge_axis: person
 
-# Default values for items
+parts:
+  praesens_1sg:   {label: "1. Person Singular"}
+  infinitiv:      {label: Infinitiv}
+  perfekt_1sg:    {label: Perfekt}
+  supinum:        {label: Supinum}
+  praefix:        {label: Präfix, display: false}
+  praesens_stamm: {label: Präsensstamm, display: false}
+  futurpartizip:  {label: Partizip Futur}
+  ppa_nom:        {label: Partizip Präsens}
+  ppa_gen:        {label: Partizip Präsens Genitiv}
+  gerundiv:       {label: Gerundivum}
+
 defaults:
-  word_form: praesens_first_person_singular
-  base_form_label: Infinitiv
+  given_part: praesens_1sg
+  lemma_part: infinitiv
 
-# Type inference rules: how to infer possible types from word endings
-# Each rule defines a suffix pattern and the types it matches
-# Rules are checked in order - first match wins
 type_inference:
-  # Rules for infinitive (base_form) - checked first
-  infinitive_rules:
-    - suffix: "āre"
-      types:
-        - A-Konjugation
-    - suffix: "are"
-      min_length: 5
-      types:
-        - A-Konjugation
-    - suffix: "ēre"
-      types:
-        - E-Konjugation
-    - suffix: "īre"
-      types:
-        - I-Konjugation
-    - suffix: "ire"
-      min_length: 5
-      types:
-        - I-Konjugation
-    - suffix: "ere"
-      min_length: 5
-      types:
-        - E-Konjugation
-        - Mischkonjugation
-  # Rules for first person singular (word) - checked if infinitive not available
-  first_person_rules:
-    - suffix: "eō"
-      types:
-        - E-Konjugation
-    - suffix: "eo"
-      min_length: 4
-      types:
-        - E-Konjugation
-    - suffix: "iō"
-      types:
-        - I-Konjugation
-        - Mischkonjugation
-    - suffix: "io"
-      min_length: 4
-      types:
-        - I-Konjugation
-        - Mischkonjugation
+  infinitiv:
+    - {suffix: "ārī", types: [A-Konjugation]}
+    - {suffix: "āre", types: [A-Konjugation]}
+    - {suffix: "ērī", types: [E-Konjugation]}
+    - {suffix: "ēre", types: [E-Konjugation]}
+    - {suffix: "īrī", types: [I-Konjugation]}
+    - {suffix: "īre", types: [I-Konjugation]}
+    - {suffix: "are", min_length: 5, types: [A-Konjugation]}
+    - {suffix: "ere", min_length: 5, types: [Konsonantische, Mischkonjugation, E-Konjugation]}
 
-# Pattern definitions for inferring forms from a base word
-# Each pattern defines how to generate all forms from the first_person_singular or base_form
-type_patterns:
+sandhi:
+  t_s:         {end: t, before: [s], replace: s, explain: "t wird vor s zu s"}
+  d_ausfall:   {end: d, before: consonant, replace: "", explain: "d fällt vor Konsonant aus"}
+  d_angleich:  {end: d, before: [f, l, t], replace: double_next, explain: "d gleicht sich dem folgenden Laut an"}
+  a_ausfall:   {end: a, before: vowel, replace: "", explain: "ā fällt vor Vokal aus"}
+  vokal_kurz:  {end: vowel, before: vowel, replace: short, explain: "Vokal vor Vokal wird kurz"}
+  kurz_nt:     {end: vowel, before: [nt, nd], replace: short, explain: "Vokal vor nt/nd wird kurz"}
+  kurz_t:      {end: vowel, before: ["t$"], replace: short, explain: "Vokal vor -t am Wortende wird kurz"}
+  i_ausfall:   {end: i, before: [i], replace: "", explain: "i fällt vor langem ī aus"}
+  i_e_r:       {end: i, before: [r], replace: e, explain: "i wird vor r zu e"}
+  i_e_auslaut: {end: i, before: ["$"], replace: e, explain: "i wird am Wortende zu e"}
+
+types:
+  Perfekt-System:
+    abstract: true
+    stems:
+      perfekt: {from: perfekt_1sg, remove: "ī", display: Perfektstamm}
+    forms:
+      ind.perf.akt.1.sg: "{perfekt}ī"
+      ind.perf.akt.2.sg: "{perfekt}istī"
+      ind.perf.akt.3.sg: "{perfekt}it"
+      ind.perf.akt.1.pl: "{perfekt}imus"
+      ind.perf.akt.2.pl: "{perfekt}istis"
+      ind.perf.akt.3.pl: ["{perfekt}ērunt", "{perfekt}ēre"]
+      ind.plusq.akt.1.sg: "{perfekt}eram"
+      ind.plusq.akt.2.sg: "{perfekt}erās"
+      ind.plusq.akt.3.sg: "{perfekt}erat"
+      ind.plusq.akt.1.pl: "{perfekt}erāmus"
+      ind.plusq.akt.2.pl: "{perfekt}erātis"
+      ind.plusq.akt.3.pl: "{perfekt}erant"
+      ind.fut2.akt.1.sg: "{perfekt}erō"
+      ind.fut2.akt.2.sg: "{perfekt}eris"
+      ind.fut2.akt.3.sg: "{perfekt}erit"
+      ind.fut2.akt.1.pl: "{perfekt}erimus"
+      ind.fut2.akt.2.pl: "{perfekt}eritis"
+      ind.fut2.akt.3.pl: "{perfekt}erint"
+      konj.perf.akt.1.sg: "{perfekt}erim"
+      konj.perf.akt.2.sg: "{perfekt}eris"
+      konj.perf.akt.3.sg: "{perfekt}erit"
+      konj.perf.akt.1.pl: "{perfekt}erimus"
+      konj.perf.akt.2.pl: "{perfekt}eritis"
+      konj.perf.akt.3.pl: "{perfekt}erint"
+      konj.plusq.akt.1.sg: "{perfekt}issem"
+      konj.plusq.akt.2.sg: "{perfekt}issēs"
+      konj.plusq.akt.3.sg: "{perfekt}isset"
+      konj.plusq.akt.1.pl: "{perfekt}issēmus"
+      konj.plusq.akt.2.pl: "{perfekt}issētis"
+      konj.plusq.akt.3.pl: "{perfekt}issent"
+      inf.perf.akt: "{perfekt}isse"
+
+  Verb-Basis:
+    abstract: true
+    inherits_from: Perfekt-System
+    stems:
+      ppp: {from: supinum, remove: "um", display: PPP-Stamm}
+      pfa: {from: futurpartizip, remove: "us", default: "{ppp}ūr", display: PFA-Stamm}
+    delegate:
+      - {name: pfa, type: a-o-Endungen, bind: {stamm: pfa}, set: {modus: part, tempus: fut, genus_verbi: akt}}
+      - {name: ppa, type: 3-Endungen-Partizip, bind: {stamm: ppa, nom_m: ppa_nom, nom_f: ppa_nom, nom_n: ppa_nom}, set: {modus: part, tempus: praes, genus_verbi: akt}}
+      - {name: gerv, type: a-o-Endungen, bind: {stamm: gerv}, set: {modus: gerv}}
+    compose:
+      - match: {modus: inf, tempus: fut, genus_verbi: akt}
+        join: " "
+        parts:
+          - {self: pfa, set: {kasus: akk, numerus: sg, genus: m}}
+          - {lexeme: esse, set: {modus: inf, tempus: praes, genus_verbi: akt}}
+    forms:
+      sup.akk: "{ppp}um"
+      sup.abl: "{ppp}ū"
+
+  Verb-Vollständig:
+    abstract: true
+    inherits_from: Verb-Basis
+    delegate:
+      - {name: ppp, type: a-o-Endungen, bind: {stamm: ppp}, set: {modus: part, tempus: perf, genus_verbi: pass}}
+    compose:
+      - match: {modus: [ind, konj], genus_verbi: pass, tempus: [perf, plusq, fut2]}
+        join: " "
+        parts:
+          - {self: ppp, set: {kasus: nom, genus: m}, pass: [numerus]}
+          - {lexeme: esse, pass: [modus, person, numerus], map: {tempus: {perf: praes, plusq: impf, fut2: fut}, genus_verbi: {pass: akt}}}
+      - match: {modus: inf, tempus: perf, genus_verbi: pass}
+        join: " "
+        parts:
+          - {self: ppp, set: {kasus: akk, numerus: sg, genus: m}}
+          - {lexeme: esse, set: {modus: inf, tempus: praes, genus_verbi: akt}}
+    forms:
+      inf.fut.pass: "{ppp}um īrī"
+
   A-Konjugation:
-    # Präsens
-    praesens_second_person_singular: "{stem}as"
-    praesens_third_person_singular: "{stem}at"
-    praesens_first_person_plural: "{stem}amus"
-    praesens_second_person_plural: "{stem}atis"
-    praesens_third_person_plural: "{stem}ant"
-    # Imperfekt
-    imperfekt_first_person_singular: "{stem}abam"
-    imperfekt_second_person_singular: "{stem}abas"
-    imperfekt_third_person_singular: "{stem}abat"
-    imperfekt_first_person_plural: "{stem}abamus"
-    imperfekt_second_person_plural: "{stem}abatis"
-    imperfekt_third_person_plural: "{stem}abant"
-    # Futur I
-    futur_first_person_singular: "{stem}abo"
-    futur_second_person_singular: "{stem}abis"
-    futur_third_person_singular: "{stem}abit"
-    futur_first_person_plural: "{stem}abimus"
-    futur_second_person_plural: "{stem}abitis"
-    futur_third_person_plural: "{stem}abunt"
-    # Perfekt (regelmäßig: Stamm + āv + Endung)
-    perfekt_first_person_singular: "{stem}avi"
-    perfekt_second_person_singular: "{stem}avisti"
-    perfekt_third_person_singular: "{stem}avit"
-    perfekt_first_person_plural: "{stem}avimus"
-    perfekt_second_person_plural: "{stem}avistis"
-    perfekt_third_person_plural: "{stem}averunt"
-    # Plusquamperfekt
-    plusquamperfekt_first_person_singular: "{stem}averam"
-    plusquamperfekt_second_person_singular: "{stem}averas"
-    plusquamperfekt_third_person_singular: "{stem}averat"
-    plusquamperfekt_first_person_plural: "{stem}averamus"
-    plusquamperfekt_second_person_plural: "{stem}averatis"
-    plusquamperfekt_third_person_plural: "{stem}averant"
-    # Imperativ
-    imperativ_singular: "{stem}a"
-    imperativ_plural: "{stem}ate"
-    # Stem extraction
-    stem_extraction: "remove_suffix:o"
-    infinitive_stem_extraction: "remove_suffix:re,āre"
-    reconstruction_from_alternative_stem: "{stem}o"
-
+    inherits_from: Verb-Vollständig
+    stems:
+      wurzel:   {from: infinitiv, remove: ["āre", "ārī"], display: Wurzel}
+      praesens: {from: praesens_stamm, default: "{wurzel}ā", display: Präsensstamm}
+      perfekt:  {from: perfekt_1sg, remove: "ī", default: "{praesens}v", display: Perfektstamm}
+      ppp:      {from: supinum, remove: "um", default: "{praesens}t", display: PPP-Stamm}
+      ppa:      {template: "{praesens}nt", display: PPA-Stamm}
+      ppa_nom:  {template: "{praesens}ns", display: PPA Nominativ}
+      gerv:     {template: "{praesens}nd", display: Gerundivstamm}
+    sandhi: [a_ausfall, kurz_nt, kurz_t]
+    forms:
+      ind.praes.akt.1.sg: "{praesens}ō"
+      ind.praes.akt.2.sg: "{praesens}s"
+      ind.praes.akt.3.sg: "{praesens}t"
+      ind.praes.akt.1.pl: "{praesens}mus"
+      ind.praes.akt.2.pl: "{praesens}tis"
+      ind.praes.akt.3.pl: "{praesens}nt"
+      ind.impf.akt.1.sg: "{praesens}bam"
+      ind.impf.akt.2.sg: "{praesens}bās"
+      ind.impf.akt.3.sg: "{praesens}bat"
+      ind.impf.akt.1.pl: "{praesens}bāmus"
+      ind.impf.akt.2.pl: "{praesens}bātis"
+      ind.impf.akt.3.pl: "{praesens}bant"
+      ind.fut.akt.1.sg: "{praesens}bō"
+      ind.fut.akt.2.sg: "{praesens}bis"
+      ind.fut.akt.3.sg: "{praesens}bit"
+      ind.fut.akt.1.pl: "{praesens}bimus"
+      ind.fut.akt.2.pl: "{praesens}bitis"
+      ind.fut.akt.3.pl: "{praesens}bunt"
+      konj.praes.akt.1.sg: "{praesens}em"
+      konj.praes.akt.2.sg: "{praesens}ēs"
+      konj.praes.akt.3.sg: "{praesens}et"
+      konj.praes.akt.1.pl: "{praesens}ēmus"
+      konj.praes.akt.2.pl: "{praesens}ētis"
+      konj.praes.akt.3.pl: "{praesens}ent"
+      konj.impf.akt.1.sg: "{praesens}rem"
+      konj.impf.akt.2.sg: "{praesens}rēs"
+      konj.impf.akt.3.sg: "{praesens}ret"
+      konj.impf.akt.1.pl: "{praesens}rēmus"
+      konj.impf.akt.2.pl: "{praesens}rētis"
+      konj.impf.akt.3.pl: "{praesens}rent"
+      imp.praes.akt.2.sg: "{praesens}"
+      imp.praes.akt.2.pl: "{praesens}te"
+      imp.fut.akt.2.sg: "{praesens}tō"
+      imp.fut.akt.3.sg: "{praesens}tō"
+      imp.fut.akt.2.pl: "{praesens}tōte"
+      imp.fut.akt.3.pl: "{praesens}ntō"
+      inf.praes.akt: "{praesens}re"
+      ger.gen: "{praesens}ndī"
+      ger.dat: "{praesens}ndō"
+      ger.akk: "{praesens}ndum"
+      ger.abl: "{praesens}ndō"
+      ind.praes.pass.1.sg: "{praesens}or"
+      ind.praes.pass.2.sg: "{praesens}ris"
+      ind.praes.pass.3.sg: "{praesens}tur"
+      ind.praes.pass.1.pl: "{praesens}mur"
+      ind.praes.pass.2.pl: "{praesens}minī"
+      ind.praes.pass.3.pl: "{praesens}ntur"
+      ind.impf.pass.1.sg: "{praesens}bar"
+      ind.impf.pass.2.sg: "{praesens}bāris"
+      ind.impf.pass.3.sg: "{praesens}bātur"
+      ind.impf.pass.1.pl: "{praesens}bāmur"
+      ind.impf.pass.2.pl: "{praesens}bāminī"
+      ind.impf.pass.3.pl: "{praesens}bantur"
+      ind.fut.pass.1.sg: "{praesens}bor"
+      ind.fut.pass.2.sg: "{praesens}beris"
+      ind.fut.pass.3.sg: "{praesens}bitur"
+      ind.fut.pass.1.pl: "{praesens}bimur"
+      ind.fut.pass.2.pl: "{praesens}biminī"
+      ind.fut.pass.3.pl: "{praesens}buntur"
+      konj.praes.pass.1.sg: "{praesens}er"
+      konj.praes.pass.2.sg: "{praesens}ēris"
+      konj.praes.pass.3.sg: "{praesens}ētur"
+      konj.praes.pass.1.pl: "{praesens}ēmur"
+      konj.praes.pass.2.pl: "{praesens}ēminī"
+      konj.praes.pass.3.pl: "{praesens}entur"
+      konj.impf.pass.1.sg: "{praesens}rer"
+      konj.impf.pass.2.sg: "{praesens}rēris"
+      konj.impf.pass.3.sg: "{praesens}rētur"
+      konj.impf.pass.1.pl: "{praesens}rēmur"
+      konj.impf.pass.2.pl: "{praesens}rēminī"
+      konj.impf.pass.3.pl: "{praesens}rentur"
+      imp.praes.pass.2.sg: "{praesens}re"
+      imp.praes.pass.2.pl: "{praesens}minī"
+      inf.praes.pass: "{praesens}rī"
   E-Konjugation:
-    # Präsens
-    praesens_second_person_singular: "{stem}es"
-    praesens_third_person_singular: "{stem}et"
-    praesens_first_person_plural: "{stem}emus"
-    praesens_second_person_plural: "{stem}etis"
-    praesens_third_person_plural: "{stem}ent"
-    # Imperfekt
-    imperfekt_first_person_singular: "{stem}ebam"
-    imperfekt_second_person_singular: "{stem}ebas"
-    imperfekt_third_person_singular: "{stem}ebat"
-    imperfekt_first_person_plural: "{stem}ebamus"
-    imperfekt_second_person_plural: "{stem}ebatis"
-    imperfekt_third_person_plural: "{stem}ebant"
-    # Futur I
-    futur_first_person_singular: "{stem}ebo"
-    futur_second_person_singular: "{stem}ebis"
-    futur_third_person_singular: "{stem}ebit"
-    futur_first_person_plural: "{stem}ebimus"
-    futur_second_person_plural: "{stem}ebitis"
-    futur_third_person_plural: "{stem}ebunt"
-    # Perfekt (regelmäßig: Stamm + u + Endung)
-    perfekt_first_person_singular: "{stem}ui"
-    perfekt_second_person_singular: "{stem}uisti"
-    perfekt_third_person_singular: "{stem}uit"
-    perfekt_first_person_plural: "{stem}uimus"
-    perfekt_second_person_plural: "{stem}uistis"
-    perfekt_third_person_plural: "{stem}uerunt"
-    # Plusquamperfekt
-    plusquamperfekt_first_person_singular: "{stem}ueram"
-    plusquamperfekt_second_person_singular: "{stem}ueras"
-    plusquamperfekt_third_person_singular: "{stem}uerat"
-    plusquamperfekt_first_person_plural: "{stem}ueramus"
-    plusquamperfekt_second_person_plural: "{stem}ueratis"
-    plusquamperfekt_third_person_plural: "{stem}uerant"
-    # Imperativ
-    imperativ_singular: "{stem}e"
-    imperativ_plural: "{stem}ete"
-    # Stem extraction
-    stem_extraction: "remove_suffix:eo"
-    infinitive_stem_extraction: "remove_suffix:re"
-    reconstruction_from_alternative_stem: "{stem}o"
-
-  E-Konjugation (Stammperfekt):
-    inherits_from: E-Konjugation
-    perfekt_first_person_singular: "{stem}i"
-    perfekt_second_person_singular: "{stem}isti"
-    perfekt_third_person_singular: "{stem}it"
-    perfekt_first_person_plural: "{stem}imus"
-    perfekt_second_person_plural: "{stem}istis"
-    perfekt_third_person_plural: "{stem}erunt"
-    plusquamperfekt_first_person_singular: "{stem}eram"
-    plusquamperfekt_second_person_singular: "{stem}eras"
-    plusquamperfekt_third_person_singular: "{stem}erat"
-    plusquamperfekt_first_person_plural: "{stem}eramus"
-    plusquamperfekt_second_person_plural: "{stem}eratis"
-    plusquamperfekt_third_person_plural: "{stem}erant"
-
-  E-Konjugation (s-Perfekt):
-    inherits_from: E-Konjugation
-    perfekt_first_person_singular: "{stem}si"
-    perfekt_second_person_singular: "{stem}sisti"
-    perfekt_third_person_singular: "{stem}sit"
-    perfekt_first_person_plural: "{stem}simus"
-    perfekt_second_person_plural: "{stem}sistis"
-    perfekt_third_person_plural: "{stem}serunt"
-    plusquamperfekt_first_person_singular: "{stem}seram"
-    plusquamperfekt_second_person_singular: "{stem}seras"
-    plusquamperfekt_third_person_singular: "{stem}serat"
-    plusquamperfekt_first_person_plural: "{stem}seramus"
-    plusquamperfekt_second_person_plural: "{stem}seratis"
-    plusquamperfekt_third_person_plural: "{stem}serant"
-
+    inherits_from: A-Konjugation
+    stems:
+      wurzel:   {from: infinitiv, remove: ["ēre", "ērī"], display: Wurzel}
+      praesens: {template: "{wurzel}ē", display: Präsensstamm}
+      perfekt:  {from: perfekt_1sg, remove: "ī", default: "{wurzel}u", display: Perfektstamm}
+      ppp:      {from: supinum, remove: "um", default: "{wurzel}it", display: PPP-Stamm}
+    sandhi: [vokal_kurz, kurz_nt, kurz_t]
+    forms:
+      konj.praes.akt.1.sg: "{praesens}am"
+      konj.praes.akt.2.sg: "{praesens}ās"
+      konj.praes.akt.3.sg: "{praesens}at"
+      konj.praes.akt.1.pl: "{praesens}āmus"
+      konj.praes.akt.2.pl: "{praesens}ātis"
+      konj.praes.akt.3.pl: "{praesens}ant"
+      konj.praes.pass.1.sg: "{praesens}ar"
+      konj.praes.pass.2.sg: "{praesens}āris"
+      konj.praes.pass.3.sg: "{praesens}ātur"
+      konj.praes.pass.1.pl: "{praesens}āmur"
+      konj.praes.pass.2.pl: "{praesens}āminī"
+      konj.praes.pass.3.pl: "{praesens}antur"
   I-Konjugation:
-    # Präsens
-    praesens_second_person_singular: "{stem}is"
-    praesens_third_person_singular: "{stem}it"
-    praesens_first_person_plural: "{stem}imus"
-    praesens_second_person_plural: "{stem}itis"
-    praesens_third_person_plural: "{stem}iunt"
-    # Imperfekt
-    imperfekt_first_person_singular: "{stem}iebam"
-    imperfekt_second_person_singular: "{stem}iebas"
-    imperfekt_third_person_singular: "{stem}iebat"
-    imperfekt_first_person_plural: "{stem}iebamus"
-    imperfekt_second_person_plural: "{stem}iebatis"
-    imperfekt_third_person_plural: "{stem}iebant"
-    # Futur I
-    futur_first_person_singular: "{stem}iam"
-    futur_second_person_singular: "{stem}ies"
-    futur_third_person_singular: "{stem}iet"
-    futur_first_person_plural: "{stem}iemus"
-    futur_second_person_plural: "{stem}ietis"
-    futur_third_person_plural: "{stem}ient"
-    # Perfekt (regelmäßig: Stamm + īv + Endung)
-    perfekt_first_person_singular: "{stem}ivi"
-    perfekt_second_person_singular: "{stem}ivisti"
-    perfekt_third_person_singular: "{stem}ivit"
-    perfekt_first_person_plural: "{stem}ivimus"
-    perfekt_second_person_plural: "{stem}ivistis"
-    perfekt_third_person_plural: "{stem}iverunt"
-    # Plusquamperfekt
-    plusquamperfekt_first_person_singular: "{stem}iveram"
-    plusquamperfekt_second_person_singular: "{stem}iveras"
-    plusquamperfekt_third_person_singular: "{stem}iverat"
-    plusquamperfekt_first_person_plural: "{stem}iveramus"
-    plusquamperfekt_second_person_plural: "{stem}iveratis"
-    plusquamperfekt_third_person_plural: "{stem}iverant"
-    # Imperativ
-    imperativ_singular: "{stem}i"
-    imperativ_plural: "{stem}ite"
-    # Stem extraction
-    stem_extraction: "remove_suffix:io"
-    infinitive_stem_extraction: "remove_suffix:re"
-    reconstruction_from_alternative_stem: "{stem}o"
-
-  I-Konjugation (Stammperfekt):
-    inherits_from: I-Konjugation
-    perfekt_first_person_singular: "{stem}i"
-    perfekt_second_person_singular: "{stem}isti"
-    perfekt_third_person_singular: "{stem}it"
-    perfekt_first_person_plural: "{stem}imus"
-    perfekt_second_person_plural: "{stem}istis"
-    perfekt_third_person_plural: "{stem}erunt"
-    plusquamperfekt_first_person_singular: "{stem}eram"
-    plusquamperfekt_second_person_singular: "{stem}eras"
-    plusquamperfekt_third_person_singular: "{stem}erat"
-    plusquamperfekt_first_person_plural: "{stem}eramus"
-    plusquamperfekt_second_person_plural: "{stem}eratis"
-    plusquamperfekt_third_person_plural: "{stem}erant"
-
+    inherits_from: Verb-Vollständig
+    stems:
+      wurzel:   {from: infinitiv, remove: ["īre", "īrī"], display: Wurzel}
+      praesens: {template: "{wurzel}ī", display: Präsensstamm}
+      perfekt:  {from: perfekt_1sg, remove: "ī", default: "{praesens}v", display: Perfektstamm}
+      ppp:      {from: supinum, remove: "um", default: "{praesens}t", display: PPP-Stamm}
+      ppa:      {template: "{praesens}ent", display: PPA-Stamm}
+      ppa_nom:  {template: "{praesens}ēns", display: PPA Nominativ}
+      gerv:     {template: "{praesens}end", display: Gerundivstamm}
+    sandhi: [vokal_kurz, kurz_t]
+    forms:
+      ind.praes.akt.1.sg: "{praesens}ō"
+      ind.praes.akt.2.sg: "{praesens}s"
+      ind.praes.akt.3.sg: "{praesens}t"
+      ind.praes.akt.1.pl: "{praesens}mus"
+      ind.praes.akt.2.pl: "{praesens}tis"
+      ind.praes.akt.3.pl: "{praesens}unt"
+      ind.impf.akt.1.sg: "{praesens}ēbam"
+      ind.impf.akt.2.sg: "{praesens}ēbās"
+      ind.impf.akt.3.sg: "{praesens}ēbat"
+      ind.impf.akt.1.pl: "{praesens}ēbāmus"
+      ind.impf.akt.2.pl: "{praesens}ēbātis"
+      ind.impf.akt.3.pl: "{praesens}ēbant"
+      ind.fut.akt.1.sg: "{praesens}am"
+      ind.fut.akt.2.sg: "{praesens}ēs"
+      ind.fut.akt.3.sg: "{praesens}et"
+      ind.fut.akt.1.pl: "{praesens}ēmus"
+      ind.fut.akt.2.pl: "{praesens}ētis"
+      ind.fut.akt.3.pl: "{praesens}ent"
+      konj.praes.akt.1.sg: "{praesens}am"
+      konj.praes.akt.2.sg: "{praesens}ās"
+      konj.praes.akt.3.sg: "{praesens}at"
+      konj.praes.akt.1.pl: "{praesens}āmus"
+      konj.praes.akt.2.pl: "{praesens}ātis"
+      konj.praes.akt.3.pl: "{praesens}ant"
+      konj.impf.akt.1.sg: "{praesens}rem"
+      konj.impf.akt.2.sg: "{praesens}rēs"
+      konj.impf.akt.3.sg: "{praesens}ret"
+      konj.impf.akt.1.pl: "{praesens}rēmus"
+      konj.impf.akt.2.pl: "{praesens}rētis"
+      konj.impf.akt.3.pl: "{praesens}rent"
+      imp.praes.akt.2.sg: "{praesens}"
+      imp.praes.akt.2.pl: "{praesens}te"
+      imp.fut.akt.2.sg: "{praesens}tō"
+      imp.fut.akt.3.sg: "{praesens}tō"
+      imp.fut.akt.2.pl: "{praesens}tōte"
+      imp.fut.akt.3.pl: "{praesens}untō"
+      inf.praes.akt: "{praesens}re"
+      ger.gen: "{praesens}endī"
+      ger.dat: "{praesens}endō"
+      ger.akk: "{praesens}endum"
+      ger.abl: "{praesens}endō"
+      ind.praes.pass.1.sg: "{praesens}or"
+      ind.praes.pass.2.sg: "{praesens}ris"
+      ind.praes.pass.3.sg: "{praesens}tur"
+      ind.praes.pass.1.pl: "{praesens}mur"
+      ind.praes.pass.2.pl: "{praesens}minī"
+      ind.praes.pass.3.pl: "{praesens}untur"
+      ind.impf.pass.1.sg: "{praesens}ēbar"
+      ind.impf.pass.2.sg: "{praesens}ēbāris"
+      ind.impf.pass.3.sg: "{praesens}ēbātur"
+      ind.impf.pass.1.pl: "{praesens}ēbāmur"
+      ind.impf.pass.2.pl: "{praesens}ēbāminī"
+      ind.impf.pass.3.pl: "{praesens}ēbantur"
+      ind.fut.pass.1.sg: "{praesens}ar"
+      ind.fut.pass.2.sg: "{praesens}ēris"
+      ind.fut.pass.3.sg: "{praesens}ētur"
+      ind.fut.pass.1.pl: "{praesens}ēmur"
+      ind.fut.pass.2.pl: "{praesens}ēminī"
+      ind.fut.pass.3.pl: "{praesens}entur"
+      konj.praes.pass.1.sg: "{praesens}ar"
+      konj.praes.pass.2.sg: "{praesens}āris"
+      konj.praes.pass.3.sg: "{praesens}ātur"
+      konj.praes.pass.1.pl: "{praesens}āmur"
+      konj.praes.pass.2.pl: "{praesens}āminī"
+      konj.praes.pass.3.pl: "{praesens}antur"
+      konj.impf.pass.1.sg: "{praesens}rer"
+      konj.impf.pass.2.sg: "{praesens}rēris"
+      konj.impf.pass.3.sg: "{praesens}rētur"
+      konj.impf.pass.1.pl: "{praesens}rēmur"
+      konj.impf.pass.2.pl: "{praesens}rēminī"
+      konj.impf.pass.3.pl: "{praesens}rentur"
+      imp.praes.pass.2.sg: "{praesens}re"
+      imp.praes.pass.2.pl: "{praesens}minī"
+      inf.praes.pass: "{praesens}rī"
   Mischkonjugation:
-    # Präsens
-    praesens_second_person_singular: "{stem}is"
-    praesens_third_person_singular: "{stem}it"
-    praesens_first_person_plural: "{stem}imus"
-    praesens_second_person_plural: "{stem}itis"
-    praesens_third_person_plural: "{stem}iunt"
-    # Imperfekt (wie I-Konjugation)
-    imperfekt_first_person_singular: "{stem}iebam"
-    imperfekt_second_person_singular: "{stem}iebas"
-    imperfekt_third_person_singular: "{stem}iebat"
-    imperfekt_first_person_plural: "{stem}iebamus"
-    imperfekt_second_person_plural: "{stem}iebatis"
-    imperfekt_third_person_plural: "{stem}iebant"
-    # Futur I (wie I-Konjugation)
-    futur_first_person_singular: "{stem}iam"
-    futur_second_person_singular: "{stem}ies"
-    futur_third_person_singular: "{stem}iet"
-    futur_first_person_plural: "{stem}iemus"
-    futur_second_person_plural: "{stem}ietis"
-    futur_third_person_plural: "{stem}ient"
-    # Perfekt: unregelmäßig - muss pro Verb explizit angegeben werden
-    # (capio → cepi, facio → feci, rapio → rapui - kein einheitliches Muster)
-    # Imperativ
-    imperativ_singular: "{stem}e"
-    imperativ_plural: "{stem}ite"
-    # Stem extraction: capio -> cap, capere -> cap
-    stem_extraction: "remove_suffix:io"
-    infinitive_stem_extraction: "remove_suffix:ere"
-    reconstruction_from_alternative_stem: "{stem}io"
+    inherits_from: I-Konjugation
+    stems:
+      wurzel:   {from: praesens_1sg, remove: ["iō", "ior"], display: Wurzel}
+      praesens: {template: "{wurzel}i", display: Präsensstamm}
+      perfekt:  {from: perfekt_1sg, remove: "ī", display: Perfektstamm}
+      ppp:      {from: supinum, remove: "um", display: PPP-Stamm}
+    sandhi: [i_ausfall, i_e_r, i_e_auslaut]
+    forms:
+      inf.praes.pass: "{praesens}ī"
+  Konsonantische:
+    inherits_from: Verb-Vollständig
+    stems:
+      praesens: {from: praesens_1sg, remove: ["ō", "or"], display: Präsensstamm}
+      ppa:      {template: "{praesens}ent", display: PPA-Stamm}
+      ppa_nom:  {template: "{praesens}ēns", display: PPA Nominativ}
+      gerv:     {template: "{praesens}end", display: Gerundivstamm}
+    forms:
+      ind.praes.akt.1.sg: "{praesens}ō"
+      ind.praes.akt.2.sg: "{praesens}is"
+      ind.praes.akt.3.sg: "{praesens}it"
+      ind.praes.akt.1.pl: "{praesens}imus"
+      ind.praes.akt.2.pl: "{praesens}itis"
+      ind.praes.akt.3.pl: "{praesens}unt"
+      ind.impf.akt.1.sg: "{praesens}ēbam"
+      ind.impf.akt.2.sg: "{praesens}ēbās"
+      ind.impf.akt.3.sg: "{praesens}ēbat"
+      ind.impf.akt.1.pl: "{praesens}ēbāmus"
+      ind.impf.akt.2.pl: "{praesens}ēbātis"
+      ind.impf.akt.3.pl: "{praesens}ēbant"
+      ind.fut.akt.1.sg: "{praesens}am"
+      ind.fut.akt.2.sg: "{praesens}ēs"
+      ind.fut.akt.3.sg: "{praesens}et"
+      ind.fut.akt.1.pl: "{praesens}ēmus"
+      ind.fut.akt.2.pl: "{praesens}ētis"
+      ind.fut.akt.3.pl: "{praesens}ent"
+      konj.praes.akt.1.sg: "{praesens}am"
+      konj.praes.akt.2.sg: "{praesens}ās"
+      konj.praes.akt.3.sg: "{praesens}at"
+      konj.praes.akt.1.pl: "{praesens}āmus"
+      konj.praes.akt.2.pl: "{praesens}ātis"
+      konj.praes.akt.3.pl: "{praesens}ant"
+      konj.impf.akt.1.sg: "{praesens}erem"
+      konj.impf.akt.2.sg: "{praesens}erēs"
+      konj.impf.akt.3.sg: "{praesens}eret"
+      konj.impf.akt.1.pl: "{praesens}erēmus"
+      konj.impf.akt.2.pl: "{praesens}erētis"
+      konj.impf.akt.3.pl: "{praesens}erent"
+      imp.praes.akt.2.sg: "{praesens}e"
+      imp.praes.akt.2.pl: "{praesens}ite"
+      imp.fut.akt.2.sg: "{praesens}itō"
+      imp.fut.akt.3.sg: "{praesens}itō"
+      imp.fut.akt.2.pl: "{praesens}itōte"
+      imp.fut.akt.3.pl: "{praesens}untō"
+      inf.praes.akt: "{praesens}ere"
+      ger.gen: "{praesens}endī"
+      ger.dat: "{praesens}endō"
+      ger.akk: "{praesens}endum"
+      ger.abl: "{praesens}endō"
+      ind.praes.pass.1.sg: "{praesens}or"
+      ind.praes.pass.2.sg: "{praesens}eris"
+      ind.praes.pass.3.sg: "{praesens}itur"
+      ind.praes.pass.1.pl: "{praesens}imur"
+      ind.praes.pass.2.pl: "{praesens}iminī"
+      ind.praes.pass.3.pl: "{praesens}untur"
+      ind.impf.pass.1.sg: "{praesens}ēbar"
+      ind.impf.pass.2.sg: "{praesens}ēbāris"
+      ind.impf.pass.3.sg: "{praesens}ēbātur"
+      ind.impf.pass.1.pl: "{praesens}ēbāmur"
+      ind.impf.pass.2.pl: "{praesens}ēbāminī"
+      ind.impf.pass.3.pl: "{praesens}ēbantur"
+      ind.fut.pass.1.sg: "{praesens}ar"
+      ind.fut.pass.2.sg: "{praesens}ēris"
+      ind.fut.pass.3.sg: "{praesens}ētur"
+      ind.fut.pass.1.pl: "{praesens}ēmur"
+      ind.fut.pass.2.pl: "{praesens}ēminī"
+      ind.fut.pass.3.pl: "{praesens}entur"
+      konj.praes.pass.1.sg: "{praesens}ar"
+      konj.praes.pass.2.sg: "{praesens}āris"
+      konj.praes.pass.3.sg: "{praesens}ātur"
+      konj.praes.pass.1.pl: "{praesens}āmur"
+      konj.praes.pass.2.pl: "{praesens}āminī"
+      konj.praes.pass.3.pl: "{praesens}antur"
+      konj.impf.pass.1.sg: "{praesens}erer"
+      konj.impf.pass.2.sg: "{praesens}erēris"
+      konj.impf.pass.3.sg: "{praesens}erētur"
+      konj.impf.pass.1.pl: "{praesens}erēmur"
+      konj.impf.pass.2.pl: "{praesens}erēminī"
+      konj.impf.pass.3.pl: "{praesens}erentur"
+      imp.praes.pass.2.sg: "{praesens}ere"
+      imp.praes.pass.2.pl: "{praesens}iminī"
+      inf.praes.pass: "{praesens}ī"
 
-  K-Konjugation:
-    # Konsonantische Konjugation (agō, agere)
-    # Präsens
-    praesens_second_person_singular: "{stem}is"
-    praesens_third_person_singular: "{stem}it"
-    praesens_first_person_plural: "{stem}imus"
-    praesens_second_person_plural: "{stem}itis"
-    praesens_third_person_plural: "{stem}unt"
-    # Imperfekt
-    imperfekt_first_person_singular: "{stem}ebam"
-    imperfekt_second_person_singular: "{stem}ebas"
-    imperfekt_third_person_singular: "{stem}ebat"
-    imperfekt_first_person_plural: "{stem}ebamus"
-    imperfekt_second_person_plural: "{stem}ebatis"
-    imperfekt_third_person_plural: "{stem}ebant"
-    # Futur I
-    futur_first_person_singular: "{stem}am"
-    futur_second_person_singular: "{stem}es"
-    futur_third_person_singular: "{stem}et"
-    futur_first_person_plural: "{stem}emus"
-    futur_second_person_plural: "{stem}etis"
-    futur_third_person_plural: "{stem}ent"
-    # Perfekt: unregelmäßig - muss pro Verb explizit angegeben werden
-    # (ago → egi, scribo → scripsi, lego → legi - kein einheitliches Muster)
-    # Imperativ
-    imperativ_singular: "{stem}e"
-    imperativ_plural: "{stem}ite"
-    # Stem extraction: ago -> ag, agere -> ag
-    stem_extraction: "remove_suffix:o"
-    infinitive_stem_extraction: "remove_suffix:ere"
-    reconstruction_from_alternative_stem: "{stem}o"
+  esse-Typ:
+    inherits_from: Perfekt-System
+    stems:
+      pfa: {from: futurpartizip, remove: "us", display: PFA-Stamm}
+    delegate:
+      - {name: pfa, type: a-o-Endungen, bind: {stamm: pfa}, set: {modus: part, tempus: fut, genus_verbi: akt}}
 
-# Form key -> its feature bundle.
-form_labels:
-  praesens_first_person_singular: {tempus: praes, person: "1", numerus: sg}
-  praesens_second_person_singular: {tempus: praes, person: "2", numerus: sg}
-  praesens_third_person_singular: {tempus: praes, person: "3", numerus: sg}
-  praesens_first_person_plural: {tempus: praes, person: "1", numerus: pl}
-  praesens_second_person_plural: {tempus: praes, person: "2", numerus: pl}
-  praesens_third_person_plural: {tempus: praes, person: "3", numerus: pl}
-  imperfekt_first_person_singular: {tempus: impf, person: "1", numerus: sg}
-  imperfekt_second_person_singular: {tempus: impf, person: "2", numerus: sg}
-  imperfekt_third_person_singular: {tempus: impf, person: "3", numerus: sg}
-  imperfekt_first_person_plural: {tempus: impf, person: "1", numerus: pl}
-  imperfekt_second_person_plural: {tempus: impf, person: "2", numerus: pl}
-  imperfekt_third_person_plural: {tempus: impf, person: "3", numerus: pl}
-  futur_first_person_singular: {tempus: fut, person: "1", numerus: sg}
-  futur_second_person_singular: {tempus: fut, person: "2", numerus: sg}
-  futur_third_person_singular: {tempus: fut, person: "3", numerus: sg}
-  futur_first_person_plural: {tempus: fut, person: "1", numerus: pl}
-  futur_second_person_plural: {tempus: fut, person: "2", numerus: pl}
-  futur_third_person_plural: {tempus: fut, person: "3", numerus: pl}
-  perfekt_first_person_singular: {tempus: perf, person: "1", numerus: sg}
-  perfekt_second_person_singular: {tempus: perf, person: "2", numerus: sg}
-  perfekt_third_person_singular: {tempus: perf, person: "3", numerus: sg}
-  perfekt_first_person_plural: {tempus: perf, person: "1", numerus: pl}
-  perfekt_second_person_plural: {tempus: perf, person: "2", numerus: pl}
-  perfekt_third_person_plural: {tempus: perf, person: "3", numerus: pl}
-  plusquamperfekt_first_person_singular: {tempus: plusq, person: "1", numerus: sg}
-  plusquamperfekt_second_person_singular: {tempus: plusq, person: "2", numerus: sg}
-  plusquamperfekt_third_person_singular: {tempus: plusq, person: "3", numerus: sg}
-  plusquamperfekt_first_person_plural: {tempus: plusq, person: "1", numerus: pl}
-  plusquamperfekt_second_person_plural: {tempus: plusq, person: "2", numerus: pl}
-  plusquamperfekt_third_person_plural: {tempus: plusq, person: "3", numerus: pl}
-  imperativ_singular: {tempus: imp, person: "2", numerus: sg}
-  imperativ_plural: {tempus: imp, person: "2", numerus: pl}
+  Unregelmäßig:
+    inherits_from: Verb-Basis
+    stems:
+      ppa:     {from: ppa_gen, remove: "is", display: PPA-Stamm}
+      ppa_nom: {from: ppa_nom, remove: "", display: PPA Nominativ}
+      gerv:    {from: gerundiv, remove: "us", display: Gerundivstamm}
 
-form_order:
-  - praesens_first_person_singular
-  - praesens_second_person_singular
-  - praesens_third_person_singular
-  - praesens_first_person_plural
-  - praesens_second_person_plural
-  - praesens_third_person_plural
-  - imperfekt_first_person_singular
-  - imperfekt_second_person_singular
-  - imperfekt_third_person_singular
-  - imperfekt_first_person_plural
-  - imperfekt_second_person_plural
-  - imperfekt_third_person_plural
-  - futur_first_person_singular
-  - futur_second_person_singular
-  - futur_third_person_singular
-  - futur_first_person_plural
-  - futur_second_person_plural
-  - futur_third_person_plural
-  - perfekt_first_person_singular
-  - perfekt_second_person_singular
-  - perfekt_third_person_singular
-  - perfekt_first_person_plural
-  - perfekt_second_person_plural
-  - perfekt_third_person_plural
-  - plusquamperfekt_first_person_singular
-  - plusquamperfekt_second_person_singular
-  - plusquamperfekt_third_person_singular
-  - plusquamperfekt_first_person_plural
-  - plusquamperfekt_second_person_plural
-  - plusquamperfekt_third_person_plural
-  - imperativ_singular
-  - imperativ_plural
 
 items:
-  # Items with verify_inference: true carry their inferred forms explicitly as
-  # regression goldens for test/form_inference_test.dart.
-  - type: A-Konjugation
-    translation: lieben, gern haben
-    base_form: amāre
-    verify_inference: true
-    forms:
-      praesens_first_person_singular: amo
-      praesens_second_person_singular: amas
-      praesens_third_person_singular: amat
-      praesens_first_person_plural: amamus
-      praesens_second_person_plural: amatis
-      praesens_third_person_plural: amant
-      imperfekt_first_person_singular: amabam
-      imperfekt_second_person_singular: amabas
-      imperfekt_third_person_singular: amabat
-      imperfekt_first_person_plural: amabamus
-      imperfekt_second_person_plural: amabatis
-      imperfekt_third_person_plural: amabant
-      futur_first_person_singular: amabo
-      futur_second_person_singular: amabis
-      futur_third_person_singular: amabit
-      futur_first_person_plural: amabimus
-      futur_second_person_plural: amabitis
-      futur_third_person_plural: amabunt
-      perfekt_first_person_singular: amavi
-      perfekt_second_person_singular: amavisti
-      perfekt_third_person_singular: amavit
-      perfekt_first_person_plural: amavimus
-      perfekt_second_person_plural: amavistis
-      perfekt_third_person_plural: amaverunt
-      plusquamperfekt_first_person_singular: amaveram
-      plusquamperfekt_second_person_singular: amaveras
-      plusquamperfekt_third_person_singular: amaverat
-      plusquamperfekt_first_person_plural: amaveramus
-      plusquamperfekt_second_person_plural: amaveratis
-      plusquamperfekt_third_person_plural: amaverant
-      imperativ_singular: ama
-      imperativ_plural: amate
-  - type: E-Konjugation
-    translation: haben, halten
-    base_form: habēre
-    verify_inference: true
-    forms:
-      praesens_first_person_singular: habeo
-      praesens_second_person_singular: habes
-      praesens_third_person_singular: habet
-      praesens_first_person_plural: habemus
-      praesens_second_person_plural: habetis
-      praesens_third_person_plural: habent
-      imperfekt_first_person_singular: habebam
-      imperfekt_second_person_singular: habebas
-      imperfekt_third_person_singular: habebat
-      imperfekt_first_person_plural: habebamus
-      imperfekt_second_person_plural: habebatis
-      imperfekt_third_person_plural: habebant
-      futur_first_person_singular: habebo
-      futur_second_person_singular: habebis
-      futur_third_person_singular: habebit
-      futur_first_person_plural: habebimus
-      futur_second_person_plural: habebitis
-      futur_third_person_plural: habebunt
-      perfekt_first_person_singular: habui
-      perfekt_second_person_singular: habuisti
-      perfekt_third_person_singular: habuit
-      perfekt_first_person_plural: habuimus
-      perfekt_second_person_plural: habuistis
-      perfekt_third_person_plural: habuerunt
-      plusquamperfekt_first_person_singular: habueram
-      plusquamperfekt_second_person_singular: habueras
-      plusquamperfekt_third_person_singular: habuerat
-      plusquamperfekt_first_person_plural: habueramus
-      plusquamperfekt_second_person_plural: habueratis
-      plusquamperfekt_third_person_plural: habuerant
-      imperativ_singular: habe
-      imperativ_plural: habete
-  - type: I-Konjugation
-    translation: hören
-    base_form: audīre
-    verify_inference: true
-    forms:
-      praesens_first_person_singular: audio
-      praesens_second_person_singular: audis
-      praesens_third_person_singular: audit
-      praesens_first_person_plural: audimus
-      praesens_second_person_plural: auditis
-      praesens_third_person_plural: audiunt
-      imperfekt_first_person_singular: audiebam
-      imperfekt_second_person_singular: audiebas
-      imperfekt_third_person_singular: audiebat
-      imperfekt_first_person_plural: audiebamus
-      imperfekt_second_person_plural: audiebatis
-      imperfekt_third_person_plural: audiebant
-      futur_first_person_singular: audiam
-      futur_second_person_singular: audies
-      futur_third_person_singular: audiet
-      futur_first_person_plural: audiemus
-      futur_second_person_plural: audietis
-      futur_third_person_plural: audient
-      perfekt_first_person_singular: audivi
-      perfekt_second_person_singular: audivisti
-      perfekt_third_person_singular: audivit
-      perfekt_first_person_plural: audivimus
-      perfekt_second_person_plural: audivistis
-      perfekt_third_person_plural: audiverunt
-      plusquamperfekt_first_person_singular: audiveram
-      plusquamperfekt_second_person_singular: audiveras
-      plusquamperfekt_third_person_singular: audiverat
-      plusquamperfekt_first_person_plural: audiveramus
-      plusquamperfekt_second_person_plural: audiveratis
-      plusquamperfekt_third_person_plural: audiverant
-      imperativ_singular: audi
-      imperativ_plural: audite
+  - translation: "lieben, gern haben"
+    parts: {infinitiv: "amāre", praesens_1sg: "amō"}
+  - translation: "haben, halten"
+    parts: {infinitiv: "habēre", praesens_1sg: "habeō"}
+  - translation: "hören"
+    parts: {infinitiv: "audīre", praesens_1sg: "audiō"}
   - type: Mischkonjugation
-    translation: nehmen
-    base_form: capere
-    word: capio
-    verify_inference: true
-    forms:
-      praesens_first_person_singular: capio
-      praesens_second_person_singular: capis
-      praesens_third_person_singular: capit
-      praesens_first_person_plural: capimus
-      praesens_second_person_plural: capitis
-      praesens_third_person_plural: capiunt
-      imperfekt_first_person_singular: capiebam
-      imperfekt_second_person_singular: capiebas
-      imperfekt_third_person_singular: capiebat
-      imperfekt_first_person_plural: capiebamus
-      imperfekt_second_person_plural: capiebatis
-      imperfekt_third_person_plural: capiebant
-      futur_first_person_singular: capiam
-      futur_second_person_singular: capies
-      futur_third_person_singular: capiet
-      futur_first_person_plural: capiemus
-      futur_second_person_plural: capietis
-      futur_third_person_plural: capient
-      perfekt_first_person_singular: cepi
-      perfekt_second_person_singular: cepisti
-      perfekt_third_person_singular: cepit
-      perfekt_first_person_plural: cepimus
-      perfekt_second_person_plural: cepistis
-      perfekt_third_person_plural: ceperunt
-      plusquamperfekt_first_person_singular: ceperam
-      plusquamperfekt_second_person_singular: ceperas
-      plusquamperfekt_third_person_singular: ceperat
-      plusquamperfekt_first_person_plural: ceperamus
-      plusquamperfekt_second_person_plural: ceperatis
-      plusquamperfekt_third_person_plural: ceperant
-      imperativ_singular: cape
-      imperativ_plural: capite
-
-  - type: I-Konjugation (Stammperfekt)
-    translation: kommen
-    base_form: venīre
-    verify_inference: true
-    forms:
-      praesens_first_person_singular: venio
-      praesens_second_person_singular: venis
-      praesens_third_person_singular: venit
-      praesens_first_person_plural: venimus
-      praesens_second_person_plural: venitis
-      praesens_third_person_plural: veniunt
-      imperfekt_first_person_singular: veniebam
-      imperfekt_second_person_singular: veniebas
-      imperfekt_third_person_singular: veniebat
-      imperfekt_first_person_plural: veniebamus
-      imperfekt_second_person_plural: veniebatis
-      imperfekt_third_person_plural: veniebant
-      futur_first_person_singular: veniam
-      futur_second_person_singular: venies
-      futur_third_person_singular: veniet
-      futur_first_person_plural: veniemus
-      futur_second_person_plural: venietis
-      futur_third_person_plural: venient
-      perfekt_first_person_singular: veni
-      perfekt_second_person_singular: venisti
-      perfekt_third_person_singular: venit
-      perfekt_first_person_plural: venimus
-      perfekt_second_person_plural: venistis
-      perfekt_third_person_plural: venerunt
-      plusquamperfekt_first_person_singular: veneram
-      plusquamperfekt_second_person_singular: veneras
-      plusquamperfekt_third_person_singular: venerat
-      plusquamperfekt_first_person_plural: veneramus
-      plusquamperfekt_second_person_plural: veneratis
-      plusquamperfekt_third_person_plural: venerant
-      imperativ_singular: veni
-      imperativ_plural: venite
+    translation: "nehmen"
+    parts: {infinitiv: "capere", praesens_1sg: "capiō", perfekt_1sg: "cēpī", supinum: "captum"}
+  - translation: "kommen"
+    parts: {infinitiv: "venīre", praesens_1sg: "veniō", perfekt_1sg: "vēnī", supinum: "ventum"}
+  - translation: "eintreten, betreten"
+    parts: {infinitiv: "intrāre", praesens_1sg: "intrō"}
+  - translation: "erscheinen, auftauchen, sich zeigen"
+    parts: {infinitiv: "appārēre", praesens_1sg: "appāreō"}
+  - translation: "bauen, erbauen"
+    parts: {infinitiv: "aedificāre", praesens_1sg: "aedificō"}
+  - translation: "gehen, spazieren gehen"
+    parts: {infinitiv: "ambulāre", praesens_1sg: "ambulō"}
+  - translation: "herbeibringen, hintragen"
+    parts: {infinitiv: "apportāre", praesens_1sg: "apportō"}
+  - translation: "sich nähern, herankommen"
+    parts: {infinitiv: "appropinquāre", praesens_1sg: "appropinquō"}
+  - translation: "zögern, sich nicht beeilen"
+    parts: {infinitiv: "cessāre", praesens_1sg: "cessō"}
+  - translation: "rufen, schreien"
+    parts: {infinitiv: "clāmāre", praesens_1sg: "clāmō"}
+  - translation: "zusammenkommen, sich versammeln"
+    parts: {infinitiv: "convenīre", praesens_1sg: "conveniō", perfekt_1sg: "convēnī", supinum: "conventum"}
+  - translation: "speisen, essen"
+    parts: {infinitiv: "cēnāre", praesens_1sg: "cēnō"}
+  - translation: "sorgen (für), sich kümmern (um)"
+    parts: {infinitiv: "cūrāre", praesens_1sg: "cūrō"}
   - type: A-Konjugation
-    translation: eintreten, betreten
-    base_form: intrāre
-    word: intro
-    verify_inference: true
+    translation: "geben, schenken"
+    parts: {infinitiv: "dare", praesens_1sg: "dō", perfekt_1sg: "dedī", supinum: "datum", praesens_stamm: "da"}
+  - translation: "schlafen"
+    parts: {infinitiv: "dormīre", praesens_1sg: "dormiō"}
+  - translation: "(jmd.) erfreuen, unterhalten"
+    parts: {infinitiv: "dēlectāre", praesens_1sg: "dēlectō"}
+  - translation: "wünschen, verlangen; vermissen"
+    parts: {infinitiv: "dēsīderāre", praesens_1sg: "dēsīderō"}
+  - translation: "erklären, darlegen"
+    parts: {infinitiv: "explicāre", praesens_1sg: "explicō"}
+  - translation: "warten, erwarten"
+    parts: {infinitiv: "exspectāre", praesens_1sg: "exspectō"}
+  - translation: "in die Flucht schlagen, vertreiben"
+    parts: {infinitiv: "fugāre", praesens_1sg: "fugō"}
+  - translation: "sich freuen"
+    parts: {infinitiv: "gaudēre", praesens_1sg: "gaudeō", supinum: "gāvīsum"}
+    deponent: ["perf", "plusq", "fut2"]
+  - translation: "befehlen, (be)herrschen"
+    parts: {infinitiv: "imperāre", praesens_1sg: "imperō"}
+  - translation: "arbeiten, sich anstrengen"
+    parts: {infinitiv: "labōrāre", praesens_1sg: "labōrō"}
+  - translation: "bleiben, warten; erwarten"
+    parts: {infinitiv: "manēre", praesens_1sg: "maneō", perfekt_1sg: "mānsī", supinum: "mānsum"}
+  - translation: "töten"
+    parts: {infinitiv: "necāre", praesens_1sg: "necō"}
+  - translation: "bereiten, vorbereiten, zubereiten"
+    parts: {infinitiv: "parāre", praesens_1sg: "parō"}
+  - translation: "gefallen"
+    parts: {infinitiv: "placēre", praesens_1sg: "placeō"}
+  - translation: "tragen, bringen"
+    parts: {infinitiv: "portāre", praesens_1sg: "portō"}
+  - translation: "(etwas) für gut befinden; prüfen, beweisen"
+    parts: {infinitiv: "probāre", praesens_1sg: "probō"}
+  - translation: "verhindern, hindern; abhalten"
+    parts: {infinitiv: "prohibēre", praesens_1sg: "prohibeō"}
+  - translation: "eilen, sich beeilen"
+    parts: {infinitiv: "properāre", praesens_1sg: "properō"}
+  - translation: "gehorchen"
+    parts: {infinitiv: "pārēre", praesens_1sg: "pāreō"}
+  - translation: "kämpfen, streiten"
+    parts: {infinitiv: "pūgnāre", praesens_1sg: "pūgnō"}
+  - translation: "antworten, erwidern"
+    parts: {infinitiv: "respondēre", praesens_1sg: "respondeō", perfekt_1sg: "respondī", supinum: "respōnsum"}
+  - translation: "fragen; bitten"
+    parts: {infinitiv: "rogāre", praesens_1sg: "rogō"}
+  - translation: "König sein, herrschen"
+    parts: {infinitiv: "rēgnāre", praesens_1sg: "rēgnō"}
+  - translation: "lachen; über etw. lachen"
+    parts: {infinitiv: "rīdēre", praesens_1sg: "rīdeō", perfekt_1sg: "rīsī", supinum: "rīsum"}
+  - translation: "opfern"
+    parts: {infinitiv: "sacrificāre", praesens_1sg: "sacrificō"}
+  - translation: "grüßen, begrüßen"
+    parts: {infinitiv: "salūtāre", praesens_1sg: "salūtō"}
+  - translation: "wissen, kennen, verstehen"
+    parts: {infinitiv: "scīre", praesens_1sg: "sciō"}
+  - translation: "sitzen"
+    parts: {infinitiv: "sedēre", praesens_1sg: "sedeō", perfekt_1sg: "sēdī", supinum: "sessum"}
+  - translation: "schützen, retten, bewahren"
+    parts: {infinitiv: "servāre", praesens_1sg: "servō"}
+  - translation: "dienen"
+    parts: {infinitiv: "servīre", praesens_1sg: "serviō"}
+  - translation: "anschauen, betrachten"
+    parts: {infinitiv: "spectāre", praesens_1sg: "spectō"}
+  - translation: "staunen, verblüfft sein"
+    parts: {infinitiv: "stupēre", praesens_1sg: "stupeō"}
+  - translation: "übertreffen, überwinden, besiegen"
+    parts: {infinitiv: "superāre", praesens_1sg: "superō"}
+  - translation: "schweigen, still sein"
+    parts: {infinitiv: "tacēre", praesens_1sg: "taceō"}
+  - translation: "angreifen; versuchen, prüfen"
+    parts: {infinitiv: "temptāre", praesens_1sg: "temptō"}
+  - translation: "(sich) fürchten, Angst haben"
+    parts: {infinitiv: "timēre", praesens_1sg: "timeō"}
+  - translation: "sehen"
+    parts: {infinitiv: "vidēre", praesens_1sg: "videō", perfekt_1sg: "vīdī", supinum: "vīsum"}
+  - translation: "rufen, nennen"
+    parts: {infinitiv: "vocāre", praesens_1sg: "vocō"}
+  - translation: "besuchen"
+    parts: {infinitiv: "vīsitāre", praesens_1sg: "vīsitō"}
+  - type: Konsonantische
+    translation: "treiben, handeln, tun"
+    parts: {infinitiv: "agere", praesens_1sg: "agō", perfekt_1sg: "ēgī", supinum: "āctum"}
+  - type: Konsonantische
+    translation: "sagen, sprechen"
+    parts: {infinitiv: "dīcere", praesens_1sg: "dīcō", perfekt_1sg: "dīxī", supinum: "dictum"}
     forms:
-      praesens_first_person_singular: intro
-      praesens_second_person_singular: intras
-      praesens_third_person_singular: intrat
-      praesens_first_person_plural: intramus
-      praesens_second_person_plural: intratis
-      praesens_third_person_plural: intrant
-      imperfekt_first_person_singular: intrabam
-      imperfekt_second_person_singular: intrabas
-      imperfekt_third_person_singular: intrabat
-      imperfekt_first_person_plural: intrabamus
-      imperfekt_second_person_plural: intrabatis
-      imperfekt_third_person_plural: intrabant
-      futur_first_person_singular: intrabo
-      futur_second_person_singular: intrabis
-      futur_third_person_singular: intrabit
-      futur_first_person_plural: intrabimus
-      futur_second_person_plural: intrabitis
-      futur_third_person_plural: intrabunt
-      perfekt_first_person_singular: intravi
-      perfekt_second_person_singular: intravisti
-      perfekt_third_person_singular: intravit
-      perfekt_first_person_plural: intravimus
-      perfekt_second_person_plural: intravistis
-      perfekt_third_person_plural: intraverunt
-      plusquamperfekt_first_person_singular: intraveram
-      plusquamperfekt_second_person_singular: intraveras
-      plusquamperfekt_third_person_singular: intraverat
-      plusquamperfekt_first_person_plural: intraveramus
-      plusquamperfekt_second_person_plural: intraveratis
-      plusquamperfekt_third_person_plural: intraverant
-      imperativ_singular: intra
-      imperativ_plural: intrate
-  - type: E-Konjugation
-    translation: erscheinen, auftauchen, sich zeigen
-    base_form: appārēre
-    verify_inference: true
+      imp.praes.akt.2.sg: "dīc"
+  - type: Konsonantische
+    translation: "führen, ziehen"
+    parts: {infinitiv: "dūcere", praesens_1sg: "dūcō", perfekt_1sg: "dūxī", supinum: "ductum"}
     forms:
-      praesens_first_person_singular: appareo
-      praesens_second_person_singular: appares
-      praesens_third_person_singular: apparet
-      praesens_first_person_plural: apparemus
-      praesens_second_person_plural: apparetis
-      praesens_third_person_plural: apparent
-      imperfekt_first_person_singular: apparebam
-      imperfekt_second_person_singular: apparebas
-      imperfekt_third_person_singular: apparebat
-      imperfekt_first_person_plural: apparebamus
-      imperfekt_second_person_plural: apparebatis
-      imperfekt_third_person_plural: apparebant
-      futur_first_person_singular: apparebo
-      futur_second_person_singular: apparebis
-      futur_third_person_singular: apparebit
-      futur_first_person_plural: apparebimus
-      futur_second_person_plural: apparebitis
-      futur_third_person_plural: apparebunt
-      perfekt_first_person_singular: apparui
-      perfekt_second_person_singular: apparuisti
-      perfekt_third_person_singular: apparuit
-      perfekt_first_person_plural: apparuimus
-      perfekt_second_person_plural: apparuistis
-      perfekt_third_person_plural: apparuerunt
-      plusquamperfekt_first_person_singular: apparueram
-      plusquamperfekt_second_person_singular: apparueras
-      plusquamperfekt_third_person_singular: apparuerat
-      plusquamperfekt_first_person_plural: apparueramus
-      plusquamperfekt_second_person_plural: apparueratis
-      plusquamperfekt_third_person_plural: apparuerant
-      imperativ_singular: appare
-      imperativ_plural: apparete
-  - translation: bauen, erbauen
-    base_form: aedificāre
-  - translation: gehen, spazieren gehen
-    base_form: ambulāre
-  - translation: herbeibringen, hintragen
-    base_form: apportāre
-  - translation: sich nähern, herankommen
-    base_form: appropinquāre
-  - translation: zögern, sich nicht beeilen
-    base_form: cessāre
-  - translation: rufen, schreien
-    base_form: clāmāre
-  - type: I-Konjugation (Stammperfekt)
-    translation: zusammenkommen, sich versammeln
-    base_form: convenīre
-  - translation: speisen, essen
-    base_form: cēnāre
-  - translation: sorgen (für), sich kümmern (um)
-    base_form: cūrāre
-  - type: A-Konjugation
-    translation: geben, schenken
-    base_form: dare
+      imp.praes.akt.2.sg: "dūc"
+  - type: Konsonantische
+    translation: "schreiben"
+    parts: {infinitiv: "scrībere", praesens_1sg: "scrībō", perfekt_1sg: "scrīpsī", supinum: "scrīptum"}
+  - type: Konsonantische
+    translation: "lesen; sammeln, auswählen"
+    parts: {infinitiv: "legere", praesens_1sg: "legō", perfekt_1sg: "lēgī", supinum: "lēctum"}
+  - type: Konsonantische
+    translation: "schicken, senden; loslassen"
+    parts: {infinitiv: "mittere", praesens_1sg: "mittō", perfekt_1sg: "mīsī", supinum: "missum"}
+  - type: Konsonantische
+    translation: "siegen, besiegen"
+    parts: {infinitiv: "vincere", praesens_1sg: "vincō", perfekt_1sg: "vīcī", supinum: "victum"}
+  - type: Konsonantische
+    translation: "setzen, stellen, legen"
+    parts: {infinitiv: "pōnere", praesens_1sg: "pōnō", perfekt_1sg: "posuī", supinum: "positum"}
+  - id: ferre
+    type: Unregelmäßig
+    translation: "tragen; bringen; ertragen"
+    parts: {infinitiv: "ferre", praesens_1sg: "ferō", perfekt_1sg: "tulī", supinum: "lātum", ppa_nom: "ferēns", ppa_gen: "ferentis", gerundiv: "ferendus"}
     forms:
-      perfekt_first_person_singular: dedi
-      perfekt_second_person_singular: dedisti
-      perfekt_third_person_singular: dedit
-      perfekt_first_person_plural: dedimus
-      perfekt_second_person_plural: dedistis
-      perfekt_third_person_plural: dederunt
-      plusquamperfekt_first_person_singular: dederam
-      plusquamperfekt_second_person_singular: dederas
-      plusquamperfekt_third_person_singular: dederat
-      plusquamperfekt_first_person_plural: dederamus
-      plusquamperfekt_second_person_plural: dederatis
-      plusquamperfekt_third_person_plural: dederant
-  - translation: schlafen
-    base_form: dormīre
-  - translation: (jmd.) erfreuen, unterhalten
-    base_form: dēlectāre
-  - translation: wünschen, verlangen; vermissen
-    base_form: dēsīderāre
-  - translation: erklären, darlegen
-    base_form: explicāre
-  - translation: warten, erwarten
-    base_form: exspectāre
-  - translation: in die Flucht schlagen, vertreiben
-    base_form: fugāre
-  # Semi-Deponent: aktive Formen im Präsensstamm, passive im Perfektstamm
-  - translation: sich freuen
-    base_form: gaudēre
+      ind.praes.akt.1.sg: "ferō"
+      ind.praes.akt.2.sg: "fers"
+      ind.praes.akt.3.sg: "fert"
+      ind.praes.akt.1.pl: "ferimus"
+      ind.praes.akt.2.pl: "fertis"
+      ind.praes.akt.3.pl: "ferunt"
+      ind.impf.akt.1.sg: "ferēbam"
+      ind.impf.akt.2.sg: "ferēbās"
+      ind.impf.akt.3.sg: "ferēbat"
+      ind.impf.akt.1.pl: "ferēbāmus"
+      ind.impf.akt.2.pl: "ferēbātis"
+      ind.impf.akt.3.pl: "ferēbant"
+      ind.fut.akt.1.sg: "feram"
+      ind.fut.akt.2.sg: "ferēs"
+      ind.fut.akt.3.sg: "feret"
+      ind.fut.akt.1.pl: "ferēmus"
+      ind.fut.akt.2.pl: "ferētis"
+      ind.fut.akt.3.pl: "ferent"
+      konj.praes.akt.1.sg: "feram"
+      konj.praes.akt.2.sg: "ferās"
+      konj.praes.akt.3.sg: "ferat"
+      konj.praes.akt.1.pl: "ferāmus"
+      konj.praes.akt.2.pl: "ferātis"
+      konj.praes.akt.3.pl: "ferant"
+      konj.impf.akt.1.sg: "ferrem"
+      konj.impf.akt.2.sg: "ferrēs"
+      konj.impf.akt.3.sg: "ferret"
+      konj.impf.akt.1.pl: "ferrēmus"
+      konj.impf.akt.2.pl: "ferrētis"
+      konj.impf.akt.3.pl: "ferrent"
+      imp.praes.akt.2.sg: "fer"
+      imp.praes.akt.2.pl: "ferte"
+      imp.fut.akt.2.sg: "fertō"
+      imp.fut.akt.3.sg: "fertō"
+      imp.fut.akt.2.pl: "fertōte"
+      imp.fut.akt.3.pl: "feruntō"
+      inf.praes.akt: "ferre"
+  - id: posse
+    type: Unregelmäßig
+    translation: "können"
+    parts: {infinitiv: "posse", praesens_1sg: "possum", perfekt_1sg: "potuī"}
     forms:
-      perfekt_first_person_singular: gavisus sum
-      perfekt_second_person_singular: gavisus es
-      perfekt_third_person_singular: gavisus est
-      perfekt_first_person_plural: gavisi sumus
-      perfekt_second_person_plural: gavisi estis
-      perfekt_third_person_plural: gavisi sunt
-      plusquamperfekt_first_person_singular: gavisus eram
-      plusquamperfekt_second_person_singular: gavisus eras
-      plusquamperfekt_third_person_singular: gavisus erat
-      plusquamperfekt_first_person_plural: gavisi eramus
-      plusquamperfekt_second_person_plural: gavisi eratis
-      plusquamperfekt_third_person_plural: gavisi erant
-  - translation: befehlen, (be)herrschen
-    base_form: imperāre
-  - translation: arbeiten, sich anstrengen
-    base_form: labōrāre
-  - type: E-Konjugation (s-Perfekt)
-    translation: bleiben, warten; erwarten
-    base_form: manēre
-  - translation: töten
-    base_form: necāre
-  - translation: bereiten, vorbereiten, zubereiten
-    base_form: parāre
-  - translation: gefallen
-    base_form: placēre
-  - translation: tragen, bringen
-    base_form: portāre
-  - translation: (etwas) für gut befinden; prüfen, beweisen
-    base_form: probāre
-  - translation: verhindern, hindern; abhalten
-    base_form: prohibēre
-  - translation: eilen, sich beeilen
-    base_form: properāre
-  - translation: gehorchen
-    base_form: pārēre
-  - translation: kämpfen, streiten
-    base_form: pūgnāre
-  - type: E-Konjugation (Stammperfekt)
-    translation: antworten, erwidern
-    base_form: respondēre
-  - translation: fragen; bitten
-    base_form: rogāre
-  - translation: König sein, herrschen
-    base_form: rēgnāre
-  - translation: lachen; über etw. lachen
-    base_form: rīdēre
+      ind.praes.akt.1.sg: "possum"
+      ind.praes.akt.2.sg: "potes"
+      ind.praes.akt.3.sg: "potest"
+      ind.praes.akt.1.pl: "possumus"
+      ind.praes.akt.2.pl: "potestis"
+      ind.praes.akt.3.pl: "possunt"
+      ind.impf.akt.1.sg: "poteram"
+      ind.impf.akt.2.sg: "poterās"
+      ind.impf.akt.3.sg: "poterat"
+      ind.impf.akt.1.pl: "poterāmus"
+      ind.impf.akt.2.pl: "poterātis"
+      ind.impf.akt.3.pl: "poterant"
+      ind.fut.akt.1.sg: "poterō"
+      ind.fut.akt.2.sg: "poteris"
+      ind.fut.akt.3.sg: "poterit"
+      ind.fut.akt.1.pl: "poterimus"
+      ind.fut.akt.2.pl: "poteritis"
+      ind.fut.akt.3.pl: "poterunt"
+      konj.praes.akt.1.sg: "possim"
+      konj.praes.akt.2.sg: "possīs"
+      konj.praes.akt.3.sg: "possit"
+      konj.praes.akt.1.pl: "possīmus"
+      konj.praes.akt.2.pl: "possītis"
+      konj.praes.akt.3.pl: "possint"
+      konj.impf.akt.1.sg: "possem"
+      konj.impf.akt.2.sg: "possēs"
+      konj.impf.akt.3.sg: "posset"
+      konj.impf.akt.1.pl: "possēmus"
+      konj.impf.akt.2.pl: "possētis"
+      konj.impf.akt.3.pl: "possent"
+      inf.praes.akt: "posse"
+  - id: ire
+    type: Unregelmäßig
+    translation: "gehen"
+    parts: {infinitiv: "īre", praesens_1sg: "eō", perfekt_1sg: ["iī", "īvī"], supinum: "itum", ppa_nom: "iēns", ppa_gen: "euntis", gerundiv: "eundus"}
     forms:
-      perfekt_first_person_singular: risi
-      perfekt_second_person_singular: risisti
-      perfekt_third_person_singular: risit
-      perfekt_first_person_plural: risimus
-      perfekt_second_person_plural: risistis
-      perfekt_third_person_plural: riserunt
-      plusquamperfekt_first_person_singular: riseram
-      plusquamperfekt_second_person_singular: riseras
-      plusquamperfekt_third_person_singular: riserat
-      plusquamperfekt_first_person_plural: riseramus
-      plusquamperfekt_second_person_plural: riseratis
-      plusquamperfekt_third_person_plural: riserant
-  - translation: opfern
-    base_form: sacrificāre
-  - translation: grüßen, begrüßen
-    base_form: salūtāre
-  - translation: wissen, kennen, verstehen
-    base_form: scīre
-  - type: E-Konjugation (Stammperfekt)
-    translation: sitzen
-    base_form: sedēre
-  - translation: schützen, retten, bewahren
-    base_form: servāre
-  - translation: dienen
-    base_form: servīre
-  - translation: anschauen, betrachten
-    base_form: spectāre
-  - translation: staunen, verblüfft sein
-    base_form: stupēre
-  - translation: übertreffen, überwinden, besiegen
-    base_form: superāre
-  - translation: schweigen, still sein
-    base_form: tacēre
-  - translation: angreifen; versuchen, prüfen
-    base_form: temptāre
-  - translation: (sich) fürchten, Angst haben
-    base_form: timēre
-  - type: E-Konjugation (Stammperfekt)
-    translation: sehen
-    base_form: vidēre
-  - translation: rufen, nennen
-    base_form: vocāre
-  - translation: besuchen
-    base_form: vīsitāre
-
-  # Konsonantische Konjugation — Perfekt und Plusquamperfekt sind pro Verb
-  # unregelmäßig und stehen deshalb explizit.
-  - type: K-Konjugation
-    translation: treiben, handeln, tun
-    base_form: agere
-    verify_inference: true
+      ind.praes.akt.1.sg: "eō"
+      ind.praes.akt.2.sg: "īs"
+      ind.praes.akt.3.sg: "it"
+      ind.praes.akt.1.pl: "īmus"
+      ind.praes.akt.2.pl: "ītis"
+      ind.praes.akt.3.pl: "eunt"
+      ind.impf.akt.1.sg: "ībam"
+      ind.impf.akt.2.sg: "ībās"
+      ind.impf.akt.3.sg: "ībat"
+      ind.impf.akt.1.pl: "ībāmus"
+      ind.impf.akt.2.pl: "ībātis"
+      ind.impf.akt.3.pl: "ībant"
+      ind.fut.akt.1.sg: "ībō"
+      ind.fut.akt.2.sg: "ībis"
+      ind.fut.akt.3.sg: "ībit"
+      ind.fut.akt.1.pl: "ībimus"
+      ind.fut.akt.2.pl: "ībitis"
+      ind.fut.akt.3.pl: "ībunt"
+      ind.perf.akt.2.sg: ["īstī", "īvistī"]
+      ind.perf.akt.2.pl: ["īstis", "īvistis"]
+      konj.praes.akt.1.sg: "eam"
+      konj.praes.akt.2.sg: "eās"
+      konj.praes.akt.3.sg: "eat"
+      konj.praes.akt.1.pl: "eāmus"
+      konj.praes.akt.2.pl: "eātis"
+      konj.praes.akt.3.pl: "eant"
+      konj.impf.akt.1.sg: "īrem"
+      konj.impf.akt.2.sg: "īrēs"
+      konj.impf.akt.3.sg: "īret"
+      konj.impf.akt.1.pl: "īrēmus"
+      konj.impf.akt.2.pl: "īrētis"
+      konj.impf.akt.3.pl: "īrent"
+      imp.praes.akt.2.sg: "ī"
+      imp.praes.akt.2.pl: "īte"
+      imp.fut.akt.2.sg: "ītō"
+      imp.fut.akt.3.sg: "ītō"
+      imp.fut.akt.2.pl: "ītōte"
+      imp.fut.akt.3.pl: "euntō"
+      inf.praes.akt: "īre"
+      ger.gen: "eundī"
+      ger.dat: "eundō"
+      ger.akk: "eundum"
+      ger.abl: "eundō"
+  - id: velle
+    type: Unregelmäßig
+    translation: "wollen"
+    parts: {infinitiv: "velle", praesens_1sg: "volō", perfekt_1sg: "voluī", ppa_nom: "volēns", ppa_gen: "volentis"}
     forms:
-      praesens_first_person_singular: ago
-      praesens_second_person_singular: agis
-      praesens_third_person_singular: agit
-      praesens_first_person_plural: agimus
-      praesens_second_person_plural: agitis
-      praesens_third_person_plural: agunt
-      imperfekt_first_person_singular: agebam
-      imperfekt_second_person_singular: agebas
-      imperfekt_third_person_singular: agebat
-      imperfekt_first_person_plural: agebamus
-      imperfekt_second_person_plural: agebatis
-      imperfekt_third_person_plural: agebant
-      futur_first_person_singular: agam
-      futur_second_person_singular: ages
-      futur_third_person_singular: aget
-      futur_first_person_plural: agemus
-      futur_second_person_plural: agetis
-      futur_third_person_plural: agent
-      perfekt_first_person_singular: egi
-      perfekt_second_person_singular: egisti
-      perfekt_third_person_singular: egit
-      perfekt_first_person_plural: egimus
-      perfekt_second_person_plural: egistis
-      perfekt_third_person_plural: egerunt
-      plusquamperfekt_first_person_singular: egeram
-      plusquamperfekt_second_person_singular: egeras
-      plusquamperfekt_third_person_singular: egerat
-      plusquamperfekt_first_person_plural: egeramus
-      plusquamperfekt_second_person_plural: egeratis
-      plusquamperfekt_third_person_plural: egerant
-      imperativ_singular: age
-      imperativ_plural: agite
-  - type: K-Konjugation
-    translation: sagen, sprechen
-    base_form: dīcere
+      ind.praes.akt.1.sg: "volō"
+      ind.praes.akt.2.sg: "vīs"
+      ind.praes.akt.3.sg: "vult"
+      ind.praes.akt.1.pl: "volumus"
+      ind.praes.akt.2.pl: "vultis"
+      ind.praes.akt.3.pl: "volunt"
+      ind.impf.akt.1.sg: "volēbam"
+      ind.impf.akt.2.sg: "volēbās"
+      ind.impf.akt.3.sg: "volēbat"
+      ind.impf.akt.1.pl: "volēbāmus"
+      ind.impf.akt.2.pl: "volēbātis"
+      ind.impf.akt.3.pl: "volēbant"
+      ind.fut.akt.1.sg: "volam"
+      ind.fut.akt.2.sg: "volēs"
+      ind.fut.akt.3.sg: "volet"
+      ind.fut.akt.1.pl: "volēmus"
+      ind.fut.akt.2.pl: "volētis"
+      ind.fut.akt.3.pl: "volent"
+      konj.praes.akt.1.sg: "velim"
+      konj.praes.akt.2.sg: "velīs"
+      konj.praes.akt.3.sg: "velit"
+      konj.praes.akt.1.pl: "velīmus"
+      konj.praes.akt.2.pl: "velītis"
+      konj.praes.akt.3.pl: "velint"
+      konj.impf.akt.1.sg: "vellem"
+      konj.impf.akt.2.sg: "vellēs"
+      konj.impf.akt.3.sg: "vellet"
+      konj.impf.akt.1.pl: "vellēmus"
+      konj.impf.akt.2.pl: "vellētis"
+      konj.impf.akt.3.pl: "vellent"
+      inf.praes.akt: "velle"
+  - id: nolle
+    type: Unregelmäßig
+    translation: "nicht wollen"
+    parts: {infinitiv: "nōlle", praesens_1sg: "nōlō", perfekt_1sg: "nōluī", ppa_nom: "nōlēns", ppa_gen: "nōlentis"}
     forms:
-      perfekt_first_person_singular: dixi
-      perfekt_second_person_singular: dixisti
-      perfekt_third_person_singular: dixit
-      perfekt_first_person_plural: diximus
-      perfekt_second_person_plural: dixistis
-      perfekt_third_person_plural: dixerunt
-      plusquamperfekt_first_person_singular: dixeram
-      plusquamperfekt_second_person_singular: dixeras
-      plusquamperfekt_third_person_singular: dixerat
-      plusquamperfekt_first_person_plural: dixeramus
-      plusquamperfekt_second_person_plural: dixeratis
-      plusquamperfekt_third_person_plural: dixerant
-      imperativ_singular: dic
-  - type: K-Konjugation
-    translation: führen, ziehen
-    base_form: dūcere
+      ind.praes.akt.1.sg: "nōlō"
+      ind.praes.akt.2.sg: "nōn vīs"
+      ind.praes.akt.3.sg: "nōn vult"
+      ind.praes.akt.1.pl: "nōlumus"
+      ind.praes.akt.2.pl: "nōn vultis"
+      ind.praes.akt.3.pl: "nōlunt"
+      ind.impf.akt.1.sg: "nōlēbam"
+      ind.impf.akt.2.sg: "nōlēbās"
+      ind.impf.akt.3.sg: "nōlēbat"
+      ind.impf.akt.1.pl: "nōlēbāmus"
+      ind.impf.akt.2.pl: "nōlēbātis"
+      ind.impf.akt.3.pl: "nōlēbant"
+      ind.fut.akt.1.sg: "nōlam"
+      ind.fut.akt.2.sg: "nōlēs"
+      ind.fut.akt.3.sg: "nōlet"
+      ind.fut.akt.1.pl: "nōlēmus"
+      ind.fut.akt.2.pl: "nōlētis"
+      ind.fut.akt.3.pl: "nōlent"
+      konj.praes.akt.1.sg: "nōlim"
+      konj.praes.akt.2.sg: "nōlīs"
+      konj.praes.akt.3.sg: "nōlit"
+      konj.praes.akt.1.pl: "nōlīmus"
+      konj.praes.akt.2.pl: "nōlītis"
+      konj.praes.akt.3.pl: "nōlint"
+      konj.impf.akt.1.sg: "nōllem"
+      konj.impf.akt.2.sg: "nōllēs"
+      konj.impf.akt.3.sg: "nōllet"
+      konj.impf.akt.1.pl: "nōllēmus"
+      konj.impf.akt.2.pl: "nōllētis"
+      konj.impf.akt.3.pl: "nōllent"
+      imp.praes.akt.2.sg: "nōlī"
+      imp.praes.akt.2.pl: "nōlīte"
+      imp.fut.akt.2.sg: "nōlītō"
+      imp.fut.akt.3.sg: "nōlītō"
+      imp.fut.akt.2.pl: "nōlītōte"
+      imp.fut.akt.3.pl: "nōluntō"
+      inf.praes.akt: "nōlle"
+  - id: malle
+    type: Unregelmäßig
+    translation: "lieber wollen"
+    parts: {infinitiv: "mālle", praesens_1sg: "mālō", perfekt_1sg: "māluī"}
     forms:
-      perfekt_first_person_singular: duxi
-      perfekt_second_person_singular: duxisti
-      perfekt_third_person_singular: duxit
-      perfekt_first_person_plural: duximus
-      perfekt_second_person_plural: duxistis
-      perfekt_third_person_plural: duxerunt
-      plusquamperfekt_first_person_singular: duxeram
-      plusquamperfekt_second_person_singular: duxeras
-      plusquamperfekt_third_person_singular: duxerat
-      plusquamperfekt_first_person_plural: duxeramus
-      plusquamperfekt_second_person_plural: duxeratis
-      plusquamperfekt_third_person_plural: duxerant
-      imperativ_singular: duc
-  - type: K-Konjugation
-    translation: schreiben
-    base_form: scrībere
+      ind.praes.akt.1.sg: "mālō"
+      ind.praes.akt.2.sg: "māvīs"
+      ind.praes.akt.3.sg: "māvult"
+      ind.praes.akt.1.pl: "mālumus"
+      ind.praes.akt.2.pl: "māvultis"
+      ind.praes.akt.3.pl: "mālunt"
+      ind.impf.akt.1.sg: "mālēbam"
+      ind.impf.akt.2.sg: "mālēbās"
+      ind.impf.akt.3.sg: "mālēbat"
+      ind.impf.akt.1.pl: "mālēbāmus"
+      ind.impf.akt.2.pl: "mālēbātis"
+      ind.impf.akt.3.pl: "mālēbant"
+      ind.fut.akt.1.sg: "mālam"
+      ind.fut.akt.2.sg: "mālēs"
+      ind.fut.akt.3.sg: "mālet"
+      ind.fut.akt.1.pl: "mālēmus"
+      ind.fut.akt.2.pl: "mālētis"
+      ind.fut.akt.3.pl: "mālent"
+      konj.praes.akt.1.sg: "mālim"
+      konj.praes.akt.2.sg: "mālīs"
+      konj.praes.akt.3.sg: "mālit"
+      konj.praes.akt.1.pl: "mālīmus"
+      konj.praes.akt.2.pl: "mālītis"
+      konj.praes.akt.3.pl: "mālint"
+      konj.impf.akt.1.sg: "māllem"
+      konj.impf.akt.2.sg: "māllēs"
+      konj.impf.akt.3.sg: "māllet"
+      konj.impf.akt.1.pl: "māllēmus"
+      konj.impf.akt.2.pl: "māllētis"
+      konj.impf.akt.3.pl: "māllent"
+      inf.praes.akt: "mālle"
+  - id: esse
+    type: esse-Typ
+    translation: "sein"
+    parts: {infinitiv: "esse", praesens_1sg: "sum", perfekt_1sg: "fuī", futurpartizip: "futūrus"}
     forms:
-      perfekt_first_person_singular: scripsi
-      perfekt_second_person_singular: scripsisti
-      perfekt_third_person_singular: scripsit
-      perfekt_first_person_plural: scripsimus
-      perfekt_second_person_plural: scripsistis
-      perfekt_third_person_plural: scripserunt
-      plusquamperfekt_first_person_singular: scripseram
-      plusquamperfekt_second_person_singular: scripseras
-      plusquamperfekt_third_person_singular: scripserat
-      plusquamperfekt_first_person_plural: scripseramus
-      plusquamperfekt_second_person_plural: scripseratis
-      plusquamperfekt_third_person_plural: scripserant
-  - type: K-Konjugation
-    translation: lesen; sammeln, auswählen
-    base_form: legere
-    forms:
-      perfekt_first_person_singular: legi
-      perfekt_second_person_singular: legisti
-      perfekt_third_person_singular: legit
-      perfekt_first_person_plural: legimus
-      perfekt_second_person_plural: legistis
-      perfekt_third_person_plural: legerunt
-      plusquamperfekt_first_person_singular: legeram
-      plusquamperfekt_second_person_singular: legeras
-      plusquamperfekt_third_person_singular: legerat
-      plusquamperfekt_first_person_plural: legeramus
-      plusquamperfekt_second_person_plural: legeratis
-      plusquamperfekt_third_person_plural: legerant
-  - type: K-Konjugation
-    translation: schicken, senden; loslassen
-    base_form: mittere
-    forms:
-      perfekt_first_person_singular: misi
-      perfekt_second_person_singular: misisti
-      perfekt_third_person_singular: misit
-      perfekt_first_person_plural: misimus
-      perfekt_second_person_plural: misistis
-      perfekt_third_person_plural: miserunt
-      plusquamperfekt_first_person_singular: miseram
-      plusquamperfekt_second_person_singular: miseras
-      plusquamperfekt_third_person_singular: miserat
-      plusquamperfekt_first_person_plural: miseramus
-      plusquamperfekt_second_person_plural: miseratis
-      plusquamperfekt_third_person_plural: miserant
-  - type: K-Konjugation
-    translation: siegen, besiegen
-    base_form: vincere
-    forms:
-      perfekt_first_person_singular: vici
-      perfekt_second_person_singular: vicisti
-      perfekt_third_person_singular: vicit
-      perfekt_first_person_plural: vicimus
-      perfekt_second_person_plural: vicistis
-      perfekt_third_person_plural: vicerunt
-      plusquamperfekt_first_person_singular: viceram
-      plusquamperfekt_second_person_singular: viceras
-      plusquamperfekt_third_person_singular: vicerat
-      plusquamperfekt_first_person_plural: viceramus
-      plusquamperfekt_second_person_plural: viceratis
-      plusquamperfekt_third_person_plural: vicerant
-  - type: K-Konjugation
-    translation: setzen, stellen, legen
-    base_form: pōnere
-    forms:
-      perfekt_first_person_singular: posui
-      perfekt_second_person_singular: posuisti
-      perfekt_third_person_singular: posuit
-      perfekt_first_person_plural: posuimus
-      perfekt_second_person_plural: posuistis
-      perfekt_third_person_plural: posuerunt
-      plusquamperfekt_first_person_singular: posueram
-      plusquamperfekt_second_person_singular: posueras
-      plusquamperfekt_third_person_singular: posuerat
-      plusquamperfekt_first_person_plural: posueramus
-      plusquamperfekt_second_person_plural: posueratis
-      plusquamperfekt_third_person_plural: posuerant
-
-  # Unregelmäßige Verben: kein Muster, alle Formen stehen explizit.
-  # posse, velle und malle haben keinen Imperativ.
-  - type: Unregelmäßig
-    translation: tragen; bringen; ertragen
-    base_form: ferre
-    word: fero
-    forms:
-      praesens_first_person_singular: fero
-      praesens_second_person_singular: fers
-      praesens_third_person_singular: fert
-      praesens_first_person_plural: ferimus
-      praesens_second_person_plural: fertis
-      praesens_third_person_plural: ferunt
-      imperfekt_first_person_singular: ferebam
-      imperfekt_second_person_singular: ferebas
-      imperfekt_third_person_singular: ferebat
-      imperfekt_first_person_plural: ferebamus
-      imperfekt_second_person_plural: ferebatis
-      imperfekt_third_person_plural: ferebant
-      futur_first_person_singular: feram
-      futur_second_person_singular: feres
-      futur_third_person_singular: feret
-      futur_first_person_plural: feremus
-      futur_second_person_plural: feretis
-      futur_third_person_plural: ferent
-      perfekt_first_person_singular: tuli
-      perfekt_second_person_singular: tulisti
-      perfekt_third_person_singular: tulit
-      perfekt_first_person_plural: tulimus
-      perfekt_second_person_plural: tulistis
-      perfekt_third_person_plural: tulerunt
-      plusquamperfekt_first_person_singular: tuleram
-      plusquamperfekt_second_person_singular: tuleras
-      plusquamperfekt_third_person_singular: tulerat
-      plusquamperfekt_first_person_plural: tuleramus
-      plusquamperfekt_second_person_plural: tuleratis
-      plusquamperfekt_third_person_plural: tulerant
-      imperativ_singular: fer
-      imperativ_plural: ferte
-  - type: Unregelmäßig
-    translation: können
-    base_form: posse
-    word: possum
-    forms:
-      praesens_first_person_singular: possum
-      praesens_second_person_singular: potes
-      praesens_third_person_singular: potest
-      praesens_first_person_plural: possumus
-      praesens_second_person_plural: potestis
-      praesens_third_person_plural: possunt
-      imperfekt_first_person_singular: poteram
-      imperfekt_second_person_singular: poteras
-      imperfekt_third_person_singular: poterat
-      imperfekt_first_person_plural: poteramus
-      imperfekt_second_person_plural: poteratis
-      imperfekt_third_person_plural: poterant
-      futur_first_person_singular: potero
-      futur_second_person_singular: poteris
-      futur_third_person_singular: poterit
-      futur_first_person_plural: poterimus
-      futur_second_person_plural: poteritis
-      futur_third_person_plural: poterunt
-      perfekt_first_person_singular: potui
-      perfekt_second_person_singular: potuisti
-      perfekt_third_person_singular: potuit
-      perfekt_first_person_plural: potuimus
-      perfekt_second_person_plural: potuistis
-      perfekt_third_person_plural: potuerunt
-      plusquamperfekt_first_person_singular: potueram
-      plusquamperfekt_second_person_singular: potueras
-      plusquamperfekt_third_person_singular: potuerat
-      plusquamperfekt_first_person_plural: potueramus
-      plusquamperfekt_second_person_plural: potueratis
-      plusquamperfekt_third_person_plural: potuerant
-  - type: Unregelmäßig
-    translation: gehen
-    base_form: īre
-    word: eo
-    forms:
-      praesens_first_person_singular: eo
-      praesens_second_person_singular: "is"
-      praesens_third_person_singular: it
-      praesens_first_person_plural: imus
-      praesens_second_person_plural: itis
-      praesens_third_person_plural: eunt
-      imperfekt_first_person_singular: ibam
-      imperfekt_second_person_singular: ibas
-      imperfekt_third_person_singular: ibat
-      imperfekt_first_person_plural: ibamus
-      imperfekt_second_person_plural: ibatis
-      imperfekt_third_person_plural: ibant
-      futur_first_person_singular: ibo
-      futur_second_person_singular: ibis
-      futur_third_person_singular: ibit
-      futur_first_person_plural: ibimus
-      futur_second_person_plural: ibitis
-      futur_third_person_plural: ibunt
-      perfekt_first_person_singular: ii
-      perfekt_second_person_singular: isti
-      perfekt_third_person_singular: iit
-      perfekt_first_person_plural: iimus
-      perfekt_second_person_plural: istis
-      perfekt_third_person_plural: ierunt
-      plusquamperfekt_first_person_singular: ieram
-      plusquamperfekt_second_person_singular: ieras
-      plusquamperfekt_third_person_singular: ierat
-      plusquamperfekt_first_person_plural: ieramus
-      plusquamperfekt_second_person_plural: ieratis
-      plusquamperfekt_third_person_plural: ierant
-      imperativ_singular: "i"
-      imperativ_plural: ite
-  - type: Unregelmäßig
-    translation: wollen
-    base_form: velle
-    word: volo
-    forms:
-      praesens_first_person_singular: volo
-      praesens_second_person_singular: vis
-      praesens_third_person_singular: vult
-      praesens_first_person_plural: volumus
-      praesens_second_person_plural: vultis
-      praesens_third_person_plural: volunt
-      imperfekt_first_person_singular: volebam
-      imperfekt_second_person_singular: volebas
-      imperfekt_third_person_singular: volebat
-      imperfekt_first_person_plural: volebamus
-      imperfekt_second_person_plural: volebatis
-      imperfekt_third_person_plural: volebant
-      futur_first_person_singular: volam
-      futur_second_person_singular: voles
-      futur_third_person_singular: volet
-      futur_first_person_plural: volemus
-      futur_second_person_plural: voletis
-      futur_third_person_plural: volent
-      perfekt_first_person_singular: volui
-      perfekt_second_person_singular: voluisti
-      perfekt_third_person_singular: voluit
-      perfekt_first_person_plural: voluimus
-      perfekt_second_person_plural: voluistis
-      perfekt_third_person_plural: voluerunt
-      plusquamperfekt_first_person_singular: volueram
-      plusquamperfekt_second_person_singular: volueras
-      plusquamperfekt_third_person_singular: voluerat
-      plusquamperfekt_first_person_plural: volueramus
-      plusquamperfekt_second_person_plural: volueratis
-      plusquamperfekt_third_person_plural: voluerant
-  - type: Unregelmäßig
-    translation: nicht wollen
-    base_form: nolle
-    word: nolo
-    forms:
-      praesens_first_person_singular: nolo
-      praesens_second_person_singular: non vis
-      praesens_third_person_singular: non vult
-      praesens_first_person_plural: nolumus
-      praesens_second_person_plural: non vultis
-      praesens_third_person_plural: nolunt
-      imperfekt_first_person_singular: nolebam
-      imperfekt_second_person_singular: nolebas
-      imperfekt_third_person_singular: nolebat
-      imperfekt_first_person_plural: nolebamus
-      imperfekt_second_person_plural: nolebatis
-      imperfekt_third_person_plural: nolebant
-      futur_first_person_singular: nolam
-      futur_second_person_singular: noles
-      futur_third_person_singular: nolet
-      futur_first_person_plural: nolemus
-      futur_second_person_plural: noletis
-      futur_third_person_plural: nolent
-      perfekt_first_person_singular: nolui
-      perfekt_second_person_singular: noluisti
-      perfekt_third_person_singular: noluit
-      perfekt_first_person_plural: noluimus
-      perfekt_second_person_plural: noluistis
-      perfekt_third_person_plural: noluerunt
-      plusquamperfekt_first_person_singular: nolueram
-      plusquamperfekt_second_person_singular: nolueras
-      plusquamperfekt_third_person_singular: noluerat
-      plusquamperfekt_first_person_plural: nolueramus
-      plusquamperfekt_second_person_plural: nolueratis
-      plusquamperfekt_third_person_plural: noluerant
-      imperativ_singular: noli
-      imperativ_plural: nolite
-  - type: Unregelmäßig
-    translation: lieber wollen
-    base_form: malle
-    word: malo
-    forms:
-      praesens_first_person_singular: malo
-      praesens_second_person_singular: mavis
-      praesens_third_person_singular: mavult
-      praesens_first_person_plural: malumus
-      praesens_second_person_plural: mavultis
-      praesens_third_person_plural: malunt
-      imperfekt_first_person_singular: malebam
-      imperfekt_second_person_singular: malebas
-      imperfekt_third_person_singular: malebat
-      imperfekt_first_person_plural: malebamus
-      imperfekt_second_person_plural: malebatis
-      imperfekt_third_person_plural: malebant
-      futur_first_person_singular: malam
-      futur_second_person_singular: males
-      futur_third_person_singular: malet
-      futur_first_person_plural: malemus
-      futur_second_person_plural: maletis
-      futur_third_person_plural: malent
-      perfekt_first_person_singular: malui
-      perfekt_second_person_singular: maluisti
-      perfekt_third_person_singular: maluit
-      perfekt_first_person_plural: maluimus
-      perfekt_second_person_plural: maluistis
-      perfekt_third_person_plural: maluerunt
-      plusquamperfekt_first_person_singular: malueram
-      plusquamperfekt_second_person_singular: malueras
-      plusquamperfekt_third_person_singular: maluerat
-      plusquamperfekt_first_person_plural: malueramus
-      plusquamperfekt_second_person_plural: malueratis
-      plusquamperfekt_third_person_plural: maluerant
+      ind.praes.akt.1.sg: "sum"
+      ind.praes.akt.2.sg: "es"
+      ind.praes.akt.3.sg: "est"
+      ind.praes.akt.1.pl: "sumus"
+      ind.praes.akt.2.pl: "estis"
+      ind.praes.akt.3.pl: "sunt"
+      ind.impf.akt.1.sg: "eram"
+      ind.impf.akt.2.sg: "erās"
+      ind.impf.akt.3.sg: "erat"
+      ind.impf.akt.1.pl: "erāmus"
+      ind.impf.akt.2.pl: "erātis"
+      ind.impf.akt.3.pl: "erant"
+      ind.fut.akt.1.sg: "erō"
+      ind.fut.akt.2.sg: "eris"
+      ind.fut.akt.3.sg: "erit"
+      ind.fut.akt.1.pl: "erimus"
+      ind.fut.akt.2.pl: "eritis"
+      ind.fut.akt.3.pl: "erunt"
+      konj.praes.akt.1.sg: "sim"
+      konj.praes.akt.2.sg: "sīs"
+      konj.praes.akt.3.sg: "sit"
+      konj.praes.akt.1.pl: "sīmus"
+      konj.praes.akt.2.pl: "sītis"
+      konj.praes.akt.3.pl: "sint"
+      konj.impf.akt.1.sg: "essem"
+      konj.impf.akt.2.sg: "essēs"
+      konj.impf.akt.3.sg: "esset"
+      konj.impf.akt.1.pl: "essēmus"
+      konj.impf.akt.2.pl: "essētis"
+      konj.impf.akt.3.pl: "essent"
+      imp.praes.akt.2.sg: "es"
+      imp.praes.akt.2.pl: "este"
+      imp.fut.akt.2.sg: "estō"
+      imp.fut.akt.3.sg: "estō"
+      imp.fut.akt.2.pl: "estōte"
+      imp.fut.akt.3.pl: "suntō"
+      inf.praes.akt: "esse"
+      inf.fut.akt: "futūrum esse"

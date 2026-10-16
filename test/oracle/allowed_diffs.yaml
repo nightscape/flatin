@@ -1,70 +1,38 @@
-# The form differences the oracle accepts, with the reason each one is the
+# The form differences the oracle accepts, each with the reason it is the
 # Collatinus data's and not ours. Any other form difference fails the run;
-# an entry that no longer happens fails it too. Matching is on item, key and
-# the two spellings as written here.
+# so does an entry that covers no difference any more. An entry covers a
+# difference when every field it names matches. In `keys`, `*` stands for
+# one segment. `synthetic: true` limits an entry to the items the sample made
+# up from Collatinus lemmas; those give no comparison parts.
 
-- item: bonus
-  key: adv.komp
-  ours: "melius"
-  theirs: "bĕnĭŭs"
+- keys: [adv.komp]
+  item: bonus
   reason: "the Collatinus model `adve` grades the adverb regularly and ignores the suppletive radicals of its lemma"
-- item: bonus
-  key: adv.sup
-  ours: "optimē / optumē"
-  theirs: "bĕnīssĭmē"
+- keys: [adv.sup]
+  item: bonus
   reason: "the Collatinus model `adve` grades the adverb regularly and ignores the suppletive radicals of its lemma"
-- item: capere
-  key: imp.fut.akt.3.pl
-  ours: "capiuntō"
-  theirs: "căpūntō"
-  reason: "the Collatinus model `capio` leaves this morph to `lego`, which drops the stem i"
-- item: audire
-  key: imp.fut.akt.3.pl
-  ours: "audiuntō"
-  theirs: "āudūntō"
-  reason: "the Collatinus model `audio` leaves this morph to `lego`, which drops the stem i"
-- item: ferre
-  key: imp.praes.pass.2.sg
-  ours: "ferre"
-  theirs: "fĕrĕrĕ"
-  reason: "the Collatinus model `fero` does not override this morph of `lego`, so it keeps the unsyncopated form"
-- item: ferre
-  key: imp.fut.akt.2.sg
-  ours: "fertō"
-  theirs: "fĕrĭtō"
-  reason: "the Collatinus model `fero` does not override this morph of `lego`, so it keeps the unsyncopated form"
-- item: ferre
-  key: imp.fut.akt.2.pl
-  ours: "fertōte"
-  theirs: "fĕrĭtōtĕ"
-  reason: "the Collatinus model `fero` does not override this morph of `lego`, so it keeps the unsyncopated form"
-- item: ferre
-  key: imp.fut.akt.3.sg
-  ours: "fertō"
-  theirs: "fĕrĭtō"
-  reason: "the Collatinus model `fero` does not override this morph of `lego`, so it keeps the unsyncopated form"
-- item: afferre
-  key: ind.praes.pass.2.sg
-  ours: "afferris"
-  theirs: "affĕrĕrĭs / affĕrĕrĕ"
-  reason: "Collatinus files the syncopated ferris as an irregular of `fero` alone, so the compound keeps the regular form"
-- item: afferre
-  key: imp.praes.pass.2.sg
-  ours: "afferre"
-  theirs: "affĕrĕrĕ"
-  reason: "inherited from `fero`, which does not override this morph of `lego`"
-- item: afferre
-  key: imp.fut.akt.2.sg
-  ours: "affertō"
-  theirs: "affĕrĭtō"
-  reason: "inherited from `fero`, which does not override this morph of `lego`"
-- item: afferre
-  key: imp.fut.akt.2.pl
-  ours: "affertōte"
-  theirs: "affĕrĭtōtĕ"
-  reason: "inherited from `fero`, which does not override this morph of `lego`"
-- item: afferre
-  key: imp.fut.akt.3.sg
-  ours: "affertō"
-  theirs: "affĕrĭtō"
-  reason: "inherited from `fero`, which does not override this morph of `lego`"
+
+- keys: ["*.*.*.komp"]
+  types: [Adjektiv-a-o, Adjektiv-a-o-er, Adjektiv-dreiendig]
+  synthetic: true
+  reason: "a sampled adjective names no comparative, so we grade regularly (-ior); Collatinus uses the suppletive radicals of magnus, malus, parvus and writes the comparative of a lemma without radicals as -or/-us (lānigerior against lānĭgĕrŏr)"
+- keys: ["*.*.*.sup"]
+  types: [Adjektiv-a-o]
+  synthetic: true
+  reason: "a sampled adjective names no superlative, so we grade regularly; Collatinus uses the suppletive radicals of magnus, malus, parvus"
+
+- keys: [imp.fut.akt.3.pl]
+  types: [I-Konjugation, Mischkonjugation]
+  reason: "the Collatinus models `audio` and `capio` leave this morph to `lego`, which drops the stem i (capiuntō against căpūntō)"
+
+- keys: [ind.perf.akt.*.*, ind.plusq.akt.*.*, ind.fut2.akt.*.*, konj.perf.akt.*.*, konj.plusq.akt.*.*, inf.perf.akt]
+  item: ferire
+  synthetic: true
+  reason: "a sampled verb names no perfect, so we form ferīvī; Collatinus gives ferio the perfect fĕrĭāvī"
+
+- keys: [imp.praes.pass.2.sg, imp.fut.akt.2.sg, imp.fut.akt.3.sg, imp.fut.akt.2.pl]
+  item: ferre
+  reason: "the Collatinus model `fero` does not override these morphs of `lego`, so it keeps the unsyncopated forms"
+- keys: [ind.praes.pass.2.sg, imp.praes.pass.2.sg, imp.fut.akt.2.sg, imp.fut.akt.3.sg, imp.fut.akt.2.pl]
+  item: afferre
+  reason: "Collatinus files the syncopated ferris as an irregular of `fero` alone, and `fero` leaves the other two morphs to `lego`, so the compound keeps the unsyncopated forms"

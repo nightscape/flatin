@@ -428,12 +428,8 @@ final class _ItemBuilder {
   void _deponent(Map<FormKey, _Made> forms) {
     final spec = item.deponent ?? type.deponent;
     if (spec == null) return;
-    if (!axes.axes.any((axis) => axis.id == 'genus_verbi')) {
-      throw StateError(
-        'item "${item.id}": "deponent" needs the axis genus_verbi, which '
-        '${file.path} does not declare',
-      );
-    }
+    assert(axes.axes.any((axis) => axis.id == 'genus_verbi'),
+        'S10 is checked at load');
     final moved = <FormKey, _Made>{};
     for (final entry in forms.entries) {
       final features = axes.parseKey(entry.key);

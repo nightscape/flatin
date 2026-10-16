@@ -192,11 +192,7 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
     // Filter forms based on settings
     final filteredData = settingsAsync.when(
       data: (settings) => widget.item.filterForms(
-        settings.enabledFormsOf(
-          widget.item.dataFileId,
-          widget.item.formOrder,
-          widget.item.formLabels,
-        ),
+        settings.enabledFormsOf(widget.item.dataFileId, widget.item.formLabels),
       ),
       loading: () =>
           widget.item.filterForms(Set<String>.from(widget.item.formOrder)),

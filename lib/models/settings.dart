@@ -1,4 +1,6 @@
 import '../data/lesson_data.dart';
+import '../data/settings_conversion.dart'
+    show settingsVersion, settingsVersionField;
 import 'form_label.dart';
 
 /// Settings model holding the user's practice selection.
@@ -63,8 +65,8 @@ class Settings {
 
   /// Whether a form is practised: its key must be on, and every feature it
   /// names must be on.
-  bool isFormEnabled(String dataFileId, FormKey formKey, FormLabel label) {
-    if (disabledForms[dataFileId]?.contains(formKey) ?? false) return false;
+  bool isFormEnabled(String dataFileId, FormLabel label) {
+    if (disabledForms[dataFileId]?.contains(label.key) ?? false) return false;
     return label.features.entries
         .every((f) => isFeatureEnabled(dataFileId, f.key, f.value));
   }
@@ -74,20 +76,11 @@ class Settings {
     return !(disabledTypes[dataFileId]?.contains(typeName) ?? false);
   }
 
-  /// The enabled subset of [allFormKeys], which [labels] describes in the same
-  /// order.
-  Set<FormKey> enabledFormsOf(
-    String dataFileId,
-    List<FormKey> allFormKeys,
-    List<FormLabel> labels,
-  ) {
-    assert(allFormKeys.length == labels.length);
-    return {
-      for (int i = 0; i < allFormKeys.length; i++)
-        if (isFormEnabled(dataFileId, allFormKeys[i], labels[i]))
-          allFormKeys[i],
-    };
-  }
+  /// The keys of the enabled labels.
+  Set<FormKey> enabledFormsOf(String dataFileId, List<FormLabel> labels) => {
+        for (final label in labels)
+          if (isFormEnabled(dataFileId, label)) label.key,
+      };
 
   /// Get the input strategy id for a data file (default: text_field)
   String getInputStrategyId(String dataFileId) {
@@ -204,6 +197,7 @@ class Settings {
   /// Convert to JSON for storage
   Map<String, dynamic> toJson() {
     return {
+      settingsVersionField: settingsVersion,
       'disabledForms': disabledForms.map(
         (key, value) => MapEntry(key, value.toList()),
       ),
@@ -223,6 +217,10 @@ class Settings {
 
   /// Create from JSON
   factory Settings.fromJson(Map<String, dynamic> json) {
+    assert(
+      json[settingsVersionField] == settingsVersion,
+      'stored settings are of another version; convert them first',
+    );
     final disabledFormsMap = json['disabledForms'] as Map<String, dynamic>?;
     final featureMap = json['disabledFeatures'] as Map<String, dynamic>?;
     final disabledTypesMap = json['disabledTypes'] as Map<String, dynamic>?;

@@ -15,6 +15,8 @@ void main() {
     final items = await loadPracticeItems('lib/data/latin_nouns.yaml');
     final dominus = items.firstWhere((i) => i.lemma == 'dominus');
     final spy = ExplainerSpy();
+    final nomRow = dominus.formOrder.indexOf('nom.sg');
+    final genRow = dominus.formOrder.indexOf('gen.sg');
 
     await tester.pumpWidget(wrapInApp(
       PracticeScreen(item: dominus),
@@ -23,14 +25,14 @@ void main() {
     ));
     await letItLoad(tester);
 
-    final correctRow = find.byKey(const Key('explanation.nominative_singular'));
-    final wrongRow = find.byKey(const Key('explanation.genitive_singular'));
-    final emptyRow = find.byKey(const Key('explanation.dative_singular'));
+    final correctRow = find.byKey(const Key('explanation.nom.sg'));
+    final wrongRow = find.byKey(const Key('explanation.gen.sg'));
+    final emptyRow = find.byKey(const Key('explanation.dat.sg'));
 
     expect(find.byType(ExplanationLines), findsNothing);
 
-    await tester.enterText(find.byType(TextField).at(0), 'dominus');
-    await tester.enterText(find.byType(TextField).at(1), 'dominis');
+    await tester.enterText(find.byType(TextField).at(nomRow), 'dominus');
+    await tester.enterText(find.byType(TextField).at(genRow), 'dominis');
     await tester.tap(find.byKey(const Key('practice.check.button')));
     await tester.pump();
 
@@ -38,11 +40,11 @@ void main() {
     expect(correctRow, findsNothing);
     expect(emptyRow, findsNothing);
     // The right row gets the spelling line instead of a diagnosis.
-    expect(find.byKey(const Key('macrons.nominative_singular')),
+    expect(find.byKey(const Key('macrons.nom.sg')),
         findsOneWidget);
     expect(find.byType(ExplanationLines), findsNWidgets(2));
-    expect(spy.wrongAnswerCalls, [('genitive_singular', 'dominis')]);
-    expect(spy.correctAnswerCalls, [('nominative_singular', 'dominus')]);
+    expect(spy.wrongAnswerCalls, [('gen.sg', 'dominis')]);
+    expect(spy.correctAnswerCalls, [('nom.sg', 'dominus')]);
     expect(
       find.text('Du hast dominis geschrieben – das passt zu keiner '
           'bekannten Form'),

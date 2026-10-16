@@ -5,7 +5,6 @@
 @Tags(['oracle'])
 library;
 
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
@@ -14,28 +13,26 @@ import 'package:latin_practice/models/form_label.dart';
 
 import 'collatinus.dart';
 import 'oracle.dart';
+import 'sample.dart';
 
-/// Our forms, until L1 lets the oracle read the engine.
-List<ItemForms> _ourForms() {
-  final root =
-      jsonDecode(File('test/oracle/paradigms.json').readAsStringSync())
-          as Map<String, dynamic>;
-  return [
-    for (final item in root['items'] as List)
-      ItemForms(
-        dataFileId: item['file'] as String,
-        id: item['id'] as String,
-        type: item['type'] as String,
-        emitted: {
-          for (final e in (item['forms'] as Map).entries)
-            e.key as FormKey: (e.value as String).split('|'),
-        },
-        internal: {
-          for (final e in (item['internal'] as Map).entries)
-            e.key as FormKey: (e.value as String).split('|'),
-        },
-      ),
-  ];
+const _fixtures = [
+  'test/fixtures/grammar_examples.yaml',
+  'test/fixtures/grammar_examples_verbs.yaml',
+];
+
+const _real = [
+  'lib/data/latin_nouns.yaml',
+  'lib/data/latin_verbs.yaml',
+];
+
+/// One set of data files, sampled and compared.
+final class _Corpus {
+  final Sample sample;
+  final List<ItemForms> items;
+  final Map<String, Axes> axes;
+  final OracleResult result;
+
+  _Corpus(this.sample, this.items, this.axes, this.result);
 }
 
 void main() {
@@ -43,34 +40,61 @@ void main() {
   late MorphMap morphMap;
   late TypeMap typeMap;
   late List<AllowedDiff> allowed;
-  late List<ItemForms> items;
-  late Map<String, Axes> axesByFile;
+  late _Corpus fixtures;
+  late _Corpus real;
+  late List<_Corpus> corpora;
   late OracleResult result;
 
   setUpAll(() {
     collatinus = Collatinus(collatinusDir);
     morphMap = MorphMap.parse(File('test/oracle/morph_map.yaml').readAsStringSync());
     typeMap = TypeMap.parse(File('test/oracle/type_map.yaml').readAsStringSync());
-    allowed = AllowedDiff.parse(
-      File('test/oracle/allowed_diffs.yaml').readAsStringSync(),
-    );
-    items = _ourForms();
-    axesByFile = {
-      for (final file in parseGrammarFiles({
-        for (final path in [
-          'test/fixtures/grammar_examples.yaml',
-          'test/fixtures/grammar_examples_verbs.yaml',
-        ])
-          path: File(path).readAsStringSync(),
-      }))
-        file.dataFileId: file.axes,
-    };
-    result = runOracle(
-      items: items,
-      axesByFile: axesByFile,
-      collatinus: collatinus,
-      morphMap: morphMap,
-      typeMap: typeMap,
+    allowed = [
+      for (final f in ['allowed_diffs', 'allowed_missing'])
+        ...AllowedDiff.parse(File('test/oracle/$f.yaml').readAsStringSync()),
+    ];
+    _Corpus run(List<String> paths, Set<String> coveredTypes) {
+      final sample = buildSample(
+        sources: {for (final path in paths) path: File(path).readAsStringSync()},
+        collatinus: collatinus,
+        typeMap: typeMap,
+        coveredTypes: coveredTypes,
+      );
+      final items = engineForms(sample);
+      final axes = axesOf(sample.sources);
+      return _Corpus(
+        sample,
+        items,
+        axes,
+        runOracle(
+          items: items,
+          axesByFile: axes,
+          collatinus: collatinus,
+          morphMap: morphMap,
+          typeMap: typeMap,
+        ),
+      );
+    }
+
+    fixtures = run(_fixtures, const {});
+    real = run(_real, {
+      for (final file in parseGrammarFiles(
+        {for (final p in _fixtures) p: File(p).readAsStringSync()},
+      ))
+        ...file.declaredTypes.keys,
+    });
+    corpora = [fixtures, real];
+    result = OracleResult(
+      [for (final c in corpora) ...c.result.diffs],
+      {
+        for (final id in ['nouns', 'verbs'])
+          id: corpora.fold(0, (n, c) => n + (c.result.compared[id] ?? 0)),
+      },
+      {
+        for (final c in corpora)
+          for (final e in c.result.skippedMorphs.entries) e.key: e.value,
+      },
+      {},
     );
     File('build/oracle_report.md')
       ..createSync(recursive: true)
@@ -120,9 +144,8 @@ void main() {
 
   test('every sampled item has the type its Collatinus model stands for', () {
     // runOracle throws when a model is unknown or stands for another type.
-    for (final item in items) {
-      expect(typeMap.sample[item.dataFileId]?[item.id], isNotNull,
-          reason: '${item.id} is in paradigms.json but not in type_map.yaml');
+    for (final item in [...fixtures.items, ...real.items]) {
+      expect(item.lemmas, isNotEmpty);
     }
   });
 
@@ -134,7 +157,7 @@ void main() {
       reason: 'see build/oracle_report.md',
     );
     expect(
-      result.stale(allowed).map((a) => a.signature).toList(),
+      result.stale(allowed).map((a) => a.describe).toList(),
       isEmpty,
       reason: 'allowed_diffs.yaml lists differences that no longer happen',
     );
@@ -142,7 +165,7 @@ void main() {
 
   test('the sample covers the deponents of section 15', () {
     for (final id in ['hortari', 'pati', 'largiri']) {
-      expect(items.map((i) => i.id), contains(id));
+      expect(fixtures.items.map((i) => i.id), contains(id));
       expect(
         result.diffs.where(
           (d) => d.item == id && d.category == DiffCategory.form,
@@ -153,22 +176,109 @@ void main() {
     }
   });
 
+  test('the whole sample is compared', () {
+    for (final c in corpora) {
+      expect(c.sample.entries.where((e) => e.synthetic), hasLength(greaterThan(100)));
+      expect(comparedWholeSample(c.result, c.sample.entries.length), isTrue);
+    }
+  });
+
+  test('-nt and -nd count as positional length', () {
+    // Collatinus marks the vowel before nt/nd long; the school spelling does
+    // not, so the pair is the same quantity.
+    expect(sameQuantity('amant', 'amānt'), isTrue);
+    expect(sameQuantity('amandum', 'amāndum'), isTrue);
+  });
+
   group('the gate is red without its parts', () {
+    test('without allowed_missing.yaml, in either direction', () {
+      final forms = allowed.where((a) => a.category == DiffCategory.form).toList();
+      final unlisted = result.unlisted(forms).map((d) => d.category).toSet();
+      expect(unlisted, {DiffCategory.missingOurs, DiffCategory.missingTheirs});
+    });
+
+    test('an allowed_missing.yaml entry that matches nothing is stale', () {
+      final bogus = AllowedDiff(
+        category: DiffCategory.missingOurs,
+        keys: ['no.such.key'],
+        reason: 'x',
+      );
+      expect(result.stale([bogus]), [bogus]);
+    });
+
+    test('a missing-key entry without keys is refused', () {
+      expect(
+        () => AllowedDiff.parse('- {direction: ours, item: ire, reason: x}'),
+        throwsFormatException,
+      );
+    });
+
+    test('an entry for one item hides no key of the item it does not name', () {
+      final ire = result.diffs.firstWhere(
+        (d) => d.category == DiffCategory.missingOurs && d.item == 'ire',
+      );
+      final other = Diff(
+        category: ire.category,
+        item: ire.item,
+        type: ire.type,
+        key: 'ind.fut.akt.1.sg',
+        ours: const [],
+        theirs: const ['x'],
+        synthetic: ire.synthetic,
+        deponent: false,
+      );
+      expect(result.unlisted(allowed).length, 0);
+      expect(allowed.any((a) => a.covers(other)), isFalse);
+    });
+
+    test('a deponent reason does not cover an item that is not a deponent', () {
+      final moved = result.diffs.firstWhere((d) =>
+          d.category == DiffCategory.missingOurs &&
+          d.key.startsWith('imp.fut.akt.') &&
+          d.deponent);
+      final active = Diff(
+        category: moved.category,
+        item: 'amare',
+        type: moved.type,
+        key: moved.key,
+        ours: moved.ours,
+        theirs: moved.theirs,
+        synthetic: false,
+        deponent: false,
+      );
+      expect(allowed.any((a) => a.covers(moved)), isTrue);
+      expect(allowed.any((a) => a.covers(active)), isFalse);
+    });
+
+    test('a shrunk or empty sample is not the whole sample', () {
+      final items = fixtures.items;
+      for (final kept in [items.take(items.length ~/ 2).toList(), <ItemForms>[]]) {
+        final shrunk = runOracle(
+          items: kept,
+          axesByFile: fixtures.axes,
+          collatinus: collatinus,
+          morphMap: morphMap,
+          typeMap: typeMap,
+        );
+        expect(comparedWholeSample(shrunk, fixtures.sample.entries.length), isFalse);
+      }
+    });
+
     test('without allowed_diffs.yaml', () {
       expect(result.unlisted(const []), isNotEmpty);
     });
 
     test('without the j/i spelling rule', () {
       final diffs = runOracle(
-        items: items,
-        axesByFile: axesByFile,
+        items: fixtures.items,
+        axesByFile: fixtures.axes,
         collatinus: collatinus,
         morphMap: morphMap,
         typeMap: typeMap,
         compare: oracleNorm,
       ).unlisted(allowed);
       // Collatinus writes hūjŭs; we write huius.
-      expect(diffs.map((d) => d.item).toSet(), {'hic'});
+      expect(diffs.map((d) => d.item), containsAll(['hic', 'iudicare']));
     });
   });
 }

@@ -23,13 +23,8 @@ Scheduler fsrsScheduler(Ref ref) {
 /// Provider for all FSRS cards (synced with YAML items)
 @riverpod
 Future<Map<String, PracticeItemCard>> fsrsCards(Ref ref) async {
-  // Load all practice items from YAML files
-  final nouns = await loadPracticeItems('lib/data/latin_nouns.yaml');
-  final verbs = await loadPracticeItems('lib/data/latin_verbs.yaml');
-  final allItems = [...nouns, ...verbs];
-
   // Sync cards with current items (creates new cards for new items)
-  return await FsrsStorage.syncCards(allItems);
+  return await FsrsStorage.syncCards(await loadAllPracticeItems());
 }
 
 /// Provider for due cards
@@ -53,11 +48,8 @@ Future<Map<String, List<PracticeItem>>> practicableItemsByType(Ref ref) async {
   final lessonData = await ref.watch(lessonDataProvider.future);
   final settings = await ref.watch(settingsProvider.future);
 
-  final nouns = await loadPracticeItems('lib/data/latin_nouns.yaml');
-  final verbs = await loadPracticeItems('lib/data/latin_verbs.yaml');
-
   final itemsByType = <String, List<PracticeItem>>{'nouns': [], 'verbs': []};
-  for (final item in [...nouns, ...verbs]) {
+  for (final item in await loadAllPracticeItems()) {
     if (!lessonData.includes(item, settings.deselectedWords)) continue;
     if (!settings.isTypeEnabled(item.dataFileId, item.type)) continue;
     itemsByType[item.dataFileId]!.add(item);

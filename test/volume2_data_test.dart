@@ -1,52 +1,32 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/data/practice_data.dart';
-import 'package:latin_practice/models/fsrs_card.dart';
 import 'package:latin_practice/models/practice_item.dart';
 
-/// The volume-2 types that carry explicit forms only. They have no pattern, so
-/// `form_inference_test.dart` never looks at them.
+/// The volume-2 types that carry explicit forms only: they have no pattern.
 const _explicitTypes = [
   'Pronomen-personal',
-  'Pronomen-hic-maskulinum',
-  'Pronomen-hic-femininum',
-  'Pronomen-hic-neutrum',
-  'Pronomen-ille-maskulinum',
-  'Pronomen-ille-femininum',
-  'Pronomen-ille-neutrum',
-  'Pronomen-iste-maskulinum',
-  'Pronomen-iste-femininum',
-  'Pronomen-iste-neutrum',
-  'Pronomen-ipse-maskulinum',
-  'Pronomen-ipse-femininum',
-  'Pronomen-ipse-neutrum',
-  'Pronomen-qui-maskulinum',
-  'Pronomen-qui-femininum',
-  'Pronomen-qui-neutrum',
-  'Pronomen-quis-maskulinum-femininum',
-  'Pronomen-quis-neutrum',
-  'Numerale-unus-maskulinum',
-  'Numerale-unus-femininum',
-  'Numerale-unus-neutrum',
-  'Numerale-tres-maskulinum-femininum',
-  'Numerale-tres-neutrum',
+  'Pronomen-is',
+  'Pronomen-idem',
+  'Pronomen-hic',
+  'Pronomen-ille',
+  'Pronomen-iste',
+  'Pronomen-ipse',
+  'Pronomen-qui',
+  'Pronomen-quis',
+  'Numerale-unus',
+  'Numerale-duo',
+  'Numerale-tres',
   'Numerale-milia',
 ];
 
-const _singular = [
-  'nominative_singular',
-  'genitive_singular',
-  'dative_singular',
-  'accusative_singular',
-  'ablative_singular',
-];
-
-const _plural = [
-  'nominative_plural',
-  'genitive_plural',
-  'dative_plural',
-  'accusative_plural',
-  'ablative_plural',
-];
+List<String> _keys(List<String> numbers, {bool genus = false}) => [
+      for (final number in numbers)
+        for (final kasus in ['nom', 'gen', 'dat', 'akk', 'abl'])
+          if (genus)
+            for (final g in ['m', 'f', 'n']) '$kasus.$number.$g'
+          else
+            '$kasus.$number',
+    ];
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -59,8 +39,8 @@ void main() {
     verbs = await loadPracticeItems('lib/data/latin_verbs.yaml');
   });
 
-  PracticeItem byId(List<PracticeItem> items, String itemId) => items
-      .firstWhere((i) => PracticeItemCard.generateItemId(i) == itemId);
+  PracticeItem byId(List<PracticeItem> items, String itemId) =>
+      items.singleWhere((i) => i.id == itemId);
 
   test('every explicit-forms type of volume 2 has at least one item', () {
     final types = nouns.map((i) => i.type).toSet();
@@ -70,24 +50,28 @@ void main() {
   });
 
   test('defective paradigms expose only the numbers they have', () {
-    expect(byId(nouns, 'nouns:ego').formOrder, _singular);
-    expect(byId(nouns, 'nouns:nos').formOrder, _plural);
-    expect(byId(nouns, 'nouns:quis').formOrder, _singular);
-    expect(byId(nouns, 'nouns:unus').formOrder, _singular);
-    expect(byId(nouns, 'nouns:tres').formOrder, _plural);
-    expect(byId(nouns, 'nouns:milia').formOrder, _plural);
+    expect(byId(nouns, 'nouns:ego').formOrder, _keys(['sg']));
+    expect(byId(nouns, 'nouns:nos').formOrder, _keys(['pl']));
+    expect(byId(nouns, 'nouns:milia').formOrder, _keys(['pl']));
+    expect(byId(nouns, 'nouns:quis').formOrder.toSet(),
+        _keys(['sg'], genus: true).toSet());
+    expect(byId(nouns, 'nouns:unus').formOrder.toSet(),
+        _keys(['sg'], genus: true).toSet());
+    expect(byId(nouns, 'nouns:tres').formOrder.toSet(),
+        _keys(['pl'], genus: true).toSet());
     // The full pronouns keep both numbers.
-    expect(byId(nouns, 'nouns:hic').formOrder, [..._singular, ..._plural]);
+    expect(byId(nouns, 'nouns:hic').formOrder.toSet(),
+        _keys(['sg', 'pl'], genus: true).toSet());
   });
 
   test('Futur I is practised for every conjugation', () {
     final futurKeys = [
-      'futur_first_person_singular',
-      'futur_second_person_singular',
-      'futur_third_person_singular',
-      'futur_first_person_plural',
-      'futur_second_person_plural',
-      'futur_third_person_plural',
+      'ind.fut.akt.1.sg',
+      'ind.fut.akt.2.sg',
+      'ind.fut.akt.3.sg',
+      'ind.fut.akt.1.pl',
+      'ind.fut.akt.2.pl',
+      'ind.fut.akt.3.pl',
     ];
     for (final itemId in [
       'verbs:amare',

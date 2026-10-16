@@ -200,7 +200,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           for (final key in metadata.formOrder) metadata.formLabelsByKey[key]!,
         ];
         final enabledForms =
-            settings.enabledFormsOf(dataFileId, metadata.formOrder, labels);
+            settings.enabledFormsOf(dataFileId, labels);
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,

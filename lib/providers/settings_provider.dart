@@ -1,16 +1,12 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
+import 'package:flutter/services.dart';
 import '../models/settings.dart';
 import '../data/lesson_data.dart';
-import '../data/practice_data.dart';
+import '../data/settings_conversion.dart';
 
 part 'settings_provider.g.dart';
-
-const Map<String, String> _yamlFiles = {
-  'nouns': 'lib/data/latin_nouns.yaml',
-  'verbs': 'lib/data/latin_verbs.yaml',
-};
 
 @riverpod
 class SettingsNotifier extends _$SettingsNotifier {
@@ -30,69 +26,46 @@ class SettingsNotifier extends _$SettingsNotifier {
     }
 
     final json = jsonDecode(settingsJson) as Map<String, dynamic>;
-    if (!json.containsKey('disabledForms')) {
-      final converted = await _convertEnabledSets(json);
-      await _saveSettings(converted);
-      return converted;
+    if (json[settingsVersionField] == settingsVersion) {
+      return Settings.fromJson(json);
     }
-    return Settings.fromJson(json);
+    final converted = Settings.fromJson(await _convert(json));
+    await _saveSettings(converted);
+    return converted;
   }
 
-  /// Convert settings written in the old enabled-set format.
-  ///
-  /// The old format cannot tell "the user switched this off" apart from "this
-  /// entry is new in the YAML", so anything missing from a stored enabled set
-  /// becomes disabled.
-  Future<Settings> _convertEnabledSets(Map<String, dynamic> json) async {
-    final enabledForms = _storedSets(json['enabledForms']);
-    final enabledTypes = _storedSets(json['enabledTypes']);
-
-    final disabledForms = <String, Set<String>>{};
-    final disabledTypes = <String, Set<String>>{};
-    for (final entry in _yamlFiles.entries) {
-      final metadata = await getFormMetadata(entry.value);
-      final forms = enabledForms[entry.key];
-      if (forms != null) {
-        disabledForms[entry.key] =
-            metadata.formOrder.where((k) => !forms.contains(k)).toSet();
-      }
-      final types = enabledTypes[entry.key];
-      if (types != null) {
-        disabledTypes[entry.key] =
-            metadata.availableTypes.where((t) => !types.contains(t)).toSet();
-      }
-    }
-
-    final selectedWords = Set<String>.from(
-      (json['selectedWords'] as List<dynamic>? ?? const [])
-          .map((e) => e as String),
+  /// Reads settings of the v0 or v1 format against the current data.
+  Future<Map<String, dynamic>> _convert(Map<String, dynamic> json) async {
+    final map = MigrationMap.parse(
+      await rootBundle.loadString('lib/data/migration_v2.yaml'),
     );
-    final deselectedWords = <String>{};
-    if (selectedWords.isNotEmpty) {
-      final lessons = await loadLessonData(lessonDataAsset);
-      for (final name in lessons.lessonNames) {
-        for (final word in lessons.lessonWords[name]!) {
-          final normalized = normalizeDiacritics(word);
-          if (!selectedWords.contains(normalized)) {
-            deselectedWords.add(normalized);
-          }
-        }
-      }
+    final converted = convertSettingsV2(json, map);
+    final isV0 = !json.containsKey('disabledForms');
+    if (isV0) {
+      converted['deselectedWords'] = await _deselectedFromSelected(
+        json['selectedWords'] as List<dynamic>? ?? const [],
+        map,
+      );
     }
-
-    return Settings.fromJson(json).copyWith(
-      disabledForms: disabledForms,
-      disabledTypes: disabledTypes,
-      deselectedWords: deselectedWords,
-    );
+    return converted;
   }
 
-  Map<String, Set<String>> _storedSets(dynamic stored) {
-    final map = stored as Map<String, dynamic>?;
-    if (map == null) return {};
-    return map.map(
-      (key, value) => MapEntry(key, Set<String>.from(value as List)),
-    );
+  /// The v0 format stored the words that were ON; every lesson word that is
+  /// not among them is off. An empty set meant "no selection yet".
+  Future<List<String>> _deselectedFromSelected(
+    List<dynamic> selectedWords,
+    MigrationMap map,
+  ) async {
+    if (selectedWords.isEmpty) return [];
+    final selected = {
+      for (final word in selectedWords) map.wordMap['$word'] ?? '$word',
+    };
+    final lessons = await loadLessonData(lessonDataAsset);
+    return {
+      for (final name in lessons.lessonNames)
+        for (final word in lessons.lessonWords[name]!)
+          if (!selected.contains(normalizeDiacritics(word))) normalizeDiacritics(word),
+    }.toList();
   }
 
   Future<void> _saveSettings(Settings settings) async {

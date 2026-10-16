@@ -1,988 +1,764 @@
-# Data file identifier
 data_file_id: nouns
 
-# Feature axes: a label reads out one value per axis. The classification
-# screen offers one selector per axis, in this order.
 axes:
-  kasus:
-    name: Kasus
-    values:
-      nom: Nominativ
-      gen: Genitiv
-      dat: Dativ
-      akk: Akkusativ
-      abl: Ablativ
-      vok: Vokativ
-  numerus:
-    name: Numerus
-    values:
-      sg: Singular
-      pl: Plural
+  kasus:   {name: Kasus, values: {nom: Nominativ, gen: Genitiv, dat: Dativ, akk: Akkusativ, abl: Ablativ, vok: Vokativ}}
+  numerus: {name: Numerus, values: {sg: Singular, pl: Plural}}
+  genus:   {name: Genus, values: {m: maskulin, f: feminin, n: neutrum}}
 
 label:
-  head: []
+  head: [genus]
   tail: [kasus, numerus]
   merge_axis: kasus
 
-# Default values for items
+parts:
+  nom: {label: Nominativ}
+  gen: {label: Genitiv}
+
 defaults:
-  word_form: nominative_singular
+  given_part: nom
+  lemma_part: nom
 
-# Type inference rules: how to infer possible types from word endings
-# Each rule defines a suffix pattern and the types it matches
-# Rules are checked in order - first match wins
-# Format: suffix -> list of possible types
 type_inference:
-  rules:
-    - suffix: "us"
-      min_length: 3
-      types:
-        - O-Deklination-maskulinum
-    - suffix: "um"
-      min_length: 3
-      types:
-        - O-Deklination-neutrum
-    - suffix: "a"
-      min_length: 2
-      types:
-        - A-Deklination
-    - suffix: "es"
-      min_length: 3
-      types:
-        - E-Deklination
-    - suffix: "is"
-      min_length: 3
-      types:
-        - E-Deklination
+  nom:
+    - {suffix: "us", min_length: 3, types: [O-Deklination-maskulinum]}
+    - {suffix: "um", min_length: 3, types: [O-Deklination-neutrum]}
+    - {suffix: "a", min_length: 2, types: [A-Deklination]}
+    - {suffix: "ēs", min_length: 3, types: [E-Deklination]}
 
-# Pattern definitions for inferring forms from a base word
-# Each pattern defines how to generate all forms from the nominative_singular
-type_patterns:
+types:
+  # Ending tables. Leaf types (no delegate, no compose, S14); the verb file
+  # delegates its participles to them.
+  a-o-Endungen:
+    abstract: true
+    forms:
+      nom.sg.m: "{stamm}us"
+      gen.sg.m: "{stamm}ī"
+      dat.sg.m: "{stamm}ō"
+      akk.sg.m: "{stamm}um"
+      abl.sg.m: "{stamm}ō"
+      vok.sg.m: "{stamm}e"
+      nom.pl.m: "{stamm}ī"
+      gen.pl.m: "{stamm}ōrum"
+      dat.pl.m: "{stamm}īs"
+      akk.pl.m: "{stamm}ōs"
+      abl.pl.m: "{stamm}īs"
+      vok.pl.m: "{stamm}ī"
+      nom.sg.f: "{stamm}a"
+      gen.sg.f: "{stamm}ae"
+      dat.sg.f: "{stamm}ae"
+      akk.sg.f: "{stamm}am"
+      abl.sg.f: "{stamm}ā"
+      vok.sg.f: "{stamm}a"
+      nom.pl.f: "{stamm}ae"
+      gen.pl.f: "{stamm}ārum"
+      dat.pl.f: "{stamm}īs"
+      akk.pl.f: "{stamm}ās"
+      abl.pl.f: "{stamm}īs"
+      vok.pl.f: "{stamm}ae"
+      nom.sg.n: "{stamm}um"
+      gen.sg.n: "{stamm}ī"
+      dat.sg.n: "{stamm}ō"
+      akk.sg.n: "{stamm}um"
+      abl.sg.n: "{stamm}ō"
+      vok.sg.n: "{stamm}um"
+      nom.pl.n: "{stamm}a"
+      gen.pl.n: "{stamm}ōrum"
+      dat.pl.n: "{stamm}īs"
+      akk.pl.n: "{stamm}a"
+      abl.pl.n: "{stamm}īs"
+      vok.pl.n: "{stamm}a"
+
+  3-Endungen:
+    abstract: true
+    forms:
+      nom.sg.m: "{nom_m}"
+      gen.sg.m: "{stamm}is"
+      dat.sg.m: "{stamm}ī"
+      akk.sg.m: "{stamm}em"
+      abl.sg.m: "{stamm}ī"
+      vok.sg.m: "{nom_m}"
+      nom.pl.m: "{stamm}ēs"
+      gen.pl.m: "{stamm}ium"
+      dat.pl.m: "{stamm}ibus"
+      akk.pl.m: ["{stamm}ēs", "{stamm}īs"]
+      abl.pl.m: "{stamm}ibus"
+      vok.pl.m: "{stamm}ēs"
+      nom.sg.f: "{nom_f}"
+      gen.sg.f: "{stamm}is"
+      dat.sg.f: "{stamm}ī"
+      akk.sg.f: "{stamm}em"
+      abl.sg.f: "{stamm}ī"
+      vok.sg.f: "{nom_f}"
+      nom.pl.f: "{stamm}ēs"
+      gen.pl.f: "{stamm}ium"
+      dat.pl.f: "{stamm}ibus"
+      akk.pl.f: ["{stamm}ēs", "{stamm}īs"]
+      abl.pl.f: "{stamm}ibus"
+      vok.pl.f: "{stamm}ēs"
+      nom.sg.n: "{nom_n}"
+      gen.sg.n: "{stamm}is"
+      dat.sg.n: "{stamm}ī"
+      akk.sg.n: "{nom_n}"
+      abl.sg.n: "{stamm}ī"
+      vok.sg.n: "{nom_n}"
+      nom.pl.n: "{stamm}ia"
+      gen.pl.n: "{stamm}ium"
+      dat.pl.n: "{stamm}ibus"
+      akk.pl.n: "{stamm}ia"
+      abl.pl.n: "{stamm}ibus"
+      vok.pl.n: "{stamm}ia"
+
+  3-Endungen-Partizip:
+    abstract: true
+    inherits_from: 3-Endungen
+    forms:
+      abl.sg.m: ["{stamm}e", "{stamm}ī"]
+      abl.sg.f: ["{stamm}e", "{stamm}ī"]
+      abl.sg.n: ["{stamm}e", "{stamm}ī"]
+      akk.pl.m: "{stamm}ēs"
+      akk.pl.f: "{stamm}ēs"
+
+  # Declensions. One gender per type, so their keys carry no genus.
   O-Deklination-maskulinum:
-    # Pattern: base word ends in -us (masculine)
-    # From nominative_singular (e.g., dominus)
-    genitive_singular: "{stem}i"           # domini
-    dative_singular: "{stem}o"             # domino
-    accusative_singular: "{stem}um"        # dominum
-    ablative_singular: "{stem}o"           # domino
-    vocative_singular: "{stem}e"           # domine
-    nominative_plural: "{stem}i"           # domini
-    genitive_plural: "{stem}orum"          # dominorum
-    dative_plural: "{stem}is"              # dominis
-    accusative_plural: "{stem}os"          # dominos
-    ablative_plural: "{stem}is"            # dominis
-    vocative_plural: "{stem}i"             # domini
-    stem_extraction: "remove_suffix:us"
+    stems:
+      stamm: {from: nom, remove: "us", display: Stamm}
+    forms:
+      nom.sg: "{stamm}us"
+      gen.sg: "{stamm}ī"
+      dat.sg: "{stamm}ō"
+      akk.sg: "{stamm}um"
+      abl.sg: "{stamm}ō"
+      vok.sg: "{stamm}e"
+      nom.pl: "{stamm}ī"
+      gen.pl: "{stamm}ōrum"
+      dat.pl: "{stamm}īs"
+      akk.pl: "{stamm}ōs"
+      abl.pl: "{stamm}īs"
+      vok.pl: "{stamm}ī"
 
   O-Deklination-neutrum:
-    # Pattern: base word ends in -um (neuter)
-    # From nominative_singular (e.g., templum)
-    genitive_singular: "{stem}i"           # templi
-    dative_singular: "{stem}o"             # templo
-    accusative_singular: "{stem}um"        # templum (same as nominative)
-    ablative_singular: "{stem}o"           # templo
-    vocative_singular: "{stem}um"          # templum (same as nominative)
-    nominative_plural: "{stem}a"           # templa
-    genitive_plural: "{stem}orum"          # templorum
-    dative_plural: "{stem}is"              # templis
-    accusative_plural: "{stem}a"           # templa (same as nominative)
-    ablative_plural: "{stem}is"            # templis
-    vocative_plural: "{stem}a"             # templa (same as nominative)
-    stem_extraction: "remove_suffix:um"
+    stems:
+      stamm: {from: nom, remove: "um", display: Stamm}
+    forms:
+      nom.sg: "{stamm}um"
+      gen.sg: "{stamm}ī"
+      dat.sg: "{stamm}ō"
+      akk.sg: "{stamm}um"
+      abl.sg: "{stamm}ō"
+      vok.sg: "{stamm}um"
+      nom.pl: "{stamm}a"
+      gen.pl: "{stamm}ōrum"
+      dat.pl: "{stamm}īs"
+      akk.pl: "{stamm}a"
+      abl.pl: "{stamm}īs"
+      vok.pl: "{stamm}a"
 
   A-Deklination:
-    # Pattern: base word ends in -a
-    # From nominative_singular (e.g., rosa)
-    genitive_singular: "{stem}ae"          # rosae
-    dative_singular: "{stem}ae"            # rosae
-    accusative_singular: "{stem}am"        # rosam
-    ablative_singular: "{stem}a"           # rosa
-    vocative_singular: "{stem}a"           # rosa
-    nominative_plural: "{stem}ae"          # rosae
-    genitive_plural: "{stem}arum"          # rosarum
-    dative_plural: "{stem}is"              # rosis
-    accusative_plural: "{stem}as"          # rosas
-    ablative_plural: "{stem}is"            # rosis
-    vocative_plural: "{stem}ae"            # rosae
-    stem_extraction: "remove_suffix:a"     # Remove -a to get stem
+    stems:
+      stamm: {from: nom, remove: "a", display: Stamm}
+    forms:
+      nom.sg: "{stamm}a"
+      gen.sg: "{stamm}ae"
+      dat.sg: "{stamm}ae"
+      akk.sg: "{stamm}am"
+      abl.sg: "{stamm}ā"
+      vok.sg: "{stamm}a"
+      nom.pl: "{stamm}ae"
+      gen.pl: "{stamm}ārum"
+      dat.pl: "{stamm}īs"
+      akk.pl: "{stamm}ās"
+      abl.pl: "{stamm}īs"
+      vok.pl: "{stamm}ae"
 
   E-Deklination:
-    # Pattern: base word ends in -es or -is
-    # From nominative_singular (e.g., dies)
-    genitive_singular: "{stem}ei"          # diei
-    dative_singular: "{stem}ei"            # diei
-    accusative_singular: "{stem}em"        # diem
-    ablative_singular: "{stem}e"           # die
-    nominative_plural: "{stem}es"          # dies
-    genitive_plural: "{stem}erum"          # dierum
-    dative_plural: "{stem}ebus"            # diebus
-    accusative_plural: "{stem}es"          # dies
-    ablative_plural: "{stem}ebus"          # diebus
-    stem_extraction: "remove_suffix:es,is" # Remove -es or -is to get stem
+    stems:
+      stamm: {from: nom, remove: "ēs", display: Stamm}
+    forms:
+      nom.sg: "{stamm}ēs"
+      gen.sg: "{stamm}ēī"
+      dat.sg: "{stamm}ēī"
+      akk.sg: "{stamm}em"
+      abl.sg: "{stamm}ē"
+      vok.sg: "{stamm}ēs"
+      nom.pl: "{stamm}ēs"
+      gen.pl: "{stamm}ērum"
+      dat.pl: "{stamm}ēbus"
+      akk.pl: "{stamm}ēs"
+      abl.pl: "{stamm}ēbus"
+      vok.pl: "{stamm}ēs"
 
   U-Deklination:
-    # Pattern: base word ends in -us
-    # From nominative_singular (e.g., manus)
-    genitive_singular: "{stem}us"          # manus
-    dative_singular: "{stem}ui"            # manui
-    accusative_singular: "{stem}um"        # manum
-    ablative_singular: "{stem}u"           # manu
-    nominative_plural: "{stem}us"          # manus
-    genitive_plural: "{stem}uum"           # manuum
-    dative_plural: "{stem}ibus"            # manibus
-    accusative_plural: "{stem}us"          # manus
-    ablative_plural: "{stem}ibus"          # manibus
-    stem_extraction: "remove_suffix:us"    # Remove -us to get stem
+    stems:
+      stamm: {from: nom, remove: "us", display: Stamm}
+    forms:
+      nom.sg: "{stamm}us"
+      gen.sg: "{stamm}ūs"
+      dat.sg: "{stamm}uī"
+      akk.sg: "{stamm}um"
+      abl.sg: "{stamm}ū"
+      vok.sg: "{stamm}us"
+      nom.pl: "{stamm}ūs"
+      gen.pl: "{stamm}uum"
+      dat.pl: "{stamm}ibus"
+      akk.pl: "{stamm}ūs"
+      abl.pl: "{stamm}ibus"
+      vok.pl: "{stamm}ūs"
 
   Konsonantische-Deklination-mf:
-    # Pattern: consonant stems (masculine/feminine)
-    # Stem derived from genitive singular (base_form): regis → reg-
-    # Nominative is irregular, provided as word
-    genitive_singular: "{stem}is"          # regis
-    dative_singular: "{stem}i"             # regi
-    accusative_singular: "{stem}em"        # regem
-    ablative_singular: "{stem}e"           # rege
-    nominative_plural: "{stem}es"          # reges
-    genitive_plural: "{stem}um"            # regum
-    dative_plural: "{stem}ibus"            # regibus
-    accusative_plural: "{stem}es"          # reges
-    ablative_plural: "{stem}ibus"          # regibus
-    genitive_stem_extraction: "remove_suffix:is"
+    stems:
+      stamm:  {from: gen, remove: "is", display: Stamm}
+      nom_sg: {from: nom, remove: "", display: Nominativ}
+    forms:
+      nom.sg: "{nom_sg}"
+      gen.sg: "{stamm}is"
+      dat.sg: "{stamm}ī"
+      akk.sg: "{stamm}em"
+      abl.sg: "{stamm}e"
+      vok.sg: "{nom_sg}"
+      nom.pl: "{stamm}ēs"
+      gen.pl: "{stamm}um"
+      dat.pl: "{stamm}ibus"
+      akk.pl: "{stamm}ēs"
+      abl.pl: "{stamm}ibus"
+      vok.pl: "{stamm}ēs"
 
   Konsonantische-Deklination-n:
-    # Pattern: consonant stems (neuter)
-    # Stem derived from genitive singular (base_form): corporis → corpor-
-    # Nominative is irregular, provided as word
-    # accusative_singular = nominative (provide as explicit form per item)
-    genitive_singular: "{stem}is"          # corporis
-    dative_singular: "{stem}i"             # corpori
-    ablative_singular: "{stem}e"           # corpore
-    nominative_plural: "{stem}a"           # corpora
-    genitive_plural: "{stem}um"            # corporum
-    dative_plural: "{stem}ibus"            # corporibus
-    accusative_plural: "{stem}a"           # corpora
-    ablative_plural: "{stem}ibus"          # corporibus
-    genitive_stem_extraction: "remove_suffix:is"
+    stems:
+      stamm:  {from: gen, remove: "is", display: Stamm}
+      nom_sg: {from: nom, remove: "", display: Nominativ}
+    forms:
+      nom.sg: "{nom_sg}"
+      gen.sg: "{stamm}is"
+      dat.sg: "{stamm}ī"
+      akk.sg: "{nom_sg}"
+      abl.sg: "{stamm}e"
+      vok.sg: "{nom_sg}"
+      nom.pl: "{stamm}a"
+      gen.pl: "{stamm}um"
+      dat.pl: "{stamm}ibus"
+      akk.pl: "{stamm}a"
+      abl.pl: "{stamm}ibus"
+      vok.pl: "{stamm}a"
 
   Konsonantische-Deklination-i-mf:
-    # i-Stämme (m/f): wie die konsonantische Deklination, aber Genitiv Plural -ium
     inherits_from: Konsonantische-Deklination-mf
-    genitive_plural: "{stem}ium"           # urbium
+    forms:
+      gen.pl: "{stamm}ium"
 
   Konsonantische-Deklination-i-n:
-    # i-Stämme (n): mare, maris — Ablativ Singular -i, Plural -ia/-ium
-    # accusative_singular = nominative (als explizite Form pro Item)
     inherits_from: Konsonantische-Deklination-n
-    ablative_singular: "{stem}i"           # mari
-    nominative_plural: "{stem}ia"          # maria
-    genitive_plural: "{stem}ium"           # marium
-    accusative_plural: "{stem}ia"          # maria
+    forms:
+      abl.sg: "{stamm}ī"
+      nom.pl: "{stamm}ia"
+      gen.pl: "{stamm}ium"
+      akk.pl: "{stamm}ia"
 
-# Form key -> its feature bundle.
-form_labels:
-  nominative_singular: {kasus: nom, numerus: sg}
-  genitive_singular: {kasus: gen, numerus: sg}
-  dative_singular: {kasus: dat, numerus: sg}
-  accusative_singular: {kasus: akk, numerus: sg}
-  ablative_singular: {kasus: abl, numerus: sg}
-  vocative_singular: {kasus: vok, numerus: sg}
-  nominative_plural: {kasus: nom, numerus: pl}
-  genitive_plural: {kasus: gen, numerus: pl}
-  dative_plural: {kasus: dat, numerus: pl}
-  accusative_plural: {kasus: akk, numerus: pl}
-  ablative_plural: {kasus: abl, numerus: pl}
-  vocative_plural: {kasus: vok, numerus: pl}
-
-form_order:
-  - nominative_singular
-  - genitive_singular
-  - dative_singular
-  - accusative_singular
-  - ablative_singular
-  - nominative_plural
-  - genitive_plural
-  - dative_plural
-  - accusative_plural
-  - ablative_plural
+  # Pronouns and numerals: one type per lexeme, every form on the item.
+  Pronomen-personal: {}
+  Pronomen-is: {}
+  Pronomen-idem: {}
+  Pronomen-hic: {}
+  Pronomen-ille: {}
+  Pronomen-iste: {}
+  Pronomen-ipse: {}
+  Pronomen-qui: {}
+  Pronomen-quis: {}
+  Numerale-unus: {}
+  Numerale-duo: {}
+  Numerale-tres: {}
+  Numerale-milia: {}
 
 items:
-  # Example: Full form specification (explicit forms - still supported)
-  - type: O-Deklination-maskulinum
-    translation: Der Hausherr/Herr
-    word_form: nominative_singular
-    word: dominus
-    possible_types:
-      - O-Deklination-maskulinum
-    forms:
-      nominative_singular: dominus
-      genitive_singular: domini
-      dative_singular: domino
-      accusative_singular: dominum
-      ablative_singular: domino
-      nominative_plural: domini
-      genitive_plural: dominorum
-      dative_plural: dominis
-      accusative_plural: dominos
-      ablative_plural: dominis
-  - type: A-Deklination
-    translation: Die Rose
-    word_form: nominative_singular
-    word: rosa
-    possible_types:
-      - A-Deklination
-    forms:
-      nominative_singular: rosa
-      genitive_singular: rosae
-      dative_singular: rosae
-      accusative_singular: rosam
-      ablative_singular: rosa
-      nominative_plural: rosae
-      genitive_plural: rosarum
-      dative_plural: rosis
-      accusative_plural: rosas
-      ablative_plural: rosis
-  - type: E-Deklination
-    translation: Der Tag
-    word_form: nominative_singular
-    word: dies
-    possible_types:
-      - E-Deklination
-    forms:
-      nominative_singular: dies
-      genitive_singular: diei
-      dative_singular: diei
-      accusative_singular: diem
-      ablative_singular: die
-      nominative_plural: dies
-      genitive_plural: dierum
-      dative_plural: diebus
-      accusative_plural: dies
-      ablative_plural: diebus
+  - translation: "Der Hausherr/Herr"
+    parts: {nom: "dominus"}
+  - translation: "Die Rose"
+    parts: {nom: "rosa"}
+  - translation: "Der Tag"
+    parts: {nom: "diēs"}
   - type: U-Deklination
-    translation: Die Hand
-    word_form: nominative_singular
-    word: manus
-    verify_inference: true
-    possible_types:
-      - U-Deklination
-    forms:
-      nominative_singular: manus
-      genitive_singular: manus
-      dative_singular: manui
-      accusative_singular: manum
-      ablative_singular: manu
-      nominative_plural: manus
-      genitive_plural: manuum
-      dative_plural: manibus
-      accusative_plural: manus
-      ablative_plural: manibus
-
-  # Example: Minimal form (type and possible_types inferred from word ending)
-  # Just specify word and translation - everything else is inferred!
-  # word_form defaults to "nominative_singular" (from defaults section)
-  - translation: Der Gott
-    word: deus
-    # type: inferred as "O-Deklination" (from -us ending)
-    # possible_types: inferred as ["O-Deklination"]
-    # word_form: defaults to "nominative_singular"
-    # forms: inferred automatically
-
-  - translation: das Kapitol (einer der sieben Hügel Roms)
-    word: Capitōlium
-  # Items with verify_inference: true carry their inferred forms explicitly as
-  # regression goldens for test/form_inference_test.dart.
-  - type: O-Deklination-maskulinum
-    translation: der Römer
-    word: Rōmānus
-    verify_inference: true
-    forms:
-      nominative_singular: Rōmānus
-      genitive_singular: Romani
-      dative_singular: Romano
-      accusative_singular: Romanum
-      ablative_singular: Romano
-      nominative_plural: Romani
-      genitive_plural: Romanorum
-      dative_plural: Romanis
-      accusative_plural: Romanos
-      ablative_plural: Romanis
-  - translation: die Unterwelt; der Tartarus
-    word: Tartarus
-  - translation: der Gegner, Feind
-    word: adversārius
-  - translation: das Gebäude, Bauwerk
-    word: aedificium
-  - translation: das Amphitheater
-    word: amphitheātrum
-  - type: O-Deklination-maskulinum
-    translation: der Freund
-    word: amīcus
-    verify_inference: true
-    forms:
-      nominative_singular: amīcus
-      genitive_singular: amici
-      dative_singular: amico
-      accusative_singular: amicum
-      ablative_singular: amico
-      nominative_plural: amici
-      genitive_plural: amicorum
-      dative_plural: amicis
-      accusative_plural: amicos
-      ablative_plural: amicis
-  - translation: der Sand; die Arena, der Kampfplatz
-    word: arēna
-  - translation: die Gerichtshalle, Markthalle
-    word: basilica
-  - translation: das (wilde) Tier
-    word: bestia
-  - translation: die Nahrung, die Speise
-    word: cibus
-  - translation: der Rat, Plan, Beschluss
-    word: cōnsilium
-  - translation: die Kurie (Versammlungsort des Senats)
-    word: cūria
-  - translation: die Göttin
-    word: dea
-  - translation: die Herrin, Ehefrau
-    word: domina
-  - translation: das Geschenk, die Gabe
-    word: dōnum
-  - translation: das Pferd
-    word: equus
-  - translation: die Familie; die Hausgemeinschaft
-    word: familia
-  - translation: der Marktplatz (das Forum)
-    word: forum
-  - translation: das Getreide
-    word: frūmentum
-  - type: A-Deklination
-    translation: die Frau
-    word: fēmina
-    verify_inference: true
-    forms:
-      nominative_singular: fēmina
-      genitive_singular: feminae
-      dative_singular: feminae
-      accusative_singular: feminam
-      ablative_singular: femina
-      nominative_plural: feminae
-      genitive_plural: feminarum
-      dative_plural: feminis
-      accusative_plural: feminas
-      ablative_plural: feminis
-  - type: A-Deklination
-    translation: die Tochter
-    word: fīlia
-    verify_inference: true
-    forms:
-      nominative_singular: fīlia
-      genitive_singular: filiae
-      dative_singular: filiae
-      accusative_singular: filiam
-      ablative_singular: filia
-      nominative_plural: filiae
-      genitive_plural: filiarum
-      dative_plural: filiis
-      accusative_plural: filias
-      ablative_plural: filiis
-  - type: O-Deklination-maskulinum
-    translation: der Sohn
-    word: fīlius
-    verify_inference: true
-    forms:
-      nominative_singular: fīlius
-      genitive_singular: filii
-      dative_singular: filio
-      accusative_singular: filium
-      ablative_singular: filio
-      nominative_plural: filii
-      genitive_plural: filiorum
-      dative_plural: filiis
-      accusative_plural: filios
-      ablative_plural: filiis
-  - translation: der Garten
-    word: hortus
-  - translation: das Opfer, Opfertier
-    word: hostia
-  - translation: der Brand
-    word: incendium
-  - translation: das Spiel, Schauspiel; die Schule
-    word: lūdus
-  - translation: das Denkmal
-    word: monumentum
-  - translation: das Ungeheuer
-    word: mōnstrum
-  - translation: die Aufgabe, Beschäftigung
-    word: negōtium
-  - translation: die Gefahr, das Abenteuer
-    word: perīculum
-  - translation: das Volk
-    word: populus
-  - translation: die Tür, das Tor, der Eingang
-    word: porta
-  - translation: das Mädchen, die junge Frau
-    word: puella
-  - translation: das Opfer
-    word: sacrificium
-  - translation: die Weisheit, Klugheit
-    word: sapientia
-  - translation: die Sklavin
-    word: serva
-  - translation: der Sklave
-    word: servus
-  - translation: das Bild, Götterbild
-    word: simulācrum
-  - translation: das Schauspiel
-    word: spectāculum
-  - translation: das Standbild, die Statue
-    word: statua
-  - translation: der Laden, das Wirtshaus
-    word: taberna
-  - translation: die Tafel, Schreibtafel
-    word: tabula
-  - type: O-Deklination-neutrum
-    translation: der Tempel
-    word_form: nominative_singular
-    word: templum
-    verify_inference: true
-    possible_types:
-      - O-Deklination-neutrum
-    forms:
-      nominative_singular: templum
-      genitive_singular: templi
-      dative_singular: templo
-      accusative_singular: templum
-      ablative_singular: templo
-      nominative_plural: templa
-      genitive_plural: templorum
-      dative_plural: templis
-      accusative_plural: templa
-      ablative_plural: templis
-  - translation: das Obergewand (die Toga)
-    word: toga
-  - translation: die Menschenmenge; die Unordnung; der Lärm
-    word: turba
-  - translation: der Schatten
-    word: umbra
-  - translation: das Wort
-    word: verbum
-  - translation: das Haus, Landhaus
-    word: vīlla
-  - translation: der Wein
-    word: vīnum
-  - translation: der Altar
-    word: āra
-
-  # Konsonantische Deklination (m/f) — word + base_form (Genitiv) reicht
+    translation: "Die Hand"
+    parts: {nom: "manus"}
+  - translation: "Der Gott"
+    parts: {nom: "deus"}
+  - translation: "das Kapitol (einer der sieben Hügel Roms)"
+    parts: {nom: "Capitōlium"}
+  - translation: "der Römer"
+    parts: {nom: "Rōmānus"}
+  - translation: "die Unterwelt; der Tartarus"
+    parts: {nom: "Tartarus"}
+  - translation: "der Gegner, Feind"
+    parts: {nom: "adversārius"}
+  - translation: "das Gebäude, Bauwerk"
+    parts: {nom: "aedificium"}
+  - translation: "das Amphitheater"
+    parts: {nom: "amphitheātrum"}
+  - translation: "der Freund"
+    parts: {nom: "amīcus"}
+  - translation: "der Sand; die Arena, der Kampfplatz"
+    parts: {nom: "arēna"}
+  - translation: "die Gerichtshalle, Markthalle"
+    parts: {nom: "basilica"}
+  - translation: "das (wilde) Tier"
+    parts: {nom: "bēstia"}
+  - translation: "die Nahrung, die Speise"
+    parts: {nom: "cibus"}
+  - translation: "der Rat, Plan, Beschluss"
+    parts: {nom: "cōnsilium"}
+  - translation: "die Kurie (Versammlungsort des Senats)"
+    parts: {nom: "cūria"}
+  - translation: "die Göttin"
+    parts: {nom: "dea"}
+  - translation: "die Herrin, Ehefrau"
+    parts: {nom: "domina"}
+  - translation: "das Geschenk, die Gabe"
+    parts: {nom: "dōnum"}
+  - translation: "das Pferd"
+    parts: {nom: "equus"}
+  - translation: "die Familie; die Hausgemeinschaft"
+    parts: {nom: "familia"}
+  - translation: "der Marktplatz (das Forum)"
+    parts: {nom: "forum"}
+  - translation: "das Getreide"
+    parts: {nom: "frūmentum"}
+  - translation: "die Frau"
+    parts: {nom: "fēmina"}
+  - translation: "die Tochter"
+    parts: {nom: "fīlia"}
+  - translation: "der Sohn"
+    parts: {nom: "fīlius"}
+  - translation: "der Garten"
+    parts: {nom: "hortus"}
+  - translation: "das Opfer, Opfertier"
+    parts: {nom: "hostia"}
+  - translation: "der Brand"
+    parts: {nom: "incendium"}
+  - translation: "das Spiel, Schauspiel; die Schule"
+    parts: {nom: "lūdus"}
+  - translation: "das Denkmal"
+    parts: {nom: "monumentum"}
+  - translation: "das Ungeheuer"
+    parts: {nom: "mōnstrum"}
+  - translation: "die Aufgabe, Beschäftigung"
+    parts: {nom: "negōtium"}
+  - translation: "die Gefahr, das Abenteuer"
+    parts: {nom: "perīculum"}
+  - translation: "das Volk"
+    parts: {nom: "populus"}
+  - translation: "die Tür, das Tor, der Eingang"
+    parts: {nom: "porta"}
+  - translation: "das Mädchen, die junge Frau"
+    parts: {nom: "puella"}
+  - translation: "das Opfer"
+    parts: {nom: "sacrificium"}
+  - translation: "die Weisheit, Klugheit"
+    parts: {nom: "sapientia"}
+  - translation: "die Sklavin"
+    parts: {nom: "serva"}
+  - translation: "der Sklave"
+    parts: {nom: "servus"}
+  - translation: "das Bild, Götterbild"
+    parts: {nom: "simulācrum"}
+  - translation: "das Schauspiel"
+    parts: {nom: "spectāculum"}
+  - translation: "das Standbild, die Statue"
+    parts: {nom: "statua"}
+  - translation: "der Laden, das Wirtshaus"
+    parts: {nom: "taberna"}
+  - translation: "die Tafel, Schreibtafel"
+    parts: {nom: "tabula"}
+  - translation: "der Tempel"
+    parts: {nom: "templum"}
+  - translation: "das Obergewand (die Toga)"
+    parts: {nom: "toga"}
+  - translation: "die Menschenmenge; die Unordnung; der Lärm"
+    parts: {nom: "turba"}
+  - translation: "der Schatten"
+    parts: {nom: "umbra"}
+  - translation: "das Wort"
+    parts: {nom: "verbum"}
+  - translation: "das Haus, Landhaus"
+    parts: {nom: "vīlla"}
+  - translation: "der Wein"
+    parts: {nom: "vīnum"}
+  - translation: "der Altar"
+    parts: {nom: "āra"}
   - type: Konsonantische-Deklination-mf
-    translation: der König
-    word_form: nominative_singular
-    word: rex
-    base_form: regis
-    verify_inference: true
-    possible_types:
-      - Konsonantische-Deklination-mf
-    forms:
-      nominative_singular: rex
-      genitive_singular: regis
-      dative_singular: regi
-      accusative_singular: regem
-      ablative_singular: rege
-      nominative_plural: reges
-      genitive_plural: regum
-      dative_plural: regibus
-      accusative_plural: reges
-      ablative_plural: regibus
+    translation: "der König"
+    parts: {nom: "rēx", gen: "rēgis"}
   - type: Konsonantische-Deklination-mf
-    translation: die Ehefrau
-    word_form: nominative_singular
-    word: uxor
-    base_form: uxoris
-    verify_inference: true
-    possible_types:
-      - Konsonantische-Deklination-mf
-    forms:
-      nominative_singular: uxor
-      genitive_singular: uxoris
-      dative_singular: uxori
-      accusative_singular: uxorem
-      ablative_singular: uxore
-      nominative_plural: uxores
-      genitive_plural: uxorum
-      dative_plural: uxoribus
-      accusative_plural: uxores
-      ablative_plural: uxoribus
-
-  # Konsonantische Deklination (n) — word + base_form (Genitiv) reicht
-  # accusative_singular = nominative (muss als explizite Form angegeben werden)
+    translation: "die Ehefrau"
+    parts: {nom: "uxor", gen: "uxōris"}
   - type: Konsonantische-Deklination-n
-    translation: der Körper
-    word_form: nominative_singular
-    word: corpus
-    base_form: corporis
-    verify_inference: true
-    possible_types:
-      - Konsonantische-Deklination-n
+    translation: "der Körper"
+    parts: {nom: "corpus", gen: "corporis"}
+  - type: Pronomen-is
+    translation: "dieser, diese, dieses; er, sie, es"
+    parts: {nom: "is"}
     forms:
-      nominative_singular: corpus
-      genitive_singular: corporis
-      dative_singular: corpori
-      accusative_singular: corpus
-      ablative_singular: corpore
-      nominative_plural: corpora
-      genitive_plural: corporum
-      dative_plural: corporibus
-      accusative_plural: corpora
-      ablative_plural: corporibus
-
-  # Pronomen: is, ea, id (dieser, diese, dieses)
-  - type: Pronomen-is-maskulinum
-    translation: dieser (m)
-    word_form: nominative_singular
-    word: is
-    possible_types:
-      - Pronomen-is-maskulinum
-    forms:
-      nominative_singular: is
-      genitive_singular: eius
-      dative_singular: ei
-      accusative_singular: eum
-      ablative_singular: eo
-      nominative_plural: ii
-      genitive_plural: eorum
-      dative_plural: iis
-      accusative_plural: eos
-      ablative_plural: iis
-  - type: Pronomen-is-femininum
-    translation: diese (f)
-    word_form: nominative_singular
-    word: ea
-    possible_types:
-      - Pronomen-is-femininum
-    forms:
-      nominative_singular: ea
-      genitive_singular: eius
-      dative_singular: ei
-      accusative_singular: eam
-      ablative_singular: ea
-      nominative_plural: eae
-      genitive_plural: earum
-      dative_plural: iis
-      accusative_plural: eas
-      ablative_plural: iis
-  - type: Pronomen-is-neutrum
-    translation: dieses (n)
-    word_form: nominative_singular
-    word: id
-    possible_types:
-      - Pronomen-is-neutrum
-    forms:
-      nominative_singular: id
-      genitive_singular: eius
-      dative_singular: ei
-      accusative_singular: id
-      ablative_singular: eo
-      nominative_plural: ea
-      genitive_plural: eorum
-      dative_plural: iis
-      accusative_plural: ea
-      ablative_plural: iis
-
-  # i-Stämme der konsonantischen Deklination: Genitiv Plural auf -ium
+      nom.sg.m: "is"
+      gen.sg.m: "eius"
+      dat.sg.m: "eī"
+      akk.sg.m: "eum"
+      abl.sg.m: "eō"
+      nom.pl.m: ["iī", "eī"]
+      gen.pl.m: "eōrum"
+      dat.pl.m: ["iīs", "eīs"]
+      akk.pl.m: "eōs"
+      abl.pl.m: ["iīs", "eīs"]
+      nom.sg.f: "ea"
+      gen.sg.f: "eius"
+      dat.sg.f: "eī"
+      akk.sg.f: "eam"
+      abl.sg.f: "eā"
+      nom.pl.f: "eae"
+      gen.pl.f: "eārum"
+      dat.pl.f: ["iīs", "eīs"]
+      akk.pl.f: "eās"
+      abl.pl.f: ["iīs", "eīs"]
+      nom.sg.n: "id"
+      gen.sg.n: "eius"
+      dat.sg.n: "eī"
+      akk.sg.n: "id"
+      abl.sg.n: "eō"
+      nom.pl.n: "ea"
+      gen.pl.n: "eōrum"
+      dat.pl.n: ["iīs", "eīs"]
+      akk.pl.n: "ea"
+      abl.pl.n: ["iīs", "eīs"]
   - type: Konsonantische-Deklination-i-mf
-    translation: die Stadt
-    word_form: nominative_singular
-    word: urbs
-    base_form: urbis
-    verify_inference: true
-    forms:
-      nominative_singular: urbs
-      genitive_singular: urbis
-      dative_singular: urbi
-      accusative_singular: urbem
-      ablative_singular: urbe
-      nominative_plural: urbes
-      genitive_plural: urbium
-      dative_plural: urbibus
-      accusative_plural: urbes
-      ablative_plural: urbibus
+    translation: "die Stadt"
+    parts: {nom: "urbs", gen: "urbis"}
   - type: Konsonantische-Deklination-i-mf
-    translation: der Teil
-    word: pars
-    base_form: partis
+    translation: "der Teil"
+    parts: {nom: "pars", gen: "partis"}
   - type: Konsonantische-Deklination-i-n
-    translation: das Meer
-    word_form: nominative_singular
-    word: mare
-    base_form: maris
-    verify_inference: true
-    forms:
-      nominative_singular: mare
-      genitive_singular: maris
-      dative_singular: mari
-      accusative_singular: mare
-      ablative_singular: mari
-      nominative_plural: maria
-      genitive_plural: marium
-      dative_plural: maribus
-      accusative_plural: maria
-      ablative_plural: maribus
+    translation: "das Meer"
+    parts: {nom: "mare", gen: "maris"}
   - type: Konsonantische-Deklination-i-n
-    translation: das Tier, Lebewesen
-    word: animal
-    base_form: animalis
-    forms:
-      accusative_singular: animal
-
-  # Personalpronomen: ego/tu stehen nur im Singular, nos/vos nur im Plural
+    translation: "das Tier, Lebewesen"
+    parts: {nom: "animal", gen: "animālis"}
   - type: Pronomen-personal
-    translation: ich
-    word_form: nominative_singular
-    word: ego
+    translation: "ich"
+    parts: {nom: "ego"}
     forms:
-      nominative_singular: ego
-      genitive_singular: mei
-      dative_singular: mihi
-      accusative_singular: me
-      ablative_singular: me
+      nom.sg: "ego"
+      gen.sg: "meī"
+      dat.sg: "mihi"
+      akk.sg: "mē"
+      abl.sg: "mē"
   - type: Pronomen-personal
-    translation: du
-    word_form: nominative_singular
-    word: tu
+    translation: "du"
+    parts: {nom: "tū"}
     forms:
-      nominative_singular: tu
-      genitive_singular: tui
-      dative_singular: tibi
-      accusative_singular: te
-      ablative_singular: te
+      nom.sg: "tū"
+      gen.sg: "tuī"
+      dat.sg: "tibi"
+      akk.sg: "tē"
+      abl.sg: "tē"
   - type: Pronomen-personal
-    translation: wir
-    word_form: nominative_plural
-    word: nos
+    translation: "wir"
+    parts: {nom: "nōs"}
     forms:
-      nominative_plural: nos
-      genitive_plural: nostrum
-      dative_plural: nobis
-      accusative_plural: nos
-      ablative_plural: nobis
+      nom.pl: "nōs"
+      gen.pl: "nostrum"
+      dat.pl: "nōbīs"
+      akk.pl: "nōs"
+      abl.pl: "nōbīs"
   - type: Pronomen-personal
-    translation: ihr
-    word_form: nominative_plural
-    word: vos
+    translation: "ihr"
+    parts: {nom: "vōs"}
     forms:
-      nominative_plural: vos
-      genitive_plural: vestrum
-      dative_plural: vobis
-      accusative_plural: vos
-      ablative_plural: vobis
-
-  # Demonstrativpronomen: je ein Item pro Genus (wie is/ea/id)
-  - type: Pronomen-hic-maskulinum
-    translation: dieser hier (m)
-    word_form: nominative_singular
-    word: hic
+      nom.pl: "vōs"
+      gen.pl: "vestrum"
+      dat.pl: "vōbīs"
+      akk.pl: "vōs"
+      abl.pl: "vōbīs"
+  - type: Pronomen-hic
+    translation: "dieser hier, diese hier, dieses hier"
+    parts: {nom: "hic"}
     forms:
-      nominative_singular: hic
-      genitive_singular: huius
-      dative_singular: huic
-      accusative_singular: hunc
-      ablative_singular: hoc
-      nominative_plural: hi
-      genitive_plural: horum
-      dative_plural: his
-      accusative_plural: hos
-      ablative_plural: his
-  - type: Pronomen-hic-femininum
-    translation: dieser hier (f)
-    word_form: nominative_singular
-    word: haec
+      nom.sg.m: "hic"
+      gen.sg.m: "huius"
+      dat.sg.m: "huic"
+      akk.sg.m: "hunc"
+      abl.sg.m: "hōc"
+      nom.pl.m: "hī"
+      gen.pl.m: "hōrum"
+      dat.pl.m: "hīs"
+      akk.pl.m: "hōs"
+      abl.pl.m: "hīs"
+      nom.sg.f: "haec"
+      gen.sg.f: "huius"
+      dat.sg.f: "huic"
+      akk.sg.f: "hanc"
+      abl.sg.f: "hāc"
+      nom.pl.f: "hae"
+      gen.pl.f: "hārum"
+      dat.pl.f: "hīs"
+      akk.pl.f: "hās"
+      abl.pl.f: "hīs"
+      nom.sg.n: "hoc"
+      gen.sg.n: "huius"
+      dat.sg.n: "huic"
+      akk.sg.n: "hoc"
+      abl.sg.n: "hōc"
+      nom.pl.n: "haec"
+      gen.pl.n: "hōrum"
+      dat.pl.n: "hīs"
+      akk.pl.n: "haec"
+      abl.pl.n: "hīs"
+  - type: Pronomen-ille
+    translation: "jener, jene, jenes"
+    parts: {nom: "ille"}
     forms:
-      nominative_singular: haec
-      genitive_singular: huius
-      dative_singular: huic
-      accusative_singular: hanc
-      ablative_singular: hac
-      nominative_plural: hae
-      genitive_plural: harum
-      dative_plural: his
-      accusative_plural: has
-      ablative_plural: his
-  - type: Pronomen-hic-neutrum
-    translation: dieser hier (n)
-    word_form: nominative_singular
-    word: hoc
+      nom.sg.m: "ille"
+      gen.sg.m: "illīus"
+      dat.sg.m: "illī"
+      akk.sg.m: "illum"
+      abl.sg.m: "illō"
+      nom.pl.m: "illī"
+      gen.pl.m: "illōrum"
+      dat.pl.m: "illīs"
+      akk.pl.m: "illōs"
+      abl.pl.m: "illīs"
+      nom.sg.f: "illa"
+      gen.sg.f: "illīus"
+      dat.sg.f: "illī"
+      akk.sg.f: "illam"
+      abl.sg.f: "illā"
+      nom.pl.f: "illae"
+      gen.pl.f: "illārum"
+      dat.pl.f: "illīs"
+      akk.pl.f: "illās"
+      abl.pl.f: "illīs"
+      nom.sg.n: "illud"
+      gen.sg.n: "illīus"
+      dat.sg.n: "illī"
+      akk.sg.n: "illud"
+      abl.sg.n: "illō"
+      nom.pl.n: "illa"
+      gen.pl.n: "illōrum"
+      dat.pl.n: "illīs"
+      akk.pl.n: "illa"
+      abl.pl.n: "illīs"
+  - type: Pronomen-iste
+    translation: "dieser da, diese da, dieses da"
+    parts: {nom: "iste"}
     forms:
-      nominative_singular: hoc
-      genitive_singular: huius
-      dative_singular: huic
-      accusative_singular: hoc
-      ablative_singular: hoc
-      nominative_plural: haec
-      genitive_plural: horum
-      dative_plural: his
-      accusative_plural: haec
-      ablative_plural: his
-  - type: Pronomen-ille-maskulinum
-    translation: jener (m)
-    word_form: nominative_singular
-    word: ille
+      nom.sg.m: "iste"
+      gen.sg.m: "istīus"
+      dat.sg.m: "istī"
+      akk.sg.m: "istum"
+      abl.sg.m: "istō"
+      nom.pl.m: "istī"
+      gen.pl.m: "istōrum"
+      dat.pl.m: "istīs"
+      akk.pl.m: "istōs"
+      abl.pl.m: "istīs"
+      nom.sg.f: "ista"
+      gen.sg.f: "istīus"
+      dat.sg.f: "istī"
+      akk.sg.f: "istam"
+      abl.sg.f: "istā"
+      nom.pl.f: "istae"
+      gen.pl.f: "istārum"
+      dat.pl.f: "istīs"
+      akk.pl.f: "istās"
+      abl.pl.f: "istīs"
+      nom.sg.n: "istud"
+      gen.sg.n: "istīus"
+      dat.sg.n: "istī"
+      akk.sg.n: "istud"
+      abl.sg.n: "istō"
+      nom.pl.n: "ista"
+      gen.pl.n: "istōrum"
+      dat.pl.n: "istīs"
+      akk.pl.n: "ista"
+      abl.pl.n: "istīs"
+  - type: Pronomen-ipse
+    translation: "selbst"
+    parts: {nom: "ipse"}
     forms:
-      nominative_singular: ille
-      genitive_singular: illius
-      dative_singular: illi
-      accusative_singular: illum
-      ablative_singular: illo
-      nominative_plural: illi
-      genitive_plural: illorum
-      dative_plural: illis
-      accusative_plural: illos
-      ablative_plural: illis
-  - type: Pronomen-ille-femininum
-    translation: jener (f)
-    word_form: nominative_singular
-    word: illa
+      nom.sg.m: "ipse"
+      gen.sg.m: "ipsīus"
+      dat.sg.m: "ipsī"
+      akk.sg.m: "ipsum"
+      abl.sg.m: "ipsō"
+      nom.pl.m: "ipsī"
+      gen.pl.m: "ipsōrum"
+      dat.pl.m: "ipsīs"
+      akk.pl.m: "ipsōs"
+      abl.pl.m: "ipsīs"
+      nom.sg.f: "ipsa"
+      gen.sg.f: "ipsīus"
+      dat.sg.f: "ipsī"
+      akk.sg.f: "ipsam"
+      abl.sg.f: "ipsā"
+      nom.pl.f: "ipsae"
+      gen.pl.f: "ipsārum"
+      dat.pl.f: "ipsīs"
+      akk.pl.f: "ipsās"
+      abl.pl.f: "ipsīs"
+      nom.sg.n: "ipsum"
+      gen.sg.n: "ipsīus"
+      dat.sg.n: "ipsī"
+      akk.sg.n: "ipsum"
+      abl.sg.n: "ipsō"
+      nom.pl.n: "ipsa"
+      gen.pl.n: "ipsōrum"
+      dat.pl.n: "ipsīs"
+      akk.pl.n: "ipsa"
+      abl.pl.n: "ipsīs"
+  - type: Pronomen-qui
+    translation: "welcher, welche, welches; der, die, das"
+    parts: {nom: "quī"}
     forms:
-      nominative_singular: illa
-      genitive_singular: illius
-      dative_singular: illi
-      accusative_singular: illam
-      ablative_singular: illa
-      nominative_plural: illae
-      genitive_plural: illarum
-      dative_plural: illis
-      accusative_plural: illas
-      ablative_plural: illis
-  - type: Pronomen-ille-neutrum
-    translation: jener (n)
-    word_form: nominative_singular
-    word: illud
+      nom.sg.m: "quī"
+      gen.sg.m: "cuius"
+      dat.sg.m: "cui"
+      akk.sg.m: "quem"
+      abl.sg.m: "quō"
+      nom.pl.m: "quī"
+      gen.pl.m: "quōrum"
+      dat.pl.m: "quibus"
+      akk.pl.m: "quōs"
+      abl.pl.m: "quibus"
+      nom.sg.f: "quae"
+      gen.sg.f: "cuius"
+      dat.sg.f: "cui"
+      akk.sg.f: "quam"
+      abl.sg.f: "quā"
+      nom.pl.f: "quae"
+      gen.pl.f: "quārum"
+      dat.pl.f: "quibus"
+      akk.pl.f: "quās"
+      abl.pl.f: "quibus"
+      nom.sg.n: "quod"
+      gen.sg.n: "cuius"
+      dat.sg.n: "cui"
+      akk.sg.n: "quod"
+      abl.sg.n: "quō"
+      nom.pl.n: "quae"
+      gen.pl.n: "quōrum"
+      dat.pl.n: "quibus"
+      akk.pl.n: "quae"
+      abl.pl.n: "quibus"
+  - type: Pronomen-quis
+    translation: "wer?, was?"
+    parts: {nom: "quis"}
     forms:
-      nominative_singular: illud
-      genitive_singular: illius
-      dative_singular: illi
-      accusative_singular: illud
-      ablative_singular: illo
-      nominative_plural: illa
-      genitive_plural: illorum
-      dative_plural: illis
-      accusative_plural: illa
-      ablative_plural: illis
-  - type: Pronomen-iste-maskulinum
-    translation: dieser da (m)
-    word_form: nominative_singular
-    word: iste
+      nom.sg.m: "quis"
+      gen.sg.m: "cuius"
+      dat.sg.m: "cui"
+      akk.sg.m: "quem"
+      abl.sg.m: "quō"
+      nom.sg.f: "quis"
+      gen.sg.f: "cuius"
+      dat.sg.f: "cui"
+      akk.sg.f: "quem"
+      abl.sg.f: "quō"
+      nom.sg.n: "quid"
+      gen.sg.n: "cuius"
+      dat.sg.n: "cui"
+      akk.sg.n: "quid"
+      abl.sg.n: "quō"
+  - type: Numerale-unus
+    translation: "ein, eine, ein"
+    parts: {nom: "ūnus"}
     forms:
-      nominative_singular: iste
-      genitive_singular: istius
-      dative_singular: isti
-      accusative_singular: istum
-      ablative_singular: isto
-      nominative_plural: isti
-      genitive_plural: istorum
-      dative_plural: istis
-      accusative_plural: istos
-      ablative_plural: istis
-  - type: Pronomen-iste-femininum
-    translation: dieser da (f)
-    word_form: nominative_singular
-    word: ista
+      nom.sg.m: "ūnus"
+      gen.sg.m: "ūnīus"
+      dat.sg.m: "ūnī"
+      akk.sg.m: "ūnum"
+      abl.sg.m: "ūnō"
+      nom.sg.f: "ūna"
+      gen.sg.f: "ūnīus"
+      dat.sg.f: "ūnī"
+      akk.sg.f: "ūnam"
+      abl.sg.f: "ūnā"
+      nom.sg.n: "ūnum"
+      gen.sg.n: "ūnīus"
+      dat.sg.n: "ūnī"
+      akk.sg.n: "ūnum"
+      abl.sg.n: "ūnō"
+  - type: Numerale-tres
+    translation: "drei"
+    parts: {nom: "trēs"}
     forms:
-      nominative_singular: ista
-      genitive_singular: istius
-      dative_singular: isti
-      accusative_singular: istam
-      ablative_singular: ista
-      nominative_plural: istae
-      genitive_plural: istarum
-      dative_plural: istis
-      accusative_plural: istas
-      ablative_plural: istis
-  - type: Pronomen-iste-neutrum
-    translation: dieser da (n)
-    word_form: nominative_singular
-    word: istud
-    forms:
-      nominative_singular: istud
-      genitive_singular: istius
-      dative_singular: isti
-      accusative_singular: istud
-      ablative_singular: isto
-      nominative_plural: ista
-      genitive_plural: istorum
-      dative_plural: istis
-      accusative_plural: ista
-      ablative_plural: istis
-  - type: Pronomen-ipse-maskulinum
-    translation: selbst (m)
-    word_form: nominative_singular
-    word: ipse
-    forms:
-      nominative_singular: ipse
-      genitive_singular: ipsius
-      dative_singular: ipsi
-      accusative_singular: ipsum
-      ablative_singular: ipso
-      nominative_plural: ipsi
-      genitive_plural: ipsorum
-      dative_plural: ipsis
-      accusative_plural: ipsos
-      ablative_plural: ipsis
-  - type: Pronomen-ipse-femininum
-    translation: selbst (f)
-    word_form: nominative_singular
-    word: ipsa
-    forms:
-      nominative_singular: ipsa
-      genitive_singular: ipsius
-      dative_singular: ipsi
-      accusative_singular: ipsam
-      ablative_singular: ipsa
-      nominative_plural: ipsae
-      genitive_plural: ipsarum
-      dative_plural: ipsis
-      accusative_plural: ipsas
-      ablative_plural: ipsis
-  - type: Pronomen-ipse-neutrum
-    translation: selbst (n)
-    word_form: nominative_singular
-    word: ipsum
-    forms:
-      nominative_singular: ipsum
-      genitive_singular: ipsius
-      dative_singular: ipsi
-      accusative_singular: ipsum
-      ablative_singular: ipso
-      nominative_plural: ipsa
-      genitive_plural: ipsorum
-      dative_plural: ipsis
-      accusative_plural: ipsa
-      ablative_plural: ipsis
-
-  # Relativpronomen qui, quae, quod und Interrogativpronomen quis, quid
-  - type: Pronomen-qui-maskulinum
-    translation: welcher, der (m)
-    word_form: nominative_singular
-    word: qui
-    forms:
-      nominative_singular: qui
-      genitive_singular: cuius
-      dative_singular: cui
-      accusative_singular: quem
-      ablative_singular: quo
-      nominative_plural: qui
-      genitive_plural: quorum
-      dative_plural: quibus
-      accusative_plural: quos
-      ablative_plural: quibus
-  - type: Pronomen-qui-femininum
-    translation: welcher, der (f)
-    word_form: nominative_singular
-    word: quae
-    forms:
-      nominative_singular: quae
-      genitive_singular: cuius
-      dative_singular: cui
-      accusative_singular: quam
-      ablative_singular: qua
-      nominative_plural: quae
-      genitive_plural: quarum
-      dative_plural: quibus
-      accusative_plural: quas
-      ablative_plural: quibus
-  - type: Pronomen-qui-neutrum
-    translation: welcher, der (n)
-    word_form: nominative_singular
-    word: quod
-    forms:
-      nominative_singular: quod
-      genitive_singular: cuius
-      dative_singular: cui
-      accusative_singular: quod
-      ablative_singular: quo
-      nominative_plural: quae
-      genitive_plural: quorum
-      dative_plural: quibus
-      accusative_plural: quae
-      ablative_plural: quibus
-  - type: Pronomen-quis-maskulinum-femininum
-    translation: wer? (m/f)
-    word_form: nominative_singular
-    word: quis
-    forms:
-      nominative_singular: quis
-      genitive_singular: cuius
-      dative_singular: cui
-      accusative_singular: quem
-      ablative_singular: quo
-  - type: Pronomen-quis-neutrum
-    translation: was? (n)
-    word_form: nominative_singular
-    word: quid
-    forms:
-      nominative_singular: quid
-      genitive_singular: cuius
-      dative_singular: cui
-      accusative_singular: quid
-      ablative_singular: quo
-
-  # Zahlwörter: unus nur im Singular, tres und milia nur im Plural
-  - type: Numerale-unus-maskulinum
-    translation: ein, einer (m)
-    word_form: nominative_singular
-    word: unus
-    forms:
-      nominative_singular: unus
-      genitive_singular: unius
-      dative_singular: uni
-      accusative_singular: unum
-      ablative_singular: uno
-  - type: Numerale-unus-femininum
-    translation: ein, einer (f)
-    word_form: nominative_singular
-    word: una
-    forms:
-      nominative_singular: una
-      genitive_singular: unius
-      dative_singular: uni
-      accusative_singular: unam
-      ablative_singular: una
-  - type: Numerale-unus-neutrum
-    translation: ein, einer (n)
-    word_form: nominative_singular
-    word: unum
-    forms:
-      nominative_singular: unum
-      genitive_singular: unius
-      dative_singular: uni
-      accusative_singular: unum
-      ablative_singular: uno
-  - type: Numerale-tres-maskulinum-femininum
-    translation: drei (m/f)
-    word_form: nominative_plural
-    word: tres
-    forms:
-      nominative_plural: tres
-      genitive_plural: trium
-      dative_plural: tribus
-      accusative_plural: tres
-      ablative_plural: tribus
-  - type: Numerale-tres-neutrum
-    translation: drei (n)
-    word_form: nominative_plural
-    word: tria
-    forms:
-      nominative_plural: tria
-      genitive_plural: trium
-      dative_plural: tribus
-      accusative_plural: tria
-      ablative_plural: tribus
+      nom.pl.m: "trēs"
+      gen.pl.m: "trium"
+      dat.pl.m: "tribus"
+      akk.pl.m: "trēs"
+      abl.pl.m: "tribus"
+      nom.pl.f: "trēs"
+      gen.pl.f: "trium"
+      dat.pl.f: "tribus"
+      akk.pl.f: "trēs"
+      abl.pl.f: "tribus"
+      nom.pl.n: "tria"
+      gen.pl.n: "trium"
+      dat.pl.n: "tribus"
+      akk.pl.n: "tria"
+      abl.pl.n: "tribus"
   - type: Numerale-milia
-    translation: Tausende
-    word_form: nominative_plural
-    word: milia
+    translation: "Tausende"
+    parts: {nom: "mīlia"}
     forms:
-      nominative_plural: milia
-      genitive_plural: milium
-      dative_plural: milibus
-      accusative_plural: milia
-      ablative_plural: milibus
+      nom.pl: "mīlia"
+      gen.pl: "mīlium"
+      dat.pl: "mīlibus"
+      akk.pl: "mīlia"
+      abl.pl: "mīlibus"
+  - type: Pronomen-idem
+    translation: "derselbe, dieselbe, dasselbe"
+    parts: {nom: "īdem"}
+    forms:
+      nom.sg.m: "īdem"
+      gen.sg.m: "eiusdem"
+      dat.sg.m: "eīdem"
+      akk.sg.m: "eundem"
+      abl.sg.m: "eōdem"
+      nom.pl.m: "eīdem"
+      gen.pl.m: "eōrundem"
+      dat.pl.m: "eīsdem"
+      akk.pl.m: "eōsdem"
+      abl.pl.m: "eīsdem"
+      nom.sg.f: "eadem"
+      gen.sg.f: "eiusdem"
+      dat.sg.f: "eīdem"
+      akk.sg.f: "eandem"
+      abl.sg.f: "eādem"
+      nom.pl.f: "eaedem"
+      gen.pl.f: "eārundem"
+      dat.pl.f: "eīsdem"
+      akk.pl.f: "eāsdem"
+      abl.pl.f: "eīsdem"
+      nom.sg.n: "idem"
+      gen.sg.n: "eiusdem"
+      dat.sg.n: "eīdem"
+      akk.sg.n: "idem"
+      abl.sg.n: "eōdem"
+      nom.pl.n: "eadem"
+      gen.pl.n: "eōrundem"
+      dat.pl.n: "eīsdem"
+      akk.pl.n: "eadem"
+      abl.pl.n: "eīsdem"
+  - type: Numerale-duo
+    translation: "zwei"
+    parts: {nom: "duo"}
+    forms:
+      nom.pl.m: "duo"
+      gen.pl.m: "duōrum"
+      dat.pl.m: "duōbus"
+      akk.pl.m: "duōs"
+      abl.pl.m: "duōbus"
+      nom.pl.f: "duae"
+      gen.pl.f: "duārum"
+      dat.pl.f: "duābus"
+      akk.pl.f: "duās"
+      abl.pl.f: "duābus"
+      nom.pl.n: "duo"
+      gen.pl.n: "duōrum"
+      dat.pl.n: "duōbus"
+      akk.pl.n: "duo"
+      abl.pl.n: "duōbus"

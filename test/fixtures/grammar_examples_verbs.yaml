@@ -521,6 +521,16 @@ items:
     parts: {infinitiv: hortārī, praesens_1sg: hortor}
     deponent: all
 
+  - type: Mischkonjugation
+    translation: leiden
+    parts: {infinitiv: patī, praesens_1sg: patior, supinum: passum}
+    deponent: all
+
+  - type: I-Konjugation
+    translation: schenken
+    parts: {infinitiv: largīrī, praesens_1sg: largior}
+    deponent: all
+
   - translation: mahnen
     parts: {infinitiv: monēre, praesens_1sg: moneō}
 

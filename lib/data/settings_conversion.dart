@@ -73,8 +73,9 @@ class MigrationMap {
   static String _word(String itemId) => itemId.split(':').last;
 }
 
-const _versionField = 'settingsVersion';
-const _version = 2;
+/// The format `Settings.toJson` writes and `convertSettingsV2` produces.
+const settingsVersionField = 'settingsVersion';
+const settingsVersion = 2;
 
 /// Reads stored settings of any older format against the v2 data.
 ///
@@ -88,7 +89,7 @@ Map<String, dynamic> convertSettingsV2(
   Map<String, dynamic> json,
   MigrationMap map,
 ) {
-  if (json[_versionField] == _version) return json;
+  if (json[settingsVersionField] == settingsVersion) return json;
 
   final isV0 = !json.containsKey('disabledForms');
   final disabledForms = <String, Set<String>>{};
@@ -128,7 +129,7 @@ Map<String, dynamic> convertSettingsV2(
 
   return {
     ...json,
-    _versionField: _version,
+    settingsVersionField: settingsVersion,
     'disabledForms': newForms,
     'disabledTypes': newTypes,
     'deselectedWords': deselected,

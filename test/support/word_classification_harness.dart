@@ -12,6 +12,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:fsrs/fsrs.dart' as fsrs;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:latin_practice/data/practice_data.dart';
+import 'package:latin_practice/data/settings_conversion.dart';
 import 'package:latin_practice/main.dart' show noRetry;
 import 'package:latin_practice/models/fsrs_card.dart';
 import 'package:latin_practice/services/fsrs_storage.dart';
@@ -81,6 +82,7 @@ Future<void> _seed(
     Map<String, Set<String>> disabledTypes, DateTime due) async {
   SharedPreferences.setMockInitialValues({
     'practice_settings': jsonEncode({
+      settingsVersionField: settingsVersion,
       'disabledForms': <String, List<String>>{},
       'disabledTypes':
           disabledTypes.map((file, types) => MapEntry(file, types.toList())),

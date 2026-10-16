@@ -5,12 +5,10 @@
 # items whose id changes; `item_key_suffix` gives the genus an
 # old item's forms take inside its merged item.
 #
-# `v0_form_universe` is the old `form_order`: the keys the old
+# `v0_form_universe` is the old form order: the keys the old
 # settings screen offered. The oldest stored format lists what
 # was switched ON, so its complement may only be taken against
 # these keys — a key the screen never showed was never off.
-#
-# Written by tool/migrate_v2/migrate.dart.
 
 form_keys:
   nouns:

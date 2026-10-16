@@ -87,6 +87,16 @@ final class ItemForms {
   final String id;
   final String type;
 
+  /// The Collatinus lemma keys: the item's own lemma first, then the separate
+  /// adverb lemma of an adjective.
+  final List<String> lemmas;
+
+  /// Built from a lemma line rather than written in a data file.
+  final bool synthetic;
+
+  /// Some passive key of the item is a deponent move (S10).
+  final bool deponent;
+
   /// Key -> accepted spellings, the shown one first (S9).
   final Map<FormKey, List<String>> emitted;
   final Map<FormKey, List<String>> internal;
@@ -95,6 +105,9 @@ final class ItemForms {
     required this.dataFileId,
     required this.id,
     required this.type,
+    required this.lemmas,
+    required this.synthetic,
+    required this.deponent,
     required this.emitted,
     required this.internal,
   });
@@ -181,13 +194,25 @@ final class MorphMap {
   }
 }
 
+/// How the sample turns the lemmas of one Collatinus model into items.
+final class ModelSpec {
+  final List<String> types;
+
+  /// `verb`, `noun` or `adjective`; null for a model whose lemmas are written
+  /// by hand.
+  final String? kind;
+  final Map<String, String> build;
+
+  ModelSpec(this.types, this.kind, this.build);
+}
+
 /// `type_map.yaml`.
 final class TypeMap {
   /// Data file id -> item id -> Collatinus lemma keys.
   final Map<String, Map<String, List<String>>> sample;
 
   /// Collatinus model -> the types of ours it stands for.
-  final Map<String, List<String>> models;
+  final Map<String, ModelSpec> models;
 
   /// Item id -> word-initial rewrites applied to the Collatinus spellings.
   final Map<String, Map<String, String>> spelling;
@@ -198,8 +223,28 @@ final class TypeMap {
     required this.spelling,
   });
 
+  Map<String, ModelSpec> get builds => {
+        for (final e in models.entries)
+          if (e.value.kind != null) e.key: e.value,
+      };
+
   factory TypeMap.parse(String source) {
     final root = loadYaml(source) as YamlMap;
+    ModelSpec spec(YamlMap node) {
+      const kinds = ['verb', 'noun', 'adjective'];
+      final kind = kinds.where(node.containsKey).singleOrNull;
+      return ModelSpec(
+        [for (final t in node['types'] as YamlList) '$t'],
+        kind,
+        kind == null
+            ? const {}
+            : {
+                for (final e in (node[kind] as YamlMap).entries)
+                  '${e.key}': '${e.value}',
+              },
+      );
+    }
+
     return TypeMap(
       sample: {
         for (final file in (root['sample'] as YamlMap).entries)
@@ -210,7 +255,7 @@ final class TypeMap {
       },
       models: {
         for (final e in (root['models'] as YamlMap).entries)
-          '${e.key}': [for (final t in e.value as YamlList) '$t'],
+          '${e.key}': spec(e.value as YamlMap),
       },
       spelling: {
         for (final e in (root['spelling'] as YamlMap).entries)
@@ -238,32 +283,86 @@ final class TypeMap {
   }
 }
 
-/// One entry of `allowed_diffs.yaml`.
+/// One entry of `allowed_diffs.yaml` or `allowed_missing.yaml`. It covers a
+/// diff when every field it names matches; `key` is a pattern whose `*`
+/// stands for exactly one dot-separated segment.
 final class AllowedDiff {
-  final String item;
-  final FormKey key;
-  final String ours;
-  final String theirs;
+  final DiffCategory category;
+  final String? item;
+  final List<String>? keys;
+  final List<String>? types;
+
+  /// True: only items the sample made up; null: any item.
+  final bool? synthetic;
+
+  /// True: only deponent items; null: any item.
+  final bool? deponent;
+  final String? ours;
+  final String? theirs;
   final String reason;
 
   AllowedDiff({
-    required this.item,
-    required this.key,
-    required this.ours,
-    required this.theirs,
+    required this.category,
+    this.item,
+    this.keys,
+    this.types,
+    this.synthetic,
+    this.deponent,
+    this.ours,
+    this.theirs,
     required this.reason,
   });
 
-  /// The diff this entry covers, written the way [Diff.signature] writes it.
-  String get signature => '$item $key: $ours / $theirs';
+  bool covers(Diff diff) {
+    if (diff.category != category) return false;
+    if (item != null && item != diff.item) return false;
+    if (types != null && !types!.contains(diff.type)) return false;
+    if (synthetic != null && synthetic != diff.synthetic) return false;
+    if (deponent != null && deponent != diff.deponent) return false;
+    if (keys != null && !keys!.any((k) => _keyMatches(k, diff.key))) {
+      return false;
+    }
+    if (ours != null && ours != diff.ours.join(' / ')) return false;
+    if (theirs != null && theirs != diff.theirs.join(' / ')) return false;
+    return true;
+  }
+
+  static bool _keyMatches(String pattern, String key) {
+    final p = pattern.split('.'), k = key.split('.');
+    if (p.length != k.length) return false;
+    for (var i = 0; i < p.length; i++) {
+      if (p[i] != '*' && p[i] != k[i]) return false;
+    }
+    return true;
+  }
+
+  String get describe =>
+      '${category.id} item=$item keys=$keys types=$types ours=$ours theirs=$theirs';
 
   static List<AllowedDiff> parse(String source) => [
     for (final entry in loadYaml(source) as YamlList)
-      AllowedDiff(
-        item: '${entry['item']}',
-        key: '${entry['key']}',
-        ours: '${entry['ours']}',
-        theirs: '${entry['theirs']}',
+      if (entry['direction'] != null && entry['keys'] == null)
+        throw FormatException('a "${entry['direction']}" entry needs keys: '
+            '${entry['reason']}')
+      else
+        AllowedDiff(
+        category: switch (entry['direction']) {
+          null => DiffCategory.form,
+          'ours' => DiffCategory.missingOurs,
+          'theirs' => DiffCategory.missingTheirs,
+          final other => throw FormatException('direction $other'),
+        },
+        item: entry['item'] == null ? null : '${entry['item']}',
+        keys: entry['keys'] == null
+            ? null
+            : [for (final k in entry['keys'] as YamlList) '$k'],
+        types: entry['types'] == null
+            ? null
+            : [for (final t in entry['types'] as YamlList) '$t'],
+        synthetic: entry['synthetic'] as bool?,
+        deponent: entry['deponent'] as bool?,
+        ours: entry['ours'] == null ? null : '${entry['ours']}',
+        theirs: entry['theirs'] == null ? null : '${entry['theirs']}',
         reason: '${entry['reason']}',
       ),
   ];
@@ -296,6 +395,8 @@ final class Diff {
   final FormKey key;
   final List<String> ours;
   final List<String> theirs;
+  final bool synthetic;
+  final bool deponent;
 
   Diff({
     required this.category,
@@ -304,9 +405,10 @@ final class Diff {
     required this.key,
     required this.ours,
     required this.theirs,
+    required this.synthetic,
+    required this.deponent,
   });
 
-  /// The text an `allowed_diffs.yaml` entry must repeat.
   String get signature =>
       '$item $key: ${ours.join(" / ")} / ${theirs.join(" / ")}';
 }
@@ -320,25 +422,39 @@ final class OracleResult {
   /// A morph number with its text -> how often the mapping dropped it (5.2).
   final Map<String, int> skippedMorphs;
 
-  OracleResult(this.diffs, this.compared, this.skippedMorphs);
+  /// The items with at least one compared key, as `<file>:<id>`.
+  final Set<String> itemsCompared;
+
+  OracleResult(
+    this.diffs,
+    this.compared,
+    this.skippedMorphs,
+    this.itemsCompared,
+  );
 
   List<Diff> of(DiffCategory category) =>
       diffs.where((d) => d.category == category).toList();
 
-  /// `form` diffs that no entry of [allowed] covers: these fail the run.
-  List<Diff> unlisted(List<AllowedDiff> allowed) {
-    final listed = {for (final a in allowed) a.signature};
-    return of(DiffCategory.form)
-        .where((d) => !listed.contains(d.signature))
-        .toList();
-  }
+  /// Gating diffs (form and missing) that no entry of [allowed] covers.
+  List<Diff> unlisted(List<AllowedDiff> allowed) => diffs
+      .where((d) => gating.contains(d.category))
+      .where((d) => !allowed.any((a) => a.covers(d)))
+      .toList();
 
-  /// Entries of [allowed] that no `form` diff produced any more.
-  List<AllowedDiff> stale(List<AllowedDiff> allowed) {
-    final seen = {for (final d in of(DiffCategory.form)) d.signature};
-    return allowed.where((a) => !seen.contains(a.signature)).toList();
-  }
+  /// Entries of [allowed] that cover no diff any more.
+  List<AllowedDiff> stale(List<AllowedDiff> allowed) =>
+      allowed.where((a) => !diffs.any(a.covers)).toList();
 }
+
+/// Whether the run compared every entry of a sample of [entries] items.
+bool comparedWholeSample(OracleResult result, int entries) =>
+    result.itemsCompared.length >= entries;
+
+const gating = {
+  DiffCategory.form,
+  DiffCategory.missingOurs,
+  DiffCategory.missingTheirs,
+};
 
 // --------------------------------------------------------------- the run
 
@@ -353,16 +469,23 @@ OracleResult runOracle({
   final diffs = <Diff>[];
   final compared = <String, int>{};
   final skipped = <String, int>{};
+  final itemsCompared = <String>{};
 
   for (final item in items) {
-    final lemmas = typeMap.sample[item.dataFileId]?[item.id];
-    if (lemmas == null) continue;
+    final lemmas = item.lemmas;
     final axes = axesByFile[item.dataFileId]!;
-    final ours = item.all;
+    // The adverb morphs come from a separate Collatinus lemma; an item
+    // without one has nothing to compare its adverb keys with.
+    final ours = {
+      for (final e in item.all.entries)
+        if (lemmas.length > 1 ||
+            !axes.parseKey(e.key).containsKey('adverb'))
+          e.key: e.value,
+    };
     final graded = ours.keys.any((k) => axes.parseKey(k).containsKey('grad'));
 
     final model = collatinus.modelOf(lemmas.first);
-    final types = typeMap.models[model];
+    final types = typeMap.models[model]?.types;
     if (types == null) {
       throw StateError('type_map.yaml has no model "$model" (${item.id})');
     }
@@ -404,6 +527,8 @@ OracleResult runOracle({
           key: key,
           ours: o,
           theirs: t,
+          synthetic: item.synthetic,
+          deponent: item.deponent,
         ));
 
     final keys = [
@@ -422,6 +547,7 @@ OracleResult runOracle({
         continue;
       }
       compared[item.dataFileId] = (compared[item.dataFileId] ?? 0) + 1;
+      itemsCompared.add('${item.dataFileId}:${item.id}');
       final oc = o.map(compare).toSet(), tc = t.map(compare).toSet();
       if (oc.intersection(tc).isEmpty) {
         add(DiffCategory.form, key, o, t);
@@ -443,7 +569,7 @@ OracleResult runOracle({
       }
     }
   }
-  return OracleResult(diffs, compared, skipped);
+  return OracleResult(diffs, compared, skipped, itemsCompared);
 }
 
 // ------------------------------------------------------------------ report
@@ -453,14 +579,14 @@ String oracleReport(OracleResult result, List<AllowedDiff> allowed) {
   final unlisted = result.unlisted(allowed);
 
   out.writeln('Keys compared: ${result.compared.entries.map((e) => "${e.key} ${e.value}").join(", ")}.');
-  out.writeln('Gate: ${unlisted.length} unlisted form diffs '
+  out.writeln('Gate: ${unlisted.length} unlisted gating diffs '
       '(${allowed.length} allowed entries).\n');
 
   out.writeln('## Counts per category\n');
   out.writeln('| category | count | gates |\n|---|---|---|');
   for (final category in DiffCategory.values) {
     out.writeln('| ${category.id} | ${result.of(category).length} | '
-        '${category == DiffCategory.form ? "yes, unless listed" : "no"} |');
+        '${gating.contains(category) ? "yes, unless listed" : "no"} |');
   }
 
   out.writeln('\n## Counts per type\n');
@@ -479,10 +605,10 @@ String oracleReport(OracleResult result, List<AllowedDiff> allowed) {
     if (list.isEmpty) continue;
     out.writeln('\n## ${category.id} (${list.length})\n');
     for (final diff in list) {
-      final mark = category == DiffCategory.form && !unlisted.contains(diff)
+      final mark = gating.contains(category) && !unlisted.contains(diff)
           ? ' [allowed]'
           : '';
-      out.writeln('- ${diff.signature}$mark');
+      out.writeln('- ${diff.signature}$mark  (${diff.type})');
     }
   }
 

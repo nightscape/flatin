@@ -1409,7 +1409,12 @@ class _Linker {
   /// S10: `deponent` is all or a list of tempus codes of the file.
   void _checkDeponent(GrammarFile file, GrammarItem item, GrammarType type) {
     final deponent = item.deponent ?? type.deponent;
-    if (deponent == null || deponent.all) return;
+    if (deponent == null) return;
+    if (!file.axes.axes.any((a) => a.id == 'genus_verbi')) {
+      _fail('S10', file.path, '${file.dataFileId} has no genus_verbi axis',
+          item: item.id);
+    }
+    if (deponent.all) return;
     final tempus = file.axes.axes.where((a) => a.id == 'tempus').firstOrNull;
     if (tempus == null) {
       _fail('S10', file.path, '${file.dataFileId} has no tempus axis',
@@ -1520,7 +1525,7 @@ class _Linker {
     // S10 moves passive keys onto their active key before item overrides.
     final deponent = <FormKey>{};
     final deponentSpec = item.deponent ?? type.deponent;
-    if (deponentSpec != null && axes.axes.any((a) => a.id == 'genus_verbi')) {
+    if (deponentSpec != null) {
       final moved = <FormKey, String>{};
       for (final entry in emitted.entries) {
         final features = axes.parseKey(entry.key);

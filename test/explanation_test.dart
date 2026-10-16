@@ -28,7 +28,7 @@ void main() {
 
     test('dominus: rule, stem, ending, and what dominis is', () {
       final item = nouns.firstWhere((i) => i.lemma == 'dominus');
-      expect(_pairs(explainWrongAnswer(item, 'genitive_plural', 'dominis')), [
+      expect(_pairs(explainWrongAnswer(item, 'gen.pl', 'dominis')), [
         [
           'explain.typeByRule',
           {
@@ -46,8 +46,8 @@ void main() {
           {
             'label': 'Genitiv Plural',
             'stem': 'domin',
-            'ending': 'orum',
-            'result': 'dominorum',
+            'ending': 'ōrum',
+            'result': 'dominōrum',
           },
         ],
         [
@@ -57,51 +57,54 @@ void main() {
       ]);
     });
 
-    // The infinitive is the only principal part, so the stem is one cut from
-    // it and the explanation names no intermediate form.
-    test('amāre: the stem is cut from the infinitive', () {
+    test('amāre: the stem is the present stem, the seam shortens the ā', () {
       final item = verbs.firstWhere((i) => i.lemma == 'amāre');
       final lines = explainWrongAnswer(
         item,
-        'praesens_third_person_singular',
+        'ind.praes.akt.3.sg',
         'amet',
       );
       expect(_pairs(lines).take(3), [
         [
           'explain.typeByRule',
-          {'word': 'amāre', 'suffix': 'āre', 'type': 'A-Konjugation'},
+          {'word': 'amāre, amō', 'suffix': 'āre', 'type': 'A-Konjugation'},
         ],
         [
-          'explain.stem',
-          {'display': 'Stamm', 'stem': 'am'},
+          'explain.stemDefault',
+          {
+            'display': 'Präsensstamm',
+            'stem': 'amā',
+            'base': 'amāre − āre',
+            'rest': 'ā',
+          },
         ],
         [
-          'explain.generated',
+          'explain.sandhi',
           {
             'label': 'Präsens: 3. Person Singular',
-            'stem': 'am',
-            'ending': 'at',
-            'result': 'amat',
+            'before': 'amā + t',
+            'after': 'amat',
+            'rule': 'Vokal vor -t am Wortende wird kurz',
           },
         ],
       ]);
     });
 
     test('rex: the stem comes from the genitive, no rule names the type', () {
-      final item = nouns.firstWhere((i) => i.lemma == 'regis');
+      final item = nouns.firstWhere((i) => i.id == 'nouns:rex');
       expect(
-        _pairs(explainWrongAnswer(item, 'dative_singular', 'rexi')).take(2),
+        _pairs(explainWrongAnswer(item, 'dat.sg', 'rexi')).take(2),
         [
           [
             'explain.typeDeclared',
-            {'word': 'rex, regis', 'type': 'Konsonantische-Deklination-mf'},
+            {'word': 'rēx, rēgis', 'type': 'Konsonantische-Deklination-mf'},
           ],
           [
             'explain.stemSource',
             {
               'display': 'Stamm',
-              'stem': 'reg',
-              'source': 'regis',
+              'stem': 'rēg',
+              'source': 'rēgis',
               'suffix': 'is',
             },
           ],
@@ -109,25 +112,29 @@ void main() {
       );
     });
 
-    // "capere" matches the macron-blind "ēre" rule first, which names only
-    // E-Konjugation, so no rule confirms the declared Mischkonjugation.
-    test('capio: the type is declared and the Perfekt has no template', () {
+    test('capio: three candidate types, the Perfekt stem is cut from cēpī', () {
       final item = verbs.firstWhere((i) => i.lemma == 'capere');
       expect(
         _pairs(
-          explainWrongAnswer(item, 'perfekt_first_person_singular', 'capi'),
+          explainWrongAnswer(item, 'ind.perf.akt.1.sg', 'capi'),
         ).take(2),
         [
           [
-            'explain.typeDeclared',
-            {'word': 'capio, capere', 'type': 'Mischkonjugation'},
+            'explain.typeByRuleAmbiguous',
+            {
+              'word': 'capere, capiō, cēpī, captum',
+              'suffix': 'ere',
+              'candidates': 'Konsonantische, Mischkonjugation, E-Konjugation',
+              'type': 'Mischkonjugation',
+            },
           ],
           [
-            'explain.irregular',
+            'explain.stemSource',
             {
-              'dictionary': 'capio, capere',
-              'label': 'Perfekt: 1. Person Singular',
-              'result': 'cepi',
+              'display': 'Perfektstamm',
+              'stem': 'cēp',
+              'source': 'cēpī',
+              'suffix': 'ī',
             },
           ],
         ],
@@ -138,15 +145,19 @@ void main() {
       final item = nouns.firstWhere((i) => i.lemma == 'is');
       expect(item.derivation.stems, isEmpty);
       expect(
-        _pairs(explainWrongAnswer(item, 'genitive_singular', 'ii')).take(2),
+        _pairs(explainWrongAnswer(item, 'gen.sg.m', 'ii')).take(2),
         [
           [
             'explain.typeDeclared',
-            {'word': 'is', 'type': 'Pronomen-is-maskulinum'},
+            {'word': 'is', 'type': 'Pronomen-is'},
           ],
           [
             'explain.irregular',
-            {'dictionary': 'is', 'label': 'Genitiv Singular', 'result': 'eius'},
+            {
+              'dictionary': 'is',
+              'label': 'maskulin: Genitiv Singular',
+              'result': 'eius',
+            },
           ],
         ],
       );
@@ -155,7 +166,7 @@ void main() {
     test('manus: the -us rule disagrees with the declared type', () {
       final item = nouns.firstWhere((i) => i.lemma == 'manus');
       expect(
-        _pairs(explainWrongAnswer(item, 'dative_singular', 'mano')).first,
+        _pairs(explainWrongAnswer(item, 'dat.sg', 'mano')).first,
         [
           'explain.typeDeclared',
           {'word': 'manus', 'type': 'U-Deklination'},
@@ -169,14 +180,13 @@ void main() {
       'an explicit form that differs from the rule keeps the rule',
       () async {
         final verbs = await loadPracticeItems(_verbs);
-        final item = verbs.firstWhere((i) => i.lemma == 'gaudēre');
+        final item = verbs.firstWhere((i) => i.lemma == 'dīcere');
         final form =
-            item.derivation.forms['perfekt_first_person_singular']!
-                as IrregularForm;
+            item.derivation.forms['imp.praes.akt.2.sg']! as IrregularForm;
         expect(form.regular, isNotNull);
         final lines = explainWrongAnswer(
           item,
-          'perfekt_first_person_singular',
+          'imp.praes.akt.2.sg',
           form.regular!.result,
         );
         expect(lines.last.key, 'explain.diag.regularInsteadOfIrregular');
@@ -196,7 +206,7 @@ void main() {
         acceptedForms: const [['capio']],
         formLabels: [verbLabel('praes', '1', 'sg')],
         dataFileId: 'verbs',
-        formOrder: const ['praesens_first_person_singular'],
+        formOrder: const ['ind.praes.akt.1.sg'],
         derivation: Derivation(
           type: 'Mischkonjugation',
           recognition: const TypeByRule(
@@ -205,8 +215,8 @@ void main() {
             candidateTypes: ['I-Konjugation', 'Mischkonjugation'],
           ),
           forms: {
-            'praesens_first_person_singular': GivenForm(
-              formKey: 'praesens_first_person_singular',
+            'ind.praes.akt.1.sg': GivenForm(
+              formKey: 'ind.praes.akt.1.sg',
               variants: const ['capio'],
             ),
           },
@@ -216,7 +226,7 @@ void main() {
 
       expect(
         _pairs(
-          explainWrongAnswer(item, 'praesens_first_person_singular', 'capeo'),
+          explainWrongAnswer(item, 'ind.praes.akt.1.sg', 'capeo'),
         ).first,
         [
           'explain.typeByRuleAmbiguous',
@@ -229,23 +239,6 @@ void main() {
         ],
       );
     });
-
-    test('a stem rule that matches no suffix is an error, not a guess', () {
-      expect(
-        () => inferForms(
-          {'type': 'A-Deklination', 'word': 'xyz'},
-          {
-            'A-Deklination': {
-              'genitive_singular': '{stem}ae',
-              'stem_extraction': 'remove_suffix:a',
-            },
-          },
-          ['nominative_singular', 'genitive_singular'],
-          'nominative_singular',
-        ),
-        throwsStateError,
-      );
-    });
   });
 
   group('classification lines', () {
@@ -253,13 +246,13 @@ void main() {
       final nouns = await loadPracticeItems(_nouns);
       final item = nouns.firstWhere((i) => i.lemma == 'dominus');
       expect(
-        _pairs(explainForm(item, ['dative_plural', 'ablative_plural'])).last,
+        _pairs(explainForm(item, ['dat.pl', 'abl.pl'])).last,
         [
           'explain.formBackToRule',
           {
-            'result': 'dominis',
+            'result': 'dominīs',
             'stem': 'domin',
-            'ending': 'is',
+            'ending': 'īs',
             'labels': 'Dativ/Ablativ Plural',
           },
         ],
@@ -269,10 +262,10 @@ void main() {
     test('a picked label names the form it would be', () async {
       final nouns = await loadPracticeItems(_nouns);
       final item = nouns.firstWhere((i) => i.lemma == 'dominus');
-      final picked = item.formLabels[item.formOrder.indexOf('genitive_plural')];
+      final picked = item.formLabels[item.formOrder.indexOf('gen.pl')];
       expect(_pair(explainPickedLabel(item, picked, 'Genitiv Plural')), [
         'explain.pickedWouldBe',
-        {'picked': 'Genitiv Plural', 'form': 'dominorum (domin + orum)'},
+        {'picked': 'Genitiv Plural', 'form': 'dominōrum (domin + ōrum)'},
       ]);
     });
 

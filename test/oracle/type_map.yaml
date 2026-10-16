@@ -37,27 +37,44 @@ sample:
 # type of every sampled item against its own lemma's model, so a lemma paired
 # with the wrong item is caught. A model covers several types of ours where we
 # split a paradigm that Collatinus keeps in one model (compounds).
+#
+# A model with a `verb`, `noun` or `adjective` entry also contributes its most
+# frequent lemmas as extra items (test/oracle/sample.dart). The entry says how
+# the lemma line becomes principal parts:
+#   verb:      strip the ending `strip` from the lemma, add `infinitive` for the
+#              infinitive; `deponent: true` marks the deponent models
+#   noun:      `ends`: the nominative must end so; the genitive is the radical 1 of the line, or the nominative
+#              without its last `cut` letters, plus `genitive`
+#   adjective: `ends` and the stem as for a noun, plus the feminine `f` and neuter `n` endings
 models:
-  amo: [A-Konjugation]
-  moneo: [E-Konjugation]
-  audio: [I-Konjugation]
-  lego: [Konsonantische]
-  capio: [Mischkonjugation]
-  imitor: [A-Konjugation]
-  patior: [Mischkonjugation]
-  potior: [I-Konjugation]
-  sum: [esse-Typ]
-  possum: [esse-Kompositum]
-  prosum: [esse-Kompositum]
-  eo: [Unregelmäßig, ire-Kompositum]
-  fero: [Konsonantische, ferre-Kompositum]
-  turris: [i-Deklination-mf]
-  mare: [i-Deklination-n]
-  doctus: [Adjektiv-a-o]
-  miser: [Adjektiv-a-o-er]
-  fortis: [Adjektiv-zweiendig]
-  acer: [Adjektiv-dreiendig]
-  hic: [Pronomen]
+  amo: {types: [A-Konjugation], verb: {strip: o, infinitive: āre}}
+  moneo: {types: [E-Konjugation], verb: {strip: eo, infinitive: ēre}}
+  audio: {types: [I-Konjugation], verb: {strip: io, infinitive: īre}}
+  lego: {types: [Konsonantische], verb: {strip: o, infinitive: ere}}
+  capio: {types: [Mischkonjugation], verb: {strip: io, infinitive: ere}}
+  imitor: {types: [A-Konjugation], verb: {strip: or, infinitive: ārī, deponent: true}}
+  patior: {types: [Mischkonjugation], verb: {strip: ior, infinitive: ī, deponent: true}}
+  potior: {types: [I-Konjugation], verb: {strip: ior, infinitive: īrī, deponent: true}}
+  sum: {types: [esse-Typ]}
+  possum: {types: [esse-Kompositum]}
+  prosum: {types: [esse-Kompositum]}
+  eo: {types: [Unregelmäßig, ire-Kompositum]}
+  fero: {types: [Konsonantische, ferre-Kompositum]}
+  lupus: {types: [O-Deklination-maskulinum], noun: {ends: us, cut: 2, genitive: ī}}
+  templum: {types: [O-Deklination-neutrum], noun: {ends: um, cut: 2, genitive: ī}}
+  uita: {types: [A-Deklination], noun: {ends: a, cut: 1, genitive: ae}}
+  miles: {types: [Konsonantische-Deklination-mf], noun: {cut: 0, genitive: is}}
+  corpus: {types: [Konsonantische-Deklination-n], noun: {ends: us, cut: 0, genitive: is}}
+  ciuis: {types: [Konsonantische-Deklination-i-mf], noun: {ends: is, cut: 0, genitive: is}}
+  manus: {types: [U-Deklination], noun: {ends: us, cut: 2, genitive: ūs}}
+  dies: {types: [E-Deklination], noun: {ends: es, cut: 2, genitive: ēī}}
+  turris: {types: [i-Deklination-mf], noun: {ends: is, cut: 2, genitive: is}}
+  mare: {types: [i-Deklination-n, Konsonantische-Deklination-i-n], noun: {ends: e, cut: 1, genitive: is}}
+  doctus: {types: [Adjektiv-a-o], adjective: {ends: us, cut: 2, f: a, n: um}}
+  miser: {types: [Adjektiv-a-o-er], adjective: {ends: er, cut: 0, f: a, n: um}}
+  fortis: {types: [Adjektiv-zweiendig], adjective: {ends: is, cut: 2, n: e}}
+  acer: {types: [Adjektiv-dreiendig], adjective: {ends: er, cut: 2, f: ris, n: re, radical: none}}
+  hic: {types: [Pronomen]}
 
 # Collatinus spells the ad- compound unassimilated (adferō, adtulī, adlātum).
 # Its variants are rewritten at the start of a word before the comparison.

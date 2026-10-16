@@ -190,11 +190,7 @@ class _WordClassificationScreenState
       _isNoun = item.dataFileId == 'nouns';
 
       // Filter forms based on settings
-      final enabledForms = settings.enabledFormsOf(
-        item.dataFileId,
-        item.formOrder,
-        item.formLabels,
-      );
+      final enabledForms = settings.enabledFormsOf(item.dataFileId, item.formLabels);
       final filteredData = item.filterForms(enabledForms);
 
       if (filteredData.forms.isEmpty) {
@@ -318,7 +314,7 @@ class _WordClassificationScreenState
       return Set<String>.from(item.formOrder);
     }
     return settingsValue.value
-        .enabledFormsOf(item.dataFileId, item.formOrder, item.formLabels);
+        .enabledFormsOf(item.dataFileId, item.formLabels);
   }
 
   /// The labels the learner may be asked about right now.
@@ -495,11 +491,7 @@ class _WordClassificationScreenState
           _currentItem != null &&
           _correctFormIndices.isNotEmpty) {
         final settings = next.value;
-        final enabledForms = settings.enabledFormsOf(
-          _currentItem!.dataFileId,
-          _currentItem!.formOrder,
-          _currentItem!.formLabels,
-        );
+        final enabledForms = settings.enabledFormsOf(_currentItem!.dataFileId, _currentItem!.formLabels);
 
         // Check if any of the current forms are still enabled
         bool anyFormEnabled = _correctFormIndices.any((index) {

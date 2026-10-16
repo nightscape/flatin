@@ -17,14 +17,14 @@ void main() {
     addTearDown(tester.view.reset);
 
     await tester.pumpWidget(wrapInApp(
-      WordClassificationScreen(item: dominus, formKey: 'genitive_plural'),
+      WordClassificationScreen(item: dominus, formKey: 'gen.pl'),
       forcedLocale: const Locale('de'),
     ));
     await letItLoad(tester);
 
     expect(
       tester.widget<Text>(find.byKey(const Key('wordClassification.word'))).data,
-      'dominorum',
+      'dominōrum',
     );
 
     await pickOption(tester, 0, 'Genitiv');
@@ -35,10 +35,10 @@ void main() {
     expect(find.byKey(const Key('explanation.classification')), findsOneWidget);
     expect(find.text('dominus: Endung -us → O-Deklination-maskulinum'),
         findsOneWidget);
-    expect(find.text('dominorum = domin + orum → Genitiv Plural'), findsOneWidget);
+    expect(find.text('dominōrum = domin + ōrum → Genitiv Plural'), findsOneWidget);
     expect(
-      find.text('Du hast Genitiv Singular gewählt – das wäre domini '
-          '(domin + i)'),
+      find.text('Du hast Genitiv Singular gewählt – das wäre dominī '
+          '(domin + ī)'),
       findsOneWidget,
     );
   });
