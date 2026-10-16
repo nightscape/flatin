@@ -11,8 +11,6 @@ diffs:
   - {lemma: mare, features: ["vok.pl.n"], engine: "mara", reason: "engine: the neuter i-stem vocative plural is mara, the print has maria (#49)"}
   - {lemma: ego, features: ["1.abl.sg"], engine: "mē", reason: "print shows a prepositional phrase; bare ablative is the form"}
   - {lemma: tu, features: ["2.abl.sg"], engine: "tē", reason: "print shows a prepositional phrase; bare ablative is the form"}
-  - {lemma: res, features: ["gen.sg"], engine: "rēī", reason: "engine: the e-declension genitive and dative singular of res is rēī, the print has reī (#52)"}
-  - {lemma: res, features: ["dat.sg"], engine: "rēī", reason: "engine: the e-declension genitive and dative singular of res is rēī, the print has reī (#52)"}
 
 missing:
   - {lemma: vocare, features: ["*.*.pass.*.*.f|n", "inf.perf.pass.f|n"], reason: "design: perfect passive practised in one (masc.) form"}

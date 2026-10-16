@@ -29,7 +29,8 @@ type_inference:
     - {suffix: "us", min_length: 3, types: [O-Deklination-maskulinum]}
     - {suffix: "um", min_length: 3, types: [O-Deklination-neutrum]}
     - {suffix: "a", min_length: 2, types: [A-Deklination]}
-    - {suffix: "ēs", min_length: 3, types: [E-Deklination]}
+    - {suffix: "iēs", min_length: 3, types: [E-Deklination]}
+    - {suffix: "ēs", min_length: 3, types: [E-Deklination-Konsonantstamm]}
 
 types:
   # Ending tables. Leaf types (no delegate, no compose, S14); the verb file
@@ -240,6 +241,12 @@ types:
       akk.pl: "{stamm}ēs"
       abl.pl: "{stamm}ēbus"
       vok.pl: "{stamm}ēs"
+
+  E-Deklination-Konsonantstamm:
+    inherits_from: E-Deklination
+    forms:
+      gen.sg: "{stamm}eī"
+      dat.sg: "{stamm}eī"
 
   U-Deklination:
     stems:
@@ -912,9 +919,6 @@ items:
     parts: {nom: "pūgna", gen: "pūgnae"}
   - translation: "die Sache, das Ding"
     parts: {nom: "rēs", gen: "rēī"}
-    forms:
-      dat.sg: "reī"
-      gen.sg: "reī"
   - type: Adjektiv-a-o
     translation: "entgegengesetzt, feindlich"
     parts: {nom: "adversus", nom_f: "adversa", nom_n: "adversum"}
@@ -924,9 +928,6 @@ items:
     parts: {nom: "fuga", gen: "fugae"}
   - translation: "die Hoffnung"
     parts: {nom: "spēs", gen: "spēī"}
-    forms:
-      dat.sg: "speī"
-      gen.sg: "speī"
   - translation: "der Himmel"
     parts: {nom: "caelum", gen: "caelī"}
   - type: Adjektiv-zweiendig
@@ -934,9 +935,6 @@ items:
     parts: {nom: "incrēdibilis", nom_n: "incrēdibile"}
   - translation: "die Treue, das Vertrauen"
     parts: {nom: "fidēs", gen: "fidēī"}
-    forms:
-      dat.sg: "fideī"
-      gen.sg: "fideī"
   - type: Adjektiv-a-o
     translation: "mittlerer, in der Mitte"
     parts: {nom: "medius", nom_f: "media", nom_n: "medium"}
