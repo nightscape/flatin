@@ -315,15 +315,19 @@ void main() {
       expect(forms['ind.praes.akt.1.pl']!.result, 'amāmus');
     });
 
-    test('every rule of a used type fires at least once', () {
-      final listed = <String>{};
+    test('every rule fires for the type that lists it', () {
+      final fired = _firedRules();
+      final listed = <String, Set<String>>{};
       for (final file in _files) {
         for (final item in file.items) {
-          listed.addAll(file.type(item.typeName).sandhi);
+          listed[item.typeName] = file.type(item.typeName).sandhi.toSet();
         }
       }
-      expect(listed, isNotEmpty);
-      expect(listed.difference(_firedRules()), isEmpty);
+      expect(listed.values.expand((rules) => rules), isNotEmpty);
+      for (final entry in listed.entries) {
+        expect(entry.value.difference(fired[entry.key] ?? {}), isEmpty,
+            reason: 'type ${entry.key}');
+      }
     });
   });
 
@@ -356,6 +360,15 @@ void main() {
   });
 
   group('Invarianten I1-I7', () {
+    test('the fixtures hold internal forms', () {
+      final internal = [
+        for (final file in _files)
+          for (final item in file.items)
+            ..._engine.of(file.dataFileId, item.id).internal.keys,
+      ];
+      expect(internal, isNotEmpty);
+    });
+
     test('over every fixture item and key', () {
       for (final file in _files) {
         for (final item in file.items) {
@@ -452,14 +465,16 @@ GrammarEngine _patched(Map<String, String> edits) {
   }));
 }
 
-Set<String> _firedRules() {
-  final fired = <String>{};
-  void add(SandhiRule? rule) {
-    if (rule != null) fired.add(rule.id);
-  }
-
+/// The ids of the sandhi rules that fire, by the name of the item's type.
+Map<String, Set<String>> _firedRules() {
+  final fired = <String, Set<String>>{};
   for (final file in _files) {
     for (final item in file.items) {
+      final ofType = fired.putIfAbsent(item.typeName, () => {});
+      void add(SandhiRule? rule) {
+        if (rule != null) ofType.add(rule.id);
+      }
+
       final derivation = _engine.of(file.dataFileId, item.id);
       for (final stem in derivation.stems.values) {
         if (stem is StemFromDefault) add(stem.sandhiRule);

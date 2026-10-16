@@ -104,7 +104,7 @@ types:
     delegate:
       - {name: pfa, type: a-o-Endungen, bind: {stamm: pfa}, set: {modus: part, tempus: fut, genus_verbi: akt}}
       - {name: ppa, type: 3-Endungen-Partizip, bind: {stamm: ppa, nom_m: ppa_nom, nom_f: ppa_nom, nom_n: ppa_nom}, set: {modus: part, tempus: praes, genus_verbi: akt}}
-      - {name: gerv, type: a-o-Endungen, bind: {stamm: gerv}, set: {modus: gerv}}
+      - {name: gerv, type: a-o-Endungen, bind: {stamm: gerv}, set: {modus: gerv}, emit: false}
     compose:
       - match: {modus: inf, tempus: fut, genus_verbi: akt}
         join: " "
