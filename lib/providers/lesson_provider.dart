@@ -4,10 +4,10 @@ import '../data/practice_data.dart';
 
 part 'lesson_provider.g.dart';
 
-/// The lesson → word mapping for the currently-configured textbook.
+/// The lesson → word mapping of the configured volumes.
 @riverpod
 Future<LessonData> lessonData(Ref ref) async {
-  return loadLessonData(lessonDataAsset);
+  return loadLessonData(lessonDataAssets);
 }
 
 /// Practisable words that no lesson lists, in YAML order and raw spelling.

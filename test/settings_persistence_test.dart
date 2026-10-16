@@ -16,7 +16,7 @@ void main() {
 
   test('deselected forms, types and words stay off after a reload', () async {
     SharedPreferences.setMockInitialValues({});
-    final lessons = await loadLessonData(lessonDataAsset);
+    final lessons = await loadLessonData(lessonDataAssets);
     final word = normalizeDiacritics(lessons.lessonWords[lessons.lessonNames.first]!.first);
 
     final first = ProviderContainer();
@@ -53,7 +53,7 @@ void main() {
     final oldType = map.types['nouns']!.keys.first;
     final newType = map.types['nouns']![oldType]!;
     final otherType = map.types['nouns']!.values.firstWhere((t) => t != newType);
-    final lessons = await loadLessonData(lessonDataAsset);
+    final lessons = await loadLessonData(lessonDataAssets);
     final allWords = lessons.lessonNames
         .expand((name) => lessons.lessonWords[name]!)
         .map(normalizeDiacritics)
@@ -94,7 +94,7 @@ void main() {
   });
 
   test('conversion leaves words outside the lessons enabled', () async {
-    final lessons = await loadLessonData(lessonDataAsset);
+    final lessons = await loadLessonData(lessonDataAssets);
     final lessonWords = lessons.lessonNames
         .expand((name) => lessons.lessonWords[name]!)
         .map(normalizeDiacritics)

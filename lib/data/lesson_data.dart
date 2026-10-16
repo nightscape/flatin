@@ -2,8 +2,11 @@ import 'package:flutter/services.dart';
 import 'package:yaml/yaml.dart';
 import '../models/practice_item.dart';
 
-/// The lesson word list of the currently-configured textbook.
-const String lessonDataAsset = 'lib/data/agite_plus_bayern_1.yaml';
+/// The lesson word lists of the configured volumes, in reading order.
+const List<String> lessonDataAssets = [
+  'lib/data/agite_plus_bayern_1.yaml',
+  'lib/data/agite_plus_bayern_2.yaml',
+];
 
 /// Maps each Latin word to the lesson in which it was introduced.
 ///
@@ -57,35 +60,43 @@ String normalizeDiacritics(String text) {
   return result;
 }
 
-/// Load the lesson mapping from a YAML asset.
+/// Load the lesson mapping from YAML assets, concatenated in the given order.
 ///
-/// Expected top-level shape:
+/// Expected top-level shape of each asset:
 /// ```yaml
 /// - lesson: "Lektion 1"
 ///   words: ["iam", "diū", ...]
 /// ```
-Future<LessonData> loadLessonData(String assetPath) async {
-  final yamlString = await rootBundle.loadString(assetPath);
-  final yaml = loadYaml(yamlString) as YamlList;
-
+///
+/// A lesson name must be unique across the assets; a word introduced by
+/// several lessons belongs to the first one.
+Future<LessonData> loadLessonData(List<String> assetPaths) async {
   final names = <String>[];
   final wordToLesson = <String, String>{};
   final lessonWords = <String, List<String>>{};
 
-  for (final entry in yaml) {
-    final map = entry as YamlMap;
-    final name = map['lesson'] as String;
-    names.add(name);
+  for (final assetPath in assetPaths) {
+    final yamlString = await rootBundle.loadString(assetPath);
+    final yaml = loadYaml(yamlString) as YamlList;
 
-    final words = map['words'] as YamlList;
-    final rawWords = <String>[];
-    for (final word in words) {
-      final raw = word as String;
-      rawWords.add(raw);
-      final normalized = normalizeDiacritics(raw);
-      wordToLesson.putIfAbsent(normalized, () => name);
+    for (final entry in yaml) {
+      final map = entry as YamlMap;
+      final name = map['lesson'] as String;
+      if (lessonWords.containsKey(name)) {
+        throw StateError('lesson "$name" is listed twice ($assetPath)');
+      }
+      names.add(name);
+
+      final words = map['words'] as YamlList;
+      final rawWords = <String>[];
+      for (final word in words) {
+        final raw = word as String;
+        rawWords.add(raw);
+        final normalized = normalizeDiacritics(raw);
+        wordToLesson.putIfAbsent(normalized, () => name);
+      }
+      lessonWords[name] = rawWords;
     }
-    lessonWords[name] = rawWords;
   }
 
   return LessonData(

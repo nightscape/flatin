@@ -5,7 +5,7 @@ import 'package:latin_practice/data/practice_data.dart';
 void main() {
   test('the nouns of the lessons are found by their dictionary form', () async {
     TestWidgetsFlutterBinding.ensureInitialized();
-    final lessons = await loadLessonData(lessonDataAsset);
+    final lessons = await loadLessonData(lessonDataAssets);
     final items = await loadAllPracticeItems();
 
     for (final lemma in ['rēx', 'uxor', 'corpus', 'urbs', 'mare']) {

@@ -60,7 +60,7 @@ class SettingsNotifier extends _$SettingsNotifier {
     final selected = {
       for (final word in selectedWords) map.wordMap['$word'] ?? '$word',
     };
-    final lessons = await loadLessonData(lessonDataAsset);
+    final lessons = await loadLessonData(lessonDataAssets);
     return {
       for (final name in lessons.lessonNames)
         for (final word in lessons.lessonWords[name]!)

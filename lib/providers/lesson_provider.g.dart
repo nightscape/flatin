@@ -8,12 +8,12 @@ part of 'lesson_provider.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
-/// The lesson → word mapping for the currently-configured textbook.
+/// The lesson → word mapping of the configured volumes.
 
 @ProviderFor(lessonData)
 const lessonDataProvider = LessonDataProvider._();
 
-/// The lesson → word mapping for the currently-configured textbook.
+/// The lesson → word mapping of the configured volumes.
 
 final class LessonDataProvider
     extends
@@ -23,7 +23,7 @@ final class LessonDataProvider
           FutureOr<LessonData>
         >
     with $FutureModifier<LessonData>, $FutureProvider<LessonData> {
-  /// The lesson → word mapping for the currently-configured textbook.
+  /// The lesson → word mapping of the configured volumes.
   const LessonDataProvider._()
     : super(
         from: null,
@@ -49,7 +49,7 @@ final class LessonDataProvider
   }
 }
 
-String _$lessonDataHash() => r'8b6da263b82a9bc0f27c637d477d07af87babc40';
+String _$lessonDataHash() => r'a80bdf846f73c3cbd7507c890b86edcf9273b7be';
 
 /// Practisable words that no lesson lists, in YAML order and raw spelling.
 ///
@@ -103,4 +103,4 @@ final class WordsOutsideLessonsProvider
 }
 
 String _$wordsOutsideLessonsHash() =>
-    r'0a059f7b129a6d7ac4d5da0a9d3a340d149eda1c';
+    r'f3b7bd0808b361a62aa916976ab9f4ecafb2d70b';
