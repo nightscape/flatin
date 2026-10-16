@@ -21,5 +21,7 @@ void main() {
     await letItLoad(tester);
 
     expect(find.textContaining('broken lessons'), findsOneWidget);
+    expect(find.text('Settings'), findsOneWidget);
+    expect(find.text('settings.title'), findsNothing);
   });
 }

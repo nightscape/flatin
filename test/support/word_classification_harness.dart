@@ -1,8 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
-import 'dart:typed_data';
 
-import 'package:flutter/foundation.dart' show SynchronousFuture;
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -17,25 +14,6 @@ import 'package:latin_practice/main.dart' show noRetry;
 import 'package:latin_practice/models/fsrs_card.dart';
 import 'package:latin_practice/services/fsrs_storage.dart';
 import 'package:latin_practice/widgets/explanation_lines.dart';
-
-/// Reads assets with synchronous disk I/O, so translations load inside
-/// pumped fake time and tests never wait on real time for them.
-class _SyncDiskBundle extends AssetBundle {
-  @override
-  Future<ByteData> load(String key) {
-    final bytes = File(key).readAsBytesSync();
-    return SynchronousFuture(ByteData.sublistView(Uint8List.fromList(bytes)));
-  }
-
-  @override
-  Future<String> loadString(String key, {bool cache = true}) =>
-      SynchronousFuture(File(key).readAsStringSync());
-
-  @override
-  Future<T> loadStructuredData<T>(
-          String key, Future<T> Function(String value) parser) =>
-      loadString(key).then(parser);
-}
 
 Widget wrapInApp(
   Widget home, {
@@ -57,7 +35,7 @@ Widget wrapInApp(
               fallbackFile: 'en',
               forcedLocale: forcedLocale,
               useCountryCode: false,
-            )..assetBundle = _SyncDiskBundle(),
+            ),
           ),
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
