@@ -67,7 +67,7 @@ void main() {
       expect(_pairs(lines).take(3), [
         [
           'explain.typeByRule',
-          {'word': 'amāre, amō', 'suffix': 'āre', 'type': 'A-Konjugation'},
+          {'word': 'amāre, amō, amātum', 'suffix': 'āre', 'type': 'A-Konjugation'},
         ],
         [
           'explain.stemDefault',
