@@ -13,6 +13,9 @@ const _path = 'lib/data/latin_nouns.yaml';
 /// Every pronoun lexeme that spells out a gendered paradigm.
 const _coveredItemCount = 8;
 
+/// Of those, the ones that spell out a plural.
+const _pluralItemCount = 7;
+
 /// A genitive plural ends in -rum or -ium; an enclitic (-dem) may follow, and
 /// assimilates the preceding m to n.
 final _genitivePlural = RegExp(r'(rum|ium)$|(run|iun)dem$');
@@ -50,10 +53,16 @@ void main() {
     }
   });
 
+  final plurals = items
+      .where((item) => item.forms.containsKey('gen.pl.m'))
+      .toList();
+
+  test('every gendered pronoun paradigm with a plural is covered', () {
+    expect(plurals, hasLength(_pluralItemCount));
+  });
+
   test('the genitive plural ends in -rum or -ium', () {
-    for (final item in items.where(
-      (item) => item.forms.containsKey('gen.pl.m'),
-    )) {
+    for (final item in plurals) {
       for (final gender in ['m', 'f', 'n']) {
         final forms = item.forms['gen.pl.$gender'];
         expect(forms, isNotNull, reason: '${item.id} gen.pl.$gender');
