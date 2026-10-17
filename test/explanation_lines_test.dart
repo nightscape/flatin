@@ -3,9 +3,18 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/widgets/explanation_lines.dart';
 
 import 'support/explanation_harness.dart';
+import 'support/trace_fixtures.dart';
 import 'support/word_classification_harness.dart';
 
 void main() {
+  test('sampleLines has an entry for every explain key of de.json', () async {
+    final explainKeys = (await germanTexts())
+        .keys
+        .where((key) => key.startsWith('explain.'))
+        .toSet();
+    expect(sampleLines.map((line) => line.key).toSet(), explainKeys);
+  });
+
   testWidgets('every explain key renders German text with its params',
       (tester) async {
     await tester.pumpWidget(wrapInApp(

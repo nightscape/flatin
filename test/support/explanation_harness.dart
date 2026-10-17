@@ -43,6 +43,13 @@ const sampleLines = <ExplanationLine>[
     'after': 'amō',
     'rule': 'ā fällt vor Vokal aus',
   }),
+  ExplanationLine('explain.sandhiOtherType', params: {
+    'label': 'Komparativ Genitiv Singular',
+    'before': 'fortiōr + is',
+    'after': 'fortiōris',
+    'rule': 'keine Veränderung',
+    'endingType': 'Konsonantische-Deklination-mf',
+  }),
   ExplanationLine('explain.composed', params: {
     'label': 'Perfekt: 1. Person Singular',
     'parts': 'amātus + sum',
