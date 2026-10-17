@@ -45,6 +45,28 @@ void _golden(String itemId, FormKey key, String variants, String trace) {
   expect(_trace(form), trace, reason: '$itemId $key trace');
 }
 
+/// The [header] line plus every line below it that is indented deeper. Blank
+/// lines inside the block stay in, so a blank line does not shrink the
+/// compared region.
+List<String> blockLines(String text, String header) {
+  final lines = text.split('\n');
+  final start = lines.indexOf(header);
+  if (start < 0) fail('no line "$header"');
+  final indent = header.length - header.trimLeft().length;
+  final block = [lines[start]];
+  for (final line in lines.skip(start + 1)) {
+    if (line.trim().isNotEmpty &&
+        line.length - line.trimLeft().length <= indent) {
+      break;
+    }
+    block.add(line);
+  }
+  while (block.last.trim().isEmpty) {
+    block.removeLast();
+  }
+  return block;
+}
+
 void main() {
   group('Paradigmen', () {
     test('every fixture item derives to the recorded paradigm', () {
@@ -117,19 +139,42 @@ void main() {
       );
     });
 
+    test('blockLines sees past a blank line inside the block', () {
+      String table(String row20) => [
+        'head:',
+        '  Komparativ-Endungen:',
+        for (var i = 1; i <= 4; i++) '    r$i: v$i',
+        '',
+        for (var i = 6; i <= 19; i++) '    r$i: v$i',
+        '    r20: $row20',
+        'next:',
+        '  e: 5',
+      ].join('\n');
+
+      const header = '  Komparativ-Endungen:';
+      expect(blockLines(table('v20'), header).length, 21);
+      expect(
+        blockLines(table('v20'), header),
+        isNot(blockLines(table('wrong'), header)),
+      );
+    });
+
     test('the fixture comparison table is the shipped table', () {
-      String block(String path) {
-        final text = File(path).readAsStringSync();
-        final start = text.indexOf('  Komparativ-Endungen:');
-        return text.substring(start, text.indexOf('\n\n', start));
-      }
+      List<String> block(String path) => blockLines(
+        File(path).readAsStringSync(),
+        '  Komparativ-Endungen:',
+      );
 
       List<String> kstamms(String path) => File(path)
           .readAsLinesSync()
           .where((line) => line.trimLeft().startsWith('kstamm:'))
           .toList();
 
-      expect(block(_nounsPath), block('lib/data/latin_nouns.yaml'));
+      final fixture = block(_nounsPath);
+      final shipped = block('lib/data/latin_nouns.yaml');
+      expect(fixture.length, greaterThan(30));
+      expect(fixture.length, shipped.length);
+      expect(fixture, shipped);
       expect(kstamms(_nounsPath), isNotEmpty);
       expect(kstamms(_nounsPath), kstamms('lib/data/latin_nouns.yaml'));
     });

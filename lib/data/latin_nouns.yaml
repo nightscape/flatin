@@ -384,6 +384,11 @@ types:
   Numerale-tres: {}
   Numerale-milia: {}
 
+# Anchors that items alias. They sit above `items:` because a YAML alias only
+# resolves below its anchor. The loader ignores this block.
+shared:
+  ohne_steigerung: &ohne_steigerung [{grad: komp}, {grad: sup}, {adverb: adv}]
+
 items:
   - translation: "Der Hausherr/Herr"
     parts: {nom: "dominus"}
@@ -979,6 +984,7 @@ items:
   - type: Adjektiv-a-o
     translation: "der höchste, der oberste"
     parts: {nom: "summus", nom_f: "summa", nom_n: "summum"}
+    absent: *ohne_steigerung
   - type: Adjektiv-zweiendig
     translation: "derartig, ein solcher, (so) beschaffen"
     parts: {nom: "tālis", nom_n: "tāle"}
@@ -1083,6 +1089,7 @@ items:
   - type: Adjektiv-a-o
     translation: "sehr groß, der Größte"
     parts: {nom: "māximus", nom_f: "māxima", nom_n: "māximum"}
+    absent: *ohne_steigerung
   - translation: "der Bote"
     parts: {nom: "nūntius", gen: "nūntiī"}
   - type: Konsonantische-Deklination-mf
@@ -1591,7 +1598,7 @@ items:
   - type: Adjektiv-a-o
     translation: "dein"
     parts: {nom: "tuus", nom_f: "tua", nom_n: "tuum"}
-    absent: &ohne_steigerung [{grad: komp}, {grad: sup}, {adverb: adv}]
+    absent: *ohne_steigerung
   - type: Adjektiv-a-o
     translation: "offen"
     parts: {nom: "apertus", nom_f: "aperta", nom_n: "apertum"}

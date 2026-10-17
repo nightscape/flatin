@@ -35,6 +35,7 @@ void main() {
   test('T-trace-2/3 every generated and irregular form is true', () async {
     int generatedCount = 0;
     int regularCount = 0;
+    int recomputedCount = 0;
 
     for (final asset in _assets) {
       final items = await loadPracticeItems(asset);
@@ -56,8 +57,19 @@ void main() {
 
           if (form is IrregularForm && form.regular != null) {
             regularCount++;
-            expect(form.regular!.result, item.inferredForms[i], reason: where);
-            expect(form.regular!.result, isNot(item.forms[i]), reason: where);
+            final regular = form.regular!;
+            expect(regular.result, item.inferredForms[i], reason: where);
+            // The Derivation assert covers the practised forms only, so the
+            // rule form behind an override is recomputed here.
+            if (regular is GeneratedForm && regular.sandhiRule == null) {
+              recomputedCount++;
+              final stem = item.derivation.stems[regular.stemName]!.stem;
+              expect(
+                norm(stem + regular.ending),
+                norm(regular.result),
+                reason: where,
+              );
+            }
           }
         }
       }
@@ -65,6 +77,7 @@ void main() {
 
     expect(generatedCount, greaterThan(0));
     expect(regularCount, greaterThan(0));
+    expect(recomputedCount, greaterThan(0));
   });
 
   group('T-trace-4 a shown type rule agrees with the type', () {

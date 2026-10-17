@@ -2,9 +2,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/models/practice_item.dart';
 
-/// Every adjective that is graded. A possessive or an ordinal has no
-/// comparative, no superlative and no adverb, so it is not listed, and an
-/// adjective added without a thought about its grades fails the first test.
+/// Every adjective that is graded. A possessive, an ordinal or a lemma that
+/// already is a degree has no comparative, no superlative and no adverb, so
+/// it is not listed, and an adjective added without a thought about its
+/// grades fails the first test.
 const _graded = {
   'acer',
   'acerbus',
@@ -47,7 +48,6 @@ const _graded = {
   'liber',
   'magnus',
   'malus',
-  'maximus',
   'medius',
   'mirus',
   'miser',
@@ -73,7 +73,6 @@ const _graded = {
   'salvus',
   'sceleratus',
   'stultus',
-  'summus',
   'superbus',
   'talis',
   'tantus',
@@ -85,6 +84,10 @@ const _graded = {
   'verus',
   'vivus',
 };
+
+/// Lemmas that already are a degree of another adjective. Grading them again
+/// would give māximior or summissimus.
+const _degreeLemmas = {'maximus', 'summus'};
 
 /// The comparison forms of the four suppletive adjectives, by item id.
 const _suppletive = {
@@ -139,6 +142,18 @@ void main() {
     };
     expect(graded.difference(_graded), isEmpty, reason: 'not graded');
     expect(_graded.difference(graded), isEmpty, reason: 'listed but ungraded');
+  });
+
+  test('a degree lemma carries no comparison key', () async {
+    final byId = {for (final item in await _adjectives()) _shortId(item): item};
+    for (final id in _degreeLemmas) {
+      final item = byId[id]!;
+      expect(
+        item.formOrder.where(_comparisonKey.hasMatch),
+        isEmpty,
+        reason: id,
+      );
+    }
   });
 
   test('the suppletive adjectives give their own comparison forms', () async {
