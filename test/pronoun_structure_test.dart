@@ -37,6 +37,25 @@ void main() {
     expect(items, hasLength(_coveredItemCount));
   });
 
+  test('every number present spells out every case in every gender', () {
+    for (final item in items) {
+      for (final number in ['sg', 'pl']) {
+        if (!item.forms.keys.any((feature) => feature.contains('.$number.'))) {
+          continue;
+        }
+        for (final kasus in ['nom', 'gen', 'dat', 'akk', 'abl']) {
+          for (final gender in ['m', 'f', 'n']) {
+            expect(
+              item.forms['$kasus.$number.$gender'],
+              isNotNull,
+              reason: '${item.id} $kasus.$number.$gender',
+            );
+          }
+        }
+      }
+    }
+  });
+
   test('genitive and dative singular are equal across the genders', () {
     for (final item in items) {
       for (final feature in ['gen.sg', 'dat.sg']) {
@@ -74,6 +93,19 @@ void main() {
           );
         }
       }
+    }
+  });
+
+  test('the genitive plural differs by gender where the nominative does', () {
+    for (final item in plurals) {
+      String nominative(String gender) =>
+          item.forms['nom.pl.$gender']!.join('/');
+      if (nominative('f') == nominative('m')) continue;
+      expect(
+        item.forms['gen.pl.f'],
+        isNot(item.forms['gen.pl.m']),
+        reason: '${item.id} gen.pl.f',
+      );
     }
   });
 }
