@@ -88,7 +88,7 @@
     "diag": {
       "regularInsteadOfIrregular": "You wrote {answer} – that is the regular form, but {label} is irregular here",
       "otherForm": "You wrote {answer} – that is {labels}",
-      "otherType": "You wrote {answer} – ending of {types}",
+      "otherType": "You wrote {answer} – {types}",
       "wrongStem": "You wrote {answer} – wrong stem {usedStem}- (correct: {display} {stem}-)",
       "noMatch": "You wrote {answer} – this matches no known form"
     }

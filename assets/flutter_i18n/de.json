@@ -88,7 +88,7 @@
     "diag": {
       "regularInsteadOfIrregular": "Du hast {answer} geschrieben – das wäre die regelmäßige Form, aber {label} ist hier unregelmäßig",
       "otherForm": "Du hast {answer} geschrieben – das ist {labels}",
-      "otherType": "Du hast {answer} geschrieben – Endung der {types}",
+      "otherType": "Du hast {answer} geschrieben – {types}",
       "wrongStem": "Du hast {answer} geschrieben – falscher Stamm {usedStem}- (richtig: {display} {stem}-)",
       "noMatch": "Du hast {answer} geschrieben – das passt zu keiner bekannten Form"
     }

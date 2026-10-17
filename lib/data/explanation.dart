@@ -208,6 +208,30 @@ String endingTypePhrase(String type) =>
     endingTypePhrases[type] ??
     (throw StateError('no phrase for ending type $type'));
 
+/// The phrase for each type a diagnosis can name that the ending clause never
+/// does; [typePhrase] reads it after [endingTypePhrases].
+const diagnosisOnlyTypePhrases = <String, String>{
+  'A-Deklination': 'Endung der A-Deklination',
+  'O-Deklination-maskulinum': 'Endung der O-Deklination (m)',
+  'O-Deklination-neutrum': 'Endung der O-Deklination (n)',
+  'U-Deklination': 'Endung der U-Deklination',
+  'E-Deklination-Konsonantstamm': 'Endung der E-Deklination (Konsonantstamm)',
+  'Konsonantische-Deklination-i-mf':
+      'Endung der konsonantischen Deklination (i-Stamm, m/f)',
+  'Konsonantische-Deklination-i-n':
+      'Endung der konsonantischen Deklination (i-Stamm, n)',
+  'A-Konjugation': 'Endung der A-Konjugation',
+  'E-Konjugation': 'Endung der E-Konjugation',
+  'Konsonantische': 'Endung der konsonantischen Konjugation',
+  'Mischkonjugation': 'Endung der Mischkonjugation',
+  'Perfekt-System': 'Endung des Perfekts',
+};
+
+String typePhrase(String type) =>
+    endingTypePhrases[type] ??
+    diagnosisOnlyTypePhrases[type] ??
+    (throw StateError('no phrase for type $type'));
+
 /// S18 a: a seam rule explains itself in place of the plain sum; S14: a
 /// borrowed ending names the type it is borrowed from, also next to a seam
 /// rule.
@@ -360,7 +384,7 @@ ExplanationLine _diagnosisLine(
     case EndingOfOtherType(:final types):
       return ExplanationLine('explain.diag.otherType', params: {
         'answer': answer,
-        'types': types.join(', '),
+        'types': types.map(typePhrase).join(', '),
       });
     case WrongStem(:final usedStem, :final stemName):
       final stem = item.derivation.stems[stemName]!;

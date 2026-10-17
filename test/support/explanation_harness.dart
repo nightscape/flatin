@@ -105,7 +105,7 @@ const sampleLines = <ExplanationLine>[
   }),
   ExplanationLine('explain.diag.otherType', params: {
     'answer': 'rosorum',
-    'types': 'O-Deklination-maskulinum',
+    'types': 'Endung der O-Deklination (m)',
   }),
   ExplanationLine('explain.diag.wrongStem', params: {
     'answer': 'dominusorum',
