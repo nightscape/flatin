@@ -225,6 +225,7 @@ const diagnosisOnlyTypePhrases = <String, String>{
   'Konsonantische': 'Endung der konsonantischen Konjugation',
   'Mischkonjugation': 'Endung der Mischkonjugation',
   'Perfekt-System': 'Endung des Perfekts',
+  'Unregelmäßig': 'unregelmäßige Endung',
 };
 
 String typePhrase(String type) =>

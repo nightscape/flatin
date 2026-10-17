@@ -136,7 +136,7 @@ void main() {
     // arms above fails here instead of thinning the check.
     expect(
       [generatedCount, generatedSeamCount, composedCount, regularCount],
-      [74480, 3867, 6715, 87],
+      [74487, 3867, 6887, 87],
     );
     expect(
       [regularPlainCount, regularSeamCount, regularComposedCount],

@@ -39,6 +39,7 @@ shipped:
     altus: [altus, altē]
   verbs:
     esse: [sŭm]
+    abesse: [absŭm]
     ire: [ĕo]
 
 # Collatinus model -> the types of ours it stands for. The oracle checks the
@@ -67,6 +68,7 @@ models:
   patior: {types: [Mischkonjugation], verb: {strip: ior, infinitive: ī, deponent: true}}
   potior: {types: [I-Konjugation], verb: {strip: ior, infinitive: īrī, deponent: true}}
   sum: {types: [esse-Typ]}
+  absum: {types: [esse-Kompositum]}
   possum: {types: [esse-Kompositum]}
   prosum: {types: [esse-Kompositum]}
   eo: {types: [Unregelmäßig, ire-Kompositum]}

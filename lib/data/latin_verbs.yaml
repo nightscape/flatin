@@ -423,12 +423,51 @@ types:
     delegate:
       - {name: pfa, type: a-o-Endungen, bind: {stamm: pfa}, set: {modus: part, tempus: fut, genus_verbi: akt}}
 
+  esse-Kompositum:
+    inherits_from: esse-Typ
+    stems:
+      praefix: {from: infinitiv, remove: "esse", display: Präfix}
+    compose:
+      - match: {modus: [ind, konj, imp], tempus: [praes, impf, fut]}
+        parts:
+          - {stem: praefix}
+          - {lexeme: esse, pass: all}
+      # Apart from the rule above so that the compound keeps no inf.fut.akt:
+      # that one belongs to its own perfect stem, not to "<Präfix>futūrum esse".
+      - match: {modus: inf, tempus: praes}
+        parts:
+          - {stem: praefix}
+          - {lexeme: esse, pass: all}
+
   Unregelmäßig:
     inherits_from: Verb-Vollständig
     stems:
       ppa:     {from: ppa_gen, remove: "is", display: PPA-Stamm}
       ppa_nom: {from: ppa_nom, remove: "", display: PPA Nominativ}
       gerv:    {from: gerundiv, remove: "us", display: Gerundivstamm}
+      # Only a Kompositum of esse gives these two parts; without them the
+      # rules below produce no key (S4), and the other items stay untouched.
+      praefix:  {from: praefix, display: Präfix}
+      praesens: {from: praesens_stamm, display: Präsensstamm}
+    sandhi: [t_s]
+    compose:
+      - match: {modus: ind, tempus: [praes, impf, fut]}
+        parts:
+          - {stem: praefix}
+          - {lexeme: esse, pass: all}
+      - match: {modus: konj, tempus: praes}
+        parts:
+          - {stem: praefix}
+          - {lexeme: esse, pass: all}
+    forms:
+      # pot- + essem contracts to possem, which no seam rule can write.
+      konj.impf.akt.1.sg: "{praesens}sem"
+      konj.impf.akt.2.sg: "{praesens}sēs"
+      konj.impf.akt.3.sg: "{praesens}set"
+      konj.impf.akt.1.pl: "{praesens}sēmus"
+      konj.impf.akt.2.pl: "{praesens}sētis"
+      konj.impf.akt.3.pl: "{praesens}sent"
+      inf.praes.akt: "{praesens}se"
 
 items:
   - translation: "lieben, gern haben"
@@ -656,39 +695,7 @@ items:
   - id: posse
     type: Unregelmäßig
     translation: "können"
-    parts: {infinitiv: "posse", praesens_1sg: "possum", perfekt_1sg: "potuī"}
-    forms:
-      ind.praes.akt.1.sg: "possum"
-      ind.praes.akt.2.sg: "potes"
-      ind.praes.akt.3.sg: "potest"
-      ind.praes.akt.1.pl: "possumus"
-      ind.praes.akt.2.pl: "potestis"
-      ind.praes.akt.3.pl: "possunt"
-      ind.impf.akt.1.sg: "poteram"
-      ind.impf.akt.2.sg: "poterās"
-      ind.impf.akt.3.sg: "poterat"
-      ind.impf.akt.1.pl: "poterāmus"
-      ind.impf.akt.2.pl: "poterātis"
-      ind.impf.akt.3.pl: "poterant"
-      ind.fut.akt.1.sg: "poterō"
-      ind.fut.akt.2.sg: "poteris"
-      ind.fut.akt.3.sg: "poterit"
-      ind.fut.akt.1.pl: "poterimus"
-      ind.fut.akt.2.pl: "poteritis"
-      ind.fut.akt.3.pl: "poterunt"
-      konj.praes.akt.1.sg: "possim"
-      konj.praes.akt.2.sg: "possīs"
-      konj.praes.akt.3.sg: "possit"
-      konj.praes.akt.1.pl: "possīmus"
-      konj.praes.akt.2.pl: "possītis"
-      konj.praes.akt.3.pl: "possint"
-      konj.impf.akt.1.sg: "possem"
-      konj.impf.akt.2.sg: "possēs"
-      konj.impf.akt.3.sg: "posset"
-      konj.impf.akt.1.pl: "possēmus"
-      konj.impf.akt.2.pl: "possētis"
-      konj.impf.akt.3.pl: "possent"
-      inf.praes.akt: "posse"
+    parts: {infinitiv: "posse", praesens_1sg: "possum", perfekt_1sg: "potuī", praefix: "pot", praesens_stamm: "pos"}
   - id: ire
     type: Unregelmäßig
     translation: "gehen"
@@ -1450,47 +1457,9 @@ items:
       ger.abl: "ineundō"
   - translation: "sich vor jmd. in Acht nehmen"
     parts: {infinitiv: "cavēre", praesens_1sg: "caveō", perfekt_1sg: "cāvī", supinum: "cautum"}
-  - type: esse-Typ
+  - type: esse-Kompositum
     translation: "an der Spitze stehen von, voranstehen"
     parts: {infinitiv: "praeesse", praesens_1sg: "praesum", perfekt_1sg: "praefuī"}
-    forms:
-      ind.praes.akt.1.sg: "praesum"
-      ind.praes.akt.2.sg: "praees"
-      ind.praes.akt.3.sg: "praeest"
-      ind.praes.akt.1.pl: "praesumus"
-      ind.praes.akt.2.pl: "praeestis"
-      ind.praes.akt.3.pl: "praesunt"
-      ind.impf.akt.1.sg: "praeeram"
-      ind.impf.akt.2.sg: "praeerās"
-      ind.impf.akt.3.sg: "praeerat"
-      ind.impf.akt.1.pl: "praeerāmus"
-      ind.impf.akt.2.pl: "praeerātis"
-      ind.impf.akt.3.pl: "praeerant"
-      ind.fut.akt.1.sg: "praeerō"
-      ind.fut.akt.2.sg: "praeeris"
-      ind.fut.akt.3.sg: "praeerit"
-      ind.fut.akt.1.pl: "praeerimus"
-      ind.fut.akt.2.pl: "praeeritis"
-      ind.fut.akt.3.pl: "praeerunt"
-      konj.praes.akt.1.sg: "praesim"
-      konj.praes.akt.2.sg: "praesīs"
-      konj.praes.akt.3.sg: "praesit"
-      konj.praes.akt.1.pl: "praesīmus"
-      konj.praes.akt.2.pl: "praesītis"
-      konj.praes.akt.3.pl: "praesint"
-      konj.impf.akt.1.sg: "praeessem"
-      konj.impf.akt.2.sg: "praeessēs"
-      konj.impf.akt.3.sg: "praeesset"
-      konj.impf.akt.1.pl: "praeessēmus"
-      konj.impf.akt.2.pl: "praeessētis"
-      konj.impf.akt.3.pl: "praeessent"
-      imp.praes.akt.2.sg: "praees"
-      imp.praes.akt.2.pl: "praeeste"
-      imp.fut.akt.2.sg: "praeestō"
-      imp.fut.akt.3.sg: "praeestō"
-      imp.fut.akt.2.pl: "praeestōte"
-      imp.fut.akt.3.pl: "praesuntō"
-      inf.praes.akt: "praeesse"
   - translation: "stehen, sich befinden"
     parts: {infinitiv: "stāre", praesens_1sg: "stō", perfekt_1sg: "stetī"}
     absent: *ohne_supinum
@@ -2166,126 +2135,12 @@ items:
       ger.dat: "adeundō"
       ger.akk: "adeundum"
       ger.abl: "adeundō"
-  - type: esse-Typ
+  - type: esse-Kompositum
     translation: "abwesend sein, fehlen"
     parts: {infinitiv: "abesse", praesens_1sg: "absum", perfekt_1sg: "āfuī"}
-    forms:
-      ind.praes.akt.1.sg: "absum"
-      ind.praes.akt.2.sg: "abes"
-      ind.praes.akt.3.sg: "abest"
-      ind.praes.akt.1.pl: "absumus"
-      ind.praes.akt.2.pl: "abestis"
-      ind.praes.akt.3.pl: "absunt"
-      ind.impf.akt.1.sg: "aberam"
-      ind.impf.akt.2.sg: "aberās"
-      ind.impf.akt.3.sg: "aberat"
-      ind.impf.akt.1.pl: "aberāmus"
-      ind.impf.akt.2.pl: "aberātis"
-      ind.impf.akt.3.pl: "aberant"
-      ind.fut.akt.1.sg: "aberō"
-      ind.fut.akt.2.sg: "aberis"
-      ind.fut.akt.3.sg: "aberit"
-      ind.fut.akt.1.pl: "aberimus"
-      ind.fut.akt.2.pl: "aberitis"
-      ind.fut.akt.3.pl: "aberunt"
-      konj.praes.akt.1.sg: "absim"
-      konj.praes.akt.2.sg: "absīs"
-      konj.praes.akt.3.sg: "absit"
-      konj.praes.akt.1.pl: "absīmus"
-      konj.praes.akt.2.pl: "absītis"
-      konj.praes.akt.3.pl: "absint"
-      konj.impf.akt.1.sg: "abessem"
-      konj.impf.akt.2.sg: "abessēs"
-      konj.impf.akt.3.sg: "abesset"
-      konj.impf.akt.1.pl: "abessēmus"
-      konj.impf.akt.2.pl: "abessētis"
-      konj.impf.akt.3.pl: "abessent"
-      imp.praes.akt.2.sg: "abes"
-      imp.praes.akt.2.pl: "abeste"
-      imp.fut.akt.2.sg: "abestō"
-      imp.fut.akt.3.sg: "abestō"
-      imp.fut.akt.2.pl: "abestōte"
-      imp.fut.akt.3.pl: "absuntō"
-      inf.praes.akt: "abesse"
-  - type: esse-Typ
+  - type: esse-Kompositum
     translation: "da sein, helfen"
     parts: {infinitiv: "adesse", praesens_1sg: "adsum", perfekt_1sg: "affuī"}
-    forms:
-      ind.praes.akt.1.sg: "adsum"
-      ind.praes.akt.2.sg: "ades"
-      ind.praes.akt.3.sg: "adest"
-      ind.praes.akt.1.pl: "adsumus"
-      ind.praes.akt.2.pl: "adestis"
-      ind.praes.akt.3.pl: "adsunt"
-      ind.impf.akt.1.sg: "aderam"
-      ind.impf.akt.2.sg: "aderās"
-      ind.impf.akt.3.sg: "aderat"
-      ind.impf.akt.1.pl: "aderāmus"
-      ind.impf.akt.2.pl: "aderātis"
-      ind.impf.akt.3.pl: "aderant"
-      ind.fut.akt.1.sg: "aderō"
-      ind.fut.akt.2.sg: "aderis"
-      ind.fut.akt.3.sg: "aderit"
-      ind.fut.akt.1.pl: "aderimus"
-      ind.fut.akt.2.pl: "aderitis"
-      ind.fut.akt.3.pl: "aderunt"
-      konj.praes.akt.1.sg: "adsim"
-      konj.praes.akt.2.sg: "adsīs"
-      konj.praes.akt.3.sg: "adsit"
-      konj.praes.akt.1.pl: "adsīmus"
-      konj.praes.akt.2.pl: "adsītis"
-      konj.praes.akt.3.pl: "adsint"
-      konj.impf.akt.1.sg: "adessem"
-      konj.impf.akt.2.sg: "adessēs"
-      konj.impf.akt.3.sg: "adesset"
-      konj.impf.akt.1.pl: "adessēmus"
-      konj.impf.akt.2.pl: "adessētis"
-      konj.impf.akt.3.pl: "adessent"
-      imp.praes.akt.2.sg: "ades"
-      imp.praes.akt.2.pl: "adeste"
-      imp.fut.akt.2.sg: "adestō"
-      imp.fut.akt.3.sg: "adestō"
-      imp.fut.akt.2.pl: "adestōte"
-      imp.fut.akt.3.pl: "adsuntō"
-      inf.praes.akt: "adesse"
-  - type: esse-Typ
+  - type: esse-Kompositum
     translation: "fehlen"
     parts: {infinitiv: "dēesse", praesens_1sg: "dēsum", perfekt_1sg: "dēfuī"}
-    forms:
-      ind.praes.akt.1.sg: "dēsum"
-      ind.praes.akt.2.sg: "dēes"
-      ind.praes.akt.3.sg: "dēest"
-      ind.praes.akt.1.pl: "dēsumus"
-      ind.praes.akt.2.pl: "dēestis"
-      ind.praes.akt.3.pl: "dēsunt"
-      ind.impf.akt.1.sg: "dēeram"
-      ind.impf.akt.2.sg: "dēerās"
-      ind.impf.akt.3.sg: "dēerat"
-      ind.impf.akt.1.pl: "dēerāmus"
-      ind.impf.akt.2.pl: "dēerātis"
-      ind.impf.akt.3.pl: "dēerant"
-      ind.fut.akt.1.sg: "dēerō"
-      ind.fut.akt.2.sg: "dēeris"
-      ind.fut.akt.3.sg: "dēerit"
-      ind.fut.akt.1.pl: "dēerimus"
-      ind.fut.akt.2.pl: "dēeritis"
-      ind.fut.akt.3.pl: "dēerunt"
-      konj.praes.akt.1.sg: "dēsim"
-      konj.praes.akt.2.sg: "dēsīs"
-      konj.praes.akt.3.sg: "dēsit"
-      konj.praes.akt.1.pl: "dēsīmus"
-      konj.praes.akt.2.pl: "dēsītis"
-      konj.praes.akt.3.pl: "dēsint"
-      konj.impf.akt.1.sg: "dēessem"
-      konj.impf.akt.2.sg: "dēessēs"
-      konj.impf.akt.3.sg: "dēesset"
-      konj.impf.akt.1.pl: "dēessēmus"
-      konj.impf.akt.2.pl: "dēessētis"
-      konj.impf.akt.3.pl: "dēessent"
-      imp.praes.akt.2.sg: "dēes"
-      imp.praes.akt.2.pl: "dēeste"
-      imp.fut.akt.2.sg: "dēestō"
-      imp.fut.akt.3.sg: "dēestō"
-      imp.fut.akt.2.pl: "dēestōte"
-      imp.fut.akt.3.pl: "dēsuntō"
-      inf.praes.akt: "dēesse"
