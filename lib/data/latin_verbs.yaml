@@ -711,8 +711,8 @@ items:
       ind.fut.akt.1.pl: "ībimus"
       ind.fut.akt.2.pl: "ībitis"
       ind.fut.akt.3.pl: "ībunt"
-      ind.perf.akt.2.sg: ["īstī", "īvistī"]
-      ind.perf.akt.2.pl: ["īstis", "īvistis"]
+      ind.perf.akt.2.sg: ["īstī", "iistī", "īvistī"]
+      ind.perf.akt.2.pl: ["īstis", "iistis", "īvistis"]
       konj.praes.akt.1.sg: "eam"
       konj.praes.akt.2.sg: "eās"
       konj.praes.akt.3.sg: "eat"

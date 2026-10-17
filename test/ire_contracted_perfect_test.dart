@@ -39,7 +39,13 @@ void main() {
     );
   });
 
-  test('every compound accepts every perfect-system variant ire accepts', () {
+  int indexOfKey(PracticeItem item, String key) {
+    final index = item.formOrder.indexOf(key);
+    expect(index, greaterThanOrEqualTo(0), reason: '${item.id} lacks $key');
+    return index;
+  }
+
+  test('ire and every compound accept the same perfect-system variants', () {
     final ire = ireType.firstWhere((i) => i.id == 'verbs:ire');
     const perfectTempora = {'perf', 'plusq', 'fut2'};
     final perfectKeys = ire.formOrder.where((k) {
@@ -50,13 +56,22 @@ void main() {
     for (final compound in ireType.where((i) => i != ire)) {
       final prefix = prefixOf(compound);
       for (final key in perfectKeys) {
-        final variants = ire.acceptedForms[ire.formOrder.indexOf(key)];
-        final index = compound.formOrder.indexOf(key);
-        for (final variant in variants) {
+        final ireIndex = indexOfKey(ire, key);
+        final compoundIndex = indexOfKey(compound, key);
+        for (final variant in ire.acceptedForms[ireIndex]) {
           expect(
-            compound.accepts(index, '$prefix$variant'),
+            compound.accepts(compoundIndex, '$prefix$variant'),
             isTrue,
             reason: '${compound.id} $key $prefix$variant',
+          );
+        }
+        for (final variant in compound.acceptedForms[compoundIndex]) {
+          expect(variant, startsWith(prefix), reason: '${compound.id} $key');
+          final bare = variant.substring(prefix.length);
+          expect(
+            ire.accepts(ireIndex, bare),
+            isTrue,
+            reason: '${ire.id} $key $bare (from ${compound.id})',
           );
         }
       }
@@ -69,7 +84,7 @@ void main() {
     for (final item in ireType) {
       final prefix = prefixOf(item);
       for (final entry in _endings.entries) {
-        final index = item.formOrder.indexOf(entry.key);
+        final index = indexOfKey(item, entry.key);
         shown['${item.id} ${entry.key}'] = item.forms[index];
         expected['${item.id} ${entry.key}'] = '$prefixī${entry.value}';
       }
@@ -81,7 +96,7 @@ void main() {
     for (final item in ireType) {
       final prefix = prefixOf(item);
       for (final entry in _endings.entries) {
-        final index = item.formOrder.indexOf(entry.key);
+        final index = indexOfKey(item, entry.key);
         expect(
           item.accepts(index, '${prefix}ii${entry.value}'),
           isTrue,
@@ -94,7 +109,7 @@ void main() {
   test('ire keeps the īv-perfect spelling accepted', () {
     final ire = ireType.firstWhere((i) => i.id == 'verbs:ire');
     for (final entry in _endings.entries) {
-      final index = ire.formOrder.indexOf(entry.key);
+      final index = indexOfKey(ire, entry.key);
       expect(
         ire.accepts(index, 'īvi${entry.value}'),
         isTrue,
