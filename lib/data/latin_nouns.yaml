@@ -85,43 +85,43 @@ types:
   Komparativ-Endungen:
     abstract: true
     forms:
-      nom.sg.m: "{kstamm}ior"
-      gen.sg.m: "{kstamm}iōris"
-      dat.sg.m: "{kstamm}iōrī"
-      akk.sg.m: "{kstamm}iōrem"
-      abl.sg.m: "{kstamm}iōre"
-      vok.sg.m: "{kstamm}ior"
-      nom.pl.m: "{kstamm}iōrēs"
-      gen.pl.m: "{kstamm}iōrum"
-      dat.pl.m: "{kstamm}iōribus"
-      akk.pl.m: "{kstamm}iōrēs"
-      abl.pl.m: "{kstamm}iōribus"
-      vok.pl.m: "{kstamm}iōrēs"
-      nom.sg.f: "{kstamm}ior"
-      gen.sg.f: "{kstamm}iōris"
-      dat.sg.f: "{kstamm}iōrī"
-      akk.sg.f: "{kstamm}iōrem"
-      abl.sg.f: "{kstamm}iōre"
-      vok.sg.f: "{kstamm}ior"
-      nom.pl.f: "{kstamm}iōrēs"
-      gen.pl.f: "{kstamm}iōrum"
-      dat.pl.f: "{kstamm}iōribus"
-      akk.pl.f: "{kstamm}iōrēs"
-      abl.pl.f: "{kstamm}iōribus"
-      vok.pl.f: "{kstamm}iōrēs"
-      nom.sg.n: "{kstamm}ius"
-      gen.sg.n: "{kstamm}iōris"
-      dat.sg.n: "{kstamm}iōrī"
-      akk.sg.n: "{kstamm}ius"
-      abl.sg.n: "{kstamm}iōre"
-      vok.sg.n: "{kstamm}ius"
-      nom.pl.n: "{kstamm}iōra"
-      gen.pl.n: "{kstamm}iōrum"
-      dat.pl.n: "{kstamm}iōribus"
-      akk.pl.n: "{kstamm}iōra"
-      abl.pl.n: "{kstamm}iōribus"
-      vok.pl.n: "{kstamm}iōra"
-      adv: "{kstamm}ius"
+      nom.sg.m: "{kstamm}or"
+      gen.sg.m: "{kstamm}ōris"
+      dat.sg.m: "{kstamm}ōrī"
+      akk.sg.m: "{kstamm}ōrem"
+      abl.sg.m: "{kstamm}ōre"
+      vok.sg.m: "{kstamm}or"
+      nom.pl.m: "{kstamm}ōrēs"
+      gen.pl.m: "{kstamm}ōrum"
+      dat.pl.m: "{kstamm}ōribus"
+      akk.pl.m: "{kstamm}ōrēs"
+      abl.pl.m: "{kstamm}ōribus"
+      vok.pl.m: "{kstamm}ōrēs"
+      nom.sg.f: "{kstamm}or"
+      gen.sg.f: "{kstamm}ōris"
+      dat.sg.f: "{kstamm}ōrī"
+      akk.sg.f: "{kstamm}ōrem"
+      abl.sg.f: "{kstamm}ōre"
+      vok.sg.f: "{kstamm}or"
+      nom.pl.f: "{kstamm}ōrēs"
+      gen.pl.f: "{kstamm}ōrum"
+      dat.pl.f: "{kstamm}ōribus"
+      akk.pl.f: "{kstamm}ōrēs"
+      abl.pl.f: "{kstamm}ōribus"
+      vok.pl.f: "{kstamm}ōrēs"
+      nom.sg.n: "{kstamm}us"
+      gen.sg.n: "{kstamm}ōris"
+      dat.sg.n: "{kstamm}ōrī"
+      akk.sg.n: "{kstamm}us"
+      abl.sg.n: "{kstamm}ōre"
+      vok.sg.n: "{kstamm}us"
+      nom.pl.n: "{kstamm}ōra"
+      gen.pl.n: "{kstamm}ōrum"
+      dat.pl.n: "{kstamm}ōribus"
+      akk.pl.n: "{kstamm}ōra"
+      abl.pl.n: "{kstamm}ōribus"
+      vok.pl.n: "{kstamm}ōra"
+      adv: "{kstamm}us"
 
   3-Endungen:
     abstract: true
@@ -320,7 +320,7 @@ types:
   Adjektiv-a-o:
     stems:
       stamm:  {from: nom, remove: "us", display: Stamm}
-      kstamm: {from: komparativ, remove: "ior", default: "{stamm}", display: Komparativstamm}
+      kstamm: {from: komparativ, remove: "or", default: "{stamm}i", display: Komparativstamm}
       sup:    {from: superlativ, remove: "us", default: "{stamm}issim", display: Superlativstamm}
     delegate:
       - {name: pos,  type: a-o-Endungen, bind: {stamm: stamm}, set: {grad: pos}}
@@ -342,7 +342,7 @@ types:
   Adjektiv-3:
     abstract: true
     stems:
-      kstamm: {from: komparativ, remove: "ior", default: "{stamm}", display: Komparativstamm}
+      kstamm: {from: komparativ, remove: "or", default: "{stamm}i", display: Komparativstamm}
       sup:    {from: superlativ, remove: "us", default: "{stamm}issim", display: Superlativstamm}
     delegate:
       - {name: pos,  type: 3-Endungen, bind: {stamm: stamm, nom_m: nom_m, nom_f: nom_f, nom_n: nom_n}, set: {grad: pos}}
@@ -1554,7 +1554,8 @@ items:
     parts: {nom: "carmen", gen: "carminis"}
   - type: Adjektiv-a-o
     translation: "groß"
-    parts: {nom: "māgnus", nom_f: "māgna", nom_n: "māgnum"}
+    parts: {nom: "māgnus", nom_f: "māgna", nom_n: "māgnum", komparativ: "māior", superlativ: "māximus"}
+    forms: {adv.pos: "māgnopere", adv.komp: "magis"}
   - type: Adjektiv-a-o
     translation: "griechisch"
     parts: {nom: "Graecus", nom_f: "Graeca", nom_n: "Graecum"}
@@ -1566,13 +1567,15 @@ items:
     parts: {nom: "laetus", nom_f: "laeta", nom_n: "laetum"}
   - type: Adjektiv-a-o
     translation: "schlecht"
-    parts: {nom: "malus", nom_f: "mala", nom_n: "malum"}
+    parts: {nom: "malus", nom_f: "mala", nom_n: "malum", komparativ: "peior", superlativ: "pessimus"}
+    forms: {adv.pos: "male"}
   - type: Adjektiv-a-o
     translation: "sicher"
     parts: {nom: "tūtus", nom_f: "tūta", nom_n: "tūtum"}
   - type: Adjektiv-a-o
     translation: "gut"
-    parts: {nom: "bonus", nom_f: "bona", nom_n: "bonum"}
+    parts: {nom: "bonus", nom_f: "bona", nom_n: "bonum", komparativ: "melior", superlativ: "optimus"}
+    forms: {adv.pos: "bene"}
   - type: Adjektiv-a-o
     translation: "dumm"
     parts: {nom: "stultus", nom_f: "stulta", nom_n: "stultum"}
@@ -1588,6 +1591,7 @@ items:
   - type: Adjektiv-a-o
     translation: "dein"
     parts: {nom: "tuus", nom_f: "tua", nom_n: "tuum"}
+    absent: &ohne_steigerung [{grad: komp}, {grad: sup}, {adverb: adv}]
   - type: Adjektiv-a-o
     translation: "offen"
     parts: {nom: "apertus", nom_f: "aperta", nom_n: "apertum"}
@@ -1611,16 +1615,19 @@ items:
     parts: {nom: "superbus", nom_f: "superba", nom_n: "superbum"}
   - type: Adjektiv-a-o
     translation: "klein"
-    parts: {nom: "parvus", nom_f: "parva", nom_n: "parvum"}
+    parts: {nom: "parvus", nom_f: "parva", nom_n: "parvum", komparativ: "minor", superlativ: "minimus"}
+    forms: {adv.pos: "parum"}
   - type: Adjektiv-a-o
     translation: "der erste"
     parts: {nom: "prīmus", nom_f: "prīma", nom_n: "prīmum"}
+    absent: *ohne_steigerung
   - type: Adjektiv-a-o
     translation: "nahe"
     parts: {nom: "propinquus", nom_f: "propinqua", nom_n: "propinquum"}
   - type: Adjektiv-a-o
     translation: "der siebte"
     parts: {nom: "septimus", nom_f: "septima", nom_n: "septimum"}
+    absent: *ohne_steigerung
   - type: Adjektiv-a-o
     translation: "hart"
     parts: {nom: "dūrus", nom_f: "dūra", nom_n: "dūrum"}
@@ -1648,6 +1655,7 @@ items:
   - type: Adjektiv-a-o
     translation: "der fünfte"
     parts: {nom: "quīntus", nom_f: "quīnta", nom_n: "quīntum"}
+    absent: *ohne_steigerung
   - type: Adjektiv-a-o
     translation: "gelehrt"
     parts: {nom: "doctus", nom_f: "docta", nom_n: "doctum"}
@@ -1657,19 +1665,24 @@ items:
   - type: Adjektiv-a-o
     translation: "sein, ihr"
     parts: {nom: "suus", nom_f: "sua", nom_n: "suum"}
+    absent: *ohne_steigerung
   - type: Adjektiv-a-o
     translation: "der zweite"
     parts: {nom: "secundus", nom_f: "secunda", nom_n: "secundum"}
+    absent: *ohne_steigerung
   - type: Adjektiv-a-o
     translation: "der dritte"
     parts: {nom: "tertius", nom_f: "tertia", nom_n: "tertium"}
+    absent: *ohne_steigerung
   - type: Adjektiv-a-o
     translation: "der vierte"
     parts: {nom: "quārtus", nom_f: "quārta", nom_n: "quārtum"}
+    absent: *ohne_steigerung
   - type: Adjektiv-a-o
     translation: "mein"
     parts: {nom: "meus", nom_f: "mea", nom_n: "meum"}
     forms: {vok.sg.m.pos: "mī"}
+    absent: *ohne_steigerung
   - type: Adjektiv-a-o-er
     translation: "elend"
     parts: {nom: "miser", nom_f: "misera", nom_n: "miserum"}
@@ -1679,9 +1692,11 @@ items:
   - type: Adjektiv-a-o-er
     translation: "euer"
     parts: {nom: "vester", nom_f: "vestra", nom_n: "vestrum"}
+    absent: *ohne_steigerung
   - type: Adjektiv-a-o-er
     translation: "unser"
     parts: {nom: "noster", nom_f: "nostra", nom_n: "nostrum"}
+    absent: *ohne_steigerung
   - type: Adjektiv-a-o-er
     translation: "schwarz"
     parts: {nom: "āter", nom_f: "ātra", nom_n: "ātrum"}
