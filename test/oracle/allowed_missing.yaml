@@ -54,9 +54,3 @@
     - inf.praes.pass
     - part.perf.pass.*.*.*
   reason: "the shipped table keeps the impersonal passive and the perfect participle of eo; Collatinus lists neither"
-- direction: ours
-  types: [esse-Kompositum]
-  keys:
-    - part.praes.akt.*.*.*
-    - part.fut.akt.*.*.*
-  reason: "a Kompositum of esse names no participle part, so S4 leaves it no participle stem; Collatinus builds absēns and āfutūrus from its own lemma line"

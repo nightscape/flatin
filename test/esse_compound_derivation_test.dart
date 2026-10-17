@@ -100,6 +100,72 @@ void main() {
     expect(got.length, want.length, reason: 'number of lines');
   });
 
+  test(
+    'abesse and praeesse have a present participle, the others none',
+    () async {
+      final items = await loadPracticeItems('lib/data/latin_verbs.yaml');
+      final byId = {for (final item in items) item.id: item};
+
+      for (final (id, nom, gen) in const [
+        ('verbs:abesse', 'absēns', 'absentis'),
+        ('verbs:praeesse', 'praesēns', 'praesentis'),
+      ]) {
+        final forms = byId[id]!.derivation.forms;
+        expect(forms['part.praes.akt.sg.nom.m']!.result, nom, reason: id);
+        expect(forms['part.praes.akt.sg.gen.n']!.result, gen, reason: id);
+        expect(forms['part.praes.akt.sg.nom.m'], isNot(isA<IrregularForm>()));
+      }
+      for (final id in const ['verbs:adesse', 'verbs:deesse']) {
+        expect(
+          byId[id]!.derivation.forms.keys.where(
+            (k) => k.startsWith('part.praes'),
+          ),
+          isEmpty,
+          reason: '$id has no present participle',
+        );
+      }
+    },
+  );
+
+  test('every compound has a future participle from futūrus', () async {
+    final items = await loadPracticeItems('lib/data/latin_verbs.yaml');
+    final byId = {for (final item in items) item.id: item};
+
+    for (final (id, nom, abl) in const [
+      ('verbs:abesse', 'āfutūrus', 'āfutūrō'),
+      ('verbs:adesse', 'adfutūrus', 'adfutūrō'),
+      ('verbs:deesse', 'dēfutūrus', 'dēfutūrō'),
+      ('verbs:praeesse', 'praefutūrus', 'praefutūrō'),
+    ]) {
+      final forms = byId[id]!.derivation.forms;
+      expect(forms['part.fut.akt.sg.nom.m']!.result, nom, reason: id);
+      expect(forms['part.fut.akt.sg.abl.n']!.result, abl, reason: id);
+      expect(forms['part.fut.akt.sg.nom.m'], isNot(isA<IrregularForm>()));
+    }
+  });
+
+  test(
+    'no compound has a perfect participle, gerund, supine or future infinitive',
+    () async {
+      final items = await loadPracticeItems('lib/data/latin_verbs.yaml');
+      final byId = {for (final item in items) item.id: item};
+
+      for (final id in _compounds.skip(1)) {
+        expect(
+          byId[id]!.derivation.forms.keys.where(
+            (k) =>
+                k.startsWith('part.perf') ||
+                k.startsWith('ger.') ||
+                k.startsWith('sup.') ||
+                k.startsWith('inf.fut'),
+          ),
+          isEmpty,
+          reason: id,
+        );
+      }
+    },
+  );
+
   test('posse writes the contracted konj. impf. from its present stem',
       () async {
     final items = await loadPracticeItems('lib/data/latin_verbs.yaml');

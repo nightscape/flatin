@@ -236,10 +236,12 @@ void main() {
     }
 
     // Pinned, so that a derivation change that drops a case from one of the
-    // arms above fails here instead of thinning the check.
+    // arms above fails here instead of thinning the check. The esse compounds
+    // add 216 generated participle forms: 144 future (four compounds) and 72
+    // present (absēns, praesēns).
     expect(
       [generatedCount, generatedSeamCount, composedCount, regularCount],
-      [74487, 3867, 6887, 87],
+      [74703, 3867, 6887, 87],
     );
     expect(
       [regularPlainCount, regularSeamCount, regularComposedCount],

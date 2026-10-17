@@ -427,6 +427,10 @@ types:
     inherits_from: esse-Typ
     stems:
       praefix: {from: infinitiv, remove: "esse", display: Präfix}
+      ppa:     {from: ppa_gen, remove: "is", display: PPA-Stamm}
+      ppa_nom: {from: ppa_nom, remove: "", display: PPA Nominativ}
+    delegate:
+      - {name: ppa, type: 3-Endungen-Partizip, bind: {stamm: ppa, nom_m: ppa_nom, nom_f: ppa_nom, nom_n: ppa_nom}, set: {modus: part, tempus: praes, genus_verbi: akt}}
     compose:
       - match: {modus: [ind, konj, imp], tempus: [praes, impf, fut]}
         parts:
@@ -1459,7 +1463,7 @@ items:
     parts: {infinitiv: "cavēre", praesens_1sg: "caveō", perfekt_1sg: "cāvī", supinum: "cautum"}
   - type: esse-Kompositum
     translation: "an der Spitze stehen von, voranstehen"
-    parts: {infinitiv: "praeesse", praesens_1sg: "praesum", perfekt_1sg: "praefuī"}
+    parts: {infinitiv: "praeesse", praesens_1sg: "praesum", perfekt_1sg: "praefuī", futurpartizip: "praefutūrus", ppa_nom: "praesēns", ppa_gen: "praesentis"}
   - translation: "stehen, sich befinden"
     parts: {infinitiv: "stāre", praesens_1sg: "stō", perfekt_1sg: "stetī"}
     absent: *ohne_supinum
@@ -2137,10 +2141,10 @@ items:
       ger.abl: "adeundō"
   - type: esse-Kompositum
     translation: "abwesend sein, fehlen"
-    parts: {infinitiv: "abesse", praesens_1sg: "absum", perfekt_1sg: "āfuī"}
+    parts: {infinitiv: "abesse", praesens_1sg: "absum", perfekt_1sg: "āfuī", futurpartizip: "āfutūrus", ppa_nom: "absēns", ppa_gen: "absentis"}
   - type: esse-Kompositum
     translation: "da sein, helfen"
-    parts: {infinitiv: "adesse", praesens_1sg: "adsum", perfekt_1sg: "affuī"}
+    parts: {infinitiv: "adesse", praesens_1sg: "adsum", perfekt_1sg: "affuī", futurpartizip: "adfutūrus"}
   - type: esse-Kompositum
     translation: "fehlen"
-    parts: {infinitiv: "dēesse", praesens_1sg: "dēsum", perfekt_1sg: "dēfuī"}
+    parts: {infinitiv: "dēesse", praesens_1sg: "dēsum", perfekt_1sg: "dēfuī", futurpartizip: "dēfutūrus"}
