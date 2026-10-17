@@ -40,6 +40,12 @@ void main() {
 
     expect(identical(mine.axes, foreign.axes), isFalse);
     expect(mine.hashCode, foreign.hashCode);
+
+    final differentKey = FormLabel(
+      features: {'kasus': 'gen', 'numerus': 'sg'},
+      axes: mine.axes,
+    );
+    expect(mine.hashCode, isNot(differentKey.hashCode));
   });
 
   test('comparing labels of two Axes instances is a programming error', () {
@@ -60,6 +66,30 @@ void main() {
           (e) => e.message,
           'message',
           contains('"sg"'),
+        ),
+      ),
+    );
+  });
+
+  test('Axes rejects a value code that one axis declares twice', () {
+    expect(
+      () => Axes(
+        axes: [
+          GrammarAxis(
+            id: 'kasus',
+            name: 'Kasus',
+            values: const [('nom', 'A'), ('nom', 'B')],
+          ),
+        ],
+        head: const [],
+        tail: const ['kasus'],
+        mergeAxis: 'kasus',
+      ),
+      throwsA(
+        isA<ArgumentError>().having(
+          (e) => e.message,
+          'message',
+          contains('"nom"'),
         ),
       ),
     );
