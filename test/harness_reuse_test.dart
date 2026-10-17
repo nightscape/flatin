@@ -12,10 +12,10 @@ import 'support/word_classification_harness.dart';
 /// wait forever on the practice data that the first one had already loaded,
 /// and then on the load that the first one had left in flight.
 void main() {
+  setUp(resetPracticeDataForTest);
   tearDown(() => parseGate = () async {});
 
   test('two concurrent loads of one zone parse once', () async {
-    resetPracticeDataForTest();
     var parses = 0;
     final gate = Completer<void>();
     parseGate = () {
@@ -32,7 +32,6 @@ void main() {
 
   test('a parse that throws does not brick later loads in the same zone',
       () async {
-    resetPracticeDataForTest();
     parseGate = () async => throw StateError('simulated bad data file');
     await expectLater(
         loadPracticeItems('lib/data/latin_nouns.yaml'), throwsStateError);
@@ -45,7 +44,6 @@ void main() {
   });
 
   test('a parse that throws rejects the callers queued behind it', () async {
-    resetPracticeDataForTest();
     final gate = Completer<void>();
     parseGate = () => gate.future;
 
@@ -63,7 +61,6 @@ void main() {
 
   test('a caller queued by another zone is adopted by the take-over',
       () async {
-    resetPracticeDataForTest();
     final gate = Completer<void>();
     parseGate = () => gate.future;
 
@@ -78,7 +75,6 @@ void main() {
   });
 
   test('an adopted caller gets the error of the take-over', () async {
-    resetPracticeDataForTest();
     final gate = Completer<void>();
     parseGate = () => gate.future;
 
@@ -96,9 +92,46 @@ void main() {
         adopted.timeout(const Duration(seconds: 5)), throwsStateError);
   });
 
+  test('a parse that finishes releases a caller it queued after a take-over',
+      () async {
+    final gateA = Completer<void>();
+    final gateB = Completer<void>();
+    var parses = 0;
+    parseGate = () => ++parses == 1 ? gateA.future : gateB.future;
+
+    unawaited(loadPracticeItems('lib/data/latin_nouns.yaml'));
+    final queued = loadPracticeItems('lib/data/latin_verbs.yaml');
+    await Future<void>.delayed(Duration.zero);
+
+    unawaited(runZoned(() => loadPracticeItems('lib/data/latin_nouns.yaml')));
+    await Future<void>.delayed(Duration.zero);
+
+    gateA.complete();
+    expect(await queued.timeout(const Duration(seconds: 5)), isNotEmpty);
+  });
+
+  test('a parse that throws rejects a caller it queued after a take-over',
+      () async {
+    final gateA = Completer<void>();
+    final gateB = Completer<void>();
+    var parses = 0;
+    parseGate = () => ++parses == 1 ? gateA.future : gateB.future;
+
+    final first = loadPracticeItems('lib/data/latin_nouns.yaml');
+    unawaited(first.then((_) {}, onError: (_) {}));
+    final queued = loadPracticeItems('lib/data/latin_verbs.yaml');
+    await Future<void>.delayed(Duration.zero);
+
+    unawaited(runZoned(() => loadPracticeItems('lib/data/latin_nouns.yaml')));
+    await Future<void>.delayed(Duration.zero);
+
+    gateA.completeError(StateError('simulated bad data file'));
+    await expectLater(
+        queued.timeout(const Duration(seconds: 5)), throwsStateError);
+  });
+
   testWidgets('a test that abandons the load does not strand the next one',
       (tester) async {
-    resetPracticeDataForTest();
     final gate = Completer<void>();
     parseGate = () => gate.future;
     SharedPreferences.setMockInitialValues({});

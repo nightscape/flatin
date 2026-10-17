@@ -88,11 +88,10 @@ Future<_Loaded> _load() async {
   return _loaded!;
 }
 
-/// Hands the parse result to every queued caller and gives up ownership,
-/// unless another zone has taken the parse over meanwhile.
+/// Hands the parse result to every queued caller, whichever zone owns the
+/// parse now, and gives up ownership unless another zone has taken it over.
 void _release(void Function(Completer<_Loaded>) finish) {
-  if (!identical(_parsingZone, Zone.current)) return;
-  _parsingZone = null;
+  if (identical(_parsingZone, Zone.current)) _parsingZone = null;
   _waiting.forEach(finish);
   _waiting.clear();
 }
