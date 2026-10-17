@@ -150,7 +150,7 @@ List<ExplanationLine> _formLines(
 /// engine detail the learner is never told, so the form is named after its own
 /// class: `habeō` is an E-Konjugation form, and the perfect endings belong to
 /// no class at all.
-const _borrowedEndings = <String, Set<String>>{
+const borrowedEndings = <String, Set<String>>{
   'A-Konjugation': {'3-Endungen', '3-Endungen-Partizip', 'a-o-Endungen'},
   'E-Konjugation': {'3-Endungen', '3-Endungen-Partizip', 'a-o-Endungen'},
   'I-Konjugation': {'3-Endungen', '3-Endungen-Partizip', 'a-o-Endungen'},
@@ -188,6 +188,26 @@ const _borrowedEndings = <String, Set<String>>{
   'E-Deklination-Konsonantstamm': {'E-Deklination'},
 };
 
+/// The school-grammar phrase naming each type [borrowedEndings] can name; the
+/// clause prints it as it stands.
+const endingTypePhrases = <String, String>{
+  '3-Endungen': 'Endung der 3. Deklination',
+  '3-Endungen-Partizip': 'Endung der 3. Deklination (Partizip)',
+  'a-o-Endungen': 'Endung der a-/o-Deklination',
+  'a-o-er-Endungen': 'Endung der a-/o-Deklination auf -er',
+  'Komparativ-Endungen': 'Komparativendung',
+  'I-Konjugation': 'Endung der I-Konjugation',
+  'Adjektiv-a-o': 'Adverbendung (Adjektiv der a-/o-Deklination)',
+  'Adjektiv-3': 'Adverbendung (Adjektiv der 3. Deklination)',
+  'Konsonantische-Deklination-mf': 'Endung der konsonantischen Deklination (m/f)',
+  'Konsonantische-Deklination-n': 'Endung der konsonantischen Deklination (n)',
+  'E-Deklination': 'Endung der E-Deklination',
+};
+
+String endingTypePhrase(String type) =>
+    endingTypePhrases[type] ??
+    (throw StateError('no phrase for ending type $type'));
+
 /// S18 a: a seam rule explains itself in place of the plain sum; S14: a
 /// borrowed ending names the type it is borrowed from, also next to a seam
 /// rule.
@@ -198,8 +218,9 @@ ExplanationLine _generatedLine(
 ) {
   final String stem = item.derivation.stems[form.stemName]!.stem;
   final bool borrowed =
-      _borrowedEndings[item.type]?.contains(form.endingType) ?? false;
-  final String? endingType = borrowed ? form.endingType : null;
+      borrowedEndings[item.type]?.contains(form.endingType) ?? false;
+  final String? endingType =
+      borrowed ? endingTypePhrase(form.endingType) : null;
   if (form.sandhiRule != null) {
     return _sandhiLine(
       label: label,

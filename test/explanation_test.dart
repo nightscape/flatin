@@ -440,7 +440,7 @@ void main() {
             'stem': 'fortiōr',
             'ending': 'is',
             'result': 'fortiōris',
-            'endingType': 'Konsonantische-Deklination-mf',
+            'endingType': 'Endung der konsonantischen Deklination (m/f)',
           },
         ],
       ]);
@@ -448,7 +448,7 @@ void main() {
       expect(
         german(lines)[2],
         'Komparativ Genitiv Singular: fortiōr + is = fortiōris '
-        '(Endung der Konsonantische-Deklination-mf)',
+        '(Endung der konsonantischen Deklination (m/f))',
       );
     });
 

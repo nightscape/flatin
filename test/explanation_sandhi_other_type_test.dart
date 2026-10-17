@@ -89,12 +89,12 @@ void main() {
       for (final item in await loadPracticeItems(path)) {
         for (final line in _allLines(texts, item)) {
           checked++;
-          if (!line.contains('Endung der')) continue;
-          (named[item.type] ??= {}).add(
-            line
-                .substring(line.indexOf('Endung der') + 'Endung der '.length)
-                .replaceAll(')', ''),
-          );
+          final types = endingTypePhrases.entries
+              .where((e) => line.endsWith('${e.value})'))
+              .map((e) => e.key)
+              .toList();
+          if (types.isEmpty) continue;
+          (named[item.type] ??= {}).add(types.single);
         }
       }
     }
