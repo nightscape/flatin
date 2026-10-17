@@ -4,6 +4,7 @@ import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/grammar/engine.dart';
 import 'package:latin_practice/grammar/schema.dart';
 import 'package:latin_practice/models/derivation.dart';
+import 'package:latin_practice/models/practice_item.dart';
 
 const _assets = ['lib/data/latin_nouns.yaml', 'lib/data/latin_verbs.yaml'];
 
@@ -19,6 +20,76 @@ Future<Map<String, GrammarFile>> _grammarFiles() async => {
 List<SandhiRuleSpec> _rulesOf(GrammarFile file, String typeName) => [
   for (final id in file.type(typeName).sandhi) file.sandhi[id]!,
 ];
+
+/// Type name → the file that declares it; a type may be used across files.
+Map<String, GrammarFile> _typeOwners(Iterable<GrammarFile> files) => {
+  for (final file in files)
+    for (final name in file.declaredTypes.keys) name: file,
+};
+
+/// S6 restated: the first type of [typeName]'s chain that declares [key].
+String _declaringType(
+  Map<String, GrammarFile> owners,
+  String typeName,
+  FormKey key,
+) {
+  var name = typeName;
+  while (true) {
+    final declared = owners[name]!.declaredTypes[name]!;
+    if (declared.forms.containsKey(key)) return name;
+    name = declared.inheritsFrom!;
+  }
+}
+
+/// Every (declaring type, shown ending) that the item's own type or one of
+/// its delegates could have written for [key]; a deponent key is also looked
+/// up under the passive key it was moved from (S10).
+Set<(String, String)> _endingSources(
+  Map<String, GrammarFile> owners,
+  GrammarFile file,
+  PracticeItem item,
+  FormKey key,
+) {
+  final axes = file.axes;
+  final wanted = {
+    key,
+    if (item.derivation.deponentKeys.contains(key))
+      axes.formatKey({...axes.parseKey(key), 'genus_verbi': 'pass'}),
+  };
+  final type = file.type(item.type);
+  final sources = <(String, String)>{};
+  for (final own in wanted) {
+    final templates = type.forms[own];
+    if (templates != null) {
+      sources.add((
+        _declaringType(owners, item.type, own),
+        templates.first.ending,
+      ));
+    }
+  }
+  for (final delegate in type.delegates) {
+    final target = owners[delegate.type]!;
+    for (final entry in target.type(delegate.type).forms.entries) {
+      final moved = axes.formatKey({
+        ...target.axes.parseKey(entry.key),
+        ...delegate.set,
+      });
+      if (!wanted.contains(moved)) continue;
+      sources.add((
+        _declaringType(owners, delegate.type, entry.key),
+        entry.value.first.ending,
+      ));
+    }
+  }
+  return sources;
+}
+
+/// The spelling a part reads before its own seam fires: the shown stem for an
+/// affix, the shown form for a lexeme part.
+String _beforeSeam(Derivation item, FormPart part) => switch (part) {
+  AffixPart(:final stemName) => item.stems[stemName]!.stem,
+  LexemeFormPart(:final derivation) => derivation.result,
+};
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -56,14 +127,18 @@ void main() {
     int regularPlainCount = 0;
     int regularSeamCount = 0;
     int regularComposedCount = 0;
+    int affixPartCount = 0;
+    int lexemePartCount = 0;
     final files = await _grammarFiles();
+    final owners = _typeOwners(files.values);
 
     for (final asset in _assets) {
       final items = await loadPracticeItems(asset);
 
       for (int n = 0; n < items.length; n++) {
         final item = items[n];
-        final rules = _rulesOf(files[item.dataFileId]!, item.type);
+        final file = files[item.dataFileId]!;
+        final rules = _rulesOf(file, item.type);
 
         /// Rebuilds [form] from what it records and compares; a seam form goes
         /// through the same S16 function the engine used.
@@ -81,12 +156,40 @@ void main() {
                       lemma: item.lemma,
                     ).first.text;
               expect(norm(left + ending), norm(form.result), reason: where);
+              expect(
+                _endingSources(owners, file, item, form.formKey),
+                contains((form.endingType, ending)),
+                reason: where,
+              );
             case ComposedForm(:final parts, :final join):
               expect(
                 norm([for (final part in parts) part.text].join(join)),
                 norm(form.result),
                 reason: where,
               );
+              for (int p = 0; p < parts.length; p++) {
+                final part = parts[p];
+                final at = '$where part $p';
+                switch (part) {
+                  case AffixPart(:final stemName, :final sandhiRule):
+                    affixPartCount++;
+                    final stem = item.derivation.stems[stemName];
+                    expect(stem, isNotNull, reason: '$at: no stem $stemName');
+                    final last = p == parts.length - 1;
+                    final seam = sandhiSeam(
+                      rules,
+                      stem!.stem,
+                      last ? '' : _beforeSeam(item.derivation, parts[p + 1]),
+                      wordFinal: last,
+                      lemma: item.lemma,
+                    ).first;
+                    expect(norm(part.text), norm(seam.text), reason: at);
+                    expect(sandhiRule?.id, seam.rule?.id, reason: at);
+                  case LexemeFormPart(:final key, :final derivation):
+                    lexemePartCount++;
+                    expect(derivation.formKey, key, reason: at);
+                }
+              }
             default:
               fail('$where: $form is not rebuildable');
           }
@@ -146,6 +249,7 @@ void main() {
       regularPlainCount + regularSeamCount + regularComposedCount,
       regularCount,
     );
+    expect([affixPartCount, lexemePartCount], [172, 13612]);
   });
 
   group('T-trace-4 a shown type rule agrees with the type', () {
