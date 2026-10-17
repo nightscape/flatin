@@ -1786,3 +1786,507 @@ items:
   - type: Konsonantische
     translation: "ziehen, wegschleppen"
     parts: {infinitiv: "trahere", praesens_1sg: "trahō", perfekt_1sg: "trāxī", supinum: "tractum"}
+  - translation: "erregen, wecken"
+    parts: {infinitiv: "excitāre", praesens_1sg: "excitō", perfekt_1sg: "excitāvī"}
+    absent: *ohne_supinum
+  - translation: "umherirren, sich irren"
+    parts: {infinitiv: "errāre", praesens_1sg: "errō", perfekt_1sg: "errāvī"}
+    absent: *ohne_supinum
+  - translation: "zusammenrufen"
+    parts: {infinitiv: "convocāre", praesens_1sg: "convocō", perfekt_1sg: "convocāvī"}
+    absent: *ohne_supinum
+  - translation: "erzählen"
+    parts: {infinitiv: "nārrāre", praesens_1sg: "nārrō", perfekt_1sg: "nārrāvī"}
+    absent: *ohne_supinum
+  - translation: "verzweifeln"
+    parts: {infinitiv: "dēspērāre", praesens_1sg: "dēspērō", perfekt_1sg: "dēspērāvī"}
+    absent: *ohne_supinum
+  - translation: "verwirren"
+    parts: {infinitiv: "turbāre", praesens_1sg: "turbō", perfekt_1sg: "turbāvī"}
+    absent: *ohne_supinum
+  - translation: "völlig verwirren"
+    parts: {infinitiv: "perturbāre", praesens_1sg: "perturbō", perfekt_1sg: "perturbāvī"}
+    absent: *ohne_supinum
+  - translation: "nachdenken"
+    parts: {infinitiv: "cōgitāre", praesens_1sg: "cōgitō", perfekt_1sg: "cōgitāvī"}
+    absent: *ohne_supinum
+  - translation: "quälen"
+    parts: {infinitiv: "vexāre", praesens_1sg: "vexō", perfekt_1sg: "vexāvī"}
+    absent: *ohne_supinum
+  - translation: "nicht kennen"
+    parts: {infinitiv: "īgnōrāre", praesens_1sg: "īgnōrō", perfekt_1sg: "īgnōrāvī"}
+    absent: *ohne_supinum
+  - translation: "verletzen"
+    parts: {infinitiv: "violāre", praesens_1sg: "violō", perfekt_1sg: "violāvī"}
+    absent: *ohne_supinum
+  - translation: "bevorstehen, drohen"
+    parts: {infinitiv: "īnstāre", praesens_1sg: "īnstō", perfekt_1sg: "īnstitī"}
+    absent: *ohne_supinum
+  - translation: "glauben, meinen"
+    parts: {infinitiv: "putāre", praesens_1sg: "putō", perfekt_1sg: "putāvī"}
+    absent: *ohne_supinum
+  - translation: "verborgen sein"
+    parts: {infinitiv: "latēre", praesens_1sg: "lateō", perfekt_1sg: "latuī"}
+    absent: *ohne_supinum
+  - translation: "müssen"
+    parts: {infinitiv: "dēbēre", praesens_1sg: "dēbeō", perfekt_1sg: "dēbuī"}
+    absent: *ohne_supinum
+  - translation: "nicht haben, frei sein von"
+    parts: {infinitiv: "carēre", praesens_1sg: "careō", perfekt_1sg: "caruī"}
+    absent: *ohne_supinum
+  - translation: "Schmerz empfinden, traurig sein"
+    parts: {infinitiv: "dolēre", praesens_1sg: "doleō", perfekt_1sg: "doluī"}
+    absent: *ohne_supinum
+  - translation: "sehr erschrecken"
+    parts: {infinitiv: "perterrēre", praesens_1sg: "perterreō", perfekt_1sg: "perterruī"}
+    absent: *ohne_supinum
+  - translation: "erschrecken"
+    parts: {infinitiv: "terrēre", praesens_1sg: "terreō", perfekt_1sg: "terruī"}
+    absent: *ohne_supinum
+  - translation: "stark sein, gelten"
+    parts: {infinitiv: "valēre", praesens_1sg: "valeō", perfekt_1sg: "valuī"}
+    absent: *ohne_supinum
+  - translation: "brennen"
+    parts: {infinitiv: "ārdēre", praesens_1sg: "ārdeō", perfekt_1sg: "ārsī"}
+    absent: *ohne_supinum
+  - translation: "ermahnen, warnen"
+    parts: {infinitiv: "monēre", praesens_1sg: "moneō", perfekt_1sg: "monuī"}
+    absent: *ohne_supinum
+  - translation: "liegen"
+    parts: {infinitiv: "iacēre", praesens_1sg: "iaceō", perfekt_1sg: "iacuī"}
+    absent: *ohne_supinum
+  - translation: "beenden"
+    parts: {infinitiv: "fīnīre", praesens_1sg: "fīniō", perfekt_1sg: "fīnīvī"}
+    absent: *ohne_supinum
+  - translation: "bewachen"
+    parts: {infinitiv: "cūstōdīre", praesens_1sg: "cūstōdiō", perfekt_1sg: "cūstōdīvī"}
+    absent: *ohne_supinum
+  - type: Konsonantische
+    translation: "sich anstrengen, eilen, kämpfen"
+    parts: {infinitiv: "contendere", praesens_1sg: "contendō", perfekt_1sg: "contendī"}
+  - type: Konsonantische
+    translation: "herantreten"
+    parts: {infinitiv: "accēdere", praesens_1sg: "accēdō", perfekt_1sg: "accessī"}
+  - type: Konsonantische
+    translation: "schonen"
+    parts: {infinitiv: "parcere", praesens_1sg: "parcō", perfekt_1sg: "pepercī"}
+  - type: Konsonantische
+    translation: "Widerstand leisten"
+    parts: {infinitiv: "resistere", praesens_1sg: "resistō", perfekt_1sg: "restitī"}
+  - type: Konsonantische
+    translation: "leben"
+    parts: {infinitiv: "vīvere", praesens_1sg: "vīvō", perfekt_1sg: "vīxī"}
+  - type: Konsonantische
+    translation: "weggehen"
+    parts: {infinitiv: "discēdere", praesens_1sg: "discēdō", perfekt_1sg: "discessī"}
+  - type: Konsonantische
+    translation: "tragen, ausführen"
+    parts: {infinitiv: "gerere", praesens_1sg: "gerō", perfekt_1sg: "gessī"}
+  - type: Konsonantische
+    translation: "fallen"
+    parts: {infinitiv: "cadere", praesens_1sg: "cadō", perfekt_1sg: "cecidī"}
+  - type: Konsonantische
+    translation: "stürzen, eilen"
+    parts: {infinitiv: "ruere", praesens_1sg: "ruō", perfekt_1sg: "ruī"}
+  - type: Konsonantische
+    translation: "fürchten"
+    parts: {infinitiv: "metuere", praesens_1sg: "metuō", perfekt_1sg: "metuī"}
+  - type: Mischkonjugation
+    translation: "fliehen"
+    parts: {infinitiv: "fugere", praesens_1sg: "fugiō", perfekt_1sg: "fūgī"}
+  - type: Mischkonjugation
+    translation: "entkommen"
+    parts: {infinitiv: "effugere", praesens_1sg: "effugiō", perfekt_1sg: "effūgī"}
+  - type: Unregelmäßig
+    translation: "hinausgehen"
+    parts: {infinitiv: "exīre", praesens_1sg: "exeō", perfekt_1sg: ["exiī", "exīvī"], ppa_nom: "exiēns", ppa_gen: "exeuntis", gerundiv: "exeundus"}
+    forms:
+      ind.praes.akt.1.sg: "exeō"
+      ind.praes.akt.2.sg: "exīs"
+      ind.praes.akt.3.sg: "exit"
+      ind.praes.akt.1.pl: "exīmus"
+      ind.praes.akt.2.pl: "exītis"
+      ind.praes.akt.3.pl: "exeunt"
+      ind.impf.akt.1.sg: "exībam"
+      ind.impf.akt.2.sg: "exībās"
+      ind.impf.akt.3.sg: "exībat"
+      ind.impf.akt.1.pl: "exībāmus"
+      ind.impf.akt.2.pl: "exībātis"
+      ind.impf.akt.3.pl: "exībant"
+      ind.fut.akt.1.sg: "exībō"
+      ind.fut.akt.2.sg: "exībis"
+      ind.fut.akt.3.sg: "exībit"
+      ind.fut.akt.1.pl: "exībimus"
+      ind.fut.akt.2.pl: "exībitis"
+      ind.fut.akt.3.pl: "exībunt"
+      konj.praes.akt.1.sg: "exeam"
+      konj.praes.akt.2.sg: "exeās"
+      konj.praes.akt.3.sg: "exeat"
+      konj.praes.akt.1.pl: "exeāmus"
+      konj.praes.akt.2.pl: "exeātis"
+      konj.praes.akt.3.pl: "exeant"
+      konj.impf.akt.1.sg: "exīrem"
+      konj.impf.akt.2.sg: "exīrēs"
+      konj.impf.akt.3.sg: "exīret"
+      konj.impf.akt.1.pl: "exīrēmus"
+      konj.impf.akt.2.pl: "exīrētis"
+      konj.impf.akt.3.pl: "exīrent"
+      konj.plusq.akt.1.sg: ["exīssem", "exiissem", "exīvissem"]
+      konj.plusq.akt.2.sg: ["exīssēs", "exiissēs", "exīvissēs"]
+      konj.plusq.akt.3.sg: ["exīsset", "exiisset", "exīvisset"]
+      konj.plusq.akt.1.pl: ["exīssēmus", "exiissēmus", "exīvissēmus"]
+      konj.plusq.akt.2.pl: ["exīssētis", "exiissētis", "exīvissētis"]
+      konj.plusq.akt.3.pl: ["exīssent", "exiissent", "exīvissent"]
+      imp.praes.akt.2.sg: "exī"
+      imp.praes.akt.2.pl: "exīte"
+      imp.fut.akt.2.sg: "exītō"
+      imp.fut.akt.3.sg: "exītō"
+      imp.fut.akt.2.pl: "exītōte"
+      imp.fut.akt.3.pl: "exeuntō"
+      inf.praes.akt: "exīre"
+      inf.perf.akt: ["exīsse", "exiisse", "exīvisse"]
+      ind.perf.akt.2.sg: ["exīstī", "exiistī", "exīvistī"]
+      ind.perf.akt.2.pl: ["exīstis", "exiistis", "exīvistis"]
+      ger.gen: "exeundī"
+      ger.dat: "exeundō"
+      ger.akk: "exeundum"
+      ger.abl: "exeundō"
+  - type: Unregelmäßig
+    translation: "zurückkehren"
+    parts: {infinitiv: "redīre", praesens_1sg: "redeō", perfekt_1sg: ["rediī", "redīvī"], ppa_nom: "rediēns", ppa_gen: "redeuntis", gerundiv: "redeundus"}
+    forms:
+      ind.praes.akt.1.sg: "redeō"
+      ind.praes.akt.2.sg: "redīs"
+      ind.praes.akt.3.sg: "redit"
+      ind.praes.akt.1.pl: "redīmus"
+      ind.praes.akt.2.pl: "redītis"
+      ind.praes.akt.3.pl: "redeunt"
+      ind.impf.akt.1.sg: "redībam"
+      ind.impf.akt.2.sg: "redībās"
+      ind.impf.akt.3.sg: "redībat"
+      ind.impf.akt.1.pl: "redībāmus"
+      ind.impf.akt.2.pl: "redībātis"
+      ind.impf.akt.3.pl: "redībant"
+      ind.fut.akt.1.sg: "redībō"
+      ind.fut.akt.2.sg: "redībis"
+      ind.fut.akt.3.sg: "redībit"
+      ind.fut.akt.1.pl: "redībimus"
+      ind.fut.akt.2.pl: "redībitis"
+      ind.fut.akt.3.pl: "redībunt"
+      konj.praes.akt.1.sg: "redeam"
+      konj.praes.akt.2.sg: "redeās"
+      konj.praes.akt.3.sg: "redeat"
+      konj.praes.akt.1.pl: "redeāmus"
+      konj.praes.akt.2.pl: "redeātis"
+      konj.praes.akt.3.pl: "redeant"
+      konj.impf.akt.1.sg: "redīrem"
+      konj.impf.akt.2.sg: "redīrēs"
+      konj.impf.akt.3.sg: "redīret"
+      konj.impf.akt.1.pl: "redīrēmus"
+      konj.impf.akt.2.pl: "redīrētis"
+      konj.impf.akt.3.pl: "redīrent"
+      konj.plusq.akt.1.sg: ["redīssem", "rediissem", "redīvissem"]
+      konj.plusq.akt.2.sg: ["redīssēs", "rediissēs", "redīvissēs"]
+      konj.plusq.akt.3.sg: ["redīsset", "rediisset", "redīvisset"]
+      konj.plusq.akt.1.pl: ["redīssēmus", "rediissēmus", "redīvissēmus"]
+      konj.plusq.akt.2.pl: ["redīssētis", "rediissētis", "redīvissētis"]
+      konj.plusq.akt.3.pl: ["redīssent", "rediissent", "redīvissent"]
+      imp.praes.akt.2.sg: "redī"
+      imp.praes.akt.2.pl: "redīte"
+      imp.fut.akt.2.sg: "redītō"
+      imp.fut.akt.3.sg: "redītō"
+      imp.fut.akt.2.pl: "redītōte"
+      imp.fut.akt.3.pl: "redeuntō"
+      inf.praes.akt: "redīre"
+      inf.perf.akt: ["redīsse", "rediisse", "redīvisse"]
+      ind.perf.akt.2.sg: ["redīstī", "rediistī", "redīvistī"]
+      ind.perf.akt.2.pl: ["redīstis", "rediistis", "redīvistis"]
+      ger.gen: "redeundī"
+      ger.dat: "redeundō"
+      ger.akk: "redeundum"
+      ger.abl: "redeundō"
+  - type: Unregelmäßig
+    translation: "herangehen, auf sich nehmen"
+    parts: {infinitiv: "subīre", praesens_1sg: "subeō", perfekt_1sg: ["subiī", "subīvī"], ppa_nom: "subiēns", ppa_gen: "subeuntis", gerundiv: "subeundus"}
+    forms:
+      ind.praes.akt.1.sg: "subeō"
+      ind.praes.akt.2.sg: "subīs"
+      ind.praes.akt.3.sg: "subit"
+      ind.praes.akt.1.pl: "subīmus"
+      ind.praes.akt.2.pl: "subītis"
+      ind.praes.akt.3.pl: "subeunt"
+      ind.impf.akt.1.sg: "subībam"
+      ind.impf.akt.2.sg: "subībās"
+      ind.impf.akt.3.sg: "subībat"
+      ind.impf.akt.1.pl: "subībāmus"
+      ind.impf.akt.2.pl: "subībātis"
+      ind.impf.akt.3.pl: "subībant"
+      ind.fut.akt.1.sg: "subībō"
+      ind.fut.akt.2.sg: "subībis"
+      ind.fut.akt.3.sg: "subībit"
+      ind.fut.akt.1.pl: "subībimus"
+      ind.fut.akt.2.pl: "subībitis"
+      ind.fut.akt.3.pl: "subībunt"
+      konj.praes.akt.1.sg: "subeam"
+      konj.praes.akt.2.sg: "subeās"
+      konj.praes.akt.3.sg: "subeat"
+      konj.praes.akt.1.pl: "subeāmus"
+      konj.praes.akt.2.pl: "subeātis"
+      konj.praes.akt.3.pl: "subeant"
+      konj.impf.akt.1.sg: "subīrem"
+      konj.impf.akt.2.sg: "subīrēs"
+      konj.impf.akt.3.sg: "subīret"
+      konj.impf.akt.1.pl: "subīrēmus"
+      konj.impf.akt.2.pl: "subīrētis"
+      konj.impf.akt.3.pl: "subīrent"
+      konj.plusq.akt.1.sg: ["subīssem", "subiissem", "subīvissem"]
+      konj.plusq.akt.2.sg: ["subīssēs", "subiissēs", "subīvissēs"]
+      konj.plusq.akt.3.sg: ["subīsset", "subiisset", "subīvisset"]
+      konj.plusq.akt.1.pl: ["subīssēmus", "subiissēmus", "subīvissēmus"]
+      konj.plusq.akt.2.pl: ["subīssētis", "subiissētis", "subīvissētis"]
+      konj.plusq.akt.3.pl: ["subīssent", "subiissent", "subīvissent"]
+      imp.praes.akt.2.sg: "subī"
+      imp.praes.akt.2.pl: "subīte"
+      imp.fut.akt.2.sg: "subītō"
+      imp.fut.akt.3.sg: "subītō"
+      imp.fut.akt.2.pl: "subītōte"
+      imp.fut.akt.3.pl: "subeuntō"
+      inf.praes.akt: "subīre"
+      inf.perf.akt: ["subīsse", "subiisse", "subīvisse"]
+      ind.perf.akt.2.sg: ["subīstī", "subiistī", "subīvistī"]
+      ind.perf.akt.2.pl: ["subīstis", "subiistis", "subīvistis"]
+      ger.gen: "subeundī"
+      ger.dat: "subeundō"
+      ger.akk: "subeundum"
+      ger.abl: "subeundō"
+  - type: Unregelmäßig
+    translation: "zugrunde gehen"
+    parts: {infinitiv: "perīre", praesens_1sg: "pereō", perfekt_1sg: ["periī", "perīvī"], ppa_nom: "periēns", ppa_gen: "pereuntis", gerundiv: "pereundus"}
+    forms:
+      ind.praes.akt.1.sg: "pereō"
+      ind.praes.akt.2.sg: "perīs"
+      ind.praes.akt.3.sg: "perit"
+      ind.praes.akt.1.pl: "perīmus"
+      ind.praes.akt.2.pl: "perītis"
+      ind.praes.akt.3.pl: "pereunt"
+      ind.impf.akt.1.sg: "perībam"
+      ind.impf.akt.2.sg: "perībās"
+      ind.impf.akt.3.sg: "perībat"
+      ind.impf.akt.1.pl: "perībāmus"
+      ind.impf.akt.2.pl: "perībātis"
+      ind.impf.akt.3.pl: "perībant"
+      ind.fut.akt.1.sg: "perībō"
+      ind.fut.akt.2.sg: "perībis"
+      ind.fut.akt.3.sg: "perībit"
+      ind.fut.akt.1.pl: "perībimus"
+      ind.fut.akt.2.pl: "perībitis"
+      ind.fut.akt.3.pl: "perībunt"
+      konj.praes.akt.1.sg: "peream"
+      konj.praes.akt.2.sg: "pereās"
+      konj.praes.akt.3.sg: "pereat"
+      konj.praes.akt.1.pl: "pereāmus"
+      konj.praes.akt.2.pl: "pereātis"
+      konj.praes.akt.3.pl: "pereant"
+      konj.impf.akt.1.sg: "perīrem"
+      konj.impf.akt.2.sg: "perīrēs"
+      konj.impf.akt.3.sg: "perīret"
+      konj.impf.akt.1.pl: "perīrēmus"
+      konj.impf.akt.2.pl: "perīrētis"
+      konj.impf.akt.3.pl: "perīrent"
+      konj.plusq.akt.1.sg: ["perīssem", "periissem", "perīvissem"]
+      konj.plusq.akt.2.sg: ["perīssēs", "periissēs", "perīvissēs"]
+      konj.plusq.akt.3.sg: ["perīsset", "periisset", "perīvisset"]
+      konj.plusq.akt.1.pl: ["perīssēmus", "periissēmus", "perīvissēmus"]
+      konj.plusq.akt.2.pl: ["perīssētis", "periissētis", "perīvissētis"]
+      konj.plusq.akt.3.pl: ["perīssent", "periissent", "perīvissent"]
+      imp.praes.akt.2.sg: "perī"
+      imp.praes.akt.2.pl: "perīte"
+      imp.fut.akt.2.sg: "perītō"
+      imp.fut.akt.3.sg: "perītō"
+      imp.fut.akt.2.pl: "perītōte"
+      imp.fut.akt.3.pl: "pereuntō"
+      inf.praes.akt: "perīre"
+      inf.perf.akt: ["perīsse", "periisse", "perīvisse"]
+      ind.perf.akt.2.sg: ["perīstī", "periistī", "perīvistī"]
+      ind.perf.akt.2.pl: ["perīstis", "periistis", "perīvistis"]
+      ger.gen: "pereundī"
+      ger.dat: "pereundō"
+      ger.akk: "pereundum"
+      ger.abl: "pereundō"
+  - type: Unregelmäßig
+    translation: "herangehen, aufsuchen"
+    parts: {infinitiv: "adīre", praesens_1sg: "adeō", perfekt_1sg: ["adiī", "adīvī"], ppa_nom: "adiēns", ppa_gen: "adeuntis", gerundiv: "adeundus"}
+    forms:
+      ind.praes.akt.1.sg: "adeō"
+      ind.praes.akt.2.sg: "adīs"
+      ind.praes.akt.3.sg: "adit"
+      ind.praes.akt.1.pl: "adīmus"
+      ind.praes.akt.2.pl: "adītis"
+      ind.praes.akt.3.pl: "adeunt"
+      ind.impf.akt.1.sg: "adībam"
+      ind.impf.akt.2.sg: "adībās"
+      ind.impf.akt.3.sg: "adībat"
+      ind.impf.akt.1.pl: "adībāmus"
+      ind.impf.akt.2.pl: "adībātis"
+      ind.impf.akt.3.pl: "adībant"
+      ind.fut.akt.1.sg: "adībō"
+      ind.fut.akt.2.sg: "adībis"
+      ind.fut.akt.3.sg: "adībit"
+      ind.fut.akt.1.pl: "adībimus"
+      ind.fut.akt.2.pl: "adībitis"
+      ind.fut.akt.3.pl: "adībunt"
+      konj.praes.akt.1.sg: "adeam"
+      konj.praes.akt.2.sg: "adeās"
+      konj.praes.akt.3.sg: "adeat"
+      konj.praes.akt.1.pl: "adeāmus"
+      konj.praes.akt.2.pl: "adeātis"
+      konj.praes.akt.3.pl: "adeant"
+      konj.impf.akt.1.sg: "adīrem"
+      konj.impf.akt.2.sg: "adīrēs"
+      konj.impf.akt.3.sg: "adīret"
+      konj.impf.akt.1.pl: "adīrēmus"
+      konj.impf.akt.2.pl: "adīrētis"
+      konj.impf.akt.3.pl: "adīrent"
+      konj.plusq.akt.1.sg: ["adīssem", "adiissem", "adīvissem"]
+      konj.plusq.akt.2.sg: ["adīssēs", "adiissēs", "adīvissēs"]
+      konj.plusq.akt.3.sg: ["adīsset", "adiisset", "adīvisset"]
+      konj.plusq.akt.1.pl: ["adīssēmus", "adiissēmus", "adīvissēmus"]
+      konj.plusq.akt.2.pl: ["adīssētis", "adiissētis", "adīvissētis"]
+      konj.plusq.akt.3.pl: ["adīssent", "adiissent", "adīvissent"]
+      imp.praes.akt.2.sg: "adī"
+      imp.praes.akt.2.pl: "adīte"
+      imp.fut.akt.2.sg: "adītō"
+      imp.fut.akt.3.sg: "adītō"
+      imp.fut.akt.2.pl: "adītōte"
+      imp.fut.akt.3.pl: "adeuntō"
+      inf.praes.akt: "adīre"
+      inf.perf.akt: ["adīsse", "adiisse", "adīvisse"]
+      ind.perf.akt.2.sg: ["adīstī", "adiistī", "adīvistī"]
+      ind.perf.akt.2.pl: ["adīstis", "adiistis", "adīvistis"]
+      ger.gen: "adeundī"
+      ger.dat: "adeundō"
+      ger.akk: "adeundum"
+      ger.abl: "adeundō"
+  - type: esse-Typ
+    translation: "abwesend sein, fehlen"
+    parts: {infinitiv: "abesse", praesens_1sg: "absum", perfekt_1sg: "āfuī"}
+    forms:
+      ind.praes.akt.1.sg: "absum"
+      ind.praes.akt.2.sg: "abes"
+      ind.praes.akt.3.sg: "abest"
+      ind.praes.akt.1.pl: "absumus"
+      ind.praes.akt.2.pl: "abestis"
+      ind.praes.akt.3.pl: "absunt"
+      ind.impf.akt.1.sg: "aberam"
+      ind.impf.akt.2.sg: "aberās"
+      ind.impf.akt.3.sg: "aberat"
+      ind.impf.akt.1.pl: "aberāmus"
+      ind.impf.akt.2.pl: "aberātis"
+      ind.impf.akt.3.pl: "aberant"
+      ind.fut.akt.1.sg: "aberō"
+      ind.fut.akt.2.sg: "aberis"
+      ind.fut.akt.3.sg: "aberit"
+      ind.fut.akt.1.pl: "aberimus"
+      ind.fut.akt.2.pl: "aberitis"
+      ind.fut.akt.3.pl: "aberunt"
+      konj.praes.akt.1.sg: "absim"
+      konj.praes.akt.2.sg: "absīs"
+      konj.praes.akt.3.sg: "absit"
+      konj.praes.akt.1.pl: "absīmus"
+      konj.praes.akt.2.pl: "absītis"
+      konj.praes.akt.3.pl: "absint"
+      konj.impf.akt.1.sg: "abessem"
+      konj.impf.akt.2.sg: "abessēs"
+      konj.impf.akt.3.sg: "abesset"
+      konj.impf.akt.1.pl: "abessēmus"
+      konj.impf.akt.2.pl: "abessētis"
+      konj.impf.akt.3.pl: "abessent"
+      imp.praes.akt.2.sg: "abes"
+      imp.praes.akt.2.pl: "abeste"
+      imp.fut.akt.2.sg: "abestō"
+      imp.fut.akt.3.sg: "abestō"
+      imp.fut.akt.2.pl: "abestōte"
+      imp.fut.akt.3.pl: "absuntō"
+      inf.praes.akt: "abesse"
+  - type: esse-Typ
+    translation: "da sein, helfen"
+    parts: {infinitiv: "adesse", praesens_1sg: "adsum", perfekt_1sg: "affuī"}
+    forms:
+      ind.praes.akt.1.sg: "adsum"
+      ind.praes.akt.2.sg: "ades"
+      ind.praes.akt.3.sg: "adest"
+      ind.praes.akt.1.pl: "adsumus"
+      ind.praes.akt.2.pl: "adestis"
+      ind.praes.akt.3.pl: "adsunt"
+      ind.impf.akt.1.sg: "aderam"
+      ind.impf.akt.2.sg: "aderās"
+      ind.impf.akt.3.sg: "aderat"
+      ind.impf.akt.1.pl: "aderāmus"
+      ind.impf.akt.2.pl: "aderātis"
+      ind.impf.akt.3.pl: "aderant"
+      ind.fut.akt.1.sg: "aderō"
+      ind.fut.akt.2.sg: "aderis"
+      ind.fut.akt.3.sg: "aderit"
+      ind.fut.akt.1.pl: "aderimus"
+      ind.fut.akt.2.pl: "aderitis"
+      ind.fut.akt.3.pl: "aderunt"
+      konj.praes.akt.1.sg: "adsim"
+      konj.praes.akt.2.sg: "adsīs"
+      konj.praes.akt.3.sg: "adsit"
+      konj.praes.akt.1.pl: "adsīmus"
+      konj.praes.akt.2.pl: "adsītis"
+      konj.praes.akt.3.pl: "adsint"
+      konj.impf.akt.1.sg: "adessem"
+      konj.impf.akt.2.sg: "adessēs"
+      konj.impf.akt.3.sg: "adesset"
+      konj.impf.akt.1.pl: "adessēmus"
+      konj.impf.akt.2.pl: "adessētis"
+      konj.impf.akt.3.pl: "adessent"
+      imp.praes.akt.2.sg: "ades"
+      imp.praes.akt.2.pl: "adeste"
+      imp.fut.akt.2.sg: "adestō"
+      imp.fut.akt.3.sg: "adestō"
+      imp.fut.akt.2.pl: "adestōte"
+      imp.fut.akt.3.pl: "adsuntō"
+      inf.praes.akt: "adesse"
+  - type: esse-Typ
+    translation: "fehlen"
+    parts: {infinitiv: "dēesse", praesens_1sg: "dēsum", perfekt_1sg: "dēfuī"}
+    forms:
+      ind.praes.akt.1.sg: "dēsum"
+      ind.praes.akt.2.sg: "dēes"
+      ind.praes.akt.3.sg: "dēest"
+      ind.praes.akt.1.pl: "dēsumus"
+      ind.praes.akt.2.pl: "dēestis"
+      ind.praes.akt.3.pl: "dēsunt"
+      ind.impf.akt.1.sg: "dēeram"
+      ind.impf.akt.2.sg: "dēerās"
+      ind.impf.akt.3.sg: "dēerat"
+      ind.impf.akt.1.pl: "dēerāmus"
+      ind.impf.akt.2.pl: "dēerātis"
+      ind.impf.akt.3.pl: "dēerant"
+      ind.fut.akt.1.sg: "dēerō"
+      ind.fut.akt.2.sg: "dēeris"
+      ind.fut.akt.3.sg: "dēerit"
+      ind.fut.akt.1.pl: "dēerimus"
+      ind.fut.akt.2.pl: "dēeritis"
+      ind.fut.akt.3.pl: "dēerunt"
+      konj.praes.akt.1.sg: "dēsim"
+      konj.praes.akt.2.sg: "dēsīs"
+      konj.praes.akt.3.sg: "dēsit"
+      konj.praes.akt.1.pl: "dēsīmus"
+      konj.praes.akt.2.pl: "dēsītis"
+      konj.praes.akt.3.pl: "dēsint"
+      konj.impf.akt.1.sg: "dēessem"
+      konj.impf.akt.2.sg: "dēessēs"
+      konj.impf.akt.3.sg: "dēesset"
+      konj.impf.akt.1.pl: "dēessēmus"
+      konj.impf.akt.2.pl: "dēessētis"
+      konj.impf.akt.3.pl: "dēessent"
+      imp.praes.akt.2.sg: "dēes"
+      imp.praes.akt.2.pl: "dēeste"
+      imp.fut.akt.2.sg: "dēestō"
+      imp.fut.akt.3.sg: "dēestō"
+      imp.fut.akt.2.pl: "dēestōte"
+      imp.fut.akt.3.pl: "dēsuntō"
+      inf.praes.akt: "dēesse"

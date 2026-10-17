@@ -1,4 +1,4 @@
-matched_lemmas: 31
+matched_lemmas: 35
 
 diffs:
   - {lemma: ego, features: ["1.abl.sg"], engine: "mē", reason: "print shows a prepositional phrase; bare ablative is the form"}
@@ -13,3 +13,7 @@ missing:
   - {lemma: ferre, features: ["*.*.pass.*.*.f|n", "inf.perf.pass.f|n"], reason: "design: perfect passive practised in one (masc.) form"}
   - {lemma: ego, features: ["1.*.pl"], reason: "design: the plural of the personal pronoun is the separate item nos"}
   - {lemma: tu, features: ["2.*.pl"], reason: "design: the plural of the personal pronoun is the separate item vos"}
+  - {lemma: bonus, features: ["*.*.*"], reason: "harness: no shape rule for the positive degree of an adjective, so none of its printed forms is compared"}
+  - {lemma: pulcher, features: ["*.*.*"], reason: "harness: no shape rule for the positive degree of an adjective, so none of its printed forms is compared"}
+  - {lemma: acer, features: ["*.*.*"], reason: "harness: no shape rule for the positive degree of an adjective, so none of its printed forms is compared"}
+  - {lemma: tristis, features: ["*.*.*"], reason: "harness: no shape rule for the positive degree of an adjective, so none of its printed forms is compared"}

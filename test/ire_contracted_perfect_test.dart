@@ -35,7 +35,16 @@ void main() {
   test('ire and its compounds are covered', () {
     expect(
       ireType.map((i) => i.id),
-      unorderedEquals(['verbs:ire', 'verbs:abire', 'verbs:inire']),
+      unorderedEquals([
+        'verbs:ire',
+        'verbs:abire',
+        'verbs:inire',
+        'verbs:exire',
+        'verbs:redire',
+        'verbs:subire',
+        'verbs:perire',
+        'verbs:adire',
+      ]),
     );
   });
 

@@ -28,7 +28,7 @@ void main() {
           }
         }
       }
-      expect(inspected.length, 22);
+      expect(inspected.length, 67);
       expect(fabricated, isEmpty);
     },
   );

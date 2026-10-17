@@ -1343,3 +1343,369 @@ items:
   - type: Konsonantische-Deklination-i-mf
     translation: "der Mord, das Blutbad"
     parts: {nom: "caedēs", gen: "caedis"}
+  - translation: "der Trojaner"
+    parts: {nom: "Trōiānus"}
+  - translation: "der Feind"
+    parts: {nom: "inimīcus"}
+  - translation: "die List"
+    parts: {nom: "dolus"}
+  - translation: "der Gefährte, Bundesgenosse"
+    parts: {nom: "socius"}
+  - translation: "der Gefangene"
+    parts: {nom: "captīvus"}
+  - translation: "der Schlaf"
+    parts: {nom: "somnus"}
+  - translation: "das Auge"
+    parts: {nom: "oculus"}
+  - translation: "das Herz, der Sinn, der Mut"
+    parts: {nom: "animus"}
+  - translation: "die Mauer"
+    parts: {nom: "mūrus"}
+  - translation: "das Jahr"
+    parts: {nom: "annus"}
+  - translation: "der Plebejer"
+    parts: {nom: "plēbēius"}
+  - translation: "die Schulter"
+    parts: {nom: "umerus"}
+  - translation: "der Großvater"
+    parts: {nom: "avus"}
+  - translation: "das Schicksal"
+    parts: {nom: "fātum"}
+  - translation: "das Übel"
+    parts: {nom: "malum"}
+  - translation: "die Stadt"
+    parts: {nom: "oppidum"}
+  - translation: "der Fels"
+    parts: {nom: "saxum"}
+  - translation: "die Hilfe"
+    parts: {nom: "auxilium"}
+  - translation: "die Herrschaft, das Reich, der Befehl"
+    parts: {nom: "imperium"}
+  - translation: "das Zeichen"
+    parts: {nom: "sīgnum"}
+  - translation: "die Tat"
+    parts: {nom: "factum"}
+  - translation: "die Ruhe, freie Zeit"
+    parts: {nom: "ōtium"}
+  - translation: "der Krieg"
+    parts: {nom: "bellum"}
+  - translation: "die Heimat"
+    parts: {nom: "patria"}
+  - translation: "das Wasser"
+    parts: {nom: "aqua"}
+  - translation: "die Beute"
+    parts: {nom: "praeda"}
+  - translation: "die Geschichte, Sage"
+    parts: {nom: "fābula"}
+  - translation: "die Sorge"
+    parts: {nom: "cūra"}
+  - translation: "der Weg, die Straße"
+    parts: {nom: "via"}
+  - translation: "(das Land) Italien"
+    parts: {nom: "Ītalia"}
+  - translation: "die Erde, das Land"
+    parts: {nom: "terra"}
+  - translation: "der Dank"
+    parts: {nom: "grātia"}
+  - translation: "die Menge, der Vorrat"
+    parts: {nom: "cōpia"}
+  - translation: "das Leben"
+    parts: {nom: "vīta"}
+  - translation: "die Träne"
+    parts: {nom: "lacrima"}
+  - translation: "der Zorn"
+    parts: {nom: "īra"}
+  - translation: "die Stunde"
+    parts: {nom: "hōra"}
+  - translation: "die Natur"
+    parts: {nom: "nātūra"}
+  - translation: "der Buchstabe"
+    parts: {nom: "littera"}
+  - translation: "die Freundin"
+    parts: {nom: "amīca"}
+  - translation: "die Flamme"
+    parts: {nom: "flamma"}
+  - translation: "die Mahlzeit"
+    parts: {nom: "cēna"}
+  - translation: "die Zunge, Sprache"
+    parts: {nom: "lingua"}
+  - translation: "(die Stadt) Rom"
+    parts: {nom: "Rōma"}
+  - translation: "die Kammer"
+    parts: {nom: "cella"}
+  - translation: "der Dichter"
+    parts: {nom: "poēta"}
+  - type: Konsonantische-Deklination-mf
+    translation: "der Ehemann/die Ehefrau"
+    parts: {nom: "coniūnx", gen: "coniugis"}
+  - type: Konsonantische-Deklination-mf
+    translation: "der Soldat"
+    parts: {nom: "mīles", gen: "mīlitis"}
+  - type: Konsonantische-Deklination-mf
+    translation: "der Vater"
+    parts: {nom: "pater", gen: "patris"}
+  - type: Konsonantische-Deklination-mf
+    translation: "der Bruder"
+    parts: {nom: "frāter", gen: "frātris"}
+  - type: Konsonantische-Deklination-mf
+    translation: "die Frau"
+    parts: {nom: "mulier", gen: "mulieris"}
+  - type: Konsonantische-Deklination-mf
+    translation: "der Frieden"
+    parts: {nom: "pāx", gen: "pācis"}
+  - type: Konsonantische-Deklination-mf
+    translation: "der Dieb"
+    parts: {nom: "fūr", gen: "fūris"}
+  - type: Konsonantische-Deklination-mf
+    translation: "der Gast, Gastgeber"
+    parts: {nom: "hospes", gen: "hospitis"}
+  - type: Konsonantische-Deklination-mf
+    translation: "die Grausamkeit"
+    parts: {nom: "crūdēlitās", gen: "crūdēlitātis"}
+  - type: Konsonantische-Deklination-mf
+    translation: "die Schwester"
+    parts: {nom: "soror", gen: "sorōris"}
+  - type: Konsonantische-Deklination-mf
+    translation: "die Stimme"
+    parts: {nom: "vōx", gen: "vōcis"}
+  - type: Konsonantische-Deklination-mf
+    translation: "die Rede"
+    parts: {nom: "ōrātiō", gen: "ōrātiōnis"}
+  - type: Konsonantische-Deklination-mf
+    translation: "die Tüchtigkeit, Tapferkeit"
+    parts: {nom: "virtūs", gen: "virtūtis"}
+  - type: Konsonantische-Deklination-mf
+    translation: "die Sklaverei"
+    parts: {nom: "servitūs", gen: "servitūtis"}
+  - type: Konsonantische-Deklination-mf
+    translation: "das einfache Volk"
+    parts: {nom: "plēbs", gen: "plēbis"}
+  - type: Konsonantische-Deklination-mf
+    translation: "die Mutter"
+    parts: {nom: "māter", gen: "mātris"}
+  - type: Konsonantische-Deklination-mf
+    translation: "der Senator"
+    parts: {nom: "senātor", gen: "senātōris"}
+  - type: Konsonantische-Deklination-mf
+    translation: "das Licht"
+    parts: {nom: "lūx", gen: "lūcis"}
+  - type: Konsonantische-Deklination-mf
+    translation: "die Ehre"
+    parts: {nom: "honōs", gen: "honōris"}
+  - type: Konsonantische-Deklination-mf
+    translation: "die Gegend"
+    parts: {nom: "regiō", gen: "regiōnis"}
+  - type: Konsonantische-Deklination-mf
+    translation: "der junge Mann"
+    parts: {nom: "iuvenis", gen: "iuvenis"}
+  - type: Konsonantische-Deklination-mf
+    translation: "die Sonne"
+    parts: {nom: "sōl", gen: "sōlis"}
+  - type: Konsonantische-Deklination-mf
+    translation: "die Arbeit, Mühe"
+    parts: {nom: "labor", gen: "labōris"}
+  - type: Konsonantische-Deklination-mf
+    translation: "die Asche"
+    parts: {nom: "cinis", gen: "cineris"}
+  - type: Konsonantische-Deklination-mf
+    translation: "der Händler"
+    parts: {nom: "mercātor", gen: "mercātōris"}
+  - type: Konsonantische-Deklination-i-mf
+    translation: "der Feind"
+    parts: {nom: "hostis", gen: "hostis"}
+  - type: Konsonantische-Deklination-i-mf
+    translation: "der Bürger"
+    parts: {nom: "cīvis", gen: "cīvis"}
+  - type: Konsonantische-Deklination-i-mf
+    translation: "die Wolke"
+    parts: {nom: "nūbēs", gen: "nūbis"}
+  - type: Konsonantische-Deklination-i-mf
+    translation: "der Berg"
+    parts: {nom: "mōns", gen: "montis"}
+  - type: Konsonantische-Deklination-i-mf
+    translation: "das Schiff"
+    parts: {nom: "nāvis", gen: "nāvis"}
+  - type: Konsonantische-Deklination-i-mf
+    translation: "die Nacht"
+    parts: {nom: "nox", gen: "noctis"}
+  - type: Konsonantische-Deklination-i-mf
+    translation: "der Zahn"
+    parts: {nom: "dēns", gen: "dentis"}
+  - type: Konsonantische-Deklination-i-mf
+    translation: "die Kunst"
+    parts: {nom: "ars", gen: "artis"}
+  - type: Konsonantische-Deklination-i-mf
+    translation: "die Kleidung"
+    parts: {nom: "vestis", gen: "vestis"}
+  - type: Konsonantische-Deklination-n
+    translation: "die Zeit"
+    parts: {nom: "tempus", gen: "temporis"}
+  - type: Konsonantische-Deklination-n
+    translation: "die Küste"
+    parts: {nom: "lītus", gen: "litoris"}
+  - type: Konsonantische-Deklination-n
+    translation: "das Vieh"
+    parts: {nom: "pecus", gen: "pecoris"}
+  - type: Konsonantische-Deklination-n
+    translation: "der Name"
+    parts: {nom: "nōmen", gen: "nōminis"}
+  - type: Konsonantische-Deklination-n
+    translation: "das Gedicht, Lied"
+    parts: {nom: "carmen", gen: "carminis"}
+  - type: Adjektiv-a-o
+    translation: "groß"
+    parts: {nom: "māgnus", nom_f: "māgna", nom_n: "māgnum"}
+  - type: Adjektiv-a-o
+    translation: "griechisch"
+    parts: {nom: "Graecus", nom_f: "Graeca", nom_n: "Graecum"}
+  - type: Adjektiv-a-o
+    translation: "ängstlich"
+    parts: {nom: "timidus", nom_f: "timida", nom_n: "timidum"}
+  - type: Adjektiv-a-o
+    translation: "froh"
+    parts: {nom: "laetus", nom_f: "laeta", nom_n: "laetum"}
+  - type: Adjektiv-a-o
+    translation: "schlecht"
+    parts: {nom: "malus", nom_f: "mala", nom_n: "malum"}
+  - type: Adjektiv-a-o
+    translation: "sicher"
+    parts: {nom: "tūtus", nom_f: "tūta", nom_n: "tūtum"}
+  - type: Adjektiv-a-o
+    translation: "gut"
+    parts: {nom: "bonus", nom_f: "bona", nom_n: "bonum"}
+  - type: Adjektiv-a-o
+    translation: "dumm"
+    parts: {nom: "stultus", nom_f: "stulta", nom_n: "stultum"}
+  - type: Adjektiv-a-o
+    translation: "wütend, schrecklich"
+    parts: {nom: "saevus", nom_f: "saeva", nom_n: "saevum"}
+  - type: Adjektiv-a-o
+    translation: "wild"
+    parts: {nom: "ferus", nom_f: "fera", nom_n: "ferum"}
+  - type: Adjektiv-a-o
+    translation: "ruhig, sanft"
+    parts: {nom: "placidus", nom_f: "placida", nom_n: "placidum"}
+  - type: Adjektiv-a-o
+    translation: "dein"
+    parts: {nom: "tuus", nom_f: "tua", nom_n: "tuum"}
+  - type: Adjektiv-a-o
+    translation: "offen"
+    parts: {nom: "apertus", nom_f: "aperta", nom_n: "apertum"}
+  - type: Adjektiv-a-o
+    translation: "neu"
+    parts: {nom: "novus", nom_f: "nova", nom_n: "novum"}
+  - type: Adjektiv-a-o
+    translation: "fromm, pflichtbewusst"
+    parts: {nom: "pius", nom_f: "pia", nom_n: "pium"}
+  - type: Adjektiv-a-o
+    translation: "verborgen"
+    parts: {nom: "occultus", nom_f: "occulta", nom_n: "occultum"}
+  - type: Adjektiv-a-o
+    translation: "gottlos"
+    parts: {nom: "impius", nom_f: "impia", nom_n: "impium"}
+  - type: Adjektiv-a-o
+    translation: "gerecht"
+    parts: {nom: "iūstus", nom_f: "iūsta", nom_n: "iūstum"}
+  - type: Adjektiv-a-o
+    translation: "stolz"
+    parts: {nom: "superbus", nom_f: "superba", nom_n: "superbum"}
+  - type: Adjektiv-a-o
+    translation: "klein"
+    parts: {nom: "parvus", nom_f: "parva", nom_n: "parvum"}
+  - type: Adjektiv-a-o
+    translation: "der erste"
+    parts: {nom: "prīmus", nom_f: "prīma", nom_n: "prīmum"}
+  - type: Adjektiv-a-o
+    translation: "nahe"
+    parts: {nom: "propinquus", nom_f: "propinqua", nom_n: "propinquum"}
+  - type: Adjektiv-a-o
+    translation: "der siebte"
+    parts: {nom: "septimus", nom_f: "septima", nom_n: "septimum"}
+  - type: Adjektiv-a-o
+    translation: "hart"
+    parts: {nom: "dūrus", nom_f: "dūra", nom_n: "dūrum"}
+  - type: Adjektiv-a-o
+    translation: "benachbart"
+    parts: {nom: "fīnitimus", nom_f: "fīnitima", nom_n: "fīnitimum"}
+  - type: Adjektiv-a-o
+    translation: "hervorragend"
+    parts: {nom: "ēgregius", nom_f: "ēgregia", nom_n: "ēgregium"}
+  - type: Adjektiv-a-o
+    translation: "alt"
+    parts: {nom: "antīquus", nom_f: "antīqua", nom_n: "antīquum"}
+  - type: Adjektiv-a-o
+    translation: "bereit"
+    parts: {nom: "parātus", nom_f: "parāta", nom_n: "parātum"}
+  - type: Adjektiv-a-o
+    translation: "so groß"
+    parts: {nom: "tantus", nom_f: "tanta", nom_n: "tantum"}
+  - type: Adjektiv-a-o
+    translation: "berühmt"
+    parts: {nom: "praeclārus", nom_f: "praeclāra", nom_n: "praeclārum"}
+  - type: Adjektiv-a-o
+    translation: "übrig"
+    parts: {nom: "reliquus", nom_f: "reliqua", nom_n: "reliquum"}
+  - type: Adjektiv-a-o
+    translation: "der fünfte"
+    parts: {nom: "quīntus", nom_f: "quīnta", nom_n: "quīntum"}
+  - type: Adjektiv-a-o
+    translation: "gelehrt"
+    parts: {nom: "doctus", nom_f: "docta", nom_n: "doctum"}
+  - type: Adjektiv-a-o
+    translation: "menschlich"
+    parts: {nom: "hūmānus", nom_f: "hūmāna", nom_n: "hūmānum"}
+  - type: Adjektiv-a-o
+    translation: "sein, ihr"
+    parts: {nom: "suus", nom_f: "sua", nom_n: "suum"}
+  - type: Adjektiv-a-o
+    translation: "der zweite"
+    parts: {nom: "secundus", nom_f: "secunda", nom_n: "secundum"}
+  - type: Adjektiv-a-o
+    translation: "der dritte"
+    parts: {nom: "tertius", nom_f: "tertia", nom_n: "tertium"}
+  - type: Adjektiv-a-o
+    translation: "der vierte"
+    parts: {nom: "quārtus", nom_f: "quārta", nom_n: "quārtum"}
+  - type: Adjektiv-a-o
+    translation: "mein"
+    parts: {nom: "meus", nom_f: "mea", nom_n: "meum"}
+    forms: {vok.sg.m.pos: "mī"}
+  - type: Adjektiv-a-o-er
+    translation: "elend"
+    parts: {nom: "miser", nom_f: "misera", nom_n: "miserum"}
+  - type: Adjektiv-a-o-er
+    translation: "schön"
+    parts: {nom: "pulcher", nom_f: "pulchra", nom_n: "pulchrum"}
+  - type: Adjektiv-a-o-er
+    translation: "euer"
+    parts: {nom: "vester", nom_f: "vestra", nom_n: "vestrum"}
+  - type: Adjektiv-a-o-er
+    translation: "unser"
+    parts: {nom: "noster", nom_f: "nostra", nom_n: "nostrum"}
+  - type: Adjektiv-a-o-er
+    translation: "schwarz"
+    parts: {nom: "āter", nom_f: "ātra", nom_n: "ātrum"}
+  - type: Adjektiv-a-o-er
+    translation: "frei"
+    parts: {nom: "līber", nom_f: "lībera", nom_n: "līberum"}
+  - type: Adjektiv-zweiendig
+    translation: "schwer"
+    parts: {nom: "gravis", nom_n: "grave"}
+  - type: Adjektiv-zweiendig
+    translation: "traurig"
+    parts: {nom: "trīstis", nom_n: "trīste"}
+  - type: Adjektiv-zweiendig
+    translation: "vornehm"
+    parts: {nom: "nōbilis", nom_n: "nōbile"}
+  - type: Adjektiv-zweiendig
+    translation: "jeder, ganz"
+    parts: {nom: "omnis", nom_n: "omne"}
+  - type: Adjektiv-zweiendig
+    translation: "unsterblich"
+    parts: {nom: "immortālis", nom_n: "immortāle"}
+  - type: Adjektiv-zweiendig
+    translation: "tapfer"
+    parts: {nom: "fortis", nom_n: "forte"}
+  - type: Adjektiv-dreiendig
+    translation: "scharf, heftig"
+    parts: {nom: "ācer", nom_f: "ācris", nom_n: "ācre"}
