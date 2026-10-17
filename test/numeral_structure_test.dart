@@ -20,6 +20,11 @@ const _pluralItemCount = 2;
 /// A genitive plural ends in -rum or -ium.
 final _genitivePlural = RegExp(r'(rum|ium)$');
 
+/// Plural numerals whose feminine nominative equals the masculine one.
+const _sharedNominativePlural = {'tres'};
+
+/// Plural cases that the feminine spells like the masculine.
+const _genderSharedPluralCases = <String>{};
 final GrammarEngine _engine = GrammarEngine(
   parseGrammarFiles({_path: File(_path).readAsStringSync()}),
 );
@@ -137,6 +142,34 @@ void main() {
         isNot(item.forms['gen.pl.m']),
         reason: '${item.id} gen.pl.f',
       );
+    }
+  });
+
+  test('only trēs shares the nominative plural across genders', () {
+    for (final item in plurals) {
+      expect(
+        item.forms['nom.pl.f'],
+        _sharedNominativePlural.contains(item.id)
+            ? item.forms['nom.pl.m']
+            : isNot(item.forms['nom.pl.m']),
+        reason: '${item.id} nom.pl.f',
+      );
+    }
+  });
+
+  test('the plural oblique cells keep the feminine stem', () {
+    for (final item in plurals) {
+      if (_sharedNominativePlural.contains(item.id)) continue;
+      for (final kasus in ['gen', 'dat', 'akk', 'abl']) {
+        final masculine = item.forms['$kasus.pl.m'];
+        expect(
+          item.forms['$kasus.pl.f'],
+          _genderSharedPluralCases.contains(kasus)
+              ? masculine
+              : isNot(masculine),
+          reason: '${item.id} $kasus.pl.f',
+        );
+      }
     }
   });
 }
