@@ -95,13 +95,13 @@ void main() {
         'fortis',
         'gen.sg.m.komp',
         'fortiōris',
-        '{kstamm}+iōris [Komparativ-Endungen]',
+        '{kstamm}+ōris [Komparativ-Endungen]',
       );
       _golden(
         'fortis',
         'adv.komp',
         'fortius',
-        '{kstamm}+ius [Komparativ-Endungen]',
+        '{kstamm}+us [Komparativ-Endungen]',
       );
       _golden(
         'fortis',
@@ -113,8 +113,25 @@ void main() {
         'bonus',
         'nom.sg.m.komp',
         'melior',
-        '{kstamm}+ior [Komparativ-Endungen]',
+        '{kstamm}+or [Komparativ-Endungen]',
       );
+    });
+
+    test('the fixture comparison table is the shipped table', () {
+      String block(String path) {
+        final text = File(path).readAsStringSync();
+        final start = text.indexOf('  Komparativ-Endungen:');
+        return text.substring(start, text.indexOf('\n\n', start));
+      }
+
+      List<String> kstamms(String path) => File(path)
+          .readAsLinesSync()
+          .where((line) => line.trimLeft().startsWith('kstamm:'))
+          .toList();
+
+      expect(block(_nounsPath), block('lib/data/latin_nouns.yaml'));
+      expect(kstamms(_nounsPath), isNotEmpty);
+      expect(kstamms(_nounsPath), kstamms('lib/data/latin_nouns.yaml'));
     });
 
     test('an item override is irregular and keeps the rule form', () {

@@ -80,43 +80,43 @@ types:
   Komparativ-Endungen:
     abstract: true
     forms:
-      nom.sg.m: "{kstamm}ior"
-      gen.sg.m: "{kstamm}iōris"
-      dat.sg.m: "{kstamm}iōrī"
-      akk.sg.m: "{kstamm}iōrem"
-      abl.sg.m: "{kstamm}iōre"
-      vok.sg.m: "{kstamm}ior"
-      nom.pl.m: "{kstamm}iōrēs"
-      gen.pl.m: "{kstamm}iōrum"
-      dat.pl.m: "{kstamm}iōribus"
-      akk.pl.m: "{kstamm}iōrēs"
-      abl.pl.m: "{kstamm}iōribus"
-      vok.pl.m: "{kstamm}iōrēs"
-      nom.sg.f: "{kstamm}ior"
-      gen.sg.f: "{kstamm}iōris"
-      dat.sg.f: "{kstamm}iōrī"
-      akk.sg.f: "{kstamm}iōrem"
-      abl.sg.f: "{kstamm}iōre"
-      vok.sg.f: "{kstamm}ior"
-      nom.pl.f: "{kstamm}iōrēs"
-      gen.pl.f: "{kstamm}iōrum"
-      dat.pl.f: "{kstamm}iōribus"
-      akk.pl.f: "{kstamm}iōrēs"
-      abl.pl.f: "{kstamm}iōribus"
-      vok.pl.f: "{kstamm}iōrēs"
-      nom.sg.n: "{kstamm}ius"
-      gen.sg.n: "{kstamm}iōris"
-      dat.sg.n: "{kstamm}iōrī"
-      akk.sg.n: "{kstamm}ius"
-      abl.sg.n: "{kstamm}iōre"
-      vok.sg.n: "{kstamm}ius"
-      nom.pl.n: "{kstamm}iōra"
-      gen.pl.n: "{kstamm}iōrum"
-      dat.pl.n: "{kstamm}iōribus"
-      akk.pl.n: "{kstamm}iōra"
-      abl.pl.n: "{kstamm}iōribus"
-      vok.pl.n: "{kstamm}iōra"
-      adv: "{kstamm}ius"
+      nom.sg.m: "{kstamm}or"
+      gen.sg.m: "{kstamm}ōris"
+      dat.sg.m: "{kstamm}ōrī"
+      akk.sg.m: "{kstamm}ōrem"
+      abl.sg.m: "{kstamm}ōre"
+      vok.sg.m: "{kstamm}or"
+      nom.pl.m: "{kstamm}ōrēs"
+      gen.pl.m: "{kstamm}ōrum"
+      dat.pl.m: "{kstamm}ōribus"
+      akk.pl.m: "{kstamm}ōrēs"
+      abl.pl.m: "{kstamm}ōribus"
+      vok.pl.m: "{kstamm}ōrēs"
+      nom.sg.f: "{kstamm}or"
+      gen.sg.f: "{kstamm}ōris"
+      dat.sg.f: "{kstamm}ōrī"
+      akk.sg.f: "{kstamm}ōrem"
+      abl.sg.f: "{kstamm}ōre"
+      vok.sg.f: "{kstamm}or"
+      nom.pl.f: "{kstamm}ōrēs"
+      gen.pl.f: "{kstamm}ōrum"
+      dat.pl.f: "{kstamm}ōribus"
+      akk.pl.f: "{kstamm}ōrēs"
+      abl.pl.f: "{kstamm}ōribus"
+      vok.pl.f: "{kstamm}ōrēs"
+      nom.sg.n: "{kstamm}us"
+      gen.sg.n: "{kstamm}ōris"
+      dat.sg.n: "{kstamm}ōrī"
+      akk.sg.n: "{kstamm}us"
+      abl.sg.n: "{kstamm}ōre"
+      vok.sg.n: "{kstamm}us"
+      nom.pl.n: "{kstamm}ōra"
+      gen.pl.n: "{kstamm}ōrum"
+      dat.pl.n: "{kstamm}ōribus"
+      akk.pl.n: "{kstamm}ōra"
+      abl.pl.n: "{kstamm}ōribus"
+      vok.pl.n: "{kstamm}ōra"
+      adv: "{kstamm}us"
 
   3-Endungen:
     abstract: true
@@ -171,7 +171,7 @@ types:
   Adjektiv-a-o:
     stems:
       stamm:  {from: nom, remove: "us", display: Stamm}
-      kstamm: {from: komparativ, remove: "ior", default: "{stamm}", display: Komparativstamm}
+      kstamm: {from: komparativ, remove: "or", default: "{stamm}i", display: Komparativstamm}
       sup:    {from: superlativ, remove: "us", default: "{stamm}issim", display: Superlativstamm}
     delegate:
       - {name: pos,  type: a-o-Endungen, bind: {stamm: stamm}, set: {grad: pos}}
@@ -193,7 +193,7 @@ types:
   Adjektiv-3:
     abstract: true
     stems:
-      kstamm: {from: komparativ, remove: "ior", default: "{stamm}", display: Komparativstamm}
+      kstamm: {from: komparativ, remove: "or", default: "{stamm}i", display: Komparativstamm}
       sup:    {from: superlativ, remove: "us", default: "{stamm}issim", display: Superlativstamm}
     delegate:
       - {name: pos,  type: 3-Endungen, bind: {stamm: stamm, nom_m: nom_m, nom_f: nom_f, nom_n: nom_n}, set: {grad: pos}}
