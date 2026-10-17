@@ -260,6 +260,10 @@ final class Derivation {
   /// Keys moved from a passive key to the active one (S10).
   final Set<FormKey> deponentKeys;
 
+  /// S10: the item is deponent in every tempus (`deponent: all`), not only in
+  /// some. A semi-deponent keeps the passive keys the move leaves alone.
+  final bool fullDeponent;
+
   /// Forms with `emit: false` (S8): for compositions and the oracle, never
   /// practised.
   final Map<FormKey, FormDerivation> internal;
@@ -272,6 +276,7 @@ final class Derivation {
     this.stems = const {},
     required this.forms,
     this.deponentKeys = const {},
+    this.fullDeponent = false,
     this.internal = const {},
     required this.grammar,
   })  : assert(forms.entries.every((e) => e.key == e.value.formKey)),

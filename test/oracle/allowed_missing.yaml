@@ -45,6 +45,12 @@
   keys: [ind.praes.pass.2.sg, ind.impf.pass.3.sg]
   reason: "Collatinus lists the impersonal passive of eo (itur), which we do not practise"
 - direction: theirs
-  item: ferire
-  keys: [part.fut.akt.*.*.*, part.perf.pass.*.*.*, sup.akk, sup.abl]
-  reason: "Collatinus gives ferio no supine and no participles built on it"
+  item: ire
+  keys:
+    - ind.praes.pass.3.sg
+    - ind.fut.pass.3.sg
+    - konj.praes.pass.3.sg
+    - konj.impf.pass.3.sg
+    - inf.praes.pass
+    - part.perf.pass.*.*.*
+  reason: "the shipped table keeps the impersonal passive and the perfect participle of eo; Collatinus lists neither"

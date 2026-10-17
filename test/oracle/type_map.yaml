@@ -33,6 +33,14 @@ sample:
     ferre: [fĕro]
     afferre: [adfĕro]
 
+# The same for items of lib/data, whose types the fixtures share by name.
+shipped:
+  nouns:
+    altus: [altus, altē]
+  verbs:
+    esse: [sŭm]
+    ire: [ĕo]
+
 # Collatinus model -> the types of ours it stands for. The oracle checks the
 # type of every sampled item against its own lemma's model, so a lemma paired
 # with the wrong item is caught. A model covers several types of ours where we

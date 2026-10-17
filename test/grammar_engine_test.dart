@@ -220,6 +220,7 @@ void main() {
             '+ esse[inf.praes.akt]=esse, join=" ")',
       );
       expect(_of('hortari').deponentKeys, isNot(contains('inf.fut.akt')));
+      expect(_of('hortari').fullDeponent, isTrue);
       final keys = _keys('hortari');
       expect(keys, isNot(contains('inf.fut.pass')));
       expect(keys.where((key) => key.startsWith('imp.fut')), isEmpty);
@@ -234,6 +235,8 @@ void main() {
             '+ esse[ind.praes.akt.1.sg]=sum, join=" ")',
       );
       expect(_of('audere').deponentKeys, contains('ind.perf.akt.1.sg'));
+      expect(_of('audere').fullDeponent, isFalse);
+      expect(_of('amare').fullDeponent, isFalse);
       expect(
         _keys('audere').where((key) => key.startsWith('ind.praes.pass')),
         isEmpty,

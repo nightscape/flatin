@@ -25,11 +25,6 @@
   types: [I-Konjugation, Mischkonjugation]
   reason: "the Collatinus models `audio` and `capio` leave this morph to `lego`, which drops the stem i (capiuntō against căpūntō)"
 
-- keys: [ind.perf.akt.*.*, ind.plusq.akt.*.*, ind.fut2.akt.*.*, konj.perf.akt.*.*, konj.plusq.akt.*.*, inf.perf.akt]
-  item: ferire
-  synthetic: true
-  reason: "a sampled verb names no perfect, so we form ferīvī; Collatinus gives ferio the perfect fĕrĭāvī"
-
 - keys: [imp.praes.pass.2.sg, imp.fut.akt.2.sg, imp.fut.akt.3.sg, imp.fut.akt.2.pl]
   item: ferre
   reason: "the Collatinus model `fero` does not override these morphs of `lego`, so it keeps the unsyncopated forms"

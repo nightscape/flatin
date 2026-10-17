@@ -220,6 +220,9 @@ final class TypeMap {
   /// Data file id -> item id -> Collatinus lemma keys.
   final Map<String, Map<String, List<String>>> sample;
 
+  /// The same for the items of the shipped data files.
+  final Map<String, Map<String, List<String>>> shipped;
+
   /// Collatinus model -> the types of ours it stands for.
   final Map<String, ModelSpec> models;
 
@@ -228,6 +231,7 @@ final class TypeMap {
 
   TypeMap({
     required this.sample,
+    required this.shipped,
     required this.models,
     required this.spelling,
   });
@@ -239,9 +243,26 @@ final class TypeMap {
 
   factory TypeMap.parse(String source) {
     final root = loadYaml(source) as YamlMap;
-    ModelSpec spec(YamlMap node) {
+    ModelSpec spec(String model, YamlMap node) {
       const kinds = ['verb', 'noun', 'adjective'];
-      final kind = kinds.where(node.containsKey).singleOrNull;
+      final present = kinds.where(node.containsKey).toList();
+      final stray = node.keys
+          .where((k) => k != 'types' && k != 'lemmas' && !kinds.contains(k));
+      if (stray.isNotEmpty || present.length > 1) {
+        throw FormatException(
+          'type_map.yaml: $model has keys ${node.keys.join(", ")}; '
+          'allowed are types, lemmas and at most one of ${kinds.join(", ")}',
+        );
+      }
+      final kind = present.singleOrNull;
+      if (kind == null && node.containsKey('lemmas')) {
+        throw FormatException(
+          'type_map.yaml: $model declares lemmas but builds none',
+        );
+      }
+      if (kind != null && node[kind] is! YamlMap) {
+        throw FormatException('type_map.yaml: $model: $kind is not a mapping');
+      }
       return ModelSpec(
         [for (final t in node['types'] as YamlList) '$t'],
         kind,
@@ -255,17 +276,20 @@ final class TypeMap {
       );
     }
 
+    Map<String, Map<String, List<String>>> items(Object? node) => {
+          for (final file in (node as YamlMap).entries)
+            '${file.key}': {
+              for (final item in (file.value as YamlMap).entries)
+                '${item.key}': [for (final l in item.value as YamlList) '$l'],
+            },
+        };
+
     return TypeMap(
-      sample: {
-        for (final file in (root['sample'] as YamlMap).entries)
-          '${file.key}': {
-            for (final item in (file.value as YamlMap).entries)
-              '${item.key}': [for (final l in item.value as YamlList) '$l'],
-          },
-      },
+      sample: items(root['sample']),
+      shipped: items(root['shipped']),
       models: {
         for (final e in (root['models'] as YamlMap).entries)
-          '${e.key}': spec(e.value as YamlMap),
+          '${e.key}': spec('${e.key}', e.value as YamlMap),
       },
       spelling: {
         for (final e in (root['spelling'] as YamlMap).entries)

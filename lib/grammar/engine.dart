@@ -273,6 +273,7 @@ final class _ItemBuilder {
       stems: stems,
       forms: _ordered(made),
       deponentKeys: deponentKeys.intersection(made.keys.toSet()),
+      fullDeponent: (item.deponent ?? type.deponent)?.all ?? false,
       internal: _ordered(internal),
       grammar: engine.grammar,
     );

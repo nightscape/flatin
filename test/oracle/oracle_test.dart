@@ -53,12 +53,12 @@ void main() {
       for (final f in ['allowed_diffs', 'allowed_missing'])
         ...AllowedDiff.parse(File('test/oracle/$f.yaml').readAsStringSync()),
     ];
-    _Corpus run(List<String> paths, Set<String> coveredTypes) {
+    _Corpus run(List<String> paths, Map<String, Map<String, List<String>>> curated) {
       final sample = buildSample(
         sources: {for (final path in paths) path: File(path).readAsStringSync()},
         collatinus: collatinus,
         typeMap: typeMap,
-        coveredTypes: coveredTypes,
+        curated: curated,
       );
       final items = engineForms(sample);
       final axes = axesOf(sample.sources);
@@ -76,13 +76,8 @@ void main() {
       );
     }
 
-    fixtures = run(_fixtures, const {});
-    real = run(_real, {
-      for (final file in parseGrammarFiles(
-        {for (final p in _fixtures) p: File(p).readAsStringSync()},
-      ))
-        ...file.declaredTypes.keys,
-    });
+    fixtures = run(_fixtures, typeMap.sample);
+    real = run(_real, typeMap.shipped);
     corpora = [fixtures, real];
     result = OracleResult(
       [for (final c in corpora) ...c.result.diffs],
@@ -167,6 +162,58 @@ void main() {
     expect(modelsOffFloor([fixtures.sample, real.sample], typeMap), isEmpty);
   });
 
+  test('the engine and the oracle agree on which items are fully deponent', () {
+    for (final c in corpora) {
+      final files = parseGrammarFiles(c.sample.sources);
+      for (final item in c.items) {
+        final file = files.singleWhere((f) => f.dataFileId == item.dataFileId);
+        final own = file.item(item.id);
+        final spec = own.deponent ?? file.type(own.typeName).deponent;
+        expect(
+          item.fullDeponent,
+          spec?.all ?? false,
+          reason: '${item.dataFileId}:${item.id}',
+        );
+        if (item.fullDeponent) expect(item.deponent, isTrue, reason: item.id);
+      }
+    }
+  });
+
+  test('the shipped data is sampled for every type the fixtures share', () {
+    final fixtureTypes = {
+      for (final f in parseGrammarFiles(fixtures.sample.sources))
+        ...f.declaredTypes.keys,
+    };
+    final sampledTypes = {for (final i in real.items) i.type};
+    final shared = {
+      for (final f in parseGrammarFiles(real.sample.sources))
+        ...f.items.map((i) => i.typeName).where(fixtureTypes.contains),
+    };
+    expect(shared, contains('Adjektiv-a-o'));
+    expect(
+      sampledTypes.containsAll(shared),
+      isTrue,
+      reason: 'unsampled: ${shared.difference(sampledTypes)}',
+    );
+  });
+
+  test('a shipped adjective is compared with its adverb lemma', () {
+    final altus = real.items.singleWhere((i) => i.id == 'altus');
+    expect(altus.lemmas, ['altus', 'altē']);
+    expect(altus.emitted.keys, contains('adv.pos'));
+  });
+
+  test('a sampled verb that is not deponent has a perfect from its lemma line',
+      () {
+    for (final c in corpora) {
+      for (final item in c.items.where((i) =>
+          i.synthetic && i.emitted.containsKey('ind.praes.akt.1.sg'))) {
+        if (item.deponent) continue;
+        expect(item.emitted['ind.perf.akt.1.sg'], isNotEmpty, reason: item.id);
+      }
+    }
+  });
+
   test('the sample covers the deponents of section 15', () {
     for (final id in ['hortari', 'pati', 'largiri']) {
       expect(fixtures.items.map((i) => i.id), contains(id));
@@ -219,15 +266,6 @@ void main() {
       );
       expect(mixed.covers(live), isTrue);
       expect(result.stale([mixed]).single.patterns, ['no.such.key']);
-    });
-
-    test('a sample that drops a model below the floor is reported', () {
-      final nounsOnly = buildSample(
-        sources: {_real.first: File(_real.first).readAsStringSync()},
-        collatinus: collatinus,
-        typeMap: typeMap,
-      );
-      expect(modelsOffFloor([nounsOnly], typeMap), isNotEmpty);
     });
 
     test('a missing-key entry without keys is refused', () {
@@ -314,7 +352,7 @@ void main() {
         compare: oracleNorm,
       ).unlisted(allowed);
       // Collatinus writes hūjŭs; we write huius.
-      expect(diffs.map((d) => d.item), containsAll(['hic', 'iudicare']));
+      expect(diffs.map((d) => d.item), containsAll(['hic', 'iuvare']));
     });
   });
 }

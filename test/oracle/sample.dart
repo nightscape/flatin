@@ -8,6 +8,8 @@
 /// need parts the line does not supply.
 library;
 
+import 'dart:math';
+
 import 'package:latin_practice/grammar/engine.dart';
 import 'package:latin_practice/grammar/schema.dart';
 import 'package:latin_practice/models/form_label.dart';
@@ -45,23 +47,25 @@ final class Sample {
   Sample(this.sources, this.entries, this.lemmasByModel);
 }
 
-/// Mapped model -> its lemmas across [samples], for every model that builds
-/// its items. A model no sample built is 0.
+/// Mapped model -> its lemmas in the sample that took most of them, for every
+/// model that builds its items. Each corpus samples the models of its own
+/// types, so a model both corpora sample is not counted twice. A model no
+/// sample built is 0.
 Map<String, int> lemmasByModel(Iterable<Sample> samples, TypeMap typeMap) => {
       for (final model in typeMap.builds.keys)
-        model: samples.fold(0, (n, s) => n + (s.lemmasByModel[model] ?? 0)),
+        model: samples.fold(0, (n, s) => max(n, s.lemmasByModel[model] ?? 0)),
     };
 
 /// Mapped model -> its lemmas, for every model that misses its floor across
 /// [samples]: [lemmasPerModel], or exactly the `lemmas` a model declares
-/// whose corpus holds fewer. Declaring the floor away is refused.
+/// whose corpus holds fewer. A declared count outside 1 .. floor-1 is refused.
 Map<String, int> modelsOffFloor(Iterable<Sample> samples, TypeMap typeMap) {
   final off = <String, int>{};
   for (final e in lemmasByModel(samples, typeMap).entries) {
     final declared = typeMap.models[e.key]!.lemmas;
-    if (declared != null && declared >= lemmasPerModel) {
+    if (declared != null && (declared < 1 || declared >= lemmasPerModel)) {
       throw StateError('type_map.yaml: ${e.key} declares $declared lemmas, '
-          'which is not below the floor of $lemmasPerModel');
+          'which is not in 1 .. ${lemmasPerModel - 1}');
     }
     final met = declared == null ? e.value >= lemmasPerModel : e.value == declared;
     if (!met) off[e.key] = e.value;
@@ -90,9 +94,11 @@ List<String>? _radical(String field) =>
 
 String _yaml(String text) => '"$text"';
 
-/// The extra item text for [lemmaKey] under [model], or null if the line does
-/// not supply what the type needs.
-String? _verbItem(
+/// The extra item for [lemmaKey] under [model]: its text and the spelling its
+/// id is made from, or null if the line does not supply what the type needs.
+typedef _Built = ({String text, String idSpelling});
+
+_Built? _verbItem(
   Collatinus collatinus,
   String lemmaKey,
   Map<String, String> build,
@@ -103,7 +109,7 @@ String? _verbItem(
   if (canonical.contains(',') || fields[4].contains('v.')) return null;
   final perfect = _radical(fields[2]), supine = _radical(fields[3]);
   final deponent = build['deponent'] == 'true';
-  if ((perfect == null) != (supine == null) && !deponent) return null;
+  if (!deponent && (perfect == null || supine == null)) return null;
 
   final present = ours(canonical);
   final strip = build['strip']!;
@@ -117,14 +123,17 @@ String? _verbItem(
     if (supine != null)
       'supinum: [${supine.map((r) => _yaml('${r}um')).join(', ')}]',
   ];
-  return '''
+  return (
+    idSpelling: stem + build['infinitive']!,
+    text: '''
   - type: $type
     translation: ${_yaml(lemmaKey)}
     parts: {${parts.join(', ')}}${deponent ? '\n    deponent: all' : ''}
-''';
+''',
+  );
 }
 
-String? _nounItem(
+_Built? _nounItem(
   Collatinus collatinus,
   String lemmaKey,
   Map<String, String> build,
@@ -139,14 +148,17 @@ String? _nounItem(
   final radical = _radical(fields[2]);
   if (radical != null && radical.length > 1) return null;
   final stem = radical?.single ?? nom.substring(0, nom.length - cut);
-  return '''
+  return (
+    idSpelling: nom,
+    text: '''
   - type: $type
     translation: ${_yaml(lemmaKey)}
     parts: {nom: ${_yaml(nom)}, gen: ${_yaml(stem + build['genitive']!)}}
-''';
+''',
+  );
 }
 
-String? _adjectiveItem(
+_Built? _adjectiveItem(
   Collatinus collatinus,
   String lemmaKey,
   Map<String, String> build,
@@ -167,45 +179,49 @@ String? _adjectiveItem(
     if (build.containsKey('f')) 'nom_f: ${_yaml(stem + build['f']!)}',
     if (build.containsKey('n')) 'nom_n: ${_yaml(stem + build['n']!)}',
   ];
-  return '''
+  return (
+    idSpelling: nom,
+    text: '''
   - type: $type
     translation: ${_yaml(lemmaKey)}
     parts: {${parts.join(', ')}}
-''';
+''',
+  );
 }
 
-/// The sample of the corpus [sources]: the curated entries of `type_map.yaml`
-/// and the most frequent lemmas of every model. With [coveredTypes], the types
-/// another corpus already samples, only the models of other types are built
-/// and no curated entry is taken.
+/// The sample of the corpus [sources]: the [curated] items (data file id ->
+/// item id -> lemmas) and the most frequent lemmas of every model whose type
+/// the corpus declares.
 Sample buildSample({
   required Map<String, String> sources,
   required Collatinus collatinus,
   required TypeMap typeMap,
-  Set<String> coveredTypes = const {},
+  required Map<String, Map<String, List<String>>> curated,
 }) {
   final declared = {
     for (final file in parseGrammarFiles(sources))
       file.dataFileId: (file.path, file.declaredTypes.keys.toSet(), file),
   };
 
-  final entries = <SampleEntry>[
-    if (coveredTypes.isEmpty)
-      for (final file in typeMap.sample.entries)
-        for (final item in file.value.entries)
-          SampleEntry(file.key, item.key, item.value, synthetic: false),
-  ];
   final seen = {
     for (final file in declared.values)
       for (final item in file.$3.items) item.id,
   };
-  final takenLemmas = {for (final e in entries) ...e.lemmas};
+  final entries = <SampleEntry>[
+    for (final file in curated.entries)
+      for (final item in file.value.entries)
+        SampleEntry(file.key, item.key, item.value, synthetic: false),
+  ];
+  final takenLemmas = {
+    for (final curated in [typeMap.sample, typeMap.shipped])
+      for (final file in curated.values)
+        for (final lemmas in file.values) ...lemmas,
+  };
 
   final extra = <String, StringBuffer>{};
   final taken = <String, int>{};
   for (final model in typeMap.builds.entries) {
     final spec = model.value;
-    if (spec.types.any(coveredTypes.contains)) continue;
     taken[model.key] = 0;
     final owner = declared.entries
         .where((f) => spec.types.any(f.value.$2.contains))
@@ -227,18 +243,16 @@ Sample buildSample({
     for (final candidate in candidates) {
       if (count == lemmasPerModel) break;
       if (takenLemmas.contains(candidate.key)) continue;
-      final text = switch (spec.kind) {
+      final built = switch (spec.kind) {
         'verb' => _verbItem(collatinus, candidate.key, spec.build, type),
         'noun' => _nounItem(collatinus, candidate.key, spec.build, type),
         'adjective' =>
           _adjectiveItem(collatinus, candidate.key, spec.build, type),
         _ => throw StateError('type_map.yaml: kind ${spec.kind}'),
       };
-      if (text == null) continue;
-      if (!seen.add(normalizeDiacritics(ours(_lemmaOf(candidate.value))))) {
-        continue;
-      }
-      (extra[owner.value.$1] ??= StringBuffer()).write(text);
+      if (built == null) continue;
+      if (!seen.add(normalizeDiacritics(built.idSpelling))) continue;
+      (extra[owner.value.$1] ??= StringBuffer()).write(built.text);
       entries.add(
           SampleEntry(dataFileId, null, [candidate.key], synthetic: true));
       takenLemmas.add(candidate.key);
@@ -258,13 +272,6 @@ List<ItemForms> engineForms(Sample sample) {
   final files = parseGrammarFiles(sample.sources);
   final engine = GrammarEngine(files);
 
-  /// S10: the item is deponent in every tempus, not only in some.
-  bool fullDeponent(GrammarFile file, String itemId, String type) {
-    final spec = file.item(itemId).deponent ??
-        files.firstWhere((f) => f.types.containsKey(type)).types[type]!.deponent;
-    return spec?.all ?? false;
-  }
-
   return [
     for (final entry in sample.entries)
       () {
@@ -282,7 +289,7 @@ List<ItemForms> engineForms(Sample sample) {
           lemmas: entry.lemmas,
           synthetic: entry.synthetic,
           deponent: derivation.deponentKeys.isNotEmpty,
-          fullDeponent: fullDeponent(file, itemId, derivation.type),
+          fullDeponent: derivation.fullDeponent,
           emitted: {
             for (final f in derivation.forms.entries) f.key: f.value.variants,
           },
