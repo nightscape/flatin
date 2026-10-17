@@ -85,8 +85,18 @@ final class Axes {
        } {
     assert(_byId.length == axes.length, 'duplicate axis id');
     // S1: a code identifies its axis, so a key needs no axis names.
-    final codeCount = axes.fold(0, (sum, axis) => sum + axis.values.length);
-    assert(_byCode.length == codeCount, 'a value code occurs in two axes');
+    final declaringAxis = <String, String>{};
+    for (final axis in axes) {
+      for (final code in axis.codes) {
+        final first = declaringAxis[code];
+        if (first != null) {
+          throw ArgumentError(
+            'value code "$code" is declared by axis $first and axis ${axis.id}',
+          );
+        }
+        declaringAxis[code] = axis.id;
+      }
+    }
     assert(
       {...head, ...tail}.length == head.length + tail.length &&
           {...head, ...tail}.length == axes.length &&
