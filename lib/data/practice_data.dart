@@ -43,9 +43,18 @@ class _Loaded {
       engine.files.singleWhere((f) => f.dataFileId == dataFileId);
 }
 
-Future<_Loaded>? _loaded;
+_Loaded? _loaded;
+Future<_Loaded>? _loading;
 
-Future<_Loaded> _load() => _loaded ??= _parse();
+/// Once the data is parsed, every caller gets the value through a future of
+/// its own: awaiting one kept future resumes in the zone that created it, and
+/// a widget test's fake-time zone is dead as soon as its test ends.
+Future<_Loaded> _load() async {
+  if (_loaded != null) return _loaded!;
+  _loaded = await (_loading ??= _parse());
+  _loading = null;
+  return _loaded!;
+}
 
 Future<_Loaded> _parse() async {
   final sources = {

@@ -7,8 +7,6 @@ import 'package:latin_practice/screens/word_classification_screen.dart';
 
 import 'support/word_classification_harness.dart';
 
-// A second widget test in this file never starts, so the all-types-off case
-// lives in word_classification_empty_test.dart.
 void main() {
   testWidgets('with nothing due the shown word belongs to an enabled type',
       (tester) async {
@@ -36,5 +34,21 @@ void main() {
         .widget<Text>(find.byKey(const Key('wordClassification.word')))
         .data;
     expect(allowed, contains(shown));
+  });
+
+  testWidgets('with nothing due and every type off no word is shown',
+      (tester) async {
+    final nouns = await getFormMetadata('lib/data/latin_nouns.yaml');
+    final verbs = await getFormMetadata('lib/data/latin_verbs.yaml');
+    await seedNothingDue({
+      'nouns': nouns.availableTypes.toSet(),
+      'verbs': verbs.availableTypes.toSet(),
+    });
+
+    await tester.pumpWidget(wrapInApp(const WordClassificationScreen()));
+    await letItLoad(tester);
+
+    expect(find.byKey(const Key('wordClassification.word')), findsNothing);
+    expect(find.text('No words available'), findsOneWidget);
   });
 }
