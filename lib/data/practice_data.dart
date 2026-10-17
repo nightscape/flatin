@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'asset_text.dart';
 import '../grammar/engine.dart';
 import '../grammar/schema.dart';
@@ -44,19 +46,59 @@ class _Loaded {
 }
 
 _Loaded? _loaded;
-Future<_Loaded>? _loading;
+Zone? _parsingZone;
+final _waiting = <Completer<_Loaded>>[];
 
-/// Once the data is parsed, every caller gets the value through a future of
-/// its own: awaiting one kept future resumes in the zone that created it, and
-/// a widget test's fake-time zone is dead as soon as its test ends.
+/// Awaited before the data files are read, so a test can hold a load open and
+/// abandon it. The app leaves the no-op default in place.
+Future<void> Function() parseGate = () async {};
+
+/// Puts the loader back to the state of a fresh process, so a test can drive
+/// the first load again.
+void resetPracticeDataForTest() {
+  _loaded = null;
+  _parsingZone = null;
+  _waiting.clear();
+}
+
+/// No future is kept between calls: awaiting one resumes in the zone that
+/// created it, and a widget test's fake-time zone is dead as soon as its test
+/// ends. Callers of the parsing zone share the parse through a completer of
+/// their own; a caller of any other zone parses for itself rather than wait
+/// on a zone that may never run again. The take-over adopts the callers that
+/// were queued behind the parse it replaces: they get its result, or its
+/// error.
 Future<_Loaded> _load() async {
   if (_loaded != null) return _loaded!;
-  _loaded = await (_loading ??= _parse());
-  _loading = null;
+  if (identical(_parsingZone, Zone.current)) {
+    final waiter = Completer<_Loaded>();
+    _waiting.add(waiter);
+    return waiter.future;
+  }
+  _parsingZone = Zone.current;
+  final _Loaded loaded;
+  try {
+    loaded = await _parse();
+  } catch (error, stack) {
+    _release((waiter) => waiter.completeError(error, stack));
+    rethrow;
+  }
+  _loaded ??= loaded;
+  _release((waiter) => waiter.complete(_loaded!));
   return _loaded!;
 }
 
+/// Hands the parse result to every queued caller and gives up ownership,
+/// unless another zone has taken the parse over meanwhile.
+void _release(void Function(Completer<_Loaded>) finish) {
+  if (!identical(_parsingZone, Zone.current)) return;
+  _parsingZone = null;
+  _waiting.forEach(finish);
+  _waiting.clear();
+}
+
 Future<_Loaded> _parse() async {
+  await parseGate();
   final sources = {
     for (final path in _assets.values) path: await loadAssetText(path),
   };
