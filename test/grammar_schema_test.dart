@@ -42,12 +42,15 @@ Map<String, String> _fixtureWithAll(List<(String, String)> edits) {
   return sources;
 }
 
-/// Parses [sources] and expects the rule [rule] to reject them.
-void _expectRejected(String rule, Map<String, String> sources) {
+/// Parses [sources] and expects the rule [rule] to reject them with a message
+/// holding [clause], the one clause of the rule that must bite.
+void _expectRejected(String rule, String clause, Map<String, String> sources) {
   expect(
     () => parseGrammarFiles(sources),
     throwsA(
-      isA<SchemaError>().having((e) => e.rule, 'rule', rule),
+      isA<SchemaError>()
+          .having((e) => e.rule, 'rule', rule)
+          .having((e) => e.message, 'message', contains(clause)),
     ),
   );
 }
@@ -236,6 +239,7 @@ void main() {
     test('S1: a code in two axes', () {
       _expectRejected(
         'S1',
+        'is declared by axis kasus and axis adverb',
         _fixtureWith(
           'adverb:  {name: Adverb, values: {adv: Adverb}}',
           'adverb:  {name: Adverb, values: {adv: Adverb, nom: Nominativ}}',
@@ -246,6 +250,7 @@ void main() {
     test('S1: a key that is not canonical', () {
       _expectRejected(
         'S1',
+        'breaks axis order',
         _fixtureWith('      nom.sg.m: "{stamm}us"', '      sg.nom.m: "{stamm}us"'),
       );
     });
@@ -253,6 +258,7 @@ void main() {
     test('S2: two placeholders in one template', () {
       _expectRejected(
         'S2',
+        'has more than one placeholder',
         _fixtureWith(
           '      nom.sg.m: "{stamm}us"',
           '      nom.sg.m: "{stamm}{stamm}us"',
@@ -263,6 +269,7 @@ void main() {
     test('S2: a template that names no stem of its type', () {
       _expectRejected(
         'S2',
+        'names no stem',
         _fixtureWith('      nom.sg.m: "{stamm}us"', '      nom.sg.m: "{}us"'),
       );
     });
@@ -270,6 +277,7 @@ void main() {
     test('S2: a template that names a stem the type has not', () {
       _expectRejected(
         'S2',
+        'has no stem "unbekannt"',
         _fixtureWith(
           'akk.sg: ["{stamm}im", "{stamm}em"]',
           'akk.sg: ["{unbekannt}im", "{stamm}em"]',
@@ -280,6 +288,7 @@ void main() {
     test('S3: no remove suffix matches the part', () {
       _expectRejected(
         'S3',
+        'no suffix of [xis] matches',
         _fixtureWith(
           '    required_stems: [stamm]\n    stems:\n'
               '      stamm: {from: gen, remove: "is", display: Stamm}',
@@ -292,6 +301,7 @@ void main() {
     test('S4: a required stem the item cannot build', () {
       _expectRejected(
         'S4',
+        'requires the stem "kstamm", which it does not declare',
         _fixtureWith('    required_stems: [stamm]', '    required_stems: [kstamm]'),
       );
     });
@@ -299,6 +309,7 @@ void main() {
     test('S5: an inheritance cycle', () {
       _expectRejected(
         'S5',
+        'inheritance cycle',
         _fixtureWith(
           '  a-o-er-Endungen:\n    abstract: true\n'
               '    inherits_from: a-o-Endungen',
@@ -311,6 +322,7 @@ void main() {
     test('S5: an item composed from itself', () {
       _expectRejected(
         'S5',
+        'composition cycle',
         _fixtureWith('type: esse-Typ', 'type: esse-Kompositum'),
       );
     });
@@ -318,6 +330,7 @@ void main() {
     test('S6: an item type that no file declares', () {
       _expectRejected(
         'S6',
+        'unknown type "i-Deklination-xy"',
         _fixtureWith('- type: i-Deklination-mf', '- type: i-Deklination-xy'),
       );
     });
@@ -325,6 +338,7 @@ void main() {
     test('S9: two spellings that differ only in quantity', () {
       _expectRejected(
         'S9',
+        'differs from another spelling only in quantity marks',
         _fixtureWith(
           '      nom.sg.m: "{stamm}us"',
           '      nom.sg.m: ["{stamm}us", "{stamm}ūs"]',
@@ -335,6 +349,7 @@ void main() {
     test('S10: deponent in a tempus the file has no code for', () {
       _expectRejected(
         'S10',
+        '"pqp" is no tempus code',
         _fixtureWith('    deponent: [perf, plusq, fut2]', '    deponent: [pqp]'),
       );
     });
@@ -342,6 +357,7 @@ void main() {
     test('S10: deponent in a file without a genus_verbi axis', () {
       _expectRejected(
         'S10',
+        'has no genus_verbi axis',
         _fixtureWith(
           '    translation: Turm\n',
           '    translation: Turm\n    deponent: all\n',
@@ -352,6 +368,7 @@ void main() {
     test('S11: an ambiguous rule without a declared type', () {
       _expectRejected(
         'S11',
+        'is ambiguous, so the item must give "type"',
         _fixtureWith(
           '- {suffix: "āre", types: [A-Konjugation]}',
           '- {suffix: "āre", types: [A-Konjugation, Unregelmäßig]}',
@@ -362,6 +379,7 @@ void main() {
     test('S12: one type name in two data files', () {
       _expectRejected(
         'S12',
+        'type "Perfekt-System" is also declared in',
         _fixtureWith('  Pronomen: {}', '  Perfekt-System: {abstract: true}'),
       );
     });
@@ -369,6 +387,7 @@ void main() {
     test('S12: a delegated code the delegating file does not declare', () {
       _expectRejected(
         'S12',
+        'code "vok" is unknown in verbs',
         _fixtureWith(
           '  kasus:       {name: Kasus, values: {nom: Nominativ, gen: Genitiv, '
               'dat: Dativ, akk: Akkusativ, abl: Ablativ, vok: Vokativ}}',
@@ -383,6 +402,7 @@ void main() {
       // verbs file that delegates into it.
       _expectRejected(
         'S12',
+        'code "sg" is axis numerus in verbs but zahl in nouns',
         _fixtureWithAll([
           (
             '  numerus: {name: Numerus, values: {sg: Singular, pl: Plural}}',
@@ -396,6 +416,7 @@ void main() {
     test('S12: an item naming a type of another file', () {
       _expectRejected(
         'S12',
+        'type "A-Konjugation" is declared in',
         _fixtureWith(
           '  - type: i-Deklination-n\n    translation: Meer',
           '  - type: A-Konjugation\n    translation: Meer',
@@ -406,6 +427,7 @@ void main() {
     test('S12: an item naming a composing type of another file', () {
       _expectRejected(
         'S12',
+        'type "esse-Kompositum" is declared in',
         _fixtureWith(
           '  - type: i-Deklination-mf\n    translation: Turm',
           '  - type: esse-Kompositum\n    translation: Turm',
@@ -415,7 +437,7 @@ void main() {
 
     test('a source that holds two YAML documents', () {
       final sources = _fixture;
-      _expectRejected('file', {
+      _expectRejected('file', 'a data file is one YAML document', {
         ...sources,
         _nounsPath: '${sources[_nounsPath]}\n---\n${sources[_verbsPath]}',
       });
@@ -450,6 +472,7 @@ void main() {
     test('S14: a delegate target that is not a leaf', () {
       _expectRejected(
         'S14',
+        'which is not a leaf',
         _fixtureWith(
           '{name: pos,  type: a-o-Endungen,',
           '{name: pos,  type: Adjektiv-a-o,',
@@ -460,6 +483,7 @@ void main() {
     test('S14: a target stem the delegate does not bind', () {
       _expectRejected(
         'S14',
+        'does not bind the stem "unbekannt"',
         _fixtureWith(
           '      nom.sg.m: "{stamm}us"',
           '      nom.sg.m: "{unbekannt}us"',
@@ -470,6 +494,7 @@ void main() {
     test('S15: an absent pattern that removes nothing', () {
       _expectRejected(
         'S15',
+        'removes no key',
         _fixtureWith('    absent:', '    absent:\n      - {modus: sup}\n    _absent:'),
       );
     });
@@ -477,6 +502,7 @@ void main() {
     test('S15: an absent pattern that removes an overridden key', () {
       _expectRejected(
         'S15',
+        'removes the overridden key',
         _fixtureWith('absent: [{modus: imp}', 'absent: [{modus: konj}'),
       );
     });
@@ -484,6 +510,7 @@ void main() {
     test('S16: a before entry that is not letters', () {
       _expectRejected(
         'S16',
+        '"before" entry "1" is not letters',
         _fixtureWith('before: [s], replace: s', 'before: [1], replace: s'),
       );
     });
@@ -491,6 +518,7 @@ void main() {
     test('S16: a type that names an unknown rule', () {
       _expectRejected(
         'S16',
+        'names no sandhi rule "d_unbekannt"',
         _fixtureWith('    sandhi: [d_angleich]', '    sandhi: [d_unbekannt]'),
       );
     });
@@ -498,6 +526,7 @@ void main() {
     test('S16: an empty explain', () {
       _expectRejected(
         'S16',
+        'has an empty "explain"',
         _fixtureWith('explain: "t wird vor s zu s"', 'explain: ""'),
       );
     });
@@ -505,6 +534,7 @@ void main() {
     test('S17: an override on an axis the file has no code for', () {
       _expectRejected(
         'S17',
+        'override names the unknown code "futur"',
         _fixtureWith(
           '- {when: {modus: [inf, part]}, axis: tempus, values: {fut: Futur}}',
           '- {when: {modus: [inf, part]}, axis: tempus, values: {futur: Futur}}',
@@ -515,6 +545,7 @@ void main() {
     test('S17: head and tail that do not cover every axis', () {
       _expectRejected(
         'S17',
+        'must list every axis exactly once',
         _fixtureWith('  tail: [kasus, numerus]', '  tail: [kasus]'),
       );
     });
