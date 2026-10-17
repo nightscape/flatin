@@ -57,11 +57,7 @@ void main() {
           if (form is IrregularForm && form.regular != null) {
             regularCount++;
             expect(form.regular!.result, item.inferredForms[i], reason: where);
-            expect(
-              norm(form.regular!.result),
-              isNot(norm(item.forms[i])),
-              reason: where,
-            );
+            expect(form.regular!.result, isNot(item.forms[i]), reason: where);
           }
         }
       }

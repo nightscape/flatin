@@ -472,8 +472,10 @@ final class _ItemBuilder {
       if (overridden.contains(entry.key) || !now(entry.key)) continue;
       overridden.add(entry.key);
       final regular = made[entry.key];
-      // I4: an override that only repeats the rule is no irregularity.
-      if (regular != null && _sameSpelling(regular.variants, entry.value)) {
+      // I4: an override that only repeats the rule is no irregularity. The
+      // macron is part of the form, so a quantity-only override is a
+      // correction and stays.
+      if (regular != null && _sameWriting(regular.variants, entry.value)) {
         continue;
       }
       final rule = regular?.build(entry.key);
@@ -679,10 +681,10 @@ final class _ItemBuilder {
   }
 }
 
-bool _sameSpelling(List<String> a, List<String> b) {
+bool _sameWriting(List<String> a, List<String> b) {
   if (a.length != b.length) return false;
   for (var i = 0; i < a.length; i++) {
-    if (norm(a[i]) != norm(b[i])) return false;
+    if (a[i] != b[i]) return false;
   }
   return true;
 }

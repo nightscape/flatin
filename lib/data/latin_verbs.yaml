@@ -754,7 +754,6 @@ items:
       konj.perf.pass.3.sg: "itum sit"
       konj.plusq.pass.3.sg: "itum esset"
       inf.praes.pass: "īrī"
-      inf.perf.pass: "itum esse"
       ger.abl: "eundō"
   - id: velle
     type: Unregelmäßig

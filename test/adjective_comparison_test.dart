@@ -98,9 +98,7 @@ const _suppletive = {
   'malus': {
     'nom.sg.m.komp': 'peior',
     'nom.sg.m.sup': 'pessimus',
-    // The item gives "male"; I4 keeps the rule's spelling because the two
-    // differ only in a quantity mark, which the answer check ignores anyway.
-    'adv.pos': 'malē',
+    'adv.pos': 'male',
     'adv.komp': 'peius',
     'adv.sup': 'pessimē',
   },
