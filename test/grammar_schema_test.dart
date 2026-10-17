@@ -421,6 +421,32 @@ void main() {
       });
     });
 
+    test('a top-level key outside the closed set', () {
+      expect(
+        () => parseGrammarFile(
+          _oneItemSource.replaceFirst('items:', 'itemz:'),
+          path: 'mini.yaml',
+        ),
+        throwsA(
+          isA<SchemaError>()
+              .having((e) => e.rule, 'rule', 'file')
+              .having((e) => e.path, 'path', 'mini.yaml')
+              .having((e) => e.message, 'message', contains('itemz')),
+        ),
+      );
+    });
+
+    test('shared: is a top-level key the loader accepts', () {
+      final file = parseGrammarFile(
+        _oneItemSource.replaceFirst(
+          'items:',
+          'shared:\n  ohne_pl: &ohne_pl [{numerus: pl}]\n\nitems:',
+        ),
+        path: 'mini.yaml',
+      );
+      expect(file.items, hasLength(1));
+    });
+
     test('S14: a delegate target that is not a leaf', () {
       _expectRejected(
         'S14',
@@ -494,3 +520,37 @@ void main() {
     });
   });
 }
+
+/// The smallest file that loads, for the top-level key tests.
+const _oneItemSource = '''
+data_file_id: mini
+
+axes:
+  numerus: {name: Numerus, values: {sg: Singular, pl: Plural}}
+
+label:
+  head: [numerus]
+  tail: []
+  merge_axis: numerus
+
+parts:
+  praesens_1sg: {label: "1. Person Singular"}
+
+defaults:
+  given_part: praesens_1sg
+  lemma_part: praesens_1sg
+
+types:
+  I-Konjugation:
+    required_stems: [wurzel]
+    stems:
+      wurzel: {from: praesens_1sg, remove: "iō", display: Wortstock}
+    forms:
+      sg: "{wurzel}iō"
+      pl: "{wurzel}īmus"
+
+items:
+  - type: I-Konjugation
+    translation: fassen
+    parts: {praesens_1sg: capiō}
+''';

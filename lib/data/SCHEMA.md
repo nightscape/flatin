@@ -69,6 +69,9 @@ types:
     sandhi: [a_ausfall, kurz_nt]     # rule ids of this file, in this order
     deponent: all                    # S10; or a list of tempus codes
 
+shared:                              # YAML anchors items alias; nothing reads it
+  ohne_steigerung: &ohne_steigerung [{grad: komp}, {grad: sup}]
+
 items:
   - type: Unregelmäßig               # omitted when inference decides (S11)
     id: esse                         # defaults to the normalized lemma
@@ -80,6 +83,13 @@ items:
 ```
 
 One file is exactly one YAML document; a `---` separated second document throws.
+
+The top-level keys above are the whole set: `data_file_id`, `axes`, `label`,
+`parts`, `defaults`, `type_inference`, `sandhi`, `types`, `items`, `shared`.
+Any other one throws, so a typo such as `itemss:` fails the load instead of
+silently dropping the section. `shared:` is the one key the loader only
+accepts: it holds anchors that items alias (`absent: *ohne_steigerung`), and it
+sits above `items:` because a YAML alias resolves only below its anchor.
 
 Loading a file resolves which keys every item has — `GrammarFile.keysByItem`,
 one `ItemKeys` per item, after S4, S10, S13, S14 and S15. That set is the

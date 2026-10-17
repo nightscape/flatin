@@ -497,7 +497,27 @@ class _FileParser {
   Never _bad(String rule, String message, {String? item, FormKey? key}) =>
       _fail(rule, path, message, item: item, key: key);
 
+  /// Every top-level key a data file may carry. `shared:` holds YAML anchors
+  /// items alias; nothing reads it.
+  static const _topLevelKeys = {
+    'data_file_id',
+    'axes',
+    'label',
+    'parts',
+    'defaults',
+    'type_inference',
+    'sandhi',
+    'types',
+    'items',
+    'shared',
+  };
+
   GrammarFile parse() {
+    for (final key in root.keys) {
+      if (!_topLevelKeys.contains(key)) {
+        _bad('file', 'unknown top-level key "$key"');
+      }
+    }
     final axes = _axes();
     final parts = _parts();
     final defaults = root['defaults'] as YamlMap?;
