@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/models/derivation.dart';
+import 'package:latin_practice/models/practice_item.dart';
 import 'package:yaml/yaml.dart';
 
 const _compounds = [
@@ -15,6 +16,16 @@ const _compounds = [
 ];
 
 const _infinitives = ['posse', 'abesse', 'adesse', 'dēesse', 'praeesse'];
+
+/// Every form of the five compounds, in the order of [_compounds] and of each
+/// item's form order, as `id\tkey\tvariants joined by " / "`.
+const _goldenPath = 'test/fixtures/esse_compound_forms.txt';
+
+List<String> _formLines(Map<String, PracticeItem> byId) => [
+      for (final id in _compounds)
+        for (final entry in byId[id]!.derivation.forms.entries)
+          '$id\t${entry.key}\t${entry.value.variants.join(' / ')}',
+    ];
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -76,6 +87,17 @@ void main() {
       expect(lexeme.lexemeId, 'esse', reason: '$id / $key');
       expect(lexeme.derivation.result, esseForm, reason: '$id / $key');
     }
+  });
+
+  test('the compounds keep the spellings the golden records', () async {
+    final items = await loadPracticeItems('lib/data/latin_verbs.yaml');
+    final got = _formLines({for (final item in items) item.id: item});
+    final want = File(_goldenPath).readAsLinesSync();
+
+    for (var i = 0; i < want.length && i < got.length; i++) {
+      expect(got[i], want[i], reason: '$_goldenPath line ${i + 1}');
+    }
+    expect(got.length, want.length, reason: 'number of lines');
   });
 
   test('posse writes the contracted konj. impf. from its present stem',

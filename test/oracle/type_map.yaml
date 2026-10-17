@@ -69,7 +69,7 @@ models:
   potior: {types: [I-Konjugation], verb: {strip: ior, infinitive: īrī, deponent: true}}
   sum: {types: [esse-Typ]}
   absum: {types: [esse-Kompositum]}
-  possum: {types: [esse-Kompositum]}
+  possum: {types: [esse-Kompositum, Unregelmäßig]}
   prosum: {types: [esse-Kompositum]}
   eo: {types: [Unregelmäßig, ire-Kompositum]}
   fero: {types: [Konsonantische, ferre-Kompositum]}
