@@ -23,25 +23,51 @@ void main() {
     final verbs = await loadPracticeItems('lib/data/latin_verbs.yaml');
     ireType = [
       for (final item in verbs)
-        if (item.principalParts.any((p) => p.$2.endsWith('iī'))) item,
+        if (item.principalParts.any((p) => p.$2.endsWith('euntis'))) item,
     ];
   });
+
+  String prefixOf(PracticeItem item) => item.principalParts
+      .firstWhere((p) => p.$2.endsWith('euntis'))
+      .$2
+      .replaceFirst(RegExp(r'euntis$'), '');
 
   test('ire and its compounds are covered', () {
     expect(
       ireType.map((i) => i.id),
-      containsAll(['verbs:ire', 'verbs:abire', 'verbs:inire']),
+      unorderedEquals(['verbs:ire', 'verbs:abire', 'verbs:inire']),
     );
+  });
+
+  test('every compound accepts every perfect-system variant ire accepts', () {
+    final ire = ireType.firstWhere((i) => i.id == 'verbs:ire');
+    const perfectTempora = {'perf', 'plusq', 'fut2'};
+    final perfectKeys = ire.formOrder.where((k) {
+      final parts = k.split('.');
+      return perfectTempora.contains(parts[1]) && parts[2] == 'akt';
+    });
+    expect(perfectKeys, hasLength(31));
+    for (final compound in ireType.where((i) => i != ire)) {
+      final prefix = prefixOf(compound);
+      for (final key in perfectKeys) {
+        final variants = ire.acceptedForms[ire.formOrder.indexOf(key)];
+        final index = compound.formOrder.indexOf(key);
+        for (final variant in variants) {
+          expect(
+            compound.accepts(index, '$prefix$variant'),
+            isTrue,
+            reason: '${compound.id} $key $prefix$variant',
+          );
+        }
+      }
+    }
   });
 
   test('the contracted spelling is shown', () {
     final shown = <String, String>{};
     final expected = <String, String>{};
     for (final item in ireType) {
-      final prefix = item.principalParts
-          .firstWhere((p) => p.$2.endsWith('iī'))
-          .$2
-          .replaceFirst(RegExp(r'iī$'), '');
+      final prefix = prefixOf(item);
       for (final entry in _endings.entries) {
         final index = item.formOrder.indexOf(entry.key);
         shown['${item.id} ${entry.key}'] = item.forms[index];
@@ -53,10 +79,7 @@ void main() {
 
   test('the uncontracted spelling stays accepted', () {
     for (final item in ireType) {
-      final prefix = item.principalParts
-          .firstWhere((p) => p.$2.endsWith('iī'))
-          .$2
-          .replaceFirst(RegExp(r'iī$'), '');
+      final prefix = prefixOf(item);
       for (final entry in _endings.entries) {
         final index = item.formOrder.indexOf(entry.key);
         expect(

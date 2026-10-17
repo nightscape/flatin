@@ -969,7 +969,7 @@ items:
     parts: {infinitiv: "tangere", praesens_1sg: "tangō", perfekt_1sg: "tetigī", supinum: "tāctum"}
   - type: Unregelmäßig
     translation: "weggehen"
-    parts: {infinitiv: "abīre", praesens_1sg: "abeō", perfekt_1sg: "abiī", ppa_nom: "abiēns", ppa_gen: "abeuntis", gerundiv: "abeundus"}
+    parts: {infinitiv: "abīre", praesens_1sg: "abeō", perfekt_1sg: ["abiī", "abīvī"], ppa_nom: "abiēns", ppa_gen: "abeuntis", gerundiv: "abeundus"}
     forms:
       ind.praes.akt.1.sg: "abeō"
       ind.praes.akt.2.sg: "abīs"
@@ -1001,12 +1001,12 @@ items:
       konj.impf.akt.1.pl: "abīrēmus"
       konj.impf.akt.2.pl: "abīrētis"
       konj.impf.akt.3.pl: "abīrent"
-      konj.plusq.akt.1.sg: ["abīssem", "abiissem"]
-      konj.plusq.akt.2.sg: ["abīssēs", "abiissēs"]
-      konj.plusq.akt.3.sg: ["abīsset", "abiisset"]
-      konj.plusq.akt.1.pl: ["abīssēmus", "abiissēmus"]
-      konj.plusq.akt.2.pl: ["abīssētis", "abiissētis"]
-      konj.plusq.akt.3.pl: ["abīssent", "abiissent"]
+      konj.plusq.akt.1.sg: ["abīssem", "abiissem", "abīvissem"]
+      konj.plusq.akt.2.sg: ["abīssēs", "abiissēs", "abīvissēs"]
+      konj.plusq.akt.3.sg: ["abīsset", "abiisset", "abīvisset"]
+      konj.plusq.akt.1.pl: ["abīssēmus", "abiissēmus", "abīvissēmus"]
+      konj.plusq.akt.2.pl: ["abīssētis", "abiissētis", "abīvissētis"]
+      konj.plusq.akt.3.pl: ["abīssent", "abiissent", "abīvissent"]
       imp.praes.akt.2.sg: "abī"
       imp.praes.akt.2.pl: "abīte"
       imp.fut.akt.2.sg: "abītō"
@@ -1014,7 +1014,9 @@ items:
       imp.fut.akt.2.pl: "abītōte"
       imp.fut.akt.3.pl: "abeuntō"
       inf.praes.akt: "abīre"
-      inf.perf.akt: ["abīsse", "abiisse"]
+      inf.perf.akt: ["abīsse", "abiisse", "abīvisse"]
+      ind.perf.akt.2.sg: ["abīstī", "abiistī", "abīvistī"]
+      ind.perf.akt.2.pl: ["abīstis", "abiistis", "abīvistis"]
       ger.gen: "abeundī"
       ger.dat: "abeundō"
       ger.akk: "abeundum"
@@ -1394,7 +1396,7 @@ items:
     parts: {infinitiv: "adhibēre", praesens_1sg: "adhibeō", perfekt_1sg: "adhibuī", supinum: "adhibitum"}
   - type: Unregelmäßig
     translation: "hineingehen"
-    parts: {infinitiv: "inīre", praesens_1sg: "ineō", perfekt_1sg: "iniī", supinum: "initum", ppa_nom: "iniēns", ppa_gen: "ineuntis", gerundiv: "ineundus"}
+    parts: {infinitiv: "inīre", praesens_1sg: "ineō", perfekt_1sg: ["iniī", "inīvī"], supinum: "initum", ppa_nom: "iniēns", ppa_gen: "ineuntis", gerundiv: "ineundus"}
     forms:
       ind.praes.akt.1.sg: "ineō"
       ind.praes.akt.2.sg: "inīs"
@@ -1426,12 +1428,12 @@ items:
       konj.impf.akt.1.pl: "inīrēmus"
       konj.impf.akt.2.pl: "inīrētis"
       konj.impf.akt.3.pl: "inīrent"
-      konj.plusq.akt.1.sg: ["inīssem", "iniissem"]
-      konj.plusq.akt.2.sg: ["inīssēs", "iniissēs"]
-      konj.plusq.akt.3.sg: ["inīsset", "iniisset"]
-      konj.plusq.akt.1.pl: ["inīssēmus", "iniissēmus"]
-      konj.plusq.akt.2.pl: ["inīssētis", "iniissētis"]
-      konj.plusq.akt.3.pl: ["inīssent", "iniissent"]
+      konj.plusq.akt.1.sg: ["inīssem", "iniissem", "inīvissem"]
+      konj.plusq.akt.2.sg: ["inīssēs", "iniissēs", "inīvissēs"]
+      konj.plusq.akt.3.sg: ["inīsset", "iniisset", "inīvisset"]
+      konj.plusq.akt.1.pl: ["inīssēmus", "iniissēmus", "inīvissēmus"]
+      konj.plusq.akt.2.pl: ["inīssētis", "iniissētis", "inīvissētis"]
+      konj.plusq.akt.3.pl: ["inīssent", "iniissent", "inīvissent"]
       imp.praes.akt.2.sg: "inī"
       imp.praes.akt.2.pl: "inīte"
       imp.fut.akt.2.sg: "inītō"
@@ -1439,7 +1441,9 @@ items:
       imp.fut.akt.2.pl: "inītōte"
       imp.fut.akt.3.pl: "ineuntō"
       inf.praes.akt: "inīre"
-      inf.perf.akt: ["inīsse", "iniisse"]
+      inf.perf.akt: ["inīsse", "iniisse", "inīvisse"]
+      ind.perf.akt.2.sg: ["inīstī", "iniistī", "inīvistī"]
+      ind.perf.akt.2.pl: ["inīstis", "iniistis", "inīvistis"]
       ger.gen: "ineundī"
       ger.dat: "ineundō"
       ger.akk: "ineundum"
