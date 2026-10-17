@@ -51,6 +51,7 @@ void main() {
   test('T-trace-2/3 every generated and irregular form is true', () async {
     int generatedCount = 0;
     int generatedSeamCount = 0;
+    int composedCount = 0;
     int regularCount = 0;
     int regularPlainCount = 0;
     int regularSeamCount = 0;
@@ -96,29 +97,36 @@ void main() {
           final form = item.derivation.forms[key]!;
           final where = '${item.translation} $key';
 
-          if (form is GeneratedForm) {
-            generatedCount++;
-            if (form.sandhiRule != null) generatedSeamCount++;
-            recompute(form, where);
-          }
-
-          if (form is IrregularForm && form.regular != null) {
-            regularCount++;
-            final regular = form.regular!;
-            expect(regular.result, item.inferredForms[i], reason: where);
-            switch (regular) {
-              case GeneratedForm(sandhiRule: null):
-                regularPlainCount++;
-              case GeneratedForm():
-                regularSeamCount++;
-              case ComposedForm():
-                regularComposedCount++;
-              default:
-                fail('$where: the rule form is $regular');
-            }
-            // The Derivation assert covers the practised forms only, so the
-            // rule form behind an override is recomputed here.
-            recompute(regular, where);
+          // Exhaustive over the sealed FormDerivation vocabulary, so a new
+          // kind breaks the build here instead of passing unchecked.
+          switch (form) {
+            case GeneratedForm():
+              generatedCount++;
+              if (form.sandhiRule != null) generatedSeamCount++;
+              recompute(form, where);
+            case ComposedForm():
+              composedCount++;
+              recompute(form, where);
+            case GivenForm():
+              break;
+            case IrregularForm(:final regular?):
+              regularCount++;
+              expect(regular.result, item.inferredForms[i], reason: where);
+              switch (regular) {
+                case GeneratedForm(sandhiRule: null):
+                  regularPlainCount++;
+                case GeneratedForm():
+                  regularSeamCount++;
+                case ComposedForm():
+                  regularComposedCount++;
+                default:
+                  fail('$where: the rule form is $regular');
+              }
+              // The Derivation assert covers the practised forms only, so the
+              // rule form behind an override is recomputed here.
+              recompute(regular, where);
+            case IrregularForm():
+              break;
           }
         }
       }
@@ -127,8 +135,8 @@ void main() {
     // Pinned, so that a derivation change that drops a case from one of the
     // arms above fails here instead of thinning the check.
     expect(
-      [generatedCount, generatedSeamCount, regularCount],
-      [74480, 3867, 87],
+      [generatedCount, generatedSeamCount, composedCount, regularCount],
+      [74480, 3867, 6715, 87],
     );
     expect(
       [regularPlainCount, regularSeamCount, regularComposedCount],
