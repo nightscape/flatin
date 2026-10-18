@@ -10,6 +10,7 @@ import 'package:latin_practice/screens/practice_screen.dart';
 import 'package:latin_practice/screens/word_classification_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'support/course_fixture.dart';
 import 'support/hand_items.dart';
 import 'support/word_classification_harness.dart';
 
@@ -45,7 +46,7 @@ void main() {
     final settings = Settings().toggleFeature('verbs', 'genus', 'pass');
 
     expect(
-      settings.enabledFormsOf('verbs', item.formLabels),
+      filterTeachingAll(settings, item).practicedForms('verbs', item.formLabels),
       {'ind.praes.akt.3.sg', 'ind.perf.akt.3.sg'},
     );
   });
@@ -56,11 +57,12 @@ void main() {
     settings = settings.toggleFeature('verbs', 'genus', 'pass');
 
     expect(
-      settings.enabledFormsOf('verbs', item.formLabels),
+      filterTeachingAll(settings, item).practicedForms('verbs', item.formLabels),
       {'ind.praes.akt.3.sg'},
     );
     expect(
-      settings.enableAllForms('verbs').enabledFormsOf('verbs', item.formLabels),
+      filterTeachingAll(settings.enableAllForms('verbs'), item)
+          .practicedForms('verbs', item.formLabels),
       item.formOrder.toSet(),
     );
   });
@@ -68,7 +70,7 @@ void main() {
   test('the classification stops asking an axis with one value left', () {
     final settings = Settings().toggleFeature('verbs', 'genus', 'pass');
     final enabled =
-        settings.enabledFormsOf('verbs', item.formLabels);
+        filterTeachingAll(settings, item).practicedForms('verbs', item.formLabels);
     final selectors = selectorsFor(item.filterForms(enabled).labels);
 
     expect(selectors.sections, isNot(contains('genus')));

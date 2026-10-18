@@ -5,6 +5,7 @@ import 'package:fsrs/fsrs.dart';
 import '../data/explanation.dart' show ExplanationLine;
 import '../models/practice_item.dart';
 import '../models/input_strategy.dart';
+import '../providers/curriculum_provider.dart';
 import '../providers/practice_providers.dart';
 import '../providers/settings_provider.dart';
 import '../providers/fsrs_provider.dart';
@@ -185,14 +186,14 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
   Widget build(BuildContext context) {
     final state = ref.watch(practiceProvider(widget.item));
     final settingsAsync = ref.watch(settingsProvider);
+    final filterAsync = ref.watch(courseFilterProvider);
     final choicesAsync = ref.watch(translationChoicesProvider(widget.item));
     final screenWidth = MediaQuery.of(context).size.width;
     final isMobile = screenWidth < 600;
 
-    // Filter forms based on settings
-    final filteredData = settingsAsync.when(
-      data: (settings) => widget.item.filterForms(
-        settings.enabledFormsOf(widget.item.dataFileId, widget.item.formLabels),
+    final filteredData = filterAsync.when(
+      data: (filter) => widget.item.filterForms(
+        filter.practicedForms(widget.item.dataFileId, widget.item.formLabels),
       ),
       loading: () =>
           widget.item.filterForms(Set<String>.from(widget.item.formOrder)),

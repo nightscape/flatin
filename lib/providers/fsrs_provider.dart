@@ -9,8 +9,7 @@ import '../models/practice_item.dart';
 import '../models/fsrs_card.dart';
 import '../services/fsrs_storage.dart';
 import '../data/practice_data.dart';
-import 'lesson_provider.dart';
-import 'settings_provider.dart';
+import 'curriculum_provider.dart';
 
 part 'fsrs_provider.g.dart';
 
@@ -41,17 +40,19 @@ Future<List<PracticeItemCard>> dueCards(Ref ref) async {
 
 /// Every item the user can practise, by exercise type.
 ///
-/// The one place the word and type selections are applied, so that no consumer
-/// can route around them.
+/// The one place the course filter is applied, so that no consumer can route
+/// around it. An item whose forms are all untaught or switched off has
+/// nothing to ask and is left out.
 @riverpod
 Future<Map<String, List<PracticeItem>>> practicableItemsByType(Ref ref) async {
-  final lessonData = await ref.watch(lessonDataProvider.future);
-  final settings = await ref.watch(settingsProvider.future);
+  final filter = await ref.watch(courseFilterProvider.future);
 
   final itemsByType = <String, List<PracticeItem>>{'nouns': [], 'verbs': []};
   for (final item in await loadAllPracticeItems()) {
-    if (!lessonData.includes(item, settings.deselectedWords)) continue;
-    if (!settings.isTypeEnabled(item.dataFileId, item.type)) continue;
+    if (!filter.itemPracticed(item)) continue;
+    if (filter.practicedForms(item.dataFileId, item.formLabels).isEmpty) {
+      continue;
+    }
     itemsByType[item.dataFileId]!.add(item);
   }
 

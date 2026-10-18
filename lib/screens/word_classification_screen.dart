@@ -4,8 +4,8 @@ import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:fsrs/fsrs.dart';
 import '../models/derivation.dart' show norm;
 import '../models/practice_item.dart';
-import '../models/settings.dart';
-import '../providers/settings_provider.dart';
+import '../models/course_filter.dart';
+import '../providers/curriculum_provider.dart';
 import '../providers/fsrs_provider.dart';
 import '../widgets/app_drawer.dart';
 import '../widgets/explanation_lines.dart';
@@ -178,8 +178,7 @@ class _WordClassificationScreenState
         return;
       }
 
-      // Get settings to filter forms
-      final settings = await ref.read(settingsProvider.future);
+      final filter = await ref.read(courseFilterProvider.future);
 
       // Pick from due items if available, otherwise random
       final random = Random();
@@ -189,8 +188,7 @@ class _WordClassificationScreenState
               : allItems[random.nextInt(allItems.length)]);
       _isNoun = item.dataFileId == 'nouns';
 
-      // Filter forms based on settings
-      final enabledForms = settings.enabledFormsOf(item.dataFileId, item.formLabels);
+      final enabledForms = filter.practicedForms(item.dataFileId, item.formLabels);
       final filteredData = item.filterForms(enabledForms);
 
       if (filteredData.forms.isEmpty) {
@@ -307,19 +305,18 @@ class _WordClassificationScreenState
     _loadRandomWord();
   }
 
-  /// The form keys the settings leave on for [item].
-  Set<String> _enabledFormsOf(PracticeItem item) {
-    final settingsValue = ref.read(settingsProvider);
-    if (settingsValue is! AsyncData<Settings>) {
+  /// The form keys the course leaves on for [item].
+  Set<String> _practicedFormsOf(PracticeItem item) {
+    final filterValue = ref.read(courseFilterProvider);
+    if (filterValue is! AsyncData<CourseFilter>) {
       return Set<String>.from(item.formOrder);
     }
-    return settingsValue.value
-        .enabledFormsOf(item.dataFileId, item.formLabels);
+    return filterValue.value.practicedForms(item.dataFileId, item.formLabels);
   }
 
   /// The labels the learner may be asked about right now.
   List<FormLabel> get _enabledLabels =>
-      _currentItem!.filterForms(_enabledFormsOf(_currentItem!)).labels;
+      _currentItem!.filterForms(_practicedFormsOf(_currentItem!)).labels;
 
   Selectors get _selectors => selectorsFor(_enabledLabels);
 
@@ -481,14 +478,14 @@ class _WordClassificationScreenState
     final screenWidth = MediaQuery.of(context).size.width;
     final isMobile = screenWidth < 600;
 
-    // Watch settings and reload word if current form becomes disabled
-    ref.listen<AsyncValue<Settings>>(settingsProvider, (previous, next) {
+    // Watch the course filter and reload the word if its form becomes hidden
+    ref.listen<AsyncValue<CourseFilter>>(courseFilterProvider, (previous, next) {
       if (previous != next &&
-          next is AsyncData<Settings> &&
+          next is AsyncData<CourseFilter> &&
           _currentItem != null &&
           _correctFormIndices.isNotEmpty) {
-        final settings = next.value;
-        final enabledForms = settings.enabledFormsOf(_currentItem!.dataFileId, _currentItem!.formLabels);
+        final enabledForms = next.value
+            .practicedForms(_currentItem!.dataFileId, _currentItem!.formLabels);
 
         // Check if any of the current forms are still enabled
         bool anyFormEnabled = _correctFormIndices.any((index) {

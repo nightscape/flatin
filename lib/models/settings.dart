@@ -217,23 +217,10 @@ class Settings {
           if (!isFeatureEnabled(dataFileId, f.key, f.value)) (f.key, f.value),
       ];
 
-  /// Whether a form is practised: its key must be on, and every feature it
-  /// names must be on.
-  bool isFormEnabled(String dataFileId, FormLabel label) {
-    return isFormSwitchedOn(dataFileId, label.key) &&
-        offFeaturesOf(dataFileId, label).isEmpty;
-  }
-
   /// Check if a type is enabled for a given data file
   bool isTypeEnabled(String dataFileId, String typeName) {
     return !(disabledTypes[dataFileId]?.contains(typeName) ?? false);
   }
-
-  /// The keys of the enabled labels.
-  Set<FormKey> enabledFormsOf(String dataFileId, List<FormLabel> labels) => {
-        for (final label in labels)
-          if (isFormEnabled(dataFileId, label)) label.key,
-      };
 
   /// Get the input strategy id for a data file (default: text_field)
   String getInputStrategyId(String dataFileId) {
@@ -372,11 +359,35 @@ class Settings {
     final forcedTypeMap = json['forcedOnTypes'] as Map<String, dynamic>?;
     final forcedFormMap = json['forcedOnForms'] as Map<String, dynamic>?;
 
+    final disabledForms = disabledFormsMap?.map(
+          (key, value) => MapEntry(key, Set<String>.from(value as List)),
+        ) ??
+        <String, Set<String>>{};
+    final disabledTypes = disabledTypesMap?.map(
+          (key, value) => MapEntry(key, Set<String>.from(value as List)),
+        ) ??
+        <String, Set<String>>{};
+    final deselectedWords = wordList != null
+        ? Set<String>.from(wordList.map((e) => e as String))
+        : <String>{};
+    final forcedOnWords = forcedWordList != null
+        ? Set<String>.from(forcedWordList.map((e) => e as String))
+        : <String>{};
+    final forcedOnTypes = forcedTypeMap?.map(
+          (key, value) => MapEntry(key, Set<String>.from(value as List)),
+        ) ??
+        <String, Set<String>>{};
+    final forcedOnForms = forcedFormMap?.map(
+          (key, value) => MapEntry(key, Set<String>.from(value as List)),
+        ) ??
+        <String, Set<String>>{};
+
+    _rejectContradictions(forcedOnWords, deselectedWords, 'word');
+    _rejectContradictionsByFile(forcedOnTypes, disabledTypes, 'type');
+    _rejectContradictionsByFile(forcedOnForms, disabledForms, 'form');
+
     return Settings(
-      disabledForms: disabledFormsMap?.map(
-            (key, value) => MapEntry(key, Set<String>.from(value as List)),
-          ) ??
-          {},
+      disabledForms: disabledForms,
       disabledFeatures: featureMap?.map(
             (file, axes) => MapEntry(
               file,
@@ -387,31 +398,43 @@ class Settings {
             ),
           ) ??
           {},
-      disabledTypes: disabledTypesMap?.map(
-            (key, value) => MapEntry(key, Set<String>.from(value as List)),
-          ) ??
-          {},
+      disabledTypes: disabledTypes,
       inputStrategyIds:
           strategyMap?.map((key, value) => MapEntry(key, value as String)) ??
               {},
-      deselectedWords: wordList != null
-          ? Set<String>.from(wordList.map((e) => e as String))
-          : <String>{},
+      deselectedWords: deselectedWords,
       courseWords: wordRange == null ? null : LessonRange.fromJson(wordRange),
       courseGrammar:
           grammarRange == null ? null : LessonRange.fromJson(grammarRange),
       grammarFollowsWords: json['grammarFollowsWords'] as bool? ?? true,
-      forcedOnWords: forcedWordList != null
-          ? Set<String>.from(forcedWordList.map((e) => e as String))
-          : <String>{},
-      forcedOnTypes: forcedTypeMap?.map(
-            (key, value) => MapEntry(key, Set<String>.from(value as List)),
-          ) ??
-          {},
-      forcedOnForms: forcedFormMap?.map(
-            (key, value) => MapEntry(key, Set<String>.from(value as List)),
-          ) ??
-          {},
+      forcedOnWords: forcedOnWords,
+      forcedOnTypes: forcedOnTypes,
+      forcedOnForms: forcedOnForms,
+    );
+  }
+}
+
+/// Stored settings that put one entry in both its on and its off set say two
+/// things at once; the app refuses them in release builds too.
+void _rejectContradictions(Set<String> on, Set<String> off, String what) {
+  final both = on.intersection(off);
+  if (both.isNotEmpty) {
+    throw StateError(
+      'stored settings force $what "${both.first}" both on and off',
+    );
+  }
+}
+
+void _rejectContradictionsByFile(
+  Map<String, Set<String>> on,
+  Map<String, Set<String>> off,
+  String what,
+) {
+  for (final file in on.entries) {
+    _rejectContradictions(
+      file.value,
+      off[file.key] ?? const {},
+      '$what of "${file.key}"',
     );
   }
 }

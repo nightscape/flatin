@@ -5,6 +5,8 @@ import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/models/course_filter.dart';
 import 'package:latin_practice/models/settings.dart';
 
+import 'support/legacy_selection.dart';
+
 /// With the default course position the filter must answer exactly what the
 /// settings answered before it existed, for every item of the real data.
 void main() {
@@ -22,8 +24,7 @@ void main() {
     for (final item in items) {
       expect(
         filter.itemPracticed(item),
-        settings.isWordSelected(normalizeDiacritics(item.lemma)) &&
-            settings.isTypeEnabled(item.dataFileId, item.type),
+        legacyItemSelected(settings, item),
         reason: item.id,
       );
       expect(
@@ -33,7 +34,7 @@ void main() {
       );
       expect(
         filter.practicedForms(item.dataFileId, item.formLabels),
-        settings.enabledFormsOf(item.dataFileId, item.formLabels),
+        legacyEnabledForms(settings, item.dataFileId, item.formLabels),
         reason: item.id,
       );
     }
@@ -49,13 +50,10 @@ void main() {
 
     var words = 0, nounForms = 0, verbForms = 0;
     for (final item in items) {
-      if (!settings.isWordSelected(normalizeDiacritics(item.lemma)) ||
-          !settings.isTypeEnabled(item.dataFileId, item.type)) {
-        continue;
-      }
+      if (!legacyItemSelected(settings, item)) continue;
       words++;
       final forms =
-          settings.enabledFormsOf(item.dataFileId, item.formLabels).length;
+          legacyEnabledForms(settings, item.dataFileId, item.formLabels).length;
       if (item.dataFileId == 'nouns') {
         nounForms += forms;
       } else {

@@ -148,16 +148,18 @@ String _$dueCardsHash() => r'dfe7b43bb0a8a1d79b7a8140b4baceedcd310365';
 
 /// Every item the user can practise, by exercise type.
 ///
-/// The one place the word and type selections are applied, so that no consumer
-/// can route around them.
+/// The one place the course filter is applied, so that no consumer can route
+/// around it. An item whose forms are all untaught or switched off has
+/// nothing to ask and is left out.
 
 @ProviderFor(practicableItemsByType)
 const practicableItemsByTypeProvider = PracticableItemsByTypeProvider._();
 
 /// Every item the user can practise, by exercise type.
 ///
-/// The one place the word and type selections are applied, so that no consumer
-/// can route around them.
+/// The one place the course filter is applied, so that no consumer can route
+/// around it. An item whose forms are all untaught or switched off has
+/// nothing to ask and is left out.
 
 final class PracticableItemsByTypeProvider
     extends
@@ -171,8 +173,9 @@ final class PracticableItemsByTypeProvider
         $FutureProvider<Map<String, List<PracticeItem>>> {
   /// Every item the user can practise, by exercise type.
   ///
-  /// The one place the word and type selections are applied, so that no consumer
-  /// can route around them.
+  /// The one place the course filter is applied, so that no consumer can route
+  /// around it. An item whose forms are all untaught or switched off has
+  /// nothing to ask and is left out.
   const PracticableItemsByTypeProvider._()
     : super(
         from: null,
@@ -200,7 +203,7 @@ final class PracticableItemsByTypeProvider
 }
 
 String _$practicableItemsByTypeHash() =>
-    r'80ad12d515b524b94eedfb329980b9977583c496';
+    r'0ed346309b880c3cc0d17f214068acaedfc9fbbc';
 
 /// Provider for due items by exercise type
 

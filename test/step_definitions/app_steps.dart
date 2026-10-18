@@ -91,6 +91,8 @@ class AppSteps {
       reason: 'Could not find widget with key or text: $text',
     );
 
+    await _waitUntilEnabled(tester, finder);
+
     // Try to scroll if scrollable exists, otherwise just tap
     final scrollable = find.byType(Scrollable);
     if (scrollable.evaluate().isNotEmpty) {
@@ -98,6 +100,22 @@ class AppSteps {
     }
     await tester.tap(finder);
     await tester.pumpAndSettle();
+  }
+
+  /// A button whose data is still loading is on screen but disabled; tapping
+  /// it does nothing, and the step after it then fails for the wrong reason.
+  Future<void> _waitUntilEnabled(WidgetTester tester, Finder finder) async {
+    bool disabled() {
+      final widget = tester.widget(finder);
+      return widget is ButtonStyleButton && widget.onPressed == null;
+    }
+
+    int attempts = 0;
+    while (disabled() && attempts < 30) {
+      await tester.pump(const Duration(milliseconds: 200));
+      attempts++;
+    }
+    expect(disabled(), isFalse, reason: 'the button stayed disabled');
   }
 
   @When('I tap on the button with text {string}')
