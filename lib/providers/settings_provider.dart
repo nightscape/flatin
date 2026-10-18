@@ -74,13 +74,14 @@ class SettingsNotifier extends _$SettingsNotifier {
   }
 
   /// Toggle a form's enabled state.
-  ///
-  /// The toggles pass `inRange: true` until the course filter is wired in:
-  /// no screen moves the course range yet, so every entry is in range.
-  Future<void> toggleForm(String dataFileId, String formKey) async {
+  Future<void> toggleForm(
+    String dataFileId,
+    String formKey, {
+    required bool inRange,
+  }) async {
     final currentSettings = await future;
     final newSettings =
-        currentSettings.toggleForm(dataFileId, formKey, inRange: true);
+        currentSettings.toggleForm(dataFileId, formKey, inRange: inRange);
     state = AsyncValue.data(newSettings);
     await _saveSettings(newSettings);
   }
@@ -106,10 +107,14 @@ class SettingsNotifier extends _$SettingsNotifier {
   }
 
   /// Toggle a type's enabled state
-  Future<void> toggleType(String dataFileId, String typeName) async {
+  Future<void> toggleType(
+    String dataFileId,
+    String typeName, {
+    required bool inRange,
+  }) async {
     final currentSettings = await future;
     final newSettings =
-        currentSettings.toggleType(dataFileId, typeName, inRange: true);
+        currentSettings.toggleType(dataFileId, typeName, inRange: inRange);
     state = AsyncValue.data(newSettings);
     await _saveSettings(newSettings);
   }
@@ -137,10 +142,13 @@ class SettingsNotifier extends _$SettingsNotifier {
   }
 
   /// Toggle a single word's selection state.
-  Future<void> toggleWord(String normalizedWord) async {
+  Future<void> toggleWord(
+    String normalizedWord, {
+    required bool inRange,
+  }) async {
     final currentSettings = await future;
     final newSettings =
-        currentSettings.toggleWord(normalizedWord, inRange: true);
+        currentSettings.toggleWord(normalizedWord, inRange: inRange);
     state = AsyncValue.data(newSettings);
     await _saveSettings(newSettings);
   }

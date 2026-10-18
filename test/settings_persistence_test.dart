@@ -6,6 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:latin_practice/data/lesson_data.dart';
 import 'package:latin_practice/data/settings_conversion.dart';
+import 'package:latin_practice/models/lesson_range.dart';
+import 'package:latin_practice/models/settings.dart';
 import 'package:latin_practice/providers/lesson_provider.dart';
 import 'package:latin_practice/providers/settings_provider.dart';
 
@@ -22,9 +24,9 @@ void main() {
     final first = ProviderContainer();
     await first.read(settingsProvider.future);
     final notifier = first.read(settingsProvider.notifier);
-    await notifier.toggleForm('nouns', 'gen.sg');
-    await notifier.toggleType('nouns', 'A-Deklination');
-    await notifier.toggleWord(word);
+    await notifier.toggleForm('nouns', 'gen.sg', inRange: true);
+    await notifier.toggleType('nouns', 'A-Deklination', inRange: true);
+    await notifier.toggleWord(word, inRange: true);
     first.dispose();
 
     final second = ProviderContainer();
@@ -44,6 +46,35 @@ void main() {
     expect(loaded.isTypeEnabled('nouns', 'Brand-New-Deklination'), isTrue);
     expect(loaded.isWordSelected('brandnovus'), isTrue);
     second.dispose();
+  });
+
+  test('the notifier stores what the course says about the entry, not a '
+      'constant', () async {
+    final stored = Settings(courseWords: LessonRange(1, 20));
+    SharedPreferences.setMockInitialValues({
+      'practice_settings': jsonEncode({
+        settingsVersionField: settingsVersion,
+        ...stored.toJson(),
+      }),
+    });
+
+    final container = ProviderContainer();
+    await container.read(settingsProvider.future);
+    final notifier = container.read(settingsProvider.notifier);
+    await notifier.toggleWord('nauta', inRange: false);
+    await notifier.toggleType('nouns', 'U-Deklination', inRange: false);
+    await notifier.toggleForm('nouns', 'gen.sg', inRange: false);
+    container.dispose();
+
+    final reloaded = ProviderContainer();
+    final loaded = await reloaded.read(settingsProvider.future);
+
+    expect(loaded.courseWords, LessonRange(1, 20));
+    expect(loaded.overrideOfWord('nauta'), Override.forcedOn);
+    expect(loaded.overrideOfType('nouns', 'U-Deklination'), Override.forcedOn);
+    expect(loaded.overrideOfForm('nouns', 'gen.sg'), Override.forcedOn);
+    expect(loaded.deselectedWords, isEmpty);
+    reloaded.dispose();
   });
 
   test('settings stored as enabled sets convert to disabled sets', () async {

@@ -177,7 +177,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             ),
             value: settings.isWordSelected(normalized),
             onChanged: (_) {
-              ref.read(settingsProvider.notifier).toggleWord(normalized);
+              ref
+                  .read(settingsProvider.notifier)
+                  .toggleWord(normalized, inRange: true);
             },
             activeColor: const Color(0xFFD0D0D0),
             checkColor: Colors.black,
@@ -332,7 +334,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   onChanged: (value) {
                     ref
                         .read(settingsProvider.notifier)
-                        .toggleType(dataFileId, typeName);
+                        .toggleType(dataFileId, typeName, inRange: true);
                   },
                   activeColor: const Color(0xFFD0D0D0),
                   checkColor: Colors.black,
@@ -451,7 +453,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 onChanged: offFeatures.isEmpty
                     ? (_) => ref
                           .read(settingsProvider.notifier)
-                          .toggleForm(dataFileId, formKey)
+                          .toggleForm(dataFileId, formKey, inRange: true)
                     : null,
                 activeColor: const Color(0xFFD0D0D0),
                 checkColor: Colors.black,
