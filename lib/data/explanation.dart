@@ -52,7 +52,7 @@ List<ExplanationLine> explainCorrectAnswer(
 
 /// The dictionary entry of the item: nominative and genitive, or 1st person
 /// and infinitive, whichever the data gives.
-String _headword(PracticeItem item) =>
+String headword(PracticeItem item) =>
     item.principalParts.map((part) => part.$2).join(', ');
 
 FormLabel _labelOf(PracticeItem item, FormKey formKey) {
@@ -63,7 +63,7 @@ FormLabel _labelOf(PracticeItem item, FormKey formKey) {
 
 ExplanationLine _typeLine(PracticeItem item) {
   final recognition = item.derivation.recognition;
-  final String word = _headword(item);
+  final String word = headword(item);
   switch (recognition) {
     case TypeByRule(:final suffix, :final candidateTypes):
       if (candidateTypes.length > 1) {
@@ -129,7 +129,7 @@ List<ExplanationLine> _formLines(
     case IrregularForm(:final result):
       return [
         ExplanationLine('explain.irregular', params: {
-          'dictionary': _headword(item),
+          'dictionary': headword(item),
           'label': label,
           'result': result,
         }),
@@ -426,7 +426,7 @@ List<ExplanationLine> explainForm(PracticeItem item, List<FormKey> formKeys) {
       final ComposedForm composed => _composedLine(item, composed, labels),
       IrregularForm(:final result) =>
         ExplanationLine('explain.irregular', params: {
-          'dictionary': _headword(item),
+          'dictionary': headword(item),
           'label': labels,
           'result': result,
         }),

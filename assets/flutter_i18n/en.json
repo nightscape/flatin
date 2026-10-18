@@ -92,5 +92,56 @@
       "wrongStem": "You wrote {answer} – wrong stem {usedStem}- (correct: {display} {stem}-)",
       "noMatch": "You wrote {answer} – this matches no known form"
     }
+  },
+  "esel": {
+    "legend": {
+      "title": "The ESEL rule",
+      "intro": "Every form is built in the same steps: recognise, stem, ending, sound rule."
+    },
+    "kind": {
+      "erkennen": {
+        "letter": "E",
+        "name": "Recognise"
+      },
+      "stamm": {
+        "letter": "S",
+        "name": "Stem"
+      },
+      "endung": {
+        "letter": "E",
+        "name": "Ending"
+      },
+      "lautregel": {
+        "letter": "L",
+        "name": "Sound rule"
+      },
+      "verbinden": {
+        "letter": "V",
+        "name": "Combine"
+      },
+      "merken": {
+        "letter": "M",
+        "name": "Memorise"
+      }
+    },
+    "question": {
+      "erkennen": "Which type is {word}?",
+      "stamm": "Which stem is the form of {word} built on?",
+      "endung": "Which ending does {label} have?",
+      "lautregel": "Does a sound change in {label}?",
+      "verbinden": "What is {label} composed of?",
+      "merken": "{label} is irregular – memorise it!",
+      "given": "{result} is the dictionary form ({label})"
+    },
+    "absent": {
+      "stamm": "no stem of its own",
+      "endung": "no ending of its own",
+      "lautregel": "no sound rule"
+    },
+    "noRule": "no sound rule",
+    "noEnding": "no ending",
+    "dictionaryForm": "dictionary form",
+    "soundChanges": "a sound changes",
+    "show": "Show"
   }
 }

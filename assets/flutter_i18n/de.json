@@ -92,5 +92,56 @@
       "wrongStem": "Du hast {answer} geschrieben – falscher Stamm {usedStem}- (richtig: {display} {stem}-)",
       "noMatch": "Du hast {answer} geschrieben – das passt zu keiner bekannten Form"
     }
+  },
+  "esel": {
+    "legend": {
+      "title": "Die ESEL-Regel",
+      "intro": "Jede Form entsteht in denselben Schritten: Erkennen, Stamm, Endung, Lautregel."
+    },
+    "kind": {
+      "erkennen": {
+        "letter": "E",
+        "name": "Erkennen"
+      },
+      "stamm": {
+        "letter": "S",
+        "name": "Stamm"
+      },
+      "endung": {
+        "letter": "E",
+        "name": "Endung"
+      },
+      "lautregel": {
+        "letter": "L",
+        "name": "Lautregel"
+      },
+      "verbinden": {
+        "letter": "V",
+        "name": "Verbinden"
+      },
+      "merken": {
+        "letter": "M",
+        "name": "Merken"
+      }
+    },
+    "question": {
+      "erkennen": "Welcher Typ ist {word}?",
+      "stamm": "Von welchem Stamm wird die Form von {word} gebildet?",
+      "endung": "Welche Endung hat {label}?",
+      "lautregel": "Ändert sich bei {label} ein Laut?",
+      "verbinden": "Woraus ist {label} zusammengesetzt?",
+      "merken": "{label} ist unregelmäßig – merken!",
+      "given": "{result} ist die Wörterbuchform ({label})"
+    },
+    "absent": {
+      "stamm": "kein eigener Stamm",
+      "endung": "keine eigene Endung",
+      "lautregel": "keine Lautregel"
+    },
+    "noRule": "keine Lautregel",
+    "noEnding": "keine Endung",
+    "dictionaryForm": "Wörterbuchform",
+    "soundChanges": "ein Laut ändert sich",
+    "show": "Zeigen"
   }
 }

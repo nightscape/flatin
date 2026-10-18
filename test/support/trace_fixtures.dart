@@ -614,8 +614,15 @@ String renderDe(Map<String, String> texts, ExplanationLine line) {
   );
 }
 
+/// en.json flattened to "explain.diag.noMatch" style keys.
+Future<Map<String, String>> englishTexts() =>
+    _texts('assets/flutter_i18n/en.json');
+
 /// de.json flattened to "explain.diag.noMatch" style keys.
-Future<Map<String, String>> germanTexts() async {
+Future<Map<String, String>> germanTexts() =>
+    _texts('assets/flutter_i18n/de.json');
+
+Future<Map<String, String>> _texts(String path) async {
   Map<String, String> flatten(Map<String, dynamic> json, String prefix) {
     final flat = <String, String>{};
     json.forEach((key, value) {
@@ -630,8 +637,7 @@ Future<Map<String, String>> germanTexts() async {
   }
 
   return flatten(
-    jsonDecode(await loadAssetText('assets/flutter_i18n/de.json'))
-        as Map<String, dynamic>,
+    jsonDecode(await loadAssetText(path)) as Map<String, dynamic>,
     '',
   );
 }
