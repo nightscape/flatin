@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:fsrs/fsrs.dart';
+import '../data/esel_groups.dart';
 import '../data/esel_steps.dart';
 import '../models/derivation.dart' show norm;
 import '../models/practice_item.dart';
@@ -370,10 +371,15 @@ class _WordClassificationScreenState
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            EselStaticSteps(
-              scope: 'esel.classification',
-              steps: eselSteps(item, shownKeys.first),
-            ),
+            for (final (i, group) in groupReadings(item, shownKeys).indexed)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: EselStaticSteps(
+                  scope: i == 0 ? 'esel.classification' : 'esel.classification.$i',
+                  title: groupTitle(item, group),
+                  steps: eselSteps(item, group.first),
+                ),
+              ),
             ..._wrongCombinations.map(
               (combination) => ExplanationLines([
                 explainer.pickedLabel(

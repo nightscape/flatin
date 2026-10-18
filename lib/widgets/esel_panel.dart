@@ -111,6 +111,7 @@ class EselStepRow extends StatelessWidget {
   final Set<String> wrongPicks;
   final void Function(EselOption option)? onPick;
   final VoidCallback? onShow;
+  final bool showQuestion;
 
   const EselStepRow({
     super.key,
@@ -120,6 +121,7 @@ class EselStepRow extends StatelessWidget {
     this.wrongPicks = const {},
     this.onPick,
     this.onShow,
+    this.showQuestion = true,
   });
 
   @override
@@ -184,7 +186,7 @@ class EselStepRow extends StatelessWidget {
   Widget _doneBody(BuildContext context) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (step.options.isEmpty)
+          if (step.options.isEmpty && showQuestion)
             Text(
               FlutterI18n.translate(
                 context,
@@ -378,16 +380,32 @@ class EselPanel extends StatelessWidget {
   }
 }
 
-/// The steps of a form, all done: no question, no reveal button.
+/// The steps of the forms named by [title], all done: no question, no reveal
+/// button.
 class EselStaticSteps extends StatelessWidget {
   final String scope;
+  final String title;
   final List<EselStep> steps;
 
-  const EselStaticSteps({super.key, required this.scope, required this.steps});
+  const EselStaticSteps({
+    super.key,
+    required this.scope,
+    required this.title,
+    required this.steps,
+  });
 
   @override
   Widget build(BuildContext context) => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Padding(
+            padding: const EdgeInsets.only(bottom: 6),
+            child: Text(
+              title,
+              key: Key('$scope.title'),
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ),
           for (final step in steps)
             Padding(
               padding: const EdgeInsets.only(bottom: 6),
@@ -395,6 +413,7 @@ class EselStaticSteps extends StatelessWidget {
                 scope: scope,
                 step: step,
                 status: EselStepStatus.done,
+                showQuestion: false,
               ),
             ),
         ],
