@@ -73,10 +73,14 @@ class SettingsNotifier extends _$SettingsNotifier {
     await prefs.setString(_settingsKey, jsonEncode(settings.toJson()));
   }
 
-  /// Toggle a form's enabled state
+  /// Toggle a form's enabled state.
+  ///
+  /// The toggles pass `inRange: true` until the course filter is wired in:
+  /// no screen moves the course range yet, so every entry is in range.
   Future<void> toggleForm(String dataFileId, String formKey) async {
     final currentSettings = await future;
-    final newSettings = currentSettings.toggleForm(dataFileId, formKey);
+    final newSettings =
+        currentSettings.toggleForm(dataFileId, formKey, inRange: true);
     state = AsyncValue.data(newSettings);
     await _saveSettings(newSettings);
   }
@@ -104,7 +108,8 @@ class SettingsNotifier extends _$SettingsNotifier {
   /// Toggle a type's enabled state
   Future<void> toggleType(String dataFileId, String typeName) async {
     final currentSettings = await future;
-    final newSettings = currentSettings.toggleType(dataFileId, typeName);
+    final newSettings =
+        currentSettings.toggleType(dataFileId, typeName, inRange: true);
     state = AsyncValue.data(newSettings);
     await _saveSettings(newSettings);
   }
@@ -134,7 +139,8 @@ class SettingsNotifier extends _$SettingsNotifier {
   /// Toggle a single word's selection state.
   Future<void> toggleWord(String normalizedWord) async {
     final currentSettings = await future;
-    final newSettings = currentSettings.toggleWord(normalizedWord);
+    final newSettings =
+        currentSettings.toggleWord(normalizedWord, inRange: true);
     state = AsyncValue.data(newSettings);
     await _saveSettings(newSettings);
   }

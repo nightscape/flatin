@@ -1,0 +1,46 @@
+# Placeholder: one entry that claims every form and every type for lesson 1,
+# so the course range changes nothing until the real progression lands.
+- lesson: 1
+  nouns:
+    forms:
+      - {}
+    types:
+      - A-Deklination
+      - Adjektiv-a-o
+      - Adjektiv-a-o-er
+      - Adjektiv-dreiendig
+      - Adjektiv-zweiendig
+      - E-Deklination
+      - E-Deklination-Konsonantstamm
+      - Konsonantische-Deklination-i-mf
+      - Konsonantische-Deklination-i-n
+      - Konsonantische-Deklination-mf
+      - Konsonantische-Deklination-n
+      - Numerale-duo
+      - Numerale-milia
+      - Numerale-tres
+      - Numerale-unus
+      - O-Deklination-maskulinum
+      - O-Deklination-neutrum
+      - Pronomen-hic
+      - Pronomen-idem
+      - Pronomen-ille
+      - Pronomen-ipse
+      - Pronomen-is
+      - Pronomen-iste
+      - Pronomen-personal
+      - Pronomen-qui
+      - Pronomen-quis
+      - U-Deklination
+  verbs:
+    forms:
+      - {}
+    types:
+      - A-Konjugation
+      - E-Konjugation
+      - I-Konjugation
+      - Konsonantische
+      - Mischkonjugation
+      - Unregelmäßig
+      - esse-Kompositum
+      - esse-Typ

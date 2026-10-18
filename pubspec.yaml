@@ -81,6 +81,8 @@ flutter:
     - lib/data/migration_v2.yaml
     - lib/data/agite_plus_bayern_1.yaml
     - lib/data/agite_plus_bayern_2.yaml
+    - lib/data/agite_plus_bayern_1_grammatik.yaml
+    - lib/data/agite_plus_bayern_2_grammatik.yaml
     - assets/flutter_i18n/
 
   # An image asset can refer to one or more resolution-specific "variants", see

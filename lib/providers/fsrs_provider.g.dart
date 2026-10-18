@@ -98,7 +98,7 @@ final class FsrsCardsProvider
   }
 }
 
-String _$fsrsCardsHash() => r'c22cda206b74e010595ed1c9bbe2d695ea4e589d';
+String _$fsrsCardsHash() => r'e647f7060d2e4474dae0ec04613e77024ce0c1cc';
 
 /// Provider for due cards
 
@@ -200,7 +200,7 @@ final class PracticableItemsByTypeProvider
 }
 
 String _$practicableItemsByTypeHash() =>
-    r'a6af2e0bfd586199261820a86e2b68132bb63649';
+    r'80ad12d515b524b94eedfb329980b9977583c496';
 
 /// Provider for due items by exercise type
 

@@ -51,7 +51,8 @@ void main() {
   });
 
   test('a form stays off while either its key or a feature is off', () {
-    var settings = Settings().toggleForm('verbs', 'ind.perf.akt.3.sg');
+    var settings =
+        Settings().toggleForm('verbs', 'ind.perf.akt.3.sg', inRange: true);
     settings = settings.toggleFeature('verbs', 'genus', 'pass');
 
     expect(

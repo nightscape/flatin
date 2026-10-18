@@ -93,7 +93,8 @@ void main() {
     container.dispose();
   });
 
-  test('conversion leaves words outside the lessons enabled', () async {
+  test('conversion deselects every lesson word the old format left out',
+      () async {
     final lessons = await loadLessonData(lessonDataAssets);
     final lessonWords = lessons.lessonNames
         .expand((name) => lessons.lessonWords[name]!)
@@ -110,13 +111,8 @@ void main() {
     final outside = await container.read(wordsOutsideLessonsProvider.future);
     final loaded = await container.read(settingsProvider.future);
 
-    // The old format had no checkbox for these, so no user ever turned them
-    // off.
-    expect(outside, isNotEmpty);
-    for (final word in outside) {
-      expect(loaded.isWordSelected(normalizeDiacritics(word)), isTrue,
-          reason: word);
-    }
+    // Every practice item belongs to a lesson, so conversion sees them all.
+    expect(outside, isEmpty);
     expect(loaded.deselectedWords, lessonWords.skip(1).toSet());
     container.dispose();
   });

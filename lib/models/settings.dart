@@ -2,11 +2,17 @@ import '../data/lesson_data.dart';
 import '../data/settings_conversion.dart'
     show settingsVersion, settingsVersionField;
 import 'form_label.dart';
+import 'lesson_range.dart';
+
+/// What the learner said about one entry, against what the course says.
+enum Override { forcedOn, forcedOff, none }
 
 /// Settings model holding the user's practice selection.
 ///
-/// Everything is stored as what the user switched OFF, so an entry that is
-/// added to the YAML later is practised by default and needs no migration.
+/// The course ranges say what the learner has been taught; the forced sets
+/// say where the learner overruled that. The off sets are the ones the app
+/// has always stored, so stored settings of the previous format read as
+/// forced-off without conversion.
 class Settings {
   /// Map of data file identifier to set of form keys the user switched off
   /// e.g., {"nouns": {"genitive_singular", ...}, ...}
@@ -30,17 +36,61 @@ class Settings {
   /// statistics screen (performance-based).
   final Set<String> deselectedWords;
 
+  /// The lessons whose words the learner practises.
+  final LessonRange courseWords;
+
+  /// The lessons whose grammar the learner practises. While
+  /// [grammarFollowsWords] it is kept at 1..[courseWords].to.
+  final LessonRange courseGrammar;
+
+  /// Whether the grammar range trails the word range.
+  final bool grammarFollowsWords;
+
+  /// Normalized words the learner practises although the course has not
+  /// reached them.
+  final Set<String> forcedOnWords;
+
+  /// Data file id -> type names practised ahead of the course.
+  final Map<String, Set<String>> forcedOnTypes;
+
+  /// Data file id -> form keys practised ahead of the course.
+  final Map<String, Set<String>> forcedOnForms;
+
   Settings({
     Map<String, Set<String>>? disabledForms,
     Map<String, Map<String, Set<String>>>? disabledFeatures,
     Map<String, Set<String>>? disabledTypes,
     Map<String, String>? inputStrategyIds,
     Set<String>? deselectedWords,
+    LessonRange? courseWords,
+    LessonRange? courseGrammar,
+    this.grammarFollowsWords = true,
+    Set<String>? forcedOnWords,
+    Map<String, Set<String>>? forcedOnTypes,
+    Map<String, Set<String>>? forcedOnForms,
   })  : disabledForms = disabledForms ?? {},
         disabledFeatures = disabledFeatures ?? {},
         disabledTypes = disabledTypes ?? {},
         inputStrategyIds = inputStrategyIds ?? {},
-        deselectedWords = deselectedWords ?? {};
+        deselectedWords = deselectedWords ?? {},
+        courseWords = courseWords ?? LessonRange.full,
+        courseGrammar = courseGrammar ?? LessonRange.full,
+        forcedOnWords = forcedOnWords ?? {},
+        forcedOnTypes = forcedOnTypes ?? {},
+        forcedOnForms = forcedOnForms ?? {} {
+    assert(
+      this.forcedOnWords.intersection(this.deselectedWords).isEmpty,
+      'a word is both forced on and forced off',
+    );
+    assert(
+      _disjoint(this.forcedOnTypes, this.disabledTypes),
+      'a type is both forced on and forced off',
+    );
+    assert(
+      _disjoint(this.forcedOnForms, this.disabledForms),
+      'a form is both forced on and forced off',
+    );
+  }
 
   Settings copyWith({
     Map<String, Set<String>>? disabledForms,
@@ -48,6 +98,12 @@ class Settings {
     Map<String, Set<String>>? disabledTypes,
     Map<String, String>? inputStrategyIds,
     Set<String>? deselectedWords,
+    LessonRange? courseWords,
+    LessonRange? courseGrammar,
+    bool? grammarFollowsWords,
+    Set<String>? forcedOnWords,
+    Map<String, Set<String>>? forcedOnTypes,
+    Map<String, Set<String>>? forcedOnForms,
   }) {
     return Settings(
       disabledForms: disabledForms ?? this.disabledForms,
@@ -55,6 +111,89 @@ class Settings {
       disabledTypes: disabledTypes ?? this.disabledTypes,
       inputStrategyIds: inputStrategyIds ?? this.inputStrategyIds,
       deselectedWords: deselectedWords ?? this.deselectedWords,
+      courseWords: courseWords ?? this.courseWords,
+      courseGrammar: courseGrammar ?? this.courseGrammar,
+      grammarFollowsWords: grammarFollowsWords ?? this.grammarFollowsWords,
+      forcedOnWords: forcedOnWords ?? this.forcedOnWords,
+      forcedOnTypes: forcedOnTypes ?? this.forcedOnTypes,
+      forcedOnForms: forcedOnForms ?? this.forcedOnForms,
+    );
+  }
+
+  /// The lessons whose grammar is practised right now.
+  LessonRange get effectiveGrammar =>
+      grammarFollowsWords ? LessonRange(1, courseWords.to) : courseGrammar;
+
+  Settings withWordRange(LessonRange range) => copyWith(
+        courseWords: range,
+        courseGrammar:
+            grammarFollowsWords ? LessonRange(1, range.to) : courseGrammar,
+      );
+
+  Settings withGrammarRange(LessonRange range) {
+    assert(!grammarFollowsWords, 'the grammar range follows the word range');
+    return copyWith(courseGrammar: range);
+  }
+
+  Settings withGrammarFollowsWords(bool follows) => copyWith(
+        grammarFollowsWords: follows,
+        courseGrammar: follows ? LessonRange(1, courseWords.to) : courseGrammar,
+      );
+
+  /// Drops every override the learner made; the course ranges stay.
+  Settings clearOverrides() => copyWith(
+        disabledForms: {},
+        disabledFeatures: {},
+        disabledTypes: {},
+        deselectedWords: {},
+        forcedOnWords: {},
+        forcedOnTypes: {},
+        forcedOnForms: {},
+      );
+
+  Override overrideOfWord(String normalizedWord) {
+    if (deselectedWords.contains(normalizedWord)) return Override.forcedOff;
+    if (forcedOnWords.contains(normalizedWord)) return Override.forcedOn;
+    return Override.none;
+  }
+
+  Override overrideOfType(String dataFileId, String typeName) =>
+      _overrideIn(disabledTypes, forcedOnTypes, dataFileId, typeName);
+
+  Override overrideOfForm(String dataFileId, FormKey formKey) =>
+      _overrideIn(disabledForms, forcedOnForms, dataFileId, formKey);
+
+  /// Flips what the learner sees for one word; [inRange] is the course
+  /// verdict, so an override is stored only where it differs from it.
+  Settings toggleWord(String normalizedWord, {required bool inRange}) {
+    final (off, on) = _flip(overrideOfWord(normalizedWord), inRange);
+    return copyWith(
+      deselectedWords: _withEntry(deselectedWords, normalizedWord, off),
+      forcedOnWords: _withEntry(forcedOnWords, normalizedWord, on),
+    );
+  }
+
+  Settings toggleType(
+    String dataFileId,
+    String typeName, {
+    required bool inRange,
+  }) {
+    final (off, on) = _flip(overrideOfType(dataFileId, typeName), inRange);
+    return copyWith(
+      disabledTypes: _withKey(disabledTypes, dataFileId, typeName, off),
+      forcedOnTypes: _withKey(forcedOnTypes, dataFileId, typeName, on),
+    );
+  }
+
+  Settings toggleForm(
+    String dataFileId,
+    FormKey formKey, {
+    required bool inRange,
+  }) {
+    final (off, on) = _flip(overrideOfForm(dataFileId, formKey), inRange);
+    return copyWith(
+      disabledForms: _withKey(disabledForms, dataFileId, formKey, off),
+      forcedOnForms: _withKey(forcedOnForms, dataFileId, formKey, on),
     );
   }
 
@@ -108,13 +247,6 @@ class Settings {
     return copyWith(inputStrategyIds: newMap);
   }
 
-  /// Toggle a form's enabled state for a given data file
-  Settings toggleForm(String dataFileId, String formKey) {
-    return copyWith(
-      disabledForms: _toggled(disabledForms, dataFileId, formKey),
-    );
-  }
-
   /// Toggle one axis value for a given data file
   Settings toggleFeature(String dataFileId, String axisId, String code) {
     final next = {
@@ -146,13 +278,6 @@ class Settings {
     );
   }
 
-  /// Toggle a type's enabled state for a given data file
-  Settings toggleType(String dataFileId, String typeName) {
-    return copyWith(
-      disabledTypes: _toggled(disabledTypes, dataFileId, typeName),
-    );
-  }
-
   /// Enable every type for a given data file
   Settings enableAllTypes(String dataFileId) {
     final newDisabledTypes = Map<String, Set<String>>.from(disabledTypes);
@@ -176,15 +301,6 @@ class Settings {
       (w) => isWordSelected(normalizeDiacritics(w)),
     );
     return selected.isNotEmpty && selected.length < rawWords.length;
-  }
-
-  /// Toggle a single word's selection state.
-  Settings toggleWord(String normalizedWord) {
-    final next = Set<String>.from(deselectedWords);
-    if (!next.remove(normalizedWord)) {
-      next.add(normalizedWord);
-    }
-    return copyWith(deselectedWords: next);
   }
 
   /// Toggle all words in a lesson.
@@ -226,6 +342,16 @@ class Settings {
       ),
       'inputStrategyIds': inputStrategyIds,
       'deselectedWords': deselectedWords.toList(),
+      'courseWords': courseWords.toJson(),
+      'courseGrammar': courseGrammar.toJson(),
+      'grammarFollowsWords': grammarFollowsWords,
+      'forcedOnWords': forcedOnWords.toList(),
+      'forcedOnTypes': forcedOnTypes.map(
+        (key, value) => MapEntry(key, value.toList()),
+      ),
+      'forcedOnForms': forcedOnForms.map(
+        (key, value) => MapEntry(key, value.toList()),
+      ),
     };
   }
 
@@ -240,6 +366,11 @@ class Settings {
     final disabledTypesMap = json['disabledTypes'] as Map<String, dynamic>?;
     final strategyMap = json['inputStrategyIds'] as Map<String, dynamic>?;
     final wordList = json['deselectedWords'] as List<dynamic>?;
+    final wordRange = json['courseWords'] as Map<String, dynamic>?;
+    final grammarRange = json['courseGrammar'] as Map<String, dynamic>?;
+    final forcedWordList = json['forcedOnWords'] as List<dynamic>?;
+    final forcedTypeMap = json['forcedOnTypes'] as Map<String, dynamic>?;
+    final forcedFormMap = json['forcedOnForms'] as Map<String, dynamic>?;
 
     return Settings(
       disabledForms: disabledFormsMap?.map(
@@ -266,20 +397,74 @@ class Settings {
       deselectedWords: wordList != null
           ? Set<String>.from(wordList.map((e) => e as String))
           : <String>{},
+      courseWords: wordRange == null ? null : LessonRange.fromJson(wordRange),
+      courseGrammar:
+          grammarRange == null ? null : LessonRange.fromJson(grammarRange),
+      grammarFollowsWords: json['grammarFollowsWords'] as bool? ?? true,
+      forcedOnWords: forcedWordList != null
+          ? Set<String>.from(forcedWordList.map((e) => e as String))
+          : <String>{},
+      forcedOnTypes: forcedTypeMap?.map(
+            (key, value) => MapEntry(key, Set<String>.from(value as List)),
+          ) ??
+          {},
+      forcedOnForms: forcedFormMap?.map(
+            (key, value) => MapEntry(key, Set<String>.from(value as List)),
+          ) ??
+          {},
     );
   }
 }
 
-Map<String, Set<String>> _toggled(
-  Map<String, Set<String>> disabled,
+Override _overrideIn(
+  Map<String, Set<String>> off,
+  Map<String, Set<String>> on,
   String dataFileId,
   String key,
 ) {
-  final next = Map<String, Set<String>>.from(disabled);
-  final keys = Set<String>.from(next[dataFileId] ?? const <String>{});
-  if (!keys.remove(key)) {
-    keys.add(key);
+  if (off[dataFileId]?.contains(key) ?? false) return Override.forcedOff;
+  if (on[dataFileId]?.contains(key) ?? false) return Override.forcedOn;
+  return Override.none;
+}
+
+bool _disjoint(
+  Map<String, Set<String>> on,
+  Map<String, Set<String>> off,
+) =>
+    on.entries.every(
+      (file) => file.value.intersection(off[file.key] ?? const {}).isEmpty,
+    );
+
+/// The off/on membership that flips the effective verdict, given what the
+/// course says: an override is kept only where it differs from [inRange].
+(bool off, bool on) _flip(Override current, bool inRange) {
+  final effective = switch (current) {
+    Override.forcedOff => false,
+    Override.forcedOn => true,
+    Override.none => inRange,
+  };
+  final wanted = !effective;
+  if (wanted == inRange) return (false, false);
+  return (!wanted, wanted);
+}
+
+Set<String> _withEntry(Set<String> entries, String entry, bool present) {
+  final next = Set<String>.from(entries);
+  if (present) {
+    next.add(entry);
+  } else {
+    next.remove(entry);
   }
-  next[dataFileId] = keys;
+  return next;
+}
+
+Map<String, Set<String>> _withKey(
+  Map<String, Set<String>> byFile,
+  String dataFileId,
+  String key,
+  bool present,
+) {
+  final next = Map<String, Set<String>>.from(byFile);
+  next[dataFileId] = _withEntry(next[dataFileId] ?? const {}, key, present);
   return next;
 }
