@@ -20,7 +20,7 @@ void main() {
       'prōvidēre',
     ]);
     expect(both.lessonWords['Lektion 21']!.length, 25);
-    expect(both.wordToLesson['salus'], 'Lektion 21');
+    expect(both.wordToLesson['salūs'], 'Lektion 21');
   });
 
   test('a word stays with the lesson that introduces it first', () async {

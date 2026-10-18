@@ -23,17 +23,16 @@ int lessonNumber(String lessonName) {
 
 /// Maps each Latin word to the lesson in which it was introduced.
 ///
-/// Lookup is diacritic-insensitive: words are normalized by stripping macrons
-/// before comparison so that e.g. `amāre` in the source matches `amare` in
-/// other data files.
+/// Lookup is by the exact spelling, macrons included: hīc (adverb) and hic
+/// (pronoun) are different words and belong to different lessons.
 class LessonData {
   /// Lesson names in presentation order.
   final List<String> lessonNames;
 
-  /// normalized word -> lesson name (first occurrence wins).
+  /// word in its exact spelling -> lesson name (first occurrence wins).
   final Map<String, String> wordToLesson;
 
-  /// lesson name -> raw (undiacriticized) word list, in YAML order, for display.
+  /// lesson name -> word list in its exact spelling, in YAML order.
   final Map<String, List<String>> lessonWords;
 
   /// lesson number -> the 1-based index of the first asset that lists it.
@@ -47,8 +46,7 @@ class LessonData {
   });
 
   /// Returns the lesson for a [PracticeItem], or null if no match.
-  String? lessonFor(PracticeItem item) =>
-      wordToLesson[normalizeDiacritics(item.lemma)];
+  String? lessonFor(PracticeItem item) => wordToLesson[item.lemma];
 
   /// The lesson that introduces [item]. Every practice item belongs to one;
   /// see [assertLessonsCoverItems].
@@ -70,8 +68,9 @@ class LessonData {
     return book;
   }
 
-  /// Whether [item] should be practiced; words in [deselectedWords]
-  /// (normalized) are the ones the user switched off.
+  /// Whether [item] should be practiced; [deselectedWords] holds the words
+  /// the user switched off, stored without macrons, so two lemmas with the
+  /// same letters are switched off together.
   bool includes(PracticeItem item, Set<String> deselectedWords) {
     if (deselectedWords.isEmpty) return true;
     return !deselectedWords.contains(normalizeDiacritics(item.lemma));
@@ -106,7 +105,9 @@ String normalizeDiacritics(String text) {
 /// ```
 ///
 /// A lesson name must be unique across the assets; a word introduced by
-/// several lessons belongs to the first one.
+/// several lessons belongs to the first one. A word is keyed by its exact
+/// spelling, so a lesson list must spell it as the practice item does; see
+/// [assertLessonsCoverItems].
 Future<LessonData> loadLessonData(List<String> assetPaths) async {
   final names = <String>[];
   final wordToLesson = <String, String>{};
@@ -137,8 +138,7 @@ Future<LessonData> loadLessonData(List<String> assetPaths) async {
           );
         }
         rawWords.add(raw);
-        final normalized = normalizeDiacritics(raw);
-        wordToLesson.putIfAbsent(normalized, () => name);
+        wordToLesson.putIfAbsent(raw, () => name);
       }
       lessonWords[name] = rawWords;
     }
@@ -161,12 +161,22 @@ Future<LessonData> loadLessonData(List<String> assetPaths) async {
   );
 }
 
-/// Throws naming every practice item that no lesson introduces.
+/// Throws naming every practice item that no lesson introduces. An item a
+/// lesson lists in another spelling is named with that spelling.
 void assertLessonsCoverItems(LessonData lessons, List<PracticeItem> items) {
-  final orphans = [
-    for (final item in items)
-      if (lessons.lessonFor(item) == null) '${item.id} (${item.lemma})',
-  ];
+  final byLetters = {
+    for (final words in lessons.lessonWords.values)
+      for (final word in words) normalizeDiacritics(word): word,
+  };
+  final orphans = <String>[];
+  for (final item in items) {
+    if (lessons.lessonFor(item) != null) continue;
+    final otherSpelling = byLetters[normalizeDiacritics(item.lemma)];
+    final hint = otherSpelling == null
+        ? ''
+        : ', the lessons spell it "$otherSpelling"';
+    orphans.add('${item.id} (${item.lemma})$hint');
+  }
   if (orphans.isNotEmpty) {
     throw StateError('no lesson introduces: ${orphans.join(", ")}');
   }

@@ -19,9 +19,8 @@ Future<List<String>> wordsOutsideLessons(Ref ref) async {
   final lessons = await ref.watch(lessonDataProvider.future);
   final words = <String>[];
   for (final item in await loadAllPracticeItems()) {
-    final raw = item.lemma;
-    if (lessons.wordToLesson.containsKey(normalizeDiacritics(raw))) continue;
-    if (!words.contains(raw)) words.add(raw);
+    if (lessons.lessonFor(item) != null) continue;
+    if (!words.contains(item.lemma)) words.add(item.lemma);
   }
   return words;
 }

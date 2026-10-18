@@ -50,7 +50,7 @@ void main() {
   test('an item no lesson introduces is named', () {
     const lessons = LessonData(
       lessonNames: ['Lektion 1'],
-      wordToLesson: {'amare': 'Lektion 1'},
+      wordToLesson: {'amāre': 'Lektion 1'},
       lessonWords: {
         'Lektion 1': ['amāre'],
       },
