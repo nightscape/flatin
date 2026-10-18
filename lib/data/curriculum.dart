@@ -161,6 +161,9 @@ bool _knownCode(
 }
 
 /// The lesson of each form key: the most specific selector that matches it.
+///
+/// Every specificity is checked, not only the winning one, so the verdict
+/// never depends on the order the selectors are listed in.
 Map<FormKey, int> _resolveForms(
   String dataFileId,
   List<FormLabel> labels,
@@ -168,25 +171,23 @@ Map<FormKey, int> _resolveForms(
 ) {
   final lessons = <FormKey, int>{};
   for (final label in labels) {
-    _Selector? best;
+    final claims = <int, int>{};
     for (final selector in selectors) {
       if (!_matches(selector, label)) continue;
-      if (best == null || selector.axes.length > best.axes.length) {
-        best = selector;
-        continue;
-      }
-      if (selector.axes.length == best.axes.length &&
-          selector.lesson != best.lesson) {
+      final claimed = claims[selector.axes.length];
+      if (claimed != null && claimed != selector.lesson) {
         throw StateError(
-          '"$dataFileId" form "${label.key}": lesson ${best.lesson} and '
+          '"$dataFileId" form "${label.key}": lesson $claimed and '
           'lesson ${selector.lesson} claim it equally specifically',
         );
       }
+      claims[selector.axes.length] = selector.lesson;
     }
-    if (best == null) {
+    if (claims.isEmpty) {
       throw StateError('no lesson teaches "$dataFileId" form "${label.key}"');
     }
-    lessons[label.key] = best.lesson;
+    final mostSpecific = claims.keys.reduce((a, b) => a > b ? a : b);
+    lessons[label.key] = claims[mostSpecific]!;
   }
   return lessons;
 }

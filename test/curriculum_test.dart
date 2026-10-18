@@ -120,6 +120,54 @@ void main() {
     );
   });
 
+  test('an interleaved more specific selector does not hide a conflict', () {
+    const entries = [
+      '''
+- lesson: 1
+  nouns:
+    forms:
+      - {}
+    types: [A-Deklination, O-Deklination]
+''',
+      '''
+- lesson: 4
+  nouns:
+    forms:
+      - {kasus: dat}
+''',
+      '''
+- lesson: 7
+  nouns:
+    forms:
+      - {kasus: dat, numerus: pl}
+''',
+      '''
+- lesson: 9
+  nouns:
+    forms:
+      - {numerus: pl}
+''',
+    ];
+    final conflict = throwsA(
+      isStateError.having(
+        (e) => e.message,
+        'message',
+        allOf(contains('dat.pl'), contains('equally')),
+      ),
+    );
+
+    final orders = permutations(entries).toList();
+    expect(orders, hasLength(24));
+    for (final order in orders) {
+      expect(
+        () => parseNouns(order.join()),
+        conflict,
+        reason: order.map((e) => RegExp(r'lesson: (\d+)').firstMatch(e)![1])
+            .join(' '),
+      );
+    }
+  });
+
   test('two equally specific selectors of the same lesson are fine', () {
     final curriculum = parseNouns('''
 - lesson: 1

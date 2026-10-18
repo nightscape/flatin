@@ -22,6 +22,21 @@ DataFileShape nounShape({List<FormLabel>? labels, List<String>? types}) =>
 Curriculum parseNouns(String yaml, {DataFileShape? shape}) =>
     Curriculum.parse([yaml], {'nouns': shape ?? nounShape()});
 
+/// Every order of [items], so an order-independent law can be stated over
+/// all of them instead of over two hand-picked orders.
+Iterable<List<T>> permutations<T>(List<T> items) sync* {
+  if (items.length <= 1) {
+    yield List.of(items);
+    return;
+  }
+  for (var i = 0; i < items.length; i++) {
+    final rest = [...items]..removeAt(i);
+    for (final tail in permutations(rest)) {
+      yield [items[i], ...tail];
+    }
+  }
+}
+
 /// A curriculum that teaches every fixture form and type in lesson 1.
 const everythingInLessonOne = '''
 - lesson: 1

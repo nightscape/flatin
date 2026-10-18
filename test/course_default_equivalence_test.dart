@@ -38,4 +38,37 @@ void main() {
       );
     }
   });
+
+  test('the default course card counts what the settings alone counted',
+      () async {
+    final settings = Settings();
+    final lessons = await loadLessonData(lessonDataAssets);
+    final curriculum = await loadCurriculum(curriculumAssets);
+    final filter = CourseFilter(settings, curriculum, lessons);
+    final items = await loadAllPracticeItems();
+
+    var words = 0, nounForms = 0, verbForms = 0;
+    for (final item in items) {
+      if (!settings.isWordSelected(normalizeDiacritics(item.lemma)) ||
+          !settings.isTypeEnabled(item.dataFileId, item.type)) {
+        continue;
+      }
+      words++;
+      final forms =
+          settings.enabledFormsOf(item.dataFileId, item.formLabels).length;
+      if (item.dataFileId == 'nouns') {
+        nounForms += forms;
+      } else {
+        verbForms += forms;
+      }
+    }
+
+    expect(words, items.length);
+    expect(nounForms, greaterThan(0));
+    expect(verbForms, greaterThan(0));
+    expect(
+      filter.summary(items),
+      (words: words, nounForms: nounForms, verbForms: verbForms),
+    );
+  });
 }
