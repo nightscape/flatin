@@ -1,0 +1,29 @@
+Start
+E Erkennen | open | Welcher Typ ist posse, possum, potuī? | Optionen: A-Konjugation ; E-Konjugation ; Unregelmäßig | [Zeigen]
+S Stamm | pending | [Zeigen]
+E Endung | pending | [Zeigen]
+L Lautregel | pending | [Zeigen]
+
+Zeigen erkennen
+E Erkennen | done | Unregelmäßig
+S Stamm | open | Von welchem Stamm wird die Form von posse, possum, potuī gebildet? | Optionen: pos- ; pot- ; potu- | [Zeigen]
+E Endung | pending | [Zeigen]
+L Lautregel | pending | [Zeigen]
+
+Zeigen stamm
+E Erkennen | done | Unregelmäßig
+S Stamm | done | pos-
+E Endung | open | Welche Endung hat Konjunktiv Imperfekt: 1. Person Singular? | Optionen: -sem ; -set ; -sēs | [Zeigen]
+L Lautregel | pending | [Zeigen]
+
+Zeigen endung
+E Erkennen | done | Unregelmäßig
+S Stamm | done | pos-
+E Endung | done | -sem
+L Lautregel | open | Ändert sich bei Konjunktiv Imperfekt: 1. Person Singular ein Laut? | Optionen: ein Laut ändert sich ; keine Lautregel | [Zeigen]
+
+Zeigen lautregel
+E Erkennen | done | Unregelmäßig
+S Stamm | done | pos-
+E Endung | done | -sem
+L Lautregel | done | keine Lautregel

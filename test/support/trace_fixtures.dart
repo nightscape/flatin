@@ -641,3 +641,26 @@ Future<Map<String, String>> _texts(String path) async {
     '',
   );
 }
+
+/// The data has no dictionary form of its own (every form is derived), so the
+/// GivenForm branch is pinned on a hand-made item of a type the data uses.
+PracticeItem givenItem() => traceItem(
+      id: 'verbs:abire',
+      lemma: 'abīre',
+      type: 'Unregelmäßig',
+      translation: 'weggehen',
+      principalParts: const [('', 'abīre'), ('', 'abiī')],
+      axes: verbAxes,
+      derivation: Derivation(
+        type: 'Unregelmäßig',
+        recognition: const TypeDeclared(),
+        grammar: const Grammar({}),
+        forms: {
+          'ind.perf.akt.1.sg': GivenForm(
+            formKey: 'ind.perf.akt.1.sg',
+            variants: const ['abiī', 'abīvī'],
+          ),
+        },
+      ),
+    );
+

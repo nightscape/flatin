@@ -1,0 +1,5 @@
+E Erkennen | done | Konsonantische
+S Stamm | done (gestrichelt) | entfällt / kein eigener Stamm
+E Endung | done (gestrichelt) | entfällt / keine eigene Endung
+L Lautregel | done (gestrichelt) | entfällt / keine Lautregel
+M Merken | done | Imperativ Präsens: 2. Person Singular ist unregelmäßig – merken! / dīc / ~dīce~

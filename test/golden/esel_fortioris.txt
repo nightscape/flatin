@@ -1,0 +1,29 @@
+Start
+E Erkennen | open | Welcher Typ ist fortis, forte? | Optionen: Adjektiv-a-o ; Adjektiv-a-o-er ; Adjektiv-zweiendig | [Zeigen]
+S Stamm | pending | [Zeigen]
+E Endung | pending | [Zeigen]
+L Lautregel | pending | [Zeigen]
+
+Zeigen erkennen
+E Erkennen | done | Adjektiv-zweiendig
+S Stamm | open | Von welchem Stamm wird die Form von fortis, forte gebildet? | Optionen: fort- ; forti- ; fortissim- | [Zeigen]
+E Endung | pending | [Zeigen]
+L Lautregel | pending | [Zeigen]
+
+Zeigen stamm
+E Erkennen | done | Adjektiv-zweiendig
+S Stamm | done | forti-
+E Endung | open | Welche Endung hat Komparativ maskulin: Genitiv Singular? | Optionen: -or ; -ōris ; -ōrī | [Zeigen]
+L Lautregel | pending | [Zeigen]
+
+Zeigen endung
+E Erkennen | done | Adjektiv-zweiendig
+S Stamm | done | forti-
+E Endung | done | -ōris (Komparativendung)
+L Lautregel | open | Ändert sich bei Komparativ maskulin: Genitiv Singular ein Laut? | Optionen: ein Laut ändert sich ; keine Lautregel | [Zeigen]
+
+Zeigen lautregel
+E Erkennen | done | Adjektiv-zweiendig
+S Stamm | done | forti-
+E Endung | done | -ōris (Komparativendung)
+L Lautregel | done | keine Lautregel

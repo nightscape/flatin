@@ -1,0 +1,29 @@
+Start
+E Erkennen | open | Welcher Typ ist amāre, amō, amātum? | Optionen: A-Konjugation ; E-Konjugation ; I-Konjugation | [Zeigen]
+S Stamm | pending | [Zeigen]
+E Endung | pending | [Zeigen]
+L Lautregel | pending | [Zeigen]
+
+Zeigen erkennen
+E Erkennen | done | A-Konjugation
+S Stamm | open | Von welchem Stamm wird die Form von amāre, amō, amātum gebildet? | Optionen: am- ; amā- ; amār- | [Zeigen]
+E Endung | pending | [Zeigen]
+L Lautregel | pending | [Zeigen]
+
+Zeigen stamm
+E Erkennen | done | A-Konjugation
+S Stamm | done | amā-
+E Endung | open | Welche Endung hat Präsens: 1. Person Singular? | Optionen: -s ; -t ; -ō | [Zeigen]
+L Lautregel | pending | [Zeigen]
+
+Zeigen endung
+E Erkennen | done | A-Konjugation
+S Stamm | done | amā-
+E Endung | done | -ō
+L Lautregel | open | Ändert sich bei Präsens: 1. Person Singular ein Laut? | Optionen: keine Lautregel ; ā fällt vor Vokal aus | [Zeigen]
+
+Zeigen lautregel
+E Erkennen | done | A-Konjugation
+S Stamm | done | amā-
+E Endung | done | -ō
+L Lautregel | done | ā fällt vor Vokal aus

@@ -114,7 +114,7 @@ void main() {
     });
 
     test('a dictionary form is shown as the form to memorise', () {
-      final steps = eselSteps(_givenItem(), 'ind.perf.akt.1.sg');
+      final steps = eselSteps(givenItem(), 'ind.perf.akt.1.sg');
       expect(steps.map((s) => s.kind), [..._esel, EselKind.merken]);
       expect(steps.last.questionKey, 'esel.question.given');
       expect(steps.last.answer, 'abiī');
@@ -419,28 +419,6 @@ void main() {
     });
   });
 }
-
-/// The data has no dictionary form of its own (every form is derived), so the
-/// GivenForm branch is pinned on a hand-made item of a type the data uses.
-PracticeItem _givenItem() => traceItem(
-      id: 'verbs:abire',
-      lemma: 'abīre',
-      type: 'Unregelmäßig',
-      translation: 'weggehen',
-      principalParts: const [('', 'abīre'), ('', 'abiī')],
-      axes: verbAxes,
-      derivation: Derivation(
-        type: 'Unregelmäßig',
-        recognition: const TypeDeclared(),
-        grammar: const Grammar({}),
-        forms: {
-          'ind.perf.akt.1.sg': GivenForm(
-            formKey: 'ind.perf.akt.1.sg',
-            variants: const ['abiī', 'abīvī'],
-          ),
-        },
-      ),
-    );
 
 List<String> _answers(List<EselStep> steps) =>
     [for (final step in steps) step.answer];

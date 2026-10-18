@@ -1,0 +1,29 @@
+Start
+E Erkennen | open | Welcher Typ ist dominus? | Optionen: A-Deklination ; E-Deklination ; O-Deklination-maskulinum | [Zeigen]
+S Stamm | pending | [Zeigen]
+E Endung | pending | [Zeigen]
+L Lautregel | pending | [Zeigen]
+
+Zeigen erkennen
+E Erkennen | done | O-Deklination-maskulinum
+S Stamm | open | Von welchem Stamm wird die Form von dominus gebildet? | Optionen: domi- ; domin- ; dominu- | [Zeigen]
+E Endung | pending | [Zeigen]
+L Lautregel | pending | [Zeigen]
+
+Zeigen stamm
+E Erkennen | done | O-Deklination-maskulinum
+S Stamm | done | domin-
+E Endung | open | Welche Endung hat Genitiv Plural? | Optionen: -us ; -īs ; -ōrum | [Zeigen]
+L Lautregel | pending | [Zeigen]
+
+Zeigen endung
+E Erkennen | done | O-Deklination-maskulinum
+S Stamm | done | domin-
+E Endung | done | -ōrum
+L Lautregel | open | Ändert sich bei Genitiv Plural ein Laut? | Optionen: ein Laut ändert sich ; keine Lautregel | [Zeigen]
+
+Zeigen lautregel
+E Erkennen | done | O-Deklination-maskulinum
+S Stamm | done | domin-
+E Endung | done | -ōrum
+L Lautregel | done | keine Lautregel

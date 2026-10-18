@@ -13,6 +13,7 @@ import 'package:latin_practice/screens/word_classification_screen.dart';
 import 'package:latin_practice/widgets/esel_panel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'support/esel_render.dart' show isDashed;
 import 'support/trace_fixtures.dart';
 import 'support/explanation_harness.dart' show pickOption;
 import 'support/word_classification_harness.dart';
@@ -169,27 +170,22 @@ void main() {
 
     testWidgets('an absent step is done, dashed and says entfällt',
         (tester) async {
-      final items = [await _dominus(), await _amare()];
-      late PracticeItem item;
-      late String key;
-      for (final candidate in items) {
-        for (final k in candidate.formOrder) {
-          if (eselSteps(candidate, k).any((s) => s.absent)) {
-            item = candidate;
-            key = k;
-            break;
-          }
-        }
-      }
+      final (item, key) = [
+        for (final item in [await _dominus(), await _amare()])
+          for (final key in item.formOrder)
+            if (eselSteps(item, key).any((s) => s.absent)) (item, key),
+      ].first;
       await _pumpChecked(tester, item, {key: 'zzz'});
       final steps = _contract(item, key, 'zzz');
       final rows = _rows(tester, _scope(key));
       expect(rows.map((r) => r.step.kind), steps.map((s) => s.kind));
-      final absent = rows.where((r) => r.step.absent);
-      expect(absent, isNotEmpty);
-      for (final row in absent) {
-        expect(row.status, EselStepStatus.done);
+      expect(rows.where((r) => r.step.absent), isNotEmpty);
+      for (final row in rows) {
         final finder = find.byKey(Key('${_scope(key)}.${row.step.kind.name}'));
+        expect(isDashed(tester, finder), row.step.absent,
+            reason: '${row.step.kind}');
+        if (!row.step.absent) continue;
+        expect(row.status, EselStepStatus.done);
         expect(
           find.descendant(of: finder, matching: find.text('entfällt')),
           findsOneWidget,
@@ -306,16 +302,47 @@ void main() {
   });
 
   group('touch targets', () {
-    testWidgets('option buttons are at least 44 px high', (tester) async {
+    double minimumHeight(WidgetTester tester, Finder button) => tester
+        .widget<ButtonStyleButton>(button)
+        .style!
+        .minimumSize!
+        .resolve({})!
+        .height;
+
+    testWidgets('option buttons ask for 44 px and get them', (tester) async {
       final item = await _dominus();
       await _pumpChecked(tester, item, {_gen: 'dominis'});
       final steps = _contract(item, _gen, 'dominis');
-      final index = _firstQuestion(steps);
-      for (final option in steps[index].options) {
-        final size =
-            tester.getSize(_option(_gen, steps[index].kind, option));
-        expect(size.height, greaterThanOrEqualTo(44));
+      final step = steps[_firstQuestion(steps)];
+      for (final option in step.options) {
+        final button = _option(_gen, step.kind, option);
+        expect(minimumHeight(tester, button), 44);
+        expect(tester.getSize(button).height, greaterThanOrEqualTo(44));
       }
+    });
+
+    testWidgets('Zeigen buttons ask for 44 px', (tester) async {
+      final item = await _dominus();
+      await _pumpChecked(tester, item, {_gen: 'dominis'});
+      final shows = find.descendant(
+          of: find.byType(EselPanel), matching: find.byType(TextButton));
+      expect(shows, findsWidgets);
+      for (final show in shows.evaluate()) {
+        expect(minimumHeight(tester, find.byWidget(show.widget)), 44);
+      }
+    });
+
+    testWidgets('the panel header asks for 44 px', (tester) async {
+      final item = await _dominus();
+      await _pumpChecked(tester, item, {_gen: 'dominis'});
+      final header = find.descendant(
+        of: find.byKey(Key('${_scope(_gen)}.toggle')),
+        matching: find.byType(ConstrainedBox),
+      );
+      expect(
+        header.evaluate().map((e) => (e.widget as ConstrainedBox).constraints.minHeight),
+        contains(44.0),
+      );
     });
   });
 

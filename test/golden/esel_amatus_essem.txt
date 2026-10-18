@@ -1,0 +1,27 @@
+Start
+E Erkennen | open | Welcher Typ ist amāre, amō, amātum? | Optionen: A-Konjugation ; E-Konjugation ; I-Konjugation | [Zeigen]
+S Stamm | done (gestrichelt) | entfällt / kein eigener Stamm
+E Endung | done (gestrichelt) | entfällt / keine eigene Endung
+L Lautregel | pending | [Zeigen]
+V Verbinden | pending | [Zeigen]
+
+Zeigen erkennen
+E Erkennen | done | A-Konjugation
+S Stamm | done (gestrichelt) | entfällt / kein eigener Stamm
+E Endung | done (gestrichelt) | entfällt / keine eigene Endung
+L Lautregel | open | Ändert sich bei Konjunktiv Plusquamperfekt Passiv: 1. Person Singular ein Laut? | Optionen: ein Laut ändert sich ; keine Lautregel | [Zeigen]
+V Verbinden | pending | [Zeigen]
+
+Zeigen lautregel
+E Erkennen | done | A-Konjugation
+S Stamm | done (gestrichelt) | entfällt / kein eigener Stamm
+E Endung | done (gestrichelt) | entfällt / keine eigene Endung
+L Lautregel | done | keine Lautregel
+V Verbinden | open | Woraus ist Konjunktiv Plusquamperfekt Passiv: 1. Person Singular zusammengesetzt? | Optionen: amātus + eram ; amātus + essem ; amātus + sim | [Zeigen]
+
+Zeigen verbinden
+E Erkennen | done | A-Konjugation
+S Stamm | done (gestrichelt) | entfällt / kein eigener Stamm
+E Endung | done (gestrichelt) | entfällt / keine eigene Endung
+L Lautregel | done | keine Lautregel
+V Verbinden | done | amātus + essem
