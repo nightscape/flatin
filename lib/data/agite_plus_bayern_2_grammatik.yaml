@@ -1,2 +1,108 @@
-# Placeholder: the second volume adds nothing until the real progression lands.
-[]
+# Which lesson of volume 2 introduces which form and which type, and what the
+# course never reaches. The `later:` entry collects the forms the data can
+# build but no lesson teaches; they sit one stop beyond the last lesson.
+
+- lesson: 22
+  verbs:
+    forms:
+      - {modus: ind, tempus: perf, genus_verbi: pass}
+      - {modus: part, tempus: perf, genus_verbi: pass}
+
+- lesson: 23
+  nouns:
+    types: [E-Deklination, E-Deklination-Konsonantstamm]
+  verbs:
+    forms:
+      - {modus: ind, tempus: plusq, genus_verbi: pass}
+      - {modus: ind, tempus: fut2, genus_verbi: pass}
+
+- lesson: 24
+  nouns:
+    types: [Pronomen-quis]
+  verbs:
+    forms:
+      - {modus: inf, tempus: perf, genus_verbi: pass}
+
+- lesson: 26
+  verbs:
+    forms:
+      - {modus: part, tempus: praes, genus_verbi: akt}
+
+- lesson: 27
+  verbs:
+    forms:
+      - {modus: ind, tempus: praes, genus_verbi: pass}
+      - {modus: inf, tempus: praes, genus_verbi: pass}
+
+- lesson: 28
+  nouns:
+    types: [Pronomen-hic]
+  verbs:
+    forms:
+      - {modus: ind, tempus: impf, genus_verbi: pass}
+      - {modus: ind, tempus: fut, genus_verbi: pass}
+
+- lesson: 29
+  verbs:
+    forms:
+      - {modus: konj, tempus: impf, genus_verbi: akt}
+
+- lesson: 30
+  nouns:
+    types: [Pronomen-ille, Pronomen-iste]
+  verbs:
+    forms:
+      - {modus: konj, tempus: plusq, genus_verbi: akt}
+
+- lesson: 32
+  nouns:
+    types: [U-Deklination]
+
+- lesson: 33
+  verbs:
+    forms:
+      - {modus: konj, tempus: praes, genus_verbi: akt}
+
+- lesson: 34
+  verbs:
+    forms:
+      - {modus: konj, tempus: perf, genus_verbi: akt}
+
+- lesson: 35
+  nouns:
+    types: [Pronomen-ipse]
+
+- lesson: 36
+  nouns:
+    types: [Numerale-milia]
+
+- lesson: 37
+  nouns:
+    types: [Pronomen-idem]
+  verbs:
+    forms:
+      - {modus: konj, tempus: praes, genus_verbi: pass}
+      - {modus: konj, tempus: impf, genus_verbi: pass}
+
+- lesson: 38
+  verbs:
+    forms:
+      - {modus: konj, tempus: perf, genus_verbi: pass}
+      - {modus: konj, tempus: plusq, genus_verbi: pass}
+
+- later: true
+  nouns:
+    forms:
+      - {grad: [komp, sup], numerus: [sg, pl], genus: [m, f, n]}
+      - {adverb: adv, grad: [komp, sup]}
+  verbs:
+    forms:
+      - {modus: inf, tempus: fut, genus_verbi: akt}
+      - {modus: inf, tempus: fut, genus_verbi: pass}
+      - {modus: imp, tempus: fut, genus_verbi: akt}
+      - {modus: imp, tempus: praes, genus_verbi: pass}
+      - {modus: part, tempus: fut, genus_verbi: akt}
+      - {modus: part, tempus: perf, genus_verbi: akt}
+      - {modus: ger}
+      - {modus: gerv}
+      - {modus: sup}

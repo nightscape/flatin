@@ -1,46 +1,126 @@
-# Placeholder: one entry that claims every form and every type for lesson 1,
-# so the course range changes nothing until the real progression lands.
+# Which lesson of volume 1 introduces which form and which type.
+#
+# A form belongs to the lesson of the most specific selector that matches it;
+# `{}` is the base of the earliest lesson. A type belongs to the lesson that
+# introduces its paradigm, so a word can be known before it can be inflected.
+
 - lesson: 1
   nouns:
     forms:
       - {}
-    types:
-      - A-Deklination
-      - Adjektiv-a-o
-      - Adjektiv-a-o-er
-      - Adjektiv-dreiendig
-      - Adjektiv-zweiendig
-      - E-Deklination
-      - E-Deklination-Konsonantstamm
-      - Konsonantische-Deklination-i-mf
-      - Konsonantische-Deklination-i-n
-      - Konsonantische-Deklination-mf
-      - Konsonantische-Deklination-n
-      - Numerale-duo
-      - Numerale-milia
-      - Numerale-tres
-      - Numerale-unus
-      - O-Deklination-maskulinum
-      - O-Deklination-neutrum
-      - Pronomen-hic
-      - Pronomen-idem
-      - Pronomen-ille
-      - Pronomen-ipse
-      - Pronomen-is
-      - Pronomen-iste
-      - Pronomen-personal
-      - Pronomen-qui
-      - Pronomen-quis
-      - U-Deklination
+    types: [A-Deklination, O-Deklination-maskulinum]
   verbs:
     forms:
-      - {}
+      - {modus: ind, tempus: praes, genus_verbi: akt, person: "3", numerus: sg}
+      - {modus: inf, tempus: praes, genus_verbi: akt}
+    types: [A-Konjugation, E-Konjugation, I-Konjugation]
+
+- lesson: 2
+  nouns:
+    forms:
+      - {kasus: nom, numerus: pl}
+  verbs:
+    forms:
+      - {modus: ind, tempus: praes, genus_verbi: akt, person: "3", numerus: pl}
+
+- lesson: 3
+  nouns:
+    forms:
+      - {kasus: akk}
+    types: [O-Deklination-neutrum]
+
+- lesson: 4
+  nouns:
+    forms:
+      - {kasus: dat}
+  verbs:
+    forms:
+      - {modus: ind, tempus: praes, genus_verbi: akt}
+
+- lesson: 5
+  nouns:
+    forms:
+      - {kasus: vok}
+  verbs:
+    forms:
+      - {modus: imp, tempus: praes, genus_verbi: akt}
+
+- lesson: 6
+  nouns:
+    forms:
+      - {kasus: gen}
+  verbs:
+    types: [esse-Typ]
+
+- lesson: 7
+  nouns:
+    types: [Adjektiv-a-o]
+
+- lesson: 8
+  nouns:
+    forms:
+      - {kasus: abl}
+
+- lesson: 9
+  nouns:
+    types: [Adjektiv-a-o-er]
+
+- lesson: 10
+  verbs:
+    forms:
+      - {modus: ind, tempus: impf, genus_verbi: akt}
+    types: [esse-Kompositum]
+
+- lesson: 11
+  nouns:
+    types: [Pronomen-personal]
+  verbs:
+    types: [Konsonantische, Mischkonjugation]
+
+- lesson: 12
+  nouns:
+    types: [Konsonantische-Deklination-mf]
+  verbs:
+    types: [Unregelmäßig]
+
+- lesson: 13
+  verbs:
+    forms:
+      - {modus: ind, tempus: perf, genus_verbi: akt}
+
+- lesson: 14
+  nouns:
+    types: [Konsonantische-Deklination-n]
+  verbs:
+    forms:
+      - {modus: inf, tempus: perf, genus_verbi: akt}
+
+- lesson: 15
+  nouns:
+    types: [Pronomen-is]
+  verbs:
+    forms:
+      - {modus: ind, tempus: plusq, genus_verbi: akt}
+
+- lesson: 16
+  nouns:
     types:
-      - A-Konjugation
-      - E-Konjugation
-      - I-Konjugation
-      - Konsonantische
-      - Mischkonjugation
-      - Unregelmäßig
-      - esse-Kompositum
-      - esse-Typ
+      - Konsonantische-Deklination-i-mf
+      - Konsonantische-Deklination-i-n
+      - Pronomen-qui
+
+- lesson: 17
+  verbs:
+    forms:
+      - {modus: ind, tempus: fut, genus_verbi: akt}
+
+- lesson: 18
+  nouns:
+    types: [Adjektiv-zweiendig, Adjektiv-dreiendig]
+
+- lesson: 20
+  nouns:
+    types: [Numerale-unus, Numerale-duo, Numerale-tres]
+  verbs:
+    forms:
+      - {modus: ind, tempus: fut2, genus_verbi: akt}

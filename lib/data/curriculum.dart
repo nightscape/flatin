@@ -44,12 +44,13 @@ final class Curriculum {
       final where = 'curriculum file ${i + 1}';
       for (final entry in loadYaml(yamlSources[i]) as YamlList) {
         final map = entry as YamlMap;
-        final lesson = map['lesson'] as int;
-        if (lesson < 1 || lesson > lastLesson) {
+        final later = map['later'] == true;
+        final lesson = later ? laterLesson : map['lesson'] as int;
+        if (!later && (lesson < 1 || lesson > lastLesson)) {
           throw StateError('$where: lesson $lesson is outside 1..$lastLesson');
         }
         for (final fileId in map.keys.cast<String>()) {
-          if (fileId == 'lesson') continue;
+          if (fileId == 'lesson' || fileId == 'later') continue;
           final shape = shapes[fileId];
           if (shape == null) {
             throw StateError('$where, lesson $lesson: no data file "$fileId"');

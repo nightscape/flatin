@@ -82,14 +82,14 @@ void main() {
     expect(range.contains(2), isFalse);
     expect(range.contains(8), isFalse);
     expect(LessonRange.fromJson(range.toJson()), range);
-    expect(LessonRange.full, LessonRange(1, lastLesson));
+    expect(LessonRange.full, LessonRange(1, laterLesson));
   });
 
   test('a lesson range outside the scale is a programming error', () {
     expect(() => LessonRange(0, 5), throwsA(isA<AssertionError>()));
     expect(() => LessonRange(5, 3), throwsA(isA<AssertionError>()));
     expect(
-      () => LessonRange(1, lastLesson + 1),
+      () => LessonRange(1, laterLesson + 1),
       throwsA(isA<AssertionError>()),
     );
   });

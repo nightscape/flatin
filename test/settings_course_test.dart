@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:latin_practice/data/lesson_data.dart';
 import 'package:latin_practice/data/settings_conversion.dart';
 import 'package:latin_practice/models/lesson_range.dart';
 import 'package:latin_practice/models/settings.dart';
@@ -14,7 +13,7 @@ void main() {
       expect(settings.courseWords, LessonRange.full);
       expect(settings.courseGrammar, LessonRange.full);
       expect(settings.grammarFollowsWords, isTrue);
-      expect(settings.effectiveGrammar, LessonRange(1, lastLesson));
+      expect(settings.effectiveGrammar, LessonRange(1, laterLesson));
     });
 
     test('while linked, the grammar range trails the word range', () {
