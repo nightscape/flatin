@@ -163,6 +163,46 @@ types:
       abl.pl.n: "{stamm}ibus"
       vok.pl.n: "{stamm}ia"
 
+  Konsonantstamm-Endungen:
+    abstract: true
+    forms:
+      nom.sg.m: "{nom_m}"
+      gen.sg.m: "{stamm}is"
+      dat.sg.m: "{stamm}ī"
+      akk.sg.m: "{stamm}em"
+      abl.sg.m: "{stamm}e"
+      vok.sg.m: "{nom_m}"
+      nom.pl.m: "{stamm}ēs"
+      gen.pl.m: "{stamm}um"
+      dat.pl.m: "{stamm}ibus"
+      akk.pl.m: "{stamm}ēs"
+      abl.pl.m: "{stamm}ibus"
+      vok.pl.m: "{stamm}ēs"
+      nom.sg.f: "{nom_m}"
+      gen.sg.f: "{stamm}is"
+      dat.sg.f: "{stamm}ī"
+      akk.sg.f: "{stamm}em"
+      abl.sg.f: "{stamm}e"
+      vok.sg.f: "{nom_m}"
+      nom.pl.f: "{stamm}ēs"
+      gen.pl.f: "{stamm}um"
+      dat.pl.f: "{stamm}ibus"
+      akk.pl.f: "{stamm}ēs"
+      abl.pl.f: "{stamm}ibus"
+      vok.pl.f: "{stamm}ēs"
+      nom.sg.n: "{nom_m}"
+      gen.sg.n: "{stamm}is"
+      dat.sg.n: "{stamm}ī"
+      akk.sg.n: "{nom_m}"
+      abl.sg.n: "{stamm}e"
+      vok.sg.n: "{nom_m}"
+      nom.pl.n: "{stamm}a"
+      gen.pl.n: "{stamm}um"
+      dat.pl.n: "{stamm}ibus"
+      akk.pl.n: "{stamm}a"
+      abl.pl.n: "{stamm}ibus"
+      vok.pl.n: "{stamm}a"
+
   3-Endungen-Partizip:
     abstract: true
     inherits_from: 3-Endungen
@@ -369,6 +409,25 @@ types:
       nom_n: {from: nom_n, remove: "", display: Nominativ neutrum}
       sup:   {from: superlativ, remove: "us", default: "{nom_m}rim", display: Superlativstamm}
 
+  Adjektiv-einendig-i:
+    inherits_from: Adjektiv-3
+    stems:
+      stamm: {from: gen, remove: "is", display: Stamm}
+      nom_m: {from: nom, remove: "", display: Nominativ}
+      nom_f: {template: "{nom_m}", display: Nominativ}
+      nom_n: {template: "{nom_m}", display: Nominativ}
+
+  Adjektiv-einendig-Konsonantstamm:
+    stems:
+      stamm:  {from: gen, remove: "is", display: Stamm}
+      nom_m:  {from: nom, remove: "", display: Nominativ}
+      kstamm: {from: komparativ, remove: "or", default: "{stamm}i", display: Komparativstamm}
+      sup:    {from: superlativ, remove: "us", default: "{stamm}issim", display: Superlativstamm}
+    delegate:
+      - {name: pos,  type: Konsonantstamm-Endungen, bind: {stamm: stamm, nom_m: nom_m}, set: {grad: pos}}
+      - {name: komp, type: Komparativ-Endungen, bind: {kstamm: kstamm}, set: {grad: komp}}
+      - {name: sup,  type: a-o-Endungen, bind: {stamm: sup}, set: {grad: sup}}
+
   # Pronouns and numerals: one type per lexeme, every form on the item.
   Pronomen-personal: {}
   Pronomen-is: {}
@@ -388,6 +447,7 @@ types:
 # resolves below its anchor. The loader ignores this block.
 shared:
   ohne_steigerung: &ohne_steigerung [{grad: komp}, {grad: sup}, {adverb: adv}]
+  ohne_neutrum_plural: &ohne_neutrum_plural [{grad: komp}, {grad: sup}, {kasus: nom, numerus: pl, genus: n}, {kasus: akk, numerus: pl, genus: n}, {kasus: vok, numerus: pl, genus: n}]
 
 items:
   - translation: "Der Hausherr/Herr"
@@ -1731,3 +1791,33 @@ items:
   - type: Adjektiv-dreiendig
     translation: "scharf, heftig"
     parts: {nom: "ācer", nom_f: "ācris", nom_n: "ācre"}
+  - type: Adjektiv-einendig-i
+    translation: "glücklich"
+    parts: {nom: "fēlīx", gen: "fēlīcis"}
+  - type: Adjektiv-einendig-i
+    translation: "gewaltig, riesig"
+    parts: {nom: "ingēns", gen: "ingentis"}
+    forms: {adv.pos: "ingenter"}
+  - type: Adjektiv-einendig-i
+    translation: "unglücklich"
+    parts: {nom: "īnfēlix", gen: "īnfēlīcis"}
+  - type: Adjektiv-einendig-i
+    translation: "klug, umsichtig"
+    parts: {nom: "prūdēns", gen: "prūdentis"}
+    forms: {adv.pos: "prūdenter"}
+  - type: Adjektiv-einendig-i
+    translation: "milde, gnädig"
+    parts: {nom: "clēmēns", gen: "clēmentis"}
+    forms: {adv.pos: "clēmenter"}
+  - type: Adjektiv-einendig-Konsonantstamm
+    translation: "arm"
+    parts: {nom: "pauper", gen: "pauperis"}
+    absent: *ohne_neutrum_plural
+  - type: Adjektiv-einendig-Konsonantstamm
+    translation: "reich"
+    parts: {nom: "dīves", gen: "dīvitis"}
+    absent: *ohne_neutrum_plural
+  - type: Adjektiv-einendig-Konsonantstamm
+    translation: "alt"
+    parts: {nom: "vetus", gen: "veteris"}
+    absent: [{grad: komp}, {grad: sup}]

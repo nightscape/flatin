@@ -339,7 +339,7 @@ void main() {
       expect(offenders, isEmpty, reason: offenders.take(10).join('\n'));
     });
 
-    test('the zero-ending forms split 166 dictionary forms / 2245 questions',
+    test('the zero-ending forms split 174 dictionary forms / 2293 questions',
         () async {
       var zeroEnding = 0;
       final dictionaryForms = <String>[];
@@ -357,9 +357,9 @@ void main() {
           }
         }
       }
-      expect(zeroEnding, 2411);
-      expect(dictionaryForms, hasLength(166));
-      expect(withQuestion, hasLength(2245));
+      expect(zeroEnding, 2467);
+      expect(dictionaryForms, hasLength(174));
+      expect(withQuestion, hasLength(2293));
       expect(
         dictionaryForms.map((e) => e.split(' ').first).toSet().toList()..sort(),
         _dictionaryFormItems,
@@ -455,6 +455,7 @@ const _dictionaryFormItems = [
     'nouns:clades',
     'nouns:clamor',
     'nouns:classis',
+    'nouns:clemens',
     'nouns:comes',
     'nouns:coniunx',
     'nouns:consul',
@@ -467,9 +468,11 @@ const _dictionaryFormItems = [
     'nouns:dens',
     'nouns:dignitas',
     'nouns:discrimen',
+    'nouns:dives',
     'nouns:dolor',
     'nouns:dux',
     'nouns:facinus',
+    'nouns:felix',
     'nouns:finis',
     'nouns:flos',
     'nouns:foedus',
@@ -486,6 +489,8 @@ const _dictionaryFormItems = [
     'nouns:immortalis',
     'nouns:imperator',
     'nouns:incredibilis',
+    'nouns:infelix',
+    'nouns:ingens',
     'nouns:iter',
     'nouns:iuvenis',
     'nouns:labor',
@@ -522,6 +527,7 @@ const _dictionaryFormItems = [
     'nouns:os',
     'nouns:pars',
     'nouns:pater',
+    'nouns:pauper',
     'nouns:pax',
     'nouns:pecus',
     'nouns:pes',
@@ -530,6 +536,7 @@ const _dictionaryFormItems = [
     'nouns:pons',
     'nouns:potestas',
     'nouns:princeps',
+    'nouns:prudens',
     'nouns:pulcher',
     'nouns:pulchritudo',
     'nouns:pulvis',
@@ -555,6 +562,7 @@ const _dictionaryFormItems = [
     'nouns:uxor',
     'nouns:vester',
     'nouns:vestis',
+    'nouns:vetus',
     'nouns:virgo',
     'nouns:virtus',
     'nouns:voluptas',

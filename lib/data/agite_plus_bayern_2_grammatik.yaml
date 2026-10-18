@@ -90,6 +90,10 @@
       - {modus: konj, tempus: perf, genus_verbi: pass}
       - {modus: konj, tempus: plusq, genus_verbi: pass}
 
+- lesson: 39
+  nouns:
+    types: [Adjektiv-einendig-Konsonantstamm]
+
 - later: true
   nouns:
     forms:

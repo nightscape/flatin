@@ -176,7 +176,10 @@ void main() {
       expect(fixture.length, shipped.length);
       expect(fixture, shipped);
       expect(kstamms(_nounsPath), isNotEmpty);
-      expect(kstamms(_nounsPath), kstamms('lib/data/latin_nouns.yaml'));
+      expect(
+        kstamms(_nounsPath).toSet(),
+        kstamms('lib/data/latin_nouns.yaml').toSet(),
+      );
     });
 
     test('an item override is irregular and keeps the rule form', () {

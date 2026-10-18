@@ -241,11 +241,11 @@ void main() {
     // present (absēns, praesēns).
     expect(
       [generatedCount, generatedSeamCount, composedCount, regularCount],
-      [74703, 3867, 6887, 87],
+      [75357, 3867, 6887, 90],
     );
     expect(
       [regularPlainCount, regularSeamCount, regularComposedCount],
-      [81, 1, 5],
+      [84, 1, 5],
     );
     expect(
       regularPlainCount + regularSeamCount + regularComposedCount,

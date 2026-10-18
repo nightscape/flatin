@@ -181,11 +181,13 @@ final firstTaught = <Pin>[
   type(36, 'nouns', 'Numerale-milia', 'Zahlwort mīlia'),
   type(37, 'nouns', 'Pronomen-idem', 'Pronomen īdem'),
   form(38, 'verbs', 'konj.perf.pass.3.sg', 'Konjunktiv Perfekt Passiv'),
+  type(39, 'nouns', 'Adjektiv-einendig-Konsonantstamm',
+      'einendige Adjektive der Konsonantenstämme'),
 ];
 
 /// Lessons whose grammar is syntax or vocabulary only: they add no form and
 /// no type to the practice data.
-const syntaxOnlyLessons = [19, 21, 25, 31, 39, 40];
+const syntaxOnlyLessons = [19, 21, 25, 31, 40];
 
 /// Whether the course never reaches [key]: a comparison degree, or one of
 /// the verb families in [laterFamilies].

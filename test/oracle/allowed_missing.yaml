@@ -54,3 +54,11 @@
     - inf.praes.pass
     - part.perf.pass.*.*.*
   reason: "the shipped table keeps the impersonal passive and the perfect participle of eo; Collatinus lists neither"
+- direction: ours
+  types: [Adjektiv-einendig-Konsonantstamm]
+  keys: ["*.*.*.komp", "*.*.*.sup"]
+  reason: "the comparison of vetus, dives and pauper is irregular (vetustior, veterrimus, ditior, pauperrimus); the data marks it absent until it gets explicit forms"
+- direction: ours
+  types: [Adjektiv-einendig-Konsonantstamm]
+  keys: [nom.pl.n.pos, akk.pl.n.pos, vok.pl.n.pos]
+  reason: "dives and pauper have no neuter plural in use; Collatinus lists one"

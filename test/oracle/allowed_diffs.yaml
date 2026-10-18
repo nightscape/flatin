@@ -31,3 +31,13 @@
 - keys: [ind.praes.pass.2.sg, imp.praes.pass.2.sg, imp.fut.akt.2.sg, imp.fut.akt.3.sg, imp.fut.akt.2.pl]
   item: afferre
   reason: "Collatinus files the syncopated ferris as an irregular of `fero` alone, and `fero` leaves the other two morphs to `lego`, so the compound keeps the unsyncopated forms"
+
+- keys: [nom.sg.n.pos, akk.sg.n.pos, vok.sg.n.pos]
+  types: [Adjektiv-einendig-i]
+  reason: "a one-ending adjective has the nominative of the masculine in the neuter singular; the Collatinus models `fortis` (neuter -e) and `infans` (neuter written as the stem plus ns) give another form"
+- keys: [adv.komp, adv.sup]
+  item: felix
+  reason: "Collatinus grades the adverb feliciter from the stem felicit- (felicitius), ours from the comparative stem felic-"
+- keys: [adv.komp, adv.sup]
+  item: infelix
+  reason: "Collatinus grades the adverb infeliciter from the stem infelicit- (infelicitius), ours from the comparative stem infelic-"

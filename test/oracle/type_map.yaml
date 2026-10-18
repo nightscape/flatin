@@ -37,6 +37,14 @@ sample:
 shipped:
   nouns:
     altus: [altus, altē]
+    felix: [fēlix, fēlīcĭter]
+    infelix: [infēlix, infēlīcĭter]
+    ingens: [ingens]
+    prudens: [prūdens, prūdenter]
+    clemens: [clēmens, clēmenter]
+    pauper: [paupĕr]
+    dives: [dīvĕs]
+    vetus: [vĕtŭs]
   verbs:
     esse: [sŭm]
     abesse: [absŭm]
@@ -85,7 +93,10 @@ models:
   mare: {types: [i-Deklination-n, Konsonantische-Deklination-i-n], noun: {ends: e, cut: 1, genitive: is}}
   doctus: {types: [Adjektiv-a-o], adjective: {ends: us, cut: 2, f: a, n: um}}
   miser: {types: [Adjektiv-a-o-er], adjective: {ends: er, cut: 0, f: a, n: um}}
-  fortis: {types: [Adjektiv-zweiendig], adjective: {ends: is, cut: 2, n: e}}
+  fortis: {types: [Adjektiv-zweiendig, Adjektiv-einendig-i], adjective: {ends: is, cut: 2, n: e}}
+  infans: {types: [Adjektiv-einendig-i], noun: {ends: ns, cut: 0, genitive: is}}
+  diues: {types: [Adjektiv-einendig-Konsonantstamm]}
+  uetus: {types: [Adjektiv-einendig-Konsonantstamm]}
   acer: {types: [Adjektiv-dreiendig], lemmas: 4, adjective: {ends: er, cut: 2, f: ris, n: re, radical: none}}
   hic: {types: [Pronomen]}
 

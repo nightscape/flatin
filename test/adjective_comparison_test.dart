@@ -24,6 +24,7 @@ const _graded = {
   'callidus',
   'carus',
   'celer',
+  'clemens',
   'clarus',
   'crudelis',
   'cruentus',
@@ -32,11 +33,14 @@ const _graded = {
   'egregius',
   'ferus',
   'finitimus',
+  'felix',
   'fortis',
   'graecus',
   'gravis',
   'humanus',
   'immortalis',
+  'infelix',
+  'ingens',
   'impius',
   'incertus',
   'incredibilis',
@@ -66,6 +70,7 @@ const _graded = {
   'praeclarus',
   'propinquus',
   'publicus',
+  'prudens',
   'pulcher',
   'quantus',
   'reliquus',
@@ -135,7 +140,7 @@ void main() {
 
   test('exactly the graded adjectives have comparison keys', () async {
     final adjectives = await _adjectives();
-    expect(adjectives.length, 89);
+    expect(adjectives.length, 97);
     final graded = {
       for (final item in adjectives)
         if (item.formOrder.any(_comparisonKey.hasMatch)) _shortId(item),

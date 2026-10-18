@@ -94,6 +94,8 @@ const eselWordClasses = <String, String>{
   'Adjektiv-a-o': 'adjektiv',
   'Adjektiv-a-o-er': 'adjektiv',
   'Adjektiv-dreiendig': 'adjektiv',
+  'Adjektiv-einendig-i': 'adjektiv',
+  'Adjektiv-einendig-Konsonantstamm': 'adjektiv',
   'Adjektiv-zweiendig': 'adjektiv',
   'Pronomen-hic': 'pronomen',
   'Pronomen-idem': 'pronomen',
