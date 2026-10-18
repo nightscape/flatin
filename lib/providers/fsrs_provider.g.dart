@@ -203,7 +203,7 @@ final class PracticableItemsByTypeProvider
 }
 
 String _$practicableItemsByTypeHash() =>
-    r'0ed346309b880c3cc0d17f214068acaedfc9fbbc';
+    r'bba275e933a85544902c953d2478c7e58dc0a60c';
 
 /// Provider for due items by exercise type
 

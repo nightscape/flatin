@@ -7,6 +7,22 @@ import 'settings.dart';
 /// been taught, the overrides say where the learner overruled that.
 ///
 /// Precedence is forced-off, then forced-on, then the course range.
+/// Why the course does not practise something yet.
+sealed class CourseGap {
+  const CourseGap();
+}
+
+/// The lesson lies outside the chosen range, to its left or right.
+final class OutsideRange extends CourseGap {
+  const OutsideRange();
+}
+
+/// The grammar range will reach it at [lesson].
+final class FromLesson extends CourseGap {
+  final int lesson;
+  const FromLesson(this.lesson);
+}
+
 final class CourseFilter {
   final Settings settings;
   final Curriculum curriculum;
@@ -37,16 +53,20 @@ final class CourseFilter {
         Override.none => typeInRange(dataFileId, typeName),
       };
 
+  /// The form's own verdict: its override, else the course. A switched-off
+  /// axis value is not part of it.
+  bool formSelected(String dataFileId, FormLabel label) =>
+      switch (settings.overrideOfForm(dataFileId, label.key)) {
+        Override.forcedOff => false,
+        Override.forcedOn => true,
+        Override.none => formInRange(dataFileId, label),
+      };
+
   /// A switched-off axis value hides every form that names it, whatever the
   /// form's own override says.
-  bool formPracticed(String dataFileId, FormLabel label) {
-    if (settings.offFeaturesOf(dataFileId, label).isNotEmpty) return false;
-    return switch (settings.overrideOfForm(dataFileId, label.key)) {
-      Override.forcedOff => false,
-      Override.forcedOn => true,
-      Override.none => formInRange(dataFileId, label),
-    };
-  }
+  bool formPracticed(String dataFileId, FormLabel label) =>
+      settings.offFeaturesOf(dataFileId, label).isEmpty &&
+      formSelected(dataFileId, label);
 
   Set<FormKey> practicedForms(String dataFileId, List<FormLabel> labels) => {
         for (final label in labels)
@@ -56,14 +76,40 @@ final class CourseFilter {
   bool itemPracticed(PracticeItem item) =>
       wordPracticed(item) && typePracticed(item.dataFileId, item.type);
 
-  /// The live counts of the course card: the practised words and, per data
-  /// file, the practised forms they add up to.
+  /// Whether practice offers the item: it is practised and has a form to ask.
+  bool reachesPractice(PracticeItem item) =>
+      itemPracticed(item) &&
+      practicedForms(item.dataFileId, item.formLabels).isNotEmpty;
+
+  CourseGap? wordGap(PracticeItem item) {
+    if (!wordInRange(item)) return const OutsideRange();
+    return typeGap(item.dataFileId, item.type, lessons.lessonNumberOf(item));
+  }
+
+  /// [wordLesson] lifts the lesson a type is first practised with its words.
+  CourseGap? typeGap(String dataFileId, String typeName, [int wordLesson = 1]) {
+    if (typeInRange(dataFileId, typeName)) return null;
+    return _grammarGap(curriculum.typeLesson(dataFileId, typeName), wordLesson);
+  }
+
+  CourseGap? formGap(String dataFileId, FormLabel label) {
+    if (formInRange(dataFileId, label)) return null;
+    return _grammarGap(curriculum.formLesson(dataFileId, label.key), 1);
+  }
+
+  CourseGap _grammarGap(int grammarLesson, int wordLesson) =>
+      grammarLesson > settings.effectiveGrammar.to
+          ? FromLesson(grammarLesson > wordLesson ? grammarLesson : wordLesson)
+          : const OutsideRange();
+
+  /// The live counts of the course card: the words practice offers and, per
+  /// data file, the practised forms they add up to.
   ({int words, int nounForms, int verbForms}) summary(
     List<PracticeItem> items,
   ) {
     var words = 0, nounForms = 0, verbForms = 0;
     for (final item in items) {
-      if (!itemPracticed(item)) continue;
+      if (!reachesPractice(item)) continue;
       words++;
       final forms = practicedForms(item.dataFileId, item.formLabels).length;
       if (item.dataFileId == 'nouns') {

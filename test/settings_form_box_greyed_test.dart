@@ -1,11 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/data/settings_conversion.dart';
 
 import 'support/stored_settings.dart';
-
-Color? titleColor(WidgetTester tester, Finder tile) =>
-    (tester.widget<CheckboxListTile>(tile).title! as Text).style?.color;
 
 void main() {
   testWidgets('the label of a feature-off form row is greyed', (tester) async {
@@ -20,7 +16,7 @@ void main() {
       'disabledTypes': <String, List<String>>{},
       'inputStrategyIds': <String, String>{},
       'deselectedWords': <String>[],
-    });
+    }, page: 'verbs');
     final off = formTile('verbs', 'ind.perf.akt.1.sg');
     final on = formTile('verbs', 'ind.praes.akt.1.sg');
     expect(

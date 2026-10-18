@@ -122,7 +122,7 @@ void main() {
       curriculum.taughtForm('verbs', 'ger.gen', LessonRange(1, lastLesson)),
       isFalse,
     );
-    expect(curriculum.taughtForm('verbs', 'ger.gen', LessonRange.full), isTrue);
+    expect(curriculum.taughtForm('verbs', 'ger.gen', LessonRange.fullGrammar), isTrue);
   });
 }
 

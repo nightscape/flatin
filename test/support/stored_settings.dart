@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/screens/settings_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -13,11 +14,14 @@ Future<Map<String, dynamic>> storedSettings() async {
       as Map<String, dynamic>;
 }
 
-/// Opens the settings screen on an app whose stored settings are [stored].
+/// Opens the settings screen on an app whose stored settings are [stored],
+/// and the detail page [page] ('words', 'nouns', 'verbs', 'input') if given.
 Future<void> openSettingsWith(
   WidgetTester tester,
-  Map<String, dynamic> stored,
-) async {
+  Map<String, dynamic> stored, {
+  String? page,
+  List<Override> overrides = const [],
+}) async {
   SharedPreferences.setMockInitialValues({
     'practice_settings': jsonEncode(stored),
   });
@@ -28,12 +32,24 @@ Future<void> openSettingsWith(
   await tester.pumpWidget(wrapInApp(
     const SettingsScreen(),
     forcedLocale: const Locale('de'),
+    overrides: overrides,
   ));
+  await letItLoad(tester);
+  if (page != null) await openSettingsPage(tester, page);
+}
+
+Future<void> openSettingsPage(WidgetTester tester, String page) async {
+  await tester.tap(find.byKey(Key('settings.tile.$page')));
+  await tester.pumpAndSettle();
   await letItLoad(tester);
 }
 
 bool isChecked(WidgetTester tester, Finder tile) =>
     tester.widget<CheckboxListTile>(tile).value!;
+
+/// The colour a row paints its label in: the oracle for "greyed".
+Color? titleColor(WidgetTester tester, Finder tile) =>
+    (tester.widget<CheckboxListTile>(tile).title! as Text).style?.color;
 
 Finder formTile(String dataFileId, String key) =>
     find.byKey(Key('form.$dataFileId.$key'));

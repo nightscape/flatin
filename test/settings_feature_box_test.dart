@@ -15,7 +15,7 @@ void main() {
       'disabledTypes': <String, List<String>>{},
       'inputStrategyIds': <String, String>{},
       'deselectedWords': <String>[],
-    });
+    }, page: 'verbs');
     final feature = find.byKey(const Key('feature.verbs.tempus.perf'));
     expect(isChecked(tester, feature), isTrue);
 

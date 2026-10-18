@@ -67,14 +67,6 @@ class LessonData {
     if (book == null) throw StateError('no volume lists lesson $lesson');
     return book;
   }
-
-  /// Whether [item] should be practiced; [deselectedWords] holds the words
-  /// the user switched off, stored without macrons, so two lemmas with the
-  /// same letters are switched off together.
-  bool includes(PracticeItem item, Set<String> deselectedWords) {
-    if (deselectedWords.isEmpty) return true;
-    return !deselectedWords.contains(normalizeDiacritics(item.lemma));
-  }
 }
 
 /// Strips Latin macrons so words can be compared across data files.

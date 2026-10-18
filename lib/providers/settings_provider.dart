@@ -1,6 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
+import '../models/lesson_range.dart';
 import '../models/settings.dart';
 import '../data/asset_text.dart';
 import '../data/lesson_data.dart';
@@ -98,14 +99,6 @@ class SettingsNotifier extends _$SettingsNotifier {
     await _saveSettings(newSettings);
   }
 
-  /// Enable all forms for a data file
-  Future<void> enableAllForms(String dataFileId) async {
-    final currentSettings = await future;
-    final newSettings = currentSettings.enableAllForms(dataFileId);
-    state = AsyncValue.data(newSettings);
-    await _saveSettings(newSettings);
-  }
-
   /// Toggle a type's enabled state
   Future<void> toggleType(
     String dataFileId,
@@ -115,14 +108,6 @@ class SettingsNotifier extends _$SettingsNotifier {
     final currentSettings = await future;
     final newSettings =
         currentSettings.toggleType(dataFileId, typeName, inRange: inRange);
-    state = AsyncValue.data(newSettings);
-    await _saveSettings(newSettings);
-  }
-
-  /// Enable all types for a data file
-  Future<void> enableAllTypes(String dataFileId) async {
-    final currentSettings = await future;
-    final newSettings = currentSettings.enableAllTypes(dataFileId);
     state = AsyncValue.data(newSettings);
     await _saveSettings(newSettings);
   }
@@ -153,18 +138,20 @@ class SettingsNotifier extends _$SettingsNotifier {
     await _saveSettings(newSettings);
   }
 
-  /// Toggle all words in a lesson on or off.
-  Future<void> toggleLessonWords(List<String> rawLessonWords) async {
-    final currentSettings = await future;
-    final newSettings = currentSettings.toggleLessonWords(rawLessonWords);
-    state = AsyncValue.data(newSettings);
-    await _saveSettings(newSettings);
-  }
+  Future<void> setWordRange(LessonRange range) =>
+      _update((s) => s.withWordRange(range));
 
-  /// Select every word.
-  Future<void> selectAllWords() async {
-    final currentSettings = await future;
-    final newSettings = currentSettings.selectAllWords();
+  Future<void> setGrammarRange(LessonRange range) =>
+      _update((s) => s.withGrammarRange(range));
+
+  Future<void> setGrammarFollowsWords(bool follows) =>
+      _update((s) => s.withGrammarFollowsWords(follows));
+
+  /// Drops every manual choice; the course ranges stay.
+  Future<void> clearOverrides() => _update((s) => s.clearOverrides());
+
+  Future<void> _update(Settings Function(Settings) change) async {
+    final newSettings = change(await future);
     state = AsyncValue.data(newSettings);
     await _saveSettings(newSettings);
   }

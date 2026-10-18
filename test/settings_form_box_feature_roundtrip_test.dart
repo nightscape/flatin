@@ -17,7 +17,7 @@ void main() {
       'disabledTypes': <String, List<String>>{},
       'inputStrategyIds': <String, String>{},
       'deselectedWords': <String>[],
-    });
+    }, page: 'verbs');
     final tile = formTile('verbs', 'ind.perf.akt.1.sg');
     final feature = find.byKey(const Key('feature.verbs.tempus.perf'));
     expect(isChecked(tester, tile), isFalse);

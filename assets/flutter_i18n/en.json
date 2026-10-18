@@ -26,17 +26,29 @@
   },
   "settings": {
     "title": "Settings",
-    "enableAll": "Enable All",
     "nouns": "Nouns (Deklination)",
     "verbs": "Verbs (Konjugation)",
     "error": "Error: {error}",
     "inputMode": "Input mode:",
-    "lessons": "Lessons",
-    "otherWords": "Other words",
     "types": "Types",
     "forms": "Forms",
     "features": "Features",
-    "featureOff": "{value} is switched off"
+    "featureOff": "{value} is switched off",
+    "wordsPage": "Words",
+    "inputPage": "Input",
+    "searchWords": "Search words",
+    "outsideRange": "outside the range",
+    "fromLesson": "from lesson {lesson}",
+    "kursstand": {
+      "title": "Course position",
+      "words": "Words",
+      "grammar": "Grammar",
+      "follow": "Grammar follows the words",
+      "later": "later",
+      "volume": "volume {book}",
+      "summary": "{words} words, {nounForms} noun forms, {verbForms} verb forms",
+      "reset": "Reset to course position"
+    }
   },
   "wordClassification": {
     "declension": "Deklination",

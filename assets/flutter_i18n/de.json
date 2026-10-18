@@ -26,17 +26,29 @@
   },
   "settings": {
     "title": "Einstellungen",
-    "enableAll": "Alle aktivieren",
     "nouns": "Nomen (Deklination)",
     "verbs": "Verben (Konjugation)",
     "error": "Fehler: {error}",
     "inputMode": "Eingabemodus:",
-    "lessons": "Lektionen",
-    "otherWords": "Weitere Wörter",
     "types": "Typen",
     "forms": "Formen",
     "features": "Merkmale",
-    "featureOff": "{value} ist ausgeschaltet"
+    "featureOff": "{value} ist ausgeschaltet",
+    "wordsPage": "Wörter",
+    "inputPage": "Eingabe",
+    "searchWords": "Wörter suchen",
+    "outsideRange": "außerhalb des Bereichs",
+    "fromLesson": "ab Lektion {lesson}",
+    "kursstand": {
+      "title": "Kursstand",
+      "words": "Wörter",
+      "grammar": "Grammatik",
+      "follow": "Grammatik folgt den Wörtern",
+      "later": "später",
+      "volume": "Band {book}",
+      "summary": "{words} Wörter, {nounForms} Nomenformen, {verbForms} Verbformen",
+      "reset": "Auf Kursstand zurücksetzen"
+    }
   },
   "wordClassification": {
     "declension": "Deklination",

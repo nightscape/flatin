@@ -20,7 +20,7 @@ void main() {
       'deselectedWords': <String>[],
       settingsVersionField: settingsVersion,
     };
-    await openSettingsWith(tester, stored);
+    await openSettingsWith(tester, stored, page: 'verbs');
     final before = await storedSettings();
 
     final tile = formTile('verbs', 'ind.perf.akt.1.sg');

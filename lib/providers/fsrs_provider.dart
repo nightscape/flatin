@@ -49,10 +49,7 @@ Future<Map<String, List<PracticeItem>>> practicableItemsByType(Ref ref) async {
 
   final itemsByType = <String, List<PracticeItem>>{'nouns': [], 'verbs': []};
   for (final item in await loadAllPracticeItems()) {
-    if (!filter.itemPracticed(item)) continue;
-    if (filter.practicedForms(item.dataFileId, item.formLabels).isEmpty) {
-      continue;
-    }
+    if (!filter.reachesPractice(item)) continue;
     itemsByType[item.dataFileId]!.add(item);
   }
 

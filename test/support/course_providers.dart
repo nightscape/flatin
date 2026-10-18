@@ -55,3 +55,26 @@ Future<Curriculum> lateGenitiveCurriculum() async {
   yaml.write('- lesson: 30\n  nouns:\n    forms:\n      - {kasus: gen}\n');
   return Curriculum.parse([yaml.toString()], shapes);
 }
+
+/// A curriculum over the real data that teaches everything in lesson 1 except
+/// the type [typeName] of [dataFileId], which it teaches in [lesson].
+Future<Curriculum> lateTypeCurriculum(
+  String dataFileId,
+  String typeName,
+  int lesson,
+) async {
+  final shapes = await _shapes();
+  final yaml = StringBuffer('- lesson: 1\n');
+  for (final file in shapes.entries) {
+    final types = [
+      for (final type in file.value.types)
+        if (!(file.key == dataFileId && type == typeName)) type,
+    ];
+    yaml.writeln('  ${file.key}:');
+    yaml.writeln('    forms:');
+    yaml.writeln('      - {}');
+    yaml.writeln('    types: [${types.join(', ')}]');
+  }
+  yaml.write('- lesson: $lesson\n  $dataFileId:\n    types: [$typeName]\n');
+  return Curriculum.parse([yaml.toString()], shapes);
+}

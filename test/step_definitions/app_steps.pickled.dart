@@ -138,9 +138,9 @@ runFeatures() {
       await steps.iAmOnScreen(widgetTester, 'home');
       await steps.iOpenTheDrawer(widgetTester);
       await steps.iTapOn(widgetTester, 'drawer.settings');
-      await steps.iShouldSeeSection(widgetTester, 'settings.section.nouns');
-      await steps.iShouldSeeSection(widgetTester, 'settings.section.verbs');
-      await steps.iShouldSeeCheckboxes(widgetTester);
+      await steps.iShouldSeeSection(widgetTester, 'settings.section.kursstand');
+      await steps.iShouldSeeSection(widgetTester, 'settings.tile.words');
+      await steps.iShouldSeeSection(widgetTester, 'settings.tile.nouns');
       await steps.iTakeScreenshot(widgetTester, 'settings_screen_full');
     });
     testWidgets('User toggles a form setting', (
@@ -150,6 +150,7 @@ runFeatures() {
       await steps.iAmOnScreen(widgetTester, 'home');
       await steps.iOpenTheDrawer(widgetTester);
       await steps.iTapOn(widgetTester, 'drawer.settings');
+      await steps.iTapOn(widgetTester, 'settings.tile.nouns');
       await steps.iWaitForToLoad(widgetTester, 'settings');
       await steps.iToggleCheckbox(widgetTester);
       await steps.checkboxStateShouldChange(widgetTester);

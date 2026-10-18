@@ -51,56 +51,48 @@ final class LessonDataProvider
 
 String _$lessonDataHash() => r'a80bdf846f73c3cbd7507c890b86edcf9273b7be';
 
-/// Practisable words that no lesson lists, in YAML order and raw spelling.
-///
-/// Without them the settings screen has no checkbox for a word the app
-/// practises, so it could never be switched off.
+/// Every practice item of the loaded data files, nouns first.
 
-@ProviderFor(wordsOutsideLessons)
-const wordsOutsideLessonsProvider = WordsOutsideLessonsProvider._();
+@ProviderFor(practiceItems)
+const practiceItemsProvider = PracticeItemsProvider._();
 
-/// Practisable words that no lesson lists, in YAML order and raw spelling.
-///
-/// Without them the settings screen has no checkbox for a word the app
-/// practises, so it could never be switched off.
+/// Every practice item of the loaded data files, nouns first.
 
-final class WordsOutsideLessonsProvider
+final class PracticeItemsProvider
     extends
         $FunctionalProvider<
-          AsyncValue<List<String>>,
-          List<String>,
-          FutureOr<List<String>>
+          AsyncValue<List<PracticeItem>>,
+          List<PracticeItem>,
+          FutureOr<List<PracticeItem>>
         >
-    with $FutureModifier<List<String>>, $FutureProvider<List<String>> {
-  /// Practisable words that no lesson lists, in YAML order and raw spelling.
-  ///
-  /// Without them the settings screen has no checkbox for a word the app
-  /// practises, so it could never be switched off.
-  const WordsOutsideLessonsProvider._()
+    with
+        $FutureModifier<List<PracticeItem>>,
+        $FutureProvider<List<PracticeItem>> {
+  /// Every practice item of the loaded data files, nouns first.
+  const PracticeItemsProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'wordsOutsideLessonsProvider',
+        name: r'practiceItemsProvider',
         isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$wordsOutsideLessonsHash();
+  String debugGetCreateSourceHash() => _$practiceItemsHash();
 
   @$internal
   @override
-  $FutureProviderElement<List<String>> $createElement(
+  $FutureProviderElement<List<PracticeItem>> $createElement(
     $ProviderPointer pointer,
   ) => $FutureProviderElement(pointer);
 
   @override
-  FutureOr<List<String>> create(Ref ref) {
-    return wordsOutsideLessons(ref);
+  FutureOr<List<PracticeItem>> create(Ref ref) {
+    return practiceItems(ref);
   }
 }
 
-String _$wordsOutsideLessonsHash() =>
-    r'f3b7bd0808b361a62aa916976ab9f4ecafb2d70b';
+String _$practiceItemsHash() => r'c7a68183fa6e0e742032adc3adf5796fe0a51649';

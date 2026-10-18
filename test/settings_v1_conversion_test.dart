@@ -29,18 +29,22 @@ void main() {
         nounTypes: ['Konsonantische-Deklination-mf', 'Pronomen-is-maskulinum'],
         verbTypes: ['E-Konjugation (s-Perfekt)'],
       ),
+      page: 'nouns',
     );
 
     expect(isChecked(tester, formTile('nouns', 'gen.sg')), isFalse);
     expect(isChecked(tester, formTile('nouns', 'nom.sg')), isTrue);
-    expect(isChecked(tester, formTile('verbs', 'ind.praes.akt.1.sg')), isFalse);
-    expect(isChecked(tester, formTile('verbs', 'ind.praes.akt.2.sg')), isTrue);
-
     expect(isChecked(tester, typeTile('Konsonantische-Deklination-mf')),
         isFalse);
     expect(isChecked(tester, typeTile('A-Deklination')), isTrue);
     // One of the three old names is not the merged type.
     expect(isChecked(tester, typeTile('Pronomen-is')), isTrue);
+
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+    await openSettingsPage(tester, 'verbs');
+    expect(isChecked(tester, formTile('verbs', 'ind.praes.akt.1.sg')), isFalse);
+    expect(isChecked(tester, formTile('verbs', 'ind.praes.akt.2.sg')), isTrue);
     expect(isChecked(tester, typeTile('E-Konjugation')), isTrue);
 
     final stored = await storedSettings();
@@ -63,9 +67,13 @@ void main() {
           'E-Konjugation (s-Perfekt)',
         ],
       ),
+      page: 'nouns',
     );
 
     expect(isChecked(tester, typeTile('Pronomen-is')), isFalse);
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+    await openSettingsPage(tester, 'verbs');
     expect(isChecked(tester, typeTile('E-Konjugation')), isFalse);
     expect(isChecked(tester, typeTile('A-Konjugation')), isTrue);
   });

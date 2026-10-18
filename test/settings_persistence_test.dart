@@ -8,7 +8,6 @@ import 'package:latin_practice/data/lesson_data.dart';
 import 'package:latin_practice/data/settings_conversion.dart';
 import 'package:latin_practice/models/lesson_range.dart';
 import 'package:latin_practice/models/settings.dart';
-import 'package:latin_practice/providers/lesson_provider.dart';
 import 'package:latin_practice/providers/settings_provider.dart';
 
 void main() {
@@ -137,11 +136,8 @@ void main() {
     });
 
     final container = ProviderContainer();
-    final outside = await container.read(wordsOutsideLessonsProvider.future);
     final loaded = await container.read(settingsProvider.future);
 
-    // Every practice item belongs to a lesson, so conversion sees them all.
-    expect(outside, isEmpty);
     expect(loaded.deselectedWords, lessonWords.skip(1).toSet());
     container.dispose();
   });

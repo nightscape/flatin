@@ -8,9 +8,9 @@ Feature: Settings Screen
     When I am on the "home" screen
     And I open the drawer
     And I tap on "drawer.settings"
-    Then I should see "settings.section.nouns" section
-    And I should see "settings.section.verbs" section
-    And I should see checkboxes for form options
+    Then I should see "settings.section.kursstand" section
+    And I should see "settings.tile.words" section
+    And I should see "settings.tile.nouns" section
     And I take a screenshot named "settings_screen_full"
 
   Scenario: User toggles a form setting
@@ -18,6 +18,7 @@ Feature: Settings Screen
     When I am on the "home" screen
     And I open the drawer
     And I tap on "drawer.settings"
+    And I tap on "settings.tile.nouns"
     And I wait for "settings" to load
     And I toggle a form checkbox
     Then the checkbox state should change

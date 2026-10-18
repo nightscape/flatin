@@ -10,8 +10,8 @@ void main() {
     test('a fresh setting practises the whole course', () {
       final settings = Settings();
 
-      expect(settings.courseWords, LessonRange.full);
-      expect(settings.courseGrammar, LessonRange.full);
+      expect(settings.courseWords, LessonRange.fullWords);
+      expect(settings.courseGrammar, LessonRange.fullGrammar);
       expect(settings.grammarFollowsWords, isTrue);
       expect(settings.effectiveGrammar, LessonRange(1, laterLesson));
     });
@@ -211,8 +211,8 @@ void main() {
         jsonDecode(jsonEncode(stored)) as Map<String, dynamic>,
       );
 
-      expect(settings.courseWords, LessonRange.full);
-      expect(settings.courseGrammar, LessonRange.full);
+      expect(settings.courseWords, LessonRange.fullWords);
+      expect(settings.courseGrammar, LessonRange.fullGrammar);
       expect(settings.grammarFollowsWords, isTrue);
       expect(settings.overrideOfWord('amare'), Override.forcedOff);
       expect(

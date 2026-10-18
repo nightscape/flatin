@@ -1,4 +1,4 @@
-import '../data/lesson_data.dart';
+import '../data/lesson_data.dart' show lastLesson;
 import '../data/settings_conversion.dart'
     show settingsVersion, settingsVersionField;
 import 'form_label.dart';
@@ -73,11 +73,15 @@ class Settings {
         disabledTypes = disabledTypes ?? {},
         inputStrategyIds = inputStrategyIds ?? {},
         deselectedWords = deselectedWords ?? {},
-        courseWords = courseWords ?? LessonRange.full,
-        courseGrammar = courseGrammar ?? LessonRange.full,
+        courseWords = courseWords ?? LessonRange.fullWords,
+        courseGrammar = courseGrammar ?? LessonRange.fullGrammar,
         forcedOnWords = forcedOnWords ?? {},
         forcedOnTypes = forcedOnTypes ?? {},
         forcedOnForms = forcedOnForms ?? {} {
+    assert(
+      this.courseWords.to <= lastLesson,
+      'the word range ends beyond the last lesson',
+    );
     assert(
       this.forcedOnWords.intersection(this.deselectedWords).isEmpty,
       'a word is both forced on and forced off',
@@ -122,12 +126,15 @@ class Settings {
 
   /// The lessons whose grammar is practised right now.
   LessonRange get effectiveGrammar =>
-      grammarFollowsWords ? LessonRange(1, courseWords.to) : courseGrammar;
+      grammarFollowsWords
+          ? LessonRange.grammarFollowing(courseWords)
+          : courseGrammar;
 
   Settings withWordRange(LessonRange range) => copyWith(
         courseWords: range,
-        courseGrammar:
-            grammarFollowsWords ? LessonRange(1, range.to) : courseGrammar,
+        courseGrammar: grammarFollowsWords
+            ? LessonRange.grammarFollowing(range)
+            : courseGrammar,
       );
 
   Settings withGrammarRange(LessonRange range) {
@@ -137,7 +144,8 @@ class Settings {
 
   Settings withGrammarFollowsWords(bool follows) => copyWith(
         grammarFollowsWords: follows,
-        courseGrammar: follows ? LessonRange(1, courseWords.to) : courseGrammar,
+        courseGrammar:
+            follows ? LessonRange.grammarFollowing(courseWords) : courseGrammar,
       );
 
   /// Drops every override the learner made; the course ranges stay.
@@ -252,63 +260,9 @@ class Settings {
     return copyWith(disabledFeatures: next);
   }
 
-  /// Enable every form for a given data file, by key and by feature
-  Settings enableAllForms(String dataFileId) {
-    final newDisabledForms = Map<String, Set<String>>.from(disabledForms);
-    newDisabledForms.remove(dataFileId);
-    final newDisabledFeatures =
-        Map<String, Map<String, Set<String>>>.from(disabledFeatures);
-    newDisabledFeatures.remove(dataFileId);
-    return copyWith(
-      disabledForms: newDisabledForms,
-      disabledFeatures: newDisabledFeatures,
-    );
-  }
-
-  /// Enable every type for a given data file
-  Settings enableAllTypes(String dataFileId) {
-    final newDisabledTypes = Map<String, Set<String>>.from(disabledTypes);
-    newDisabledTypes.remove(dataFileId);
-    return copyWith(disabledTypes: newDisabledTypes);
-  }
-
   /// Whether a specific normalized word is selected.
   bool isWordSelected(String normalizedWord) {
     return !deselectedWords.contains(normalizedWord);
-  }
-
-  /// Whether all words in a lesson are selected.
-  bool isLessonFullySelected(List<String> rawWords) {
-    return rawWords.every((w) => isWordSelected(normalizeDiacritics(w)));
-  }
-
-  /// Whether some (but not all) words in a lesson are selected.
-  bool isLessonPartiallySelected(List<String> rawWords) {
-    final selected = rawWords.where(
-      (w) => isWordSelected(normalizeDiacritics(w)),
-    );
-    return selected.isNotEmpty && selected.length < rawWords.length;
-  }
-
-  /// Toggle all words in a lesson.
-  ///
-  /// If all lesson words are selected, deselect them all.
-  /// Otherwise, select all of them.
-  Settings toggleLessonWords(List<String> rawLessonWords) {
-    final lessonNormalized = rawLessonWords.map(normalizeDiacritics);
-    final next = Set<String>.from(deselectedWords);
-
-    if (isLessonFullySelected(rawLessonWords)) {
-      next.addAll(lessonNormalized);
-    } else {
-      next.removeAll(lessonNormalized);
-    }
-    return copyWith(deselectedWords: next);
-  }
-
-  /// Select every word.
-  Settings selectAllWords() {
-    return copyWith(deselectedWords: <String>{});
   }
 
   /// Convert to JSON for storage

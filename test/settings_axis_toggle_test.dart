@@ -61,7 +61,7 @@ void main() {
       {'ind.praes.akt.3.sg'},
     );
     expect(
-      filterTeachingAll(settings.enableAllForms('verbs'), item)
+      filterTeachingAll(settings.clearOverrides(), item)
           .practicedForms('verbs', item.formLabels),
       item.formOrder.toSet(),
     );
