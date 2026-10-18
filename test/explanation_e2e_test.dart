@@ -25,10 +25,7 @@ void main() {
     await tester.pump();
 
     expect(find.byKey(const Key('explanation.gen.pl')), findsOneWidget);
-    expect(find.text('dominus: Endung -us → O-Deklination-maskulinum'),
-        findsOneWidget);
-    expect(find.text('Stamm domin-'), findsOneWidget);
-    expect(find.text('Genitiv Plural: domin + ōrum = dominōrum'), findsOneWidget);
+    expect(find.text('Stamm domin-'), findsNothing);
     expect(find.text('Du hast dominis geschrieben – das ist Dativ/Ablativ Plural'),
         findsOneWidget);
   });

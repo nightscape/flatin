@@ -43,7 +43,6 @@ void main() {
       }
     }
 
-    expect(rendered[2], 'manus: U-Deklination');
     expect(rendered.last, endsWith('das passt zu keiner bekannten Form'));
   });
 }

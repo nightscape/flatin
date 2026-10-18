@@ -33,9 +33,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byKey(const Key('explanation.classification')), findsOneWidget);
-    expect(find.text('dominus: Endung -us → O-Deklination-maskulinum'),
-        findsOneWidget);
-    expect(find.text('dominōrum = domin + ōrum → Genitiv Plural'), findsOneWidget);
+    expect(find.text('dominōrum = domin + ōrum → Genitiv Plural'), findsNothing);
     expect(
       find.text('Du hast Genitiv Singular gewählt – das wäre dominī '
           '(domin + ī)'),

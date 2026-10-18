@@ -13,7 +13,6 @@ typedef Explainer = ({
   // Q11 A: a correct answer is explained too when its spelling differs.
   List<ExplanationLine> Function(PracticeItem item, String formKey, String answer)
       correctAnswer,
-  List<ExplanationLine> Function(PracticeItem item, List<String> formKeys) form,
   ExplanationLine Function(
           PracticeItem item, FormLabel? picked, String pickedText)
       pickedLabel,
@@ -23,7 +22,6 @@ final explainerProvider = Provider<Explainer>(
   (ref) => (
     wrongAnswer: explainWrongAnswer,
     correctAnswer: explainCorrectAnswer,
-    form: explainForm,
     pickedLabel: explainPickedLabel,
   ),
 );

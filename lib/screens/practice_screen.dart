@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:fsrs/fsrs.dart';
+import '../data/diagnosis.dart' show diagnose;
+import '../data/esel_steps.dart';
 import '../data/explanation.dart' show ExplanationLine;
 import '../models/practice_item.dart';
 import '../models/input_strategy.dart';
@@ -10,6 +12,7 @@ import '../providers/practice_providers.dart';
 import '../providers/settings_provider.dart';
 import '../providers/fsrs_provider.dart';
 import '../widgets/app_drawer.dart';
+import '../widgets/esel_panel.dart';
 import '../widgets/explanation_lines.dart';
 
 /// A wrong translation forces [Rating.again]; otherwise the rating follows the
@@ -42,6 +45,8 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
   Rating? _suggestedRating;
   bool _showRatingButtons = false;
   String? _selectedTranslation;
+  Map<String, EselProgress> _panels = {};
+  Set<String> _expandedPanels = {};
 
   void _ensureAnswerSlots(int count) {
     if (_userAnswers.length != count) {
@@ -64,8 +69,23 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
       state.translationCorrect!,
     );
 
+    final wrongIndexes = [
+      for (var i = 0; i < _filteredKeys.length; i++)
+        if (state.validationResults[i] == false) i,
+    ];
     setState(() {
       _showRatingButtons = true;
+      _panels = {
+        for (final i in wrongIndexes)
+          _filteredKeys[i]: EselProgress(eselSteps(
+            widget.item,
+            _filteredKeys[i],
+            diagnosis: diagnose(widget.item, _filteredKeys[i], _userAnswers[i]),
+          )),
+      };
+      _expandedPanels = {
+        if (wrongIndexes.isNotEmpty) _filteredKeys[wrongIndexes.first],
+      };
     });
   }
 
@@ -76,6 +96,8 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
       _showRatingButtons = false;
       _suggestedRating = null;
       _selectedTranslation = null;
+      _panels = {};
+      _expandedPanels = {};
     });
   }
 
@@ -456,6 +478,25 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
                                           _filteredKeys[index],
                                           _userAnswers[index],
                                         ),
+                                  ),
+                                if (_panels[_filteredKeys[index]]
+                                    case final progress?)
+                                  EselPanel(
+                                    key: Key('esel.panel.${_filteredKeys[index]}'),
+                                    scope: 'esel.${_filteredKeys[index]}',
+                                    progress: progress,
+                                    expanded: _expandedPanels
+                                        .contains(_filteredKeys[index]),
+                                    onToggle: () => setState(() {
+                                      final key = _filteredKeys[index];
+                                      if (!_expandedPanels.add(key)) {
+                                        _expandedPanels.remove(key);
+                                      }
+                                    }),
+                                    onPick: (step, option) => setState(
+                                        () => progress.pick(step, option)),
+                                    onShow: (step) =>
+                                        setState(() => progress.show(step)),
                                   ),
                                 if (correctLines.isNotEmpty)
                                   ExplanationLines(

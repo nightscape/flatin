@@ -66,23 +66,9 @@
     "errorLoadingData": "Error loading data"
   },
   "explain": {
-    "typeByRule": "{word}: ending -{suffix} → {type}",
-    "typeByRuleAmbiguous": "{word}: ending -{suffix} → {candidates}; here: {type}",
-    "typeDeclared": "{word}: {type}",
-    "stem": "{display} {stem}-",
-    "stemSource": "{display} {stem}- ({source} − {suffix})",
-    "stemDefault": "{display} {stem}- ({base} + {rest})",
-    "generated": "{label}: {stem} + {ending} = {result}",
-    "generatedOtherType": "{label}: {stem} + {ending} = {result} ({endingType})",
-    "sandhi": "{label}: {before} = {after} ({rule})",
-    "sandhiOtherType": "{label}: {before} = {after} ({rule}; {endingType})",
-    "given": "{result} is the dictionary form ({label})",
-    "irregular": "irregular – memorise: {dictionary} · {label}: {result}",
-    "composed": "{label}: {parts} = {result}",
     "deponent": "{label} is deponent: passive form, active meaning",
     "variants": "also correct: {variants}",
     "correctWithMacrons": "Correct. With macrons: {result}",
-    "formBackToRule": "{result} = {stem} + {ending} → {labels}",
     "pickedWouldBe": "You picked {picked} – that would be {form}",
     "pickedMissing": "{picked} does not exist for this word",
     "diag": {
@@ -96,7 +82,16 @@
   "esel": {
     "legend": {
       "title": "The ESEL rule",
-      "intro": "Every form is built in the same steps: recognise, stem, ending, sound rule."
+      "intro": "Every form is built in the same steps: recognise, stem, ending, sound rule.",
+      "open": "Explain the ESEL rule",
+      "meaning": {
+        "erkennen": "Which type does the word belong to?",
+        "stamm": "Which stem carries the ending?",
+        "endung": "Which ending belongs to this form?",
+        "lautregel": "Does a sound change at the seam?",
+        "verbinden": "Which parts make up the form?",
+        "merken": "Irregular form: learn it by heart."
+      }
     },
     "kind": {
       "erkennen": {
@@ -142,6 +137,11 @@
     "noEnding": "no ending",
     "dictionaryForm": "dictionary form",
     "soundChanges": "a sound changes",
-    "show": "Show"
+    "show": "Show",
+    "panel": {
+      "title": "Step by step"
+    },
+    "absentLabel": "not needed",
+    "wrongPick": "wrong"
   }
 }

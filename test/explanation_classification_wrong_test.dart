@@ -66,16 +66,6 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byKey(const Key('explanation.classification')), findsOneWidget);
-    expect(spy.formCalls, [
-      [
-        'part.fut.akt.sg.nom.f',
-        'part.fut.akt.sg.abl.f',
-        'part.fut.akt.sg.vok.f',
-        'part.fut.akt.pl.nom.n',
-        'part.fut.akt.pl.akk.n',
-        'part.fut.akt.pl.vok.n',
-      ]
-    ]);
     expect(spy.pickedCalls, hasLength(2));
     expect(spy.pickedCalls[0].$1?.displayName, wrong.displayName);
     expect(spy.pickedCalls[1].$1, isNull);

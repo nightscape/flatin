@@ -6,89 +6,12 @@ import 'package:latin_practice/widgets/explanation_lines.dart';
 
 /// One hand-made line per `explain.*` key, every parameter filled.
 const sampleLines = <ExplanationLine>[
-  ExplanationLine('explain.typeByRule', params: {
-    'word': 'dominus',
-    'suffix': 'us',
-    'type': 'O-Deklination-maskulinum',
-  }),
-  ExplanationLine('explain.typeByRuleAmbiguous', params: {
-    'word': 'monēre',
-    'suffix': 'ēre',
-    'candidates': 'E-Konjugation, Mischkonjugation',
-    'type': 'E-Konjugation',
-  }),
-  ExplanationLine('explain.typeDeclared', params: {
-    'word': 'manus',
-    'type': 'U-Deklination',
-  }),
-  ExplanationLine('explain.stem', params: {
-    'display': 'Stamm',
-    'stem': 'domin',
-  }),
-  ExplanationLine('explain.stemSource', params: {
-    'display': 'Stamm',
-    'stem': 'domin',
-    'source': 'dominus',
-    'suffix': 'us',
-  }),
-  ExplanationLine('explain.stemDefault', params: {
-    'display': 'Präsensstamm',
-    'stem': 'amā',
-    'base': 'amāre − āre',
-    'rest': 'ā',
-  }),
-  ExplanationLine('explain.sandhi', params: {
-    'label': 'Präsens: 1. Person Singular',
-    'before': 'amā + ō',
-    'after': 'amō',
-    'rule': 'ā fällt vor Vokal aus',
-  }),
-  ExplanationLine('explain.sandhiOtherType', params: {
-    'label': 'Komparativ Genitiv Singular',
-    'before': 'fortiōr + is',
-    'after': 'fortiōris',
-    'rule': 'keine Veränderung',
-    'endingType': 'Konsonantische-Deklination-mf',
-  }),
-  ExplanationLine('explain.composed', params: {
-    'label': 'Perfekt: 1. Person Singular',
-    'parts': 'amātus + sum',
-    'result': 'amātus sum',
-  }),
   ExplanationLine('explain.deponent', params: {
     'label': 'Präsens: 1. Person Singular',
   }),
   ExplanationLine('explain.variants', params: {'variants': 'dominūm'}),
   ExplanationLine('explain.correctWithMacrons', params: {
     'result': 'dominōrum',
-  }),
-  ExplanationLine('explain.generated', params: {
-    'label': 'Genitiv Plural',
-    'stem': 'domin',
-    'ending': 'orum',
-    'result': 'dominorum',
-  }),
-  ExplanationLine('explain.generatedOtherType', params: {
-    'label': 'Komparativ Genitiv Singular',
-    'stem': 'fortiōr',
-    'ending': 'is',
-    'result': 'fortiōris',
-    'endingType': 'Konsonantische-Deklination-mf',
-  }),
-  ExplanationLine('explain.given', params: {
-    'result': 'dominus',
-    'label': 'Nominativ Singular',
-  }),
-  ExplanationLine('explain.irregular', params: {
-    'dictionary': 'deus',
-    'label': 'Nominativ Plural',
-    'result': 'dei',
-  }),
-  ExplanationLine('explain.formBackToRule', params: {
-    'result': 'dominis',
-    'stem': 'domin',
-    'ending': 'is',
-    'labels': 'Dativ/Ablativ Plural',
   }),
   ExplanationLine('explain.pickedWouldBe', params: {
     'picked': 'Genitiv Plural',
@@ -126,12 +49,11 @@ Future<void> pickOption(WidgetTester tester, int index, String value) async {
   await tester.pumpAndSettle();
 }
 
-/// Stands in for the real [explainWrongAnswer] / [explainForm] /
+/// Stands in for the real [explainWrongAnswer] /
 /// [explainPickedLabel] while the logic lane is open, and records its calls.
 class ExplainerSpy {
   final List<(String formKey, String answer)> wrongAnswerCalls = [];
   final List<(String formKey, String answer)> correctAnswerCalls = [];
-  final List<List<String>> formCalls = [];
   final List<(FormLabel? picked, String pickedText)> pickedCalls = [];
 
   Explainer get explainer => (
@@ -146,13 +68,6 @@ class ExplainerSpy {
           return [
             ExplanationLine('explain.correctWithMacrons',
                 params: {'result': answer}),
-          ];
-        },
-        form: (PracticeItem item, List<String> formKeys) {
-          formCalls.add(formKeys);
-          return [
-            ExplanationLine('explain.typeDeclared',
-                params: {'word': 'shown', 'type': formKeys.join('+')}),
           ];
         },
         pickedLabel:

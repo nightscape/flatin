@@ -11,7 +11,8 @@ final class ExplanationLine {
   const ExplanationLine(this.key, {this.params = const {}});
 }
 
-/// Practice screen: type, derivation of the asked form, and what the answer is.
+/// Practice screen: what the asked form needs to be told besides its ESEL
+/// steps, and what the answer is.
 List<ExplanationLine> explainWrongAnswer(
   PracticeItem item,
   FormKey formKey,
@@ -19,9 +20,7 @@ List<ExplanationLine> explainWrongAnswer(
 ) {
   final String label = describeLabels([_labelOf(item, formKey)]);
   return [
-    _typeLine(item),
     ..._deponentLine(item, formKey, label),
-    ..._formLines(item, formKey, label),
     ..._variantsLine(item, formKey),
     _diagnosisLine(item, formKey, answer),
   ];
@@ -61,32 +60,6 @@ FormLabel _labelOf(PracticeItem item, FormKey formKey) {
   return item.formLabels[index];
 }
 
-ExplanationLine _typeLine(PracticeItem item) {
-  final recognition = item.derivation.recognition;
-  final String word = headword(item);
-  switch (recognition) {
-    case TypeByRule(:final suffix, :final candidateTypes):
-      if (candidateTypes.length > 1) {
-        return ExplanationLine('explain.typeByRuleAmbiguous', params: {
-          'word': word,
-          'suffix': suffix,
-          'candidates': candidateTypes.join(', '),
-          'type': item.type,
-        });
-      }
-      return ExplanationLine('explain.typeByRule', params: {
-        'word': word,
-        'suffix': suffix,
-        'type': item.type,
-      });
-    case TypeDeclared():
-      return ExplanationLine('explain.typeDeclared', params: {
-        'word': word,
-        'type': item.type,
-      });
-  }
-}
-
 /// S10: the key is practised in the active, but the form is a passive one.
 List<ExplanationLine> _deponentLine(
   PracticeItem item,
@@ -106,42 +79,6 @@ List<ExplanationLine> _variantsLine(PracticeItem item, FormKey formKey) {
       'variants': variants.skip(1).join(', '),
     }),
   ];
-}
-
-/// How the asked form itself follows from the rule: stem plus ending, the
-/// parts it is composed of, the dictionary forms to memorise, or the
-/// dictionary form as it stands.
-List<ExplanationLine> _formLines(
-  PracticeItem item,
-  FormKey formKey,
-  String label,
-) {
-  final derivation = item.derivation;
-  final form = derivation.forms[formKey]!;
-  switch (form) {
-    case final GeneratedForm generated:
-      return [
-        _stemLine(item, derivation.stems[generated.stemName]!),
-        _generatedLine(item, generated, label),
-      ];
-    case final ComposedForm composed:
-      return [_composedLine(item, composed, label)];
-    case IrregularForm(:final result):
-      return [
-        ExplanationLine('explain.irregular', params: {
-          'dictionary': headword(item),
-          'label': label,
-          'result': result,
-        }),
-      ];
-    case GivenForm(:final result):
-      return [
-        ExplanationLine('explain.given', params: {
-          'result': result,
-          'label': label,
-        }),
-      ];
-  }
 }
 
 /// S14: per item class, the types whose endings its school grammar really
@@ -233,136 +170,6 @@ String typePhrase(String type) =>
     diagnosisOnlyTypePhrases[type] ??
     (throw StateError('no phrase for type $type'));
 
-/// S18 a: a seam rule explains itself in place of the plain sum; S14: a
-/// borrowed ending names the type it is borrowed from, also next to a seam
-/// rule.
-ExplanationLine _generatedLine(
-  PracticeItem item,
-  GeneratedForm form,
-  String label,
-) {
-  final String stem = item.derivation.stems[form.stemName]!.stem;
-  final bool borrowed =
-      borrowedEndings[item.type]?.contains(form.endingType) ?? false;
-  final String? endingType =
-      borrowed ? endingTypePhrase(form.endingType) : null;
-  if (form.sandhiRule != null) {
-    return _sandhiLine(
-      label: label,
-      before: '$stem + ${form.ending}',
-      after: form.result,
-      rule: form.sandhiRule!,
-      endingType: endingType,
-    );
-  }
-  final params = {
-    'label': label,
-    'stem': stem,
-    'ending': form.ending,
-    'result': form.result,
-  };
-  if (endingType == null) {
-    return ExplanationLine('explain.generated', params: params);
-  }
-  return ExplanationLine(
-    'explain.generatedOtherType',
-    params: {...params, 'endingType': endingType},
-  );
-}
-
-/// S13: the parts as they go in, the form as it comes out. An affix is named
-/// by the stem it is cut from, so the seam rule has something to change.
-ExplanationLine _composedLine(
-  PracticeItem item,
-  ComposedForm form,
-  String label,
-) {
-  final stems = item.derivation.stems;
-  final String pieces = form.parts
-      .map((part) => part is AffixPart ? stems[part.stemName]!.stem : part.text)
-      .join(' + ');
-  final rule = form.parts
-      .whereType<AffixPart>()
-      .map((part) => part.sandhiRule)
-      .nonNulls
-      .firstOrNull;
-  if (rule != null) {
-    return _sandhiLine(
-      label: label,
-      before: pieces,
-      after: form.result,
-      rule: rule,
-    );
-  }
-  return ExplanationLine('explain.composed', params: {
-    'label': label,
-    'parts': pieces,
-    'result': form.result,
-  });
-}
-
-ExplanationLine _sandhiLine({
-  required String label,
-  required String before,
-  required String after,
-  required SandhiRule rule,
-  String? endingType,
-}) =>
-    ExplanationLine(
-      endingType == null ? 'explain.sandhi' : 'explain.sandhiOtherType',
-      params: {
-        'label': label,
-        'before': before,
-        'after': after,
-        'rule': rule.explain,
-        'endingType': ?endingType,
-      },
-    );
-
-ExplanationLine _stemLine(PracticeItem item, StemDerivation stem) {
-  switch (stem) {
-    // Naming the part the stem comes from only helps when it is not the first
-    // spelling the learner sees anyway.
-    case StemFromPart(:final sourceWord, :final removedSuffix)
-        when sourceWord != item.principalParts.first.$2:
-      return ExplanationLine('explain.stemSource', params: {
-        'display': stem.display,
-        'stem': stem.stem,
-        'source': sourceWord,
-        'suffix': removedSuffix,
-      });
-    case StemFromPart():
-      return ExplanationLine('explain.stem', params: {
-        'display': stem.display,
-        'stem': stem.stem,
-      });
-    case StemFromDefault(:final template, :final base, :final sandhiRule):
-      final String rest = template.replaceAll('{${base.name}}', '');
-      if (sandhiRule != null) {
-        return _sandhiLine(
-          label: stem.display,
-          before: '${base.stem} + $rest',
-          after: stem.stem,
-          rule: sandhiRule,
-        );
-      }
-      return ExplanationLine('explain.stemDefault', params: {
-        'display': stem.display,
-        'stem': stem.stem,
-        'base': _baseText(base),
-        'rest': rest,
-      });
-  }
-}
-
-/// A stem cut from a principal part is shown as that cut, so the chain back to
-/// the dictionary form stays visible: "amāre − āre" instead of "am".
-String _baseText(StemDerivation base) => switch (base) {
-      StemFromPart(:final sourceWord, :final removedSuffix) =>
-        '$sourceWord − $removedSuffix',
-      _ => base.stem,
-    };
-
 ExplanationLine _diagnosisLine(
   PracticeItem item,
   FormKey formKey,
@@ -400,43 +207,6 @@ ExplanationLine _diagnosisLine(
         'answer': answer,
       });
   }
-}
-
-/// Classification screen: type and how the shown form follows from the rule.
-/// [formKeys] are all keys whose form equals the shown string.
-List<ExplanationLine> explainForm(PracticeItem item, List<FormKey> formKeys) {
-  assert(formKeys.isNotEmpty);
-  final String labels = describeLabels(
-    formKeys.map((key) => _labelOf(item, key)).toList(),
-  );
-  final form = item.derivation.forms[formKeys.first]!;
-  return [
-    _typeLine(item),
-    ..._deponentLine(item, formKeys.first, labels),
-    switch (form) {
-      // Here the derivation runs backwards: from the shown form to the rule.
-      final GeneratedForm generated when generated.sandhiRule == null =>
-        ExplanationLine('explain.formBackToRule', params: {
-          'result': generated.result,
-          'stem': item.derivation.stems[generated.stemName]!.stem,
-          'ending': generated.ending,
-          'labels': labels,
-        }),
-      final GeneratedForm generated => _generatedLine(item, generated, labels),
-      final ComposedForm composed => _composedLine(item, composed, labels),
-      IrregularForm(:final result) =>
-        ExplanationLine('explain.irregular', params: {
-          'dictionary': headword(item),
-          'label': labels,
-          'result': result,
-        }),
-      GivenForm(:final result) => ExplanationLine('explain.given', params: {
-          'result': result,
-          'label': labels,
-        }),
-    },
-    ..._variantsLine(item, formKeys.first),
-  ];
 }
 
 /// Classification screen: what the picked label would be for this item.

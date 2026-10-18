@@ -66,23 +66,9 @@
     "errorLoadingData": "Fehler beim Laden der Daten"
   },
   "explain": {
-    "typeByRule": "{word}: Endung -{suffix} → {type}",
-    "typeByRuleAmbiguous": "{word}: Endung -{suffix} → {candidates}; hier: {type}",
-    "typeDeclared": "{word}: {type}",
-    "stem": "{display} {stem}-",
-    "stemSource": "{display} {stem}- ({source} − {suffix})",
-    "stemDefault": "{display} {stem}- ({base} + {rest})",
-    "generated": "{label}: {stem} + {ending} = {result}",
-    "generatedOtherType": "{label}: {stem} + {ending} = {result} ({endingType})",
-    "sandhi": "{label}: {before} = {after} ({rule})",
-    "sandhiOtherType": "{label}: {before} = {after} ({rule}; {endingType})",
-    "given": "{result} ist die Wörterbuchform ({label})",
-    "irregular": "unregelmäßig – merken: {dictionary} · {label}: {result}",
-    "composed": "{label}: {parts} = {result}",
     "deponent": "{label} ist ein Deponens: passive Form, aktive Bedeutung",
     "variants": "auch richtig: {variants}",
     "correctWithMacrons": "Richtig. Mit Längenzeichen: {result}",
-    "formBackToRule": "{result} = {stem} + {ending} → {labels}",
     "pickedWouldBe": "Du hast {picked} gewählt – das wäre {form}",
     "pickedMissing": "{picked} gibt es bei diesem Wort nicht",
     "diag": {
@@ -96,7 +82,16 @@
   "esel": {
     "legend": {
       "title": "Die ESEL-Regel",
-      "intro": "Jede Form entsteht in denselben Schritten: Erkennen, Stamm, Endung, Lautregel."
+      "intro": "Jede Form entsteht in denselben Schritten: Erkennen, Stamm, Endung, Lautregel.",
+      "open": "ESEL-Regel erklären",
+      "meaning": {
+        "erkennen": "Zu welchem Typ gehört das Wort?",
+        "stamm": "Welcher Stamm trägt die Endung?",
+        "endung": "Welche Endung gehört zu dieser Form?",
+        "lautregel": "Ändert sich an der Nahtstelle ein Laut?",
+        "verbinden": "Aus welchen Teilen besteht die Form?",
+        "merken": "Unregelmäßige Form: auswendig lernen."
+      }
     },
     "kind": {
       "erkennen": {
@@ -142,6 +137,11 @@
     "noEnding": "keine Endung",
     "dictionaryForm": "Wörterbuchform",
     "soundChanges": "ein Laut ändert sich",
-    "show": "Zeigen"
+    "show": "Zeigen",
+    "panel": {
+      "title": "Schritt für Schritt"
+    },
+    "absentLabel": "entfällt",
+    "wrongPick": "falsch"
   }
 }

@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:fsrs/fsrs.dart';
+import '../data/esel_steps.dart';
 import '../models/derivation.dart' show norm;
 import '../models/practice_item.dart';
 import '../models/course_filter.dart';
 import '../providers/curriculum_provider.dart';
 import '../providers/fsrs_provider.dart';
 import '../widgets/app_drawer.dart';
+import '../widgets/esel_panel.dart';
 import '../widgets/explanation_lines.dart';
 import 'dart:math';
 
@@ -368,7 +370,10 @@ class _WordClassificationScreenState
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ExplanationLines(explainer.form(item, shownKeys)),
+            EselStaticSteps(
+              scope: 'esel.classification',
+              steps: eselSteps(item, shownKeys.first),
+            ),
             ..._wrongCombinations.map(
               (combination) => ExplanationLines([
                 explainer.pickedLabel(
