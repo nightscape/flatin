@@ -44,9 +44,14 @@ sandhi:                              # S16; the file's rule library
   kurz_nt: {end: vowel, before: [nt, nd], replace: short,
             explain: "Vokal vor nt/nd wird kurz"}
 
+classes: [konjugation]               # S19; the word classes types may name
+
 types:
+  Verb-Basis:
+    abstract: true                   # no item uses it directly, so no "class"
+
   A-Konjugation:
-    abstract: true                   # no item uses it directly
+    class: konjugation               # S19; every concrete type names one
     inherits_from: Verb-Basis        # S6
     required_stems: [praesens]       # S4
     stems:
@@ -85,7 +90,8 @@ items:
 One file is exactly one YAML document; a `---` separated second document throws.
 
 The top-level keys above are the whole set: `data_file_id`, `axes`, `label`,
-`parts`, `defaults`, `type_inference`, `sandhi`, `types`, `items`, `shared`.
+`parts`, `defaults`, `type_inference`, `sandhi`, `classes`, `types`, `items`,
+`shared`.
 Any other one throws, so a typo such as `itemss:` fails the load instead of
 silently dropping the section. `shared:` is the one key the loader only
 accepts: it holds anchors that items alias (`absent: *ohne_steigerung`), and it
@@ -223,6 +229,12 @@ templates too, since delegate targets have no list of their own. Present stems
 are school stems (`amā-`, `monē-`, `audī-`, `capi-`, `reg-`), built as root plus
 theme vowel, so the quantity change at the seam is data: `amā` + `ō` → `amō`,
 `capi` + `re` → `capere`.
+
+**S19. Word class.** `classes:` lists the word classes of a file, and every
+concrete type names one of them in `class:` — the class a learner weighs its
+types against, so the ESEL Erkennen step draws its distractors from it. A
+concrete type without `class`, a class the file does not list, and a `class` on
+an abstract type each throw, naming the type and the file.
 
 **Collisions.** A key produced twice — by own forms, by delegation or by
 composition — throws. There is no precedence between them; inheritance (S6) is

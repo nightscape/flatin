@@ -76,50 +76,6 @@ final class EselStep {
         );
 }
 
-/// The word class a type belongs to: an erkennen distractor is a type of the
-/// same class, so the choice is between the types a learner weighs against
-/// each other. Every type an item has is listed (pinned by a test over the
-/// data), abstract and internal ending tables are not.
-const eselWordClasses = <String, String>{
-  'A-Deklination': 'deklination',
-  'E-Deklination': 'deklination',
-  'E-Deklination-Konsonantstamm': 'deklination',
-  'Konsonantische-Deklination-i-mf': 'deklination',
-  'Konsonantische-Deklination-i-n': 'deklination',
-  'Konsonantische-Deklination-mf': 'deklination',
-  'Konsonantische-Deklination-n': 'deklination',
-  'O-Deklination-maskulinum': 'deklination',
-  'O-Deklination-neutrum': 'deklination',
-  'U-Deklination': 'deklination',
-  'Adjektiv-a-o': 'adjektiv',
-  'Adjektiv-a-o-er': 'adjektiv',
-  'Adjektiv-dreiendig': 'adjektiv',
-  'Adjektiv-einendig-i': 'adjektiv',
-  'Adjektiv-einendig-Konsonantstamm': 'adjektiv',
-  'Adjektiv-zweiendig': 'adjektiv',
-  'Pronomen-hic': 'pronomen',
-  'Pronomen-idem': 'pronomen',
-  'Pronomen-ille': 'pronomen',
-  'Pronomen-ipse': 'pronomen',
-  'Pronomen-is': 'pronomen',
-  'Pronomen-iste': 'pronomen',
-  'Pronomen-personal': 'pronomen',
-  'Pronomen-qui': 'pronomen',
-  'Pronomen-quis': 'pronomen',
-  'Numerale-duo': 'numerale',
-  'Numerale-milia': 'numerale',
-  'Numerale-tres': 'numerale',
-  'Numerale-unus': 'numerale',
-  'A-Konjugation': 'konjugation',
-  'E-Konjugation': 'konjugation',
-  'I-Konjugation': 'konjugation',
-  'Konsonantische': 'konjugation',
-  'Mischkonjugation': 'konjugation',
-  'Unregelmäßig': 'konjugation',
-  'esse-Kompositum': 'konjugation',
-  'esse-Typ': 'konjugation',
-};
-
 /// The steps of [formKey] of [item], in the fixed ESEL order. [diagnosis] is
 /// the learner's mistake when there is one; without it the steps are the same,
 /// only the distractors are drawn from the data alone.
@@ -219,19 +175,25 @@ SandhiRule? _seamRule(ComposedForm form) => form.parts
 
 // ---------------------------------------------------------------- Erkennen
 
+/// A distractor of the Erkennen step is a type of the same word class (S19),
+/// so the choice is between the types a learner weighs against each other.
 EselStep _erkennen(PracticeItem item, FormKey formKey) {
   final String right = item.derivation.type;
-  final String wordClass = eselWordClasses[right] ??
-      (throw StateError('no word class for type $right'));
+  final classByType = item.derivation.grammar.classByType;
+  final String wordClass = classByType[right]!;
   final recognition = item.derivation.recognition;
   final sameEnding = recognition is TypeByRule
       ? recognition.candidateTypes
       : const <String>[];
+  // By name, so the options do not follow the order of the data file.
+  final sameClass = [
+    for (final entry in classByType.entries)
+      if (entry.value == wordClass) entry.key,
+  ]..sort();
   final others = [
     for (final type in sameEnding)
-      if (eselWordClasses[type] == wordClass) type,
-    for (final entry in eselWordClasses.entries)
-      if (entry.value == wordClass) entry.key,
+      if (classByType[type] == wordClass) type,
+    ...sameClass,
   ];
 
   return EselStep(

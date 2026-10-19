@@ -8,6 +8,7 @@ import 'dart:convert';
 
 import 'package:latin_practice/data/asset_text.dart';
 import 'package:latin_practice/data/explanation.dart';
+import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/models/derivation.dart';
 import 'package:latin_practice/models/practice_item.dart';
 
@@ -206,7 +207,7 @@ PracticeItem amare() {
         'perfekt': perfekt,
         'ppp': ppp,
       },
-      grammar: const Grammar({}),
+      grammar: const Grammar({}, {}),
       forms: {
         'ind.praes.akt.1.sg': GeneratedForm(
           formKey: 'ind.praes.akt.1.sg',
@@ -328,7 +329,7 @@ PracticeItem capere() {
         ],
       ),
       stems: {'wurzel': wurzel, 'praesens': praesens},
-      grammar: const Grammar({}),
+      grammar: const Grammar({}, {}),
       forms: {
         'inf.praes.akt': GeneratedForm(
           formKey: 'inf.praes.akt',
@@ -365,7 +366,7 @@ PracticeItem regere() {
       type: 'Konsonantische-Konjugation',
       recognition: const TypeDeclared(),
       stems: {'praesens': praesens},
-      grammar: const Grammar({}),
+      grammar: const Grammar({}, {}),
       forms: {
         'ind.praes.akt.3.sg': GeneratedForm(
           formKey: 'ind.praes.akt.3.sg',
@@ -423,7 +424,7 @@ PracticeItem posse() {
       type: 'Unregelmäßig-posse',
       recognition: const TypeDeclared(),
       stems: {'praesens': praesens},
-      grammar: const Grammar({}),
+      grammar: const Grammar({}, {}),
       forms: {
         'ind.praes.akt.1.sg': composed(
           'ind.praes.akt.1.sg',
@@ -475,7 +476,7 @@ PracticeItem fortis() {
       type: 'I-Deklination-mf',
       recognition: const TypeDeclared(),
       stems: {'stamm': stamm, 'komparativ': komparativ},
-      grammar: const Grammar({}),
+      grammar: const Grammar({}, {}),
       forms: {
         'komp.gen.sg': GeneratedForm(
           formKey: 'komp.gen.sg',
@@ -515,7 +516,7 @@ PracticeItem hortari() {
         candidateTypes: ['A-Konjugation'],
       ),
       stems: {'praesens': praesens},
-      grammar: const Grammar({}),
+      grammar: const Grammar({}, {}),
       deponentKeys: const {'ind.praes.akt.1.sg'},
       forms: {
         'ind.praes.akt.1.sg': GeneratedForm(
@@ -553,7 +554,7 @@ PracticeItem afferre() {
       type: 'Unregelmäßig-ferre',
       recognition: const TypeDeclared(),
       stems: {'praesens': praesens},
-      grammar: const Grammar({}),
+      grammar: const Grammar({}, {}),
       forms: {
         'ind.praes.akt.1.sg': GeneratedForm(
           formKey: 'ind.praes.akt.1.sg',
@@ -578,7 +579,7 @@ PracticeItem abire() => traceItem(
       derivation: Derivation(
         type: 'Unregelmäßig-ire',
         recognition: const TypeDeclared(),
-        grammar: const Grammar({}),
+        grammar: const Grammar({}, {}),
         forms: {
           'ind.perf.akt.1.sg': GivenForm(
             formKey: 'ind.perf.akt.1.sg',
@@ -639,8 +640,10 @@ Future<Map<String, String>> _texts(String path) async {
 }
 
 /// The data has no dictionary form of its own (every form is derived), so the
-/// GivenForm branch is pinned on a hand-made item of a type the data uses.
-PracticeItem givenItem() => traceItem(
+/// GivenForm branch is pinned on a hand-made item of a type the data uses. It
+/// carries the loaded grammar, because the Erkennen step reads the word class
+/// of its type from there (S19).
+Future<PracticeItem> givenItem() async => traceItem(
       id: 'verbs:abire',
       lemma: 'abīre',
       type: 'Unregelmäßig',
@@ -650,7 +653,7 @@ PracticeItem givenItem() => traceItem(
       derivation: Derivation(
         type: 'Unregelmäßig',
         recognition: const TypeDeclared(),
-        grammar: const Grammar({}),
+        grammar: (await loadAllPracticeItems()).first.derivation.grammar,
         forms: {
           'ind.perf.akt.1.sg': GivenForm(
             formKey: 'ind.perf.akt.1.sg',

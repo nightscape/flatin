@@ -128,8 +128,8 @@ void main() {
       expect(steps[2].options.firstWhere((o) => o.isRight).text, '-ōris');
     });
 
-    test('a dictionary form is shown as the form to memorise', () {
-      final steps = eselSteps(givenItem(), 'ind.perf.akt.1.sg');
+    test('a dictionary form is shown as the form to memorise', () async {
+      final steps = eselSteps(await givenItem(), 'ind.perf.akt.1.sg');
       expect(steps.map((s) => s.kind), [..._esel, EselKind.merken]);
       expect(steps.last.questionKey, 'esel.question.given');
       expect(steps.last.answer, 'abiī');
@@ -284,7 +284,8 @@ void main() {
             }
             if (step.kind == EselKind.erkennen) {
               for (final option in step.options) {
-                expect(eselWordClasses, contains(option.text), reason: where);
+                expect(item.derivation.grammar.classByType,
+                    contains(option.text), reason: where);
               }
             }
             if (step.kind == EselKind.endung) {
@@ -381,9 +382,10 @@ void main() {
       );
     });
 
-    test('the word classes list exactly the types the items have', () async {
-      final used = {for (final item in await loadAllPracticeItems()) item.type};
-      expect(eselWordClasses.keys.toSet(), used);
+    test('the classified types are exactly the types the items have', () async {
+      final all = await loadAllPracticeItems();
+      final used = {for (final item in all) item.type};
+      expect(all.first.derivation.grammar.classByType.keys.toSet(), used);
     });
   });
 

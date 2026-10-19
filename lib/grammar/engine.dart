@@ -169,6 +169,10 @@ final class GrammarEngine {
                 endings: [for (final template in form.value) template.ending],
               ),
           },
+    }, {
+      for (final file in files)
+        for (final type in file.declaredTypes.entries)
+          if (type.value.wordClass case final wordClass?) type.key: wordClass,
     });
   }
 

@@ -766,8 +766,11 @@ type_inference:
   praesens_1sg:
     - {suffix: "iō", types: [I-Konjugation, Mischkonjugation]}
 
+classes: [konjugation]
+
 types:
   I-Konjugation:
+    class: konjugation
     required_stems: [wurzel]
     stems:
       wurzel: {from: praesens_1sg, remove: "iō", display: Wortstock}
@@ -776,6 +779,7 @@ types:
       pl: "{wurzel}īmus"
 
   Mischkonjugation:
+    class: konjugation
     required_stems: [wurzel]
     stems:
       wurzel: {from: praesens_1sg, remove: "iō", display: Wortstock}

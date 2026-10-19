@@ -58,6 +58,8 @@ sandhi:
   i_e_r:       {end: i, before: [r], replace: e, explain: "i wird vor r zu e"}
   i_e_auslaut: {end: i, before: ["$"], replace: e, explain: "i wird am Wortende zu e"}
 
+classes: [konjugation]
+
 types:
   Perfekt-System:
     abstract: true
@@ -136,6 +138,7 @@ types:
       inf.fut.pass: "{ppp}um īrī"
 
   A-Konjugation:
+    class: konjugation
     inherits_from: Verb-Vollständig
     stems:
       wurzel:   {from: infinitiv, remove: ["āre", "ārī"], display: Wurzel}
@@ -222,6 +225,7 @@ types:
       imp.praes.pass.2.pl: "{praesens}minī"
       inf.praes.pass: "{praesens}rī"
   E-Konjugation:
+    class: konjugation
     inherits_from: A-Konjugation
     stems:
       wurzel:   {from: infinitiv, remove: ["ēre", "ērī"], display: Wurzel}
@@ -243,6 +247,7 @@ types:
       konj.praes.pass.2.pl: "{praesens}āminī"
       konj.praes.pass.3.pl: "{praesens}antur"
   I-Konjugation:
+    class: konjugation
     inherits_from: Verb-Vollständig
     stems:
       wurzel:   {from: infinitiv, remove: ["īre", "īrī"], display: Wurzel}
@@ -329,6 +334,7 @@ types:
       imp.praes.pass.2.pl: "{praesens}minī"
       inf.praes.pass: "{praesens}rī"
   Mischkonjugation:
+    class: konjugation
     inherits_from: I-Konjugation
     stems:
       wurzel:   {from: praesens_1sg, remove: ["iō", "ior"], display: Wurzel}
@@ -339,6 +345,7 @@ types:
     forms:
       inf.praes.pass: "{praesens}ī"
   Konsonantische:
+    class: konjugation
     inherits_from: Verb-Vollständig
     stems:
       praesens: {from: praesens_1sg, remove: ["ō", "or"], display: Präsensstamm}
@@ -422,6 +429,7 @@ types:
       inf.praes.pass: "{praesens}ī"
 
   esse-Typ:
+    class: konjugation
     inherits_from: Perfekt-System
     stems:
       pfa: {from: futurpartizip, remove: "us", display: PFA-Stamm}
@@ -429,6 +437,7 @@ types:
       - {name: pfa, type: a-o-Endungen, bind: {stamm: pfa}, set: {modus: part, tempus: fut, genus_verbi: akt}}
 
   Unregelmäßig:
+    class: konjugation
     inherits_from: Verb-Basis
     stems:
       ppa:     {from: ppa_gen, remove: "is", display: PPA-Stamm}
@@ -459,6 +468,7 @@ types:
       inf.praes.akt: "{praesens}se"
 
   esse-Kompositum:
+    class: konjugation
     inherits_from: Perfekt-System
     stems:
       praefix: {from: praefix, remove: "", display: Präfix}
@@ -469,6 +479,7 @@ types:
     sandhi: [d_ausfall]
 
   ire-Kompositum:
+    class: konjugation
     stems:
       praefix: {from: praefix, remove: "", display: Präfix}
     compose:
@@ -477,6 +488,7 @@ types:
         parts: [{stem: praefix}, {lexeme: ire, pass: all}]
 
   ferre-Kompositum:
+    class: konjugation
     stems:
       praefix: {from: praefix, remove: "", display: Präfix}
     compose:

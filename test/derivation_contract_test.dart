@@ -130,7 +130,7 @@ void main() {
       recognition: const TypeDeclared(),
       stems: {praesensStem.name: praesensStem},
       forms: forms,
-      grammar: const Grammar({}),
+      grammar: const Grammar({}, {}),
     );
 
     test('an ending may be empty', () {

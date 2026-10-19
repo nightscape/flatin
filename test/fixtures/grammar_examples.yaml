@@ -29,6 +29,8 @@ defaults:
   given_part: nom
   lemma_part: nom
 
+classes: [deklination, adjektiv, pronomen]
+
 types:
   a-o-Endungen:
     abstract: true
@@ -169,6 +171,7 @@ types:
       akk.pl.f: "{stamm}ēs"
 
   Adjektiv-a-o:
+    class: adjektiv
     stems:
       stamm:  {from: nom, remove: "us", display: Stamm}
       kstamm: {from: komparativ, remove: "or", default: "{stamm}i", display: Komparativstamm}
@@ -182,6 +185,7 @@ types:
       adv.sup: "{sup}ē"
 
   Adjektiv-a-o-er:
+    class: adjektiv
     inherits_from: Adjektiv-a-o
     stems:
       stamm: {from: nom_f, remove: "a", display: Stamm}
@@ -204,6 +208,7 @@ types:
       adv.sup: "{sup}ē"
 
   Adjektiv-zweiendig:
+    class: adjektiv
     inherits_from: Adjektiv-3
     stems:
       stamm: {from: nom, remove: "is", display: Stamm}
@@ -212,6 +217,7 @@ types:
       nom_n: {from: nom_n, remove: "", display: Nominativ neutrum}
 
   Adjektiv-dreiendig:
+    class: adjektiv
     inherits_from: Adjektiv-3
     stems:
       stamm: {from: nom_f, remove: "is", display: Stamm}
@@ -221,6 +227,7 @@ types:
       sup:   {from: superlativ, remove: "us", default: "{nom_m}rim", display: Superlativstamm}
 
   i-Deklination-mf:
+    class: deklination
     required_stems: [stamm]
     stems:
       stamm: {from: gen, remove: "is", display: Stamm}
@@ -240,6 +247,7 @@ types:
       vok.pl: "{stamm}ēs"
 
   i-Deklination-n:
+    class: deklination
     stems:
       stamm: {from: gen, remove: "is", display: Stamm}
       nom:   {from: nom, remove: "", display: Nominativ}
@@ -257,7 +265,8 @@ types:
       abl.pl: "{stamm}ibus"
       vok.pl: "{stamm}ia"
 
-  Pronomen: {}
+  Pronomen:
+    class: pronomen
 
 items:
   - type: i-Deklination-mf

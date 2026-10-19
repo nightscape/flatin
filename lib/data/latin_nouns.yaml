@@ -32,6 +32,8 @@ type_inference:
     - {suffix: "iēs", min_length: 3, types: [E-Deklination]}
     - {suffix: "ēs", min_length: 3, types: [E-Deklination-Konsonantstamm]}
 
+classes: [deklination, adjektiv, pronomen, numerale]
+
 types:
   # Ending tables. Leaf types (no delegate, no compose, S14); the verb file
   # delegates its participles to them.
@@ -215,6 +217,7 @@ types:
 
   # Declensions. One gender per type, so their keys carry no genus.
   O-Deklination-maskulinum:
+    class: deklination
     stems:
       stamm: {from: nom, remove: "us", display: Stamm}
     forms:
@@ -232,6 +235,7 @@ types:
       vok.pl: "{stamm}ī"
 
   O-Deklination-neutrum:
+    class: deklination
     stems:
       stamm: {from: nom, remove: "um", display: Stamm}
     forms:
@@ -249,6 +253,7 @@ types:
       vok.pl: "{stamm}a"
 
   A-Deklination:
+    class: deklination
     stems:
       stamm: {from: nom, remove: "a", display: Stamm}
     forms:
@@ -266,6 +271,7 @@ types:
       vok.pl: "{stamm}ae"
 
   E-Deklination:
+    class: deklination
     stems:
       stamm: {from: nom, remove: "ēs", display: Stamm}
     forms:
@@ -283,12 +289,14 @@ types:
       vok.pl: "{stamm}ēs"
 
   E-Deklination-Konsonantstamm:
+    class: deklination
     inherits_from: E-Deklination
     forms:
       gen.sg: "{stamm}eī"
       dat.sg: "{stamm}eī"
 
   U-Deklination:
+    class: deklination
     stems:
       stamm: {from: nom, remove: "us", display: Stamm}
     forms:
@@ -306,6 +314,7 @@ types:
       vok.pl: "{stamm}ūs"
 
   Konsonantische-Deklination-mf:
+    class: deklination
     stems:
       stamm:  {from: gen, remove: "is", display: Stamm}
       nom_sg: {from: nom, remove: "", display: Nominativ}
@@ -324,6 +333,7 @@ types:
       vok.pl: "{stamm}ēs"
 
   Konsonantische-Deklination-n:
+    class: deklination
     stems:
       stamm:  {from: gen, remove: "is", display: Stamm}
       nom_sg: {from: nom, remove: "", display: Nominativ}
@@ -342,11 +352,13 @@ types:
       vok.pl: "{stamm}a"
 
   Konsonantische-Deklination-i-mf:
+    class: deklination
     inherits_from: Konsonantische-Deklination-mf
     forms:
       gen.pl: "{stamm}ium"
 
   Konsonantische-Deklination-i-n:
+    class: deklination
     inherits_from: Konsonantische-Deklination-n
     forms:
       abl.sg: "{stamm}ī"
@@ -358,6 +370,7 @@ types:
   # Adjectives. Every grade is a delegate into an ending table, so the three
   # grades share one key space and the adverb sits beside them.
   Adjektiv-a-o:
+    class: adjektiv
     stems:
       stamm:  {from: nom, remove: "us", display: Stamm}
       kstamm: {from: komparativ, remove: "or", default: "{stamm}i", display: Komparativstamm}
@@ -371,6 +384,7 @@ types:
       adv.sup: "{sup}ē"
 
   Adjektiv-a-o-er:
+    class: adjektiv
     inherits_from: Adjektiv-a-o
     stems:
       stamm: {from: nom_f, remove: "a", display: Stamm}
@@ -393,6 +407,7 @@ types:
       adv.sup: "{sup}ē"
 
   Adjektiv-zweiendig:
+    class: adjektiv
     inherits_from: Adjektiv-3
     stems:
       stamm: {from: nom, remove: "is", display: Stamm}
@@ -401,6 +416,7 @@ types:
       nom_n: {from: nom_n, remove: "", display: Nominativ neutrum}
 
   Adjektiv-dreiendig:
+    class: adjektiv
     inherits_from: Adjektiv-3
     stems:
       stamm: {from: nom_f, remove: "is", display: Stamm}
@@ -410,6 +426,7 @@ types:
       sup:   {from: superlativ, remove: "us", default: "{nom_m}rim", display: Superlativstamm}
 
   Adjektiv-einendig-i:
+    class: adjektiv
     inherits_from: Adjektiv-3
     stems:
       stamm: {from: gen, remove: "is", display: Stamm}
@@ -418,6 +435,7 @@ types:
       nom_n: {template: "{nom_m}", display: Nominativ}
 
   Adjektiv-einendig-Konsonantstamm:
+    class: adjektiv
     stems:
       stamm:  {from: gen, remove: "is", display: Stamm}
       nom_m:  {from: nom, remove: "", display: Nominativ}
@@ -429,19 +447,32 @@ types:
       - {name: sup,  type: a-o-Endungen, bind: {stamm: sup}, set: {grad: sup}}
 
   # Pronouns and numerals: one type per lexeme, every form on the item.
-  Pronomen-personal: {}
-  Pronomen-is: {}
-  Pronomen-idem: {}
-  Pronomen-hic: {}
-  Pronomen-ille: {}
-  Pronomen-iste: {}
-  Pronomen-ipse: {}
-  Pronomen-qui: {}
-  Pronomen-quis: {}
-  Numerale-unus: {}
-  Numerale-duo: {}
-  Numerale-tres: {}
-  Numerale-milia: {}
+  Pronomen-personal:
+    class: pronomen
+  Pronomen-is:
+    class: pronomen
+  Pronomen-idem:
+    class: pronomen
+  Pronomen-hic:
+    class: pronomen
+  Pronomen-ille:
+    class: pronomen
+  Pronomen-iste:
+    class: pronomen
+  Pronomen-ipse:
+    class: pronomen
+  Pronomen-qui:
+    class: pronomen
+  Pronomen-quis:
+    class: pronomen
+  Numerale-unus:
+    class: numerale
+  Numerale-duo:
+    class: numerale
+  Numerale-tres:
+    class: numerale
+  Numerale-milia:
+    class: numerale
 
 # Anchors that items alias. They sit above `items:` because a YAML alias only
 # resolves below its anchor. The loader ignores this block.

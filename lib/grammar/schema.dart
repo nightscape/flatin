@@ -276,6 +276,10 @@ final class DeponentSpec {
 final class GrammarType {
   final String name;
   final bool isAbstract;
+
+  /// S19: the word class of a concrete type, null for an abstract one.
+  final String? wordClass;
+
   final String? inheritsFrom;
   final List<String> requiredStems;
   final Map<String, StemSpec> stems;
@@ -294,6 +298,7 @@ final class GrammarType {
   GrammarType({
     required this.name,
     this.isAbstract = false,
+    this.wordClass,
     this.inheritsFrom,
     this.requiredStems = const [],
     this.stems = const {},
@@ -311,6 +316,7 @@ final class GrammarType {
   GrammarType inheriting(GrammarType parent) => GrammarType(
     name: name,
     isAbstract: isAbstract,
+    wordClass: wordClass,
     inheritsFrom: inheritsFrom,
     requiredStems: {...parent.requiredStems, ...requiredStems}.toList(),
     stems: {...parent.stems, ...stems},
@@ -409,6 +415,9 @@ final class GrammarFile {
 
   final Map<String, SandhiRuleSpec> sandhi;
 
+  /// S19: the word classes the types of this file may name.
+  final Set<String> classes;
+
   /// Types as written, before inheritance.
   final Map<String, GrammarType> declaredTypes;
 
@@ -428,6 +437,7 @@ final class GrammarFile {
     required this.parts,
     required this.typeInference,
     required this.sandhi,
+    required this.classes,
     required this.declaredTypes,
     this.givenPart,
     this.lemmaPart,
@@ -507,6 +517,7 @@ class _FileParser {
     'defaults',
     'type_inference',
     'sandhi',
+    'classes',
     'types',
     'items',
     'shared',
@@ -521,6 +532,7 @@ class _FileParser {
     final axes = _axes();
     final parts = _parts();
     final defaults = root['defaults'] as YamlMap?;
+    final classes = _classes();
     final file = GrammarFile(
       path: path,
       dataFileId: root['data_file_id'] as String,
@@ -530,7 +542,8 @@ class _FileParser {
       lemmaPart: defaults?['lemma_part'] as String?,
       typeInference: _typeInference(parts),
       sandhi: _sandhi(),
-      declaredTypes: _types(axes),
+      classes: classes,
+      declaredTypes: _types(axes, classes),
     );
     file.items.addAll(_items(file));
     return file;
@@ -743,15 +756,28 @@ class _FileParser {
     return rules;
   }
 
-  Map<String, GrammarType> _types(Axes axes) {
+  Set<String> _classes() {
+    final names = <String>{};
+    for (final node in (root['classes'] as YamlList?) ?? const []) {
+      if (!names.add('$node')) {
+        _bad('S19', 'class "$node" is declared twice');
+      }
+    }
+    return names;
+  }
+
+  Map<String, GrammarType> _types(Axes axes, Set<String> classes) {
     final node = (root['types'] as YamlMap?) ?? YamlMap();
     final types = <String, GrammarType>{};
     for (final entry in node.entries) {
       final name = '${entry.key}';
       final spec = (entry.value as YamlMap?) ?? YamlMap();
+      final isAbstract = spec['abstract'] as bool? ?? false;
       types[name] = GrammarType(
         name: name,
-        isAbstract: spec['abstract'] as bool? ?? false,
+        isAbstract: isAbstract,
+        wordClass: _wordClass(name, spec['class'] as String?, isAbstract,
+            classes),
         inheritsFrom: spec['inherits_from'] as String?,
         requiredStems: [
           for (final s in (spec['required_stems'] as YamlList?) ?? const [])
@@ -768,6 +794,27 @@ class _FileParser {
       );
     }
     return types;
+  }
+
+  /// S19: a concrete type names one of the file's classes, an abstract one
+  /// names none.
+  String? _wordClass(
+    String type,
+    String? given,
+    bool isAbstract,
+    Set<String> classes,
+  ) {
+    if (isAbstract) {
+      if (given != null) {
+        _bad('S19', 'type $type is abstract, so it takes no "class"');
+      }
+      return null;
+    }
+    if (given == null) _bad('S19', 'type $type has no "class"');
+    if (!classes.contains(given)) {
+      _bad('S19', 'type $type names the unknown class "$given"');
+    }
+    return given;
   }
 
   Map<String, StemSpec> _stems(String type, YamlMap? node) {

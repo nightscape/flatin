@@ -387,7 +387,10 @@ void main() {
       _expectRejected(
         'S12',
         'type "Perfekt-System" is also declared in',
-        _fixtureWith('  Pronomen: {}', '  Perfekt-System: {abstract: true}'),
+        _fixtureWith(
+          '  Pronomen:\n    class: pronomen',
+          '  Perfekt-System: {abstract: true}',
+        ),
       );
     });
 
@@ -568,6 +571,60 @@ void main() {
         _fixtureWith('  tail: [kasus, numerus]', '  tail: [kasus]'),
       );
     });
+
+    test('S19: a concrete type without a class', () {
+      _expectRejected(
+        'S19',
+        'type i-Deklination-mf has no "class"',
+        _fixtureWith(
+          '  i-Deklination-mf:\n    class: deklination',
+          '  i-Deklination-mf:',
+        ),
+      );
+    });
+
+    test('S19: a type naming a class the file does not list', () {
+      _expectRejected(
+        'S19',
+        'type i-Deklination-mf names the unknown class "verb"',
+        _fixtureWith('    class: deklination\n    required_stems: [stamm]',
+            '    class: verb\n    required_stems: [stamm]'),
+      );
+    });
+
+    test('S19: a class on an abstract type', () {
+      _expectRejected(
+        'S19',
+        'type a-o-Endungen is abstract, so it takes no "class"',
+        _fixtureWith(
+          '  a-o-Endungen:\n    abstract: true',
+          '  a-o-Endungen:\n    abstract: true\n    class: deklination',
+        ),
+      );
+    });
+
+    test('S19: a class listed twice', () {
+      _expectRejected(
+        'S19',
+        'class "deklination" is declared twice',
+        _fixtureWith(
+          'classes: [deklination, adjektiv, pronomen]',
+          'classes: [deklination, adjektiv, pronomen, deklination]',
+        ),
+      );
+    });
+
+    // A new type is caught by the load, not by the first step that uses it.
+    test('S19: a type added without a class', () {
+      _expectRejected(
+        'S19',
+        'type Neu-Deklination has no "class"',
+        _fixtureWith(
+          '  i-Deklination-mf:',
+          '  Neu-Deklination: {}\n\n  i-Deklination-mf:',
+        ),
+      );
+    });
   });
 }
 
@@ -590,8 +647,11 @@ defaults:
   given_part: praesens_1sg
   lemma_part: praesens_1sg
 
+classes: [konjugation]
+
 types:
   I-Konjugation:
+    class: konjugation
     required_stems: [wurzel]
     stems:
       wurzel: {from: praesens_1sg, remove: "iō", display: Wortstock}

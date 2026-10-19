@@ -244,7 +244,10 @@ final class Grammar {
   /// it changes, so a diagnosis names the parent rather than both.
   final Map<String, Map<FormKey, Template>> templatesByType;
 
-  const Grammar(this.templatesByType);
+  /// S19: concrete type → its word class. Abstract types are absent.
+  final Map<String, String> classByType;
+
+  const Grammar(this.templatesByType, this.classByType);
 }
 
 final class Derivation {
