@@ -339,13 +339,6 @@ class AppSteps {
     expect(finder, findsAtLeastNWidgets(1));
   }
 
-  @Then('I should see checkboxes for form options')
-  @And('I should see checkboxes for form options')
-  Future<void> iShouldSeeCheckboxes(WidgetTester tester) async {
-    final checkboxFinder = find.byType(CheckboxListTile);
-    expect(checkboxFinder, findsAtLeastNWidgets(1));
-  }
-
   @Then('the checkbox state should change')
   @And('the checkbox state should change')
   Future<void> checkboxStateShouldChange(WidgetTester tester) async {

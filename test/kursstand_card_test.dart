@@ -29,6 +29,22 @@ Future<void> _move(
   await letItLoad(tester);
 }
 
+/// Drags the thumb that sits at [at] of the slider's width by [dx] pixels.
+Future<void> _dragThumb(
+  WidgetTester tester,
+  String slider,
+  double at,
+  double dx,
+) async {
+  final rect = tester.getRect(_text(slider));
+  await tester.dragFrom(
+    Offset(rect.left + rect.width * at, rect.center.dy),
+    Offset(dx, 0),
+  );
+  await tester.pumpAndSettle();
+  await letItLoad(tester);
+}
+
 Future<void> _open(
   WidgetTester tester,
   Settings settings, {
@@ -72,6 +88,31 @@ void main() {
     expect(_shown(tester, 'kursstand.grammar.label'), 'L1 (Band 1) - L23 (Band 2)');
     expect(tester.widget<RangeSlider>(_text('kursstand.grammar.slider')).onChanged,
         isNull);
+  });
+
+  testWidgets('dragging the word thumbs to the ends stops at L1 and L40',
+      (tester) async {
+    await _open(tester, Settings(courseWords: LessonRange(10, 20)));
+
+    await _dragThumb(tester, 'kursstand.words.slider', 0.49, 1000);
+    expect(_shown(tester, 'kursstand.words.label'), 'L10 (Band 1) - L40 (Band 2)');
+
+    await _dragThumb(tester, 'kursstand.words.slider', 0.23, -1000);
+    expect(_shown(tester, 'kursstand.words.label'), 'L1 (Band 1) - L40 (Band 2)');
+    expect((await storedSettings())['courseWords'],
+        LessonRange(1, lastLesson).toJson());
+  });
+
+  testWidgets('dragging the grammar slider does nothing while linked',
+      (tester) async {
+    await _open(tester, Settings(courseWords: LessonRange(10, 20)));
+
+    final before = _shown(tester, 'kursstand.grammar.label');
+    await _dragThumb(tester, 'kursstand.grammar.slider', 0.49, 1000);
+
+    expect(_shown(tester, 'kursstand.grammar.label'), before);
+    expect((await storedSettings())['courseWords'],
+        LessonRange(10, 20).toJson());
   });
 
   testWidgets('the grammar slider stays when unlinked', (tester) async {
