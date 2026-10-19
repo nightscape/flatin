@@ -189,7 +189,7 @@ void main() {
       expect(bene.regular!.result, 'bonē');
     });
 
-    test('posse: overrides over a composition', () {
+    test('posse: a type pattern beside a composition', () {
       _golden(
         'posse',
         'ind.praes.akt.1.sg',
@@ -199,10 +199,31 @@ void main() {
       _golden('posse', 'ind.perf.akt.1.sg', 'potuī', '{perfekt}+ī '
           '[Perfekt-System]');
       _golden('posse', 'konj.impf.akt.1.sg', 'possem',
-          'irregular (rule: potessem)');
-      final possem = _form('posse', 'konj.impf.akt.1.sg') as IrregularForm;
-      expect(possem.regular, isA<ComposedForm>());
-      expect(possem.regular!.result, 'potessem');
+          '{praesens}+sem [Unregelmäßig]');
+      final possem = _form('posse', 'konj.impf.akt.1.sg') as GeneratedForm;
+      expect(possem.stemName, 'praesens');
+      expect(possem.ending, 'sem');
+    });
+
+    test('the fixture derives posse as the shipped data does', () {
+      final shipped = parseGrammarFiles({
+        'lib/data/latin_verbs.yaml':
+            File('lib/data/latin_verbs.yaml').readAsStringSync(),
+        'lib/data/latin_nouns.yaml':
+            File('lib/data/latin_nouns.yaml').readAsStringSync(),
+      });
+      final shippedEngine = GrammarEngine(shipped);
+      for (final key in const [
+        'konj.impf.akt.1.sg',
+        'konj.impf.akt.3.pl',
+        'inf.praes.akt',
+      ]) {
+        final here = _form('posse', key);
+        final there = shippedEngine.of('verbs', 'posse').forms[key]!;
+        expect(here.runtimeType, there.runtimeType, reason: key);
+        expect(here.variants, there.variants, reason: key);
+        expect(_trace(here), _trace(there), reason: key);
+      }
     });
 
     test('prodesse: the prefix loses its d before a consonant', () {

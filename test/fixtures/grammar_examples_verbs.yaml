@@ -25,6 +25,7 @@ parts:
   perfekt_1sg:    {label: Perfekt}
   supinum:        {label: Supinum}
   praefix:        {label: Präfix, display: false}
+  praesens_stamm: {label: Präsensstamm, display: false}
   futurpartizip:  {label: Partizip Futur}
   ppa_nom:        {label: Partizip Präsens}
   ppa_gen:        {label: Partizip Präsens Genitiv}
@@ -433,6 +434,29 @@ types:
       ppa:     {from: ppa_gen, remove: "is", display: PPA-Stamm}
       ppa_nom: {from: ppa_nom, remove: "", display: PPA Nominativ}
       gerv:    {from: gerundiv, remove: "us", display: Gerundivstamm}
+      # Only a Kompositum of esse gives these two parts; without them the
+      # rules below produce no key (S4), and the other items stay untouched.
+      praefix:  {from: praefix, display: Präfix}
+      praesens: {from: praesens_stamm, display: Präsensstamm}
+    sandhi: [t_s]
+    compose:
+      - match: {modus: ind, tempus: [praes, impf, fut]}
+        parts:
+          - {stem: praefix}
+          - {lexeme: esse, pass: all}
+      - match: {modus: konj, tempus: praes}
+        parts:
+          - {stem: praefix}
+          - {lexeme: esse, pass: all}
+    forms:
+      # pot- + essem contracts to possem, which no seam rule can write.
+      konj.impf.akt.1.sg: "{praesens}sem"
+      konj.impf.akt.2.sg: "{praesens}sēs"
+      konj.impf.akt.3.sg: "{praesens}set"
+      konj.impf.akt.1.pl: "{praesens}sēmus"
+      konj.impf.akt.2.pl: "{praesens}sētis"
+      konj.impf.akt.3.pl: "{praesens}sent"
+      inf.praes.akt: "{praesens}se"
 
   esse-Kompositum:
     inherits_from: Perfekt-System
@@ -442,7 +466,7 @@ types:
       - match: {tempus: [praes, impf, fut]}
         join: ""
         parts: [{stem: praefix}, {lexeme: esse, pass: all}]
-    sandhi: [t_s, d_ausfall]
+    sandhi: [d_ausfall]
 
   ire-Kompositum:
     stems:
@@ -545,18 +569,9 @@ items:
     parts: {infinitiv: audēre, praesens_1sg: audeō, supinum: ausum}
     deponent: [perf, plusq, fut2]
 
-  - type: esse-Kompositum
+  - type: Unregelmäßig
     translation: können
-    parts: {infinitiv: posse, praesens_1sg: possum, praefix: pot, perfekt_1sg: potuī}
-    absent: [{modus: imp}, {modus: part}, {modus: inf, tempus: fut}]
-    forms:
-      inf.praes.akt: "posse"
-      konj.impf.akt.1.sg: "possem"
-      konj.impf.akt.2.sg: "possēs"
-      konj.impf.akt.3.sg: "posset"
-      konj.impf.akt.1.pl: "possēmus"
-      konj.impf.akt.2.pl: "possētis"
-      konj.impf.akt.3.pl: "possent"
+    parts: {infinitiv: posse, praesens_1sg: possum, praefix: pot, praesens_stamm: pos, perfekt_1sg: potuī}
 
   - type: esse-Kompositum
     translation: nützen

@@ -6,6 +6,7 @@
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:latin_practice/grammar/engine.dart';
 import 'package:latin_practice/grammar/schema.dart';
 import 'package:latin_practice/models/form_label.dart';
 
@@ -16,6 +17,12 @@ Map<String, String> get _fixture => {
       _nounsPath: File(_nounsPath).readAsStringSync(),
       _verbsPath: File(_verbsPath).readAsStringSync(),
     };
+
+/// The item lines the `absent:` tests hang their own list under: posse has
+/// konj keys from a compose rule and no override, ferre overrides generated
+/// konj imperfect keys.
+const _posseParts = '    parts: {infinitiv: posse,';
+const _ferreParts = '    parts: {infinitiv: ferre,';
 
 /// The fixture with one line replaced in whichever file holds it, for the
 /// failing-load tests.
@@ -491,11 +498,22 @@ void main() {
       );
     });
 
+    test('S15: an absent pattern removes the keys it names', () {
+      final engine = GrammarEngine(parseGrammarFiles(
+        _fixtureWith(_posseParts,
+            '    absent: [{modus: konj, tempus: praes}]\n$_posseParts'),
+      ));
+      final keys = engine.of('verbs', 'posse').forms.keys;
+      expect(keys, contains('konj.impf.akt.1.sg'));
+      expect(keys, isNot(contains('konj.praes.akt.1.sg')));
+    });
+
     test('S15: an absent pattern that removes nothing', () {
       _expectRejected(
         'S15',
         'removes no key',
-        _fixtureWith('    absent:', '    absent:\n      - {modus: sup}\n    _absent:'),
+        _fixtureWith(
+            _posseParts, '    absent: [{modus: sup}]\n$_posseParts'),
       );
     });
 
@@ -503,7 +521,8 @@ void main() {
       _expectRejected(
         'S15',
         'removes the overridden key',
-        _fixtureWith('absent: [{modus: imp}', 'absent: [{modus: konj}'),
+        _fixtureWith(_ferreParts,
+            '    absent: [{modus: konj, tempus: impf}]\n$_ferreParts'),
       );
     });
 

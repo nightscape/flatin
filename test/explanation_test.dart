@@ -83,24 +83,22 @@ void main() {
     List<String> german(List<ExplanationLine> lines) =>
         [for (final line in lines) renderDe(de, line)];
 
-    test('potessem: the regular form of an irregular one is composed', () {
-      final item = posse();
+    test('īre: the regular form of an irregular one is composed', () async {
+      final verbs = await loadPracticeItems(_verbs);
+      final item = verbs.firstWhere((i) => i.lemma == 'īre');
+      const key = 'konj.plusq.pass.3.sg';
+      final form = item.derivation.forms[key]! as IrregularForm;
+      expect(form.variants, ['itum esset']);
+      expect(form.regular, isA<ComposedForm>());
+      expect(form.regular!.result, 'itus esset');
       expect(
-        item.derivation.forms['konj.plusq.akt.1.sg'],
-        isA<IrregularForm>().having(
-          (f) => f.regular,
-          'regular',
-          isA<ComposedForm>(),
-        ),
-      );
-      expect(
-        diagnose(item, 'konj.plusq.akt.1.sg', 'potessem'),
+        diagnose(item, key, 'itus esset'),
         isA<RegularInsteadOfIrregular>(),
       );
       expect(
-        german(explainWrongAnswer(item, 'konj.plusq.akt.1.sg', 'potessem')).last,
-        'Du hast potessem geschrieben – das wäre die regelmäßige Form, '
-        'aber Konjunktiv Plusquamperfekt: 1. Person Singular ist hier '
+        german(explainWrongAnswer(item, key, 'itus esset')).last,
+        'Du hast itus esset geschrieben – das wäre die regelmäßige Form, '
+        'aber Konjunktiv Plusquamperfekt Passiv: 3. Person Singular ist hier '
         'unregelmäßig',
       );
     });

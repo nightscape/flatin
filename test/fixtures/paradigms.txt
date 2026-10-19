@@ -3289,9 +3289,10 @@ gerv.pl.abl.n | audendīs | {gerv}+īs [a-o-Endungen]
 gerv.pl.vok.m | audendī | {gerv}+ī [a-o-Endungen]
 gerv.pl.vok.f | audendae | {gerv}+ae [a-o-Endungen]
 gerv.pl.vok.n | audenda | {gerv}+a [a-o-Endungen]
-## posse (verbs) esse-Kompositum
+## posse (verbs) Unregelmäßig
 - stem perfekt = potu
 - stem praefix = pot
+- stem praesens = pos
 ind.praes.akt.1.sg | possum | compose(praefix:pos(t_s) + esse[ind.praes.akt.1.sg]=sum, join="")
 ind.praes.akt.1.pl | possumus | compose(praefix:pos(t_s) + esse[ind.praes.akt.1.pl]=sumus, join="")
 ind.praes.akt.2.sg | potes | compose(praefix:pot + esse[ind.praes.akt.2.sg]=es, join="")
@@ -3334,12 +3335,12 @@ konj.praes.akt.2.sg | possīs | compose(praefix:pos(t_s) + esse[konj.praes.akt.2
 konj.praes.akt.2.pl | possītis | compose(praefix:pos(t_s) + esse[konj.praes.akt.2.pl]=sītis, join="")
 konj.praes.akt.3.sg | possit | compose(praefix:pos(t_s) + esse[konj.praes.akt.3.sg]=sit, join="")
 konj.praes.akt.3.pl | possint | compose(praefix:pos(t_s) + esse[konj.praes.akt.3.pl]=sint, join="")
-konj.impf.akt.1.sg | possem | irregular (rule: potessem)
-konj.impf.akt.1.pl | possēmus | irregular (rule: potessēmus)
-konj.impf.akt.2.sg | possēs | irregular (rule: potessēs)
-konj.impf.akt.2.pl | possētis | irregular (rule: potessētis)
-konj.impf.akt.3.sg | posset | irregular (rule: potesset)
-konj.impf.akt.3.pl | possent | irregular (rule: potessent)
+konj.impf.akt.1.sg | possem | {praesens}+sem [Unregelmäßig]
+konj.impf.akt.1.pl | possēmus | {praesens}+sēmus [Unregelmäßig]
+konj.impf.akt.2.sg | possēs | {praesens}+sēs [Unregelmäßig]
+konj.impf.akt.2.pl | possētis | {praesens}+sētis [Unregelmäßig]
+konj.impf.akt.3.sg | posset | {praesens}+set [Unregelmäßig]
+konj.impf.akt.3.pl | possent | {praesens}+sent [Unregelmäßig]
 konj.perf.akt.1.sg | potuerim | {perfekt}+erim [Perfekt-System]
 konj.perf.akt.1.pl | potuerimus | {perfekt}+erimus [Perfekt-System]
 konj.perf.akt.2.sg | potueris | {perfekt}+eris [Perfekt-System]
@@ -3352,7 +3353,7 @@ konj.plusq.akt.2.sg | potuissēs | {perfekt}+issēs [Perfekt-System]
 konj.plusq.akt.2.pl | potuissētis | {perfekt}+issētis [Perfekt-System]
 konj.plusq.akt.3.sg | potuisset | {perfekt}+isset [Perfekt-System]
 konj.plusq.akt.3.pl | potuissent | {perfekt}+issent [Perfekt-System]
-inf.praes.akt | posse | irregular (rule: potesse)
+inf.praes.akt | posse | {praesens}+se [Unregelmäßig]
 inf.perf.akt | potuisse | {perfekt}+isse [Perfekt-System]
 ## prodesse (verbs) esse-Kompositum
 - stem perfekt = prōfu

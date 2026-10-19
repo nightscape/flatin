@@ -95,6 +95,21 @@ void main() {
       expect(steps.sublist(1, 4).every((s) => s.absent), isTrue);
     });
 
+    test('possem: the data quizzes the present stem, not a Merken card', () {
+      final item = verb('posse');
+      const key = 'konj.impf.akt.1.sg';
+      final form = item.derivation.forms[key]! as GeneratedForm;
+      expect(form.result, 'possem');
+      expect(form.stemName, 'praesens');
+      expect(form.ending, 'sem');
+
+      final steps = eselSteps(item, key);
+      expect(steps.map((s) => s.kind), _esel);
+      expect(_answers(steps), ['Unregelmäßig', 'pos-', '-sem', '']);
+      expect(steps.last.answerKey, 'esel.noRule');
+      expect(steps.every((s) => !s.absent), isTrue);
+    });
+
     test('an irregular form without a regular one keeps regular null', () {
       final item = noun('is');
       expect(item.derivation.forms['nom.sg.m'], isA<IrregularForm>());

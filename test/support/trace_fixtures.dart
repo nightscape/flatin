@@ -379,16 +379,16 @@ PracticeItem regere() {
   );
 }
 
-/// posse: a composition with an affix that the seam rule changes, and an
-/// irregular form whose regular counterpart is that composition.
+/// posse: a composition with an affix that the seam rule changes, beside a
+/// type pattern on the present stem, as `lib/data/latin_verbs.yaml` has it.
 PracticeItem posse() {
   final praesens = StemFromPart(
     name: 'praesens',
     display: 'Präsensstamm',
-    variants: const ['pot'],
-    part: 'perfekt',
-    sourceWord: 'potuī',
-    removedSuffix: 'uī',
+    variants: const ['pos'],
+    part: 'praesens_stamm',
+    sourceWord: 'pos',
+    removedSuffix: '',
   );
 
   ComposedForm composed(
@@ -432,16 +432,12 @@ PracticeItem posse() {
           'sum',
           tVorS,
         ),
-        'konj.plusq.akt.1.sg': IrregularForm(
-          formKey: 'konj.plusq.akt.1.sg',
+        'konj.impf.akt.1.sg': GeneratedForm(
+          formKey: 'konj.impf.akt.1.sg',
           variants: const ['possem'],
-          regular: composed(
-            'konj.plusq.akt.1.sg',
-            'potessem',
-            'pot',
-            'essem',
-            null,
-          ),
+          stemName: 'praesens',
+          ending: 'sem',
+          endingType: 'Unregelmäßig',
         ),
       },
     ),
