@@ -59,7 +59,7 @@ Future<void> _openWordsPage(WidgetTester tester) async {
 }
 
 Future<void> _back(WidgetTester tester) async {
-  await tester.pageBack();
+  await tester.tap(find.byType(BackButton));
   await tester.pumpAndSettle();
   await letItLoad(tester);
 }

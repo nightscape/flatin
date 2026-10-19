@@ -30,10 +30,10 @@ class OfferedLocale {
 }
 
 /// One line per language: `supportedLocales` and the language picker both
-/// read this list, so adding or hiding a language changes nothing else.
+/// read this list. A language is listed only when every string on screen
+/// exists in it.
 const offeredLocales = <OfferedLocale>[
   OfferedLocale('de', 'Deutsch', 'German', '🇩🇪'),
-  OfferedLocale('en', 'English', 'English', '🇬🇧'),
 ];
 
 /// The course language: what a device the app has no translation for gets.
@@ -58,7 +58,12 @@ class LocaleOverride extends _$LocaleOverride {
   Future<Locale?> build() async {
     final prefs = await SharedPreferences.getInstance();
     final code = prefs.getString(_key);
-    return code == null ? null : Locale(code);
+    if (code == null) return null;
+    if (offeredLocales.every((offered) => offered.code != code)) {
+      await prefs.remove(_key);
+      return null;
+    }
+    return Locale(code);
   }
 
   /// A null [locale] hands the choice back to the device language.

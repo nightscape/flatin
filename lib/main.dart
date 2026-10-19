@@ -21,7 +21,7 @@ class LatinPracticeApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
-      title: 'Latin Practice',
+      onGenerateTitle: (context) => FlutterI18n.translate(context, 'app.title'),
       locale: ref.watch(localeOverrideProvider).value,
       supportedLocales: [for (final offered in offeredLocales) offered.locale],
       localeListResolutionCallback: (locales, supported) =>
@@ -34,7 +34,7 @@ class LatinPracticeApp extends ConsumerWidget {
         FlutterI18nDelegate(
           translationLoader: FileTranslationLoader(
             basePath: 'assets/flutter_i18n',
-            fallbackFile: 'en',
+            fallbackFile: 'de',
             useCountryCode: false,
           ),
           missingTranslationHandler: (key, locale) {

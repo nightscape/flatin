@@ -15,20 +15,18 @@ Future<void> openLanguageScreen(WidgetTester tester) async {
 void main() {
   test('an entry names the language in both tongues', () {
     final german = offeredLocales.firstWhere((o) => o.code == 'de');
-    final english = offeredLocales.firstWhere((o) => o.code == 'en');
 
     expect(german.label, '🇩🇪 Deutsch (German)');
-    expect(english.label, '🇬🇧 English');
+    expect(offeredLocales.map((o) => o.code), ['de']);
   });
 
   test('search matches endonym, English name and code', () {
     final german = offeredLocales.firstWhere((o) => o.code == 'de');
-    final english = offeredLocales.firstWhere((o) => o.code == 'en');
 
     for (final query in ['deutsch', 'DEUTSCH', 'German', 'de', ' de ']) {
       expect(german.matches(query), isTrue, reason: query);
-      expect(english.matches(query), isFalse, reason: query);
     }
+    expect(german.matches('english'), isFalse);
     expect(german.matches(''), isTrue);
   });
 
@@ -46,26 +44,12 @@ void main() {
     await openLanguageScreen(tester);
 
     expect(find.byKey(const Key('language.de')), findsOneWidget);
-    expect(find.byKey(const Key('language.en')), findsOneWidget);
 
-    await tester.enterText(find.byKey(const Key('language.search')), 'German');
+    await tester.enterText(find.byKey(const Key('language.search')), 'French');
     await settle(tester);
 
-    expect(find.byKey(const Key('language.de')), findsOneWidget);
-    expect(find.byKey(const Key('language.en')), findsNothing);
+    expect(find.byKey(const Key('language.de')), findsNothing);
     expect(find.byKey(const Key('language.system')), findsOneWidget);
-  });
-
-  testWidgets('a picked language applies without a restart', (tester) async {
-    SharedPreferences.setMockInitialValues({});
-    await pumpAppOnDevice(tester, const Locale('de', 'DE'));
-    expect(titleOf(tester), 'Latein Übung');
-
-    await openLanguageScreen(tester);
-    await tester.tap(find.byKey(const Key('language.en')));
-    await settle(tester);
-
-    expect(titleOf(tester), 'Latin Practice');
   });
 
   test('a picked language is there for the next start', () async {
@@ -77,12 +61,14 @@ void main() {
     await container.read(localeOverrideProvider.future);
     await container
         .read(localeOverrideProvider.notifier)
-        .select(const Locale('en'));
+        .select(const Locale('de'));
 
     final restarted = freshContainer();
     addTearDown(restarted.dispose);
-    expect(await restarted.read(localeOverrideProvider.future),
-        const Locale('en'));
+    expect(
+      await restarted.read(localeOverrideProvider.future),
+      const Locale('de'),
+    );
 
     await restarted.read(localeOverrideProvider.notifier).select(null);
     final andAgain = freshContainer();
@@ -90,23 +76,20 @@ void main() {
     expect(await andAgain.read(localeOverrideProvider.future), isNull);
   });
 
-  testWidgets('a stored choice outranks the device language', (tester) async {
-    SharedPreferences.setMockInitialValues({'app_locale': 'en'});
-    await pumpAppOnDevice(tester, const Locale('de', 'DE'));
-
-    expect(titleOf(tester), 'Latin Practice');
-  });
-
-  testWidgets('the System entry hands the choice back to the device',
-      (tester) async {
-    SharedPreferences.setMockInitialValues({'app_locale': 'en'});
-    await pumpAppOnDevice(tester, const Locale('de', 'DE'));
-    expect(titleOf(tester), 'Latin Practice');
+  testWidgets('the System entry hands the choice back to the device', (
+    tester,
+  ) async {
+    SharedPreferences.setMockInitialValues({'app_locale': 'de'});
+    await pumpAppOnDevice(tester, const Locale('en', 'US'));
 
     await openLanguageScreen(tester);
     await tester.tap(find.byKey(const Key('language.system')));
     await settle(tester);
 
     expect(titleOf(tester), 'Latein Übung');
+    expect(
+      (await SharedPreferences.getInstance()).containsKey('app_locale'),
+      isFalse,
+    );
   });
 }
