@@ -221,13 +221,25 @@ void main() {
         ).readAsStringSync(),
       });
       final shippedEngine = GrammarEngine(shipped);
-      for (final key in const [
-        'konj.impf.akt.1.sg',
-        'konj.impf.akt.3.pl',
-        'inf.praes.akt',
-      ]) {
-        final here = _form('posse', key);
-        final there = shippedEngine.of('verbs', 'posse').forms[key]!;
+      final fixtureDerivation = _of('posse');
+      final shippedDerivation = shippedEngine.of('verbs', 'posse');
+      expect(
+        fixtureDerivation.forms.keys.toSet(),
+        shippedDerivation.forms.keys.toSet(),
+      );
+      expect(
+        {
+          for (final stem in fixtureDerivation.stems.values)
+            stem.name: stem.variants,
+        },
+        {
+          for (final stem in shippedDerivation.stems.values)
+            stem.name: stem.variants,
+        },
+      );
+      for (final key in shippedDerivation.forms.keys) {
+        final here = fixtureDerivation.forms[key]!;
+        final there = shippedDerivation.forms[key]!;
         expect(here.runtimeType, there.runtimeType, reason: key);
         expect(here.variants, there.variants, reason: key);
         expect(_trace(here), _trace(there), reason: key);
