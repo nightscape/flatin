@@ -31,9 +31,10 @@ class Settings {
   /// e.g., {"verbs": "dropdown_all_forms", "nouns": "text_field"}
   final Map<String, String> inputStrategyIds;
 
-  /// Normalized words the user switched off; every other word is practised.
-  /// Can be set from either the settings screen (lesson-based) or the
-  /// statistics screen (performance-based).
+  /// Words the user switched off, in the exact spelling of their lemma;
+  /// every other word is practised. hīc and hic are different words, so a
+  /// macron tells two entries apart. Can be set from either the settings
+  /// screen (lesson-based) or the statistics screen (performance-based).
   final Set<String> deselectedWords;
 
   /// The lessons whose words the learner practises.
@@ -46,8 +47,8 @@ class Settings {
   /// Whether the grammar range trails the word range.
   final bool grammarFollowsWords;
 
-  /// Normalized words the learner practises although the course has not
-  /// reached them.
+  /// Words the learner practises although the course has not reached them,
+  /// in the exact spelling of their lemma.
   final Set<String> forcedOnWords;
 
   /// Data file id -> type names practised ahead of the course.
@@ -159,9 +160,9 @@ class Settings {
         forcedOnForms: {},
       );
 
-  Override overrideOfWord(String normalizedWord) {
-    if (deselectedWords.contains(normalizedWord)) return Override.forcedOff;
-    if (forcedOnWords.contains(normalizedWord)) return Override.forcedOn;
+  Override overrideOfWord(String lemma) {
+    if (deselectedWords.contains(lemma)) return Override.forcedOff;
+    if (forcedOnWords.contains(lemma)) return Override.forcedOn;
     return Override.none;
   }
 
@@ -173,11 +174,11 @@ class Settings {
 
   /// Flips what the learner sees for one word; [inRange] is the course
   /// verdict, so an override is stored only where it differs from it.
-  Settings toggleWord(String normalizedWord, {required bool inRange}) {
-    final (off, on) = _flip(overrideOfWord(normalizedWord), inRange);
+  Settings toggleWord(String lemma, {required bool inRange}) {
+    final (off, on) = _flip(overrideOfWord(lemma), inRange);
     return copyWith(
-      deselectedWords: _withEntry(deselectedWords, normalizedWord, off),
-      forcedOnWords: _withEntry(forcedOnWords, normalizedWord, on),
+      deselectedWords: _withEntry(deselectedWords, lemma, off),
+      forcedOnWords: _withEntry(forcedOnWords, lemma, on),
     );
   }
 
@@ -260,9 +261,9 @@ class Settings {
     return copyWith(disabledFeatures: next);
   }
 
-  /// Whether a specific normalized word is selected.
-  bool isWordSelected(String normalizedWord) {
-    return !deselectedWords.contains(normalizedWord);
+  /// Whether the word of that exact lemma is selected.
+  bool isWordSelected(String lemma) {
+    return !deselectedWords.contains(lemma);
   }
 
   /// Convert to JSON for storage

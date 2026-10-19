@@ -35,37 +35,42 @@ class SettingsNotifier extends _$SettingsNotifier {
     return converted;
   }
 
-  /// Reads settings of the v0 or v1 format against the current data.
+  /// Reads settings of any older format against the current data.
   Future<Map<String, dynamic>> _convert(Map<String, dynamic> json) async {
     final map = MigrationMap.parse(
       await loadAssetText('lib/data/migration_v2.yaml'),
     );
+    final lessons = await loadLessonData(lessonDataAssets);
     final converted = convertSettingsV2(json, map);
     final isV0 = !json.containsKey('disabledForms');
     if (isV0) {
-      converted['deselectedWords'] = await _deselectedFromSelected(
+      converted['deselectedWords'] = _deselectedFromSelected(
         json['selectedWords'] as List<dynamic>? ?? const [],
         map,
+        lessons,
       );
     }
-    return converted;
+    return convertSettingsV3(
+      converted,
+      lessons.lessonWords.values.expand((words) => words),
+    );
   }
 
   /// The v0 format stored the words that were ON; every lesson word that is
   /// not among them is off. An empty set meant "no selection yet".
-  Future<List<String>> _deselectedFromSelected(
+  List<String> _deselectedFromSelected(
     List<dynamic> selectedWords,
     MigrationMap map,
-  ) async {
+    LessonData lessons,
+  ) {
     if (selectedWords.isEmpty) return [];
     final selected = {
       for (final word in selectedWords) map.wordMap['$word'] ?? '$word',
     };
-    final lessons = await loadLessonData(lessonDataAssets);
     return {
       for (final name in lessons.lessonNames)
         for (final word in lessons.lessonWords[name]!)
-          if (!selected.contains(normalizeDiacritics(word))) normalizeDiacritics(word),
+          if (!selected.contains(normalizeDiacritics(word))) word,
     }.toList();
   }
 
@@ -128,12 +133,11 @@ class SettingsNotifier extends _$SettingsNotifier {
 
   /// Toggle a single word's selection state.
   Future<void> toggleWord(
-    String normalizedWord, {
+    String lemma, {
     required bool inRange,
   }) async {
     final currentSettings = await future;
-    final newSettings =
-        currentSettings.toggleWord(normalizedWord, inRange: inRange);
+    final newSettings = currentSettings.toggleWord(lemma, inRange: inRange);
     state = AsyncValue.data(newSettings);
     await _saveSettings(newSettings);
   }

@@ -39,8 +39,8 @@ final class CourseFilter {
   bool formInRange(String dataFileId, FormLabel label) =>
       curriculum.taughtForm(dataFileId, label.key, settings.effectiveGrammar);
 
-  bool wordPracticed(PracticeItem item) => switch (settings
-      .overrideOfWord(normalizeDiacritics(item.lemma))) {
+  bool wordPracticed(PracticeItem item) =>
+      switch (settings.overrideOfWord(item.lemma)) {
         Override.forcedOff => false,
         Override.forcedOn => true,
         Override.none => wordInRange(item),

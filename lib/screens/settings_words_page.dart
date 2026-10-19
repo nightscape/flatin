@@ -68,9 +68,12 @@ class _WordList extends ConsumerWidget {
 
     final rows = <Object>[];
     for (final name in filter.lessons.lessonNames) {
+      // A word several lessons list belongs to the one that introduces it,
+      // so it gets one row and one toggle.
       final matches = [
         for (final lemma in filter.lessons.lessonWords[name]!)
           if (byLemma.containsKey(lemma) &&
+              filter.lessons.wordToLesson[lemma] == name &&
               normalizeDiacritics(lemma).toLowerCase().contains(needle))
             byLemma[lemma]!,
       ];
@@ -90,10 +93,9 @@ class _WordList extends ConsumerWidget {
   }
 
   Widget _wordTile(BuildContext context, WidgetRef ref, PracticeItem item) {
-    final normalized = normalizeDiacritics(item.lemma);
     final gap = filter.wordGap(item);
     return CheckboxListTile(
-      key: Key('word.$normalized'),
+      key: Key('word.${item.lemma}'),
       dense: true,
       title: Text(
         item.lemma,
@@ -103,7 +105,7 @@ class _WordList extends ConsumerWidget {
       value: filter.wordPracticed(item),
       onChanged: (_) => ref
           .read(settingsProvider.notifier)
-          .toggleWord(normalized, inRange: filter.wordInRange(item)),
+          .toggleWord(item.lemma, inRange: filter.wordInRange(item)),
       activeColor: settingsCheckboxColor,
       checkColor: Colors.black,
     );

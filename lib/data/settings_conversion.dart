@@ -1,5 +1,7 @@
 import 'package:yaml/yaml.dart';
 
+import 'lesson_data.dart' show normalizeDiacritics;
+
 /// The tables of `lib/data/migration_v2.yaml`.
 ///
 /// `formKeys` and `types` are keyed by data file id, then by the old entry.
@@ -73,9 +75,9 @@ class MigrationMap {
   static String _word(String itemId) => itemId.split(':').last;
 }
 
-/// The format `Settings.toJson` writes and `convertSettingsV2` produces.
+/// The format `Settings.toJson` writes and `convertSettingsV3` produces.
 const settingsVersionField = 'settingsVersion';
-const settingsVersion = 2;
+const settingsVersion = 3;
 
 /// Reads stored settings of any older format against the v2 data.
 ///
@@ -89,7 +91,7 @@ Map<String, dynamic> convertSettingsV2(
   Map<String, dynamic> json,
   MigrationMap map,
 ) {
-  if (json[settingsVersionField] == settingsVersion) return json;
+  if (_versionOf(json) >= 2) return json;
 
   final isV0 = !json.containsKey('disabledForms');
   final disabledForms = <String, Set<String>>{};
@@ -129,13 +131,43 @@ Map<String, dynamic> convertSettingsV2(
 
   return {
     ...json,
-    settingsVersionField: settingsVersion,
+    settingsVersionField: 2,
     'disabledForms': newForms,
     'disabledTypes': newTypes,
     'deselectedWords': deselected,
   }..remove('enabledForms')
     ..remove('enabledTypes');
 }
+
+/// Reads the word sets of the v2 format, which dropped the macrons, against
+/// the exact lemmas of [lemmas].
+///
+/// One stored word stands for every lemma that spells it the same without
+/// macrons: hīc and hic were one entry and become two, both keeping what the
+/// learner said. A stored word no lemma matches is kept as it is.
+Map<String, dynamic> convertSettingsV3(
+  Map<String, dynamic> json,
+  Iterable<String> lemmas,
+) {
+  if (_versionOf(json) >= 3) return json;
+  final byNormalized = <String, Set<String>>{};
+  for (final lemma in lemmas) {
+    byNormalized.putIfAbsent(normalizeDiacritics(lemma), () => {}).add(lemma);
+  }
+  List<String> exact(dynamic stored) => [
+        for (final word in _words(stored)) ...byNormalized[word] ?? {word},
+      ];
+
+  return {
+    ...json,
+    settingsVersionField: 3,
+    'deselectedWords': exact(json['deselectedWords']),
+    'forcedOnWords': exact(json['forcedOnWords']),
+  };
+}
+
+int _versionOf(Map<String, dynamic> json) =>
+    json[settingsVersionField] as int? ?? 0;
 
 /// The new entries that stay disabled. [oneOld] names one old entry per new
 /// entry; where [several] maps more than one old entry to the same new one,

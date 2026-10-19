@@ -124,14 +124,14 @@ void main() {
   test('conversion deselects every lesson word the old format left out',
       () async {
     final lessons = await loadLessonData(lessonDataAssets);
-    final lessonWords = lessons.lessonNames
-        .expand((name) => lessons.lessonWords[name]!)
-        .map(normalizeDiacritics)
-        .toList();
+    final lessonWords =
+        lessons.lessonNames.expand((name) => lessons.lessonWords[name]!);
 
+    // The old format stored the words without their macrons; what comes back
+    // is the exact lemma of each.
     SharedPreferences.setMockInitialValues({
       'practice_settings': jsonEncode({
-        'selectedWords': [lessonWords.first],
+        'selectedWords': [normalizeDiacritics(lessonWords.first)],
       }),
     });
 

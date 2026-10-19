@@ -2,7 +2,6 @@
 /// The migration tests keep it as their oracle.
 library;
 
-import 'package:latin_practice/data/lesson_data.dart';
 import 'package:latin_practice/models/practice_item.dart';
 import 'package:latin_practice/models/settings.dart';
 
@@ -22,5 +21,5 @@ Set<FormKey> legacyEnabledForms(
 
 /// An item was practised when neither its word nor its type was switched off.
 bool legacyItemSelected(Settings settings, PracticeItem item) =>
-    settings.isWordSelected(normalizeDiacritics(item.lemma)) &&
+    settings.isWordSelected(item.lemma) &&
     settings.isTypeEnabled(item.dataFileId, item.type);
