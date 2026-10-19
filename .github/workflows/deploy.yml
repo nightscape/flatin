@@ -33,9 +33,49 @@ jobs:
           flutter pub get
           bundle install
 
+      - name: Prepare signing
+        shell: bash
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+        run: |
+          for name in ANDROID_KEYSTORE_BASE64 ANDROID_KEY_ALIAS ANDROID_KEY_PASSWORD ANDROID_KEYSTORE_PASSWORD; do
+            if [ -z "${!name}" ]; then
+              echo "::error::Secret $name is empty or not set"
+              exit 1
+            fi
+          done
+          umask 077
+          printf '%s' "$ANDROID_KEYSTORE_BASE64" | base64 --decode > android/app/github-release.keystore
+          printf '%s\n' \
+            "storeFile=app/github-release.keystore" \
+            "keyAlias=$ANDROID_KEY_ALIAS" \
+            "keyPassword=$ANDROID_KEY_PASSWORD" \
+            "storePassword=$ANDROID_KEYSTORE_PASSWORD" > android/key.properties
+
+      - name: Build release APK
+        run: flutter build apk --release
+
+      - name: Verify signature
+        shell: bash
+        run: |
+          apksigner=$(printf '%s\n' "$ANDROID_HOME"/build-tools/*/apksigner | sort -V | tail -n 1)
+          certs=$("$apksigner" verify --print-certs build/app/outputs/flutter-apk/app-release.apk)
+          if grep -q "Android Debug" <<<"$certs"; then
+            echo "::error::Release APK is signed with the Android debug certificate"
+            exit 1
+          fi
+          grep "certificate SHA-256 digest" <<<"$certs"
+
       - name: Publish APK to GitHub Releases
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           cd android
           bundle exec fastlane github_release
+
+      - name: Remove signing material
+        if: always()
+        run: rm -f android/key.properties android/app/github-release.keystore
