@@ -13,13 +13,21 @@ import 'package:latin_practice/models/practice_item.dart';
 import 'support/esel_render.dart';
 
 const _gen = 'gen.pl';
-const _fonts = '/opt/homebrew/share/flutter/bin/cache/artifacts/material_fonts';
 
 // The test font Ahem has fixed glyph widths; real label widths need Roboto.
 Future<void> _loadRoboto() async {
+  final root = Platform.environment['FLUTTER_ROOT'];
+  if (root == null) {
+    throw StateError('FLUTTER_ROOT is not set; flutter test must provide it');
+  }
+  final fonts = '$root/bin/cache/artifacts/material_fonts';
   final loader = FontLoader('Roboto');
   for (final file in ['Regular', 'Medium', 'Bold']) {
-    final bytes = await File('$_fonts/Roboto-$file.ttf').readAsBytes();
+    final roboto = File('$fonts/Roboto-$file.ttf');
+    if (!roboto.existsSync()) {
+      throw StateError('Roboto font missing: ${roboto.path}');
+    }
+    final bytes = await roboto.readAsBytes();
     loader.addFont(Future.value(ByteData.sublistView(bytes)));
   }
   await loader.load();

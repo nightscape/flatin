@@ -135,7 +135,9 @@ class _PracticeTypeButton extends ConsumerWidget {
     final practicable =
         practicableAsync.value?[dataFileId] ?? const <PracticeItem>[];
     final due = dueAsync.value?[dataFileId] ?? const <PracticeItem>[];
-    final itemToShow = due.isNotEmpty
+    final itemToShow = !dueAsync.hasValue
+        ? null
+        : due.isNotEmpty
         ? due.first
         : (practicable.isEmpty ? null : practicable.first);
 
