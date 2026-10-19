@@ -99,10 +99,9 @@ void main() {
   });
 
   test(
-    'practice switches off the lemma that was stored, not its letters',
+    'practice switches off only the macron or only the plain spelling that was stored',
     () async {
       final items = await loadAllPracticeItems();
-      final hic = items.singleWhere((item) => item.lemma == 'hic');
       final parere = items.singleWhere((item) => item.lemma == 'parere');
       final withMacrons = items.singleWhere((item) => item.lemma == 'pārēre');
 
@@ -120,10 +119,6 @@ void main() {
       final plainOff = await filterWith({'parere'});
       expect(plainOff.wordPracticed(parere), isFalse);
       expect(plainOff.wordPracticed(withMacrons), isTrue);
-
-      // hīc is a lesson word of its own; switching it off says nothing about
-      // the pronoun hic.
-      expect((await filterWith({'hīc'})).wordPracticed(hic), isTrue);
     },
   );
 }

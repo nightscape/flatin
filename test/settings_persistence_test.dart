@@ -16,9 +16,9 @@ void main() {
   test('deselected forms, types and words stay off after a reload', () async {
     SharedPreferences.setMockInitialValues({});
     final lessons = await loadLessonData(lessonDataAssets);
-    final word = normalizeDiacritics(
-      lessons.lessonWords[lessons.lessonNames.first]!.first,
-    );
+    final word = lessons.lessonWords.values
+        .expand((words) => words)
+        .firstWhere((w) => w != normalizeDiacritics(w));
 
     final first = ProviderContainer();
     await first.read(settingsProvider.future);

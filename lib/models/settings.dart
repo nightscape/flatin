@@ -37,8 +37,7 @@ class Settings {
 
   /// Words the user switched off, in the exact spelling of their lemma;
   /// every other word is practised. hīc and hic are different words, so a
-  /// macron tells two entries apart. Can be set from either the settings
-  /// screen (lesson-based) or the statistics screen (performance-based).
+  /// macron tells two entries apart.
   final Set<String> deselectedWords;
 
   /// The lessons whose words the learner practises.
