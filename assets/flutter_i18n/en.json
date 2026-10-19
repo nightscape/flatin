@@ -30,6 +30,8 @@
     "verbs": "Verbs (Konjugation)",
     "error": "Error: {error}",
     "inputMode": "Input mode:",
+    "distractorMode": "Wrong translation choices:",
+    "distractors": { "random": "Random" },
     "types": "Types",
     "forms": "Forms",
     "features": "Features",

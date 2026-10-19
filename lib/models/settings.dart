@@ -1,6 +1,7 @@
 import '../data/lesson_data.dart' show lastLesson;
 import '../data/settings_conversion.dart'
     show settingsVersion, settingsVersionField;
+import 'distractor_strategy.dart';
 import 'form_label.dart';
 import 'lesson_range.dart';
 
@@ -30,6 +31,9 @@ class Settings {
   /// Map of data file identifier to input strategy id
   /// e.g., {"verbs": "dropdown_all_forms", "nouns": "text_field"}
   final Map<String, String> inputStrategyIds;
+
+  /// Id of the strategy that picks the wrong translations.
+  final String distractorStrategyId;
 
   /// Words the user switched off, in the exact spelling of their lemma;
   /// every other word is practised. hīc and hic are different words, so a
@@ -62,6 +66,7 @@ class Settings {
     Map<String, Map<String, Set<String>>>? disabledFeatures,
     Map<String, Set<String>>? disabledTypes,
     Map<String, String>? inputStrategyIds,
+    this.distractorStrategyId = defaultDistractorStrategyId,
     Set<String>? deselectedWords,
     LessonRange? courseWords,
     LessonRange? courseGrammar,
@@ -102,6 +107,7 @@ class Settings {
     Map<String, Map<String, Set<String>>>? disabledFeatures,
     Map<String, Set<String>>? disabledTypes,
     Map<String, String>? inputStrategyIds,
+    String? distractorStrategyId,
     Set<String>? deselectedWords,
     LessonRange? courseWords,
     LessonRange? courseGrammar,
@@ -115,6 +121,7 @@ class Settings {
       disabledFeatures: disabledFeatures ?? this.disabledFeatures,
       disabledTypes: disabledTypes ?? this.disabledTypes,
       inputStrategyIds: inputStrategyIds ?? this.inputStrategyIds,
+      distractorStrategyId: distractorStrategyId ?? this.distractorStrategyId,
       deselectedWords: deselectedWords ?? this.deselectedWords,
       courseWords: courseWords ?? this.courseWords,
       courseGrammar: courseGrammar ?? this.courseGrammar,
@@ -283,6 +290,7 @@ class Settings {
         (key, value) => MapEntry(key, value.toList()),
       ),
       'inputStrategyIds': inputStrategyIds,
+      'distractorStrategyId': distractorStrategyId,
       'deselectedWords': deselectedWords.toList(),
       'courseWords': courseWords.toJson(),
       'courseGrammar': courseGrammar.toJson(),
@@ -307,6 +315,9 @@ class Settings {
     final featureMap = json['disabledFeatures'] as Map<String, dynamic>?;
     final disabledTypesMap = json['disabledTypes'] as Map<String, dynamic>?;
     final strategyMap = json['inputStrategyIds'] as Map<String, dynamic>?;
+    final distractorId = json['distractorStrategyId'] as String? ??
+        defaultDistractorStrategyId;
+    distractorStrategyById(distractorId);
     final wordList = json['deselectedWords'] as List<dynamic>?;
     final wordRange = json['courseWords'] as Map<String, dynamic>?;
     final grammarRange = json['courseGrammar'] as Map<String, dynamic>?;
@@ -357,6 +368,7 @@ class Settings {
       inputStrategyIds:
           strategyMap?.map((key, value) => MapEntry(key, value as String)) ??
               {},
+      distractorStrategyId: distractorId,
       deselectedWords: deselectedWords,
       courseWords: wordRange == null ? null : LessonRange.fromJson(wordRange),
       courseGrammar:

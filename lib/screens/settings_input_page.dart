@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../models/distractor_strategy.dart';
 import '../models/input_strategy.dart';
 import '../providers/settings_provider.dart';
 import 'course_scope.dart';
@@ -48,6 +49,36 @@ class SettingsInputPage extends ConsumerWidget {
                 ),
               ),
             ],
+            const SizedBox(height: 16),
+            Text(FlutterI18n.translate(context, 'settings.distractorMode')),
+            const SizedBox(height: 8),
+            DropdownButtonFormField<String>(
+              key: const Key('input.distractors'),
+              isExpanded: true,
+              initialValue: settings.distractorStrategyId,
+              items: [
+                for (final s in distractorStrategies)
+                  DropdownMenuItem(
+                    value: s.id,
+                    child: Text(
+                      FlutterI18n.translate(
+                        context,
+                        'settings.distractors.${s.id}',
+                      ),
+                    ),
+                  ),
+              ],
+              onChanged: (value) => ref
+                  .read(settingsProvider.notifier)
+                  .setDistractorStrategy(value!),
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.white,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(4),
+                ),
+              ),
+            ),
           ],
         ),
       ),

@@ -6,6 +6,7 @@ import 'package:latin_practice/providers/fsrs_provider.dart';
 import 'package:latin_practice/providers/practice_providers.dart';
 import 'package:latin_practice/screens/practice_screen.dart';
 import 'package:fsrs/fsrs.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -13,6 +14,7 @@ void main() {
   group('translationChoices', () {
     for (final file in ['nouns', 'verbs']) {
       test('$file: correct answer, unique, at most 4, deterministic', () async {
+        SharedPreferences.setMockInitialValues({});
         final items = await loadPracticeItems('lib/data/latin_$file.yaml');
         final container = ProviderContainer();
         addTearDown(container.dispose);

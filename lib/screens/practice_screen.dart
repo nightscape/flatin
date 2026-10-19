@@ -266,7 +266,7 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
               vertical: verticalPadding,
             ),
             child: Text(
-              widget.item.type,
+              widget.item.lemma,
               style: TextStyle(
                 fontSize: titleFontSize,
                 fontWeight: FontWeight.bold,

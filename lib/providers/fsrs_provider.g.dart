@@ -336,13 +336,13 @@ final class NextDueItemFamily extends $Family
 }
 
 /// Provides shuffled translation choices for a practice item:
-/// the correct translation plus 3 random distractors from the same data file.
+/// the correct translation plus 3 distractors from the chosen strategy.
 
 @ProviderFor(translationChoices)
 const translationChoicesProvider = TranslationChoicesFamily._();
 
 /// Provides shuffled translation choices for a practice item:
-/// the correct translation plus 3 random distractors from the same data file.
+/// the correct translation plus 3 distractors from the chosen strategy.
 
 final class TranslationChoicesProvider
     extends
@@ -353,7 +353,7 @@ final class TranslationChoicesProvider
         >
     with $FutureModifier<List<String>>, $FutureProvider<List<String>> {
   /// Provides shuffled translation choices for a practice item:
-  /// the correct translation plus 3 random distractors from the same data file.
+  /// the correct translation plus 3 distractors from the chosen strategy.
   const TranslationChoicesProvider._({
     required TranslationChoicesFamily super.from,
     required PracticeItem super.argument,
@@ -399,10 +399,10 @@ final class TranslationChoicesProvider
 }
 
 String _$translationChoicesHash() =>
-    r'fadf71cc6e4a693b2204fb0256e72896f5760577';
+    r'36d436ac4492981cb25617621d9401d01a9c6e9d';
 
 /// Provides shuffled translation choices for a practice item:
-/// the correct translation plus 3 random distractors from the same data file.
+/// the correct translation plus 3 distractors from the chosen strategy.
 
 final class TranslationChoicesFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<List<String>>, PracticeItem> {
@@ -416,7 +416,7 @@ final class TranslationChoicesFamily extends $Family
       );
 
   /// Provides shuffled translation choices for a practice item:
-  /// the correct translation plus 3 random distractors from the same data file.
+  /// the correct translation plus 3 distractors from the chosen strategy.
 
   TranslationChoicesProvider call(PracticeItem item) =>
       TranslationChoicesProvider._(argument: item, from: this);

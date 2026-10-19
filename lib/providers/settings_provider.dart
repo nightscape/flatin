@@ -131,6 +131,9 @@ class SettingsNotifier extends _$SettingsNotifier {
     await _saveSettings(newSettings);
   }
 
+  Future<void> setDistractorStrategy(String id) =>
+      _update((s) => s.copyWith(distractorStrategyId: id));
+
   /// Toggle a single word's selection state.
   Future<void> toggleWord(
     String lemma, {

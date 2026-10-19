@@ -5,11 +5,13 @@ import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fsrs/fsrs.dart';
+import '../models/distractor_strategy.dart';
 import '../models/practice_item.dart';
 import '../models/fsrs_card.dart';
 import '../services/fsrs_storage.dart';
 import '../data/practice_data.dart';
 import 'curriculum_provider.dart';
+import 'settings_provider.dart';
 
 part 'fsrs_provider.g.dart';
 
@@ -155,21 +157,20 @@ Future<bool> reviewCardReportingErrors(
 }
 
 /// Provides shuffled translation choices for a practice item:
-/// the correct translation plus 3 random distractors from the same data file.
+/// the correct translation plus 3 distractors from the chosen strategy.
 @riverpod
 Future<List<String>> translationChoices(Ref ref, PracticeItem item) async {
   final yamlPath = 'lib/data/latin_${item.dataFileId}.yaml';
   final allItems = await loadPracticeItems(yamlPath);
 
+  final strategy = distractorStrategyById(
+    (await ref.watch(settingsProvider.future)).distractorStrategyId,
+  );
   final seed = item.translation.hashCode;
-  final otherTranslations = allItems
-      .where((i) => i.translation != item.translation)
-      .map((i) => i.translation)
-      .toSet()
-      .toList()
-    ..shuffle(Random(seed));
-
-  final choices = [item.translation, ...otherTranslations.take(3)];
+  final choices = [
+    item.translation,
+    ...strategy.pick(item, allItems, 3, Random(seed)),
+  ];
   choices.shuffle(Random(seed + 1));
   return choices;
 }
