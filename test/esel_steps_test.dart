@@ -428,8 +428,7 @@ void main() {
       expect(en, contains('esel.legend.title'));
     });
 
-    test('the German texts of the steps leave no parameter open', () async {
-      final de = await germanTexts();
+    test('the texts of the steps leave no parameter open', () async {
       final steps = [
         ...eselSteps(noun('dominus'), 'gen.pl'),
         ...eselSteps(verb('amāre'), 'konj.plusq.pass.1.sg'),
@@ -440,12 +439,14 @@ void main() {
             RegExp(r'\{(\w+)\}'),
             (match) => params[match.group(1)]!,
           );
-      for (final step in steps) {
-        expect(filled(de[step.questionKey]!, step.questionParams),
-            isNot(contains('{')));
-        if (step.answerKey == null) continue;
-        expect(filled(de[step.answerKey]!, step.answerParams),
-            isNot(contains('{')));
+      for (final texts in [await germanTexts(), await englishTexts()]) {
+        for (final step in steps) {
+          expect(filled(texts[step.questionKey]!, step.questionParams),
+              isNot(contains('{')));
+          if (step.answerKey == null) continue;
+          expect(filled(texts[step.answerKey]!, step.answerParams),
+              isNot(contains('{')));
+        }
       }
     });
   });
