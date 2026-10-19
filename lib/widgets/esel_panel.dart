@@ -151,9 +151,26 @@ class EselStepRow extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    _name(context, step.kind),
-                    style: TextStyle(fontWeight: FontWeight.bold, color: color),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          _name(context, step.kind),
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, color: color),
+                        ),
+                      ),
+                      if (!done && onShow != null)
+                        TextButton(
+                          key: Key('$stepKey.show'),
+                          onPressed: onShow,
+                          style: TextButton.styleFrom(
+                            minimumSize: const Size(48, _optionHeight),
+                          ),
+                          child: Text(
+                              FlutterI18n.translate(context, 'esel.show')),
+                        ),
+                    ],
                   ),
                   if (step.absent) _absentBody(context),
                   if (!step.absent && done) _doneBody(context),
@@ -161,15 +178,6 @@ class EselStepRow extends StatelessWidget {
                 ],
               ),
             ),
-            if (!done && onShow != null)
-              TextButton(
-                key: Key('$stepKey.show'),
-                onPressed: onShow,
-                style: TextButton.styleFrom(
-                  minimumSize: const Size(48, _optionHeight),
-                ),
-                child: Text(FlutterI18n.translate(context, 'esel.show')),
-              ),
           ],
         ),
       ),
