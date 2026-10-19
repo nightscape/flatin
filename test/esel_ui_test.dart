@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart' show RenderParagraph;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/data/diagnosis.dart' show diagnose;
@@ -298,6 +299,35 @@ void main() {
         );
       }
       handle.dispose();
+    });
+  });
+
+  group('panel width', () {
+    testWidgets('fills the content width, options inside it with whole labels',
+        (tester) async {
+      final item = await _dominus();
+      await _pumpChecked(tester, item, {_gen: 'dominis'});
+      tester.view.physicalSize = const Size(360, 800);
+      await tester.pumpAndSettle();
+
+      final panel = tester.getRect(_panel(_gen));
+      expect(panel.width, 360 - 2 * 16);
+      final steps = _contract(item, _gen, 'dominis');
+      final step = steps[_firstQuestion(steps)];
+      for (final option in step.options) {
+        expect(
+          tester.getRect(_option(_gen, step.kind, option)).right,
+          lessThanOrEqualTo(panel.right),
+        );
+        final label = find.descendant(
+            of: _option(_gen, step.kind, option), matching: find.byType(Text));
+        final text = tester.widget<Text>(label);
+        expect(text.maxLines, isNull);
+        expect(text.overflow, isNot(TextOverflow.ellipsis));
+        expect(tester.renderObject<RenderParagraph>(label).didExceedMaxLines,
+            isFalse);
+      }
+      expect(tester.takeException(), isNull);
     });
   });
 

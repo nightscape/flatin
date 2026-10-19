@@ -371,17 +371,8 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
                         ],
                       ),
                     ),
-                  // Table with aligned rows
-                  Table(
-                    columnWidths: state.isTranslationVisible
-                        ? {
-                            0: FlexColumnWidth(isMobile ? 0.8 : 1),
-                            1: FlexColumnWidth(isMobile ? 1.2 : 1),
-                          }
-                        : {
-                            0: const FlexColumnWidth(0),
-                            1: const FlexColumnWidth(2),
-                          },
+                  // One single-row Table per form (flex columns align them) so the panel can span the full width
+                  Column(
                     children: List.generate(_filteredForms.length, (index) {
                       final correctAnswer = _filteredForms[index];
                       final correctLines = state.isChecked &&
@@ -393,7 +384,21 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
                                 _userAnswers[index],
                               )
                           : const <ExplanationLine>[];
-                      return TableRow(
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Table(
+                            columnWidths: state.isTranslationVisible
+                                ? {
+                                    0: FlexColumnWidth(isMobile ? 0.8 : 1),
+                                    1: FlexColumnWidth(isMobile ? 1.2 : 1),
+                                  }
+                                : {
+                                    0: const FlexColumnWidth(0),
+                                    1: const FlexColumnWidth(2),
+                                  },
+                            children: [
+                              TableRow(
                         children: [
                           // Left column - Form label
                           Padding(
@@ -479,7 +484,20 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
                                           _userAnswers[index],
                                         ),
                                   ),
-                                if (_panels[_filteredKeys[index]]
+                                if (correctLines.isNotEmpty)
+                                  ExplanationLines(
+                                    key:
+                                        Key('macrons.${_filteredKeys[index]}'),
+                                    correctLines,
+                                  ),
+                              ],
+                            ),
+                          ),
+                        ],
+                              ),
+                            ],
+                          ),
+                          if (_panels[_filteredKeys[index]]
                                     case final progress?)
                                   EselPanel(
                                     key: Key('esel.panel.${_filteredKeys[index]}'),
@@ -498,15 +516,6 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
                                     onShow: (step) =>
                                         setState(() => progress.show(step)),
                                   ),
-                                if (correctLines.isNotEmpty)
-                                  ExplanationLines(
-                                    key:
-                                        Key('macrons.${_filteredKeys[index]}'),
-                                    correctLines,
-                                  ),
-                              ],
-                            ),
-                          ),
                         ],
                       );
                     }),
