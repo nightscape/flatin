@@ -78,3 +78,20 @@ Future<Curriculum> lateTypeCurriculum(
   yaml.write('- lesson: $lesson\n  $dataFileId:\n    types: [$typeName]\n');
   return Curriculum.parse([yaml.toString()], shapes);
 }
+
+/// A curriculum over the real data that teaches every type in lesson 1 and
+/// every form of [dataFileId] in [lesson].
+Future<Curriculum> lateFormsCurriculum(String dataFileId, int lesson) async {
+  final shapes = await _shapes();
+  final yaml = StringBuffer('- lesson: 1\n');
+  for (final file in shapes.entries) {
+    yaml.writeln('  ${file.key}:');
+    if (file.key != dataFileId) {
+      yaml.writeln('    forms:');
+      yaml.writeln('      - {}');
+    }
+    yaml.writeln('    types: [${file.value.types.join(', ')}]');
+  }
+  yaml.write('- lesson: $lesson\n  $dataFileId:\n    forms:\n      - {}\n');
+  return Curriculum.parse([yaml.toString()], shapes);
+}

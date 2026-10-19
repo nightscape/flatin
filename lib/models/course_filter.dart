@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import '../data/curriculum.dart';
 import '../data/lesson_data.dart';
 import 'practice_item.dart';
@@ -15,6 +17,11 @@ sealed class CourseGap {
 /// The lesson lies outside the chosen range, to its left or right.
 final class OutsideRange extends CourseGap {
   const OutsideRange();
+}
+
+/// The lesson that teaches it lies below the grammar range.
+final class GrammarOutsideRange extends CourseGap {
+  const GrammarOutsideRange();
 }
 
 /// The grammar range will reach it at [lesson].
@@ -81,26 +88,51 @@ final class CourseFilter {
       itemPracticed(item) &&
       practicedForms(item.dataFileId, item.formLabels).isNotEmpty;
 
+  /// Null when practice offers the word, or when the learner's own choice,
+  /// not the course, keeps it from practice.
   CourseGap? wordGap(PracticeItem item) {
-    if (!wordInRange(item)) return const OutsideRange();
-    return typeGap(item.dataFileId, item.type, lessons.lessonNumberOf(item));
+    final id = item.dataFileId;
+    final lesson = lessons.lessonNumberOf(item);
+    if (settings.overrideOfWord(item.lemma) != Override.forcedOn &&
+        !wordInRange(item)) {
+      return const OutsideRange();
+    }
+    final typeGapOfItem = typeGap(id, item.type, lesson);
+    if (typeGapOfItem != null) return typeGapOfItem;
+
+    if (practicedForms(id, item.formLabels).isNotEmpty) return null;
+    final unreached = [
+      for (final label in item.formLabels)
+        if (settings.offFeaturesOf(id, label).isEmpty &&
+            settings.overrideOfForm(id, label.key) != Override.forcedOff &&
+            !formInRange(id, label))
+          curriculum.formLesson(id, label.key),
+    ];
+    if (unreached.isEmpty) return null;
+    return _grammarGap(unreached.reduce(min), lesson);
   }
 
   /// [wordLesson] lifts the lesson a type is first practised with its words.
   CourseGap? typeGap(String dataFileId, String typeName, [int wordLesson = 1]) {
-    if (typeInRange(dataFileId, typeName)) return null;
+    if (settings.overrideOfType(dataFileId, typeName) == Override.forcedOn ||
+        typeInRange(dataFileId, typeName)) {
+      return null;
+    }
     return _grammarGap(curriculum.typeLesson(dataFileId, typeName), wordLesson);
   }
 
   CourseGap? formGap(String dataFileId, FormLabel label) {
-    if (formInRange(dataFileId, label)) return null;
+    if (settings.overrideOfForm(dataFileId, label.key) == Override.forcedOn ||
+        formInRange(dataFileId, label)) {
+      return null;
+    }
     return _grammarGap(curriculum.formLesson(dataFileId, label.key), 1);
   }
 
   CourseGap _grammarGap(int grammarLesson, int wordLesson) =>
       grammarLesson > settings.effectiveGrammar.to
           ? FromLesson(grammarLesson > wordLesson ? grammarLesson : wordLesson)
-          : const OutsideRange();
+          : const GrammarOutsideRange();
 
   /// The live counts of the course card: the words practice offers and, per
   /// data file, the practised forms they add up to.

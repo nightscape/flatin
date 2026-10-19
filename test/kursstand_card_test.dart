@@ -190,6 +190,96 @@ void main() {
         findsNothing);
     expect(titleColor(tester, tile), isNot(Colors.black),
         reason: 'a word whose type is taught later must look greyed');
+
+    expect(isChecked(tester, tile), isTrue);
+    await tester.tap(tile);
+    await tester.pumpAndSettle();
+    await letItLoad(tester);
+
+    expect(isChecked(tester, tile), isFalse);
+    expect((await storedSettings())['deselectedWords'], [item.lemma]);
+  });
+
+  testWidgets('a type forced on clears the gap of its word', (tester) async {
+    final lessons = await loadLessonData(lessonDataAssets);
+    final item = (await loadAllPracticeItems())
+        .firstWhere((i) => lessons.lessonNumberOf(i) == 21);
+    final curriculum = await lateTypeCurriculum(item.dataFileId, item.type, 32);
+
+    await _open(
+      tester,
+      Settings(
+        courseWords: LessonRange(21, 23),
+        forcedOnTypes: {
+          item.dataFileId: {item.type},
+        },
+      ),
+      page: 'words',
+      curriculum: curriculum,
+    );
+
+    final tile = _text('word.${normalizeDiacritics(item.lemma)}');
+    expect(find.descendant(of: tile, matching: find.byType(Text)),
+        findsOneWidget);
+    expect(titleColor(tester, tile), Colors.black);
+  });
+
+  testWidgets('a word forced on outside the word range is not greyed',
+      (tester) async {
+    await _open(
+      tester,
+      Settings(courseWords: LessonRange(21, 23), forcedOnWords: {'rosa'}),
+      page: 'words',
+    );
+
+    expect(isChecked(tester, _text('word.rosa')), isTrue);
+    expect(titleColor(tester, _text('word.rosa')), Colors.black);
+    expect(
+      find.descendant(
+          of: _text('word.rosa'), matching: find.text('außerhalb des Bereichs')),
+      findsNothing,
+    );
+  });
+
+  testWidgets('a word whose forms are all taught later says from which lesson',
+      (tester) async {
+    final lessons = await loadLessonData(lessonDataAssets);
+    final item = (await loadAllPracticeItems())
+        .firstWhere((i) => lessons.lessonNumberOf(i) == 21);
+    final curriculum = await lateFormsCurriculum(item.dataFileId, 30);
+
+    await _open(tester, Settings(courseWords: LessonRange(21, 23)),
+        page: 'words', curriculum: curriculum);
+
+    final tile = _text('word.${normalizeDiacritics(item.lemma)}');
+    expect(find.descendant(of: tile, matching: find.text('ab Lektion 30')),
+        findsOneWidget);
+    expect(titleColor(tester, tile), isNot(Colors.black));
+  });
+
+  testWidgets('a grammar gap below the grammar range names the grammar',
+      (tester) async {
+    final lessons = await loadLessonData(lessonDataAssets);
+    final item = (await loadAllPracticeItems())
+        .firstWhere((i) => lessons.lessonNumberOf(i) == 21);
+    final curriculum = await lateTypeCurriculum(item.dataFileId, item.type, 2);
+
+    await _open(
+      tester,
+      Settings(
+        grammarFollowsWords: false,
+        courseGrammar: LessonRange(5, 40),
+      ),
+      page: 'words',
+      curriculum: curriculum,
+    );
+
+    final tile = _text('word.${normalizeDiacritics(item.lemma)}');
+    expect(
+      find.descendant(
+          of: tile, matching: find.text('Grammatik außerhalb des Bereichs')),
+      findsOneWidget,
+    );
   });
 
   testWidgets('reset clears the overrides and keeps the ranges',

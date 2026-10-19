@@ -38,6 +38,7 @@
     "inputPage": "Input",
     "searchWords": "Search words",
     "outsideRange": "outside the range",
+    "grammarOutsideRange": "grammar outside the range",
     "fromLesson": "from lesson {lesson}",
     "kursstand": {
       "title": "Course position",
