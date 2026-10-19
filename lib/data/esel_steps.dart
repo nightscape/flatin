@@ -38,6 +38,8 @@ final class EselStep {
   /// The i18n key of the answer when it is a phrase, else null.
   final String? answerKey;
 
+  final Map<String, String> answerParams;
+
   /// Exactly one option is right; empty for merken and for absent steps.
   final List<EselOption> options;
 
@@ -53,10 +55,12 @@ final class EselStep {
     this.questionParams = const {},
     this.answer = '',
     this.answerKey,
+    this.answerParams = const {},
     this.options = const [],
     this.absent = false,
     this.regular,
   })  : assert(answer.isEmpty != (answerKey == null)),
+        assert(answerParams.isEmpty || answerKey != null),
         assert(
           options.where((option) => option.isRight).length ==
               (options.isEmpty ? 0 : 1),
@@ -74,6 +78,20 @@ final class EselStep {
               options.length,
           'two options differ only in quantity marks',
         );
+
+  /// Everything a done step row shows, so two steps with the same value render
+  /// the same row: the question and the options belong to an open row only. A
+  /// field a done row shows and this value does not read would group readings
+  /// that differ in it into one panel.
+  String get shownIdentity => [
+        kind.name,
+        absent,
+        answerKey,
+        answer,
+        regular,
+        for (final key in answerParams.keys.toList()..sort())
+          '$key=${answerParams[key]}',
+      ].join('\u0000');
 }
 
 /// The steps of [formKey] of [item], in the fixed ESEL order. [diagnosis] is
@@ -124,7 +142,8 @@ List<EselStep> eselSteps(
           kind: EselKind.merken,
           questionKey: 'esel.question.merken',
           questionParams: {'label': label},
-          answer: result,
+          answerKey: 'esel.answer.merken',
+          answerParams: {'form': result},
           regular: regular?.result,
         ),
       ],

@@ -70,7 +70,11 @@ String _optionText(BuildContext context, EselOption option) =>
 String _answerText(BuildContext context, EselStep step) =>
     step.answerKey == null
         ? step.answer
-        : FlutterI18n.translate(context, step.answerKey!);
+        : FlutterI18n.translate(
+            context,
+            step.answerKey!,
+            translationParams: step.answerParams,
+          );
 
 class EselBadge extends StatelessWidget {
   final EselKind kind;

@@ -39,9 +39,8 @@ void main() {
         'O-Deklination-maskulinum',
         'domin-',
         '-ōrum',
-        '',
+        'esel.noRule',
       ]);
-      expect(steps.last.answerKey, 'esel.noRule');
       expect(steps.every((s) => !s.absent), isTrue);
       expect(
         steps[0].options.map((o) => o.text),
@@ -89,7 +88,9 @@ void main() {
           'dīce');
       expect(steps.map((s) => s.kind), [..._esel, EselKind.merken]);
       expect(steps.last.options, isEmpty);
-      expect(steps.last.answer, item.derivation.forms[key]!.result);
+      expect(steps.last.answerKey, 'esel.answer.merken');
+      expect(steps.last.answerParams,
+          {'form': item.derivation.forms[key]!.result});
       expect(steps.last.regular,
           (item.derivation.forms[key]! as IrregularForm).regular!.result);
       expect(steps.sublist(1, 4).every((s) => s.absent), isTrue);
@@ -105,9 +106,16 @@ void main() {
 
       final steps = eselSteps(item, key);
       expect(steps.map((s) => s.kind), _esel);
-      expect(_answers(steps), ['Unregelmäßig', 'pos-', '-sem', '']);
-      expect(steps.last.answerKey, 'esel.noRule');
+      expect(_answers(steps), ['Unregelmäßig', 'pos-', '-sem', 'esel.noRule']);
       expect(steps.every((s) => !s.absent), isTrue);
+    });
+
+    test('īssem: the Merken answer carries the form and its reason', () {
+      final steps = eselSteps(verb('īre'), 'konj.plusq.akt.1.sg');
+      expect(steps.last.kind, EselKind.merken);
+      expect(steps.last.answerKey, 'esel.answer.merken');
+      expect(steps.last.answerParams, {'form': 'īssem'});
+      expect(steps.last.regular, 'iissem');
     });
 
     test('an irregular form without a regular one keeps regular null', () {
@@ -115,7 +123,7 @@ void main() {
       expect(item.derivation.forms['nom.sg.m'], isA<IrregularForm>());
       final steps = eselSteps(item, 'nom.sg.m');
       expect(steps.last.kind, EselKind.merken);
-      expect(steps.last.answer, 'is');
+      expect(steps.last.answerParams, {'form': 'is'});
       expect(steps.last.regular, isNull);
     });
 
@@ -425,20 +433,32 @@ void main() {
       final steps = [
         ...eselSteps(noun('dominus'), 'gen.pl'),
         ...eselSteps(verb('amāre'), 'konj.plusq.pass.1.sg'),
+        ...eselSteps(verb('dīcere'), 'imp.praes.akt.2.sg'),
       ];
+      String filled(String text, Map<String, String> params) =>
+          text.replaceAllMapped(
+            RegExp(r'\{(\w+)\}'),
+            (match) => params[match.group(1)]!,
+          );
       for (final step in steps) {
-        final text = de[step.questionKey]!.replaceAllMapped(
-          RegExp(r'\{(\w+)\}'),
-          (match) => step.questionParams[match.group(1)]!,
-        );
-        expect(text, isNot(contains('{')));
+        expect(filled(de[step.questionKey]!, step.questionParams),
+            isNot(contains('{')));
+        if (step.answerKey == null) continue;
+        expect(filled(de[step.answerKey]!, step.answerParams),
+            isNot(contains('{')));
       }
     });
   });
 }
 
-List<String> _answers(List<EselStep> steps) =>
-    [for (final step in steps) step.answer];
+/// The answer of every step, a keyed one as its key and params: a pin must not
+/// read as an empty string just because the answer is a phrase.
+List<String> _answers(List<EselStep> steps) => [
+      for (final step in steps)
+        step.answerKey == null
+            ? step.answer
+            : [step.answerKey!, ...step.answerParams.values].join(' '),
+    ];
 
 List<String> _texts(List<EselStep> steps) =>
     [for (final step in steps) for (final o in step.options) o.identity];

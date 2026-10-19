@@ -138,8 +138,11 @@
       "endung": "Welche Endung hat {label}?",
       "lautregel": "Ändert sich bei {label} ein Laut?",
       "verbinden": "Woraus ist {label} zusammengesetzt?",
-      "merken": "{label} ist unregelmäßig – merken!",
+      "merken": "Wie lautet {label}?",
       "given": "{result} ist die Wörterbuchform ({label})"
+    },
+    "answer": {
+      "merken": "unregelmäßig – merken: {form}"
     },
     "absent": {
       "stamm": "kein eigener Stamm",

@@ -138,8 +138,11 @@
       "endung": "Which ending does {label} have?",
       "lautregel": "Does a sound change in {label}?",
       "verbinden": "What is {label} composed of?",
-      "merken": "{label} is irregular – memorise it!",
+      "merken": "What is {label}?",
       "given": "{result} is the dictionary form ({label})"
+    },
+    "answer": {
+      "merken": "irregular – memorise: {form}"
     },
     "absent": {
       "stamm": "no stem of its own",

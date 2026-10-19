@@ -76,7 +76,7 @@ final _dic = (
   formKey: 'imp.praes.akt.2.sg',
   wrong: 'zzz',
   pinned: [
-    'M Merken | done | Imperativ Präsens: 2. Person Singular ist unregelmäßig – merken! / dīc / ~dīce~',
+    'M Merken | done | Wie lautet Imperativ Präsens: 2. Person Singular? / unregelmäßig – merken: dīc / ~dīce~',
   ],
   missing: <String>[],
 );
@@ -86,7 +86,7 @@ final _issem = (
   formKey: 'konj.plusq.akt.1.sg',
   wrong: 'zzz',
   pinned: [
-    'M Merken | done | Konjunktiv Plusquamperfekt: 1. Person Singular ist unregelmäßig – merken! / īssem / ~iissem~',
+    'M Merken | done | Wie lautet Konjunktiv Plusquamperfekt: 1. Person Singular? / unregelmäßig – merken: īssem / ~iissem~',
   ],
   missing: <String>[],
 );
@@ -217,4 +217,13 @@ void main() {
       expectGolden('classification_${c.name}', rendered);
     });
   }
+
+  testWidgets('dic: the static panel gives the reason, not the question',
+      (tester) async {
+    await pumpClassified(tester, await _dic.item(), _dic.formKey);
+    final rendered = renderSteps(tester, 'esel.classification');
+    expect(rendered,
+        contains('M Merken | done | unregelmäßig – merken: dīc / ~dīce~'));
+    expect(rendered, isNot(contains('Wie lautet')));
+  });
 }

@@ -7,13 +7,28 @@ import 'package:latin_practice/models/derivation.dart' show norm;
 import 'package:latin_practice/models/practice_item.dart';
 import 'package:latin_practice/widgets/esel_panel.dart';
 
+import 'support/trace_fixtures.dart' show germanTexts;
 import 'support/word_classification_harness.dart';
 import 'support/explanation_harness.dart' show pickOption;
 import 'package:latin_practice/screens/word_classification_screen.dart';
 
-String _answers(PracticeItem item, String key) => eselSteps(item, key)
-    .map((s) => '${s.kind.name}|${s.answerKey}|${s.answer}')
-    .join('\n');
+/// What the rows of a static panel read, built from de.json like the widget
+/// does — never from the identity of `groupReadings`, which is the code under
+/// test here.
+String _rendered(Map<String, String> de, PracticeItem item, String key) =>
+    eselSteps(item, key).map((s) => _row(de, s)).join('\n');
+
+String _row(Map<String, String> de, EselStep step) => [
+      de['esel.kind.${step.kind.name}.name']!,
+      if (step.absent) de['esel.absentLabel']!,
+      step.answerKey == null
+          ? step.answer
+          : de[step.answerKey]!.replaceAllMapped(
+              RegExp(r'\{(\w+)\}'),
+              (match) => step.answerParams[match.group(1)]!,
+            ),
+      if (step.regular != null) step.regular!,
+    ].join(' | ');
 
 Future<PracticeItem> _item(String asset, String lemma) async =>
     (await loadPracticeItems(asset)).firstWhere((i) => i.lemma == lemma);
@@ -49,13 +64,16 @@ void main() {
 
   test('groups partition the readings of every spelling by equal steps',
       () async {
+    final de = await germanTexts();
     var checked = 0;
     for (final asset in [
       'lib/data/latin_nouns.yaml',
       'lib/data/latin_verbs.yaml',
     ]) {
       for (final item in await loadPracticeItems(asset)) {
-        final answers = {for (final k in item.formOrder) k: _answers(item, k)};
+        final answers = {
+          for (final k in item.formOrder) k: _rendered(de, item, k)
+        };
         final seen = <String>{};
         for (final accepted in item.acceptedForms) {
           for (final spelling in accepted) {

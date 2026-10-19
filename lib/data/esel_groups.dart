@@ -14,9 +14,8 @@ List<List<FormKey>> groupReadings(PracticeItem item, Iterable<FormKey> keys) {
   return groups.values.toList();
 }
 
-String _answers(PracticeItem item, FormKey key) => eselSteps(item, key)
-    .map((step) => '${step.kind.name}\u0000${step.answerKey}\u0000${step.answer}')
-    .join('\u0001');
+String _answers(PracticeItem item, FormKey key) =>
+    eselSteps(item, key).map((step) => step.shownIdentity).join('\u0001');
 
 /// The full label of every reading in [group], joined with " / ".
 String groupTitle(PracticeItem item, List<FormKey> group) => group
