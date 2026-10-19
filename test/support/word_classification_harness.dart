@@ -20,30 +20,29 @@ Widget wrapInApp(
   Explainer? explainer,
   Locale? forcedLocale,
   List<Override> overrides = const [],
-}) =>
-    ProviderScope(
-      retry: noRetry,
-      overrides: [
-        if (explainer != null) explainerProvider.overrideWithValue(explainer),
-        ...overrides,
-      ],
-      child: MaterialApp(
-        localizationsDelegates: [
-          FlutterI18nDelegate(
-            translationLoader: FileTranslationLoader(
-              basePath: 'assets/flutter_i18n',
-              fallbackFile: 'en',
-              forcedLocale: forcedLocale,
-              useCountryCode: false,
-            ),
-          ),
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-        ],
-        builder: FlutterI18n.rootAppBuilder(),
-        home: home,
+}) => ProviderScope(
+  retry: noRetry,
+  overrides: [
+    if (explainer != null) explainerProvider.overrideWithValue(explainer),
+    ...overrides,
+  ],
+  child: MaterialApp(
+    localizationsDelegates: [
+      FlutterI18nDelegate(
+        translationLoader: FileTranslationLoader(
+          basePath: 'assets/flutter_i18n',
+          fallbackFile: 'en',
+          forcedLocale: forcedLocale,
+          useCountryCode: false,
+        ),
       ),
-    );
+      GlobalMaterialLocalizations.delegate,
+      GlobalWidgetsLocalizations.delegate,
+    ],
+    builder: FlutterI18n.rootAppBuilder(),
+    home: home,
+  ),
+);
 
 /// Disable the given types and put every card far in the future, so the
 /// screens have to take their empty-due fallback.
@@ -52,18 +51,19 @@ Future<void> seedNothingDue(Map<String, Set<String>> disabledTypes) =>
 
 /// Disable the given types and make every card due, so the screens take their
 /// due path.
-Future<void> seedEverythingDue(Map<String, Set<String>> disabledTypes) =>
-    _seed(
-        disabledTypes, DateTime.now().toUtc().subtract(const Duration(days: 1)));
+Future<void> seedEverythingDue(Map<String, Set<String>> disabledTypes) => _seed(
+  disabledTypes,
+  DateTime.now().toUtc().subtract(const Duration(days: 1)),
+);
 
-Future<void> _seed(
-    Map<String, Set<String>> disabledTypes, DateTime due) async {
+Future<void> _seed(Map<String, Set<String>> disabledTypes, DateTime due) async {
   SharedPreferences.setMockInitialValues({
     'practice_settings': jsonEncode({
       settingsVersionField: settingsVersion,
       'disabledForms': <String, List<String>>{},
-      'disabledTypes':
-          disabledTypes.map((file, types) => MapEntry(file, types.toList())),
+      'disabledTypes': disabledTypes.map(
+        (file, types) => MapEntry(file, types.toList()),
+      ),
       'inputStrategyIds': <String, String>{},
       'deselectedWords': <String>[],
     }),

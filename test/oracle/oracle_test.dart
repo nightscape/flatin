@@ -20,10 +20,7 @@ const _fixtures = [
   'test/fixtures/grammar_examples_verbs.yaml',
 ];
 
-const _real = [
-  'lib/data/latin_nouns.yaml',
-  'lib/data/latin_verbs.yaml',
-];
+const _real = ['lib/data/latin_nouns.yaml', 'lib/data/latin_verbs.yaml'];
 
 /// One set of data files, sampled and compared.
 final class _Corpus {
@@ -47,15 +44,24 @@ void main() {
 
   setUpAll(() {
     collatinus = Collatinus(collatinusDir);
-    morphMap = MorphMap.parse(File('test/oracle/morph_map.yaml').readAsStringSync());
-    typeMap = TypeMap.parse(File('test/oracle/type_map.yaml').readAsStringSync());
+    morphMap = MorphMap.parse(
+      File('test/oracle/morph_map.yaml').readAsStringSync(),
+    );
+    typeMap = TypeMap.parse(
+      File('test/oracle/type_map.yaml').readAsStringSync(),
+    );
     allowed = [
       for (final f in ['allowed_diffs', 'allowed_missing'])
         ...AllowedDiff.parse(File('test/oracle/$f.yaml').readAsStringSync()),
     ];
-    _Corpus run(List<String> paths, Map<String, Map<String, List<String>>> curated) {
+    _Corpus run(
+      List<String> paths,
+      Map<String, Map<String, List<String>>> curated,
+    ) {
       final sample = buildSample(
-        sources: {for (final path in paths) path: File(path).readAsStringSync()},
+        sources: {
+          for (final path in paths) path: File(path).readAsStringSync(),
+        },
         collatinus: collatinus,
         typeMap: typeMap,
         curated: curated,
@@ -102,7 +108,9 @@ void main() {
 
     test('a regular perfect has both 3rd plural endings', () {
       expect(
-        collatinus.inflect('ămo')[morphOf('perfect indicative active 3rd plural')],
+        collatinus.inflect('ămo')[morphOf(
+          'perfect indicative active 3rd plural',
+        )],
         ['ămāvērūnt', 'ămāvērĕ'],
       );
     });
@@ -117,7 +125,9 @@ void main() {
     });
 
     test('a noun builds on radical 1 of its lemma line', () {
-      expect(collatinus.inflect('rex')[morphOf('genitive singular')], ['rēgĭs']);
+      expect(collatinus.inflect('rex')[morphOf('genitive singular')], [
+        'rēgĭs',
+      ]);
     });
 
     test('an irregular form replaces the ending of its morph', () {
@@ -203,16 +213,23 @@ void main() {
     expect(altus.emitted.keys, contains('adv.pos'));
   });
 
-  test('a sampled verb that is not deponent has a perfect from its lemma line',
-      () {
-    for (final c in corpora) {
-      for (final item in c.items.where((i) =>
-          i.synthetic && i.emitted.containsKey('ind.praes.akt.1.sg'))) {
-        if (item.deponent) continue;
-        expect(item.emitted['ind.perf.akt.1.sg'], isNotEmpty, reason: item.id);
+  test(
+    'a sampled verb that is not deponent has a perfect from its lemma line',
+    () {
+      for (final c in corpora) {
+        for (final item in c.items.where(
+          (i) => i.synthetic && i.emitted.containsKey('ind.praes.akt.1.sg'),
+        )) {
+          if (item.deponent) continue;
+          expect(
+            item.emitted['ind.perf.akt.1.sg'],
+            isNotEmpty,
+            reason: item.id,
+          );
+        }
       }
-    }
-  });
+    },
+  );
 
   test('the sample covers the deponents of section 15', () {
     for (final id in ['hortari', 'pati', 'largiri']) {
@@ -229,7 +246,10 @@ void main() {
 
   test('the whole sample is compared', () {
     for (final c in corpora) {
-      expect(c.sample.entries.where((e) => e.synthetic), hasLength(greaterThan(100)));
+      expect(
+        c.sample.entries.where((e) => e.synthetic),
+        hasLength(greaterThan(100)),
+      );
       expect(comparedWholeSample(c.result, c.sample.entries.length), isTrue);
     }
   });
@@ -243,7 +263,9 @@ void main() {
 
   group('the gate is red without its parts', () {
     test('without allowed_missing.yaml, in either direction', () {
-      final forms = allowed.where((a) => a.category == DiffCategory.form).toList();
+      final forms = allowed
+          .where((a) => a.category == DiffCategory.form)
+          .toList();
       final unlisted = result.unlisted(forms).map((d) => d.category).toSet();
       expect(unlisted, {DiffCategory.missingOurs, DiffCategory.missingTheirs});
     });
@@ -294,39 +316,46 @@ void main() {
       expect(allowed.any((a) => a.covers(other)), isFalse);
     });
 
-    test('a deponent reason covers neither an active verb nor a semi-deponent',
-        () {
-      final moved = result.diffs.firstWhere((d) =>
-          d.category == DiffCategory.missingOurs &&
-          d.key.startsWith('imp.fut.akt.') &&
-          d.fullDeponent);
-      Diff like(String item, {required bool deponent}) => Diff(
-            category: moved.category,
-            item: item,
-            type: moved.type,
-            key: moved.key,
-            ours: moved.ours,
-            theirs: moved.theirs,
-            synthetic: false,
-            deponent: deponent,
-            fullDeponent: false,
-          );
+    test(
+      'a deponent reason covers neither an active verb nor a semi-deponent',
+      () {
+        final moved = result.diffs.firstWhere(
+          (d) =>
+              d.category == DiffCategory.missingOurs &&
+              d.key.startsWith('imp.fut.akt.') &&
+              d.fullDeponent,
+        );
+        Diff like(String item, {required bool deponent}) => Diff(
+          category: moved.category,
+          item: item,
+          type: moved.type,
+          key: moved.key,
+          ours: moved.ours,
+          theirs: moved.theirs,
+          synthetic: false,
+          deponent: deponent,
+          fullDeponent: false,
+        );
 
-      final active = like('amare', deponent: false);
-      final semi = like('audere', deponent: true);
-      expect(allowed.any((a) => a.covers(moved)), isTrue);
-      expect(allowed.any((a) => a.covers(active)), isFalse);
-      expect(allowed.any((a) => a.covers(semi)), isFalse);
-      // The semi-deponent is what a widened selector would let through.
-      final widened = AllowedDiff.parse(
-        '- {direction: ours, keys: [${moved.key}], deponent: some, reason: x}',
-      );
-      expect(widened.single.covers(semi), isTrue);
-    });
+        final active = like('amare', deponent: false);
+        final semi = like('audere', deponent: true);
+        expect(allowed.any((a) => a.covers(moved)), isTrue);
+        expect(allowed.any((a) => a.covers(active)), isFalse);
+        expect(allowed.any((a) => a.covers(semi)), isFalse);
+        // The semi-deponent is what a widened selector would let through.
+        final widened = AllowedDiff.parse(
+          '- {direction: ours, keys: [${moved.key}], deponent: some, reason: x}',
+        );
+        expect(widened.single.covers(semi), isTrue);
+      },
+    );
 
     test('a shrunk or empty sample is not the whole sample', () {
       final items = fixtures.items;
-      for (final kept in [items.take(items.length ~/ 2).toList(), <ItemForms>[]]) {
+      for (final kept in [
+        items.take(items.length ~/ 2).toList(),
+        <ItemForms>[],
+      ]) {
         final shrunk = runOracle(
           items: kept,
           axesByFile: fixtures.axes,
@@ -334,7 +363,10 @@ void main() {
           morphMap: morphMap,
           typeMap: typeMap,
         );
-        expect(comparedWholeSample(shrunk, fixtures.sample.entries.length), isFalse);
+        expect(
+          comparedWholeSample(shrunk, fixtures.sample.entries.length),
+          isFalse,
+        );
       }
     });
 

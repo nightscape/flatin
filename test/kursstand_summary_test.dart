@@ -16,8 +16,9 @@ void main() {
     final container = ProviderContainer();
     addTearDown(container.dispose);
 
-    final practicable =
-        await container.read(practicableItemsByTypeProvider.future);
+    final practicable = await container.read(
+      practicableItemsByTypeProvider.future,
+    );
     final filter = await container.read(courseFilterProvider.future);
     final summary = filter.summary(await loadAllPracticeItems());
 

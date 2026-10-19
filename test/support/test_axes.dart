@@ -48,7 +48,11 @@ final verbAxes = Axes(
     GrammarAxis(
       id: 'person',
       name: 'Person',
-      values: const [('1', '1. Person'), ('2', '2. Person'), ('3', '3. Person')],
+      values: const [
+        ('1', '1. Person'),
+        ('2', '2. Person'),
+        ('3', '3. Person'),
+      ],
     ),
     GrammarAxis(
       id: 'numerus',

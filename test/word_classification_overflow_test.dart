@@ -14,16 +14,19 @@ void main() {
       'nouns': nouns.availableTypes.where((t) => t != 'U-Deklination').toSet(),
       'verbs': verbs.availableTypes.toSet(),
     });
-    final item = (await loadPracticeItems('lib/data/latin_nouns.yaml'))
-        .singleWhere((i) => i.id == 'nouns:manus');
+    final item = (await loadPracticeItems(
+      'lib/data/latin_nouns.yaml',
+    )).singleWhere((i) => i.id == 'nouns:manus');
     tester.view.physicalSize = const Size(800, 600);
     tester.view.devicePixelRatio = 1.0;
     addTearDown(tester.view.reset);
 
-    await tester.pumpWidget(wrapInApp(
-      WordClassificationScreen(item: item, formKey: 'nom.sg'),
-      forcedLocale: const Locale('de'),
-    ));
+    await tester.pumpWidget(
+      wrapInApp(
+        WordClassificationScreen(item: item, formKey: 'nom.sg'),
+        forcedLocale: const Locale('de'),
+      ),
+    );
     await letItLoad(tester);
 
     // manibus, so neither the shown form nor one of its macron twins: the
@@ -35,8 +38,10 @@ void main() {
     await tester.tap(find.byKey(const Key('wordClassification.check.button')));
     await tester.pumpAndSettle();
 
-    expect(find.byKey(const Key('wordClassification.check.button')),
-        findsNothing);
+    expect(
+      find.byKey(const Key('wordClassification.check.button')),
+      findsNothing,
+    );
     expect(find.byKey(const Key('explanation.classification')), findsOneWidget);
     expect(tester.takeException(), isNull);
   });

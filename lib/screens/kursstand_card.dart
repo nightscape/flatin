@@ -113,13 +113,16 @@ class _RangeRow extends StatelessWidget {
       ? FlutterI18n.translate(context, 'settings.kursstand.later')
       : 'L$lesson';
 
-  String _volume(BuildContext context, int lesson) => ' (${FlutterI18n.translate(context, 'settings.kursstand.volume', translationParams: {'book': '${lessons.bookOf(lesson)}'})})';
+  String _volume(BuildContext context, int lesson) =>
+      ' (${FlutterI18n.translate(context, 'settings.kursstand.volume', translationParams: {'book': '${lessons.bookOf(lesson)}'})})';
 
   String _label(BuildContext context) {
     final from = range.from, to = range.to;
-    final first = _stop(context, from) +
+    final first =
+        _stop(context, from) +
         (from == laterLesson ? '' : _volume(context, from));
-    final sameVolume = from == laterLesson ||
+    final sameVolume =
+        from == laterLesson ||
         to == laterLesson ||
         lessons.bookOf(from) == lessons.bookOf(to);
     final last = _stop(context, to) + (sameVolume ? '' : _volume(context, to));
@@ -136,10 +139,7 @@ class _RangeRow extends StatelessWidget {
           padding: const EdgeInsets.only(top: 8),
           child: Row(
             children: [
-              Text(
-                title,
-                style: const TextStyle(fontWeight: FontWeight.w600),
-              ),
+              Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
               const SizedBox(width: 12),
               Text(label, key: Key('$rowKey.label')),
             ],

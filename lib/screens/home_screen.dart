@@ -157,9 +157,7 @@ class _PracticeTypeButton extends ConsumerWidget {
           backgroundColor: const Color(0xFFD0D0D0),
           foregroundColor: Colors.black,
           elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

@@ -7,8 +7,9 @@ import 'package:latin_practice/screens/practice_screen.dart';
 import 'support/word_classification_harness.dart';
 
 void main() {
-  testWidgets('with everything due the home entry opens an enabled type',
-      (tester) async {
+  testWidgets('with everything due the home entry opens an enabled type', (
+    tester,
+  ) async {
     final nouns = await getFormMetadata('lib/data/latin_nouns.yaml');
     final verbs = await getFormMetadata('lib/data/latin_verbs.yaml');
     final enabledType = nouns.availableTypes.first;
@@ -27,8 +28,9 @@ void main() {
     expect(opened.item.type, enabledType);
   });
 
-  testWidgets('with nothing due the home entries honour the type selection',
-      (tester) async {
+  testWidgets('with nothing due the home entries honour the type selection', (
+    tester,
+  ) async {
     final nouns = await getFormMetadata('lib/data/latin_nouns.yaml');
     final verbs = await getFormMetadata('lib/data/latin_verbs.yaml');
     final enabledType = nouns.availableTypes.first;
@@ -40,8 +42,9 @@ void main() {
     await tester.pumpWidget(wrapInApp(const HomeScreen()));
     await letItLoad(tester);
 
-    final verbsButton = tester
-        .widget<ElevatedButton>(find.byKey(const Key('home.verbs.button')));
+    final verbsButton = tester.widget<ElevatedButton>(
+      find.byKey(const Key('home.verbs.button')),
+    );
     expect(verbsButton.onPressed, isNull);
 
     await tester.tap(find.byKey(const Key('home.nouns.button')));

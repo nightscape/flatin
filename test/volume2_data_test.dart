@@ -95,13 +95,13 @@ const _volume1VerbIds = [
 ];
 
 List<String> _keys(List<String> numbers, {bool genus = false}) => [
-      for (final number in numbers)
-        for (final kasus in ['nom', 'gen', 'dat', 'akk', 'abl'])
-          if (genus)
-            for (final g in ['m', 'f', 'n']) '$kasus.$number.$g'
-          else
-            '$kasus.$number',
-    ];
+  for (final number in numbers)
+    for (final kasus in ['nom', 'gen', 'dat', 'akk', 'abl'])
+      if (genus)
+        for (final g in ['m', 'f', 'n']) '$kasus.$number.$g'
+      else
+        '$kasus.$number',
+];
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -128,15 +128,23 @@ void main() {
     expect(byId(nouns, 'nouns:ego').formOrder, _keys(['sg']));
     expect(byId(nouns, 'nouns:nos').formOrder, _keys(['pl']));
     expect(byId(nouns, 'nouns:milia').formOrder, _keys(['pl']));
-    expect(byId(nouns, 'nouns:quis').formOrder.toSet(),
-        _keys(['sg'], genus: true).toSet());
-    expect(byId(nouns, 'nouns:unus').formOrder.toSet(),
-        _keys(['sg'], genus: true).toSet());
-    expect(byId(nouns, 'nouns:tres').formOrder.toSet(),
-        _keys(['pl'], genus: true).toSet());
+    expect(
+      byId(nouns, 'nouns:quis').formOrder.toSet(),
+      _keys(['sg'], genus: true).toSet(),
+    );
+    expect(
+      byId(nouns, 'nouns:unus').formOrder.toSet(),
+      _keys(['sg'], genus: true).toSet(),
+    );
+    expect(
+      byId(nouns, 'nouns:tres').formOrder.toSet(),
+      _keys(['pl'], genus: true).toSet(),
+    );
     // The full pronouns keep both numbers.
-    expect(byId(nouns, 'nouns:hic').formOrder.toSet(),
-        _keys(['sg', 'pl'], genus: true).toSet());
+    expect(
+      byId(nouns, 'nouns:hic').formOrder.toSet(),
+      _keys(['sg', 'pl'], genus: true).toSet(),
+    );
   });
 
   test('Futur I is practised for every conjugation', () {

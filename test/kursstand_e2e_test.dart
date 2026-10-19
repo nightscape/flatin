@@ -74,8 +74,9 @@ ProviderContainer _container(WidgetTester tester) =>
     ProviderScope.containerOf(tester.element(find.byType(MaterialApp)));
 
 Future<Set<String>> _practicable(WidgetTester tester) async {
-  final byType =
-      await _container(tester).read(practicableItemsByTypeProvider.future);
+  final byType = await _container(
+    tester,
+  ).read(practicableItemsByTypeProvider.future);
   return {for (final items in byType.values) ...items.map((i) => i.id)};
 }
 
@@ -89,22 +90,22 @@ class _Expected {
   final Curriculum curriculum;
 
   Iterable<FormKey> taughtForms(PracticeItem item, int grammar) => [
-        for (final label in item.formLabels)
-          if (curriculum.formLesson(item.dataFileId, label.key) <= grammar)
-            label.key,
-      ];
+    for (final label in item.formLabels)
+      if (curriculum.formLesson(item.dataFileId, label.key) <= grammar)
+        label.key,
+  ];
 
   bool reaches(PracticeItem item, int grammar) =>
       curriculum.typeLesson(item.dataFileId, item.type) <= grammar &&
       taughtForms(item, grammar).isNotEmpty;
 
   Set<String> ids(int fromLesson, int toLesson) => {
-        for (final item in items)
-          if (fromLesson <= lessons.lessonNumberOf(item) &&
-              lessons.lessonNumberOf(item) <= toLesson &&
-              reaches(item, toLesson))
-            item.id,
-      };
+    for (final item in items)
+      if (fromLesson <= lessons.lessonNumberOf(item) &&
+          lessons.lessonNumberOf(item) <= toLesson &&
+          reaches(item, toLesson))
+        item.id,
+  };
 
   PracticeItem firstWhere(bool Function(PracticeItem) test) =>
       items.firstWhere(test);
@@ -121,9 +122,11 @@ Future<void> _expectTaughtUpTo(
   final filter = await _container(tester).read(courseFilterProvider.future);
   for (final id in practicable) {
     final item = byId[id]!;
-    expect(expected.lessons.lessonNumberOf(item),
-        inInclusiveRange(fromLesson, toLesson),
-        reason: item.lemma);
+    expect(
+      expected.lessons.lessonNumberOf(item),
+      inInclusiveRange(fromLesson, toLesson),
+      reason: item.lemma,
+    );
     expect(
       expected.curriculum.typeLesson(item.dataFileId, item.type),
       lessThanOrEqualTo(toLesson),
@@ -132,18 +135,20 @@ Future<void> _expectTaughtUpTo(
     final asked = filter.practicedForms(item.dataFileId, item.formLabels);
     expect(asked, isNotEmpty, reason: item.lemma);
     for (final key in asked) {
-      expect(expected.curriculum.formLesson(item.dataFileId, key),
-          lessThanOrEqualTo(toLesson),
-          reason: '${item.lemma} $key');
+      expect(
+        expected.curriculum.formLesson(item.dataFileId, key),
+        lessThanOrEqualTo(toLesson),
+        reason: '${item.lemma} $key',
+      );
     }
   }
 }
 
 Future<_Expected> _expected() async => _Expected(
-      await loadAllPracticeItems(),
-      await loadLessonData(lessonDataAssets),
-      await loadCurriculum(curriculumAssets),
-    );
+  await loadAllPracticeItems(),
+  await loadLessonData(lessonDataAssets),
+  await loadCurriculum(curriculumAssets),
+);
 
 Future<Map<String, dynamic>> _stored() => storedSettings();
 
@@ -161,53 +166,62 @@ void main() {
     await letItLoad(tester);
   }
 
-  testWidgets('Kursstand L21-L23: practice offers exactly what the YAML teaches',
-      (tester) async {
-    final expected = await _expected();
-    await startApp(tester);
-    await _openSettings(tester);
+  testWidgets(
+    'Kursstand L21-L23: practice offers exactly what the YAML teaches',
+    (tester) async {
+      final expected = await _expected();
+      await startApp(tester);
+      await _openSettings(tester);
 
-    await _dragThumb(tester, 'kursstand.words.slider', 40, 23);
-    await _dragThumb(tester, 'kursstand.words.slider', 1, 21);
+      await _dragThumb(tester, 'kursstand.words.slider', 40, 23);
+      await _dragThumb(tester, 'kursstand.words.slider', 1, 21);
 
-    final stored = await _stored();
-    expect(stored['courseWords'], {'from': 21, 'to': 23});
-    expect(stored['grammarFollowsWords'], isTrue);
-    expect(stored['courseGrammar'], {'from': 1, 'to': 23});
+      final stored = await _stored();
+      expect(stored['courseWords'], {'from': 21, 'to': 23});
+      expect(stored['grammarFollowsWords'], isTrue);
+      expect(stored['courseGrammar'], {'from': 1, 'to': 23});
 
-    final wanted = expected.ids(21, 23);
-    expect(wanted, isNotEmpty);
-    final practicable = await _practicable(tester);
-    expect(practicable, wanted);
+      final wanted = expected.ids(21, 23);
+      expect(wanted, isNotEmpty);
+      final practicable = await _practicable(tester);
+      expect(practicable, wanted);
 
-    await _expectTaughtUpTo(tester, expected, practicable, 21, 23);
+      await _expectTaughtUpTo(tester, expected, practicable, 21, 23);
 
-    await _closeScreen(tester);
-    for (final button in ['home.nouns.button', 'home.verbs.button']) {
-      await tester.tap(_key(button));
-      await tester.pumpAndSettle();
-      await letItLoad(tester);
-      final shown = tester.widget<PracticeScreen>(find.byType(PracticeScreen));
-      expect(practicable, contains(shown.item.id), reason: button);
       await _closeScreen(tester);
-    }
-  });
+      for (final button in ['home.nouns.button', 'home.verbs.button']) {
+        await tester.tap(_key(button));
+        await tester.pumpAndSettle();
+        await letItLoad(tester);
+        final shown = tester.widget<PracticeScreen>(
+          find.byType(PracticeScreen),
+        );
+        expect(practicable, contains(shown.item.id), reason: button);
+        await _closeScreen(tester);
+      }
+    },
+  );
 
-  testWidgets('overrides survive a slider move and reset clears them',
-      (tester) async {
+  testWidgets('overrides survive a slider move and reset clears them', (
+    tester,
+  ) async {
     final expected = await _expected();
     await startApp(tester);
     await _openSettings(tester);
     await _dragThumb(tester, 'kursstand.words.slider', 40, 23);
     await _dragThumb(tester, 'kursstand.words.slider', 1, 21);
 
-    final inside = expected.firstWhere((i) =>
-        expected.ids(21, 23).contains(i.id) &&
-        expected.items.where((o) => o.lemma == i.lemma).length == 1);
-    final outside = expected.firstWhere((i) =>
-        expected.lessons.lessonNumberOf(i) == 1 &&
-        expected.reaches(i, 23) &&
-        expected.items.where((o) => o.lemma == i.lemma).length == 1);
+    final inside = expected.firstWhere(
+      (i) =>
+          expected.ids(21, 23).contains(i.id) &&
+          expected.items.where((o) => o.lemma == i.lemma).length == 1,
+    );
+    final outside = expected.firstWhere(
+      (i) =>
+          expected.lessons.lessonNumberOf(i) == 1 &&
+          expected.reaches(i, 23) &&
+          expected.items.where((o) => o.lemma == i.lemma).length == 1,
+    );
     final range2123 = expected.ids(21, 23);
     expect(range2123, isNot(contains(outside.id)));
 
@@ -227,10 +241,7 @@ void main() {
     expect(stored['deselectedWords'], [inside.lemma]);
 
     await _dragThumb(tester, 'kursstand.words.slider', 23, 24);
-    expect(
-      (await _stored())['courseWords'],
-      {'from': 21, 'to': 24},
-    );
+    expect((await _stored())['courseWords'], {'from': 21, 'to': 24});
     final range2124 = expected.ids(21, 24);
     final moved = {...range2124, outside.id}..remove(inside.id);
     final practicableAfterMove = await _practicable(tester);

@@ -65,12 +65,12 @@ sealed class StemDerivation {
     required this.name,
     required this.display,
     required this.variants,
-  })  : stem = variants.first,
-        assert(variants.isNotEmpty),
-        assert(
-          variants.map(norm).toSet().length == variants.length,
-          'stem $name: two variants differ only in quantity marks',
-        );
+  }) : stem = variants.first,
+       assert(variants.isNotEmpty),
+       assert(
+         variants.map(norm).toSet().length == variants.length,
+         'stem $name: two variants differ only in quantity marks',
+       );
 }
 
 /// Cut from a principal part the item gives (S3).
@@ -122,12 +122,12 @@ sealed class FormDerivation {
   final List<String> variants;
 
   FormDerivation({required this.formKey, required this.variants})
-      : result = variants.first,
-        assert(variants.isNotEmpty),
-        assert(
-          variants.map(norm).toSet().length == variants.length,
-          'form $formKey: two variants differ only in quantity marks',
-        );
+    : result = variants.first,
+      assert(variants.isNotEmpty),
+      assert(
+        variants.map(norm).toSet().length == variants.length,
+        'form $formKey: two variants differ only in quantity marks',
+      );
 }
 
 /// A principal part the item gives, shown as it stands.
@@ -178,15 +178,12 @@ final class IrregularForm extends FormDerivation {
   /// What the rules give for this key, if they give anything.
   final FormDerivation? regular;
 
-  IrregularForm({
-    required super.formKey,
-    required super.variants,
-    this.regular,
-  }) : assert(
-          regular == null ||
-              (regular.formKey == formKey && regular.result != variants.first),
-          'the regular derivation must be another spelling of the same key',
-        );
+  IrregularForm({required super.formKey, required super.variants, this.regular})
+    : assert(
+        regular == null ||
+            (regular.formKey == formKey && regular.result != variants.first),
+        'the regular derivation must be another spelling of the same key',
+      );
 }
 
 /// One piece of a [ComposedForm].
@@ -282,30 +279,30 @@ final class Derivation {
     this.fullDeponent = false,
     this.internal = const {},
     required this.grammar,
-  })  : assert(forms.entries.every((e) => e.key == e.value.formKey)),
-        assert(
-          stems.entries.every((e) => e.key == e.value.name),
-          'a stem is filed under another name than its own',
-        ),
-        // I5: no stem, no generated or composed form.
-        assert(
-          stems.isNotEmpty ||
-              !forms.values.any(
-                (f) =>
-                    f is GeneratedForm ||
-                    (f is ComposedForm && f.parts.any((p) => p is AffixPart)),
-              ),
-        ),
-        // I2, as far as it holds without the sandhi function: a seam rule may
-        // change the stem, so only a rule-free seam concatenates exactly.
-        assert(
-          forms.values.every(
-            (f) => switch (f) {
-              GeneratedForm(sandhiRule: final rule) when rule != null => true,
-              GeneratedForm(:final stemName, :final ending, :final result) =>
-                norm(stems[stemName]!.stem + ending) == norm(result),
-              _ => true,
-            },
-          ),
-        );
+  }) : assert(forms.entries.every((e) => e.key == e.value.formKey)),
+       assert(
+         stems.entries.every((e) => e.key == e.value.name),
+         'a stem is filed under another name than its own',
+       ),
+       // I5: no stem, no generated or composed form.
+       assert(
+         stems.isNotEmpty ||
+             !forms.values.any(
+               (f) =>
+                   f is GeneratedForm ||
+                   (f is ComposedForm && f.parts.any((p) => p is AffixPart)),
+             ),
+       ),
+       // I2, as far as it holds without the sandhi function: a seam rule may
+       // change the stem, so only a rule-free seam concatenates exactly.
+       assert(
+         forms.values.every(
+           (f) => switch (f) {
+             GeneratedForm(sandhiRule: final rule) when rule != null => true,
+             GeneratedForm(:final stemName, :final ending, :final result) =>
+               norm(stems[stemName]!.stem + ending) == norm(result),
+             _ => true,
+           },
+         ),
+       );
 }

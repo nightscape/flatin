@@ -5,20 +5,24 @@ import 'package:latin_practice/screens/home_screen.dart';
 import 'support/word_classification_harness.dart';
 
 void main() {
-  testWidgets('a card store that cannot be read is reported on the home screen',
-      (tester) async {
-    await seedNothingDue({'nouns': <String>{}, 'verbs': <String>{}});
+  testWidgets(
+    'a card store that cannot be read is reported on the home screen',
+    (tester) async {
+      await seedNothingDue({'nouns': <String>{}, 'verbs': <String>{}});
 
-    await tester.pumpWidget(wrapInApp(
-      const HomeScreen(),
-      overrides: [
-        fsrsCardsProvider.overrideWith(
-          (ref) async => throw const FormatException('broken store'),
+      await tester.pumpWidget(
+        wrapInApp(
+          const HomeScreen(),
+          overrides: [
+            fsrsCardsProvider.overrideWith(
+              (ref) async => throw const FormatException('broken store'),
+            ),
+          ],
         ),
-      ],
-    ));
-    await letItLoad(tester);
+      );
+      await letItLoad(tester);
 
-    expect(find.textContaining('broken store'), findsWidgets);
-  });
+      expect(find.textContaining('broken store'), findsWidgets);
+    },
+  );
 }

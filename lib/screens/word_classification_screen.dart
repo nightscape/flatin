@@ -66,16 +66,15 @@ class Selectors {
 
   /// A pick in the words of the dropdowns, e.g. "Futur I 3. Person Singular".
   String textOf(Map<String, String?> picks) => [
-        for (final section in sections)
-          if (picks[section] != absentValue)
-            optionText(section, picks[section]!),
-      ].join(' ');
+    for (final section in sections)
+      if (picks[section] != absentValue) optionText(section, picks[section]!),
+  ].join(' ');
 
   /// [label] in the words of the dropdowns.
   String textOfLabel(FormLabel label) => textOf({
-        for (final section in sections)
-          section: label.features[section] ?? absentValue,
-      });
+    for (final section in sections)
+      section: label.features[section] ?? absentValue,
+  });
 }
 
 /// The selectors for the forms the learner may be asked about.
@@ -115,8 +114,10 @@ class WordClassificationScreen extends ConsumerStatefulWidget {
   final String? formKey;
 
   const WordClassificationScreen({super.key, this.item, this.formKey})
-      : assert((item == null) == (formKey == null),
-            'item and formKey are given together');
+    : assert(
+        (item == null) == (formKey == null),
+        'item and formKey are given together',
+      );
 
   @override
   ConsumerState<WordClassificationScreen> createState() =>
@@ -185,13 +186,17 @@ class _WordClassificationScreenState
 
       // Pick from due items if available, otherwise random
       final random = Random();
-      final item = widget.item ??
+      final item =
+          widget.item ??
           (allDueItems.isNotEmpty
               ? allDueItems[random.nextInt(allDueItems.length)]
               : allItems[random.nextInt(allItems.length)]);
       _isNoun = item.dataFileId == 'nouns';
 
-      final enabledForms = filter.practicedForms(item.dataFileId, item.formLabels);
+      final enabledForms = filter.practicedForms(
+        item.dataFileId,
+        item.formLabels,
+      );
       final filteredData = item.filterForms(enabledForms);
 
       if (filteredData.forms.isEmpty) {
@@ -216,7 +221,9 @@ class _WordClassificationScreenState
       for (int i = 0; i < item.forms.length; i++) {
         final formKey = item.formOrder[i];
         if (!enabledForms.contains(formKey)) continue;
-        if (item.acceptedForms[i].any((f) => norm(f) == norm(_displayedWord!))) {
+        if (item.acceptedForms[i].any(
+          (f) => norm(f) == norm(_displayedWord!),
+        )) {
           _correctFormIndices.add(i);
           _correctAnswers.add(item.formLabels[i]);
         }
@@ -324,8 +331,8 @@ class _WordClassificationScreenState
   Selectors get _selectors => selectorsFor(_enabledLabels);
 
   Map<String, String?> _emptyCombination() => {
-        for (final section in _selectors.sections) section: null,
-      };
+    for (final section in _selectors.sections) section: null,
+  };
 
   void _nextWord() {
     setState(() {
@@ -355,8 +362,9 @@ class _WordClassificationScreenState
   Widget _buildExplanationBox(bool isMobile) {
     final item = _currentItem!;
     final explainer = ref.watch(explainerProvider);
-    final shownKeys =
-        _correctFormIndices.map((i) => item.formOrder[i]).toList();
+    final shownKeys = _correctFormIndices
+        .map((i) => item.formOrder[i])
+        .toList();
 
     return Padding(
       padding: EdgeInsets.symmetric(vertical: isMobile ? 6.0 : 8.0),
@@ -375,7 +383,9 @@ class _WordClassificationScreenState
               Padding(
                 padding: const EdgeInsets.only(bottom: 8),
                 child: EselStaticSteps(
-                  scope: i == 0 ? 'esel.classification' : 'esel.classification.$i',
+                  scope: i == 0
+                      ? 'esel.classification'
+                      : 'esel.classification.$i',
                   title: groupTitle(item, group),
                   steps: eselSteps(item, group.first),
                 ),
@@ -490,13 +500,18 @@ class _WordClassificationScreenState
     final isMobile = screenWidth < 600;
 
     // Watch the course filter and reload the word if its form becomes hidden
-    ref.listen<AsyncValue<CourseFilter>>(courseFilterProvider, (previous, next) {
+    ref.listen<AsyncValue<CourseFilter>>(courseFilterProvider, (
+      previous,
+      next,
+    ) {
       if (previous != next &&
           next is AsyncData<CourseFilter> &&
           _currentItem != null &&
           _correctFormIndices.isNotEmpty) {
-        final enabledForms = next.value
-            .practicedForms(_currentItem!.dataFileId, _currentItem!.formLabels);
+        final enabledForms = next.value.practicedForms(
+          _currentItem!.dataFileId,
+          _currentItem!.formLabels,
+        );
 
         // Check if any of the current forms are still enabled
         bool anyFormEnabled = _correctFormIndices.any((index) {
@@ -540,7 +555,10 @@ class _WordClassificationScreenState
           : _currentItem == null || _displayedWord == null
           ? Center(
               child: Text(
-                FlutterI18n.translate(context, 'wordClassification.noWordsAvailable'),
+                FlutterI18n.translate(
+                  context,
+                  'wordClassification.noWordsAvailable',
+                ),
                 style: TextStyle(fontSize: isMobile ? 16.0 : 18.0),
               ),
             )
@@ -553,12 +571,20 @@ class _WordClassificationScreenState
                     vertical: verticalPadding,
                   ),
                   child: Text(
-                    key: Key(_isNoun
-                        ? 'wordClassification.declension'
-                        : 'wordClassification.conjugation'),
+                    key: Key(
+                      _isNoun
+                          ? 'wordClassification.declension'
+                          : 'wordClassification.conjugation',
+                    ),
                     _isNoun
-                        ? FlutterI18n.translate(context, 'wordClassification.declension')
-                        : FlutterI18n.translate(context, 'wordClassification.conjugation'),
+                        ? FlutterI18n.translate(
+                            context,
+                            'wordClassification.declension',
+                          )
+                        : FlutterI18n.translate(
+                            context,
+                            'wordClassification.conjugation',
+                          ),
                     style: TextStyle(
                       fontSize: titleFontSize,
                       fontWeight: FontWeight.bold,
@@ -611,7 +637,9 @@ class _WordClassificationScreenState
                 // Combination selectors
                 Expanded(
                   child: SingleChildScrollView(
-                    padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: horizontalPadding,
+                    ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -631,7 +659,10 @@ class _WordClassificationScreenState
                               },
                               icon: const Icon(Icons.add),
                               label: Text(
-                                FlutterI18n.translate(context, 'wordClassification.addCombination'),
+                                FlutterI18n.translate(
+                                  context,
+                                  'wordClassification.addCombination',
+                                ),
                               ),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: const Color(0xFFD0D0D0),
@@ -671,7 +702,10 @@ class _WordClassificationScreenState
                                     SizedBox(width: isMobile ? 6 : 8),
                                     Expanded(
                                       child: Text(
-                                        FlutterI18n.translate(context, 'wordClassification.allCorrectCombinations'),
+                                        FlutterI18n.translate(
+                                          context,
+                                          'wordClassification.allCorrectCombinations',
+                                        ),
                                         style: TextStyle(
                                           fontSize: isMobile ? 14.0 : 16.0,
                                           fontWeight: FontWeight.bold,
@@ -688,9 +722,13 @@ class _WordClassificationScreenState
                                   children: _correctAnswers.map((label) {
                                     final wasSelected = _selectedAnswers
                                         .where(_selectors.isComplete)
-                                        .any((combination) =>
-                                            _combinationToFormLabel(combination) ==
-                                            label);
+                                        .any(
+                                          (combination) =>
+                                              _combinationToFormLabel(
+                                                combination,
+                                              ) ==
+                                              label,
+                                        );
 
                                     return Container(
                                       padding: EdgeInsets.symmetric(
@@ -729,7 +767,9 @@ class _WordClassificationScreenState
                                             child: Text(
                                               _selectors.textOfLabel(label),
                                               style: TextStyle(
-                                                fontSize: isMobile ? 12.0 : 14.0,
+                                                fontSize: isMobile
+                                                    ? 12.0
+                                                    : 14.0,
                                                 fontWeight: wasSelected
                                                     ? FontWeight.bold
                                                     : FontWeight.normal,
@@ -786,10 +826,19 @@ class _WordClassificationScreenState
                                   Expanded(
                                     child: Text(
                                       _isCorrect
-                                          ? FlutterI18n.translate(context, 'wordClassification.correct')
+                                          ? FlutterI18n.translate(
+                                              context,
+                                              'wordClassification.correct',
+                                            )
                                           : (_isPartiallyCorrect
-                                                ? FlutterI18n.translate(context, 'wordClassification.partiallyCorrect')
-                                                : FlutterI18n.translate(context, 'wordClassification.incorrect')),
+                                                ? FlutterI18n.translate(
+                                                    context,
+                                                    'wordClassification.partiallyCorrect',
+                                                  )
+                                                : FlutterI18n.translate(
+                                                    context,
+                                                    'wordClassification.incorrect',
+                                                  )),
                                       style: TextStyle(
                                         fontSize: isMobile ? 14.0 : 16.0,
                                         fontWeight: FontWeight.bold,
@@ -817,7 +866,10 @@ class _WordClassificationScreenState
                       ? Column(
                           children: [
                             Text(
-                              FlutterI18n.translate(context, 'wordClassification.howWellDidYouKnow'),
+                              FlutterI18n.translate(
+                                context,
+                                'wordClassification.howWellDidYouKnow',
+                              ),
                               style: TextStyle(
                                 fontSize: isMobile ? 14.0 : 16.0,
                                 fontWeight: FontWeight.bold,
@@ -832,25 +884,37 @@ class _WordClassificationScreenState
                               children: [
                                 _buildRatingButton(
                                   Rating.again,
-                                  FlutterI18n.translate(context, 'wordClassification.rating.again'),
+                                  FlutterI18n.translate(
+                                    context,
+                                    'wordClassification.rating.again',
+                                  ),
                                   Colors.red,
                                   isMobile,
                                 ),
                                 _buildRatingButton(
                                   Rating.hard,
-                                  FlutterI18n.translate(context, 'wordClassification.rating.hard'),
+                                  FlutterI18n.translate(
+                                    context,
+                                    'wordClassification.rating.hard',
+                                  ),
                                   Colors.orange,
                                   isMobile,
                                 ),
                                 _buildRatingButton(
                                   Rating.good,
-                                  FlutterI18n.translate(context, 'wordClassification.rating.good'),
+                                  FlutterI18n.translate(
+                                    context,
+                                    'wordClassification.rating.good',
+                                  ),
                                   Colors.green,
                                   isMobile,
                                 ),
                                 _buildRatingButton(
                                   Rating.easy,
-                                  FlutterI18n.translate(context, 'wordClassification.rating.easy'),
+                                  FlutterI18n.translate(
+                                    context,
+                                    'wordClassification.rating.easy',
+                                  ),
                                   Colors.blue,
                                   isMobile,
                                 ),
@@ -863,7 +927,9 @@ class _WordClassificationScreenState
                           children: [
                             if (!_isChecked)
                               ElevatedButton(
-                                key: const Key('wordClassification.check.button'),
+                                key: const Key(
+                                  'wordClassification.check.button',
+                                ),
                                 onPressed:
                                     _selectedAnswers.any(_selectors.isComplete)
                                     ? _checkAnswers
@@ -882,7 +948,10 @@ class _WordClassificationScreenState
                                   ),
                                 ),
                                 child: Text(
-                                  FlutterI18n.translate(context, 'wordClassification.check'),
+                                  FlutterI18n.translate(
+                                    context,
+                                    'wordClassification.check',
+                                  ),
                                   style: TextStyle(
                                     fontSize: isMobile ? 14.0 : 16.0,
                                     fontWeight: FontWeight.bold,
@@ -891,7 +960,9 @@ class _WordClassificationScreenState
                               )
                             else
                               ElevatedButton(
-                                key: const Key('wordClassification.nextWord.button'),
+                                key: const Key(
+                                  'wordClassification.nextWord.button',
+                                ),
                                 onPressed: _nextWord,
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: const Color(0xFFD0D0D0),
@@ -907,7 +978,10 @@ class _WordClassificationScreenState
                                   ),
                                 ),
                                 child: Text(
-                                  FlutterI18n.translate(context, 'wordClassification.nextWord'),
+                                  FlutterI18n.translate(
+                                    context,
+                                    'wordClassification.nextWord',
+                                  ),
                                   style: TextStyle(
                                     fontSize: isMobile ? 14.0 : 16.0,
                                     fontWeight: FontWeight.bold,
@@ -922,7 +996,12 @@ class _WordClassificationScreenState
     );
   }
 
-  Widget _buildRatingButton(Rating rating, String label, Color color, bool isMobile) {
+  Widget _buildRatingButton(
+    Rating rating,
+    String label,
+    Color color,
+    bool isMobile,
+  ) {
     final isSuggested = rating == _suggestedRating;
     final key = Key('rating.${rating.name}');
     return ElevatedButton(

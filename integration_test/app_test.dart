@@ -17,7 +17,8 @@ void main() {
     expect(
       binding.debugOutstandingSemanticsHandles,
       lessThanOrEqualTo(handlesAtStart),
-      reason: 'the platform switched semantics on during this scenario; the '
+      reason:
+          'the platform switched semantics on during this scenario; the '
           'handle belongs to the binding, not to a step',
     );
   });

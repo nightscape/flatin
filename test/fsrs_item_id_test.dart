@@ -15,7 +15,9 @@ PracticeItem _item(String dataFileId, String lemma, String translation) =>
       translation: translation,
       principalParts: [('', lemma)],
       forms: const ['x'],
-      acceptedForms: const [['x']],
+      acceptedForms: const [
+        ['x'],
+      ],
       formLabels: [nounLabel('nom', 'sg')],
       dataFileId: dataFileId,
       formOrder: const ['nominative_singular'],
@@ -35,25 +37,27 @@ Future<List<PracticeItem>> _allItems() async => [
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  test('every item has a "<dataFileId>:<lemma>" id and all ids are unique',
-      () async {
-    final items = await _allItems();
-    expect(items, isNotEmpty);
+  test(
+    'every item has a "<dataFileId>:<lemma>" id and all ids are unique',
+    () async {
+      final items = await _allItems();
+      expect(items, isNotEmpty);
 
-    final seen = <String>{};
-    for (final item in items) {
-      final itemId = PracticeItemCard.generateItemId(item);
-      expect(
-        itemId,
-        matches(RegExp(r'^(nouns|verbs):[^:]+$')),
-        reason: '${item.translation} has an unexpected id',
-      );
-      expect(itemId.startsWith('${item.dataFileId}:'), isTrue);
-      expect(seen.add(itemId), isTrue, reason: 'duplicate id $itemId');
-    }
+      final seen = <String>{};
+      for (final item in items) {
+        final itemId = PracticeItemCard.generateItemId(item);
+        expect(
+          itemId,
+          matches(RegExp(r'^(nouns|verbs):[^:]+$')),
+          reason: '${item.translation} has an unexpected id',
+        );
+        expect(itemId.startsWith('${item.dataFileId}:'), isTrue);
+        expect(seen.add(itemId), isTrue, reason: 'duplicate id $itemId');
+      }
 
-    PracticeItemCard.assertUniqueItemIds(items);
-  });
+      PracticeItemCard.assertUniqueItemIds(items);
+    },
+  );
 
   test('two items with the same lemma throw and name both translations', () {
     expect(

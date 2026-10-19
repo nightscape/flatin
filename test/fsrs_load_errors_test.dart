@@ -44,38 +44,42 @@ Future<List<PracticeItem>> _allItems() async => [
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  test('corrupted stored JSON throws and leaves the stored bytes alone',
-      () async {
-    const corrupted = '{"version": "2.0", "cards": [';
-    await _seed(corrupted);
-    final items = await _allItems();
+  test(
+    'corrupted stored JSON throws and leaves the stored bytes alone',
+    () async {
+      const corrupted = '{"version": "2.0", "cards": [';
+      await _seed(corrupted);
+      final items = await _allItems();
 
-    await expectLater(
-      FsrsStorage.syncCards(items),
-      throwsA(isA<FormatException>()),
-    );
-    expect(await _rawStorage(), corrupted);
-  });
+      await expectLater(
+        FsrsStorage.syncCards(items),
+        throwsA(isA<FormatException>()),
+      );
+      expect(await _rawStorage(), corrupted);
+    },
+  );
 
-  test('a card with a malformed field throws and leaves the stored bytes alone',
-      () async {
-    final items = await _allItems();
-    final healthy = _storedCard(
-      PracticeItemCard.generateItemId(items.first),
-      DateTime.utc(2030),
-    );
-    final malformed = _storedCard('deadbeef', DateTime.utc(2030))
-      ..['due'] = 'not-a-date';
-    final raw = jsonEncode({
-      'version': '2.0',
-      'cards': [healthy, malformed],
-    });
-    await _seed(raw);
+  test(
+    'a card with a malformed field throws and leaves the stored bytes alone',
+    () async {
+      final items = await _allItems();
+      final healthy = _storedCard(
+        PracticeItemCard.generateItemId(items.first),
+        DateTime.utc(2030),
+      );
+      final malformed = _storedCard('deadbeef', DateTime.utc(2030))
+        ..['due'] = 'not-a-date';
+      final raw = jsonEncode({
+        'version': '2.0',
+        'cards': [healthy, malformed],
+      });
+      await _seed(raw);
 
-    await expectLater(
-      FsrsStorage.syncCards(items),
-      throwsA(isA<FormatException>()),
-    );
-    expect(await _rawStorage(), raw);
-  });
+      await expectLater(
+        FsrsStorage.syncCards(items),
+        throwsA(isA<FormatException>()),
+      );
+      expect(await _rawStorage(), raw);
+    },
+  );
 }

@@ -30,18 +30,23 @@ void main() {
     expect(parses, 1);
   });
 
-  test('a parse that throws does not brick later loads in the same zone',
-      () async {
-    parseGate = () async => throw StateError('simulated bad data file');
-    await expectLater(
-        loadPracticeItems('lib/data/latin_nouns.yaml'), throwsStateError);
+  test(
+    'a parse that throws does not brick later loads in the same zone',
+    () async {
+      parseGate = () async => throw StateError('simulated bad data file');
+      await expectLater(
+        loadPracticeItems('lib/data/latin_nouns.yaml'),
+        throwsStateError,
+      );
 
-    parseGate = () async {};
-    final items = await loadPracticeItems('lib/data/latin_nouns.yaml')
-        .timeout(const Duration(seconds: 5));
+      parseGate = () async {};
+      final items = await loadPracticeItems(
+        'lib/data/latin_nouns.yaml',
+      ).timeout(const Duration(seconds: 5));
 
-    expect(items, isNotEmpty);
-  });
+      expect(items, isNotEmpty);
+    },
+  );
 
   test('a parse that throws rejects the callers queued behind it', () async {
     final gate = Completer<void>();
@@ -56,11 +61,12 @@ void main() {
 
     await expectLater(first, throwsStateError);
     await expectLater(
-        second.timeout(const Duration(seconds: 5)), throwsStateError);
+      second.timeout(const Duration(seconds: 5)),
+      throwsStateError,
+    );
   });
 
-  test('a caller queued by another zone is adopted by the take-over',
-      () async {
+  test('a caller queued by another zone is adopted by the take-over', () async {
     final gate = Completer<void>();
     parseGate = () => gate.future;
 
@@ -84,54 +90,69 @@ void main() {
 
     parseGate = () async => throw StateError('simulated bad data file');
     await expectLater(
-        runZoned(() => loadPracticeItems('lib/data/latin_nouns.yaml')),
-        throwsA(isA<StateError>()
-            .having((e) => e.message, 'message', 'simulated bad data file')));
+      runZoned(() => loadPracticeItems('lib/data/latin_nouns.yaml')),
+      throwsA(
+        isA<StateError>().having(
+          (e) => e.message,
+          'message',
+          'simulated bad data file',
+        ),
+      ),
+    );
 
     await expectLater(
-        adopted.timeout(const Duration(seconds: 5)), throwsStateError);
+      adopted.timeout(const Duration(seconds: 5)),
+      throwsStateError,
+    );
   });
 
-  test('a parse that finishes releases a caller it queued after a take-over',
-      () async {
-    final gateA = Completer<void>();
-    final gateB = Completer<void>();
-    var parses = 0;
-    parseGate = () => ++parses == 1 ? gateA.future : gateB.future;
+  test(
+    'a parse that finishes releases a caller it queued after a take-over',
+    () async {
+      final gateA = Completer<void>();
+      final gateB = Completer<void>();
+      var parses = 0;
+      parseGate = () => ++parses == 1 ? gateA.future : gateB.future;
 
-    unawaited(loadPracticeItems('lib/data/latin_nouns.yaml'));
-    final queued = loadPracticeItems('lib/data/latin_verbs.yaml');
-    await Future<void>.delayed(Duration.zero);
+      unawaited(loadPracticeItems('lib/data/latin_nouns.yaml'));
+      final queued = loadPracticeItems('lib/data/latin_verbs.yaml');
+      await Future<void>.delayed(Duration.zero);
 
-    unawaited(runZoned(() => loadPracticeItems('lib/data/latin_nouns.yaml')));
-    await Future<void>.delayed(Duration.zero);
+      unawaited(runZoned(() => loadPracticeItems('lib/data/latin_nouns.yaml')));
+      await Future<void>.delayed(Duration.zero);
 
-    gateA.complete();
-    expect(await queued.timeout(const Duration(seconds: 5)), isNotEmpty);
-  });
+      gateA.complete();
+      expect(await queued.timeout(const Duration(seconds: 5)), isNotEmpty);
+    },
+  );
 
-  test('a parse that throws rejects a caller it queued after a take-over',
-      () async {
-    final gateA = Completer<void>();
-    final gateB = Completer<void>();
-    var parses = 0;
-    parseGate = () => ++parses == 1 ? gateA.future : gateB.future;
+  test(
+    'a parse that throws rejects a caller it queued after a take-over',
+    () async {
+      final gateA = Completer<void>();
+      final gateB = Completer<void>();
+      var parses = 0;
+      parseGate = () => ++parses == 1 ? gateA.future : gateB.future;
 
-    final first = loadPracticeItems('lib/data/latin_nouns.yaml');
-    unawaited(first.then((_) {}, onError: (_) {}));
-    final queued = loadPracticeItems('lib/data/latin_verbs.yaml');
-    await Future<void>.delayed(Duration.zero);
+      final first = loadPracticeItems('lib/data/latin_nouns.yaml');
+      unawaited(first.then((_) {}, onError: (_) {}));
+      final queued = loadPracticeItems('lib/data/latin_verbs.yaml');
+      await Future<void>.delayed(Duration.zero);
 
-    unawaited(runZoned(() => loadPracticeItems('lib/data/latin_nouns.yaml')));
-    await Future<void>.delayed(Duration.zero);
+      unawaited(runZoned(() => loadPracticeItems('lib/data/latin_nouns.yaml')));
+      await Future<void>.delayed(Duration.zero);
 
-    gateA.completeError(StateError('simulated bad data file'));
-    await expectLater(
-        queued.timeout(const Duration(seconds: 5)), throwsStateError);
-  });
+      gateA.completeError(StateError('simulated bad data file'));
+      await expectLater(
+        queued.timeout(const Duration(seconds: 5)),
+        throwsStateError,
+      );
+    },
+  );
 
-  testWidgets('a test that abandons the load does not strand the next one',
-      (tester) async {
+  testWidgets('a test that abandons the load does not strand the next one', (
+    tester,
+  ) async {
     final gate = Completer<void>();
     parseGate = () => gate.future;
     SharedPreferences.setMockInitialValues({});
@@ -142,7 +163,8 @@ void main() {
     }
 
     final nouns = tester.widget<ElevatedButton>(
-        find.byKey(const Key('home.nouns.button')));
+      find.byKey(const Key('home.nouns.button')),
+    );
     expect(nouns.onPressed, isNull);
   });
 
@@ -153,13 +175,15 @@ void main() {
     await letItLoad(tester);
 
     final nouns = tester.widget<ElevatedButton>(
-        find.byKey(const Key('home.nouns.button')));
+      find.byKey(const Key('home.nouns.button')),
+    );
     expect(nouns.onPressed, isNotNull);
   });
 
   for (final run in ['first', 'second']) {
-    testWidgets('the $run test of the file reaches the home screen',
-        (tester) async {
+    testWidgets('the $run test of the file reaches the home screen', (
+      tester,
+    ) async {
       await seedNothingDue({'nouns': <String>{}, 'verbs': <String>{}});
 
       await tester.pumpWidget(wrapInApp(const LatinPracticeApp()));

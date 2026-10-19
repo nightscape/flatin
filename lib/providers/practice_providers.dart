@@ -67,7 +67,9 @@ class PracticeNotifier extends _$PracticeNotifier {
         results.add(null);
         continue;
       }
-      results.add(item.accepts(item.formOrder.indexOf(formKeys[i]), userAnswer));
+      results.add(
+        item.accepts(item.formOrder.indexOf(formKeys[i]), userAnswer),
+      );
     }
 
     final translationCorrect = selectedTranslation == correctTranslation;
@@ -135,8 +137,9 @@ class WordClassificationNotifier extends _$WordClassificationNotifier {
     final selected = Set<String>.from(state.selectedTypes);
     final correct = Set<String>.from(correctTypes);
 
-    final isCorrect = selected.length == correct.length &&
-                     selected.every((type) => correct.contains(type));
+    final isCorrect =
+        selected.length == correct.length &&
+        selected.every((type) => correct.contains(type));
 
     state = state.copyWith(
       isChecked: true,

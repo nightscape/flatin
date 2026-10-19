@@ -8,26 +8,30 @@ import 'support/word_classification_harness.dart';
 
 void main() {
   test('sampleLines has an entry for every explain key of de.json', () async {
-    final explainKeys = (await germanTexts())
-        .keys
+    final explainKeys = (await germanTexts()).keys
         .where((key) => key.startsWith('explain.'))
         .toSet();
     expect(sampleLines.map((line) => line.key).toSet(), explainKeys);
   });
 
-  testWidgets('every explain key renders German text with its params',
-      (tester) async {
-    await tester.pumpWidget(wrapInApp(
-      const Scaffold(body: ExplanationLines(sampleLines)),
-      forcedLocale: const Locale('de'),
-    ));
+  testWidgets('every explain key renders German text with its params', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      wrapInApp(
+        const Scaffold(body: ExplanationLines(sampleLines)),
+        forcedLocale: const Locale('de'),
+      ),
+    );
     await tester.pumpAndSettle();
 
     final rendered = tester
-        .widgetList<Text>(find.descendant(
-          of: find.byType(ExplanationLines),
-          matching: find.byType(Text),
-        ))
+        .widgetList<Text>(
+          find.descendant(
+            of: find.byType(ExplanationLines),
+            matching: find.byType(Text),
+          ),
+        )
         .map((t) => t.data!)
         .toList();
 
@@ -35,9 +39,16 @@ void main() {
     for (var i = 0; i < sampleLines.length; i++) {
       final line = sampleLines[i];
       final text = rendered[i];
-      expect(text, isNot(line.key), reason: '${line.key} is missing in de.json');
-      expect(text, isNot(contains('{')),
-          reason: '${line.key} left a parameter unsubstituted');
+      expect(
+        text,
+        isNot(line.key),
+        reason: '${line.key} is missing in de.json',
+      );
+      expect(
+        text,
+        isNot(contains('{')),
+        reason: '${line.key} left a parameter unsubstituted',
+      );
       for (final value in line.params.values) {
         expect(text, contains(value), reason: '${line.key} dropped $value');
       }

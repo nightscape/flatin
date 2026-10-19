@@ -48,7 +48,9 @@ class _LanguageScreenState extends ConsumerState<LanguageScreen> {
               children: [
                 ListTile(
                   key: const Key('language.system'),
-                  title: Text(FlutterI18n.translate(context, 'language.system')),
+                  title: Text(
+                    FlutterI18n.translate(context, 'language.system'),
+                  ),
                   selected: selected == null,
                   onTap: () => _choose(null),
                 ),

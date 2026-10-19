@@ -7,22 +7,22 @@ import 'support/stored_settings.dart';
 Map<String, dynamic> _v1({
   required List<String> nounTypes,
   required List<String> verbTypes,
-}) =>
-    {
-      'disabledForms': {
-        'nouns': ['genitive_singular'],
-        'verbs': ['praesens_first_person_singular'],
-      },
-      'disabledTypes': {'nouns': nounTypes, 'verbs': verbTypes},
-      'inputStrategyIds': <String, String>{},
-      'deselectedWords': <String>[],
-    };
+}) => {
+  'disabledForms': {
+    'nouns': ['genitive_singular'],
+    'verbs': ['praesens_first_person_singular'],
+  },
+  'disabledTypes': {'nouns': nounTypes, 'verbs': verbTypes},
+  'inputStrategyIds': <String, String>{},
+  'deselectedWords': <String>[],
+};
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  testWidgets('the app opens v1 settings with the same choices switched off',
-      (tester) async {
+  testWidgets('the app opens v1 settings with the same choices switched off', (
+    tester,
+  ) async {
     await openSettingsWith(
       tester,
       _v1(
@@ -34,8 +34,10 @@ void main() {
 
     expect(isChecked(tester, formTile('nouns', 'gen.sg')), isFalse);
     expect(isChecked(tester, formTile('nouns', 'nom.sg')), isTrue);
-    expect(isChecked(tester, typeTile('Konsonantische-Deklination-mf')),
-        isFalse);
+    expect(
+      isChecked(tester, typeTile('Konsonantische-Deklination-mf')),
+      isFalse,
+    );
     expect(isChecked(tester, typeTile('A-Deklination')), isTrue);
     // One of the three old names is not the merged type.
     expect(isChecked(tester, typeTile('Pronomen-is')), isTrue);

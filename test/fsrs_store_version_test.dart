@@ -48,17 +48,19 @@ void main() {
 
   final due = DateTime.utc(2030, 1, 2, 3, 4, 5);
 
-  test('a v1.0 store is discarded and replaced by an empty 2.0 store',
-      () async {
-    final items = await _allItems();
-    await _seed('1.0', [
-      _storedCard(PracticeItemCard.generateItemId(items.first), due),
-      _storedCard('deadbeef', due),
-    ]);
+  test(
+    'a v1.0 store is discarded and replaced by an empty 2.0 store',
+    () async {
+      final items = await _allItems();
+      await _seed('1.0', [
+        _storedCard(PracticeItemCard.generateItemId(items.first), due),
+        _storedCard('deadbeef', due),
+      ]);
 
-    expect(await FsrsStorage.loadCards(), isEmpty);
-    expect(await _readStorage(), {'version': '2.0', 'cards': <dynamic>[]});
-  });
+      expect(await FsrsStorage.loadCards(), isEmpty);
+      expect(await _readStorage(), {'version': '2.0', 'cards': <dynamic>[]});
+    },
+  );
 
   test('a 2.0 store keeps its cards', () async {
     final items = await _allItems();
@@ -70,19 +72,25 @@ void main() {
     expect(cards[itemId]!.due, due);
   });
 
-  test('syncCards over a discarded v1.0 store gives every item a new card',
-      () async {
-    final items = await _allItems();
-    await _seed('1.0', [
-      for (final item in items)
-        _storedCard(PracticeItemCard.generateItemId(item), due),
-    ]);
+  test(
+    'syncCards over a discarded v1.0 store gives every item a new card',
+    () async {
+      final items = await _allItems();
+      await _seed('1.0', [
+        for (final item in items)
+          _storedCard(PracticeItemCard.generateItemId(item), due),
+      ]);
 
-    final cards = await FsrsStorage.syncCards(items);
+      final cards = await FsrsStorage.syncCards(items);
 
-    expect(cards.length, items.length);
-    for (final card in cards.values) {
-      expect(card.due, isNot(due), reason: '${card.itemId} kept its v1.0 card');
-    }
-  });
+      expect(cards.length, items.length);
+      for (final card in cards.values) {
+        expect(
+          card.due,
+          isNot(due),
+          reason: '${card.itemId} kept its v1.0 card',
+        );
+      }
+    },
+  );
 }

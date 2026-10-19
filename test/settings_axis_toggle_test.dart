@@ -27,17 +27,17 @@ final item = handItem(
 
 /// The settings as they are stored once the Passive is switched off.
 String storedWithoutPassive() => jsonEncode({
-      settingsVersionField: settingsVersion,
-      'disabledForms': <String, List<String>>{},
-      'disabledFeatures': {
-        'verbs': {
-          'genus': ['pass'],
-        },
-      },
-      'disabledTypes': <String, List<String>>{},
-      'inputStrategyIds': <String, String>{},
-      'deselectedWords': <String>[],
-    });
+  settingsVersionField: settingsVersion,
+  'disabledForms': <String, List<String>>{},
+  'disabledFeatures': {
+    'verbs': {
+      'genus': ['pass'],
+    },
+  },
+  'disabledTypes': <String, List<String>>{},
+  'inputStrategyIds': <String, String>{},
+  'deselectedWords': <String>[],
+});
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -46,31 +46,44 @@ void main() {
     final settings = Settings().toggleFeature('verbs', 'genus', 'pass');
 
     expect(
-      filterTeachingAll(settings, item).practicedForms('verbs', item.formLabels),
+      filterTeachingAll(
+        settings,
+        item,
+      ).practicedForms('verbs', item.formLabels),
       {'ind.praes.akt.3.sg', 'ind.perf.akt.3.sg'},
     );
   });
 
   test('a form stays off while either its key or a feature is off', () {
-    var settings =
-        Settings().toggleForm('verbs', 'ind.perf.akt.3.sg', inRange: true);
+    var settings = Settings().toggleForm(
+      'verbs',
+      'ind.perf.akt.3.sg',
+      inRange: true,
+    );
     settings = settings.toggleFeature('verbs', 'genus', 'pass');
 
     expect(
-      filterTeachingAll(settings, item).practicedForms('verbs', item.formLabels),
+      filterTeachingAll(
+        settings,
+        item,
+      ).practicedForms('verbs', item.formLabels),
       {'ind.praes.akt.3.sg'},
     );
     expect(
-      filterTeachingAll(settings.clearOverrides(), item)
-          .practicedForms('verbs', item.formLabels),
+      filterTeachingAll(
+        settings.clearOverrides(),
+        item,
+      ).practicedForms('verbs', item.formLabels),
       item.formOrder.toSet(),
     );
   });
 
   test('the classification stops asking an axis with one value left', () {
     final settings = Settings().toggleFeature('verbs', 'genus', 'pass');
-    final enabled =
-        filterTeachingAll(settings, item).practicedForms('verbs', item.formLabels);
+    final enabled = filterTeachingAll(
+      settings,
+      item,
+    ).practicedForms('verbs', item.formLabels);
     final selectors = selectorsFor(item.filterForms(enabled).labels);
 
     expect(selectors.sections, isNot(contains('genus')));
@@ -104,10 +117,9 @@ void main() {
     tester.view.devicePixelRatio = 1.0;
     addTearDown(tester.view.reset);
 
-    await tester.pumpWidget(wrapInApp(
-      PracticeScreen(item: item),
-      forcedLocale: const Locale('de'),
-    ));
+    await tester.pumpWidget(
+      wrapInApp(PracticeScreen(item: item), forcedLocale: const Locale('de')),
+    );
     await letItLoad(tester);
 
     expect(find.text('Präsens: 3. Person Singular'), findsOneWidget);

@@ -64,10 +64,7 @@ final _possem = (
   item: () => loadItem(_verbs, 'posse'),
   formKey: 'konj.impf.akt.1.sg',
   wrong: 'zzz',
-  pinned: [
-    'S Stamm | done | pos-',
-    'E Endung | done | -sem',
-  ],
+  pinned: ['S Stamm | done | pos-', 'E Endung | done | -sem'],
   missing: ['M Merken'],
 );
 final _dic = (
@@ -158,9 +155,12 @@ Future<List<String>> _walk(WidgetTester tester, _Case c) async {
     final after = stepRows(tester, scope);
     expect(after[index].status, EselStepStatus.done, reason: '${c.name} $kind');
     final next = after.indexWhere(
-        (r) => r.step.options.isNotEmpty && r.status != EselStepStatus.done);
+      (r) => r.step.options.isNotEmpty && r.status != EselStepStatus.done,
+    );
     expect(
-      after.where((r) => r.status == EselStepStatus.open).map((r) => r.step.kind),
+      after
+          .where((r) => r.status == EselStepStatus.open)
+          .map((r) => r.step.kind),
       next < 0 ? isEmpty : [after[next].step.kind],
       reason: '${c.name} after Zeigen on $kind',
     );
@@ -178,28 +178,35 @@ void main() {
       final lines = snapshots.expand((s) => s.split('\n')).toList();
       expect(lines, containsAll(c.pinned), reason: c.name);
       for (final text in c.missing) {
-        expect(lines.where((line) => line.contains(text)), isEmpty,
-            reason: '${c.name} shows "$text"');
+        expect(
+          lines.where((line) => line.contains(text)),
+          isEmpty,
+          reason: '${c.name} shows "$text"',
+        );
       }
       expectGolden(c.name, snapshots.join('\n'));
     });
   }
 
   for (final c in [_dic, _issem]) {
-    testWidgets('${c.name}: Merken is done from the start, without options',
-        (tester) async {
+    testWidgets('${c.name}: Merken is done from the start, without options', (
+      tester,
+    ) async {
       await pumpChecked(tester, await c.item(), {c.formKey: c.wrong});
       final merken = stepRow(_scope(c), EselKind.merken);
-      expect(find.descendant(of: merken, matching: find.byType(ButtonStyleButton)),
-          findsNothing);
+      expect(
+        find.descendant(of: merken, matching: find.byType(ButtonStyleButton)),
+        findsNothing,
+      );
       expect(stepRows(tester, _scope(c)).last.status, EselStepStatus.done);
       expect(renderSteps(tester, _scope(c)), contains(c.pinned.single));
     });
   }
 
   for (final c in [_dominorum, _dic]) {
-    testWidgets('${c.name}: classification shows all steps done',
-        (tester) async {
+    testWidgets('${c.name}: classification shows all steps done', (
+      tester,
+    ) async {
       await pumpClassified(tester, await c.item(), c.formKey);
       final rows = stepRows(tester, 'esel.classification');
       expect(rows, isNotEmpty);
@@ -218,12 +225,15 @@ void main() {
     });
   }
 
-  testWidgets('dic: the static panel gives the reason, not the question',
-      (tester) async {
+  testWidgets('dic: the static panel gives the reason, not the question', (
+    tester,
+  ) async {
     await pumpClassified(tester, await _dic.item(), _dic.formKey);
     final rendered = renderSteps(tester, 'esel.classification');
-    expect(rendered,
-        contains('M Merken | done | unregelmäßig – merken: dīc / ~dīce~'));
+    expect(
+      rendered,
+      contains('M Merken | done | unregelmäßig – merken: dīc / ~dīce~'),
+    );
     expect(rendered, isNot(contains('Wie lautet')));
   });
 }

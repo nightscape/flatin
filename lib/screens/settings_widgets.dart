@@ -66,8 +66,10 @@ class SectionTitle extends StatelessWidget {
 /// Why the course holds something back, in a few words.
 String gapText(BuildContext context, CourseGap gap) => switch (gap) {
   OutsideRange() => FlutterI18n.translate(context, 'settings.outsideRange'),
-  GrammarOutsideRange() =>
-    FlutterI18n.translate(context, 'settings.grammarOutsideRange'),
+  GrammarOutsideRange() => FlutterI18n.translate(
+    context,
+    'settings.grammarOutsideRange',
+  ),
   FromLesson(:final lesson) => FlutterI18n.translate(
     context,
     'settings.fromLesson',

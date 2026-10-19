@@ -59,39 +59,39 @@ final class EselStep {
     this.options = const [],
     this.absent = false,
     this.regular,
-  })  : assert(answer.isEmpty != (answerKey == null)),
-        assert(answerParams.isEmpty || answerKey != null),
-        assert(
-          options.where((option) => option.isRight).length ==
-              (options.isEmpty ? 0 : 1),
-          'a step needs exactly one right option',
-        ),
-        assert(options.length != 1, 'a question needs a distractor'),
-        assert(options.length <= 3),
-        assert(
-          options.map((option) => option.identity).toSet().length ==
-              options.length,
-          'two options are the same text',
-        ),
-        assert(
-          options.map((option) => norm(option.identity)).toSet().length ==
-              options.length,
-          'two options differ only in quantity marks',
-        );
+  }) : assert(answer.isEmpty != (answerKey == null)),
+       assert(answerParams.isEmpty || answerKey != null),
+       assert(
+         options.where((option) => option.isRight).length ==
+             (options.isEmpty ? 0 : 1),
+         'a step needs exactly one right option',
+       ),
+       assert(options.length != 1, 'a question needs a distractor'),
+       assert(options.length <= 3),
+       assert(
+         options.map((option) => option.identity).toSet().length ==
+             options.length,
+         'two options are the same text',
+       ),
+       assert(
+         options.map((option) => norm(option.identity)).toSet().length ==
+             options.length,
+         'two options differ only in quantity marks',
+       );
 
   /// Everything a done step row shows, so two steps with the same value render
   /// the same row: the question and the options belong to an open row only. A
   /// field a done row shows and this value does not read would group readings
   /// that differ in it into one panel.
   String get shownIdentity => [
-        kind.name,
-        absent,
-        answerKey,
-        answer,
-        regular,
-        for (final key in answerParams.keys.toList()..sort())
-          '$key=${answerParams[key]}',
-      ].join('\u0000');
+    kind.name,
+    absent,
+    answerKey,
+    answer,
+    regular,
+    for (final key in answerParams.keys.toList()..sort())
+      '$key=${answerParams[key]}',
+  ].join('\u0000');
 }
 
 /// The steps of [formKey] of [item], in the fixed ESEL order. [diagnosis] is
@@ -108,7 +108,9 @@ List<EselStep> eselSteps(
   final form = item.derivation.forms[formKey]!;
 
   return switch (form) {
-    final GeneratedForm generated when _isDictionaryForm(item, formKey, generated) => [
+    final GeneratedForm generated
+        when _isDictionaryForm(item, formKey, generated) =>
+      [
         _erkennen(item, formKey),
         _absent(EselKind.stamm, {'word': headword(item)}),
         _absent(EselKind.endung, {'label': label}),
@@ -121,44 +123,44 @@ List<EselStep> eselSteps(
         ),
       ],
     final GeneratedForm generated => [
-        _erkennen(item, formKey),
-        _stamm(item, formKey, generated, diagnosis),
-        _endung(item, formKey, generated, label, diagnosis),
-        _lautregel(item, formKey, generated.sandhiRule, label),
-      ],
+      _erkennen(item, formKey),
+      _stamm(item, formKey, generated, diagnosis),
+      _endung(item, formKey, generated, label, diagnosis),
+      _lautregel(item, formKey, generated.sandhiRule, label),
+    ],
     final ComposedForm composed => [
-        _erkennen(item, formKey),
-        _absent(EselKind.stamm, {'word': headword(item)}),
-        _absent(EselKind.endung, {'label': label}),
-        _lautregel(item, formKey, _seamRule(composed), label),
-        _verbinden(item, formKey, composed, label),
-      ],
+      _erkennen(item, formKey),
+      _absent(EselKind.stamm, {'word': headword(item)}),
+      _absent(EselKind.endung, {'label': label}),
+      _lautregel(item, formKey, _seamRule(composed), label),
+      _verbinden(item, formKey, composed, label),
+    ],
     IrregularForm(:final result, :final regular) => [
-        _erkennen(item, formKey),
-        _absent(EselKind.stamm, {'word': headword(item)}),
-        _absent(EselKind.endung, {'label': label}),
-        _absent(EselKind.lautregel, {'label': label}),
-        EselStep(
-          kind: EselKind.merken,
-          questionKey: 'esel.question.merken',
-          questionParams: {'label': label},
-          answerKey: 'esel.answer.merken',
-          answerParams: {'form': result},
-          regular: regular?.result,
-        ),
-      ],
+      _erkennen(item, formKey),
+      _absent(EselKind.stamm, {'word': headword(item)}),
+      _absent(EselKind.endung, {'label': label}),
+      _absent(EselKind.lautregel, {'label': label}),
+      EselStep(
+        kind: EselKind.merken,
+        questionKey: 'esel.question.merken',
+        questionParams: {'label': label},
+        answerKey: 'esel.answer.merken',
+        answerParams: {'form': result},
+        regular: regular?.result,
+      ),
+    ],
     GivenForm(:final result) => [
-        _erkennen(item, formKey),
-        _absent(EselKind.stamm, {'word': headword(item)}),
-        _absent(EselKind.endung, {'label': label}),
-        _absent(EselKind.lautregel, {'label': label}),
-        EselStep(
-          kind: EselKind.merken,
-          questionKey: 'esel.question.given',
-          questionParams: {'label': label, 'result': result},
-          answer: result,
-        ),
-      ],
+      _erkennen(item, formKey),
+      _absent(EselKind.stamm, {'word': headword(item)}),
+      _absent(EselKind.endung, {'label': label}),
+      _absent(EselKind.lautregel, {'label': label}),
+      EselStep(
+        kind: EselKind.merken,
+        questionKey: 'esel.question.given',
+        questionParams: {'label': label, 'result': result},
+        answer: result,
+      ),
+    ],
   };
 }
 
@@ -173,18 +175,19 @@ bool _isDictionaryForm(PracticeItem item, FormKey formKey, GeneratedForm form) {
     norm(item.lemma),
   };
   if (!dictionary.contains(norm(form.result))) return false;
-  return item.formOrder.firstWhere((key) =>
-          norm(item.derivation.forms[key]!.result) == norm(form.result)) ==
+  return item.formOrder.firstWhere(
+        (key) => norm(item.derivation.forms[key]!.result) == norm(form.result),
+      ) ==
       formKey;
 }
 
 EselStep _absent(EselKind kind, Map<String, String> params) => EselStep(
-      kind: kind,
-      questionKey: 'esel.question.${kind.name}',
-      questionParams: params,
-      answerKey: 'esel.absent.${kind.name}',
-      absent: true,
-    );
+  kind: kind,
+  questionKey: 'esel.question.${kind.name}',
+  questionParams: params,
+  answerKey: 'esel.absent.${kind.name}',
+  absent: true,
+);
 
 SandhiRule? _seamRule(ComposedForm form) => form.parts
     .whereType<AffixPart>()
@@ -244,7 +247,8 @@ EselStep _stamm(
       : item.principalParts.first.$2;
   // One letter later than the stem, and still short of the whole word: the
   // dictionary form is not a stem and is never an option.
-  final bool cuts = norm(source).startsWith(norm(stem.stem)) &&
+  final bool cuts =
+      norm(source).startsWith(norm(stem.stem)) &&
       source.length > stem.stem.length + 1;
   final dictionary = {
     '${item.lemma}-',
@@ -254,7 +258,9 @@ EselStep _stamm(
   // The stem the learner used is what the step holds against the right one,
   // even where that is the dictionary form.
   if (diagnosis is WrongStem) {
-    dictionary.removeWhere((word) => norm(word) == norm('${diagnosis.usedStem}-'));
+    dictionary.removeWhere(
+      (word) => norm(word) == norm('${diagnosis.usedStem}-'),
+    );
   }
 
   return EselStep(
@@ -308,8 +314,9 @@ EselStep _endung(
 
   /// An ending that builds an accepted spelling of the asked key is the right
   /// answer in another spelling, not a distractor.
-  bool correct(String ending) => stem.variants
-      .any((spelling) => item.accepts(index, spelling + ending.substring(1)));
+  bool correct(String ending) => stem.variants.any(
+    (spelling) => item.accepts(index, spelling + ending.substring(1)),
+  );
 
   return EselStep(
     kind: EselKind.endung,
@@ -318,8 +325,8 @@ EselStep _endung(
     answer: emptyEnding != null
         ? ''
         : borrowed
-            ? '$right (${endingTypePhrase(form.endingType)})'
-            : right,
+        ? '$right (${endingTypePhrase(form.endingType)})'
+        : right,
     answerKey: emptyEnding,
     options: _options(
       item: item,
@@ -361,7 +368,10 @@ Set<String> _acceptedEndings(
       .toList();
   return {
     form.ending,
-    ...?item.derivation.grammar.templatesByType[form.endingType]?[formKey]
+    ...?item
+        .derivation
+        .grammar
+        .templatesByType[form.endingType]?[formKey]
         ?.endings,
     for (final variant in form.variants)
       for (final stem in stems)
@@ -377,24 +387,24 @@ EselStep _lautregel(
   FormKey formKey,
   SandhiRule? rule,
   String label,
-) =>
-    EselStep(
-      kind: EselKind.lautregel,
-      questionKey: 'esel.question.lautregel',
-      questionParams: {'label': label},
-      answer: rule?.explain ?? '',
-      answerKey: rule == null ? 'esel.noRule' : null,
-      options: (rule == null
-          ? [
-              const EselOption.phrase('esel.noRule', isRight: true),
-              const EselOption.phrase('esel.soundChanges', isRight: false),
-            ]
-          : [
-              EselOption(rule.explain, isRight: true),
-              const EselOption.phrase('esel.noRule', isRight: false),
-            ])
+) => EselStep(
+  kind: EselKind.lautregel,
+  questionKey: 'esel.question.lautregel',
+  questionParams: {'label': label},
+  answer: rule?.explain ?? '',
+  answerKey: rule == null ? 'esel.noRule' : null,
+  options:
+      (rule == null
+            ? [
+                const EselOption.phrase('esel.noRule', isRight: true),
+                const EselOption.phrase('esel.soundChanges', isRight: false),
+              ]
+            : [
+                EselOption(rule.explain, isRight: true),
+                const EselOption.phrase('esel.noRule', isRight: false),
+              ])
         ..shuffle(_seeded(item.id, formKey, EselKind.lautregel)),
-    );
+);
 
 // --------------------------------------------------------------- Verbinden
 
@@ -421,9 +431,11 @@ EselStep _verbinden(
 }
 
 String _parts(PracticeItem item, ComposedForm form) => form.parts
-    .map((part) => part is AffixPart
-        ? item.derivation.stems[part.stemName]!.stem
-        : part.text)
+    .map(
+      (part) => part is AffixPart
+          ? item.derivation.stems[part.stemName]!.stem
+          : part.text,
+    )
     .join(' + ');
 
 /// The same composition with the auxiliary of another tense or mood: the
@@ -452,8 +464,9 @@ List<String> _otherAuxiliaryForm(
     final int distance = features.entries
         .where((entry) => asked[entry.key] != entry.value)
         .length;
-    final otherHeads =
-        other.parts.take(other.parts.length - 1).map((part) => part.text);
+    final otherHeads = other.parts
+        .take(other.parts.length - 1)
+        .map((part) => part.text);
     if (_sameList(heads, otherHeads.toList())) {
       sameHead.add((distance, _parts(item, other)));
     } else {
@@ -468,15 +481,15 @@ List<String> _otherAuxiliaryForm(
   for (final list in [sameHead, ownHead]) {
     list.sort((a, b) => a.$1.compareTo(b.$1));
   }
-  return [for (final candidate in [...sameHead, ...ownHead]) candidate.$2];
+  return [
+    for (final candidate in [...sameHead, ...ownHead]) candidate.$2,
+  ];
 }
 
 List<String> _heads(PracticeItem item, ComposedForm form) => [
-      for (final part in form.parts.take(form.parts.length - 1))
-        part is AffixPart
-            ? item.derivation.stems[part.stemName]!.stem
-            : part.text,
-    ];
+  for (final part in form.parts.take(form.parts.length - 1))
+    part is AffixPart ? item.derivation.stems[part.stemName]!.stem : part.text,
+];
 
 bool _sameList(List<String> a, List<String> b) =>
     a.length == b.length &&
@@ -516,7 +529,8 @@ List<EselOption> _options({
       EselOption.phrase(rightKey, isRight: true)
     else
       EselOption(right, isRight: true),
-    for (final distractor in distractors) EselOption(distractor, isRight: false),
+    for (final distractor in distractors)
+      EselOption(distractor, isRight: false),
   ];
   return options..shuffle(_seeded(item.id, formKey, kind));
 }

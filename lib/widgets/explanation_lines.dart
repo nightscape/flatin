@@ -8,14 +8,25 @@ import '../models/practice_item.dart';
 /// The explanation functions the screens call. Widget tests override
 /// [explainerProvider] with hand-made lines.
 typedef Explainer = ({
-  List<ExplanationLine> Function(PracticeItem item, String formKey, String answer)
-      wrongAnswer,
+  List<ExplanationLine> Function(
+    PracticeItem item,
+    String formKey,
+    String answer,
+  )
+  wrongAnswer,
   // Q11 A: a correct answer is explained too when its spelling differs.
-  List<ExplanationLine> Function(PracticeItem item, String formKey, String answer)
-      correctAnswer,
+  List<ExplanationLine> Function(
+    PracticeItem item,
+    String formKey,
+    String answer,
+  )
+  correctAnswer,
   ExplanationLine Function(
-          PracticeItem item, FormLabel? picked, String pickedText)
-      pickedLabel,
+    PracticeItem item,
+    FormLabel? picked,
+    String pickedText,
+  )
+  pickedLabel,
 });
 
 final explainerProvider = Provider<Explainer>(

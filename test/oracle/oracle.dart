@@ -143,14 +143,17 @@ final class MorphMap {
     Map<String, Map<String, String>> table(String key) => {
       for (final e in (root[key] as YamlMap).entries)
         '${e.key}': {
-          for (final f in (e.value as YamlMap).entries) '${f.key}': '${f.value}',
+          for (final f in (e.value as YamlMap).entries)
+            '${f.key}': '${f.value}',
         },
     };
     return MorphMap(
       phrases: table('phrases'),
       words: table('words'),
       ignored: {for (final e in (root['ignored'] as YamlMap).keys) e as int},
-      adverbMorphs: {for (final n in root['adverb_morphs'] as YamlList) n as int},
+      adverbMorphs: {
+        for (final n in root['adverb_morphs'] as YamlList) n as int,
+      },
       adverbFeatures: {
         for (final e in (root['adverb_features'] as YamlMap).entries)
           '${e.key}': '${e.value}',
@@ -186,7 +189,9 @@ final class MorphMap {
     for (final word in rest.split(' ').where((w) => w.isNotEmpty)) {
       final mapped = words[word];
       if (mapped == null) {
-        throw StateError('morph $number "$text": morph_map.yaml has no "$word"');
+        throw StateError(
+          'morph $number "$text": morph_map.yaml has no "$word"',
+        );
       }
       features.addAll(mapped);
     }
@@ -237,17 +242,18 @@ final class TypeMap {
   });
 
   Map<String, ModelSpec> get builds => {
-        for (final e in models.entries)
-          if (e.value.kind != null) e.key: e.value,
-      };
+    for (final e in models.entries)
+      if (e.value.kind != null) e.key: e.value,
+  };
 
   factory TypeMap.parse(String source) {
     final root = loadYaml(source) as YamlMap;
     ModelSpec spec(String model, YamlMap node) {
       const kinds = ['verb', 'noun', 'adjective'];
       final present = kinds.where(node.containsKey).toList();
-      final stray = node.keys
-          .where((k) => k != 'types' && k != 'lemmas' && !kinds.contains(k));
+      final stray = node.keys.where(
+        (k) => k != 'types' && k != 'lemmas' && !kinds.contains(k),
+      );
       if (stray.isNotEmpty || present.length > 1) {
         throw FormatException(
           'type_map.yaml: $model has keys ${node.keys.join(", ")}; '
@@ -277,12 +283,12 @@ final class TypeMap {
     }
 
     Map<String, Map<String, List<String>>> items(Object? node) => {
-          for (final file in (node as YamlMap).entries)
-            '${file.key}': {
-              for (final item in (file.value as YamlMap).entries)
-                '${item.key}': [for (final l in item.value as YamlList) '$l'],
-            },
-        };
+      for (final file in (node as YamlMap).entries)
+        '${file.key}': {
+          for (final item in (file.value as YamlMap).entries)
+            '${item.key}': [for (final l in item.value as YamlList) '$l'],
+        },
+    };
 
     return TypeMap(
       sample: items(root['sample']),
@@ -294,14 +300,16 @@ final class TypeMap {
       spelling: {
         for (final e in (root['spelling'] as YamlMap).entries)
           '${e.key}': {
-            for (final r in (e.value as YamlMap).entries) '${r.key}': '${r.value}',
+            for (final r in (e.value as YamlMap).entries)
+              '${r.key}': '${r.value}',
           },
       },
     );
   }
 
   String rewrite(String itemId, String variant) {
-    for (final rule in spelling[itemId]?.entries ?? const <MapEntry<String, String>>[]) {
+    for (final rule
+        in spelling[itemId]?.entries ?? const <MapEntry<String, String>>[]) {
       // The rewrite is word-initial but the spelling carries quantity marks,
       // so it is matched on the letters.
       final letters = oracleNorm(variant);
@@ -406,37 +414,40 @@ final class AllowedDiff {
     return true;
   }
 
-  String get describe => '${category.id} item=$item keys=$keys types=$types '
+  String get describe =>
+      '${category.id} item=$item keys=$keys types=$types '
       'deponent=${deponent?.name} ours=$ours theirs=$theirs';
 
   static List<AllowedDiff> parse(String source) => [
     for (final entry in loadYaml(source) as YamlList)
       if (entry['direction'] != null && entry['keys'] == null)
-        throw FormatException('a "${entry['direction']}" entry needs keys: '
-            '${entry['reason']}')
+        throw FormatException(
+          'a "${entry['direction']}" entry needs keys: '
+          '${entry['reason']}',
+        )
       else
         AllowedDiff(
-        category: switch (entry['direction']) {
-          null => DiffCategory.form,
-          'ours' => DiffCategory.missingOurs,
-          'theirs' => DiffCategory.missingTheirs,
-          final other => throw FormatException('direction $other'),
-        },
-        item: entry['item'] == null ? null : '${entry['item']}',
-        keys: entry['keys'] == null
-            ? null
-            : [for (final k in entry['keys'] as YamlList) '$k'],
-        types: entry['types'] == null
-            ? null
-            : [for (final t in entry['types'] as YamlList) '$t'],
-        synthetic: entry['synthetic'] as bool?,
-        deponent: entry['deponent'] == null
-            ? null
-            : DeponentKind.parse(entry['deponent']),
-        ours: entry['ours'] == null ? null : '${entry['ours']}',
-        theirs: entry['theirs'] == null ? null : '${entry['theirs']}',
-        reason: '${entry['reason']}',
-      ),
+          category: switch (entry['direction']) {
+            null => DiffCategory.form,
+            'ours' => DiffCategory.missingOurs,
+            'theirs' => DiffCategory.missingTheirs,
+            final other => throw FormatException('direction $other'),
+          },
+          item: entry['item'] == null ? null : '${entry['item']}',
+          keys: entry['keys'] == null
+              ? null
+              : [for (final k in entry['keys'] as YamlList) '$k'],
+          types: entry['types'] == null
+              ? null
+              : [for (final t in entry['types'] as YamlList) '$t'],
+          synthetic: entry['synthetic'] as bool?,
+          deponent: entry['deponent'] == null
+              ? null
+              : DeponentKind.parse(entry['deponent']),
+          ours: entry['ours'] == null ? null : '${entry['ours']}',
+          theirs: entry['theirs'] == null ? null : '${entry['theirs']}',
+          reason: '${entry['reason']}',
+        ),
   ];
 }
 
@@ -568,8 +579,7 @@ OracleResult runOracle({
     // without one has nothing to compare its adverb keys with.
     final ours = {
       for (final e in item.all.entries)
-        if (lemmas.length > 1 ||
-            !axes.parseKey(e.key).containsKey('adverb'))
+        if (lemmas.length > 1 || !axes.parseKey(e.key).containsKey('adverb'))
           e.key: e.value,
     };
     final graded = ours.keys.any((k) => axes.parseKey(k).containsKey('grad'));
@@ -609,18 +619,24 @@ OracleResult runOracle({
       });
     }
 
-    void add(DiffCategory category, FormKey key, List<String> o, List<String> t) =>
-        diffs.add(Diff(
-          category: category,
-          item: item.id,
-          type: item.type,
-          key: key,
-          ours: o,
-          theirs: t,
-          synthetic: item.synthetic,
-          deponent: item.deponent,
-          fullDeponent: item.fullDeponent,
-        ));
+    void add(
+      DiffCategory category,
+      FormKey key,
+      List<String> o,
+      List<String> t,
+    ) => diffs.add(
+      Diff(
+        category: category,
+        item: item.id,
+        type: item.type,
+        key: key,
+        ours: o,
+        theirs: t,
+        synthetic: item.synthetic,
+        deponent: item.deponent,
+        fullDeponent: item.fullDeponent,
+      ),
+    );
 
     final keys = [
       ...ours.keys,
@@ -669,15 +685,21 @@ String oracleReport(OracleResult result, List<AllowedDiff> allowed) {
   final out = StringBuffer('# Oracle report\n\n');
   final unlisted = result.unlisted(allowed);
 
-  out.writeln('Keys compared: ${result.compared.entries.map((e) => "${e.key} ${e.value}").join(", ")}.');
-  out.writeln('Gate: ${unlisted.length} unlisted gating diffs '
-      '(${allowed.length} allowed entries).\n');
+  out.writeln(
+    'Keys compared: ${result.compared.entries.map((e) => "${e.key} ${e.value}").join(", ")}.',
+  );
+  out.writeln(
+    'Gate: ${unlisted.length} unlisted gating diffs '
+    '(${allowed.length} allowed entries).\n',
+  );
 
   out.writeln('## Counts per category\n');
   out.writeln('| category | count | gates |\n|---|---|---|');
   for (final category in DiffCategory.values) {
-    out.writeln('| ${category.id} | ${result.of(category).length} | '
-        '${gating.contains(category) ? "yes, unless listed" : "no"} |');
+    out.writeln(
+      '| ${category.id} | ${result.of(category).length} | '
+      '${gating.contains(category) ? "yes, unless listed" : "no"} |',
+    );
   }
 
   out.writeln('\n## Counts per type\n');
@@ -686,7 +708,8 @@ String oracleReport(OracleResult result, List<AllowedDiff> allowed) {
   final types = {for (final d in result.diffs) d.type}.toList()..sort();
   for (final type in types) {
     final row = DiffCategory.values.map(
-      (c) => result.diffs.where((d) => d.type == type && d.category == c).length,
+      (c) =>
+          result.diffs.where((d) => d.type == type && d.category == c).length,
     );
     out.writeln('| $type | ${row.join(" | ")} |');
   }
@@ -704,19 +727,23 @@ String oracleReport(OracleResult result, List<AllowedDiff> allowed) {
   }
 
   out.writeln('\n## Collatinus morphs the mapping drops (5.2)\n');
-  out.writeln('How much of Collatinus never reaches the comparison. A morph '
-      'listed here is one `morph_map.yaml` declares outside our axes, or one '
-      'that belongs to the other lemma of an adjective pair.\n');
+  out.writeln(
+    'How much of Collatinus never reaches the comparison. A morph '
+    'listed here is one `morph_map.yaml` declares outside our axes, or one '
+    'that belongs to the other lemma of an adjective pair.\n',
+  );
   if (result.skippedMorphs.isEmpty) out.writeln('None.');
   for (final entry in result.skippedMorphs.entries) {
     out.writeln('- ${entry.key}: ${entry.value} times');
   }
 
   out.writeln('\n## Macron suggestions (Q10)\n');
-  out.writeln('Every vowel Collatinus marks long that our spelling writes '
-      'short, outside the positions plan 5.4 drops. A suggestion is a '
-      'candidate for the principal part it comes from, not a verdict: '
-      'Collatinus also marks hidden quantity the school spelling leaves out.\n');
+  out.writeln(
+    'Every vowel Collatinus marks long that our spelling writes '
+    'short, outside the positions plan 5.4 drops. A suggestion is a '
+    'candidate for the principal part it comes from, not a verdict: '
+    'Collatinus also marks hidden quantity the school spelling leaves out.\n',
+  );
   final byItem = <String, List<Diff>>{};
   for (final diff in result.of(DiffCategory.quantity)) {
     (byItem[diff.item] ??= []).add(diff);
@@ -725,8 +752,10 @@ String oracleReport(OracleResult result, List<AllowedDiff> allowed) {
   for (final entry in byItem.entries) {
     out.writeln('\n### ${entry.key} (${entry.value.length})\n');
     for (final diff in entry.value) {
-      out.writeln('- ${diff.key}: ours ${diff.ours.single}, '
-          'Collatinus ${diff.theirs.single}');
+      out.writeln(
+        '- ${diff.key}: ours ${diff.ours.single}, '
+        'Collatinus ${diff.theirs.single}',
+      );
     }
   }
   return out.toString();

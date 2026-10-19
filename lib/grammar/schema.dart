@@ -443,10 +443,10 @@ final class GrammarFile {
     this.lemmaPart,
   });
 
-  GrammarItem item(String id) =>
-      items.firstWhere((i) => i.id == id, orElse: () => throw ArgumentError(
-        '$path has no item "$id"',
-      ));
+  GrammarItem item(String id) => items.firstWhere(
+    (i) => i.id == id,
+    orElse: () => throw ArgumentError('$path has no item "$id"'),
+  );
 
   GrammarType type(String name) {
     final type = types[name];
@@ -608,15 +608,11 @@ class _FileParser {
       }
       final when = <String, Set<String>>{};
       for (final entry in (spec['when'] as YamlMap).entries) {
-        final whenAxis = axes
-            .where((a) => a.id == '${entry.key}')
-            .firstOrNull;
+        final whenAxis = axes.where((a) => a.id == '${entry.key}').firstOrNull;
         if (whenAxis == null) {
           _bad('S17', 'override "when" names the unknown axis "${entry.key}"');
         }
-        final codes = {
-          for (final code in _asList(entry.value)) '$code',
-        };
+        final codes = {for (final code in _asList(entry.value)) '$code'};
         for (final code in codes) {
           if (whenAxis.indexOf(code) < 0) {
             _bad(
@@ -736,7 +732,10 @@ class _FileParser {
       if (replace == SandhiReplace.literal &&
           replaceText.isNotEmpty &&
           !_letters.hasMatch(replaceText)) {
-        _bad('S16', 'rule $id: "replace" must be letters, short or double_next');
+        _bad(
+          'S16',
+          'rule $id: "replace" must be letters, short or double_next',
+        );
       }
 
       final explain = '${spec['explain'] ?? ''}';
@@ -776,8 +775,12 @@ class _FileParser {
       types[name] = GrammarType(
         name: name,
         isAbstract: isAbstract,
-        wordClass: _wordClass(name, spec['class'] as String?, isAbstract,
-            classes),
+        wordClass: _wordClass(
+          name,
+          spec['class'] as String?,
+          isAbstract,
+          classes,
+        ),
         inheritsFrom: spec['inherits_from'] as String?,
         requiredStems: [
           for (final s in (spec['required_stems'] as YamlList?) ?? const [])
@@ -825,10 +828,7 @@ class _FileParser {
       final from = spec['from'] as String?;
       final template = spec['template'] as String?;
       if ((from == null) == (template == null)) {
-        _bad(
-          'S2',
-          'type $type stem $name needs either "from" or "template"',
-        );
+        _bad('S2', 'type $type stem $name needs either "from" or "template"');
       }
       stems[name] = StemSpec(
         name: name,
@@ -1129,8 +1129,7 @@ class _FileParser {
   }
 }
 
-Iterable<Object?> _asList(Object? node) =>
-    node is YamlList ? node : [node];
+Iterable<Object?> _asList(Object? node) => node is YamlList ? node : [node];
 
 // ---------------------------------------------------------------- linking
 
@@ -1319,8 +1318,12 @@ class _Linker {
     }
     final name = declared ?? matched!.types.single;
     if (!_typeByName.containsKey(name)) {
-      _fail('S6', file.path, 'item uses the unknown type "$name"',
-          item: item.id);
+      _fail(
+        'S6',
+        file.path,
+        'item uses the unknown type "$name"',
+        item: item.id,
+      );
     }
     // S12: the item's keys are written in its own file's axes, so only
     // `delegate` reaches across files.
@@ -1431,8 +1434,12 @@ class _Linker {
         );
       }
       if (!available.contains(name)) {
-        _fail('S4', file.path, 'the required stem "$name" is missing',
-            item: item.id);
+        _fail(
+          'S4',
+          file.path,
+          'the required stem "$name" is missing',
+          item: item.id,
+        );
       }
     }
   }
@@ -1450,16 +1457,18 @@ class _Linker {
       final stem = type.stems[name];
       if (stem == null) return false;
       if (chain.contains(name)) {
-        _fail('S5', file.path, 'stem cycle ${chain.join(" → ")} → $name',
-            item: item.id);
+        _fail(
+          'S5',
+          file.path,
+          'stem cycle ${chain.join(" → ")} → $name',
+          item: item.id,
+        );
       }
       if (stem.from != null && item.parts.containsKey(stem.from)) {
         available.add(name);
         return true;
       }
-      final template = stem.from == null
-          ? stem.template
-          : stem.defaultTemplate;
+      final template = stem.from == null ? stem.template : stem.defaultTemplate;
       if (template == null) return false;
       final base = template.stemName;
       if (base != null && !resolve(base, [...chain, name])) return false;
@@ -1478,14 +1487,22 @@ class _Linker {
     final deponent = item.deponent ?? type.deponent;
     if (deponent == null) return;
     if (!file.axes.axes.any((a) => a.id == 'genus_verbi')) {
-      _fail('S10', file.path, '${file.dataFileId} has no genus_verbi axis',
-          item: item.id);
+      _fail(
+        'S10',
+        file.path,
+        '${file.dataFileId} has no genus_verbi axis',
+        item: item.id,
+      );
     }
     if (deponent.all) return;
     final tempus = file.axes.axes.where((a) => a.id == 'tempus').firstOrNull;
     if (tempus == null) {
-      _fail('S10', file.path, '${file.dataFileId} has no tempus axis',
-          item: item.id);
+      _fail(
+        'S10',
+        file.path,
+        '${file.dataFileId} has no tempus axis',
+        item: item.id,
+      );
     }
     for (final code in deponent.tempora) {
       if (tempus.indexOf(code) < 0) {
@@ -1503,9 +1520,7 @@ class _Linker {
     for (final compose in file.type(item.typeName).composes) {
       for (final part in compose.parts) {
         if (part is! LexemePart) continue;
-        final target = file.items
-            .where((i) => i.id == part.lexeme)
-            .firstOrNull;
+        final target = file.items.where((i) => i.id == part.lexeme).firstOrNull;
         if (target == null) {
           _fail(
             'S5',
@@ -1567,8 +1582,7 @@ class _Linker {
       final targetAxes = _fileOfType[delegate.type]!.axes;
       for (final entry in target.forms.entries) {
         final targetStem = entry.value.first.stemName;
-        if (targetStem != null &&
-            !stems.contains(delegate.bind[targetStem])) {
+        if (targetStem != null && !stems.contains(delegate.bind[targetStem])) {
           continue;
         }
         final key = axes.formatKey({
@@ -1619,8 +1633,12 @@ class _Linker {
           .where((key) => _patternMatches(axes.parseKey(key), pattern))
           .toSet();
       if (removed.isEmpty) {
-        _fail('S15', file.path, 'absent pattern $pattern removes no key',
-            item: item.id);
+        _fail(
+          'S15',
+          file.path,
+          'absent pattern $pattern removes no key',
+          item: item.id,
+        );
       }
       final overridden = removed.intersection(item.forms.keys.toSet());
       if (overridden.isNotEmpty) {
@@ -1708,10 +1726,7 @@ class _Linker {
     }
     for (final part in compose.parts) {
       for (final axisId in [...part.pass, ...part.map.keys]) {
-        axisCodes.putIfAbsent(
-          axisId,
-          () => axes.byId(axisId).codes.toList(),
-        );
+        axisCodes.putIfAbsent(axisId, () => axes.byId(axisId).codes.toList());
       }
     }
 
@@ -1725,7 +1740,9 @@ class _Linker {
 
     final keys = <FormKey>{};
     for (final bundle in bundles) {
-      if (compose.parts.every((p) => _partResolves(file, item, type, p, bundle, stems))) {
+      if (compose.parts.every(
+        (p) => _partResolves(file, item, type, p, bundle, stems),
+      )) {
         keys.add(axes.formatKey(bundle));
       }
     }

@@ -50,7 +50,11 @@ final verbAxes = Axes(
     GrammarAxis(
       id: 'person',
       name: 'Person',
-      values: const [('1', '1. Person'), ('2', '2. Person'), ('3', '3. Person')],
+      values: const [
+        ('1', '1. Person'),
+        ('2', '2. Person'),
+        ('3', '3. Person'),
+      ],
     ),
     GrammarAxis(
       id: 'numerus',
@@ -105,10 +109,7 @@ final adjectiveAxes = Axes(
   mergeAxis: 'kasus',
 );
 
-const aAusfall = SandhiRule(
-  id: 'a_ausfall',
-  explain: 'ā fällt vor Vokal aus',
-);
+const aAusfall = SandhiRule(id: 'a_ausfall', explain: 'ā fällt vor Vokal aus');
 const kurzVorNt = SandhiRule(
   id: 'kurz_nt',
   explain: 'Vokal vor nt/nd wird kurz',
@@ -398,20 +399,19 @@ PracticeItem posse() {
     String affix,
     String verb,
     SandhiRule? rule,
-  ) =>
-      ComposedForm(
-        formKey: key,
-        variants: [result],
-        join: '',
-        parts: [
-          AffixPart(stemName: 'praesens', text: affix, sandhiRule: rule),
-          LexemeFormPart(
-            lexemeId: 'verbs:esse',
-            key: key,
-            derivation: GivenForm(formKey: key, variants: [verb]),
-          ),
-        ],
-      );
+  ) => ComposedForm(
+    formKey: key,
+    variants: [result],
+    join: '',
+    parts: [
+      AffixPart(stemName: 'praesens', text: affix, sandhiRule: rule),
+      LexemeFormPart(
+        lexemeId: 'verbs:esse',
+        key: key,
+        derivation: GivenForm(formKey: key, variants: [verb]),
+      ),
+    ],
+  );
 
   return traceItem(
     id: 'verbs:posse',
@@ -570,36 +570,36 @@ PracticeItem afferre() {
 
 /// abīre: the perfect has two spellings in the data (S9, part list).
 PracticeItem abire() => traceItem(
-      id: 'verbs:abire',
-      lemma: 'abīre',
-      type: 'Unregelmäßig-ire',
-      translation: 'weggehen',
-      principalParts: const [('', 'abīre'), ('', 'abiī')],
-      axes: verbAxes,
-      derivation: Derivation(
-        type: 'Unregelmäßig-ire',
-        recognition: const TypeDeclared(),
-        grammar: const Grammar({}, {}),
-        forms: {
-          'ind.perf.akt.1.sg': GivenForm(
-            formKey: 'ind.perf.akt.1.sg',
-            variants: const ['abiī', 'abīvī'],
-          ),
-        },
+  id: 'verbs:abire',
+  lemma: 'abīre',
+  type: 'Unregelmäßig-ire',
+  translation: 'weggehen',
+  principalParts: const [('', 'abīre'), ('', 'abiī')],
+  axes: verbAxes,
+  derivation: Derivation(
+    type: 'Unregelmäßig-ire',
+    recognition: const TypeDeclared(),
+    grammar: const Grammar({}, {}),
+    forms: {
+      'ind.perf.akt.1.sg': GivenForm(
+        formKey: 'ind.perf.akt.1.sg',
+        variants: const ['abiī', 'abīvī'],
       ),
-    );
+    },
+  ),
+);
 
 /// Every hand-made item, for the sweeps.
 List<PracticeItem> traceItems() => [
-      amare(),
-      capere(),
-      regere(),
-      posse(),
-      fortis(),
-      hortari(),
-      afferre(),
-      abire(),
-    ];
+  amare(),
+  capere(),
+  regere(),
+  posse(),
+  fortis(),
+  hortari(),
+  afferre(),
+  abire(),
+];
 
 /// The German text of a line, as the screens render it.
 String renderDe(Map<String, String> texts, ExplanationLine line) {
@@ -644,22 +644,21 @@ Future<Map<String, String>> _texts(String path) async {
 /// carries the loaded grammar, because the Erkennen step reads the word class
 /// of its type from there (S19).
 Future<PracticeItem> givenItem() async => traceItem(
-      id: 'verbs:abire',
-      lemma: 'abīre',
-      type: 'Unregelmäßig',
-      translation: 'weggehen',
-      principalParts: const [('', 'abīre'), ('', 'abiī')],
-      axes: verbAxes,
-      derivation: Derivation(
-        type: 'Unregelmäßig',
-        recognition: const TypeDeclared(),
-        grammar: (await loadAllPracticeItems()).first.derivation.grammar,
-        forms: {
-          'ind.perf.akt.1.sg': GivenForm(
-            formKey: 'ind.perf.akt.1.sg',
-            variants: const ['abiī', 'abīvī'],
-          ),
-        },
+  id: 'verbs:abire',
+  lemma: 'abīre',
+  type: 'Unregelmäßig',
+  translation: 'weggehen',
+  principalParts: const [('', 'abīre'), ('', 'abiī')],
+  axes: verbAxes,
+  derivation: Derivation(
+    type: 'Unregelmäßig',
+    recognition: const TypeDeclared(),
+    grammar: (await loadAllPracticeItems()).first.derivation.grammar,
+    forms: {
+      'ind.perf.akt.1.sg': GivenForm(
+        formKey: 'ind.perf.akt.1.sg',
+        variants: const ['abiī', 'abīvī'],
       ),
-    );
-
+    },
+  ),
+);

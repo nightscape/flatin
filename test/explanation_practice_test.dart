@@ -9,8 +9,9 @@ import 'support/explanation_harness.dart';
 import 'support/word_classification_harness.dart';
 
 void main() {
-  testWidgets('the practice screen explains only the wrong rows',
-      (tester) async {
+  testWidgets('the practice screen explains only the wrong rows', (
+    tester,
+  ) async {
     SharedPreferences.setMockInitialValues({});
     final items = await loadPracticeItems('lib/data/latin_nouns.yaml');
     final dominus = items.firstWhere((i) => i.lemma == 'dominus');
@@ -18,11 +19,13 @@ void main() {
     final nomRow = dominus.formOrder.indexOf('nom.sg');
     final genRow = dominus.formOrder.indexOf('gen.sg');
 
-    await tester.pumpWidget(wrapInApp(
-      PracticeScreen(item: dominus),
-      explainer: spy.explainer,
-      forcedLocale: const Locale('de'),
-    ));
+    await tester.pumpWidget(
+      wrapInApp(
+        PracticeScreen(item: dominus),
+        explainer: spy.explainer,
+        forcedLocale: const Locale('de'),
+      ),
+    );
     await letItLoad(tester);
 
     final correctRow = find.byKey(const Key('explanation.nom.sg'));
@@ -40,14 +43,15 @@ void main() {
     expect(correctRow, findsNothing);
     expect(emptyRow, findsNothing);
     // The right row gets the spelling line instead of a diagnosis.
-    expect(find.byKey(const Key('macrons.nom.sg')),
-        findsOneWidget);
+    expect(find.byKey(const Key('macrons.nom.sg')), findsOneWidget);
     expect(find.byType(ExplanationLines), findsNWidgets(2));
     expect(spy.wrongAnswerCalls, [('gen.sg', 'dominis')]);
     expect(spy.correctAnswerCalls, [('nom.sg', 'dominus')]);
     expect(
-      find.text('Du hast dominis geschrieben – das passt zu keiner '
-          'bekannten Form'),
+      find.text(
+        'Du hast dominis geschrieben – das passt zu keiner '
+        'bekannten Form',
+      ),
       findsOneWidget,
     );
   });

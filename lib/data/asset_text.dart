@@ -10,4 +10,5 @@ Future<String> loadAssetText(String path) async =>
     _decode(await rootBundle.load(path));
 
 String _decode(ByteData data) => utf8.decode(
-    data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes));
+  data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes),
+);

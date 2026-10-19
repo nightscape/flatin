@@ -32,7 +32,6 @@ void main() {
         ],
       ]);
     });
-
   });
 
   group('plan 3.8 fallbacks', () {
@@ -52,7 +51,6 @@ void main() {
         expect(lines.last.key, 'explain.diag.regularInsteadOfIrregular');
       },
     );
-
   });
 
   group('classification lines', () {
@@ -80,8 +78,9 @@ void main() {
     late Map<String, String> de;
     setUp(() async => de = await germanTexts());
 
-    List<String> german(List<ExplanationLine> lines) =>
-        [for (final line in lines) renderDe(de, line)];
+    List<String> german(List<ExplanationLine> lines) => [
+      for (final line in lines) renderDe(de, line),
+    ];
 
     test('īre: the regular form of an irregular one is composed', () async {
       final verbs = await loadPracticeItems(_verbs);
@@ -104,8 +103,11 @@ void main() {
     });
 
     test('hortor: a deponent says so before the form', () {
-      final lines =
-          explainWrongAnswer(hortari(), 'ind.praes.akt.1.sg', 'hortō');
+      final lines = explainWrongAnswer(
+        hortari(),
+        'ind.praes.akt.1.sg',
+        'hortō',
+      );
       expect(_pairs(lines).first, [
         'explain.deponent',
         {'label': 'Präsens: 1. Person Singular'},
@@ -118,14 +120,20 @@ void main() {
     });
 
     test('amāvērunt: the other spelling is correct too', () {
-      final lines =
-          explainWrongAnswer(amare(), 'ind.perf.akt.3.pl', 'amāvērat');
+      final lines = explainWrongAnswer(
+        amare(),
+        'ind.perf.akt.3.pl',
+        'amāvērat',
+      );
       expect(german(lines).first, 'auch richtig: amāvēre');
     });
 
     test('afferō: both prefix spellings count', () {
-      final lines =
-          explainWrongAnswer(afferre(), 'ind.praes.akt.1.sg', 'afferu');
+      final lines = explainWrongAnswer(
+        afferre(),
+        'ind.praes.akt.1.sg',
+        'afferu',
+      );
       expect(german(lines).first, 'auch richtig: adferō');
     });
 
@@ -134,22 +142,24 @@ void main() {
       expect(german(lines).first, 'auch richtig: abīvī');
     });
 
-    test('Q11 A: a correct answer without macrons gets the marked spelling',
-        () {
-      final item = amare();
-      expect(
-        german(explainCorrectAnswer(item, 'ind.perf.akt.3.pl', 'amaverunt')),
-        ['Richtig. Mit Längenzeichen: amāvērunt'],
-      );
-      expect(
-        explainCorrectAnswer(item, 'ind.perf.akt.3.pl', 'amāvērunt'),
-        isEmpty,
-      );
-      expect(
-        explainCorrectAnswer(item, 'ind.perf.akt.3.pl', 'amāvēre'),
-        isEmpty,
-      );
-    });
+    test(
+      'Q11 A: a correct answer without macrons gets the marked spelling',
+      () {
+        final item = amare();
+        expect(
+          german(explainCorrectAnswer(item, 'ind.perf.akt.3.pl', 'amaverunt')),
+          ['Richtig. Mit Längenzeichen: amāvērunt'],
+        );
+        expect(
+          explainCorrectAnswer(item, 'ind.perf.akt.3.pl', 'amāvērunt'),
+          isEmpty,
+        );
+        expect(
+          explainCorrectAnswer(item, 'ind.perf.akt.3.pl', 'amāvēre'),
+          isEmpty,
+        );
+      },
+    );
   });
 
   test('T-expl-2 every line exists in de.json with all its params', () async {

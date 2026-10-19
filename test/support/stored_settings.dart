@@ -29,11 +29,13 @@ Future<void> openSettingsWith(
   tester.view.devicePixelRatio = 1.0;
   addTearDown(tester.view.reset);
 
-  await tester.pumpWidget(wrapInApp(
-    const SettingsScreen(),
-    forcedLocale: const Locale('de'),
-    overrides: overrides,
-  ));
+  await tester.pumpWidget(
+    wrapInApp(
+      const SettingsScreen(),
+      forcedLocale: const Locale('de'),
+      overrides: overrides,
+    ),
+  );
   await letItLoad(tester);
   if (page != null) await openSettingsPage(tester, page);
 }

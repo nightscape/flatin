@@ -4,8 +4,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/data/settings_conversion.dart';
 
 void main() {
-  final map =
-      MigrationMap.parse(File('lib/data/migration_v2.yaml').readAsStringSync());
+  final map = MigrationMap.parse(
+    File('lib/data/migration_v2.yaml').readAsStringSync(),
+  );
 
   Set<String> forms(Map<String, dynamic> json, String file) =>
       Set<String>.from(json['disabledForms'][file] as List);
@@ -63,8 +64,10 @@ void main() {
     }, map);
 
     expect(forms(converted, 'nouns'), contains('nom.sg'));
-    expect(forms(converted, 'nouns').where((k) => k.startsWith('lokativ')),
-        isEmpty);
+    expect(
+      forms(converted, 'nouns').where((k) => k.startsWith('lokativ')),
+      isEmpty,
+    );
     // A word of an item that is not renamed stays as it is.
     expect(converted['deselectedWords'], ['rosa']);
   });

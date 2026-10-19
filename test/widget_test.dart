@@ -11,7 +11,9 @@ import 'package:latin_practice/main.dart';
 import 'support/word_classification_harness.dart';
 
 void main() {
-  testWidgets('Latin declension screen displays correctly', (WidgetTester tester) async {
+  testWidgets('Latin declension screen displays correctly', (
+    WidgetTester tester,
+  ) async {
     // Build our app with i18n support and trigger a frame.
     await tester.pumpWidget(wrapInApp(const LatinPracticeApp()));
 

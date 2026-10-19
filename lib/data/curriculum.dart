@@ -85,9 +85,7 @@ final class Curriculum {
     for (final file in shapes.entries) {
       for (final type in file.value.types) {
         if (!typeLessons[file.key]!.containsKey(type)) {
-          throw StateError(
-            'no lesson teaches type "$type" of "${file.key}"',
-          );
+          throw StateError('no lesson teaches type "$type" of "${file.key}"');
         }
       }
       formLessons[file.key] = _resolveForms(
@@ -111,8 +109,10 @@ final class Curriculum {
   int typeLesson(String dataFileId, String typeName) {
     final lesson = _typeLessons[dataFileId]![typeName];
     if (lesson == null) {
-      throw StateError('no curriculum entry for "$dataFileId" type '
-          '"$typeName"');
+      throw StateError(
+        'no curriculum entry for "$dataFileId" type '
+        '"$typeName"',
+      );
     }
     return lesson;
   }
@@ -155,8 +155,10 @@ bool _knownCode(
     throw StateError('$where, lesson $lesson: no axis "$axisId"');
   }
   if (axis.indexOf(code) < 0) {
-    throw StateError('$where, lesson $lesson: axis "$axisId" has no code '
-        '"$code"');
+    throw StateError(
+      '$where, lesson $lesson: axis "$axisId" has no code '
+      '"$code"',
+    );
   }
   return true;
 }
@@ -212,8 +214,7 @@ Future<Curriculum> loadCurriculum(List<String> assets) async {
       types: metadata.availableTypes,
     );
   }
-  return Curriculum.parse(
-    [for (final asset in assets) await loadAssetText(asset)],
-    shapes,
-  );
+  return Curriculum.parse([
+    for (final asset in assets) await loadAssetText(asset),
+  ], shapes);
 }

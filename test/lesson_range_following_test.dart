@@ -28,9 +28,9 @@ void main() {
         LessonRange(1, 30),
       );
       expect(
-        Settings(courseWords: LessonRange(1, lastLesson))
-            .withGrammarFollowsWords(true)
-            .effectiveGrammar,
+        Settings(
+          courseWords: LessonRange(1, lastLesson),
+        ).withGrammarFollowsWords(true).effectiveGrammar,
         LessonRange.fullGrammar,
       );
     });

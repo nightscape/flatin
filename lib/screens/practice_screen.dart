@@ -77,11 +77,17 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
       _showRatingButtons = true;
       _panels = {
         for (final i in wrongIndexes)
-          _filteredKeys[i]: EselProgress(eselSteps(
-            widget.item,
-            _filteredKeys[i],
-            diagnosis: diagnose(widget.item, _filteredKeys[i], _userAnswers[i]),
-          )),
+          _filteredKeys[i]: EselProgress(
+            eselSteps(
+              widget.item,
+              _filteredKeys[i],
+              diagnosis: diagnose(
+                widget.item,
+                _filteredKeys[i],
+                _userAnswers[i],
+              ),
+            ),
+          ),
       };
       _expandedPanels = {
         if (wrongIndexes.isNotEmpty) _filteredKeys[wrongIndexes.first],
@@ -167,8 +173,10 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
                   value: c,
                   child: Text(
                     c,
-                    style:
-                        TextStyle(fontSize: labelFontSize, color: Colors.black),
+                    style: TextStyle(
+                      fontSize: labelFontSize,
+                      color: Colors.black,
+                    ),
                   ),
                 ),
               )
@@ -292,12 +300,12 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
                           Expanded(
                             flex: 1,
                             child: Padding(
-                              padding: EdgeInsets.only(
-                                top: isMobile ? 10 : 12,
-                              ),
+                              padding: EdgeInsets.only(top: isMobile ? 10 : 12),
                               child: Text(
                                 FlutterI18n.translate(
-                                    context, 'practice.translation'),
+                                  context,
+                                  'practice.translation',
+                                ),
                                 style: TextStyle(
                                   fontSize: headerFontSize,
                                   fontWeight: FontWeight.bold,
@@ -321,7 +329,9 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
                             loading: () => const SizedBox(
                               height: 40,
                               child: Center(
-                                child: CircularProgressIndicator(strokeWidth: 2),
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
                               ),
                             ),
                             error: (_, __) => Text(
@@ -338,8 +348,9 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
                     ),
                   ),
                   // One row per principal part the data names
-                  for (final part in widget.item.principalParts
-                      .where((part) => part.$1.isNotEmpty))
+                  for (final part in widget.item.principalParts.where(
+                    (part) => part.$1.isNotEmpty,
+                  ))
                     Padding(
                       padding: EdgeInsets.only(bottom: verticalPadding),
                       child: Row(
@@ -375,14 +386,17 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
                   Column(
                     children: List.generate(_filteredForms.length, (index) {
                       final correctAnswer = _filteredForms[index];
-                      final correctLines = state.isChecked &&
+                      final correctLines =
+                          state.isChecked &&
                               index < state.validationResults.length &&
                               state.validationResults[index] == true
-                          ? ref.watch(explainerProvider).correctAnswer(
-                                widget.item,
-                                _filteredKeys[index],
-                                _userAnswers[index],
-                              )
+                          ? ref
+                                .watch(explainerProvider)
+                                .correctAnswer(
+                                  widget.item,
+                                  _filteredKeys[index],
+                                  _userAnswers[index],
+                                )
                           : const <ExplanationLine>[];
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -399,123 +413,148 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
                                   },
                             children: [
                               TableRow(
-                        children: [
-                          // Left column - Form label
-                          Padding(
-                            padding: EdgeInsets.only(
-                              right: state.isTranslationVisible
-                                  ? (isMobile ? 12.0 : 24.0)
-                                  : 0.0,
-                              bottom: isMobile ? 8.0 : 12.0,
-                            ),
-                            child: SizedBox(
-                              height: isMobile ? 36 : 40,
-                              child: state.isTranslationVisible
-                                  ? Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        _filteredLabels[index].displayName,
-                                        style: TextStyle(
-                                          fontSize: labelFontSize,
-                                          color: Colors.black,
-                                        ),
-                                      ),
-                                    )
-                                  : const SizedBox.shrink(),
-                            ),
-                          ),
-                          // Right column - Input field and answer
-                          Padding(
-                            padding: EdgeInsets.only(bottom: isMobile ? 8.0 : 12.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: strategy.buildInput(
-                                        InputContext(
-                                          index: index,
-                                          correctAnswer: correctAnswer,
-                                          allForms: _filteredForms,
-                                          inferredForms: _filteredInferredForms,
-                                          isChecked: state.isChecked,
-                                          borderColor: _getBorderColor(index, state),
-                                          labelFontSize: labelFontSize,
-                                          isMobile: isMobile,
-                                          currentValue: _userAnswers[index],
-                                          onChanged: (value) {
-                                            setState(() {
-                                              _userAnswers[index] = value;
-                                            });
-                                          },
-                                        ),
-                                      ),
+                                children: [
+                                  // Left column - Form label
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                      right: state.isTranslationVisible
+                                          ? (isMobile ? 12.0 : 24.0)
+                                          : 0.0,
+                                      bottom: isMobile ? 8.0 : 12.0,
                                     ),
-                                    if (state.isChecked &&
-                                        index < state.validationResults.length &&
-                                        state.validationResults[index] != null)
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                          left: isMobile ? 8.0 : 12.0,
+                                    child: SizedBox(
+                                      height: isMobile ? 36 : 40,
+                                      child: state.isTranslationVisible
+                                          ? Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Text(
+                                                _filteredLabels[index]
+                                                    .displayName,
+                                                style: TextStyle(
+                                                  fontSize: labelFontSize,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                            )
+                                          : const SizedBox.shrink(),
+                                    ),
+                                  ),
+                                  // Right column - Input field and answer
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                      bottom: isMobile ? 8.0 : 12.0,
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              child: strategy.buildInput(
+                                                InputContext(
+                                                  index: index,
+                                                  correctAnswer: correctAnswer,
+                                                  allForms: _filteredForms,
+                                                  inferredForms:
+                                                      _filteredInferredForms,
+                                                  isChecked: state.isChecked,
+                                                  borderColor: _getBorderColor(
+                                                    index,
+                                                    state,
+                                                  ),
+                                                  labelFontSize: labelFontSize,
+                                                  isMobile: isMobile,
+                                                  currentValue:
+                                                      _userAnswers[index],
+                                                  onChanged: (value) {
+                                                    setState(() {
+                                                      _userAnswers[index] =
+                                                          value;
+                                                    });
+                                                  },
+                                                ),
+                                              ),
+                                            ),
+                                            if (state.isChecked &&
+                                                index <
+                                                    state
+                                                        .validationResults
+                                                        .length &&
+                                                state.validationResults[index] !=
+                                                    null)
+                                              Padding(
+                                                padding: EdgeInsets.only(
+                                                  left: isMobile ? 8.0 : 12.0,
+                                                ),
+                                                child: Text(
+                                                  correctAnswer,
+                                                  style: TextStyle(
+                                                    fontSize: labelFontSize,
+                                                    color:
+                                                        state
+                                                            .validationResults[index]!
+                                                        ? Colors.green
+                                                        : Colors.red,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                          ],
                                         ),
-                                        child: Text(
-                                          correctAnswer,
-                                          style: TextStyle(
-                                            fontSize: labelFontSize,
-                                            color: state.validationResults[index]!
-                                                ? Colors.green
-                                                : Colors.red,
-                                            fontWeight: FontWeight.bold,
+                                        if (state.isChecked &&
+                                            index <
+                                                state
+                                                    .validationResults
+                                                    .length &&
+                                            state.validationResults[index] ==
+                                                false)
+                                          ExplanationLines(
+                                            key: Key(
+                                              'explanation.${_filteredKeys[index]}',
+                                            ),
+                                            ref
+                                                .watch(explainerProvider)
+                                                .wrongAnswer(
+                                                  widget.item,
+                                                  _filteredKeys[index],
+                                                  _userAnswers[index],
+                                                ),
                                           ),
-                                        ),
-                                      ),
-                                  ],
-                                ),
-                                if (state.isChecked &&
-                                    index < state.validationResults.length &&
-                                    state.validationResults[index] == false)
-                                  ExplanationLines(
-                                    key: Key(
-                                        'explanation.${_filteredKeys[index]}'),
-                                    ref.watch(explainerProvider).wrongAnswer(
-                                          widget.item,
-                                          _filteredKeys[index],
-                                          _userAnswers[index],
-                                        ),
+                                        if (correctLines.isNotEmpty)
+                                          ExplanationLines(
+                                            key: Key(
+                                              'macrons.${_filteredKeys[index]}',
+                                            ),
+                                            correctLines,
+                                          ),
+                                      ],
+                                    ),
                                   ),
-                                if (correctLines.isNotEmpty)
-                                  ExplanationLines(
-                                    key:
-                                        Key('macrons.${_filteredKeys[index]}'),
-                                    correctLines,
-                                  ),
-                              ],
-                            ),
-                          ),
-                        ],
+                                ],
                               ),
                             ],
                           ),
                           if (_panels[_filteredKeys[index]]
-                                    case final progress?)
-                                  EselPanel(
-                                    key: Key('esel.panel.${_filteredKeys[index]}'),
-                                    scope: 'esel.${_filteredKeys[index]}',
-                                    progress: progress,
-                                    expanded: _expandedPanels
-                                        .contains(_filteredKeys[index]),
-                                    onToggle: () => setState(() {
-                                      final key = _filteredKeys[index];
-                                      if (!_expandedPanels.add(key)) {
-                                        _expandedPanels.remove(key);
-                                      }
-                                    }),
-                                    onPick: (step, option) => setState(
-                                        () => progress.pick(step, option)),
-                                    onShow: (step) =>
-                                        setState(() => progress.show(step)),
-                                  ),
+                              case final progress?)
+                            EselPanel(
+                              key: Key('esel.panel.${_filteredKeys[index]}'),
+                              scope: 'esel.${_filteredKeys[index]}',
+                              progress: progress,
+                              expanded: _expandedPanels.contains(
+                                _filteredKeys[index],
+                              ),
+                              onToggle: () => setState(() {
+                                final key = _filteredKeys[index];
+                                if (!_expandedPanels.add(key)) {
+                                  _expandedPanels.remove(key);
+                                }
+                              }),
+                              onPick: (step, option) =>
+                                  setState(() => progress.pick(step, option)),
+                              onShow: (step) =>
+                                  setState(() => progress.show(step)),
+                            ),
                         ],
                       );
                     }),
@@ -532,7 +571,10 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
                 ? Column(
                     children: [
                       Text(
-                        FlutterI18n.translate(context, 'practice.howWellDidYouKnow'),
+                        FlutterI18n.translate(
+                          context,
+                          'practice.howWellDidYouKnow',
+                        ),
                         style: TextStyle(
                           fontSize: isMobile ? 14.0 : 16.0,
                           fontWeight: FontWeight.bold,
@@ -547,25 +589,37 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
                         children: [
                           _buildRatingButton(
                             Rating.again,
-                            FlutterI18n.translate(context, 'practice.rating.again'),
+                            FlutterI18n.translate(
+                              context,
+                              'practice.rating.again',
+                            ),
                             Colors.red,
                             isMobile,
                           ),
                           _buildRatingButton(
                             Rating.hard,
-                            FlutterI18n.translate(context, 'practice.rating.hard'),
+                            FlutterI18n.translate(
+                              context,
+                              'practice.rating.hard',
+                            ),
                             Colors.orange,
                             isMobile,
                           ),
                           _buildRatingButton(
                             Rating.good,
-                            FlutterI18n.translate(context, 'practice.rating.good'),
+                            FlutterI18n.translate(
+                              context,
+                              'practice.rating.good',
+                            ),
                             Colors.green,
                             isMobile,
                           ),
                           _buildRatingButton(
                             Rating.easy,
-                            FlutterI18n.translate(context, 'practice.rating.easy'),
+                            FlutterI18n.translate(
+                              context,
+                              'practice.rating.easy',
+                            ),
                             Colors.blue,
                             isMobile,
                           ),
@@ -597,7 +651,10 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
                         child: Text(
                           state.isChecked
                               ? FlutterI18n.translate(context, 'practice.hide')
-                              : FlutterI18n.translate(context, 'practice.check'),
+                              : FlutterI18n.translate(
+                                  context,
+                                  'practice.check',
+                                ),
                           style: TextStyle(
                             fontSize: isMobile ? 14.0 : 16.0,
                             fontWeight: FontWeight.bold,
@@ -612,7 +669,12 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
     );
   }
 
-  Widget _buildRatingButton(Rating rating, String label, Color color, bool isMobile) {
+  Widget _buildRatingButton(
+    Rating rating,
+    String label,
+    Color color,
+    bool isMobile,
+  ) {
     final isSuggested = rating == _suggestedRating;
     final key = Key('rating.${rating.name}');
     return ElevatedButton(

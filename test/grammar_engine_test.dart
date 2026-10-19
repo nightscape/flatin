@@ -28,8 +28,7 @@ final GrammarEngine _engine = GrammarEngine(_files);
 GrammarFile _fileOf(String itemId) =>
     _files.firstWhere((file) => file.items.any((item) => item.id == itemId));
 
-Derivation _of(String itemId) =>
-    _engine.of(_fileOf(itemId).dataFileId, itemId);
+Derivation _of(String itemId) => _engine.of(_fileOf(itemId).dataFileId, itemId);
 
 FormDerivation _form(String itemId, FormKey key) {
   final derivation = _of(itemId);
@@ -160,10 +159,8 @@ void main() {
     });
 
     test('the fixture comparison table is the shipped table', () {
-      List<String> block(String path) => blockLines(
-        File(path).readAsStringSync(),
-        '  Komparativ-Endungen:',
-      );
+      List<String> block(String path) =>
+          blockLines(File(path).readAsStringSync(), '  Komparativ-Endungen:');
 
       List<String> kstamms(String path) => File(path)
           .readAsLinesSync()
@@ -196,10 +193,19 @@ void main() {
         'possum',
         'compose(praefix:pos(t_s) + esse[ind.praes.akt.1.sg]=sum, join="")',
       );
-      _golden('posse', 'ind.perf.akt.1.sg', 'potuī', '{perfekt}+ī '
-          '[Perfekt-System]');
-      _golden('posse', 'konj.impf.akt.1.sg', 'possem',
-          '{praesens}+sem [Unregelmäßig]');
+      _golden(
+        'posse',
+        'ind.perf.akt.1.sg',
+        'potuī',
+        '{perfekt}+ī '
+            '[Perfekt-System]',
+      );
+      _golden(
+        'posse',
+        'konj.impf.akt.1.sg',
+        'possem',
+        '{praesens}+sem [Unregelmäßig]',
+      );
       final possem = _form('posse', 'konj.impf.akt.1.sg') as GeneratedForm;
       expect(possem.stemName, 'praesens');
       expect(possem.ending, 'sem');
@@ -207,10 +213,12 @@ void main() {
 
     test('the fixture derives posse as the shipped data does', () {
       final shipped = parseGrammarFiles({
-        'lib/data/latin_verbs.yaml':
-            File('lib/data/latin_verbs.yaml').readAsStringSync(),
-        'lib/data/latin_nouns.yaml':
-            File('lib/data/latin_nouns.yaml').readAsStringSync(),
+        'lib/data/latin_verbs.yaml': File(
+          'lib/data/latin_verbs.yaml',
+        ).readAsStringSync(),
+        'lib/data/latin_nouns.yaml': File(
+          'lib/data/latin_nouns.yaml',
+        ).readAsStringSync(),
       });
       final shippedEngine = GrammarEngine(shipped);
       for (final key in const [
@@ -284,8 +292,12 @@ void main() {
 
     test('a part list gives a stem variant', () {
       expect(_of('bonus').stems['sup']!.variants, ['optim', 'optum']);
-      _golden('bonus', 'nom.sg.m.sup', 'optimus / optumus',
-          '{sup}+us [a-o-Endungen]');
+      _golden(
+        'bonus',
+        'nom.sg.m.sup',
+        'optimus / optumus',
+        '{sup}+us [a-o-Endungen]',
+      );
     });
 
     test('an empty ending', () {
@@ -295,8 +307,12 @@ void main() {
 
   group('Deponentien (S10)', () {
     test('hortārī is a deponent in every tempus', () {
-      _golden('hortari', 'ind.praes.akt.1.sg', 'hortor',
-          '{praesens}+or [A-Konjugation] [a_ausfall]');
+      _golden(
+        'hortari',
+        'ind.praes.akt.1.sg',
+        'hortor',
+        '{praesens}+or [A-Konjugation] [a_ausfall]',
+      );
       expect(_of('hortari').deponentKeys, contains('ind.praes.akt.1.sg'));
       _golden(
         'hortari',
@@ -333,7 +349,7 @@ void main() {
     test('an item override names the key after the move (Q14)', () {
       final engine = _patched({
         'parts: {infinitiv: hortārī, praesens_1sg: hortor}\n'
-            '    deponent: all':
+                '    deponent: all':
             'parts: {infinitiv: hortārī, praesens_1sg: hortor}\n'
             '    deponent: all\n'
             '    forms: {ind.praes.akt.1.sg: "hortō"}',
@@ -347,51 +363,115 @@ void main() {
   group('Schulstämme (S18)', () {
     test('A-Konjugation', () {
       expect(_of('amare').stems['praesens']!.stem, 'amā');
-      _golden('amare', 'ind.praes.akt.1.sg', 'amō',
-          '{praesens}+ō [A-Konjugation] [a_ausfall]');
-      _golden('amare', 'ind.praes.akt.3.sg', 'amat',
-          '{praesens}+t [A-Konjugation] [kurz_t]');
-      _golden('amare', 'ind.praes.akt.3.pl', 'amant',
-          '{praesens}+nt [A-Konjugation] [kurz_nt]');
-      _golden('amare', 'konj.praes.akt.1.sg', 'amem',
-          '{praesens}+em [A-Konjugation] [a_ausfall]');
-      _golden('amare', 'part.praes.akt.sg.gen.m', 'amantis',
-          '{ppa}+is [3-Endungen]');
+      _golden(
+        'amare',
+        'ind.praes.akt.1.sg',
+        'amō',
+        '{praesens}+ō [A-Konjugation] [a_ausfall]',
+      );
+      _golden(
+        'amare',
+        'ind.praes.akt.3.sg',
+        'amat',
+        '{praesens}+t [A-Konjugation] [kurz_t]',
+      );
+      _golden(
+        'amare',
+        'ind.praes.akt.3.pl',
+        'amant',
+        '{praesens}+nt [A-Konjugation] [kurz_nt]',
+      );
+      _golden(
+        'amare',
+        'konj.praes.akt.1.sg',
+        'amem',
+        '{praesens}+em [A-Konjugation] [a_ausfall]',
+      );
+      _golden(
+        'amare',
+        'part.praes.akt.sg.gen.m',
+        'amantis',
+        '{ppa}+is [3-Endungen]',
+      );
       expect(_of('amare').stems['ppa']!.stem, 'amant');
     });
 
     test('E-Konjugation', () {
-      _golden('monere', 'konj.praes.akt.1.sg', 'moneam',
-          '{praesens}+am [E-Konjugation] [vokal_kurz]');
-      _golden('monere', 'ind.perf.akt.1.sg', 'monuī',
-          '{perfekt}+ī [Perfekt-System]');
+      _golden(
+        'monere',
+        'konj.praes.akt.1.sg',
+        'moneam',
+        '{praesens}+am [E-Konjugation] [vokal_kurz]',
+      );
+      _golden(
+        'monere',
+        'ind.perf.akt.1.sg',
+        'monuī',
+        '{perfekt}+ī [Perfekt-System]',
+      );
     });
 
     test('I-Konjugation', () {
-      _golden('audire', 'ind.praes.akt.3.pl', 'audiunt',
-          '{praesens}+unt [I-Konjugation] [vokal_kurz]');
-      _golden('audire', 'ind.fut.akt.2.sg', 'audiēs',
-          '{praesens}+ēs [I-Konjugation] [vokal_kurz]');
-      _golden('audire', 'ind.praes.akt.3.sg', 'audit',
-          '{praesens}+t [I-Konjugation] [kurz_t]');
+      _golden(
+        'audire',
+        'ind.praes.akt.3.pl',
+        'audiunt',
+        '{praesens}+unt [I-Konjugation] [vokal_kurz]',
+      );
+      _golden(
+        'audire',
+        'ind.fut.akt.2.sg',
+        'audiēs',
+        '{praesens}+ēs [I-Konjugation] [vokal_kurz]',
+      );
+      _golden(
+        'audire',
+        'ind.praes.akt.3.sg',
+        'audit',
+        '{praesens}+t [I-Konjugation] [kurz_t]',
+      );
     });
 
     test('Konsonantische: no rule fires', () {
-      _golden('regere', 'ind.praes.akt.3.sg', 'regit',
-          '{praesens}+it [Konsonantische]');
-      _golden('regere', 'ind.fut.pass.2.sg', 'regēris',
-          '{praesens}+ēris [Konsonantische]');
+      _golden(
+        'regere',
+        'ind.praes.akt.3.sg',
+        'regit',
+        '{praesens}+it [Konsonantische]',
+      );
+      _golden(
+        'regere',
+        'ind.fut.pass.2.sg',
+        'regēris',
+        '{praesens}+ēris [Konsonantische]',
+      );
     });
 
     test('Mischkonjugation', () {
-      _golden('capere', 'inf.praes.akt', 'capere',
-          '{praesens}+re [I-Konjugation] [i_e_r]');
-      _golden('capere', 'ind.praes.pass.2.sg', 'caperis',
-          '{praesens}+ris [I-Konjugation] [i_e_r]');
-      _golden('capere', 'imp.praes.akt.2.sg', 'cape',
-          '{praesens}+ [I-Konjugation] [i_e_auslaut]');
-      _golden('capere', 'inf.praes.pass', 'capī',
-          '{praesens}+ī [Mischkonjugation] [i_ausfall]');
+      _golden(
+        'capere',
+        'inf.praes.akt',
+        'capere',
+        '{praesens}+re [I-Konjugation] [i_e_r]',
+      );
+      _golden(
+        'capere',
+        'ind.praes.pass.2.sg',
+        'caperis',
+        '{praesens}+ris [I-Konjugation] [i_e_r]',
+      );
+      _golden(
+        'capere',
+        'imp.praes.akt.2.sg',
+        'cape',
+        '{praesens}+ [I-Konjugation] [i_e_auslaut]',
+      );
+      _golden(
+        'capere',
+        'inf.praes.pass',
+        'capī',
+        '{praesens}+ī [Mischkonjugation] [i_ausfall]',
+      );
     });
 
     test('the theme vowel comes from the type, not from the item', () {
@@ -414,8 +494,11 @@ void main() {
       }
       expect(listed.values.expand((rules) => rules), isNotEmpty);
       for (final entry in listed.entries) {
-        expect(entry.value.difference(fired[entry.key] ?? {}), isEmpty,
-            reason: 'type ${entry.key}');
+        expect(
+          entry.value.difference(fired[entry.key] ?? {}),
+          isEmpty,
+          reason: 'type ${entry.key}',
+        );
       }
     });
   });
@@ -423,23 +506,19 @@ void main() {
   group('Schlüsselmengen', () {
     test('amāre: the perfect passive, and the keys that do not exist', () {
       final keys = _keys('amare');
-      expect(
-        keys.where((key) => key.startsWith('ind.perf.pass')).toList(),
-        [
-          'ind.perf.pass.1.sg',
-          'ind.perf.pass.1.pl',
-          'ind.perf.pass.2.sg',
-          'ind.perf.pass.2.pl',
-          'ind.perf.pass.3.sg',
-          'ind.perf.pass.3.pl',
-        ],
-      );
+      expect(keys.where((key) => key.startsWith('ind.perf.pass')).toList(), [
+        'ind.perf.pass.1.sg',
+        'ind.perf.pass.1.pl',
+        'ind.perf.pass.2.sg',
+        'ind.perf.pass.2.pl',
+        'ind.perf.pass.3.sg',
+        'ind.perf.pass.3.pl',
+      ]);
       expect(keys.where((key) => key.startsWith('imp.perf')), isEmpty);
       expect(keys.where((key) => key.startsWith('konj.fut2')), isEmpty);
     });
 
-    test('posse has no imperative, no participle and no future infinitive',
-        () {
+    test('posse has no imperative, no participle and no future infinitive', () {
       final keys = _keys('posse');
       expect(keys.where((key) => key.startsWith('imp')), isEmpty);
       expect(keys.where((key) => key.startsWith('part')), isEmpty);
@@ -485,8 +564,11 @@ void main() {
     test('capere: the rule leaves three candidates, type: picks one', () {
       final recognition = _of('capere').recognition as TypeByRule;
       expect(recognition.suffix, 'ere');
-      expect(recognition.candidateTypes,
-          ['Konsonantische', 'Mischkonjugation', 'E-Konjugation']);
+      expect(recognition.candidateTypes, [
+        'Konsonantische',
+        'Mischkonjugation',
+        'E-Konjugation',
+      ]);
       expect(typeByRuleAmbiguous(_fileOf('capere').item('capere')), isTrue);
     });
 
@@ -494,7 +576,8 @@ void main() {
       expect(
         () => _patched({
           '  - type: Mischkonjugation\n'
-              '    translation: fassen': '  - translation: fassen',
+                  '    translation: fassen':
+              '  - translation: fassen',
         }),
         throwsA(isA<SchemaError>()),
       );
@@ -506,8 +589,7 @@ void main() {
       final recognition = derivation.recognition as TypeByRule;
       expect(recognition.sourceWord, 'capiō');
       expect(recognition.suffix, 'iō');
-      expect(recognition.candidateTypes,
-          ['I-Konjugation', 'Mischkonjugation']);
+      expect(recognition.candidateTypes, ['I-Konjugation', 'Mischkonjugation']);
       expect(derivation.forms['pl']!.result, 'capimus');
     });
   });
@@ -544,14 +626,16 @@ List<FormKey> _keys(String itemId) {
 GrammarEngine _patched(Map<String, String> edits) {
   var source = _sources[_verbsPath]!;
   for (final edit in edits.entries) {
-    expect(edit.key.allMatches(source).length, 1,
-        reason: 'patch does not fit the fixture any more: ${edit.key}');
+    expect(
+      edit.key.allMatches(source).length,
+      1,
+      reason: 'patch does not fit the fixture any more: ${edit.key}',
+    );
     source = source.replaceFirst(edit.key, edit.value);
   }
-  return GrammarEngine(parseGrammarFiles({
-    _nounsPath: _sources[_nounsPath]!,
-    _verbsPath: source,
-  }));
+  return GrammarEngine(
+    parseGrammarFiles({_nounsPath: _sources[_nounsPath]!, _verbsPath: source}),
+  );
 }
 
 /// The ids of the sandhi rules that fire, by the name of the item's type.
@@ -609,8 +693,9 @@ void _checkInvariants(GrammarFile file, GrammarItem item, Derivation d) {
   expect(d.forms.keys.toSet(), plan.emitted, reason: where);
   expect(d.internal.keys.toSet(), plan.internal, reason: where);
   final sorted = d.forms.keys.toList()
-    ..sort((a, b) =>
-        file.axes.compare(file.axes.parseKey(a), file.axes.parseKey(b)));
+    ..sort(
+      (a, b) => file.axes.compare(file.axes.parseKey(a), file.axes.parseKey(b)),
+    );
   expect(d.forms.keys.toList(), sorted, reason: '$where: S7 order');
 
   final rules = [
@@ -635,15 +720,23 @@ void _checkInvariants(GrammarFile file, GrammarItem item, Derivation d) {
       case GeneratedForm(:final stemName, :final ending, :final sandhiRule):
         final stem = d.stems[stemName];
         expect(stem, isNotNull, reason: '$where $key: stem $stemName');
-        final seam = sandhi(rules, stem!.stem, ending,
-            wordFinal: true, lemma: item.lemma);
+        final seam = sandhi(
+          rules,
+          stem!.stem,
+          ending,
+          wordFinal: true,
+          lemma: item.lemma,
+        );
         expect(seam.rule?.id, sandhiRule?.id, reason: '$where $key');
         expect(seam.text + ending, form.result, reason: '$where $key');
 
       // I3.
       case ComposedForm(:final parts, :final join):
-        expect(parts.map((part) => part.text).join(join), form.result,
-            reason: '$where $key');
+        expect(
+          parts.map((part) => part.text).join(join),
+          form.result,
+          reason: '$where $key',
+        );
         for (final part in parts) {
           if (part is LexemeFormPart) {
             expect(part.derivation.result, part.text, reason: '$where $key');
@@ -654,8 +747,11 @@ void _checkInvariants(GrammarFile file, GrammarItem item, Derivation d) {
       case IrregularForm(:final regular):
         if (regular != null) {
           expect(regular.formKey, key, reason: '$where $key');
-          expect(norm(regular.result), isNot(norm(form.result)),
-              reason: '$where $key');
+          expect(
+            norm(regular.result),
+            isNot(norm(form.result)),
+            reason: '$where $key',
+          );
         }
 
       case GivenForm():
@@ -667,8 +763,13 @@ void _checkInvariants(GrammarFile file, GrammarItem item, Derivation d) {
   for (final stem in d.stems.values) {
     if (stem is! StemFromDefault) continue;
     final rest = stem.template.substring(stem.template.indexOf('}') + 1);
-    final seam = sandhi(rules, stem.base.stem, rest,
-        wordFinal: false, lemma: item.lemma);
+    final seam = sandhi(
+      rules,
+      stem.base.stem,
+      rest,
+      wordFinal: false,
+      lemma: item.lemma,
+    );
     expect(seam.rule?.id, stem.sandhiRule?.id, reason: '$where ${stem.name}');
     expect(seam.text + rest, stem.stem, reason: '$where ${stem.name}');
   }
@@ -685,7 +786,11 @@ void _checkInvariants(GrammarFile file, GrammarItem item, Derivation d) {
 
   // I7.
   for (final key in d.deponentKeys) {
-    expect(file.axes.parseKey(key)['genus_verbi'], 'akt', reason: '$where $key');
+    expect(
+      file.axes.parseKey(key)['genus_verbi'],
+      'akt',
+      reason: '$where $key',
+    );
     final passive = file.axes.formatKey({
       ...file.axes.parseKey(key),
       'genus_verbi': 'pass',
@@ -710,10 +815,13 @@ String _renderAll() {
         ...derivation.forms,
         ...derivation.internal,
       }.entries) {
-        final deponent =
-            derivation.deponentKeys.contains(entry.key) ? ' (deponent)' : '';
-        out.writeln('${entry.key}$deponent | '
-            '${entry.value.variants.join(" / ")} | ${_trace(entry.value)}');
+        final deponent = derivation.deponentKeys.contains(entry.key)
+            ? ' (deponent)'
+            : '';
+        out.writeln(
+          '${entry.key}$deponent | '
+          '${entry.value.variants.join(" / ")} | ${_trace(entry.value)}',
+        );
       }
     }
   }
@@ -721,26 +829,24 @@ String _renderAll() {
 }
 
 String _trace(FormDerivation form) => switch (form) {
-      GivenForm() => 'given',
-      GeneratedForm(
-        :final stemName,
-        :final ending,
-        :final endingType,
-        :final sandhiRule
-      ) =>
-        '{$stemName}+$ending [$endingType]'
-            '${sandhiRule == null ? "" : " [${sandhiRule.id}]"}',
-      ComposedForm(:final parts, :final join) =>
-        'compose(${parts.map((part) => switch (part) {
-              AffixPart(:final stemName, :final text, :final sandhiRule) =>
-                '$stemName:$text'
-                    '${sandhiRule == null ? "" : "(${sandhiRule.id})"}',
-              LexemeFormPart(:final lexemeId, :final key) =>
-                '$lexemeId[$key]=${part.text}',
-            }).join(" + ")}, join="$join")',
-      IrregularForm(:final regular) =>
-        'irregular${regular == null ? "" : " (rule: ${regular.result})"}',
-    };
+  GivenForm() => 'given',
+  GeneratedForm(
+    :final stemName,
+    :final ending,
+    :final endingType,
+    :final sandhiRule,
+  ) =>
+    '{$stemName}+$ending [$endingType]'
+        '${sandhiRule == null ? "" : " [${sandhiRule.id}]"}',
+  ComposedForm(:final parts, :final join) =>
+    'compose(${parts.map((part) => switch (part) {
+      AffixPart(:final stemName, :final text, :final sandhiRule) => '$stemName:$text'
+          '${sandhiRule == null ? "" : "(${sandhiRule.id})"}',
+      LexemeFormPart(:final lexemeId, :final key) => '$lexemeId[$key]=${part.text}',
+    }).join(" + ")}, join="$join")',
+  IrregularForm(:final regular) =>
+    'irregular${regular == null ? "" : " (rule: ${regular.result})"}',
+};
 
 // A file of its own: `capiō` has no infinitive, so the rule must read
 // another part (S11), which the verbs fixture cannot show.

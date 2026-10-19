@@ -46,10 +46,10 @@ const _lateType = '''
 ''';
 
 CourseFilter _filter(Settings settings, String curriculum) => CourseFilter(
-      settings,
-      parseNouns(curriculum, shape: nounShape(labels: _nauta.formLabels)),
-      _lessons,
-    );
+  settings,
+  parseNouns(curriculum, shape: nounShape(labels: _nauta.formLabels)),
+  _lessons,
+);
 
 void main() {
   test('a word in range whose type comes later is not practised yet', () {
@@ -64,16 +64,13 @@ void main() {
   });
 
   test('once the type is taught the item is practised', () {
-    final filter = _filter(
-      Settings().withWordRange(LessonRange(21, 23)),
-      '''
+    final filter = _filter(Settings().withWordRange(LessonRange(21, 23)), '''
 - lesson: 21
   nouns:
     forms:
       - {}
     types: [A-Deklination, O-Deklination]
-''',
-    );
+''');
 
     expect(filter.itemPracticed(_nauta), isTrue);
   });
@@ -92,16 +89,19 @@ void main() {
     final inRange = Settings().withWordRange(LessonRange(21, 23));
 
     expect(
-      _filter(inRange.toggleWord('nauta', inRange: true), everythingInLessonOne)
-          .wordPracticed(_nauta),
+      _filter(
+        inRange.toggleWord('nauta', inRange: true),
+        everythingInLessonOne,
+      ).wordPracticed(_nauta),
       isFalse,
     );
 
     final outOfRange = Settings().withWordRange(LessonRange(1, 20));
     expect(
-      _filter(outOfRange.toggleWord('nauta', inRange: false),
-              everythingInLessonOne)
-          .wordPracticed(_nauta),
+      _filter(
+        outOfRange.toggleWord('nauta', inRange: false),
+        everythingInLessonOne,
+      ).wordPracticed(_nauta),
       isTrue,
     );
 
@@ -126,9 +126,7 @@ void main() {
   });
 
   test('practicedForms and summary count what the learner sees', () {
-    final filter = _filter(
-      Settings().withWordRange(LessonRange(21, 23)),
-      '''
+    final filter = _filter(Settings().withWordRange(LessonRange(21, 23)), '''
 - lesson: 21
   nouns:
     forms:
@@ -138,16 +136,16 @@ void main() {
   nouns:
     forms:
       - {numerus: pl}
-''',
-    );
+''');
 
-    expect(
-      filter.practicedForms('nouns', _nauta.formLabels),
-      {'nom.sg', 'gen.sg'},
-    );
-    expect(
-      filter.summary(<PracticeItem>[_nauta]),
-      (words: 1, nounForms: 2, verbForms: 0),
-    );
+    expect(filter.practicedForms('nouns', _nauta.formLabels), {
+      'nom.sg',
+      'gen.sg',
+    });
+    expect(filter.summary(<PracticeItem>[_nauta]), (
+      words: 1,
+      nounForms: 2,
+      verbForms: 0,
+    ));
   });
 }

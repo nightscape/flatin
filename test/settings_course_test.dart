@@ -30,8 +30,10 @@ void main() {
           .withGrammarRange(LessonRange(1, 8));
 
       expect(settings.effectiveGrammar, LessonRange(1, 8));
-      expect(settings.withWordRange(LessonRange(5, 20)).effectiveGrammar,
-          LessonRange(1, 8));
+      expect(
+        settings.withWordRange(LessonRange(5, 20)).effectiveGrammar,
+        LessonRange(1, 8),
+      );
     });
 
     test('linking again pulls the grammar range back to the words', () {
@@ -67,8 +69,11 @@ void main() {
         final once = Settings().toggleWord('amare', inRange: inRange);
         final twice = once.toggleWord('amare', inRange: inRange);
 
-        expect(twice.overrideOfWord('amare'), Override.none,
-            reason: 'inRange: $inRange');
+        expect(
+          twice.overrideOfWord('amare'),
+          Override.none,
+          reason: 'inRange: $inRange',
+        );
         expect(twice.deselectedWords, isEmpty);
         expect(twice.forcedOnWords, isEmpty);
       }
@@ -118,10 +123,7 @@ void main() {
 
     test('an entry cannot be forced on and off at once', () {
       expect(
-        () => Settings(
-          deselectedWords: {'amare'},
-          forcedOnWords: {'amare'},
-        ),
+        () => Settings(deselectedWords: {'amare'}, forcedOnWords: {'amare'}),
         throwsA(isA<AssertionError>()),
       );
       expect(
@@ -220,8 +222,10 @@ void main() {
         Override.forcedOff,
       );
       expect(settings.overrideOfForm('nouns', 'gen.sg'), Override.forcedOff);
-      expect(settings.isFeatureEnabled('verbs', 'genus_verbi', 'pass'),
-          isFalse);
+      expect(
+        settings.isFeatureEnabled('verbs', 'genus_verbi', 'pass'),
+        isFalse,
+      );
     });
   });
 }

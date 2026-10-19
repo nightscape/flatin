@@ -18,13 +18,12 @@ Future<void> _open(
   WidgetTester tester,
   Settings settings,
   Curriculum curriculum,
-) =>
-    openSettingsWith(
-      tester,
-      settings.toJson(),
-      page: 'nouns',
-      overrides: [curriculumProvider.overrideWith((ref) async => curriculum)],
-    );
+) => openSettingsWith(
+  tester,
+  settings.toJson(),
+  page: 'nouns',
+  overrides: [curriculumProvider.overrideWith((ref) async => curriculum)],
+);
 
 Future<void> _tap(WidgetTester tester, Finder row) async {
   await tester.tap(row);
@@ -36,55 +35,69 @@ Finder _gapText(Finder row, String text) =>
     find.descendant(of: row, matching: find.text(text));
 
 void main() {
-  testWidgets('a type the course has not taught is greyed and a tap forces it on',
-      (tester) async {
-    final curriculum = await lateTypeCurriculum('nouns', _type, 32);
-    await _open(tester, Settings(courseWords: LessonRange(1, 5)), curriculum);
+  testWidgets(
+    'a type the course has not taught is greyed and a tap forces it on',
+    (tester) async {
+      final curriculum = await lateTypeCurriculum('nouns', _type, 32);
+      await _open(tester, Settings(courseWords: LessonRange(1, 5)), curriculum);
 
-    expect(_gapText(_typeRow, 'ab Lektion 32'), findsOneWidget);
-    expect(titleColor(tester, _typeRow), isNot(Colors.black));
-    expect(isChecked(tester, _typeRow), isFalse);
+      expect(_gapText(_typeRow, 'ab Lektion 32'), findsOneWidget);
+      expect(titleColor(tester, _typeRow), isNot(Colors.black));
+      expect(isChecked(tester, _typeRow), isFalse);
 
-    await _tap(tester, _typeRow);
+      await _tap(tester, _typeRow);
 
-    expect(isChecked(tester, _typeRow), isTrue);
-    expect((await storedSettings())['forcedOnTypes'], {
-      'nouns': [_type],
-    });
-    expect(_gapText(_typeRow, 'ab Lektion 32'), findsNothing);
-    expect(titleColor(tester, _typeRow), Colors.black,
-        reason: 'a forced-on type is offered, so it is not greyed');
-  });
+      expect(isChecked(tester, _typeRow), isTrue);
+      expect((await storedSettings())['forcedOnTypes'], {
+        'nouns': [_type],
+      });
+      expect(_gapText(_typeRow, 'ab Lektion 32'), findsNothing);
+      expect(
+        titleColor(tester, _typeRow),
+        Colors.black,
+        reason: 'a forced-on type is offered, so it is not greyed',
+      );
+    },
+  );
 
-  testWidgets('a form the course has not taught is greyed and a tap forces it on',
-      (tester) async {
-    final curriculum = await lateGenitiveCurriculum();
-    await _open(tester, Settings(courseWords: LessonRange(1, 5)), curriculum);
+  testWidgets(
+    'a form the course has not taught is greyed and a tap forces it on',
+    (tester) async {
+      final curriculum = await lateGenitiveCurriculum();
+      await _open(tester, Settings(courseWords: LessonRange(1, 5)), curriculum);
 
-    expect(titleColor(tester, _nomRow), Colors.black);
-    expect(_gapText(_genRow, 'ab Lektion 30'), findsOneWidget);
-    expect(titleColor(tester, _genRow), isNot(Colors.black));
-    expect(isChecked(tester, _genRow), isFalse);
+      expect(titleColor(tester, _nomRow), Colors.black);
+      expect(_gapText(_genRow, 'ab Lektion 30'), findsOneWidget);
+      expect(titleColor(tester, _genRow), isNot(Colors.black));
+      expect(isChecked(tester, _genRow), isFalse);
 
-    await _tap(tester, _genRow);
+      await _tap(tester, _genRow);
 
-    expect(isChecked(tester, _genRow), isTrue);
-    expect((await storedSettings())['forcedOnForms'], {
-      'nouns': ['gen.sg'],
-    });
-    expect(_gapText(_genRow, 'ab Lektion 30'), findsNothing);
-    expect(titleColor(tester, _genRow), Colors.black,
-        reason: 'a forced-on form is offered, so it is not greyed');
-  });
+      expect(isChecked(tester, _genRow), isTrue);
+      expect((await storedSettings())['forcedOnForms'], {
+        'nouns': ['gen.sg'],
+      });
+      expect(_gapText(_genRow, 'ab Lektion 30'), findsNothing);
+      expect(
+        titleColor(tester, _genRow),
+        Colors.black,
+        reason: 'a forced-on form is offered, so it is not greyed',
+      );
+    },
+  );
 
-  testWidgets('a form forced on stays offered and a tap switches it off',
-      (tester) async {
+  testWidgets('a form forced on stays offered and a tap switches it off', (
+    tester,
+  ) async {
     final curriculum = await lateGenitiveCurriculum();
     await _open(
       tester,
-      Settings(courseWords: LessonRange(1, 5), forcedOnForms: {
-        'nouns': {'gen.sg'},
-      }),
+      Settings(
+        courseWords: LessonRange(1, 5),
+        forcedOnForms: {
+          'nouns': {'gen.sg'},
+        },
+      ),
       curriculum,
     );
 

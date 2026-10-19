@@ -29,63 +29,67 @@ void main() {
 
   group('Derivation contract', () {
     for (final assetPath in _yamlFiles) {
-      test('$assetPath: forms cover formOrder with the item\'s own values',
-          () async {
-        final items = await loadPracticeItems(assetPath);
-        expect(items, isNotEmpty);
+      test(
+        '$assetPath: forms cover formOrder with the item\'s own values',
+        () async {
+          final items = await loadPracticeItems(assetPath);
+          expect(items, isNotEmpty);
 
-        for (final item in items) {
-          final label = item.lemma;
+          for (final item in items) {
+            final label = item.lemma;
 
-          expect(
-            item.derivation.forms.keys.toList(),
-            item.formOrder,
-            reason: '$label: derivation keys must equal formOrder',
-          );
-          expect(item.derivation.type, item.type, reason: label);
+            expect(
+              item.derivation.forms.keys.toList(),
+              item.formOrder,
+              reason: '$label: derivation keys must equal formOrder',
+            );
+            expect(item.derivation.type, item.type, reason: label);
 
-          for (int i = 0; i < item.formOrder.length; i++) {
-            final key = item.formOrder[i];
-            final form = item.derivation.forms[key]!;
-            expect(
-              form.result,
-              item.forms[i],
-              reason: '$label / $key: trace must match the answer',
-            );
-            expect(
-              form.variants.first,
-              form.result,
-              reason: '$label / $key: the first variant is the shown one',
-            );
-            expect(
-              item.acceptedForms[i],
-              form.variants,
-              reason: '$label / $key: the item accepts what the trace gives',
-            );
+            for (int i = 0; i < item.formOrder.length; i++) {
+              final key = item.formOrder[i];
+              final form = item.derivation.forms[key]!;
+              expect(
+                form.result,
+                item.forms[i],
+                reason: '$label / $key: trace must match the answer',
+              );
+              expect(
+                form.variants.first,
+                form.result,
+                reason: '$label / $key: the first variant is the shown one',
+              );
+              expect(
+                item.acceptedForms[i],
+                form.variants,
+                reason: '$label / $key: the item accepts what the trace gives',
+              );
+            }
           }
-        }
-      });
+        },
+      );
 
-      test('$assetPath: filterForms returns the keys of the kept rows',
-          () async {
-        final items = await loadPracticeItems(assetPath);
+      test(
+        '$assetPath: filterForms returns the keys of the kept rows',
+        () async {
+          final items = await loadPracticeItems(assetPath);
 
-        for (final item in items) {
-          final label = item.lemma;
+          for (final item in items) {
+            final label = item.lemma;
 
-          expect(
-            item.filterForms(item.formOrder.toSet()).keys,
-            item.formOrder,
-            reason: '$label: all forms enabled',
-          );
+            expect(
+              item.filterForms(item.formOrder.toSet()).keys,
+              item.formOrder,
+              reason: '$label: all forms enabled',
+            );
 
-          final someKeys = item.formOrder.take(2).toSet();
-          final filtered = item.filterForms(someKeys);
-          expect(filtered.keys, someKeys.toList(), reason: label);
-          expect(filtered.forms.length, filtered.keys.length, reason: label);
-          expect(filtered.labels.length, filtered.keys.length, reason: label);
-        }
-      });
+            final someKeys = item.formOrder.take(2).toSet();
+            final filtered = item.filterForms(someKeys);
+            expect(filtered.keys, someKeys.toList(), reason: label);
+            expect(filtered.forms.length, filtered.keys.length, reason: label);
+            expect(filtered.labels.length, filtered.keys.length, reason: label);
+          }
+        },
+      );
     }
   });
 
@@ -158,8 +162,10 @@ void main() {
           explain: 'ā fällt vor Vokal aus',
         ),
       );
-      expect(derivationOf({'praes.1.sg': form}).forms['praes.1.sg']!.result,
-          'amō');
+      expect(
+        derivationOf({'praes.1.sg': form}).forms['praes.1.sg']!.result,
+        'amō',
+      );
     });
 
     test('an irregular form may hold a composed regular form', () {
@@ -186,15 +192,17 @@ void main() {
         derivationOf({'perf.1.sg': irregular}).forms['perf.1.sg'],
         same(irregular),
       );
-      expect(composed.parts.map((p) => p.text).join(composed.join),
-          composed.result);
+      expect(
+        composed.parts.map((p) => p.text).join(composed.join),
+        composed.result,
+      );
     });
   });
 
   test('de.json and en.json have the same keys', () {
     Set<String> keysOf(String path) => _leafKeys(
-          jsonDecode(File(path).readAsStringSync()) as Map<String, dynamic>,
-        );
+      jsonDecode(File(path).readAsStringSync()) as Map<String, dynamic>,
+    );
 
     final de = keysOf('assets/flutter_i18n/de.json');
     final en = keysOf('assets/flutter_i18n/en.json');

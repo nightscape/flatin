@@ -8,8 +8,9 @@ import 'package:latin_practice/screens/word_classification_screen.dart';
 import 'support/word_classification_harness.dart';
 
 void main() {
-  testWidgets('with nothing due the shown word belongs to an enabled type',
-      (tester) async {
+  testWidgets('with nothing due the shown word belongs to an enabled type', (
+    tester,
+  ) async {
     final nouns = await getFormMetadata('lib/data/latin_nouns.yaml');
     final verbs = await getFormMetadata('lib/data/latin_verbs.yaml');
     final enabledType = nouns.availableTypes.first;
@@ -20,8 +21,9 @@ void main() {
 
     final container = ProviderContainer();
     expect(await container.read(dueCardsProvider.future), isEmpty);
-    final practicable =
-        await container.read(practicableItemsByTypeProvider.future);
+    final practicable = await container.read(
+      practicableItemsByTypeProvider.future,
+    );
     expect(practicable['nouns']!.every((i) => i.type == enabledType), isTrue);
     expect(practicable['verbs'], isEmpty);
     final allowed = practicable['nouns']!.expand((item) => item.forms).toSet();
@@ -36,8 +38,9 @@ void main() {
     expect(allowed, contains(shown));
   });
 
-  testWidgets('with nothing due and every type off no word is shown',
-      (tester) async {
+  testWidgets('with nothing due and every type off no word is shown', (
+    tester,
+  ) async {
     final nouns = await getFormMetadata('lib/data/latin_nouns.yaml');
     final verbs = await getFormMetadata('lib/data/latin_verbs.yaml');
     await seedNothingDue({

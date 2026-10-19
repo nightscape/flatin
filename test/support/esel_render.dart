@@ -31,10 +31,9 @@ Future<void> pumpChecked(
   tester.view.physicalSize = const Size(1200, 12000);
   tester.view.devicePixelRatio = 1.0;
   addTearDown(tester.view.reset);
-  await tester.pumpWidget(wrapInApp(
-    PracticeScreen(item: item),
-    forcedLocale: const Locale('de'),
-  ));
+  await tester.pumpWidget(
+    wrapInApp(PracticeScreen(item: item), forcedLocale: const Locale('de')),
+  );
   await letItLoad(tester);
   for (final entry in wrong.entries) {
     await tester.enterText(
@@ -59,10 +58,12 @@ Future<void> pumpClassified(
   tester.view.physicalSize = const Size(1200, 4800);
   tester.view.devicePixelRatio = 1.0;
   addTearDown(tester.view.reset);
-  await tester.pumpWidget(wrapInApp(
-    WordClassificationScreen(item: item, formKey: formKey),
-    forcedLocale: const Locale('de'),
-  ));
+  await tester.pumpWidget(
+    wrapInApp(
+      WordClassificationScreen(item: item, formKey: formKey),
+      forcedLocale: const Locale('de'),
+    ),
+  );
   await letItLoad(tester);
 
   final label = item.formLabels[item.formOrder.indexOf(formKey)];
@@ -81,7 +82,9 @@ Future<void> pumpClassified(
     await tester.ensureVisible(dropdown);
     await tester.tap(dropdown);
     await tester.pumpAndSettle();
-    await tester.tap(find.text(axis.values.firstWhere((v) => v.$1 == code).$2).last);
+    await tester.tap(
+      find.text(axis.values.firstWhere((v) => v.$1 == code).$2).last,
+    );
     await tester.pumpAndSettle();
   }
   await tester.tap(find.byKey(const Key('wordClassification.check.button')));
@@ -90,7 +93,8 @@ Future<void> pumpClassified(
 
 List<EselStepRow> stepRows(WidgetTester tester, String scope) => tester
     .widgetList<EselStepRow>(
-        find.byWidgetPredicate((w) => w is EselStepRow && w.scope == scope))
+      find.byWidgetPredicate((w) => w is EselStepRow && w.scope == scope),
+    )
     .toList();
 
 Finder stepRow(String scope, EselKind kind) =>
@@ -110,13 +114,21 @@ String renderSteps(WidgetTester tester, String scope) {
         .widgetList<Text>(find.descendant(of: finder, matching: matching))
         .toList();
     final texts = inside(find.byType(Text));
-    final badge = inside(find.descendant(
-        of: find.byType(EselBadge), matching: find.byType(Text)));
-    final buttonTexts = inside(find.descendant(
+    final badge = inside(
+      find.descendant(of: find.byType(EselBadge), matching: find.byType(Text)),
+    );
+    final buttonTexts = inside(
+      find.descendant(
         of: find.byWidgetPredicate((w) => w is ButtonStyleButton),
-        matching: find.byType(Text)));
-    final optionTexts = inside(find.descendant(
-        of: find.byType(OutlinedButton), matching: find.byType(Text)));
+        matching: find.byType(Text),
+      ),
+    );
+    final optionTexts = inside(
+      find.descendant(
+        of: find.byType(OutlinedButton),
+        matching: find.byType(Text),
+      ),
+    );
 
     final letter = badge.single.data!;
     final name = texts[1].data!;
@@ -133,13 +145,15 @@ String renderSteps(WidgetTester tester, String scope) {
         if (!optionTexts.contains(text)) text.data!,
     ];
 
-    lines.add([
-      '$letter $name',
-      row.status.name + (isDashed(tester, finder) ? ' (gestrichelt)' : ''),
-      if (shown.isNotEmpty) shown.join(' / '),
-      if (options.isNotEmpty) 'Optionen: ${options.join(' ; ')}',
-      if (show.isNotEmpty) '[${show.join()}]',
-    ].join(' | '));
+    lines.add(
+      [
+        '$letter $name',
+        row.status.name + (isDashed(tester, finder) ? ' (gestrichelt)' : ''),
+        if (shown.isNotEmpty) shown.join(' / '),
+        if (options.isNotEmpty) 'Optionen: ${options.join(' ; ')}',
+        if (show.isNotEmpty) '[${show.join()}]',
+      ].join(' | '),
+    );
   }
   return '${lines.join('\n')}\n';
 }

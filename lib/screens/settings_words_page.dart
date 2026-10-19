@@ -78,7 +78,9 @@ class _WordList extends ConsumerWidget {
             byLemma[lemma]!,
       ];
       if (matches.isEmpty) continue;
-      rows..add(name)..addAll(matches);
+      rows
+        ..add(name)
+        ..addAll(matches);
     }
 
     return ListView.builder(

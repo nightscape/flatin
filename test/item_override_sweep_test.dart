@@ -11,9 +11,11 @@ import 'package:latin_practice/models/derivation.dart';
 
 const _paths = ['lib/data/latin_nouns.yaml', 'lib/data/latin_verbs.yaml'];
 
-final GrammarEngine _engine = GrammarEngine(parseGrammarFiles({
-  for (final path in _paths) path: File(path).readAsStringSync(),
-}));
+final GrammarEngine _engine = GrammarEngine(
+  parseGrammarFiles({
+    for (final path in _paths) path: File(path).readAsStringSync(),
+  }),
+);
 
 void main() {
   test('every item override is applied and none repeats the rule', () {

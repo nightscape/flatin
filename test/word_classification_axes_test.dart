@@ -10,26 +10,31 @@ import 'support/word_classification_harness.dart';
 /// Spans Modus, Tempus, Genus verbi, Person and Numerus; the Infinitiv has
 /// neither Person nor Numerus.
 PracticeItem spanningItem() => handItem(
-      dataFileId: 'verbs',
-      lemma: 'amāre',
-      axes: fullVerbAxes,
-      forms: {
-        'ind.praes.akt.3.sg': ['amat'],
-        'ind.praes.akt.3.pl': ['amant'],
-        'ind.praes.pass.3.sg': ['amātur'],
-        'konj.praes.akt.3.sg': ['amet'],
-        'ind.fut.akt.3.sg': ['amābit'],
-        'inf.fut.akt': ['amātūrum esse'],
-      },
-    );
+  dataFileId: 'verbs',
+  lemma: 'amāre',
+  axes: fullVerbAxes,
+  forms: {
+    'ind.praes.akt.3.sg': ['amat'],
+    'ind.praes.akt.3.pl': ['amant'],
+    'ind.praes.pass.3.sg': ['amātur'],
+    'konj.praes.akt.3.sg': ['amet'],
+    'ind.fut.akt.3.sg': ['amābit'],
+    'inf.fut.akt': ['amātūrum esse'],
+  },
+);
 
 void main() {
   final item = spanningItem();
   final selectors = selectorsFor(item.formLabels);
 
   test('every axis the forms disagree on gets a selector', () {
-    expect(selectors.sections,
-        ['modus', 'tempus', 'genus', 'person', 'numerus']);
+    expect(selectors.sections, [
+      'modus',
+      'tempus',
+      'genus',
+      'person',
+      'numerus',
+    ]);
     expect(selectors.fixed, isEmpty);
   });
 
@@ -47,25 +52,33 @@ void main() {
     expect(only.sections, isNot(contains('modus')));
     expect(only.fixed['modus'], 'ind');
     expect(
-      only.labelFor({'tempus': 'praes', 'genus': 'akt', 'person': '3', 'numerus': 'sg'},
-          item.formLabels),
+      only.labelFor({
+        'tempus': 'praes',
+        'genus': 'akt',
+        'person': '3',
+        'numerus': 'sg',
+      }, item.formLabels),
       fullVerbLabel('ind.praes.akt.3.sg'),
     );
   });
 
   test('two forms that differ only in Genus verbi are told apart', () {
     Map<String, String?> picks(String genus) => {
-          'modus': 'ind',
-          'tempus': 'praes',
-          'genus': genus,
-          'person': '3',
-          'numerus': 'sg',
-        };
+      'modus': 'ind',
+      'tempus': 'praes',
+      'genus': genus,
+      'person': '3',
+      'numerus': 'sg',
+    };
 
-    expect(selectors.labelFor(picks('akt'), item.formLabels),
-        fullVerbLabel('ind.praes.akt.3.sg'));
-    expect(selectors.labelFor(picks('pass'), item.formLabels),
-        fullVerbLabel('ind.praes.pass.3.sg'));
+    expect(
+      selectors.labelFor(picks('akt'), item.formLabels),
+      fullVerbLabel('ind.praes.akt.3.sg'),
+    );
+    expect(
+      selectors.labelFor(picks('pass'), item.formLabels),
+      fullVerbLabel('ind.praes.pass.3.sg'),
+    );
   });
 
   test('a combination the item has no form for maps to no label', () {
@@ -92,14 +105,18 @@ void main() {
     tester.view.devicePixelRatio = 1.0;
     addTearDown(tester.view.reset);
 
-    await tester.pumpWidget(wrapInApp(
-      WordClassificationScreen(item: item, formKey: 'inf.fut.akt'),
-      forcedLocale: const Locale('de'),
-    ));
+    await tester.pumpWidget(
+      wrapInApp(
+        WordClassificationScreen(item: item, formKey: 'inf.fut.akt'),
+        forcedLocale: const Locale('de'),
+      ),
+    );
     await letItLoad(tester);
 
-    expect(find.byType(DropdownButtonFormField<String>),
-        findsNWidgets(selectors.sections.length));
+    expect(
+      find.byType(DropdownButtonFormField<String>),
+      findsNWidgets(selectors.sections.length),
+    );
 
     await pickOption(tester, 0, 'Infinitiv');
     await pickOption(tester, 1, 'Futur I');

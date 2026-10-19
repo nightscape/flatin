@@ -65,19 +65,21 @@ List<ExplanationLine> _deponentLine(
   PracticeItem item,
   FormKey formKey,
   String label,
-) =>
-    item.derivation.deponentKeys.contains(formKey)
-        ? [ExplanationLine('explain.deponent', params: {'label': label})]
-        : const [];
+) => item.derivation.deponentKeys.contains(formKey)
+    ? [
+        ExplanationLine('explain.deponent', params: {'label': label}),
+      ]
+    : const [];
 
 /// S9: the other spellings that count as correct.
 List<ExplanationLine> _variantsLine(PracticeItem item, FormKey formKey) {
   final variants = item.derivation.forms[formKey]!.variants;
   if (variants.length == 1) return const [];
   return [
-    ExplanationLine('explain.variants', params: {
-      'variants': variants.skip(1).join(', '),
-    }),
+    ExplanationLine(
+      'explain.variants',
+      params: {'variants': variants.skip(1).join(', ')},
+    ),
   ];
 }
 
@@ -136,7 +138,8 @@ const endingTypePhrases = <String, String>{
   'I-Konjugation': 'Endung der I-Konjugation',
   'Adjektiv-a-o': 'Adverbendung (Adjektiv der a-/o-Deklination)',
   'Adjektiv-3': 'Adverbendung (Adjektiv der 3. Deklination)',
-  'Konsonantische-Deklination-mf': 'Endung der konsonantischen Deklination (m/f)',
+  'Konsonantische-Deklination-mf':
+      'Endung der konsonantischen Deklination (m/f)',
   'Konsonantische-Deklination-n': 'Endung der konsonantischen Deklination (n)',
   'E-Deklination': 'Endung der E-Deklination',
 };
@@ -178,34 +181,44 @@ ExplanationLine _diagnosisLine(
   final diagnosis = diagnose(item, formKey, answer);
   switch (diagnosis) {
     case RegularInsteadOfIrregular():
-      return ExplanationLine('explain.diag.regularInsteadOfIrregular', params: {
-        'answer': answer,
-        'label': describeLabels([_labelOf(item, formKey)]),
-      });
+      return ExplanationLine(
+        'explain.diag.regularInsteadOfIrregular',
+        params: {
+          'answer': answer,
+          'label': describeLabels([_labelOf(item, formKey)]),
+        },
+      );
     case OtherFormOfWord(:final formKeys):
-      return ExplanationLine('explain.diag.otherForm', params: {
-        'answer': answer,
-        'labels': describeLabels(
-          formKeys.map((key) => _labelOf(item, key)).toList(),
-        ),
-      });
+      return ExplanationLine(
+        'explain.diag.otherForm',
+        params: {
+          'answer': answer,
+          'labels': describeLabels(
+            formKeys.map((key) => _labelOf(item, key)).toList(),
+          ),
+        },
+      );
     case EndingOfOtherType(:final types):
-      return ExplanationLine('explain.diag.otherType', params: {
-        'answer': answer,
-        'types': types.map(typePhrase).join(', '),
-      });
+      return ExplanationLine(
+        'explain.diag.otherType',
+        params: {'answer': answer, 'types': types.map(typePhrase).join(', ')},
+      );
     case WrongStem(:final usedStem, :final stemName):
       final stem = item.derivation.stems[stemName]!;
-      return ExplanationLine('explain.diag.wrongStem', params: {
-        'answer': answer,
-        'usedStem': usedStem,
-        'display': stem.display,
-        'stem': stem.stem,
-      });
+      return ExplanationLine(
+        'explain.diag.wrongStem',
+        params: {
+          'answer': answer,
+          'usedStem': usedStem,
+          'display': stem.display,
+          'stem': stem.stem,
+        },
+      );
     case NoMatch():
-      return ExplanationLine('explain.diag.noMatch', params: {
-        'answer': answer,
-      });
+      return ExplanationLine(
+        'explain.diag.noMatch',
+        params: {'answer': answer},
+      );
   }
 }
 
@@ -220,9 +233,10 @@ ExplanationLine explainPickedLabel(
   String pickedText,
 ) {
   if (picked == null) {
-    return ExplanationLine('explain.pickedMissing', params: {
-      'picked': pickedText,
-    });
+    return ExplanationLine(
+      'explain.pickedMissing',
+      params: {'picked': pickedText},
+    );
   }
 
   final int index = item.formLabels.indexOf(picked);
@@ -230,11 +244,11 @@ ExplanationLine explainPickedLabel(
   final form = item.derivation.forms[item.formOrder[index]]!;
   final String text = form is GeneratedForm
       ? '${form.result} '
-          '(${item.derivation.stems[form.stemName]!.stem} + ${form.ending})'
+            '(${item.derivation.stems[form.stemName]!.stem} + ${form.ending})'
       : form.result;
 
-  return ExplanationLine('explain.pickedWouldBe', params: {
-    'picked': pickedText,
-    'form': text,
-  });
+  return ExplanationLine(
+    'explain.pickedWouldBe',
+    params: {'picked': pickedText, 'form': text},
+  );
 }

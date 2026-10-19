@@ -31,8 +31,12 @@ final class SampleEntry {
   final List<String> lemmas;
   final bool synthetic;
 
-  SampleEntry(this.dataFileId, this.itemId, this.lemmas,
-      {required this.synthetic});
+  SampleEntry(
+    this.dataFileId,
+    this.itemId,
+    this.lemmas, {
+    required this.synthetic,
+  });
 }
 
 final class Sample {
@@ -52,9 +56,9 @@ final class Sample {
 /// types, so a model both corpora sample is not counted twice. A model no
 /// sample built is 0.
 Map<String, int> lemmasByModel(Iterable<Sample> samples, TypeMap typeMap) => {
-      for (final model in typeMap.builds.keys)
-        model: samples.fold(0, (n, s) => max(n, s.lemmasByModel[model] ?? 0)),
-    };
+  for (final model in typeMap.builds.keys)
+    model: samples.fold(0, (n, s) => max(n, s.lemmasByModel[model] ?? 0)),
+};
 
 /// Mapped model -> its lemmas, for every model that misses its floor across
 /// [samples]: [lemmasPerModel], or exactly the `lemmas` a model declares
@@ -64,10 +68,14 @@ Map<String, int> modelsOffFloor(Iterable<Sample> samples, TypeMap typeMap) {
   for (final e in lemmasByModel(samples, typeMap).entries) {
     final declared = typeMap.models[e.key]!.lemmas;
     if (declared != null && (declared < 1 || declared >= lemmasPerModel)) {
-      throw StateError('type_map.yaml: ${e.key} declares $declared lemmas, '
-          'which is not in 1 .. ${lemmasPerModel - 1}');
+      throw StateError(
+        'type_map.yaml: ${e.key} declares $declared lemmas, '
+        'which is not in 1 .. ${lemmasPerModel - 1}',
+      );
     }
-    final met = declared == null ? e.value >= lemmasPerModel : e.value == declared;
+    final met = declared == null
+        ? e.value >= lemmasPerModel
+        : e.value == declared;
     if (!met) off[e.key] = e.value;
   }
   return off;
@@ -78,8 +86,7 @@ Map<String, int> modelsOffFloor(Iterable<Sample> samples, TypeMap typeMap) {
 String ours(String collatinus) => collatinus
     .toLowerCase()
     .replaceAll('̆', '')
-    .replaceAllMapped(
-        RegExp('[ăĕĭŏŭ]'), (m) => 'aeiou'['ăĕĭŏŭ'.indexOf(m[0]!)])
+    .replaceAllMapped(RegExp('[ăĕĭŏŭ]'), (m) => 'aeiou'['ăĕĭŏŭ'.indexOf(m[0]!)])
     .replaceAll('j', 'i')
     .replaceAll(RegExp(r'\d'), '');
 
@@ -125,7 +132,8 @@ _Built? _verbItem(
   ];
   return (
     idSpelling: stem + build['infinitive']!,
-    text: '''
+    text:
+        '''
   - type: $type
     translation: ${_yaml(lemmaKey)}
     parts: {${parts.join(', ')}}${deponent ? '\n    deponent: all' : ''}
@@ -150,7 +158,8 @@ _Built? _nounItem(
   final stem = radical?.single ?? nom.substring(0, nom.length - cut);
   return (
     idSpelling: nom,
-    text: '''
+    text:
+        '''
   - type: $type
     translation: ${_yaml(lemmaKey)}
     parts: {nom: ${_yaml(nom)}, gen: ${_yaml(stem + build['genitive']!)}}
@@ -173,7 +182,8 @@ _Built? _adjectiveItem(
   if (radical != null && radical.length > 1) return null;
   if (radical != null && build['radical'] == 'none') return null;
   final stem =
-      radical?.single ?? nom.substring(0, nom.length - int.parse(build['cut']!));
+      radical?.single ??
+      nom.substring(0, nom.length - int.parse(build['cut']!));
   final parts = <String>[
     'nom: ${_yaml(nom)}',
     if (build.containsKey('f')) 'nom_f: ${_yaml(stem + build['f']!)}',
@@ -181,7 +191,8 @@ _Built? _adjectiveItem(
   ];
   return (
     idSpelling: nom,
-    text: '''
+    text:
+        '''
   - type: $type
     translation: ${_yaml(lemmaKey)}
     parts: {${parts.join(', ')}}
@@ -230,14 +241,19 @@ Sample buildSample({
     final type = spec.types.firstWhere(owner.value.$2.contains);
     final dataFileId = owner.key;
 
-    final candidates = collatinus.lemmaLines.entries
-        .where((e) => e.value[1] == model.key && int.tryParse(e.value[5]) != null)
-        .toList()
-      ..sort((a, b) {
-        final byFrequency =
-            int.parse(b.value[5]).compareTo(int.parse(a.value[5]));
-        return byFrequency != 0 ? byFrequency : a.key.compareTo(b.key);
-      });
+    final candidates =
+        collatinus.lemmaLines.entries
+            .where(
+              (e) =>
+                  e.value[1] == model.key && int.tryParse(e.value[5]) != null,
+            )
+            .toList()
+          ..sort((a, b) {
+            final byFrequency = int.parse(
+              b.value[5],
+            ).compareTo(int.parse(a.value[5]));
+            return byFrequency != 0 ? byFrequency : a.key.compareTo(b.key);
+          });
 
     var count = 0;
     for (final candidate in candidates) {
@@ -246,25 +262,34 @@ Sample buildSample({
       final built = switch (spec.kind) {
         'verb' => _verbItem(collatinus, candidate.key, spec.build, type),
         'noun' => _nounItem(collatinus, candidate.key, spec.build, type),
-        'adjective' =>
-          _adjectiveItem(collatinus, candidate.key, spec.build, type),
+        'adjective' => _adjectiveItem(
+          collatinus,
+          candidate.key,
+          spec.build,
+          type,
+        ),
         _ => throw StateError('type_map.yaml: kind ${spec.kind}'),
       };
       if (built == null) continue;
       if (!seen.add(normalizeDiacritics(built.idSpelling))) continue;
       (extra[owner.value.$1] ??= StringBuffer()).write(built.text);
       entries.add(
-          SampleEntry(dataFileId, null, [candidate.key], synthetic: true));
+        SampleEntry(dataFileId, null, [candidate.key], synthetic: true),
+      );
       takenLemmas.add(candidate.key);
       count++;
     }
     taken[model.key] = count;
   }
 
-  return Sample({
-    for (final entry in sources.entries)
-      entry.key: '${entry.value}\n${extra[entry.key] ?? ''}',
-  }, entries, taken);
+  return Sample(
+    {
+      for (final entry in sources.entries)
+        entry.key: '${entry.value}\n${extra[entry.key] ?? ''}',
+    },
+    entries,
+    taken,
+  );
 }
 
 /// Our forms of every entry, as the engine derives them.
@@ -275,9 +300,9 @@ List<ItemForms> engineForms(Sample sample) {
   return [
     for (final entry in sample.entries)
       () {
-        final file =
-            files.singleWhere((f) => f.dataFileId == entry.dataFileId);
-        final itemId = entry.itemId ??
+        final file = files.singleWhere((f) => f.dataFileId == entry.dataFileId);
+        final itemId =
+            entry.itemId ??
             file.items
                 .singleWhere((i) => i.translation == entry.lemmas.single)
                 .id;
@@ -294,7 +319,8 @@ List<ItemForms> engineForms(Sample sample) {
             for (final f in derivation.forms.entries) f.key: f.value.variants,
           },
           internal: {
-            for (final f in derivation.internal.entries) f.key: f.value.variants,
+            for (final f in derivation.internal.entries)
+              f.key: f.value.variants,
           },
         );
       }(),
@@ -303,6 +329,5 @@ List<ItemForms> engineForms(Sample sample) {
 
 /// The axes of every data file of [sources].
 Map<String, Axes> axesOf(Map<String, String> sources) => {
-      for (final file in parseGrammarFiles(sources))
-        file.dataFileId: file.axes,
-    };
+  for (final file in parseGrammarFiles(sources)) file.dataFileId: file.axes,
+};

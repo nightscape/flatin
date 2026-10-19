@@ -14,18 +14,21 @@ void main() {
       'nouns': nouns.availableTypes.where((t) => t != 'U-Deklination').toSet(),
       'verbs': verbs.availableTypes.toSet(),
     });
-    final items = (await loadPracticeItems('lib/data/latin_nouns.yaml'))
-        .where((i) => i.type == 'U-Deklination');
+    final items = (await loadPracticeItems(
+      'lib/data/latin_nouns.yaml',
+    )).where((i) => i.type == 'U-Deklination');
     final spy = ExplainerSpy();
     tester.view.physicalSize = const Size(1200, 2400);
     tester.view.devicePixelRatio = 1.0;
     addTearDown(tester.view.reset);
 
-    await tester.pumpWidget(wrapInApp(
-      const WordClassificationScreen(),
-      explainer: spy.explainer,
-      forcedLocale: const Locale('de'),
-    ));
+    await tester.pumpWidget(
+      wrapInApp(
+        const WordClassificationScreen(),
+        explainer: spy.explainer,
+        forcedLocale: const Locale('de'),
+      ),
+    );
     await letItLoad(tester);
 
     final shown = tester

@@ -124,12 +124,7 @@ bool _beforeMatch(
   return false;
 }
 
-String _replace(
-  SandhiRuleSpec spec,
-  List<String> left,
-  int cut,
-  String right,
-) {
+String _replace(SandhiRuleSpec spec, List<String> left, int cut, String right) {
   final kept = left.sublist(0, left.length - cut).join();
   final replaced = left.sublist(left.length - cut);
   return switch (spec.replace) {
@@ -159,21 +154,24 @@ final class GrammarEngine {
         _byType[name] = file;
       }
     }
-    grammar = Grammar({
-      for (final file in files)
-        for (final type in file.declaredTypes.entries)
-          type.key: {
-            for (final form in type.value.forms.entries)
-              form.key: Template(
-                stemName: form.value.first.stemName,
-                endings: [for (final template in form.value) template.ending],
-              ),
-          },
-    }, {
-      for (final file in files)
-        for (final type in file.declaredTypes.entries)
-          if (type.value.wordClass case final wordClass?) type.key: wordClass,
-    });
+    grammar = Grammar(
+      {
+        for (final file in files)
+          for (final type in file.declaredTypes.entries)
+            type.key: {
+              for (final form in type.value.forms.entries)
+                form.key: Template(
+                  stemName: form.value.first.stemName,
+                  endings: [for (final template in form.value) template.ending],
+                ),
+            },
+      },
+      {
+        for (final file in files)
+          for (final type in file.declaredTypes.entries)
+            if (type.value.wordClass case final wordClass?) type.key: wordClass,
+      },
+    );
   }
 
   Derivation of(String dataFileId, String itemId) {
@@ -181,8 +179,7 @@ final class GrammarEngine {
     return _derive(file, file.item(itemId));
   }
 
-  GrammarType _resolved(String typeName) =>
-      _byType[typeName]!.types[typeName]!;
+  GrammarType _resolved(String typeName) => _byType[typeName]!.types[typeName]!;
 
   /// S6: the type that wrote [key]'s template — the first of the inheritance
   /// chain that declares it.
@@ -433,8 +430,10 @@ final class _ItemBuilder {
   void _deponent(Map<FormKey, _Made> forms) {
     final spec = item.deponent ?? type.deponent;
     if (spec == null) return;
-    assert(axes.axes.any((axis) => axis.id == 'genus_verbi'),
-        'S10 is checked at load');
+    assert(
+      axes.axes.any((axis) => axis.id == 'genus_verbi'),
+      'S10 is checked at load',
+    );
     final moved = <FormKey, _Made>{};
     for (final entry in forms.entries) {
       final features = axes.parseKey(entry.key);
@@ -485,11 +484,8 @@ final class _ItemBuilder {
       final rule = regular?.build(entry.key);
       made[entry.key] = _Made(
         entry.value,
-        (key) => IrregularForm(
-          formKey: key,
-          variants: entry.value,
-          regular: rule,
-        ),
+        (key) =>
+            IrregularForm(formKey: key, variants: entry.value, regular: rule),
       );
     }
   }

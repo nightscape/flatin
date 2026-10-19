@@ -86,8 +86,11 @@ class SettingsNotifier extends _$SettingsNotifier {
     required bool inRange,
   }) async {
     final currentSettings = await future;
-    final newSettings =
-        currentSettings.toggleForm(dataFileId, formKey, inRange: inRange);
+    final newSettings = currentSettings.toggleForm(
+      dataFileId,
+      formKey,
+      inRange: inRange,
+    );
     state = AsyncValue.data(newSettings);
     await _saveSettings(newSettings);
   }
@@ -111,17 +114,17 @@ class SettingsNotifier extends _$SettingsNotifier {
     required bool inRange,
   }) async {
     final currentSettings = await future;
-    final newSettings =
-        currentSettings.toggleType(dataFileId, typeName, inRange: inRange);
+    final newSettings = currentSettings.toggleType(
+      dataFileId,
+      typeName,
+      inRange: inRange,
+    );
     state = AsyncValue.data(newSettings);
     await _saveSettings(newSettings);
   }
 
   /// Set the input strategy for a data file
-  Future<void> setInputStrategy(
-    String dataFileId,
-    String strategyId,
-  ) async {
+  Future<void> setInputStrategy(String dataFileId, String strategyId) async {
     final currentSettings = await future;
     final newSettings = currentSettings.setInputStrategy(
       dataFileId,
@@ -135,10 +138,7 @@ class SettingsNotifier extends _$SettingsNotifier {
       _update((s) => s.copyWith(distractorStrategyId: id));
 
   /// Toggle a single word's selection state.
-  Future<void> toggleWord(
-    String lemma, {
-    required bool inRange,
-  }) async {
+  Future<void> toggleWord(String lemma, {required bool inRange}) async {
     final currentSettings = await future;
     final newSettings = currentSettings.toggleWord(lemma, inRange: inRange);
     state = AsyncValue.data(newSettings);

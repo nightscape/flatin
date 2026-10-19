@@ -74,16 +74,16 @@ class Settings {
     Set<String>? forcedOnWords,
     Map<String, Set<String>>? forcedOnTypes,
     Map<String, Set<String>>? forcedOnForms,
-  })  : disabledForms = disabledForms ?? {},
-        disabledFeatures = disabledFeatures ?? {},
-        disabledTypes = disabledTypes ?? {},
-        inputStrategyIds = inputStrategyIds ?? {},
-        deselectedWords = deselectedWords ?? {},
-        courseWords = courseWords ?? LessonRange.fullWords,
-        courseGrammar = courseGrammar ?? LessonRange.fullGrammar,
-        forcedOnWords = forcedOnWords ?? {},
-        forcedOnTypes = forcedOnTypes ?? {},
-        forcedOnForms = forcedOnForms ?? {} {
+  }) : disabledForms = disabledForms ?? {},
+       disabledFeatures = disabledFeatures ?? {},
+       disabledTypes = disabledTypes ?? {},
+       inputStrategyIds = inputStrategyIds ?? {},
+       deselectedWords = deselectedWords ?? {},
+       courseWords = courseWords ?? LessonRange.fullWords,
+       courseGrammar = courseGrammar ?? LessonRange.fullGrammar,
+       forcedOnWords = forcedOnWords ?? {},
+       forcedOnTypes = forcedOnTypes ?? {},
+       forcedOnForms = forcedOnForms ?? {} {
     assert(
       this.courseWords.to <= lastLesson,
       'the word range ends beyond the last lesson',
@@ -133,17 +133,16 @@ class Settings {
   }
 
   /// The lessons whose grammar is practised right now.
-  LessonRange get effectiveGrammar =>
-      grammarFollowsWords
-          ? LessonRange.grammarFollowing(courseWords)
-          : courseGrammar;
+  LessonRange get effectiveGrammar => grammarFollowsWords
+      ? LessonRange.grammarFollowing(courseWords)
+      : courseGrammar;
 
   Settings withWordRange(LessonRange range) => copyWith(
-        courseWords: range,
-        courseGrammar: grammarFollowsWords
-            ? LessonRange.grammarFollowing(range)
-            : courseGrammar,
-      );
+    courseWords: range,
+    courseGrammar: grammarFollowsWords
+        ? LessonRange.grammarFollowing(range)
+        : courseGrammar,
+  );
 
   Settings withGrammarRange(LessonRange range) {
     assert(!grammarFollowsWords, 'the grammar range follows the word range');
@@ -151,21 +150,22 @@ class Settings {
   }
 
   Settings withGrammarFollowsWords(bool follows) => copyWith(
-        grammarFollowsWords: follows,
-        courseGrammar:
-            follows ? LessonRange.grammarFollowing(courseWords) : courseGrammar,
-      );
+    grammarFollowsWords: follows,
+    courseGrammar: follows
+        ? LessonRange.grammarFollowing(courseWords)
+        : courseGrammar,
+  );
 
   /// Drops every override the learner made; the course ranges stay.
   Settings clearOverrides() => copyWith(
-        disabledForms: {},
-        disabledFeatures: {},
-        disabledTypes: {},
-        deselectedWords: {},
-        forcedOnWords: {},
-        forcedOnTypes: {},
-        forcedOnForms: {},
-      );
+    disabledForms: {},
+    disabledFeatures: {},
+    disabledTypes: {},
+    deselectedWords: {},
+    forcedOnWords: {},
+    forcedOnTypes: {},
+    forcedOnForms: {},
+  );
 
   Override overrideOfWord(String lemma) {
     if (deselectedWords.contains(lemma)) return Override.forcedOff;
@@ -227,11 +227,10 @@ class Settings {
   List<(String axisId, String code)> offFeaturesOf(
     String dataFileId,
     FormLabel label,
-  ) =>
-      [
-        for (final f in label.features.entries)
-          if (!isFeatureEnabled(dataFileId, f.key, f.value)) (f.key, f.value),
-      ];
+  ) => [
+    for (final f in label.features.entries)
+      if (!isFeatureEnabled(dataFileId, f.key, f.value)) (f.key, f.value),
+  ];
 
   /// Check if a type is enabled for a given data file
   bool isTypeEnabled(String dataFileId, String typeName) {
@@ -315,8 +314,8 @@ class Settings {
     final featureMap = json['disabledFeatures'] as Map<String, dynamic>?;
     final disabledTypesMap = json['disabledTypes'] as Map<String, dynamic>?;
     final strategyMap = json['inputStrategyIds'] as Map<String, dynamic>?;
-    final distractorId = json['distractorStrategyId'] as String? ??
-        defaultDistractorStrategyId;
+    final distractorId =
+        json['distractorStrategyId'] as String? ?? defaultDistractorStrategyId;
     distractorStrategyById(distractorId);
     final wordList = json['deselectedWords'] as List<dynamic>?;
     final wordRange = json['courseWords'] as Map<String, dynamic>?;
@@ -325,11 +324,13 @@ class Settings {
     final forcedTypeMap = json['forcedOnTypes'] as Map<String, dynamic>?;
     final forcedFormMap = json['forcedOnForms'] as Map<String, dynamic>?;
 
-    final disabledForms = disabledFormsMap?.map(
+    final disabledForms =
+        disabledFormsMap?.map(
           (key, value) => MapEntry(key, Set<String>.from(value as List)),
         ) ??
         <String, Set<String>>{};
-    final disabledTypes = disabledTypesMap?.map(
+    final disabledTypes =
+        disabledTypesMap?.map(
           (key, value) => MapEntry(key, Set<String>.from(value as List)),
         ) ??
         <String, Set<String>>{};
@@ -339,11 +340,13 @@ class Settings {
     final forcedOnWords = forcedWordList != null
         ? Set<String>.from(forcedWordList.map((e) => e as String))
         : <String>{};
-    final forcedOnTypes = forcedTypeMap?.map(
+    final forcedOnTypes =
+        forcedTypeMap?.map(
           (key, value) => MapEntry(key, Set<String>.from(value as List)),
         ) ??
         <String, Set<String>>{};
-    final forcedOnForms = forcedFormMap?.map(
+    final forcedOnForms =
+        forcedFormMap?.map(
           (key, value) => MapEntry(key, Set<String>.from(value as List)),
         ) ??
         <String, Set<String>>{};
@@ -354,7 +357,8 @@ class Settings {
 
     return Settings(
       disabledForms: disabledForms,
-      disabledFeatures: featureMap?.map(
+      disabledFeatures:
+          featureMap?.map(
             (file, axes) => MapEntry(
               file,
               (axes as Map<String, dynamic>).map(
@@ -367,12 +371,13 @@ class Settings {
       disabledTypes: disabledTypes,
       inputStrategyIds:
           strategyMap?.map((key, value) => MapEntry(key, value as String)) ??
-              {},
+          {},
       distractorStrategyId: distractorId,
       deselectedWords: deselectedWords,
       courseWords: wordRange == null ? null : LessonRange.fromJson(wordRange),
-      courseGrammar:
-          grammarRange == null ? null : LessonRange.fromJson(grammarRange),
+      courseGrammar: grammarRange == null
+          ? null
+          : LessonRange.fromJson(grammarRange),
       grammarFollowsWords: json['grammarFollowsWords'] as bool? ?? true,
       forcedOnWords: forcedOnWords,
       forcedOnTypes: forcedOnTypes,
@@ -417,10 +422,7 @@ Override _overrideIn(
   return Override.none;
 }
 
-bool _disjoint(
-  Map<String, Set<String>> on,
-  Map<String, Set<String>> off,
-) =>
+bool _disjoint(Map<String, Set<String>> on, Map<String, Set<String>> off) =>
     on.entries.every(
       (file) => file.value.intersection(off[file.key] ?? const {}).isEmpty,
     );

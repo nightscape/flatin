@@ -19,23 +19,25 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   for (final file in _keysByPartLabel.keys) {
-    test('$file: a displayed principal part equals the engine form of its key',
-        () async {
-      final items = await loadPracticeItems('lib/data/latin_$file.yaml');
-      final mismatches = <String>[];
-      for (final item in items) {
-        for (final (label, value) in item.principalParts) {
-          final keys = _keysByPartLabel[file]![label];
-          if (keys == null) continue;
-          final key = keys.where(item.formOrder.contains).firstOrNull;
-          if (key == null) continue;
-          final form = item.forms[item.formOrder.indexOf(key)];
-          if (form != value) {
-            mismatches.add('${item.id} $key: shown "$value", engine "$form"');
+    test(
+      '$file: a displayed principal part equals the engine form of its key',
+      () async {
+        final items = await loadPracticeItems('lib/data/latin_$file.yaml');
+        final mismatches = <String>[];
+        for (final item in items) {
+          for (final (label, value) in item.principalParts) {
+            final keys = _keysByPartLabel[file]![label];
+            if (keys == null) continue;
+            final key = keys.where(item.formOrder.contains).firstOrNull;
+            if (key == null) continue;
+            final form = item.forms[item.formOrder.indexOf(key)];
+            if (form != value) {
+              mismatches.add('${item.id} $key: shown "$value", engine "$form"');
+            }
           }
         }
-      }
-      expect(mismatches, isEmpty);
-    });
+        expect(mismatches, isEmpty);
+      },
+    );
   }
 }

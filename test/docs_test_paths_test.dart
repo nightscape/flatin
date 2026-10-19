@@ -46,20 +46,33 @@ void main() {
       final named = <String>{};
 
       for (final match in _command.allMatches(text)) {
-        named.addAll(match.group(1)!.split(RegExp(r'\s+')).where(_looksLikePath));
+        named.addAll(
+          match.group(1)!.split(RegExp(r'\s+')).where(_looksLikePath),
+        );
       }
       for (final match in _codeSpan.allMatches(text)) {
-        named.addAll(match.group(1)!.split(RegExp(r'\s+')).where(
-            (word) => _looksLikeTestPath(word.replaceAll(RegExp(r'[,.]$'), ''))));
+        named.addAll(
+          match
+              .group(1)!
+              .split(RegExp(r'\s+'))
+              .where(
+                (word) =>
+                    _looksLikeTestPath(word.replaceAll(RegExp(r'[,.]$'), '')),
+              ),
+        );
       }
 
-      final missing = named
-          .map((word) => word.replaceAll(RegExp(r'[,.]$'), ''))
-          .map(_upToTheGlob)
-          .where((candidate) =>
-              !File(candidate).existsSync() && !Directory(candidate).existsSync())
-          .toList()
-        ..sort();
+      final missing =
+          named
+              .map((word) => word.replaceAll(RegExp(r'[,.]$'), ''))
+              .map(_upToTheGlob)
+              .where(
+                (candidate) =>
+                    !File(candidate).existsSync() &&
+                    !Directory(candidate).existsSync(),
+              )
+              .toList()
+            ..sort();
       expect(missing, isEmpty, reason: '$path names paths that do not exist');
     });
   }

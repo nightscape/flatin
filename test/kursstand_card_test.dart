@@ -16,15 +16,10 @@ Finder _text(String key) => find.byKey(Key(key));
 String _shown(WidgetTester tester, String key) =>
     tester.widget<Text>(_text(key)).data!;
 
-Future<void> _move(
-  WidgetTester tester,
-  String slider,
-  int from,
-  int to,
-) async {
-  tester
-      .widget<RangeSlider>(_text(slider))
-      .onChanged!(RangeValues(from.toDouble(), to.toDouble()));
+Future<void> _move(WidgetTester tester, String slider, int from, int to) async {
+  tester.widget<RangeSlider>(_text(slider)).onChanged!(
+    RangeValues(from.toDouble(), to.toDouble()),
+  );
   await tester.pumpAndSettle();
   await letItLoad(tester);
 }
@@ -50,69 +45,94 @@ Future<void> _open(
   Settings settings, {
   String? page,
   Curriculum? curriculum,
-}) =>
-    openSettingsWith(
-      tester,
-      settings.toJson(),
-      page: page,
-      overrides: [
-        if (curriculum != null)
-          curriculumProvider.overrideWith((ref) async => curriculum),
-      ],
-    );
+}) => openSettingsWith(
+  tester,
+  settings.toJson(),
+  page: page,
+  overrides: [
+    if (curriculum != null)
+      curriculumProvider.overrideWith((ref) async => curriculum),
+  ],
+);
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  testWidgets('the card shows two sliders, the toggle, the summary and reset',
-      (tester) async {
+  testWidgets('the card shows two sliders, the toggle, the summary and reset', (
+    tester,
+  ) async {
     await _open(tester, Settings());
 
     expect(_text('kursstand.words.slider'), findsOneWidget);
     expect(_text('kursstand.grammar.slider'), findsOneWidget);
     expect(_text('kursstand.follow'), findsOneWidget);
-    expect(tester.widget<SwitchListTile>(_text('kursstand.follow')).value,
-        isTrue);
-    expect(_shown(tester, 'kursstand.summary'),
-        matches(r'^\d+ Wörter, \d+ Nomenformen, \d+ Verbformen$'));
+    expect(
+      tester.widget<SwitchListTile>(_text('kursstand.follow')).value,
+      isTrue,
+    );
+    expect(
+      _shown(tester, 'kursstand.summary'),
+      matches(r'^\d+ Wörter, \d+ Nomenformen, \d+ Verbformen$'),
+    );
     expect(find.text('Auf Kursstand zurücksetzen'), findsOneWidget);
-    expect(_shown(tester, 'kursstand.words.label'), 'L1 (Band 1) - L40 (Band 2)');
+    expect(
+      _shown(tester, 'kursstand.words.label'),
+      'L1 (Band 1) - L40 (Band 2)',
+    );
   });
 
-  testWidgets('the grammar slider follows the word slider while linked',
-      (tester) async {
+  testWidgets('the grammar slider follows the word slider while linked', (
+    tester,
+  ) async {
     await _open(tester, Settings());
 
     await _move(tester, 'kursstand.words.slider', 21, 23);
     expect(_shown(tester, 'kursstand.words.label'), 'L21 (Band 2) - L23');
-    expect(_shown(tester, 'kursstand.grammar.label'), 'L1 (Band 1) - L23 (Band 2)');
-    expect(tester.widget<RangeSlider>(_text('kursstand.grammar.slider')).onChanged,
-        isNull);
+    expect(
+      _shown(tester, 'kursstand.grammar.label'),
+      'L1 (Band 1) - L23 (Band 2)',
+    );
+    expect(
+      tester.widget<RangeSlider>(_text('kursstand.grammar.slider')).onChanged,
+      isNull,
+    );
   });
 
-  testWidgets('dragging the word thumbs to the ends stops at L1 and L40',
-      (tester) async {
+  testWidgets('dragging the word thumbs to the ends stops at L1 and L40', (
+    tester,
+  ) async {
     await _open(tester, Settings(courseWords: LessonRange(10, 20)));
 
     await _dragThumb(tester, 'kursstand.words.slider', 0.49, 1000);
-    expect(_shown(tester, 'kursstand.words.label'), 'L10 (Band 1) - L40 (Band 2)');
+    expect(
+      _shown(tester, 'kursstand.words.label'),
+      'L10 (Band 1) - L40 (Band 2)',
+    );
 
     await _dragThumb(tester, 'kursstand.words.slider', 0.23, -1000);
-    expect(_shown(tester, 'kursstand.words.label'), 'L1 (Band 1) - L40 (Band 2)');
-    expect((await storedSettings())['courseWords'],
-        LessonRange(1, lastLesson).toJson());
+    expect(
+      _shown(tester, 'kursstand.words.label'),
+      'L1 (Band 1) - L40 (Band 2)',
+    );
+    expect(
+      (await storedSettings())['courseWords'],
+      LessonRange(1, lastLesson).toJson(),
+    );
   });
 
-  testWidgets('dragging the grammar slider does nothing while linked',
-      (tester) async {
+  testWidgets('dragging the grammar slider does nothing while linked', (
+    tester,
+  ) async {
     await _open(tester, Settings(courseWords: LessonRange(10, 20)));
 
     final before = _shown(tester, 'kursstand.grammar.label');
     await _dragThumb(tester, 'kursstand.grammar.slider', 0.49, 1000);
 
     expect(_shown(tester, 'kursstand.grammar.label'), before);
-    expect((await storedSettings())['courseWords'],
-        LessonRange(10, 20).toJson());
+    expect(
+      (await storedSettings())['courseWords'],
+      LessonRange(10, 20).toJson(),
+    );
   });
 
   testWidgets('the grammar slider stays when unlinked', (tester) async {
@@ -128,68 +148,90 @@ void main() {
     expect(_shown(tester, 'kursstand.grammar.label'), 'L3 (Band 1) - L12');
   });
 
-  testWidgets('the top stop of the grammar slider reads später',
-      (tester) async {
+  testWidgets('the top stop of the grammar slider reads später', (
+    tester,
+  ) async {
     await _open(tester, Settings());
 
     expect(_shown(tester, 'kursstand.grammar.label'), endsWith('später'));
     expect(
-      tester
-          .widget<RangeSlider>(_text('kursstand.grammar.slider'))
-          .labels!
-          .end,
+      tester.widget<RangeSlider>(_text('kursstand.grammar.slider')).labels!.end,
       'später',
     );
   });
 
-  testWidgets('a word outside the word range is greyed and a tap forces it on',
-      (tester) async {
+  testWidgets(
+    'a word outside the word range is greyed and a tap forces it on',
+    (tester) async {
+      final lessons = await loadLessonData(lessonDataAssets);
+      final inRange = (await loadAllPracticeItems()).firstWhere(
+        (i) => lessons.lessonNumberOf(i) == 21,
+      );
+
+      await _open(
+        tester,
+        Settings(courseWords: LessonRange(21, 23)),
+        page: 'words',
+      );
+
+      expect(isChecked(tester, _text('word.rosa')), isFalse);
+      expect(
+        find.descendant(
+          of: _text('word.rosa'),
+          matching: find.text('außerhalb des Bereichs'),
+        ),
+        findsOneWidget,
+      );
+      expect(
+        titleColor(tester, _text('word.${normalizeDiacritics(inRange.lemma)}')),
+        Colors.black,
+        reason: 'a word the course has reached must not look greyed',
+      );
+      expect(
+        titleColor(tester, _text('word.rosa')),
+        isNot(Colors.black),
+        reason: 'an out-of-range word row must look greyed',
+      );
+
+      await tester.tap(_text('word.rosa'));
+      await tester.pumpAndSettle();
+      await letItLoad(tester);
+
+      expect(isChecked(tester, _text('word.rosa')), isTrue);
+      expect((await storedSettings())['forcedOnWords'], ['rosa']);
+    },
+  );
+
+  testWidgets('a word whose type is taught later says from which lesson', (
+    tester,
+  ) async {
     final lessons = await loadLessonData(lessonDataAssets);
-    final inRange = (await loadAllPracticeItems())
-        .firstWhere((i) => lessons.lessonNumberOf(i) == 21);
+    final item = (await loadAllPracticeItems()).firstWhere(
+      (i) => lessons.lessonNumberOf(i) == 21,
+    );
+    final curriculum = await lateTypeCurriculum(item.dataFileId, item.type, 32);
 
-    await _open(tester, Settings(courseWords: LessonRange(21, 23)),
-        page: 'words');
+    await _open(
+      tester,
+      Settings(courseWords: LessonRange(21, 23)),
+      page: 'words',
+      curriculum: curriculum,
+    );
 
-    expect(isChecked(tester, _text('word.rosa')), isFalse);
+    final tile = _text('word.${normalizeDiacritics(item.lemma)}');
     expect(
-      find.descendant(
-          of: _text('word.rosa'), matching: find.text('außerhalb des Bereichs')),
+      find.descendant(of: tile, matching: find.text('ab Lektion 32')),
       findsOneWidget,
     );
     expect(
-      titleColor(tester, _text('word.${normalizeDiacritics(inRange.lemma)}')),
-      Colors.black,
-      reason: 'a word the course has reached must not look greyed',
+      find.descendant(of: tile, matching: find.text('außerhalb des Bereichs')),
+      findsNothing,
     );
-    expect(titleColor(tester, _text('word.rosa')), isNot(Colors.black),
-        reason: 'an out-of-range word row must look greyed');
-
-    await tester.tap(_text('word.rosa'));
-    await tester.pumpAndSettle();
-    await letItLoad(tester);
-
-    expect(isChecked(tester, _text('word.rosa')), isTrue);
-    expect((await storedSettings())['forcedOnWords'], ['rosa']);
-  });
-
-  testWidgets('a word whose type is taught later says from which lesson',
-      (tester) async {
-    final lessons = await loadLessonData(lessonDataAssets);
-    final item = (await loadAllPracticeItems())
-        .firstWhere((i) => lessons.lessonNumberOf(i) == 21);
-    final curriculum = await lateTypeCurriculum(item.dataFileId, item.type, 32);
-
-    await _open(tester, Settings(courseWords: LessonRange(21, 23)),
-        page: 'words', curriculum: curriculum);
-
-    final tile = _text('word.${normalizeDiacritics(item.lemma)}');
-    expect(find.descendant(of: tile, matching: find.text('ab Lektion 32')),
-        findsOneWidget);
-    expect(find.descendant(of: tile, matching: find.text('außerhalb des Bereichs')),
-        findsNothing);
-    expect(titleColor(tester, tile), isNot(Colors.black),
-        reason: 'a word whose type is taught later must look greyed');
+    expect(
+      titleColor(tester, tile),
+      isNot(Colors.black),
+      reason: 'a word whose type is taught later must look greyed',
+    );
 
     expect(isChecked(tester, tile), isTrue);
     await tester.tap(tile);
@@ -202,8 +244,9 @@ void main() {
 
   testWidgets('a type forced on clears the gap of its word', (tester) async {
     final lessons = await loadLessonData(lessonDataAssets);
-    final item = (await loadAllPracticeItems())
-        .firstWhere((i) => lessons.lessonNumberOf(i) == 21);
+    final item = (await loadAllPracticeItems()).firstWhere(
+      (i) => lessons.lessonNumberOf(i) == 21,
+    );
     final curriculum = await lateTypeCurriculum(item.dataFileId, item.type, 32);
 
     await _open(
@@ -219,13 +262,16 @@ void main() {
     );
 
     final tile = _text('word.${normalizeDiacritics(item.lemma)}');
-    expect(find.descendant(of: tile, matching: find.byType(Text)),
-        findsOneWidget);
+    expect(
+      find.descendant(of: tile, matching: find.byType(Text)),
+      findsOneWidget,
+    );
     expect(titleColor(tester, tile), Colors.black);
   });
 
-  testWidgets('a word forced on outside the word range is not greyed',
-      (tester) async {
+  testWidgets('a word forced on outside the word range is not greyed', (
+    tester,
+  ) async {
     await _open(
       tester,
       Settings(courseWords: LessonRange(21, 23), forcedOnWords: {'rosa'}),
@@ -236,40 +282,50 @@ void main() {
     expect(titleColor(tester, _text('word.rosa')), Colors.black);
     expect(
       find.descendant(
-          of: _text('word.rosa'), matching: find.text('außerhalb des Bereichs')),
+        of: _text('word.rosa'),
+        matching: find.text('außerhalb des Bereichs'),
+      ),
       findsNothing,
     );
   });
 
-  testWidgets('a word whose forms are all taught later says from which lesson',
-      (tester) async {
+  testWidgets(
+    'a word whose forms are all taught later says from which lesson',
+    (tester) async {
+      final lessons = await loadLessonData(lessonDataAssets);
+      final item = (await loadAllPracticeItems()).firstWhere(
+        (i) => lessons.lessonNumberOf(i) == 21,
+      );
+      final curriculum = await lateFormsCurriculum(item.dataFileId, 30);
+
+      await _open(
+        tester,
+        Settings(courseWords: LessonRange(21, 23)),
+        page: 'words',
+        curriculum: curriculum,
+      );
+
+      final tile = _text('word.${normalizeDiacritics(item.lemma)}');
+      expect(
+        find.descendant(of: tile, matching: find.text('ab Lektion 30')),
+        findsOneWidget,
+      );
+      expect(titleColor(tester, tile), isNot(Colors.black));
+    },
+  );
+
+  testWidgets('a grammar gap below the grammar range names the grammar', (
+    tester,
+  ) async {
     final lessons = await loadLessonData(lessonDataAssets);
-    final item = (await loadAllPracticeItems())
-        .firstWhere((i) => lessons.lessonNumberOf(i) == 21);
-    final curriculum = await lateFormsCurriculum(item.dataFileId, 30);
-
-    await _open(tester, Settings(courseWords: LessonRange(21, 23)),
-        page: 'words', curriculum: curriculum);
-
-    final tile = _text('word.${normalizeDiacritics(item.lemma)}');
-    expect(find.descendant(of: tile, matching: find.text('ab Lektion 30')),
-        findsOneWidget);
-    expect(titleColor(tester, tile), isNot(Colors.black));
-  });
-
-  testWidgets('a grammar gap below the grammar range names the grammar',
-      (tester) async {
-    final lessons = await loadLessonData(lessonDataAssets);
-    final item = (await loadAllPracticeItems())
-        .firstWhere((i) => lessons.lessonNumberOf(i) == 21);
+    final item = (await loadAllPracticeItems()).firstWhere(
+      (i) => lessons.lessonNumberOf(i) == 21,
+    );
     final curriculum = await lateTypeCurriculum(item.dataFileId, item.type, 2);
 
     await _open(
       tester,
-      Settings(
-        grammarFollowsWords: false,
-        courseGrammar: LessonRange(5, 40),
-      ),
+      Settings(grammarFollowsWords: false, courseGrammar: LessonRange(5, 40)),
       page: 'words',
       curriculum: curriculum,
     );
@@ -277,13 +333,16 @@ void main() {
     final tile = _text('word.${normalizeDiacritics(item.lemma)}');
     expect(
       find.descendant(
-          of: tile, matching: find.text('Grammatik außerhalb des Bereichs')),
+        of: tile,
+        matching: find.text('Grammatik außerhalb des Bereichs'),
+      ),
       findsOneWidget,
     );
   });
 
-  testWidgets('reset clears the overrides and keeps the ranges',
-      (tester) async {
+  testWidgets('reset clears the overrides and keeps the ranges', (
+    tester,
+  ) async {
     await _open(
       tester,
       Settings(
@@ -322,9 +381,11 @@ void main() {
 
     for (final page in ['words', 'nouns', 'verbs', 'input']) {
       await openSettingsPage(tester, page);
-      expect(_text('settings.${page == 'input' ? 'input' : page}.title'),
-          findsOneWidget,
-          reason: page);
+      expect(
+        _text('settings.${page == 'input' ? 'input' : page}.title'),
+        findsOneWidget,
+        reason: page,
+      );
       await tester.pageBack();
       await tester.pumpAndSettle();
     }

@@ -52,9 +52,10 @@ void main() {
         int checked = 0;
         final parents = await _parentTypes(asset);
         for (final item in await loadPracticeItems(asset)) {
-          for (final formKey in item.formOrder.indexed
-              .where((e) => e.$1 % 7 == 0)
-              .map((e) => e.$2)) {
+          for (final formKey
+              in item.formOrder.indexed
+                  .where((e) => e.$1 % 7 == 0)
+                  .map((e) => e.$2)) {
             final asked = item.derivation.forms[formKey]!;
             for (final entry
                 in item.derivation.grammar.templatesByType.entries) {
@@ -69,13 +70,17 @@ void main() {
               final candidate = stem + template.endings.first;
               // Earlier steps own these answers: they are a form of the word
               // itself, or the regular variant of an irregular form.
-              if (List.generate(item.formOrder.length, (j) => j)
-                  .any((j) => item.accepts(j, candidate))) {
+              if (List.generate(
+                item.formOrder.length,
+                (j) => j,
+              ).any((j) => item.accepts(j, candidate))) {
                 continue;
               }
               if (asked is IrregularForm &&
                   asked.regular != null &&
-                  asked.regular!.variants.any((v) => norm(v) == norm(candidate))) {
+                  asked.regular!.variants.any(
+                    (v) => norm(v) == norm(candidate),
+                  )) {
                 continue;
               }
               checked++;
@@ -129,8 +134,11 @@ void main() {
             if (macronised != null) {
               expect(item.accepts(i, macronised), isTrue, reason: where);
               expect(
-                explainCorrectAnswer(item, formKey, macronised)
-                    .map((line) => line.params['result']),
+                explainCorrectAnswer(
+                  item,
+                  formKey,
+                  macronised,
+                ).map((line) => line.params['result']),
                 [item.forms[i]],
                 reason: where,
               );
@@ -174,11 +182,7 @@ void main() {
     });
 
     test('dominusorum keeps the whole nominative as stem', () {
-      final result = diagnose(
-        byWord('dominus'),
-        'gen.pl',
-        'dominusorum',
-      );
+      final result = diagnose(byWord('dominus'), 'gen.pl', 'dominusorum');
       expect(
         result,
         isA<WrongStem>()
@@ -187,19 +191,22 @@ void main() {
       );
     });
 
-    test('the ending of an inheriting type is named by its parent only', () async {
-      final verbs = await loadPracticeItems(_assets.last);
-      final item = verbs.firstWhere((i) => i.lemma == 'amāre');
-      final result = diagnose(item, 'ind.praes.akt.1.sg', 'amāō');
-      expect(
-        result,
-        isA<EndingOfOtherType>().having(
-          (d) => d.types,
-          'types',
-          orderedEquals(['I-Konjugation', 'Konsonantische']),
-        ),
-      );
-    });
+    test(
+      'the ending of an inheriting type is named by its parent only',
+      () async {
+        final verbs = await loadPracticeItems(_assets.last);
+        final item = verbs.firstWhere((i) => i.lemma == 'amāre');
+        final result = diagnose(item, 'ind.praes.akt.1.sg', 'amāō');
+        expect(
+          result,
+          isA<EndingOfOtherType>().having(
+            (d) => d.types,
+            'types',
+            orderedEquals(['I-Konjugation', 'Konsonantische']),
+          ),
+        );
+      },
+    );
   });
 }
 

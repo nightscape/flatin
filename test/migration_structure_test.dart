@@ -34,15 +34,17 @@ Map<String, List<LegacyItem>> _legacy() {
 
 Map<String, dynamic> _golden(String file) =>
     (jsonDecode(File('test/golden/legacy_v1.json').readAsStringSync())
-        as Map<String, dynamic>)[_oldPaths[file]!] as Map<String, dynamic>;
+            as Map<String, dynamic>)[_oldPaths[file]!]
+        as Map<String, dynamic>;
 
 List<String> _oldFormKeys(String file) =>
     (_golden(file)['formLabelKeys'] as List).cast<String>();
 
 void main() {
   final legacy = _legacy();
-  final map =
-      MigrationMap.parse(File('lib/data/migration_v2.yaml').readAsStringSync());
+  final map = MigrationMap.parse(
+    File('lib/data/migration_v2.yaml').readAsStringSync(),
+  );
   final files = {
     for (final file in parseGrammarFiles({
       for (final path in _oldPaths.values) path: File(path).readAsStringSync(),
@@ -75,15 +77,21 @@ void main() {
         expect(types, contains(item.type), reason: item.id);
       }
       final newKeys = [for (final keys in formKeys.values) ...keys];
-      expect(newKeys.toSet().length, newKeys.length,
-          reason: '${entry.key}: a new form key is mapped twice');
+      expect(
+        newKeys.toSet().length,
+        newKeys.length,
+        reason: '${entry.key}: a new form key is mapped twice',
+      );
     }
   });
 
   test('the v0 key universe is what the old settings screen offered', () {
     for (final file in _oldPaths.keys) {
-      expect(map.v0FormUniverse[file], _golden(file)['formOrderAll'],
-          reason: file);
+      expect(
+        map.v0FormUniverse[file],
+        _golden(file)['formOrderAll'],
+        reason: file,
+      );
       for (final key in map.v0FormUniverse[file]!) {
         expect(map.formKeys[file], contains(key), reason: '$file $key');
       }
@@ -117,8 +125,11 @@ void main() {
       final file = files[entry.key]!;
       for (final item in entry.value) {
         final newId = (map.itemIds[item.id] ?? item.id).split(':').last;
-        expect(file.item(newId).typeName, map.types[entry.key]![item.type],
-            reason: item.id);
+        expect(
+          file.item(newId).typeName,
+          map.types[entry.key]![item.type],
+          reason: item.id,
+        );
       }
     }
   });
@@ -148,8 +159,11 @@ void main() {
           for (final forms in type.forms.values)
             for (final template in forms) template.ending,
       ];
-      expect(templates.where((e) => e.contains(RegExp('[āēīōū]'))), isNotEmpty,
-          reason: file.path);
+      expect(
+        templates.where((e) => e.contains(RegExp('[āēīōū]'))),
+        isNotEmpty,
+        reason: file.path,
+      );
     }
     expect(
       files['nouns']!.types['A-Deklination']!.forms['abl.sg']!.single.ending,

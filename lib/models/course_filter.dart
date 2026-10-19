@@ -40,8 +40,8 @@ final class CourseFilter {
   bool wordInRange(PracticeItem item) =>
       settings.courseWords.contains(lessons.lessonNumberOf(item));
 
-  bool typeInRange(String dataFileId, String typeName) => curriculum
-      .taughtType(dataFileId, typeName, settings.effectiveGrammar);
+  bool typeInRange(String dataFileId, String typeName) =>
+      curriculum.taughtType(dataFileId, typeName, settings.effectiveGrammar);
 
   bool formInRange(String dataFileId, FormLabel label) =>
       curriculum.taughtForm(dataFileId, label.key, settings.effectiveGrammar);
@@ -76,9 +76,9 @@ final class CourseFilter {
       formSelected(dataFileId, label);
 
   Set<FormKey> practicedForms(String dataFileId, List<FormLabel> labels) => {
-        for (final label in labels)
-          if (formPracticed(dataFileId, label)) label.key,
-      };
+    for (final label in labels)
+      if (formPracticed(dataFileId, label)) label.key,
+  };
 
   bool itemPracticed(PracticeItem item) =>
       wordPracticed(item) && typePracticed(item.dataFileId, item.type);
@@ -131,8 +131,8 @@ final class CourseFilter {
 
   CourseGap _grammarGap(int grammarLesson, int wordLesson) =>
       grammarLesson > settings.effectiveGrammar.to
-          ? FromLesson(grammarLesson > wordLesson ? grammarLesson : wordLesson)
-          : const GrammarOutsideRange();
+      ? FromLesson(grammarLesson > wordLesson ? grammarLesson : wordLesson)
+      : const GrammarOutsideRange();
 
   /// The live counts of the course card: the words practice offers and, per
   /// data file, the practised forms they add up to.

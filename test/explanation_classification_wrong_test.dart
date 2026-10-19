@@ -7,17 +7,18 @@ import 'support/explanation_harness.dart';
 import 'support/word_classification_harness.dart';
 
 void main() {
-  testWidgets('every wrong pick gets its own explanation line',
-      (tester) async {
+  testWidgets('every wrong pick gets its own explanation line', (tester) async {
     final nouns = await getFormMetadata('lib/data/latin_nouns.yaml');
     final verbs = await getFormMetadata('lib/data/latin_verbs.yaml');
     await seedNothingDue({
       'nouns': nouns.availableTypes.toSet(),
-      'verbs':
-          verbs.availableTypes.where((t) => t != 'Mischkonjugation').toSet(),
+      'verbs': verbs.availableTypes
+          .where((t) => t != 'Mischkonjugation')
+          .toSet(),
     });
-    final item = (await loadPracticeItems('lib/data/latin_verbs.yaml'))
-        .singleWhere((i) => i.id == 'verbs:capere');
+    final item = (await loadPracticeItems(
+      'lib/data/latin_verbs.yaml',
+    )).singleWhere((i) => i.id == 'verbs:capere');
     // Its macron-free spelling is also the spelling of the ablative.
     const shownKey = 'part.fut.akt.sg.nom.f';
     final spy = ExplainerSpy();
@@ -25,11 +26,13 @@ void main() {
     tester.view.devicePixelRatio = 1.0;
     addTearDown(tester.view.reset);
 
-    await tester.pumpWidget(wrapInApp(
-      WordClassificationScreen(item: item, formKey: shownKey),
-      explainer: spy.explainer,
-      forcedLocale: const Locale('de'),
-    ));
+    await tester.pumpWidget(
+      wrapInApp(
+        WordClassificationScreen(item: item, formKey: shownKey),
+        explainer: spy.explainer,
+        forcedLocale: const Locale('de'),
+      ),
+    );
     await letItLoad(tester);
 
     final shown = tester
@@ -70,7 +73,11 @@ void main() {
     expect(spy.pickedCalls[0].$1?.displayName, wrong.displayName);
     expect(spy.pickedCalls[1].$1, isNull);
     expect(spy.pickedCalls[1].$2, 'Imperativ Präsens Aktiv 1. Person Singular');
-    expect(find.text('Imperativ Präsens Aktiv 1. Person Singular gibt es bei diesem Wort nicht'),
-        findsOneWidget);
+    expect(
+      find.text(
+        'Imperativ Präsens Aktiv 1. Person Singular gibt es bei diesem Wort nicht',
+      ),
+      findsOneWidget,
+    );
   });
 }

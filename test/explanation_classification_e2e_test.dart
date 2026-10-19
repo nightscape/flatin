@@ -7,8 +7,9 @@ import 'support/explanation_harness.dart';
 import 'support/word_classification_harness.dart';
 
 void main() {
-  testWidgets('the real explainer explains a fixed classification item',
-      (tester) async {
+  testWidgets('the real explainer explains a fixed classification item', (
+    tester,
+  ) async {
     await seedNothingDue({});
     final items = await loadPracticeItems('lib/data/latin_nouns.yaml');
     final dominus = items.firstWhere((i) => i.lemma == 'dominus');
@@ -16,14 +17,18 @@ void main() {
     tester.view.devicePixelRatio = 1.0;
     addTearDown(tester.view.reset);
 
-    await tester.pumpWidget(wrapInApp(
-      WordClassificationScreen(item: dominus, formKey: 'gen.pl'),
-      forcedLocale: const Locale('de'),
-    ));
+    await tester.pumpWidget(
+      wrapInApp(
+        WordClassificationScreen(item: dominus, formKey: 'gen.pl'),
+        forcedLocale: const Locale('de'),
+      ),
+    );
     await letItLoad(tester);
 
     expect(
-      tester.widget<Text>(find.byKey(const Key('wordClassification.word'))).data,
+      tester
+          .widget<Text>(find.byKey(const Key('wordClassification.word')))
+          .data,
       'dominōrum',
     );
 
@@ -33,10 +38,15 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byKey(const Key('explanation.classification')), findsOneWidget);
-    expect(find.text('dominōrum = domin + ōrum → Genitiv Plural'), findsNothing);
     expect(
-      find.text('Du hast Genitiv Singular gewählt – das wäre dominī '
-          '(domin + ī)'),
+      find.text('dominōrum = domin + ōrum → Genitiv Plural'),
+      findsNothing,
+    );
+    expect(
+      find.text(
+        'Du hast Genitiv Singular gewählt – das wäre dominī '
+        '(domin + ī)',
+      ),
       findsOneWidget,
     );
   });

@@ -11,7 +11,8 @@ import 'package:integration_test/integration_test.dart';
 bool _isKeyed(Widget widget) => widget.key is ValueKey<String>;
 
 bool _hasKeyPrefix(Widget widget, String prefix) =>
-    _isKeyed(widget) && (widget.key as ValueKey<String>).value.startsWith(prefix);
+    _isKeyed(widget) &&
+    (widget.key as ValueKey<String>).value.startsWith(prefix);
 
 @StepDefinition()
 class AppSteps {
@@ -343,9 +344,7 @@ class AppSteps {
   @And('the checkbox state should change')
   Future<void> checkboxStateShouldChange(WidgetTester tester) async {
     await tester.pumpAndSettle();
-    final tile = tester.widget<CheckboxListTile>(
-      find.byKey(_toggledCheckbox!),
-    );
+    final tile = tester.widget<CheckboxListTile>(find.byKey(_toggledCheckbox!));
     expect(tile.value, isNot(_valueBeforeToggle));
   }
 

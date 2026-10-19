@@ -9,9 +9,9 @@ import 'package:latin_practice/data/lesson_data.dart';
 void _serve(String path, String yaml) {
   TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
       .setMockMessageHandler('flutter/assets', (message) async {
-    if (utf8.decode(message!.buffer.asUint8List()) != path) return null;
-    return ByteData.sublistView(Uint8List.fromList(utf8.encode(yaml)));
-  });
+        if (utf8.decode(message!.buffer.asUint8List()) != path) return null;
+        return ByteData.sublistView(Uint8List.fromList(utf8.encode(yaml)));
+      });
 }
 
 void main() {
@@ -30,9 +30,17 @@ void main() {
 
     expect(
       loadLessonData(['bad.yaml']),
-      throwsA(isStateError.having((e) => e.message, 'message',
-          allOf(contains('bad.yaml'), contains('Lektion 1'),
-              contains('is, ea, id')))),
+      throwsA(
+        isStateError.having(
+          (e) => e.message,
+          'message',
+          allOf(
+            contains('bad.yaml'),
+            contains('Lektion 1'),
+            contains('is, ea, id'),
+          ),
+        ),
+      ),
     );
   });
 

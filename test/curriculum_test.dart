@@ -162,7 +162,8 @@ void main() {
       expect(
         () => parseNouns(order.join()),
         conflict,
-        reason: order.map((e) => RegExp(r'lesson: (\d+)').firstMatch(e)![1])
+        reason: order
+            .map((e) => RegExp(r'lesson: (\d+)').firstMatch(e)![1])
             .join(' '),
       );
     }
@@ -245,11 +246,7 @@ void main() {
     types: [A-Deklination, O-Deklination]
 '''),
         throwsA(
-          isStateError.having(
-            (e) => e.message,
-            'message',
-            contains('outside'),
-          ),
+          isStateError.having((e) => e.message, 'message', contains('outside')),
         ),
         reason: 'lesson $lesson',
       );
@@ -269,13 +266,19 @@ void main() {
 ''');
 
     expect(
-      curriculum.taughtForm('nouns', nounLabel('nom', 'sg').key,
-          LessonRange(1, 5)),
+      curriculum.taughtForm(
+        'nouns',
+        nounLabel('nom', 'sg').key,
+        LessonRange(1, 5),
+      ),
       isTrue,
     );
     expect(
-      curriculum.taughtForm('nouns', nounLabel('nom', 'sg').key,
-          LessonRange(1, 2)),
+      curriculum.taughtForm(
+        'nouns',
+        nounLabel('nom', 'sg').key,
+        LessonRange(1, 2),
+      ),
       isFalse,
     );
     expect(

@@ -21,6 +21,9 @@ Future<CourseFilter> courseFilter(Ref ref) async {
   final settings = await ref.watch(settingsProvider.future);
   final lessons = await ref.watch(lessonDataProvider.future);
   assertLessonsCoverItems(lessons, await loadAllPracticeItems());
-  return CourseFilter(settings, await ref.watch(curriculumProvider.future),
-      lessons);
+  return CourseFilter(
+    settings,
+    await ref.watch(curriculumProvider.future),
+    lessons,
+  );
 }

@@ -30,31 +30,34 @@ final _byHand = Settings(
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  test('a hand-made selection practises what the old readers practised',
-      () async {
-    seedSettings(_byHand);
-    final container = ProviderContainer();
-    addTearDown(container.dispose);
+  test(
+    'a hand-made selection practises what the old readers practised',
+    () async {
+      seedSettings(_byHand);
+      final container = ProviderContainer();
+      addTearDown(container.dispose);
 
-    final items = await loadAllPracticeItems();
-    final expected = items.where((item) => legacyItemSelected(_byHand, item));
-    expect(expected, isNotEmpty);
-    expect(expected.length, lessThan(items.length));
+      final items = await loadAllPracticeItems();
+      final expected = items.where((item) => legacyItemSelected(_byHand, item));
+      expect(expected, isNotEmpty);
+      expect(expected.length, lessThan(items.length));
 
-    final practicable =
-        await container.read(practicableItemsByTypeProvider.future);
-    final shown = {
-      for (final byType in practicable.values) ...byType.map((i) => i.id),
-    };
-    expect(shown, expected.map((item) => item.id).toSet());
-
-    final filter = await container.read(courseFilterProvider.future);
-    for (final item in expected) {
-      expect(
-        filter.practicedForms(item.dataFileId, item.formLabels),
-        legacyEnabledForms(_byHand, item.dataFileId, item.formLabels),
-        reason: item.id,
+      final practicable = await container.read(
+        practicableItemsByTypeProvider.future,
       );
-    }
-  });
+      final shown = {
+        for (final byType in practicable.values) ...byType.map((i) => i.id),
+      };
+      expect(shown, expected.map((item) => item.id).toSet());
+
+      final filter = await container.read(courseFilterProvider.future);
+      for (final item in expected) {
+        expect(
+          filter.practicedForms(item.dataFileId, item.formLabels),
+          legacyEnabledForms(_byHand, item.dataFileId, item.formLabels),
+          reason: item.id,
+        );
+      }
+    },
+  );
 }

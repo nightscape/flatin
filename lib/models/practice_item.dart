@@ -52,20 +52,17 @@ class PracticeItem {
     required this.formOrder,
     required this.derivation,
     List<String>? inferredForms,
-  })  : inferredForms = inferredForms ?? forms,
-        assert(principalParts.isNotEmpty),
-        assert(forms.length == formOrder.length),
-        assert(formLabels.length == formOrder.length),
-        assert(acceptedForms.length == formOrder.length),
-        assert(
-          () {
-            for (int i = 0; i < forms.length; i++) {
-              if (acceptedForms[i].first != forms[i]) return false;
-            }
-            return true;
-          }(),
-          'the first accepted spelling is the shown one',
-        );
+  }) : inferredForms = inferredForms ?? forms,
+       assert(principalParts.isNotEmpty),
+       assert(forms.length == formOrder.length),
+       assert(formLabels.length == formOrder.length),
+       assert(acceptedForms.length == formOrder.length),
+       assert(() {
+         for (int i = 0; i < forms.length; i++) {
+           if (acceptedForms[i].first != forms[i]) return false;
+         }
+         return true;
+       }(), 'the first accepted spelling is the shown one');
 
   /// Get all forms that need to be practiced
   List<String> get allForms => forms;
@@ -80,7 +77,8 @@ class PracticeItem {
     List<FormLabel> labels,
     List<String> inferredForms,
     List<String> keys,
-  }) filterForms(Set<String> enabledFormKeys) {
+  })
+  filterForms(Set<String> enabledFormKeys) {
     final filteredForms = <String>[];
     final filteredLabels = <FormLabel>[];
     final filteredInferred = <String>[];

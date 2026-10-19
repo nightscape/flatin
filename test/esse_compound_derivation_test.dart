@@ -22,10 +22,10 @@ const _infinitives = ['posse', 'abesse', 'adesse', 'dēesse', 'praeesse'];
 const _goldenPath = 'test/fixtures/esse_compound_forms.txt';
 
 List<String> _formLines(Map<String, PracticeItem> byId) => [
-      for (final id in _compounds)
-        for (final entry in byId[id]!.derivation.forms.entries)
-          '$id\t${entry.key}\t${entry.value.variants.join(' / ')}',
-    ];
+  for (final id in _compounds)
+    for (final entry in byId[id]!.derivation.forms.entries)
+      '$id\t${entry.key}\t${entry.value.variants.join(' / ')}',
+];
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -54,7 +54,9 @@ void main() {
           entry.key: entry.value.runtimeType.toString(),
       };
       expect(
-        kinds.entries.where((e) => e.value == 'IrregularForm').map((e) => e.key),
+        kinds.entries
+            .where((e) => e.value == 'IrregularForm')
+            .map((e) => e.key),
         isEmpty,
         reason: '$id: these keys are written out instead of derived',
       );
@@ -166,20 +168,22 @@ void main() {
     },
   );
 
-  test('posse writes the contracted konj. impf. from its present stem',
-      () async {
-    final items = await loadPracticeItems('lib/data/latin_verbs.yaml');
-    final posse = items.singleWhere((item) => item.id == 'verbs:posse');
+  test(
+    'posse writes the contracted konj. impf. from its present stem',
+    () async {
+      final items = await loadPracticeItems('lib/data/latin_verbs.yaml');
+      final posse = items.singleWhere((item) => item.id == 'verbs:posse');
 
-    for (final (key, expected) in const [
-      ('konj.impf.akt.1.sg', 'possem'),
-      ('konj.impf.akt.2.pl', 'possētis'),
-      ('inf.praes.akt', 'posse'),
-    ]) {
-      final form = posse.derivation.forms[key];
-      expect(form, isA<GeneratedForm>(), reason: key);
-      expect((form as GeneratedForm).stemName, 'praesens', reason: key);
-      expect(form.result, expected, reason: key);
-    }
-  });
+      for (final (key, expected) in const [
+        ('konj.impf.akt.1.sg', 'possem'),
+        ('konj.impf.akt.2.pl', 'possētis'),
+        ('inf.praes.akt', 'posse'),
+      ]) {
+        final form = posse.derivation.forms[key];
+        expect(form, isA<GeneratedForm>(), reason: key);
+        expect((form as GeneratedForm).stemName, 'praesens', reason: key);
+        expect(form.result, expected, reason: key);
+      }
+    },
+  );
 }

@@ -4,8 +4,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'support/stored_settings.dart';
 
 void main() {
-  testWidgets('the word page lists the lessons of the second volume',
-      (tester) async {
+  testWidgets('the word page lists the lessons of the second volume', (
+    tester,
+  ) async {
     await openSettingsWith(tester, {}, page: 'words');
 
     for (final lesson in ['Lektion 21', 'Lektion 40']) {

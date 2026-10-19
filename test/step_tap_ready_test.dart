@@ -13,20 +13,23 @@ import 'support/word_classification_harness.dart';
 /// practice screen — the failure a loaded machine produces. `I tap on`
 /// therefore waits for the entry to become tappable.
 void main() {
-  testWidgets('tapping an entry whose data is still loading opens the screen',
-      (tester) async {
+  testWidgets('tapping an entry whose data is still loading opens the screen', (
+    tester,
+  ) async {
     await seedEverythingDue(const {});
     final nouns = await loadPracticeItems('lib/data/latin_nouns.yaml');
 
-    await tester.pumpWidget(wrapInApp(
-      const HomeScreen(),
-      overrides: [
-        practicableItemsByTypeProvider.overrideWith((ref) async {
-          await Future<void>.delayed(const Duration(milliseconds: 500));
-          return {'nouns': nouns, 'verbs': <PracticeItem>[]};
-        }),
-      ],
-    ));
+    await tester.pumpWidget(
+      wrapInApp(
+        const HomeScreen(),
+        overrides: [
+          practicableItemsByTypeProvider.overrideWith((ref) async {
+            await Future<void>.delayed(const Duration(milliseconds: 500));
+            return {'nouns': nouns, 'verbs': <PracticeItem>[]};
+          }),
+        ],
+      ),
+    );
     // The steps before the tap settle the home screen, so the entry is on
     // screen — with its data still on the way.
     await tester.pump(const Duration(milliseconds: 100));

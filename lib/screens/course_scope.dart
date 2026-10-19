@@ -17,7 +17,8 @@ class CourseScope extends ConsumerWidget {
     BuildContext context,
     CourseFilter filter,
     List<PracticeItem> items,
-  ) builder;
+  )
+  builder;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

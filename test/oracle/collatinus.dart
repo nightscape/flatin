@@ -206,10 +206,9 @@ class Collatinus {
   Map<int, List<String>> inflect(String lemmaKey) {
     final fields = lemmaLines[lemmaKey];
     if (fields == null) throw ArgumentError('no Collatinus lemma "$lemmaKey"');
-    final canonical = (fields[0].contains('=')
-            ? fields[0].split('=')[1]
-            : fields[0])
-        .replaceAll(RegExp(r'\d'), '');
+    final canonical =
+        (fields[0].contains('=') ? fields[0].split('=')[1] : fields[0])
+            .replaceAll(RegExp(r'\d'), '');
     final model = models[fields[1]]!;
 
     final radicals = <int, List<String>>{};

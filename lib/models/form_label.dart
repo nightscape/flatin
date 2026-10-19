@@ -255,7 +255,8 @@ String describeLabels(List<FormLabel> labels) {
       () => (label.features, <String>[]),
     );
     final code = label.features[axes.mergeAxis];
-    if (code == null || axes.byId(axes.mergeAxis).hiddenInLabel.contains(code)) {
+    if (code == null ||
+        axes.byId(axes.mergeAxis).hiddenInLabel.contains(code)) {
       continue;
     }
     final text = axes.displayOf(axes.mergeAxis, label.features);

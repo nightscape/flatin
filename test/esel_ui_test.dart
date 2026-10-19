@@ -24,7 +24,8 @@ const _gen = 'gen.pl';
 Future<PracticeItem> _item(String asset, String lemma) async =>
     (await loadPracticeItems(asset)).firstWhere((i) => i.lemma == lemma);
 
-Future<PracticeItem> _dominus() => _item('lib/data/latin_nouns.yaml', 'dominus');
+Future<PracticeItem> _dominus() =>
+    _item('lib/data/latin_nouns.yaml', 'dominus');
 
 Future<PracticeItem> _amare() => _item('lib/data/latin_verbs.yaml', 'amāre');
 
@@ -39,10 +40,9 @@ Future<void> _pumpChecked(
   tester.view.physicalSize = const Size(1200, 12000);
   tester.view.devicePixelRatio = 1.0;
   addTearDown(tester.view.reset);
-  await tester.pumpWidget(wrapInApp(
-    PracticeScreen(item: item),
-    forcedLocale: const Locale('de'),
-  ));
+  await tester.pumpWidget(
+    wrapInApp(PracticeScreen(item: item), forcedLocale: const Locale('de')),
+  );
   await letItLoad(tester);
   for (final entry in wrong.entries) {
     await tester.enterText(
@@ -56,7 +56,8 @@ Future<void> _pumpChecked(
 
 List<EselStepRow> _rows(WidgetTester tester, String scope) => tester
     .widgetList<EselStepRow>(
-        find.byWidgetPredicate((w) => w is EselStepRow && w.scope == scope))
+      find.byWidgetPredicate((w) => w is EselStepRow && w.scope == scope),
+    )
     .toList();
 
 String _scope(String formKey) => 'esel.$formKey';
@@ -69,8 +70,9 @@ List<EselStep> _contract(PracticeItem item, String formKey, String answer) =>
 int _firstQuestion(List<EselStep> steps) =>
     steps.indexWhere((s) => s.options.isNotEmpty);
 
-Finder _option(String formKey, EselKind kind, EselOption option) =>
-    find.byKey(Key('${_scope(formKey)}.${kind.name}.option.${option.identity}'));
+Finder _option(String formKey, EselKind kind, EselOption option) => find.byKey(
+  Key('${_scope(formKey)}.${kind.name}.option.${option.identity}'),
+);
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -98,8 +100,9 @@ void main() {
   });
 
   group('(b) choosing an option', () {
-    testWidgets('right opens the next step, wrong keeps it open',
-        (tester) async {
+    testWidgets('right opens the next step, wrong keeps it open', (
+      tester,
+    ) async {
       final item = await _dominus();
       await _pumpChecked(tester, item, {_gen: 'dominis'});
       final steps = _contract(item, _gen, 'dominis');
@@ -134,7 +137,8 @@ void main() {
       final index = _firstQuestion(steps);
 
       await tester.tap(
-          find.byKey(Key('${_scope(_gen)}.${steps[index].kind.name}.show')));
+        find.byKey(Key('${_scope(_gen)}.${steps[index].kind.name}.show')),
+      );
       await tester.pumpAndSettle();
 
       final rows = _rows(tester, _scope(_gen));
@@ -145,8 +149,9 @@ void main() {
   });
 
   group('(d) initial state follows the contract', () {
-    testWidgets('count, order, done and pending for noun and verb',
-        (tester) async {
+    testWidgets('count, order, done and pending for noun and verb', (
+      tester,
+    ) async {
       for (final (item, key, answer) in [
         (await _dominus(), _gen, 'dominis'),
         (await _amare(), 'ind.praes.akt.3.sg', 'amet'),
@@ -160,17 +165,20 @@ void main() {
           final expected = steps[i].options.isEmpty
               ? EselStepStatus.done
               : i == open
-                  ? EselStepStatus.open
-                  : EselStepStatus.pending;
+              ? EselStepStatus.open
+              : EselStepStatus.pending;
           expect(rows[i].status, expected, reason: '${item.lemma} step $i');
         }
-        final lautregel = rows.singleWhere((r) => r.step.kind == EselKind.lautregel);
+        final lautregel = rows.singleWhere(
+          (r) => r.step.kind == EselKind.lautregel,
+        );
         expect(lautregel.step.options, isNotEmpty);
       }
     });
 
-    testWidgets('an absent step is done, dashed and says entfällt',
-        (tester) async {
+    testWidgets('an absent step is done, dashed and says entfällt', (
+      tester,
+    ) async {
       final (item, key) = [
         for (final item in [await _dominus(), await _amare()])
           for (final key in item.formOrder)
@@ -183,8 +191,11 @@ void main() {
       expect(rows.where((r) => r.step.absent), isNotEmpty);
       for (final row in rows) {
         final finder = find.byKey(Key('${_scope(key)}.${row.step.kind.name}'));
-        expect(isDashed(tester, finder), row.step.absent,
-            reason: '${row.step.kind}');
+        expect(
+          isDashed(tester, finder),
+          row.step.absent,
+          reason: '${row.step.kind}',
+        );
         if (!row.step.absent) continue;
         expect(row.status, EselStepStatus.done);
         expect(
@@ -203,13 +214,15 @@ void main() {
       final index = _firstQuestion(steps);
       final step = steps[index];
 
-      await tester.tap(_option(_gen, step.kind, step.options.firstWhere((o) => o.isRight)));
+      await tester.tap(
+        _option(_gen, step.kind, step.options.firstWhere((o) => o.isRight)),
+      );
       await tester.pumpAndSettle();
       expect(_rows(tester, _scope(_gen))[index].status, EselStepStatus.done);
 
-      ProviderScope.containerOf(tester.element(find.byType(PracticeScreen)))
-          .read(practiceProvider(item).notifier)
-          .hideAnswers();
+      ProviderScope.containerOf(
+        tester.element(find.byType(PracticeScreen)),
+      ).read(practiceProvider(item).notifier).hideAnswers();
       await tester.pumpAndSettle();
       await tester.tap(find.byKey(const Key('practice.check.button')));
       await tester.pumpAndSettle();
@@ -231,15 +244,16 @@ void main() {
         expect(row, findsOneWidget);
         expect(
           find.descendant(
-              of: row,
-              matching: find.text(texts['esel.kind.${kind.name}.name']!)),
+            of: row,
+            matching: find.text(texts['esel.kind.${kind.name}.name']!),
+          ),
           findsOneWidget,
         );
         expect(
           find.descendant(
-              of: row,
-              matching:
-                  find.text(texts['esel.legend.meaning.${kind.name}']!)),
+            of: row,
+            matching: find.text(texts['esel.legend.meaning.${kind.name}']!),
+          ),
           findsOneWidget,
         );
       }
@@ -253,14 +267,18 @@ void main() {
       tester.view.physicalSize = const Size(1200, 4800);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(tester.view.reset);
-      await tester.pumpWidget(wrapInApp(
-        WordClassificationScreen(item: item, formKey: _gen),
-        forcedLocale: const Locale('de'),
-      ));
+      await tester.pumpWidget(
+        wrapInApp(
+          WordClassificationScreen(item: item, formKey: _gen),
+          forcedLocale: const Locale('de'),
+        ),
+      );
       await letItLoad(tester);
       await pickOption(tester, 0, 'Genitiv');
       await pickOption(tester, 1, 'Singular');
-      await tester.tap(find.byKey(const Key('wordClassification.check.button')));
+      await tester.tap(
+        find.byKey(const Key('wordClassification.check.button')),
+      );
       await tester.pumpAndSettle();
 
       final rows = _rows(tester, 'esel.classification');
@@ -269,12 +287,16 @@ void main() {
       expect(rows.map((r) => r.status).toSet(), {EselStepStatus.done});
       expect(
         find.descendant(
-            of: find.byType(EselStaticSteps), matching: find.byType(OutlinedButton)),
+          of: find.byType(EselStaticSteps),
+          matching: find.byType(OutlinedButton),
+        ),
         findsNothing,
       );
       expect(
         find.descendant(
-            of: find.byType(EselStaticSteps), matching: find.byType(TextButton)),
+          of: find.byType(EselStaticSteps),
+          matching: find.byType(TextButton),
+        ),
         findsNothing,
       );
     });
@@ -288,7 +310,9 @@ void main() {
       await _pumpChecked(tester, item, {_gen: 'dominis'});
 
       final badges = find.descendant(
-          of: _panel(_gen), matching: find.byType(EselBadge));
+        of: _panel(_gen),
+        matching: find.byType(EselBadge),
+      );
       final rows = _rows(tester, _scope(_gen));
       expect(badges, findsNWidgets(rows.length));
       for (var i = 0; i < rows.length; i++) {
@@ -303,32 +327,38 @@ void main() {
   });
 
   group('panel width', () {
-    testWidgets('fills the content width, options inside it with whole labels',
-        (tester) async {
-      final item = await _dominus();
-      await _pumpChecked(tester, item, {_gen: 'dominis'});
-      tester.view.physicalSize = const Size(360, 800);
-      await tester.pumpAndSettle();
+    testWidgets(
+      'fills the content width, options inside it with whole labels',
+      (tester) async {
+        final item = await _dominus();
+        await _pumpChecked(tester, item, {_gen: 'dominis'});
+        tester.view.physicalSize = const Size(360, 800);
+        await tester.pumpAndSettle();
 
-      final panel = tester.getRect(_panel(_gen));
-      expect(panel.width, 360 - 2 * 16);
-      final steps = _contract(item, _gen, 'dominis');
-      final step = steps[_firstQuestion(steps)];
-      for (final option in step.options) {
-        expect(
-          tester.getRect(_option(_gen, step.kind, option)).right,
-          lessThanOrEqualTo(panel.right),
-        );
-        final label = find.descendant(
-            of: _option(_gen, step.kind, option), matching: find.byType(Text));
-        final text = tester.widget<Text>(label);
-        expect(text.maxLines, isNull);
-        expect(text.overflow, isNot(TextOverflow.ellipsis));
-        expect(tester.renderObject<RenderParagraph>(label).didExceedMaxLines,
-            isFalse);
-      }
-      expect(tester.takeException(), isNull);
-    });
+        final panel = tester.getRect(_panel(_gen));
+        expect(panel.width, 360 - 2 * 16);
+        final steps = _contract(item, _gen, 'dominis');
+        final step = steps[_firstQuestion(steps)];
+        for (final option in step.options) {
+          expect(
+            tester.getRect(_option(_gen, step.kind, option)).right,
+            lessThanOrEqualTo(panel.right),
+          );
+          final label = find.descendant(
+            of: _option(_gen, step.kind, option),
+            matching: find.byType(Text),
+          );
+          final text = tester.widget<Text>(label);
+          expect(text.maxLines, isNull);
+          expect(text.overflow, isNot(TextOverflow.ellipsis));
+          expect(
+            tester.renderObject<RenderParagraph>(label).didExceedMaxLines,
+            isFalse,
+          );
+        }
+        expect(tester.takeException(), isNull);
+      },
+    );
   });
 
   group('touch targets', () {
@@ -355,7 +385,9 @@ void main() {
       final item = await _dominus();
       await _pumpChecked(tester, item, {_gen: 'dominis'});
       final shows = find.descendant(
-          of: find.byType(EselPanel), matching: find.byType(TextButton));
+        of: find.byType(EselPanel),
+        matching: find.byType(TextButton),
+      );
       expect(shows, findsWidgets);
       for (final show in shows.evaluate()) {
         expect(minimumHeight(tester, find.byWidget(show.widget)), 44);
@@ -370,36 +402,44 @@ void main() {
         matching: find.byType(ConstrainedBox),
       );
       expect(
-        header.evaluate().map((e) => (e.widget as ConstrainedBox).constraints.minHeight),
+        header.evaluate().map(
+          (e) => (e.widget as ConstrainedBox).constraints.minHeight,
+        ),
         contains(44.0),
       );
     });
   });
 
-  test('every esel key the screens use exists in de.json and en.json',
-      () async {
-    final used = <String>{};
-    for (final path in [
-      'lib/screens/practice_screen.dart',
-      'lib/screens/word_classification_screen.dart',
-      'lib/widgets/esel_panel.dart',
-    ]) {
-      final source = File(path).readAsStringSync();
-      for (final match
-          in RegExp(r"translate\(\s*context,\s*'(esel\.[^']+)'").allMatches(source)) {
-        final key = match.group(1)!;
-        if (key.contains(r'${kind.name}')) {
-          for (final kind in EselKind.values) {
-            used.add(key.replaceAll(r'${kind.name}', kind.name));
+  test(
+    'every esel key the screens use exists in de.json and en.json',
+    () async {
+      final used = <String>{};
+      for (final path in [
+        'lib/screens/practice_screen.dart',
+        'lib/screens/word_classification_screen.dart',
+        'lib/widgets/esel_panel.dart',
+      ]) {
+        final source = File(path).readAsStringSync();
+        for (final match in RegExp(
+          r"translate\(\s*context,\s*'(esel\.[^']+)'",
+        ).allMatches(source)) {
+          final key = match.group(1)!;
+          if (key.contains(r'${kind.name}')) {
+            for (final kind in EselKind.values) {
+              used.add(key.replaceAll(r'${kind.name}', kind.name));
+            }
+          } else {
+            used.add(key);
           }
-        } else {
-          used.add(key);
         }
       }
-    }
-    expect(used, containsAll(['esel.show', 'esel.panel.title', 'esel.absentLabel']));
-    for (final texts in [await germanTexts(), await englishTexts()]) {
-      expect(used.where((k) => !texts.containsKey(k)), isEmpty);
-    }
-  });
+      expect(
+        used,
+        containsAll(['esel.show', 'esel.panel.title', 'esel.absentLabel']),
+      );
+      for (final texts in [await germanTexts(), await englishTexts()]) {
+        expect(used.where((k) => !texts.containsKey(k)), isEmpty);
+      }
+    },
+  );
 }

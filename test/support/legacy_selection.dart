@@ -11,13 +11,12 @@ Set<FormKey> legacyEnabledForms(
   Settings settings,
   String dataFileId,
   List<FormLabel> labels,
-) =>
-    {
-      for (final label in labels)
-        if (settings.isFormSwitchedOn(dataFileId, label.key) &&
-            settings.offFeaturesOf(dataFileId, label).isEmpty)
-          label.key,
-    };
+) => {
+  for (final label in labels)
+    if (settings.isFormSwitchedOn(dataFileId, label.key) &&
+        settings.offFeaturesOf(dataFileId, label).isEmpty)
+      label.key,
+};
 
 /// An item was practised when neither its word nor its type was switched off.
 bool legacyItemSelected(Settings settings, PracticeItem item) =>

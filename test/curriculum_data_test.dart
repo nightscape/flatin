@@ -44,10 +44,10 @@ void main() {
       }
     }
     expect(taught.difference({laterLesson}), pinned);
-    expect(
-      [for (var l = 1; l <= lastLesson; l++) if (!pinned.contains(l)) l],
-      syntaxOnlyLessons,
-    );
+    expect([
+      for (var l = 1; l <= lastLesson; l++)
+        if (!pinned.contains(l)) l,
+    ], syntaxOnlyLessons);
   });
 
   test('every form is taught in 1..lastLesson or waits beyond the course', () {
@@ -68,9 +68,8 @@ void main() {
     final byFamily = <String, Set<int>>{};
     for (final key in metadata['verbs']!.formOrder) {
       final parts = key.split('.');
-      final family = parts.take(key.startsWith('ger') || key.startsWith('sup')
-              ? 1
-              : 3)
+      final family = parts
+          .take(key.startsWith('ger') || key.startsWith('sup') ? 1 : 3)
           .join('.');
       byFamily
           .putIfAbsent(family, () => {})
@@ -122,7 +121,10 @@ void main() {
       curriculum.taughtForm('verbs', 'ger.gen', LessonRange(1, lastLesson)),
       isFalse,
     );
-    expect(curriculum.taughtForm('verbs', 'ger.gen', LessonRange.fullGrammar), isTrue);
+    expect(
+      curriculum.taughtForm('verbs', 'ger.gen', LessonRange.fullGrammar),
+      isTrue,
+    );
   });
 }
 
@@ -134,13 +136,21 @@ typedef Pin = ({
   String topic,
 });
 
-Pin form(int lesson, String dataFileId, String name, String topic) =>
-    (lesson: lesson, dataFileId: dataFileId, name: name, isType: false,
-        topic: topic);
+Pin form(int lesson, String dataFileId, String name, String topic) => (
+  lesson: lesson,
+  dataFileId: dataFileId,
+  name: name,
+  isType: false,
+  topic: topic,
+);
 
-Pin type(int lesson, String dataFileId, String name, String topic) =>
-    (lesson: lesson, dataFileId: dataFileId, name: name, isType: true,
-        topic: topic);
+Pin type(int lesson, String dataFileId, String name, String topic) => (
+  lesson: lesson,
+  dataFileId: dataFileId,
+  name: name,
+  isType: true,
+  topic: topic,
+);
 
 /// One point per lesson that introduces something, with the topic in our
 /// words. Only lessons that teach syntax or words alone are missing; they are
@@ -157,8 +167,12 @@ final firstTaught = <Pin>[
   type(9, 'nouns', 'Adjektiv-a-o-er', 'Adjektive auf -(e)r'),
   form(10, 'verbs', 'ind.impf.akt.3.sg', 'Imperfekt Aktiv'),
   type(11, 'verbs', 'Konsonantische', 'konsonantische Konjugation'),
-  type(12, 'nouns', 'Konsonantische-Deklination-mf',
-      'dritte Deklination, Konsonantenstämme'),
+  type(
+    12,
+    'nouns',
+    'Konsonantische-Deklination-mf',
+    'dritte Deklination, Konsonantenstämme',
+  ),
   form(13, 'verbs', 'ind.perf.akt.3.sg', 'Perfekt Aktiv'),
   form(14, 'verbs', 'inf.perf.akt', 'Infinitiv Perfekt Aktiv'),
   form(15, 'verbs', 'ind.plusq.akt.3.sg', 'Plusquamperfekt Aktiv'),
@@ -181,8 +195,12 @@ final firstTaught = <Pin>[
   type(36, 'nouns', 'Numerale-milia', 'Zahlwort mīlia'),
   type(37, 'nouns', 'Pronomen-idem', 'Pronomen īdem'),
   form(38, 'verbs', 'konj.perf.pass.3.sg', 'Konjunktiv Perfekt Passiv'),
-  type(39, 'nouns', 'Adjektiv-einendig-Konsonantstamm',
-      'einendige Adjektive der Konsonantenstämme'),
+  type(
+    39,
+    'nouns',
+    'Adjektiv-einendig-Konsonantstamm',
+    'einendige Adjektive der Konsonantenstämme',
+  ),
 ];
 
 /// Lessons whose grammar is syntax or vocabulary only: they add no form and
@@ -211,12 +229,32 @@ const laterFamilies = [
 /// Tense families in the order the book introduces them, within one mood and
 /// one voice.
 const tenseOrders = [
-  ['ind.praes.akt.3.sg', 'ind.impf.akt.3.sg', 'ind.perf.akt.3.sg',
-      'ind.plusq.akt.3.sg', 'ind.fut.akt.3.sg', 'ind.fut2.akt.3.sg'],
-  ['ind.perf.pass.3.sg', 'ind.plusq.pass.3.sg', 'ind.fut2.pass.3.sg',
-      'ind.praes.pass.3.sg', 'ind.impf.pass.3.sg', 'ind.fut.pass.3.sg'],
-  ['konj.impf.akt.3.sg', 'konj.plusq.akt.3.sg', 'konj.praes.akt.3.sg',
-      'konj.perf.akt.3.sg'],
-  ['konj.praes.pass.3.sg', 'konj.impf.pass.3.sg', 'konj.perf.pass.3.sg',
-      'konj.plusq.pass.3.sg'],
+  [
+    'ind.praes.akt.3.sg',
+    'ind.impf.akt.3.sg',
+    'ind.perf.akt.3.sg',
+    'ind.plusq.akt.3.sg',
+    'ind.fut.akt.3.sg',
+    'ind.fut2.akt.3.sg',
+  ],
+  [
+    'ind.perf.pass.3.sg',
+    'ind.plusq.pass.3.sg',
+    'ind.fut2.pass.3.sg',
+    'ind.praes.pass.3.sg',
+    'ind.impf.pass.3.sg',
+    'ind.fut.pass.3.sg',
+  ],
+  [
+    'konj.impf.akt.3.sg',
+    'konj.plusq.akt.3.sg',
+    'konj.praes.akt.3.sg',
+    'konj.perf.akt.3.sg',
+  ],
+  [
+    'konj.praes.pass.3.sg',
+    'konj.impf.pass.3.sg',
+    'konj.perf.pass.3.sg',
+    'konj.plusq.pass.3.sg',
+  ],
 ];

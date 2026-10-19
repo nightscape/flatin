@@ -24,8 +24,7 @@ void main() {
     }
   });
 
-  test('the lesson scale runs 1..lastLesson, split over two volumes',
-      () async {
+  test('the lesson scale runs 1..lastLesson, split over two volumes', () async {
     final lessons = await loadLessonData(lessonDataAssets);
 
     expect(lessons.lessonNumbers, [for (var i = 1; i <= lastLesson; i++) i]);

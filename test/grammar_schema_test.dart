@@ -14,9 +14,9 @@ const _nounsPath = 'test/fixtures/grammar_examples.yaml';
 const _verbsPath = 'test/fixtures/grammar_examples_verbs.yaml';
 
 Map<String, String> get _fixture => {
-      _nounsPath: File(_nounsPath).readAsStringSync(),
-      _verbsPath: File(_verbsPath).readAsStringSync(),
-    };
+  _nounsPath: File(_nounsPath).readAsStringSync(),
+  _verbsPath: File(_verbsPath).readAsStringSync(),
+};
 
 /// The item lines the `absent:` tests hang their own list under: posse has
 /// konj keys from a compose rule and no override, ferre overrides generated
@@ -33,8 +33,9 @@ Map<String, String> _fixtureWith(String original, String replacement) =>
 Map<String, String> _fixtureWithAll(List<(String, String)> edits) {
   var sources = _fixture;
   for (final (original, replacement) in edits) {
-    final holders =
-        sources.keys.where((p) => sources[p]!.split(original).length == 2);
+    final holders = sources.keys.where(
+      (p) => sources[p]!.split(original).length == 2,
+    );
     expect(
       holders,
       hasLength(1),
@@ -64,20 +65,22 @@ void _expectRejected(String rule, String clause, Map<String, String> sources) {
 
 /// Kasus before Numerus, Nominativ before Genitiv, Singular before Plural.
 Axes _twoAxes() => Axes(
-      axes: [
-        GrammarAxis(id: 'kasus', name: 'Kasus', values: const [
-          ('nom', 'Nominativ'),
-          ('gen', 'Genitiv'),
-        ]),
-        GrammarAxis(id: 'numerus', name: 'Numerus', values: const [
-          ('sg', 'Singular'),
-          ('pl', 'Plural'),
-        ]),
-      ],
-      head: const [],
-      tail: const ['kasus', 'numerus'],
-      mergeAxis: 'kasus',
-    );
+  axes: [
+    GrammarAxis(
+      id: 'kasus',
+      name: 'Kasus',
+      values: const [('nom', 'Nominativ'), ('gen', 'Genitiv')],
+    ),
+    GrammarAxis(
+      id: 'numerus',
+      name: 'Numerus',
+      values: const [('sg', 'Singular'), ('pl', 'Plural')],
+    ),
+  ],
+  head: const [],
+  tail: const ['kasus', 'numerus'],
+  mergeAxis: 'kasus',
+);
 
 void main() {
   test('key round trip (axis order)', () {
@@ -258,7 +261,10 @@ void main() {
       _expectRejected(
         'S1',
         'breaks axis order',
-        _fixtureWith('      nom.sg.m: "{stamm}us"', '      sg.nom.m: "{stamm}us"'),
+        _fixtureWith(
+          '      nom.sg.m: "{stamm}us"',
+          '      sg.nom.m: "{stamm}us"',
+        ),
       );
     });
 
@@ -309,7 +315,10 @@ void main() {
       _expectRejected(
         'S4',
         'requires the stem "kstamm", which it does not declare',
-        _fixtureWith('    required_stems: [stamm]', '    required_stems: [kstamm]'),
+        _fixtureWith(
+          '    required_stems: [stamm]',
+          '    required_stems: [kstamm]',
+        ),
       );
     });
 
@@ -357,7 +366,10 @@ void main() {
       _expectRejected(
         'S10',
         '"pqp" is no tempus code',
-        _fixtureWith('    deponent: [perf, plusq, fut2]', '    deponent: [pqp]'),
+        _fixtureWith(
+          '    deponent: [perf, plusq, fut2]',
+          '    deponent: [pqp]',
+        ),
       );
     });
 
@@ -502,10 +514,14 @@ void main() {
     });
 
     test('S15: an absent pattern removes the keys it names', () {
-      final engine = GrammarEngine(parseGrammarFiles(
-        _fixtureWith(_posseParts,
-            '    absent: [{modus: konj, tempus: praes}]\n$_posseParts'),
-      ));
+      final engine = GrammarEngine(
+        parseGrammarFiles(
+          _fixtureWith(
+            _posseParts,
+            '    absent: [{modus: konj, tempus: praes}]\n$_posseParts',
+          ),
+        ),
+      );
       final keys = engine.of('verbs', 'posse').forms.keys;
       expect(keys, contains('konj.impf.akt.1.sg'));
       expect(keys, isNot(contains('konj.praes.akt.1.sg')));
@@ -515,8 +531,7 @@ void main() {
       _expectRejected(
         'S15',
         'removes no key',
-        _fixtureWith(
-            _posseParts, '    absent: [{modus: sup}]\n$_posseParts'),
+        _fixtureWith(_posseParts, '    absent: [{modus: sup}]\n$_posseParts'),
       );
     });
 
@@ -524,8 +539,10 @@ void main() {
       _expectRejected(
         'S15',
         'removes the overridden key',
-        _fixtureWith(_ferreParts,
-            '    absent: [{modus: konj, tempus: impf}]\n$_ferreParts'),
+        _fixtureWith(
+          _ferreParts,
+          '    absent: [{modus: konj, tempus: impf}]\n$_ferreParts',
+        ),
       );
     });
 
@@ -587,8 +604,10 @@ void main() {
       _expectRejected(
         'S19',
         'type i-Deklination-mf names the unknown class "verb"',
-        _fixtureWith('    class: deklination\n    required_stems: [stamm]',
-            '    class: verb\n    required_stems: [stamm]'),
+        _fixtureWith(
+          '    class: deklination\n    required_stems: [stamm]',
+          '    class: verb\n    required_stems: [stamm]',
+        ),
       );
     });
 

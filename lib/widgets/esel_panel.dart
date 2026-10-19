@@ -64,17 +64,17 @@ String _letter(BuildContext context, EselKind kind) =>
 
 String _optionText(BuildContext context, EselOption option) =>
     option.textKey == null
-        ? option.text
-        : FlutterI18n.translate(context, option.textKey!);
+    ? option.text
+    : FlutterI18n.translate(context, option.textKey!);
 
 String _answerText(BuildContext context, EselStep step) =>
     step.answerKey == null
-        ? step.answer
-        : FlutterI18n.translate(
-            context,
-            step.answerKey!,
-            translationParams: step.answerParams,
-          );
+    ? step.answer
+    : FlutterI18n.translate(
+        context,
+        step.answerKey!,
+        translationParams: step.answerParams,
+      );
 
 class EselBadge extends StatelessWidget {
   final EselKind kind;
@@ -91,8 +91,10 @@ class EselBadge extends StatelessWidget {
         width: 28,
         height: 28,
         alignment: Alignment.center,
-        decoration:
-            BoxDecoration(color: _kindColors[kind], shape: BoxShape.circle),
+        decoration: BoxDecoration(
+          color: _kindColors[kind],
+          shape: BoxShape.circle,
+        ),
         child: Text(
           letter,
           style: const TextStyle(
@@ -157,7 +159,9 @@ class EselStepRow extends StatelessWidget {
                         child: Text(
                           _name(context, step.kind),
                           style: TextStyle(
-                              fontWeight: FontWeight.bold, color: color),
+                            fontWeight: FontWeight.bold,
+                            color: color,
+                          ),
                         ),
                       ),
                       if (!done && onShow != null)
@@ -168,13 +172,15 @@ class EselStepRow extends StatelessWidget {
                             minimumSize: const Size(48, _optionHeight),
                           ),
                           child: Text(
-                              FlutterI18n.translate(context, 'esel.show')),
+                            FlutterI18n.translate(context, 'esel.show'),
+                          ),
                         ),
                     ],
                   ),
                   if (step.absent) _absentBody(context),
                   if (!step.absent && done) _doneBody(context),
-                  if (status == EselStepStatus.open) _openBody(context, stepKey),
+                  if (status == EselStepStatus.open)
+                    _openBody(context, stepKey),
                 ],
               ),
             ),
@@ -185,71 +191,75 @@ class EselStepRow extends StatelessWidget {
   }
 
   Widget _absentBody(BuildContext context) => Wrap(
-        spacing: 8,
-        children: [
-          Text(
-            FlutterI18n.translate(context, 'esel.absentLabel'),
-            style: const TextStyle(fontStyle: FontStyle.italic),
-          ),
-          Text(_answerText(context, step)),
-        ],
-      );
+    spacing: 8,
+    children: [
+      Text(
+        FlutterI18n.translate(context, 'esel.absentLabel'),
+        style: const TextStyle(fontStyle: FontStyle.italic),
+      ),
+      Text(_answerText(context, step)),
+    ],
+  );
 
   Widget _doneBody(BuildContext context) => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (step.options.isEmpty && showQuestion)
-            Text(
-              FlutterI18n.translate(
-                context,
-                step.questionKey,
-                translationParams: step.questionParams,
-              ),
-            ),
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(Icons.check_circle, size: 16, color: Colors.green),
-              const SizedBox(width: 4),
-              Flexible(
-                child: Text(
-                  _answerText(context, step),
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
-              ),
-            ],
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      if (step.options.isEmpty && showQuestion)
+        Text(
+          FlutterI18n.translate(
+            context,
+            step.questionKey,
+            translationParams: step.questionParams,
           ),
-          if (step.regular != null)
-            Text(
-              step.regular!,
-              style: const TextStyle(decoration: TextDecoration.lineThrough),
+        ),
+      Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Icon(Icons.check_circle, size: 16, color: Colors.green),
+          const SizedBox(width: 4),
+          Flexible(
+            child: Text(
+              _answerText(context, step),
+              style: const TextStyle(fontWeight: FontWeight.bold),
             ),
+          ),
         ],
-      );
+      ),
+      if (step.regular != null)
+        Text(
+          step.regular!,
+          style: const TextStyle(decoration: TextDecoration.lineThrough),
+        ),
+    ],
+  );
 
   Widget _openBody(BuildContext context, String stepKey) => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(
+        FlutterI18n.translate(
+          context,
+          step.questionKey,
+          translationParams: step.questionParams,
+        ),
+      ),
+      const SizedBox(height: 4),
+      Wrap(
+        spacing: 8,
+        runSpacing: 8,
         children: [
-          Text(
-            FlutterI18n.translate(
-              context,
-              step.questionKey,
-              translationParams: step.questionParams,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: [
-              for (final option in step.options)
-                _optionButton(context, stepKey, option),
-            ],
-          ),
+          for (final option in step.options)
+            _optionButton(context, stepKey, option),
         ],
-      );
+      ),
+    ],
+  );
 
-  Widget _optionButton(BuildContext context, String stepKey, EselOption option) {
+  Widget _optionButton(
+    BuildContext context,
+    String stepKey,
+    EselOption option,
+  ) {
     final bool wrong = wrongPicks.contains(option.identity);
     return OutlinedButton(
       key: Key('$stepKey.option.${option.identity}'),
@@ -288,10 +298,9 @@ class _StepBorder extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.5;
     final outline = Path()
-      ..addRRect(RRect.fromRectAndRadius(
-        Offset.zero & size,
-        const Radius.circular(8),
-      ));
+      ..addRRect(
+        RRect.fromRectAndRadius(Offset.zero & size, const Radius.circular(8)),
+      );
     if (!dashed) {
       canvas.drawPath(outline, paint);
       return;
@@ -348,7 +357,9 @@ class EselPanel extends StatelessWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: Icon(expanded ? Icons.expand_less : Icons.expand_more),
+                    child: Icon(
+                      expanded ? Icons.expand_less : Icons.expand_more,
+                    ),
                   ),
                   Expanded(
                     child: Text(
@@ -408,79 +419,77 @@ class EselStaticSteps extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(bottom: 6),
-            child: Text(
-              title,
-              key: Key('$scope.title'),
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Padding(
+        padding: const EdgeInsets.only(bottom: 6),
+        child: Text(
+          title,
+          key: Key('$scope.title'),
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+      ),
+      for (final step in steps)
+        Padding(
+          padding: const EdgeInsets.only(bottom: 6),
+          child: EselStepRow(
+            scope: scope,
+            step: step,
+            status: EselStepStatus.done,
+            showQuestion: false,
           ),
-          for (final step in steps)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 6),
-              child: EselStepRow(
-                scope: scope,
-                step: step,
-                status: EselStepStatus.done,
-                showQuestion: false,
-              ),
-            ),
-        ],
-      );
+        ),
+    ],
+  );
 }
 
 Future<void> showEselLegend(BuildContext context) => showModalBottomSheet<void>(
-      context: context,
-      isScrollControlled: true,
-      builder: (context) => SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                FlutterI18n.translate(context, 'esel.legend.title'),
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              const SizedBox(height: 4),
-              Text(FlutterI18n.translate(context, 'esel.legend.intro')),
-              const SizedBox(height: 12),
-              for (final kind in EselKind.values)
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 10),
-                  child: Row(
-                    key: Key('esel.legend.${kind.name}'),
-                    children: [
-                      EselBadge(kind),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              _name(context, kind),
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Text(
-                              FlutterI18n.translate(
-                                context,
-                                'esel.legend.meaning.${kind.name}',
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-            ],
+  context: context,
+  isScrollControlled: true,
+  builder: (context) => SafeArea(
+    child: SingleChildScrollView(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            FlutterI18n.translate(context, 'esel.legend.title'),
+            style: Theme.of(context).textTheme.titleLarge,
           ),
-        ),
+          const SizedBox(height: 4),
+          Text(FlutterI18n.translate(context, 'esel.legend.intro')),
+          const SizedBox(height: 12),
+          for (final kind in EselKind.values)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: Row(
+                key: Key('esel.legend.${kind.name}'),
+                children: [
+                  EselBadge(kind),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          _name(context, kind),
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          FlutterI18n.translate(
+                            context,
+                            'esel.legend.meaning.${kind.name}',
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+        ],
       ),
-    );
+    ),
+  ),
+);

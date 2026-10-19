@@ -26,7 +26,8 @@ class _RateButton extends ConsumerWidget {
       body: Center(
         child: ElevatedButton(
           onPressed: () => onRated(
-              reviewCardReportingErrors(context, ref, item, Rating.good)),
+            reviewCardReportingErrors(context, ref, item, Rating.good),
+          ),
           child: const Text('rate'),
         ),
       ),
@@ -43,14 +44,16 @@ void main() {
 
     Future<bool>? rated;
 
-    await tester.pumpWidget(wrapInApp(
-      _RateButton(item, (future) => rated = future),
-      overrides: [
-        fsrsCardsProvider.overrideWith(
-          (ref) async => {itemId: PracticeItemCard.createNew(item)},
-        ),
-      ],
-    ));
+    await tester.pumpWidget(
+      wrapInApp(
+        _RateButton(item, (future) => rated = future),
+        overrides: [
+          fsrsCardsProvider.overrideWith(
+            (ref) async => {itemId: PracticeItemCard.createNew(item)},
+          ),
+        ],
+      ),
+    );
     await letItLoad(tester);
 
     await tester.runAsync(() async {

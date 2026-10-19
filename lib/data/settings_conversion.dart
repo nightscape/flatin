@@ -67,9 +67,7 @@ class MigrationMap {
   /// The new word of every old word whose item is renamed or merged away.
   Map<String, String> get wordMap {
     final old = {...itemIds.keys, ...itemKeySuffix.keys};
-    return {
-      for (final id in old) _word(id): _word(itemIds[id] ?? id),
-    };
+    return {for (final id in old) _word(id): _word(itemIds[id] ?? id)};
   }
 
   static String _word(String itemId) => itemId.split(':').last;
@@ -108,13 +106,10 @@ Map<String, dynamic> convertSettingsV2(
   final newForms = <String, List<String>>{};
   final newTypes = <String, List<String>>{};
   for (final file in map.formKeys.keys) {
-    newForms[file] = _convert(
-      {
-        for (final e in map.formKeys[file]!.entries)
-          for (final newKey in e.value) newKey: e.key,
-      },
-      disabledForms[file]!,
-    );
+    newForms[file] = _convert({
+      for (final e in map.formKeys[file]!.entries)
+        for (final newKey in e.value) newKey: e.key,
+    }, disabledForms[file]!);
     newTypes[file] = _convert(
       map.types[file]!.map((old, now) => MapEntry(now, old)),
       disabledTypes[file]!,
@@ -130,12 +125,13 @@ Map<String, dynamic> convertSettingsV2(
   )..addAll(words.where((w) => !map.wordMap.containsKey(w)));
 
   return {
-    ...json,
-    settingsVersionField: 2,
-    'disabledForms': newForms,
-    'disabledTypes': newTypes,
-    'deselectedWords': deselected,
-  }..remove('enabledForms')
+      ...json,
+      settingsVersionField: 2,
+      'disabledForms': newForms,
+      'disabledTypes': newTypes,
+      'deselectedWords': deselected,
+    }
+    ..remove('enabledForms')
     ..remove('enabledTypes');
 }
 
@@ -155,8 +151,8 @@ Map<String, dynamic> convertSettingsV3(
     byNormalized.putIfAbsent(normalizeDiacritics(lemma), () => {}).add(lemma);
   }
   List<String> exact(dynamic stored) => [
-        for (final word in _words(stored)) ...byNormalized[word] ?? {word},
-      ];
+    for (final word in _words(stored)) ...byNormalized[word] ?? {word},
+  ];
 
   return {
     ...json,

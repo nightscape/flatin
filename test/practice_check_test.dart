@@ -30,7 +30,9 @@ void main() {
 
   /// Grades [answers] against the two forms above.
   PracticeState check(List<String> answers) {
-    container.read(practiceProvider(item).notifier).checkAnswers(
+    container
+        .read(practiceProvider(item).notifier)
+        .checkAnswers(
           answers,
           item.formOrder,
           selectedTranslation: item.translation,
@@ -59,14 +61,14 @@ void main() {
     expect(state.validationResults, [null, null]);
   });
 
-  testWidgets('the screen shows the quantity marks of a right answer',
-      (tester) async {
+  testWidgets('the screen shows the quantity marks of a right answer', (
+    tester,
+  ) async {
     SharedPreferences.setMockInitialValues({});
 
-    await tester.pumpWidget(wrapInApp(
-      PracticeScreen(item: item),
-      forcedLocale: const Locale('de'),
-    ));
+    await tester.pumpWidget(
+      wrapInApp(PracticeScreen(item: item), forcedLocale: const Locale('de')),
+    );
     await letItLoad(tester);
 
     await tester.enterText(find.byType(TextField).at(0), 'amavit');

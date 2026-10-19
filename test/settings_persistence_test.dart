@@ -16,7 +16,9 @@ void main() {
   test('deselected forms, types and words stay off after a reload', () async {
     SharedPreferences.setMockInitialValues({});
     final lessons = await loadLessonData(lessonDataAssets);
-    final word = normalizeDiacritics(lessons.lessonWords[lessons.lessonNames.first]!.first);
+    final word = normalizeDiacritics(
+      lessons.lessonWords[lessons.lessonNames.first]!.first,
+    );
 
     final first = ProviderContainer();
     await first.read(settingsProvider.future);
@@ -28,18 +30,12 @@ void main() {
 
     final second = ProviderContainer();
     final loaded = await second.read(settingsProvider.future);
-    expect(
-      loaded.isFormSwitchedOn('nouns', 'gen.sg'),
-      isFalse,
-    );
+    expect(loaded.isFormSwitchedOn('nouns', 'gen.sg'), isFalse);
     expect(loaded.isTypeEnabled('nouns', 'A-Deklination'), isFalse);
     expect(loaded.isWordSelected(word), isFalse);
     // Entries that appear in the YAML later are not in the stored disabled
     // sets, so they are on.
-    expect(
-      loaded.isFormSwitchedOn('nouns', 'nom.pl'),
-      isTrue,
-    );
+    expect(loaded.isFormSwitchedOn('nouns', 'nom.pl'), isTrue);
     expect(loaded.isTypeEnabled('nouns', 'Brand-New-Deklination'), isTrue);
     expect(loaded.isWordSelected('brandnovus'), isTrue);
     second.dispose();
@@ -80,7 +76,9 @@ void main() {
     );
     final oldType = map.types['nouns']!.keys.first;
     final newType = map.types['nouns']![oldType]!;
-    final otherType = map.types['nouns']!.values.firstWhere((t) => t != newType);
+    final otherType = map.types['nouns']!.values.firstWhere(
+      (t) => t != newType,
+    );
     final lessons = await loadLessonData(lessonDataAssets);
     final allWords = lessons.lessonNames
         .expand((name) => lessons.lessonWords[name]!)
@@ -121,24 +119,27 @@ void main() {
     container.dispose();
   });
 
-  test('conversion deselects every lesson word the old format left out',
-      () async {
-    final lessons = await loadLessonData(lessonDataAssets);
-    final lessonWords =
-        lessons.lessonNames.expand((name) => lessons.lessonWords[name]!);
+  test(
+    'conversion deselects every lesson word the old format left out',
+    () async {
+      final lessons = await loadLessonData(lessonDataAssets);
+      final lessonWords = lessons.lessonNames.expand(
+        (name) => lessons.lessonWords[name]!,
+      );
 
-    // The old format stored the words without their macrons; what comes back
-    // is the exact lemma of each.
-    SharedPreferences.setMockInitialValues({
-      'practice_settings': jsonEncode({
-        'selectedWords': [normalizeDiacritics(lessonWords.first)],
-      }),
-    });
+      // The old format stored the words without their macrons; what comes back
+      // is the exact lemma of each.
+      SharedPreferences.setMockInitialValues({
+        'practice_settings': jsonEncode({
+          'selectedWords': [normalizeDiacritics(lessonWords.first)],
+        }),
+      });
 
-    final container = ProviderContainer();
-    final loaded = await container.read(settingsProvider.future);
+      final container = ProviderContainer();
+      final loaded = await container.read(settingsProvider.future);
 
-    expect(loaded.deselectedWords, lessonWords.skip(1).toSet());
-    container.dispose();
-  });
+      expect(loaded.deselectedWords, lessonWords.skip(1).toSet());
+      container.dispose();
+    },
+  );
 }

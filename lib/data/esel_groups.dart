@@ -19,6 +19,7 @@ String _answers(PracticeItem item, FormKey key) =>
 
 /// The full label of every reading in [group], joined with " / ".
 String groupTitle(PracticeItem item, List<FormKey> group) => group
-    .map((key) =>
-        describeLabels([item.formLabels[item.formOrder.indexOf(key)]]))
+    .map(
+      (key) => describeLabels([item.formLabels[item.formOrder.indexOf(key)]]),
+    )
     .join(' / ');

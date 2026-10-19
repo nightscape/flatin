@@ -20,10 +20,12 @@ Future<void> _pumpChecked(
   tester.view.physicalSize = const Size(1200, 4800);
   tester.view.devicePixelRatio = 1.0;
   addTearDown(tester.view.reset);
-  await tester.pumpWidget(wrapInApp(
-    WordClassificationScreen(item: item, formKey: formKey),
-    forcedLocale: const Locale('de'),
-  ));
+  await tester.pumpWidget(
+    wrapInApp(
+      WordClassificationScreen(item: item, formKey: formKey),
+      forcedLocale: const Locale('de'),
+    ),
+  );
   await letItLoad(tester);
   await pickOption(tester, 0, 'Genitiv');
   await pickOption(tester, 1, 'Plural');
@@ -34,19 +36,27 @@ Future<void> _pumpChecked(
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  testWidgets('dominī: the one panel is headed by all its labels joined by " / "',
-      (tester) async {
-    final item = await _item('lib/data/latin_nouns.yaml', 'dominus');
-    await _pumpChecked(tester, item, 'nom.pl');
+  testWidgets(
+    'dominī: the one panel is headed by all its labels joined by " / "',
+    (tester) async {
+      final item = await _item('lib/data/latin_nouns.yaml', 'dominus');
+      await _pumpChecked(tester, item, 'nom.pl');
 
-    final titles = tester
-        .widgetList<EselStaticSteps>(find.byType(EselStaticSteps))
-        .map((w) => w.title)
-        .toList();
+      final titles = tester
+          .widgetList<EselStaticSteps>(find.byType(EselStaticSteps))
+          .map((w) => w.title)
+          .toList();
 
-    expect(titles, hasLength(1));
-    expect(titles.single, isNot(contains(',')),
-        reason: 'labels of one group must be joined with " / ", not ", "');
-    expect(titles.single, 'Nominativ Plural / Genitiv Singular / Vokativ Plural');
-  });
+      expect(titles, hasLength(1));
+      expect(
+        titles.single,
+        isNot(contains(',')),
+        reason: 'labels of one group must be joined with " / ", not ", "',
+      );
+      expect(
+        titles.single,
+        'Nominativ Plural / Genitiv Singular / Vokativ Plural',
+      );
+    },
+  );
 }

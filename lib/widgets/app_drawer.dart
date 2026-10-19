@@ -20,9 +20,7 @@ Widget buildAppDrawer(BuildContext context) {
       padding: EdgeInsets.zero,
       children: [
         DrawerHeader(
-          decoration: const BoxDecoration(
-            color: Color(0xFFD0D0D0),
-          ),
+          decoration: const BoxDecoration(color: Color(0xFFD0D0D0)),
           child: Text(
             FlutterI18n.translate(context, 'drawer.title'),
             style: TextStyle(
@@ -73,9 +71,7 @@ Widget buildAppDrawer(BuildContext context) {
           onTap: () {
             Navigator.pop(context);
             Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => const LanguageScreen(),
-              ),
+              MaterialPageRoute(builder: (context) => const LanguageScreen()),
             );
           },
         ),
@@ -89,9 +85,7 @@ Widget buildAppDrawer(BuildContext context) {
           onTap: () {
             Navigator.pop(context);
             Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => const SettingsScreen(),
-              ),
+              MaterialPageRoute(builder: (context) => const SettingsScreen()),
             );
           },
         ),
@@ -113,7 +107,7 @@ Widget _practiceTile({
     builder: (context, ref, child) {
       final practicable =
           ref.watch(practicableItemsByTypeProvider).value?[dataFileId] ??
-              const <PracticeItem>[];
+          const <PracticeItem>[];
       final enabled = practicable.isNotEmpty;
       final color = enabled ? Colors.black : Theme.of(context).disabledColor;
 

@@ -110,15 +110,19 @@ String _dataFileIdOf(String assetPath) =>
 Future<FormMetadata> getFormMetadata(String assetPath) async {
   final loaded = await _load();
   final dataFileId = _dataFileIdOf(assetPath);
-  return loaded.metadataByFile[dataFileId] ??= _metadata(loaded.file(dataFileId));
+  return loaded.metadataByFile[dataFileId] ??= _metadata(
+    loaded.file(dataFileId),
+  );
 }
 
 FormMetadata _metadata(GrammarFile file) {
-  final keys = {
-    for (final item in file.items) ...file.keysByItem[item.id]!.emitted,
-  }.toList()
-    ..sort((a, b) =>
-        file.axes.compare(file.axes.parseKey(a), file.axes.parseKey(b)));
+  final keys =
+      {
+        for (final item in file.items) ...file.keysByItem[item.id]!.emitted,
+      }.toList()..sort(
+        (a, b) =>
+            file.axes.compare(file.axes.parseKey(a), file.axes.parseKey(b)),
+      );
   return FormMetadata(
     dataFileId: file.dataFileId,
     axes: file.axes,
@@ -141,8 +145,8 @@ Future<List<PracticeItem>> loadPracticeItems(String assetPath) async {
 
 /// The items of every data file, nouns first.
 Future<List<PracticeItem>> loadAllPracticeItems() async => [
-      for (final path in _assets.values) ...await loadPracticeItems(path),
-    ];
+  for (final path in _assets.values) ...await loadPracticeItems(path),
+];
 
 PracticeItem _practiceItem(
   GrammarEngine engine,

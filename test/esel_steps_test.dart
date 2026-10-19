@@ -84,15 +84,20 @@ void main() {
       final item = verb('dīcere');
       const key = 'imp.praes.akt.2.sg';
       final steps = eselSteps(item, key);
-      expect((item.derivation.forms[key]! as IrregularForm).regular!.result,
-          'dīce');
+      expect(
+        (item.derivation.forms[key]! as IrregularForm).regular!.result,
+        'dīce',
+      );
       expect(steps.map((s) => s.kind), [..._esel, EselKind.merken]);
       expect(steps.last.options, isEmpty);
       expect(steps.last.answerKey, 'esel.answer.merken');
-      expect(steps.last.answerParams,
-          {'form': item.derivation.forms[key]!.result});
-      expect(steps.last.regular,
-          (item.derivation.forms[key]! as IrregularForm).regular!.result);
+      expect(steps.last.answerParams, {
+        'form': item.derivation.forms[key]!.result,
+      });
+      expect(
+        steps.last.regular,
+        (item.derivation.forms[key]! as IrregularForm).regular!.result,
+      );
       expect(steps.sublist(1, 4).every((s) => s.absent), isTrue);
     });
 
@@ -148,10 +153,15 @@ void main() {
       for (final lemma in ['rēx', 'mare', 'animal']) {
         final item = noun(lemma);
         final steps = eselSteps(item, 'nom.sg');
-        expect(steps.map((s) => s.kind), [..._esel, EselKind.merken],
-            reason: lemma);
-        expect(steps.sublist(1, 4).every((s) => s.absent), isTrue,
-            reason: lemma);
+        expect(steps.map((s) => s.kind), [
+          ..._esel,
+          EselKind.merken,
+        ], reason: lemma);
+        expect(
+          steps.sublist(1, 4).every((s) => s.absent),
+          isTrue,
+          reason: lemma,
+        );
         expect(steps.last.answerKey, 'esel.dictionaryForm', reason: lemma);
         expect(steps.last.options, isEmpty, reason: lemma);
         expect(steps.first.absent, isFalse, reason: lemma);
@@ -166,14 +176,19 @@ void main() {
       ];
       for (final (item, formKey) in cases) {
         final where = '${item.id} $formKey';
-        expect((item.derivation.forms[formKey]! as GeneratedForm).ending, '',
-            reason: where);
+        expect(
+          (item.derivation.forms[formKey]! as GeneratedForm).ending,
+          '',
+          reason: where,
+        );
         final step = eselSteps(item, formKey)[2];
         expect(step.absent, isFalse, reason: where);
         expect(step.answerKey, 'esel.noEnding', reason: where);
-        expect(step.options.firstWhere((o) => o.isRight).textKey,
-            'esel.noEnding',
-            reason: where);
+        expect(
+          step.options.firstWhere((o) => o.isRight).textKey,
+          'esel.noEnding',
+          reason: where,
+        );
         expect(step.options.length, inInclusiveRange(2, 3), reason: where);
       }
     });
@@ -194,7 +209,11 @@ void main() {
       expect(used, isA<WrongStem>());
       expect((used as WrongStem).usedStem, 'canis');
       expect(
-        eselSteps(item, 'dat.sg', diagnosis: used)[1].options.map((o) => o.text),
+        eselSteps(
+          item,
+          'dat.sg',
+          diagnosis: used,
+        )[1].options.map((o) => o.text),
         contains('canis-'),
       );
       final others = <Diagnosis?>[
@@ -206,7 +225,11 @@ void main() {
       expect(others[2], isA<EndingOfOtherType>());
       for (final diagnosis in others) {
         expect(
-          eselSteps(item, 'dat.sg', diagnosis: diagnosis)[1].options.map((o) => o.text),
+          eselSteps(
+            item,
+            'dat.sg',
+            diagnosis: diagnosis,
+          )[1].options.map((o) => o.text),
           isNot(contains('canis-')),
           reason: 'diagnosis ${diagnosis.runtimeType}',
         );
@@ -271,14 +294,20 @@ void main() {
             }
             if (step.options.isEmpty) continue;
             expect(step.options.length, inInclusiveRange(2, 3), reason: where);
-            expect(step.options.where((o) => o.isRight), hasLength(1),
-                reason: where);
+            expect(
+              step.options.where((o) => o.isRight),
+              hasLength(1),
+              reason: where,
+            );
             final right = step.options.firstWhere((o) => o.isRight);
             final rest = step.options.where((o) => !o.isRight);
             for (final option in rest) {
               expect(option.identity, isNot(right.identity), reason: where);
-              expect(norm(option.identity), isNot(norm(right.identity)),
-                  reason: where);
+              expect(
+                norm(option.identity),
+                isNot(norm(right.identity)),
+                reason: where,
+              );
             }
             expect(
               step.options.map((o) => norm(o.identity)).toSet(),
@@ -292,8 +321,11 @@ void main() {
             }
             if (step.kind == EselKind.erkennen) {
               for (final option in step.options) {
-                expect(item.derivation.grammar.classByType,
-                    contains(option.text), reason: where);
+                expect(
+                  item.derivation.grammar.classByType,
+                  contains(option.text),
+                  reason: where,
+                );
               }
             }
             if (step.kind == EselKind.endung) {
@@ -354,8 +386,10 @@ void main() {
           for (final option in step.options.where((o) => !o.isRight)) {
             final bare = option.text.replaceFirst(RegExp(r'-$'), '');
             if (words.contains(norm(bare))) {
-              offenders.add('${item.id} $formKey: ${option.text} '
-                  '(right ${step.answer})');
+              offenders.add(
+                '${item.id} $formKey: ${option.text} '
+                '(right ${step.answer})',
+              );
             }
           }
         }
@@ -363,32 +397,35 @@ void main() {
       expect(offenders, isEmpty, reason: offenders.take(10).join('\n'));
     });
 
-    test('the zero-ending forms split 174 dictionary forms / 2293 questions',
-        () async {
-      var zeroEnding = 0;
-      final dictionaryForms = <String>[];
-      final withQuestion = <String>[];
-      for (final item in await loadAllPracticeItems()) {
-        for (final formKey in item.formOrder) {
-          final form = item.derivation.forms[formKey];
-          if (form is! GeneratedForm || form.ending.isNotEmpty) continue;
-          zeroEnding++;
-          final steps = eselSteps(item, formKey);
-          if (steps.last.answerKey == 'esel.dictionaryForm') {
-            dictionaryForms.add('${item.id} $formKey');
-          } else {
-            withQuestion.add('${item.id} $formKey');
+    test(
+      'the zero-ending forms split 174 dictionary forms / 2293 questions',
+      () async {
+        var zeroEnding = 0;
+        final dictionaryForms = <String>[];
+        final withQuestion = <String>[];
+        for (final item in await loadAllPracticeItems()) {
+          for (final formKey in item.formOrder) {
+            final form = item.derivation.forms[formKey];
+            if (form is! GeneratedForm || form.ending.isNotEmpty) continue;
+            zeroEnding++;
+            final steps = eselSteps(item, formKey);
+            if (steps.last.answerKey == 'esel.dictionaryForm') {
+              dictionaryForms.add('${item.id} $formKey');
+            } else {
+              withQuestion.add('${item.id} $formKey');
+            }
           }
         }
-      }
-      expect(zeroEnding, 2467);
-      expect(dictionaryForms, hasLength(174));
-      expect(withQuestion, hasLength(2293));
-      expect(
-        dictionaryForms.map((e) => e.split(' ').first).toSet().toList()..sort(),
-        _dictionaryFormItems,
-      );
-    });
+        expect(zeroEnding, 2467);
+        expect(dictionaryForms, hasLength(174));
+        expect(withQuestion, hasLength(2293));
+        expect(
+          dictionaryForms.map((e) => e.split(' ').first).toSet().toList()
+            ..sort(),
+          _dictionaryFormItems,
+        );
+      },
+    );
 
     test('the classified types are exactly the types the items have', () async {
       final all = await loadAllPracticeItems();
@@ -398,35 +435,37 @@ void main() {
   });
 
   group('T-esel-5 i18n', () {
-    test('every esel key the builder emits exists in de.json and en.json',
-        () async {
-      final de = await germanTexts();
-      final en = await englishTexts();
-      final emitted = <String>{};
-      for (final item in await loadAllPracticeItems()) {
-        for (final formKey in item.formOrder) {
-          for (final step in eselSteps(item, formKey)) {
-            emitted.add(step.questionKey);
-            if (step.answerKey != null) emitted.add(step.answerKey!);
-            emitted.addAll(step.options.map((o) => o.textKey).nonNulls);
+    test(
+      'every esel key the builder emits exists in de.json and en.json',
+      () async {
+        final de = await germanTexts();
+        final en = await englishTexts();
+        final emitted = <String>{};
+        for (final item in await loadAllPracticeItems()) {
+          for (final formKey in item.formOrder) {
+            for (final step in eselSteps(item, formKey)) {
+              emitted.add(step.questionKey);
+              if (step.answerKey != null) emitted.add(step.answerKey!);
+              emitted.addAll(step.options.map((o) => o.textKey).nonNulls);
+            }
           }
         }
-      }
-      expect(emitted, isNotEmpty);
-      for (final key in emitted) {
-        expect(de, contains(key));
-        expect(en, contains(key));
-      }
-      for (final kind in EselKind.values) {
-        expect(de, contains('esel.kind.${kind.name}.letter'));
-        expect(de, contains('esel.kind.${kind.name}.name'));
-        expect(en, contains('esel.kind.${kind.name}.name'));
-      }
-      expect(de, contains('esel.show'));
-      expect(de, contains('esel.legend.title'));
-      expect(en, contains('esel.show'));
-      expect(en, contains('esel.legend.title'));
-    });
+        expect(emitted, isNotEmpty);
+        for (final key in emitted) {
+          expect(de, contains(key));
+          expect(en, contains(key));
+        }
+        for (final kind in EselKind.values) {
+          expect(de, contains('esel.kind.${kind.name}.letter'));
+          expect(de, contains('esel.kind.${kind.name}.name'));
+          expect(en, contains('esel.kind.${kind.name}.name'));
+        }
+        expect(de, contains('esel.show'));
+        expect(de, contains('esel.legend.title'));
+        expect(en, contains('esel.show'));
+        expect(en, contains('esel.legend.title'));
+      },
+    );
 
     test('the texts of the steps leave no parameter open', () async {
       final steps = [
@@ -441,11 +480,15 @@ void main() {
           );
       for (final texts in [await germanTexts(), await englishTexts()]) {
         for (final step in steps) {
-          expect(filled(texts[step.questionKey]!, step.questionParams),
-              isNot(contains('{')));
+          expect(
+            filled(texts[step.questionKey]!, step.questionParams),
+            isNot(contains('{')),
+          );
           if (step.answerKey == null) continue;
-          expect(filled(texts[step.answerKey]!, step.answerParams),
-              isNot(contains('{')));
+          expect(
+            filled(texts[step.answerKey]!, step.answerParams),
+            isNot(contains('{')),
+          );
         }
       }
     });
@@ -455,176 +498,178 @@ void main() {
 /// The answer of every step, a keyed one as its key and params: a pin must not
 /// read as an empty string just because the answer is a phrase.
 List<String> _answers(List<EselStep> steps) => [
-      for (final step in steps)
-        step.answerKey == null
-            ? step.answer
-            : [step.answerKey!, ...step.answerParams.values].join(' '),
-    ];
+  for (final step in steps)
+    step.answerKey == null
+        ? step.answer
+        : [step.answerKey!, ...step.answerParams.values].join(' '),
+];
 
-List<String> _texts(List<EselStep> steps) =>
-    [for (final step in steps) for (final o in step.options) o.identity];
+List<String> _texts(List<EselStep> steps) => [
+  for (final step in steps)
+    for (final o in step.options) o.identity,
+];
 
 /// The items with a form the dictionary itself writes. The rule reads the
 /// first key of `formOrder` that spells the principal part, so a reorder of the
 /// data would move it: this list makes such a move visible.
 const _dictionaryFormItems = [
-    'nouns:acer',
-    'nouns:aedis',
-    'nouns:aetas',
-    'nouns:amor',
-    'nouns:animal',
-    'nouns:arbor',
-    'nouns:ars',
-    'nouns:asper',
-    'nouns:ater',
-    'nouns:auctor',
-    'nouns:auctoritas',
-    'nouns:auris',
-    'nouns:caedes',
-    'nouns:caesar',
-    'nouns:calamitas',
-    'nouns:canis',
-    'nouns:caput',
-    'nouns:carmen',
-    'nouns:celer',
-    'nouns:cicero',
-    'nouns:cinis',
-    'nouns:civis',
-    'nouns:clades',
-    'nouns:clamor',
-    'nouns:classis',
-    'nouns:clemens',
-    'nouns:comes',
-    'nouns:coniunx',
-    'nouns:consul',
-    'nouns:cor',
-    'nouns:corpus',
-    'nouns:crudelis',
-    'nouns:crudelitas',
-    'nouns:cupiditas',
-    'nouns:custos',
-    'nouns:dens',
-    'nouns:dignitas',
-    'nouns:discrimen',
-    'nouns:dives',
-    'nouns:dolor',
-    'nouns:dux',
-    'nouns:facinus',
-    'nouns:felix',
-    'nouns:finis',
-    'nouns:flos',
-    'nouns:foedus',
-    'nouns:fortis',
-    'nouns:frater',
-    'nouns:fur',
-    'nouns:gens',
-    'nouns:gravis',
-    'nouns:homo',
-    'nouns:honos',
-    'nouns:hospes',
-    'nouns:hostis',
-    'nouns:imago',
-    'nouns:immortalis',
-    'nouns:imperator',
-    'nouns:incredibilis',
-    'nouns:infelix',
-    'nouns:ingens',
-    'nouns:iter',
-    'nouns:iuvenis',
-    'nouns:labor',
-    'nouns:laus',
-    'nouns:legio',
-    'nouns:lex',
-    'nouns:liber',
-    'nouns:libertas',
-    'nouns:litus',
-    'nouns:lux',
-    'nouns:maiestas',
-    'nouns:mare',
-    'nouns:mater',
-    'nouns:mercator',
-    'nouns:miles',
-    'nouns:miser',
-    'nouns:mollis',
-    'nouns:mons',
-    'nouns:mors',
-    'nouns:mos',
-    'nouns:mulier',
-    'nouns:munus',
-    'nouns:navis',
-    'nouns:nobilis',
-    'nouns:nomen',
-    'nouns:noster',
-    'nouns:nox',
-    'nouns:nubes',
-    'nouns:numen',
-    'nouns:occasio',
-    'nouns:omnis',
-    'nouns:oratio',
-    'nouns:orbis',
-    'nouns:os',
-    'nouns:pars',
-    'nouns:pater',
-    'nouns:pauper',
-    'nouns:pax',
-    'nouns:pecus',
-    'nouns:pes',
-    'nouns:pietas',
-    'nouns:plebs',
-    'nouns:pons',
-    'nouns:potestas',
-    'nouns:princeps',
-    'nouns:prudens',
-    'nouns:pulcher',
-    'nouns:pulchritudo',
-    'nouns:pulvis',
-    'nouns:regio',
-    'nouns:rex',
-    'nouns:salus',
-    'nouns:sanguis',
-    'nouns:scelus',
-    'nouns:senator',
-    'nouns:senex',
-    'nouns:sermo',
-    'nouns:servitus',
-    'nouns:sol',
-    'nouns:soror',
-    'nouns:talis',
-    'nouns:tempestas',
-    'nouns:tempus',
-    'nouns:terror',
-    'nouns:timor',
-    'nouns:tristis',
-    'nouns:turpis',
-    'nouns:urbs',
-    'nouns:uxor',
-    'nouns:vester',
-    'nouns:vestis',
-    'nouns:vetus',
-    'nouns:virgo',
-    'nouns:virtus',
-    'nouns:voluptas',
-    'nouns:vox',
-    'nouns:vulnus',
-    'verbs:abesse',
-    'verbs:abire',
-    'verbs:adire',
-    'verbs:afferre',
-    'verbs:auferre',
-    'verbs:conferre',
-    'verbs:efferre',
-    'verbs:exire',
-    'verbs:ferre',
-    'verbs:inferre',
-    'verbs:inire',
-    'verbs:ire',
-    'verbs:nolle',
-    'verbs:offerre',
-    'verbs:perferre',
-    'verbs:perire',
-    'verbs:praeesse',
-    'verbs:redire',
-    'verbs:referre',
-    'verbs:subire',
-    'verbs:velle',
+  'nouns:acer',
+  'nouns:aedis',
+  'nouns:aetas',
+  'nouns:amor',
+  'nouns:animal',
+  'nouns:arbor',
+  'nouns:ars',
+  'nouns:asper',
+  'nouns:ater',
+  'nouns:auctor',
+  'nouns:auctoritas',
+  'nouns:auris',
+  'nouns:caedes',
+  'nouns:caesar',
+  'nouns:calamitas',
+  'nouns:canis',
+  'nouns:caput',
+  'nouns:carmen',
+  'nouns:celer',
+  'nouns:cicero',
+  'nouns:cinis',
+  'nouns:civis',
+  'nouns:clades',
+  'nouns:clamor',
+  'nouns:classis',
+  'nouns:clemens',
+  'nouns:comes',
+  'nouns:coniunx',
+  'nouns:consul',
+  'nouns:cor',
+  'nouns:corpus',
+  'nouns:crudelis',
+  'nouns:crudelitas',
+  'nouns:cupiditas',
+  'nouns:custos',
+  'nouns:dens',
+  'nouns:dignitas',
+  'nouns:discrimen',
+  'nouns:dives',
+  'nouns:dolor',
+  'nouns:dux',
+  'nouns:facinus',
+  'nouns:felix',
+  'nouns:finis',
+  'nouns:flos',
+  'nouns:foedus',
+  'nouns:fortis',
+  'nouns:frater',
+  'nouns:fur',
+  'nouns:gens',
+  'nouns:gravis',
+  'nouns:homo',
+  'nouns:honos',
+  'nouns:hospes',
+  'nouns:hostis',
+  'nouns:imago',
+  'nouns:immortalis',
+  'nouns:imperator',
+  'nouns:incredibilis',
+  'nouns:infelix',
+  'nouns:ingens',
+  'nouns:iter',
+  'nouns:iuvenis',
+  'nouns:labor',
+  'nouns:laus',
+  'nouns:legio',
+  'nouns:lex',
+  'nouns:liber',
+  'nouns:libertas',
+  'nouns:litus',
+  'nouns:lux',
+  'nouns:maiestas',
+  'nouns:mare',
+  'nouns:mater',
+  'nouns:mercator',
+  'nouns:miles',
+  'nouns:miser',
+  'nouns:mollis',
+  'nouns:mons',
+  'nouns:mors',
+  'nouns:mos',
+  'nouns:mulier',
+  'nouns:munus',
+  'nouns:navis',
+  'nouns:nobilis',
+  'nouns:nomen',
+  'nouns:noster',
+  'nouns:nox',
+  'nouns:nubes',
+  'nouns:numen',
+  'nouns:occasio',
+  'nouns:omnis',
+  'nouns:oratio',
+  'nouns:orbis',
+  'nouns:os',
+  'nouns:pars',
+  'nouns:pater',
+  'nouns:pauper',
+  'nouns:pax',
+  'nouns:pecus',
+  'nouns:pes',
+  'nouns:pietas',
+  'nouns:plebs',
+  'nouns:pons',
+  'nouns:potestas',
+  'nouns:princeps',
+  'nouns:prudens',
+  'nouns:pulcher',
+  'nouns:pulchritudo',
+  'nouns:pulvis',
+  'nouns:regio',
+  'nouns:rex',
+  'nouns:salus',
+  'nouns:sanguis',
+  'nouns:scelus',
+  'nouns:senator',
+  'nouns:senex',
+  'nouns:sermo',
+  'nouns:servitus',
+  'nouns:sol',
+  'nouns:soror',
+  'nouns:talis',
+  'nouns:tempestas',
+  'nouns:tempus',
+  'nouns:terror',
+  'nouns:timor',
+  'nouns:tristis',
+  'nouns:turpis',
+  'nouns:urbs',
+  'nouns:uxor',
+  'nouns:vester',
+  'nouns:vestis',
+  'nouns:vetus',
+  'nouns:virgo',
+  'nouns:virtus',
+  'nouns:voluptas',
+  'nouns:vox',
+  'nouns:vulnus',
+  'verbs:abesse',
+  'verbs:abire',
+  'verbs:adire',
+  'verbs:afferre',
+  'verbs:auferre',
+  'verbs:conferre',
+  'verbs:efferre',
+  'verbs:exire',
+  'verbs:ferre',
+  'verbs:inferre',
+  'verbs:inire',
+  'verbs:ire',
+  'verbs:nolle',
+  'verbs:offerre',
+  'verbs:perferre',
+  'verbs:perire',
+  'verbs:praeesse',
+  'verbs:redire',
+  'verbs:referre',
+  'verbs:subire',
+  'verbs:velle',
 ];
