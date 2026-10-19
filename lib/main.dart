@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_i18n/flutter_i18n_delegate.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'providers/locale_provider.dart';
 import 'screens/home_screen.dart';
 
 /// Nothing here is loaded over a network: a read that fails fails again, and
@@ -14,13 +15,17 @@ void main() {
   runApp(ProviderScope(retry: noRetry, child: const LatinPracticeApp()));
 }
 
-class LatinPracticeApp extends StatelessWidget {
+class LatinPracticeApp extends ConsumerWidget {
   const LatinPracticeApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
       title: 'Latin Practice',
+      locale: ref.watch(localeOverrideProvider).value,
+      supportedLocales: [for (final offered in offeredLocales) offered.locale],
+      localeListResolutionCallback: (locales, supported) =>
+          resolveLocale(locales),
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.grey),
         useMaterial3: true,
@@ -40,6 +45,7 @@ class LatinPracticeApp extends StatelessWidget {
         ),
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
       ],
       builder: FlutterI18n.rootAppBuilder(),
       home: const HomeScreen(),

@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../screens/practice_screen.dart';
 import '../screens/word_classification_screen.dart';
 import '../screens/settings_screen.dart';
+import '../screens/language_screen.dart';
 import '../models/practice_item.dart';
 import '../providers/fsrs_provider.dart';
 
@@ -62,6 +63,22 @@ Widget buildAppDrawer(BuildContext context) {
           },
         ),
         const Divider(),
+        ListTile(
+          key: const Key('drawer.language'),
+          leading: const Icon(Icons.language, color: Colors.black),
+          title: Text(
+            FlutterI18n.translate(context, 'drawer.language'),
+            style: TextStyle(color: Colors.black, fontSize: itemFontSize),
+          ),
+          onTap: () {
+            Navigator.pop(context);
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => const LanguageScreen(),
+              ),
+            );
+          },
+        ),
         ListTile(
           key: const Key('drawer.settings'),
           leading: const Icon(Icons.settings, color: Colors.black),

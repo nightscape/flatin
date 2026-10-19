@@ -63,7 +63,8 @@
     "verbs": "Verbs (Konjugation)",
     "wordClassification": "Word Classification",
     "settings": "Settings",
-    "errorLoadingData": "Error loading data"
+    "errorLoadingData": "Error loading data",
+    "language": "Language"
   },
   "explain": {
     "deponent": "{label} is deponent: passive form, active meaning",
@@ -143,5 +144,10 @@
     },
     "absentLabel": "not needed",
     "wrongPick": "wrong"
+  },
+  "language": {
+    "title": "Language",
+    "search": "Search",
+    "system": "System (device language)"
   }
 }

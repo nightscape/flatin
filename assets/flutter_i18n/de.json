@@ -63,7 +63,8 @@
     "verbs": "Verben (Konjugation)",
     "wordClassification": "Wortklassifikation",
     "settings": "Einstellungen",
-    "errorLoadingData": "Fehler beim Laden der Daten"
+    "errorLoadingData": "Fehler beim Laden der Daten",
+    "language": "Sprache"
   },
   "explain": {
     "deponent": "{label} ist ein Deponens: passive Form, aktive Bedeutung",
@@ -143,5 +144,10 @@
     },
     "absentLabel": "entfällt",
     "wrongPick": "falsch"
+  },
+  "language": {
+    "title": "Sprache",
+    "search": "Suchen",
+    "system": "System (Gerätesprache)"
   }
 }
