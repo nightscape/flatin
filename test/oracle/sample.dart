@@ -135,7 +135,7 @@ _Built? _verbItem(
     text:
         '''
   - type: $type
-    translation: ${_yaml(lemmaKey)}
+    translation: {de: ${_yaml(lemmaKey)}, en: ${_yaml(lemmaKey)}}
     parts: {${parts.join(', ')}}${deponent ? '\n    deponent: all' : ''}
 ''',
   );
@@ -161,7 +161,7 @@ _Built? _nounItem(
     text:
         '''
   - type: $type
-    translation: ${_yaml(lemmaKey)}
+    translation: {de: ${_yaml(lemmaKey)}, en: ${_yaml(lemmaKey)}}
     parts: {nom: ${_yaml(nom)}, gen: ${_yaml(stem + build['genitive']!)}}
 ''',
   );
@@ -194,7 +194,7 @@ _Built? _adjectiveItem(
     text:
         '''
   - type: $type
-    translation: ${_yaml(lemmaKey)}
+    translation: {de: ${_yaml(lemmaKey)}, en: ${_yaml(lemmaKey)}}
     parts: {${parts.join(', ')}}
 ''',
   );

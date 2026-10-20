@@ -1,4 +1,4 @@
-/// Parser and Dart model of the grammar data schema 3.1 (`lib/data/SCHEMA.md`).
+/// Parser and Dart model of the grammar data schema 3.2 (`lib/data/SCHEMA.md`).
 ///
 /// This library reads and checks data; it generates no forms. It resolves type
 /// inheritance (S6), the type of every item (S11) and the set of keys every
@@ -11,7 +11,7 @@ import 'package:yaml/yaml.dart';
 import '../data/lesson_data.dart' show normalizeDiacritics;
 import '../models/form_label.dart';
 
-/// A violation of one of the schema rules S1-S18.
+/// A violation of one of the schema rules S1-S20.
 class SchemaError implements Exception {
   final String rule;
   final String path;
@@ -33,6 +33,13 @@ class SchemaError implements Exception {
 }
 
 String _norm(String text) => normalizeDiacritics(text).toLowerCase();
+
+/// S20: every text shown to the learner is given in each of these languages.
+const dataLanguages = ['de', 'en'];
+
+/// The language the course is written in: what a learner reads when no other
+/// data language is asked for.
+const courseLanguage = 'de';
 
 final _letters = RegExp(r'^[a-zāēīōūȳăĕĭŏŭ]+$', caseSensitive: false);
 final _macron = RegExp(r'[āēīōūȳĀĒĪŌŪȲ]');
@@ -280,6 +287,9 @@ final class GrammarType {
   /// S19: the word class of a concrete type, null for an abstract one.
   final String? wordClass;
 
+  /// S20: what the learner reads for a concrete type, null for an abstract one.
+  final String? display;
+
   final String? inheritsFrom;
   final List<String> requiredStems;
   final Map<String, StemSpec> stems;
@@ -299,6 +309,7 @@ final class GrammarType {
     required this.name,
     this.isAbstract = false,
     this.wordClass,
+    this.display,
     this.inheritsFrom,
     this.requiredStems = const [],
     this.stems = const {},
@@ -317,6 +328,7 @@ final class GrammarType {
     name: name,
     isAbstract: isAbstract,
     wordClass: wordClass,
+    display: display,
     inheritsFrom: inheritsFrom,
     requiredStems: {...parent.requiredStems, ...requiredStems}.toList(),
     stems: {...parent.stems, ...stems},
@@ -404,6 +416,9 @@ final class ItemKeys {
 /// One parsed data file.
 final class GrammarFile {
   final String path;
+
+  /// The language of every text of this parse (S20).
+  final String language;
   final String dataFileId;
   final Axes axes;
   final Map<String, PartSpec> parts;
@@ -432,6 +447,7 @@ final class GrammarFile {
 
   GrammarFile({
     required this.path,
+    required this.language,
     required this.dataFileId,
     required this.axes,
     required this.parts,
@@ -459,16 +475,27 @@ final class GrammarFile {
 
 /// The `axes:` and `label:` blocks of one data file, with their S1 and S17
 /// checks. The v1 loader needs these without the rest of the schema.
-Axes parseAxes(YamlMap root, {required String path}) =>
-    _FileParser(path, root)._axes();
+Axes parseAxes(
+  YamlMap root, {
+  required String path,
+  String language = courseLanguage,
+}) => _FileParser(path, root, language)._axes();
 
 /// Parses one data file. Use [parseGrammarFiles] when types cross file
 /// borders (S12).
-GrammarFile parseGrammarFile(String source, {required String path}) =>
-    parseGrammarFiles({path: source}).single;
+GrammarFile parseGrammarFile(
+  String source, {
+  required String path,
+  String language = courseLanguage,
+}) => parseGrammarFiles({path: source}, language: language).single;
 
-/// Parses all data files together and runs the cross-file checks (S12).
-List<GrammarFile> parseGrammarFiles(Map<String, String> sourceByPath) {
+/// Parses all data files together and runs the cross-file checks (S12). The
+/// texts come in [language]; S20 checks every language on every parse.
+List<GrammarFile> parseGrammarFiles(
+  Map<String, String> sourceByPath, {
+  String language = courseLanguage,
+}) {
+  assert(dataLanguages.contains(language), 'no data language "$language"');
   final files = <GrammarFile>[];
   for (final entry in sourceByPath.entries) {
     final documents = loadYamlDocuments(entry.value);
@@ -481,7 +508,11 @@ List<GrammarFile> parseGrammarFiles(Map<String, String> sourceByPath) {
       );
     }
     files.add(
-      _FileParser(entry.key, documents.single.contents as YamlMap).parse(),
+      _FileParser(
+        entry.key,
+        documents.single.contents as YamlMap,
+        language,
+      ).parse(),
     );
   }
   _Linker(files).link();
@@ -501,11 +532,30 @@ Never _fail(
 class _FileParser {
   final String path;
   final YamlMap root;
+  final String language;
 
-  _FileParser(this.path, this.root);
+  _FileParser(this.path, this.root, this.language);
 
   Never _bad(String rule, String message, {String? item, FormKey? key}) =>
       _fail(rule, path, message, item: item, key: key);
+
+  /// S20: a map from each data language to a non-empty text.
+  Map<String, String> _texts(Object? node, String where) {
+    if (node is! YamlMap ||
+        node.length != dataLanguages.length ||
+        !dataLanguages.every(node.containsKey)) {
+      _bad('S20', '$where: give a map of the languages $dataLanguages');
+    }
+    return {
+      for (final code in dataLanguages)
+        code: switch (node[code]) {
+          final String text when text.trim().isNotEmpty => text,
+          _ => _bad('S20', '$where: the "$code" text is missing or empty'),
+        },
+    };
+  }
+
+  String _text(Object? node, String where) => _texts(node, where)[language]!;
 
   /// Every top-level key a data file may carry. `shared:` holds YAML anchors
   /// items alias; nothing reads it.
@@ -535,6 +585,7 @@ class _FileParser {
     final classes = _classes();
     final file = GrammarFile(
       path: path,
+      language: language,
       dataFileId: root['data_file_id'] as String,
       axes: axes,
       parts: parts,
@@ -564,7 +615,7 @@ class _FileParser {
           _bad('S1', 'code "$code" is declared by axis $owner and axis $id');
         }
         codeOwner[code] = id;
-        values.add((code, '${value.value}'));
+        values.add((code, _text(value.value, 'axis $id code $code')));
       }
       final hidden = (spec['hidden_in_label'] as YamlList?) ?? const [];
       for (final code in hidden) {
@@ -575,7 +626,7 @@ class _FileParser {
       axes.add(
         GrammarAxis(
           id: id,
-          name: spec['name'] as String,
+          name: _text(spec['name'], 'axis $id name'),
           values: values,
           hiddenInLabel: {for (final code in hidden) '$code'},
         ),
@@ -630,7 +681,7 @@ class _FileParser {
         if (axis.indexOf(code) < 0) {
           _bad('S17', 'override names the unknown code "$code" of $axisId');
         }
-        values[code] = '${entry.value}';
+        values[code] = _text(entry.value, 'override of $axisId code $code');
       }
       overrides.add(LabelOverride(when: when, axis: axisId, values: values));
     }
@@ -650,7 +701,7 @@ class _FileParser {
       for (final entry in node.entries)
         '${entry.key}': PartSpec(
           name: '${entry.key}',
-          label: '${(entry.value as YamlMap)['label']}',
+          label: _text((entry.value as YamlMap)['label'], 'part ${entry.key}'),
           display: (entry.value as YamlMap)['display'] as bool? ?? true,
         ),
     };
@@ -738,8 +789,7 @@ class _FileParser {
         );
       }
 
-      final explain = '${spec['explain'] ?? ''}';
-      if (explain.isEmpty) _bad('S16', 'rule $id has an empty "explain"');
+      final explain = _text(spec['explain'], 'sandhi rule $id explain');
 
       rules[id] = SandhiRuleSpec(
         id: id,
@@ -768,19 +818,34 @@ class _FileParser {
   Map<String, GrammarType> _types(Axes axes, Set<String> classes) {
     final node = (root['types'] as YamlMap?) ?? YamlMap();
     final types = <String, GrammarType>{};
+    final typeOfDisplay = <(String, String), String>{};
     for (final entry in node.entries) {
       final name = '${entry.key}';
       final spec = (entry.value as YamlMap?) ?? YamlMap();
       final isAbstract = spec['abstract'] as bool? ?? false;
+      final wordClass = _wordClass(
+        name,
+        spec['class'] as String?,
+        isAbstract,
+        classes,
+      );
+      final displays = _typeDisplays(name, spec['display'], isAbstract);
+      for (final display in displays.entries) {
+        final other = typeOfDisplay[(display.key, display.value)];
+        if (other != null) {
+          _bad(
+            'S20',
+            'types $other and $name share the ${display.key} display '
+                '"${display.value}"',
+          );
+        }
+        typeOfDisplay[(display.key, display.value)] = name;
+      }
       types[name] = GrammarType(
         name: name,
         isAbstract: isAbstract,
-        wordClass: _wordClass(
-          name,
-          spec['class'] as String?,
-          isAbstract,
-          classes,
-        ),
+        wordClass: wordClass,
+        display: displays[language],
         inheritsFrom: spec['inherits_from'] as String?,
         requiredStems: [
           for (final s in (spec['required_stems'] as YamlList?) ?? const [])
@@ -797,6 +862,19 @@ class _FileParser {
       );
     }
     return types;
+  }
+
+  /// S20: a concrete type has a display per language, an abstract one none.
+  Map<String, String> _typeDisplays(
+    String type,
+    Object? node,
+    bool isAbstract,
+  ) {
+    if (!isAbstract) return _texts(node, 'type $type display');
+    if (node != null) {
+      _bad('S20', 'type $type is abstract, so it takes no "display"');
+    }
+    return const {};
   }
 
   /// S19: a concrete type names one of the file's classes, an abstract one
@@ -842,7 +920,9 @@ class _FileParser {
         template: template == null
             ? null
             : _template(template, 'type $type stem $name'),
-        display: spec['display'] as String?,
+        display: spec['display'] == null
+            ? null
+            : _text(spec['display'], 'type $type stem $name display'),
       );
     }
     return stems;
@@ -1072,10 +1152,7 @@ class _FileParser {
       final lemmaPart = file.lemmaPart ?? file.givenPart;
       final lemma = parts[lemmaPart]?.first;
       if (lemma == null) {
-        _bad(
-          'S3',
-          'item "${spec['translation']}" lacks the lemma part "$lemmaPart"',
-        );
+        _bad('S3', 'item ${spec['parts']} lacks the lemma part "$lemmaPart"');
       }
       final id = spec['id'] as String? ?? _norm(lemma);
       if (!ids.add(id)) _bad('S5', 'two items share the id "$id"', item: id);
@@ -1114,7 +1191,7 @@ class _FileParser {
       items.add(
         GrammarItem(
           id: id,
-          translation: '${spec['translation']}',
+          translation: _text(spec['translation'], 'item $id translation'),
           parts: parts,
           forms: forms,
           absent: absent,

@@ -1,15 +1,15 @@
 # The code "sg" is declared by two axes, which S1 forbids.
 axes:
   numerus:
-    name: Numerus
+    name: {de: Numerus, en: Number}
     values:
-      sg: Singular
-      pl: Plural
+      sg: {de: Singular, en: Singular}
+      pl: {de: Plural, en: Plural}
   genus:
-    name: Genus
+    name: {de: Genus, en: Gender}
     values:
-      sg: Singular
-      f: Femininum
+      sg: {de: Singular, en: Singular}
+      f: {de: Femininum, en: Feminine}
 
 label:
   head: []

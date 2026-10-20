@@ -34,6 +34,7 @@ class OfferedLocale {
 /// exists in it.
 const offeredLocales = <OfferedLocale>[
   OfferedLocale('de', 'Deutsch', 'German', '🇩🇪'),
+  OfferedLocale('en', 'English', 'English', '🇬🇧'),
 ];
 
 /// The course language: what a device the app has no translation for gets.
@@ -77,6 +78,15 @@ class LocaleOverride extends _$LocaleOverride {
     state = AsyncData(locale);
   }
 }
+
+/// The language of the data texts: the language the app shows.
+// shortcut: reads the device languages once, so a change of them while the
+// app runs shows in the data texts after a restart; upgrade when that matters.
+@riverpod
+Future<String> dataLanguage(Ref ref) async =>
+    (await ref.watch(localeOverrideProvider.future) ??
+            resolveLocale(WidgetsBinding.instance.platformDispatcher.locales))
+        .languageCode;
 
 /// Lowercases and strips the accents a learner may not type.
 String foldForSearch(String text) {

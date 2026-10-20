@@ -127,51 +127,111 @@ const borrowedEndings = <String, Set<String>>{
   'E-Deklination-Konsonantstamm': {'E-Deklination'},
 };
 
-/// The school-grammar phrase naming each type [borrowedEndings] can name; the
-/// clause prints it as it stands.
-const endingTypePhrases = <String, String>{
-  '3-Endungen': 'Endung der 3. Deklination',
-  '3-Endungen-Partizip': 'Endung der 3. Deklination (Partizip)',
-  'a-o-Endungen': 'Endung der a-/o-Deklination',
-  'a-o-er-Endungen': 'Endung der a-/o-Deklination auf -er',
-  'Komparativ-Endungen': 'Komparativendung',
-  'I-Konjugation': 'Endung der I-Konjugation',
-  'Adjektiv-a-o': 'Adverbendung (Adjektiv der a-/o-Deklination)',
-  'Adjektiv-3': 'Adverbendung (Adjektiv der 3. Deklination)',
-  'Konsonantische-Deklination-mf':
-      'Endung der konsonantischen Deklination (m/f)',
-  'Konsonantische-Deklination-n': 'Endung der konsonantischen Deklination (n)',
-  'E-Deklination': 'Endung der E-Deklination',
+/// The school-grammar phrase naming each type [borrowedEndings] can name, by
+/// language; the clause prints it as it stands.
+const endingTypePhrases = <String, Map<String, String>>{
+  '3-Endungen': {
+    'de': 'Endung der 3. Deklination',
+    'en': '3rd declension ending',
+  },
+  '3-Endungen-Partizip': {
+    'de': 'Endung der 3. Deklination (Partizip)',
+    'en': '3rd declension ending (participle)',
+  },
+  'a-o-Endungen': {
+    'de': 'Endung der a-/o-Deklination',
+    'en': '1st/2nd declension ending',
+  },
+  'a-o-er-Endungen': {
+    'de': 'Endung der a-/o-Deklination auf -er',
+    'en': '1st/2nd declension ending in -er',
+  },
+  'Komparativ-Endungen': {'de': 'Komparativendung', 'en': 'comparative ending'},
+  'I-Konjugation': {
+    'de': 'Endung der I-Konjugation',
+    'en': '4th conjugation ending',
+  },
+  'Adjektiv-a-o': {
+    'de': 'Adverbendung (Adjektiv der a-/o-Deklination)',
+    'en': 'adverb ending (1st/2nd declension adjective)',
+  },
+  'Adjektiv-3': {
+    'de': 'Adverbendung (Adjektiv der 3. Deklination)',
+    'en': 'adverb ending (3rd declension adjective)',
+  },
+  'Konsonantische-Deklination-mf': {
+    'de': 'Endung der konsonantischen Deklination (m/f)',
+    'en': '3rd declension consonant-stem ending (m/f)',
+  },
+  'Konsonantische-Deklination-n': {
+    'de': 'Endung der konsonantischen Deklination (n)',
+    'en': '3rd declension consonant-stem ending (n)',
+  },
+  'E-Deklination': {
+    'de': 'Endung der E-Deklination',
+    'en': '5th declension ending',
+  },
 };
 
-String endingTypePhrase(String type) =>
-    endingTypePhrases[type] ??
-    (throw StateError('no phrase for ending type $type'));
+String endingTypePhrase(String type, String language) =>
+    (endingTypePhrases[type] ??
+    (throw StateError('no phrase for ending type $type')))[language]!;
 
 /// The phrase for each type a diagnosis can name that the ending clause never
 /// does; [typePhrase] reads it after [endingTypePhrases].
-const diagnosisOnlyTypePhrases = <String, String>{
-  'A-Deklination': 'Endung der A-Deklination',
-  'O-Deklination-maskulinum': 'Endung der O-Deklination (m)',
-  'O-Deklination-neutrum': 'Endung der O-Deklination (n)',
-  'U-Deklination': 'Endung der U-Deklination',
-  'E-Deklination-Konsonantstamm': 'Endung der E-Deklination (Konsonantstamm)',
-  'Konsonantische-Deklination-i-mf':
-      'Endung der konsonantischen Deklination (i-Stamm, m/f)',
-  'Konsonantische-Deklination-i-n':
-      'Endung der konsonantischen Deklination (i-Stamm, n)',
-  'A-Konjugation': 'Endung der A-Konjugation',
-  'E-Konjugation': 'Endung der E-Konjugation',
-  'Konsonantische': 'Endung der konsonantischen Konjugation',
-  'Mischkonjugation': 'Endung der Mischkonjugation',
-  'Perfekt-System': 'Endung des Perfekts',
-  'Unregelmäßig': 'unregelmäßige Endung',
+const diagnosisOnlyTypePhrases = <String, Map<String, String>>{
+  'A-Deklination': {
+    'de': 'Endung der A-Deklination',
+    'en': '1st declension ending',
+  },
+  'O-Deklination-maskulinum': {
+    'de': 'Endung der O-Deklination (m)',
+    'en': '2nd declension ending (m)',
+  },
+  'O-Deklination-neutrum': {
+    'de': 'Endung der O-Deklination (n)',
+    'en': '2nd declension ending (n)',
+  },
+  'U-Deklination': {
+    'de': 'Endung der U-Deklination',
+    'en': '4th declension ending',
+  },
+  'E-Deklination-Konsonantstamm': {
+    'de': 'Endung der E-Deklination (Konsonantstamm)',
+    'en': '5th declension ending (consonant stem)',
+  },
+  'Konsonantische-Deklination-i-mf': {
+    'de': 'Endung der konsonantischen Deklination (i-Stamm, m/f)',
+    'en': '3rd declension i-stem ending (m/f)',
+  },
+  'Konsonantische-Deklination-i-n': {
+    'de': 'Endung der konsonantischen Deklination (i-Stamm, n)',
+    'en': '3rd declension i-stem ending (n)',
+  },
+  'A-Konjugation': {
+    'de': 'Endung der A-Konjugation',
+    'en': '1st conjugation ending',
+  },
+  'E-Konjugation': {
+    'de': 'Endung der E-Konjugation',
+    'en': '2nd conjugation ending',
+  },
+  'Konsonantische': {
+    'de': 'Endung der konsonantischen Konjugation',
+    'en': '3rd conjugation ending',
+  },
+  'Mischkonjugation': {
+    'de': 'Endung der Mischkonjugation',
+    'en': 'mixed conjugation ending',
+  },
+  'Perfekt-System': {'de': 'Endung des Perfekts', 'en': 'perfect ending'},
+  'Unregelmäßig': {'de': 'unregelmäßige Endung', 'en': 'irregular ending'},
 };
 
-String typePhrase(String type) =>
-    endingTypePhrases[type] ??
+String typePhrase(String type, String language) =>
+    (endingTypePhrases[type] ??
     diagnosisOnlyTypePhrases[type] ??
-    (throw StateError('no phrase for type $type'));
+    (throw StateError('no phrase for type $type')))[language]!;
 
 ExplanationLine _diagnosisLine(
   PracticeItem item,
@@ -201,7 +261,12 @@ ExplanationLine _diagnosisLine(
     case EndingOfOtherType(:final types):
       return ExplanationLine(
         'explain.diag.otherType',
-        params: {'answer': answer, 'types': types.map(typePhrase).join(', ')},
+        params: {
+          'answer': answer,
+          'types': types
+              .map((type) => typePhrase(type, item.derivation.grammar.language))
+              .join(', '),
+        },
       );
     case WrongStem(:final usedStem, :final stemName):
       final stem = item.derivation.stems[stemName]!;

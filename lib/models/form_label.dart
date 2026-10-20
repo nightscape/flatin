@@ -1,4 +1,4 @@
-/// Feature axes and labels of one data file (schema 3.1, rules S1, S7, S17).
+/// Feature axes and labels of one data file (schema 3.2, rules S1, S7, S17).
 ///
 /// See `lib/data/SCHEMA.md`.
 library;

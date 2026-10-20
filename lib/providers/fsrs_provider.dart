@@ -11,6 +11,7 @@ import '../models/fsrs_card.dart';
 import '../services/fsrs_storage.dart';
 import '../data/practice_data.dart';
 import 'curriculum_provider.dart';
+import 'locale_provider.dart';
 import 'settings_provider.dart';
 
 part 'fsrs_provider.g.dart';
@@ -50,7 +51,8 @@ Future<Map<String, List<PracticeItem>>> practicableItemsByType(Ref ref) async {
   final filter = await ref.watch(courseFilterProvider.future);
 
   final itemsByType = <String, List<PracticeItem>>{'nouns': [], 'verbs': []};
-  for (final item in await loadAllPracticeItems()) {
+  final language = await ref.watch(dataLanguageProvider.future);
+  for (final item in await loadAllPracticeItems(language: language)) {
     if (!filter.reachesPractice(item)) continue;
     itemsByType[item.dataFileId]!.add(item);
   }
@@ -161,7 +163,10 @@ Future<bool> reviewCardReportingErrors(
 @riverpod
 Future<List<String>> translationChoices(Ref ref, PracticeItem item) async {
   final yamlPath = 'lib/data/latin_${item.dataFileId}.yaml';
-  final allItems = await loadPracticeItems(yamlPath);
+  final allItems = await loadPracticeItems(
+    yamlPath,
+    language: item.derivation.grammar.language,
+  );
 
   final strategy = distractorStrategyById(
     (await ref.watch(settingsProvider.future)).distractorStrategyId,

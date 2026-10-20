@@ -208,7 +208,7 @@ PracticeItem amare() {
         'perfekt': perfekt,
         'ppp': ppp,
       },
-      grammar: const Grammar({}, {}),
+      grammar: const Grammar({}, {}, {}, 'de'),
       forms: {
         'ind.praes.akt.1.sg': GeneratedForm(
           formKey: 'ind.praes.akt.1.sg',
@@ -330,7 +330,7 @@ PracticeItem capere() {
         ],
       ),
       stems: {'wurzel': wurzel, 'praesens': praesens},
-      grammar: const Grammar({}, {}),
+      grammar: const Grammar({}, {}, {}, 'de'),
       forms: {
         'inf.praes.akt': GeneratedForm(
           formKey: 'inf.praes.akt',
@@ -367,7 +367,7 @@ PracticeItem regere() {
       type: 'Konsonantische-Konjugation',
       recognition: const TypeDeclared(),
       stems: {'praesens': praesens},
-      grammar: const Grammar({}, {}),
+      grammar: const Grammar({}, {}, {}, 'de'),
       forms: {
         'ind.praes.akt.3.sg': GeneratedForm(
           formKey: 'ind.praes.akt.3.sg',
@@ -424,7 +424,7 @@ PracticeItem posse() {
       type: 'Unregelmäßig-posse',
       recognition: const TypeDeclared(),
       stems: {'praesens': praesens},
-      grammar: const Grammar({}, {}),
+      grammar: const Grammar({}, {}, {}, 'de'),
       forms: {
         'ind.praes.akt.1.sg': composed(
           'ind.praes.akt.1.sg',
@@ -476,7 +476,7 @@ PracticeItem fortis() {
       type: 'I-Deklination-mf',
       recognition: const TypeDeclared(),
       stems: {'stamm': stamm, 'komparativ': komparativ},
-      grammar: const Grammar({}, {}),
+      grammar: const Grammar({}, {}, {}, 'de'),
       forms: {
         'komp.gen.sg': GeneratedForm(
           formKey: 'komp.gen.sg',
@@ -516,7 +516,7 @@ PracticeItem hortari() {
         candidateTypes: ['A-Konjugation'],
       ),
       stems: {'praesens': praesens},
-      grammar: const Grammar({}, {}),
+      grammar: const Grammar({}, {}, {}, 'de'),
       deponentKeys: const {'ind.praes.akt.1.sg'},
       forms: {
         'ind.praes.akt.1.sg': GeneratedForm(
@@ -554,7 +554,7 @@ PracticeItem afferre() {
       type: 'Unregelmäßig-ferre',
       recognition: const TypeDeclared(),
       stems: {'praesens': praesens},
-      grammar: const Grammar({}, {}),
+      grammar: const Grammar({}, {}, {}, 'de'),
       forms: {
         'ind.praes.akt.1.sg': GeneratedForm(
           formKey: 'ind.praes.akt.1.sg',
@@ -579,7 +579,7 @@ PracticeItem abire() => traceItem(
   derivation: Derivation(
     type: 'Unregelmäßig-ire',
     recognition: const TypeDeclared(),
-    grammar: const Grammar({}, {}),
+    grammar: const Grammar({}, {}, {}, 'de'),
     forms: {
       'ind.perf.akt.1.sg': GivenForm(
         formKey: 'ind.perf.akt.1.sg',

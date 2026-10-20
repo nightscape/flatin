@@ -25,7 +25,7 @@ PracticeItem _item(String dataFileId, String lemma, String translation) =>
         type: 'A-Deklination',
         recognition: const TypeDeclared(),
         forms: const {},
-        grammar: const Grammar({}, {}),
+        grammar: const Grammar({}, {}, {}, 'de'),
       ),
     );
 

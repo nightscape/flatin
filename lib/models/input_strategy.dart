@@ -47,7 +47,6 @@ class InputContext {
 /// Strategy for how the user enters answers in the practice screen.
 abstract class InputStrategy {
   String get id;
-  String get displayName;
 
   Widget buildInput(InputContext ctx);
 
@@ -73,9 +72,6 @@ class TextFieldStrategy extends InputStrategy {
   String get id => 'text_field';
 
   @override
-  String get displayName => 'Texteingabe';
-
-  @override
   Widget buildInput(InputContext ctx) {
     return _PersistentTextField(
       value: ctx.currentValue,
@@ -92,9 +88,6 @@ class TextFieldStrategy extends InputStrategy {
 class AllFormsDropdownStrategy extends InputStrategy {
   @override
   String get id => 'dropdown_all_forms';
-
-  @override
-  String get displayName => 'Dropdown (alle Formen)';
 
   @override
   Widget buildInput(InputContext ctx) {
@@ -115,9 +108,6 @@ class AllFormsDropdownStrategy extends InputStrategy {
 class DistractorDropdownStrategy extends InputStrategy {
   @override
   String get id => 'dropdown_distractors';
-
-  @override
-  String get displayName => 'Dropdown (mit Distraktoren)';
 
   @override
   Widget buildInput(InputContext ctx) {
@@ -145,9 +135,6 @@ class DistractorDropdownStrategy extends InputStrategy {
 class RegularFormDistractorStrategy extends InputStrategy {
   @override
   String get id => 'dropdown_regular_distractor';
-
-  @override
-  String get displayName => 'Dropdown (reguläre Formen als Distraktoren)';
 
   @override
   Widget buildInput(InputContext ctx) {

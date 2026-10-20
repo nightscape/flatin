@@ -17,7 +17,8 @@ void main() {
     final german = offeredLocales.firstWhere((o) => o.code == 'de');
 
     expect(german.label, '🇩🇪 Deutsch (German)');
-    expect(offeredLocales.map((o) => o.code), ['de']);
+    expect(offeredLocales.last.label, '🇬🇧 English');
+    expect(offeredLocales.map((o) => o.code), ['de', 'en']);
   });
 
   test('search matches endonym, English name and code', () {
@@ -86,7 +87,7 @@ void main() {
     await tester.tap(find.byKey(const Key('language.system')));
     await settle(tester);
 
-    expect(titleOf(tester), 'Latein Übung');
+    expect(titleOf(tester), 'Latin Practice');
     expect(
       (await SharedPreferences.getInstance()).containsKey('app_locale'),
       isFalse,

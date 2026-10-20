@@ -12,6 +12,7 @@ import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/data/settings_conversion.dart';
 import 'package:latin_practice/main.dart' show noRetry;
 import 'package:latin_practice/models/fsrs_card.dart';
+import 'package:latin_practice/providers/locale_provider.dart';
 import 'package:latin_practice/services/fsrs_storage.dart';
 import 'package:latin_practice/widgets/explanation_lines.dart';
 
@@ -24,6 +25,8 @@ Widget wrapInApp(
   retry: noRetry,
   overrides: [
     if (explainer != null) explainerProvider.overrideWithValue(explainer),
+    if (forcedLocale != null)
+      dataLanguageProvider.overrideWith((ref) => forcedLocale.languageCode),
     ...overrides,
   ],
   child: MaterialApp(

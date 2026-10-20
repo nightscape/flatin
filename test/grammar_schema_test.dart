@@ -1,4 +1,4 @@
-// The schema 3.1 parser: the fixture loads, keys round-trip, labels read as
+// The schema 3.2 parser: the fixture loads, keys round-trip, labels read as
 // they should, and every rule of lib/data/SCHEMA.md rejects its own mistake.
 //
 // Must-fail proof: swapping `kasus` and `numerus` in the `axes:` list of the
@@ -251,8 +251,9 @@ void main() {
         'S1',
         'is declared by axis kasus and axis adverb',
         _fixtureWith(
-          'adverb:  {name: Adverb, values: {adv: Adverb}}',
-          'adverb:  {name: Adverb, values: {adv: Adverb, nom: Nominativ}}',
+          '      adv: {de: Adverb, en: Adverb}',
+          '      adv: {de: Adverb, en: Adverb}\n'
+              '      nom: {de: Nominativ, en: Nominative}',
         ),
       );
     });
@@ -304,9 +305,9 @@ void main() {
         'no suffix of [xis] matches',
         _fixtureWith(
           '    required_stems: [stamm]\n    stems:\n'
-              '      stamm: {from: gen, remove: "is", display: Stamm}',
+              '      stamm: {from: gen, remove: "is", display: {de: Stamm, en: Stem}}',
           '    required_stems: [stamm]\n    stems:\n'
-              '      stamm: {from: gen, remove: "xis", display: Stamm}',
+              '      stamm: {from: gen, remove: "xis", display: {de: Stamm, en: Stem}}',
         ),
       );
     });
@@ -378,8 +379,8 @@ void main() {
         'S10',
         'has no genus_verbi axis',
         _fixtureWith(
-          '    translation: Turm\n',
-          '    translation: Turm\n    deponent: all\n',
+          '    translation: {de: Turm, en: tower}\n',
+          '    translation: {de: Turm, en: tower}\n    deponent: all\n',
         ),
       );
     });
@@ -400,7 +401,8 @@ void main() {
         'S12',
         'type "Perfekt-System" is also declared in',
         _fixtureWith(
-          '  Pronomen:\n    class: pronomen',
+          '  Pronomen:\n    class: pronomen\n'
+              '    display: {de: Pronomen, en: Pronomen}',
           '  Perfekt-System: {abstract: true}',
         ),
       );
@@ -411,10 +413,8 @@ void main() {
         'S12',
         'code "vok" is unknown in verbs',
         _fixtureWith(
-          '  kasus:       {name: Kasus, values: {nom: Nominativ, gen: Genitiv, '
-              'dat: Dativ, akk: Akkusativ, abl: Ablativ, vok: Vokativ}}',
-          '  kasus:       {name: Kasus, values: {nom: Nominativ, gen: Genitiv, '
-              'dat: Dativ, akk: Akkusativ, abl: Ablativ}}',
+          '      vok: {de: Vokativ, en: Vocative}\n  genus:',
+          '  genus:',
         ),
       );
     });
@@ -427,8 +427,8 @@ void main() {
         'code "sg" is axis numerus in verbs but zahl in nouns',
         _fixtureWithAll([
           (
-            '  numerus: {name: Numerus, values: {sg: Singular, pl: Plural}}',
-            '  zahl:    {name: Numerus, values: {sg: Singular, pl: Plural}}',
+            '      vok: {de: Vokativ, en: Vocative}\n  numerus:',
+            '      vok: {de: Vokativ, en: Vocative}\n  zahl:',
           ),
           ('  tail: [kasus, numerus]', '  tail: [kasus, zahl]'),
         ]),
@@ -440,8 +440,8 @@ void main() {
         'S12',
         'type "A-Konjugation" is declared in',
         _fixtureWith(
-          '  - type: i-Deklination-n\n    translation: Meer',
-          '  - type: A-Konjugation\n    translation: Meer',
+          '  - type: i-Deklination-n\n    translation: {de: Meer',
+          '  - type: A-Konjugation\n    translation: {de: Meer',
         ),
       );
     });
@@ -451,8 +451,8 @@ void main() {
         'S12',
         'type "esse-Kompositum" is declared in',
         _fixtureWith(
-          '  - type: i-Deklination-mf\n    translation: Turm',
-          '  - type: esse-Kompositum\n    translation: Turm',
+          '  - type: i-Deklination-mf\n    translation: {de: Turm',
+          '  - type: esse-Kompositum\n    translation: {de: Turm',
         ),
       );
     });
@@ -562,11 +562,56 @@ void main() {
       );
     });
 
-    test('S16: an empty explain', () {
+    test('S20: a text without an English version', () {
       _expectRejected(
-        'S16',
-        'has an empty "explain"',
-        _fixtureWith('explain: "t wird vor s zu s"', 'explain: ""'),
+        'S20',
+        'sandhi rule t_s explain: give a map of the languages [de, en]',
+        _fixtureWith(
+          'explain: {de: t wird vor s zu s, en: t becomes s before s}',
+          'explain: {de: t wird vor s zu s}',
+        ),
+      );
+    });
+
+    test('S20: an empty English gloss', () {
+      _expectRejected(
+        'S20',
+        'item turris translation: the "en" text is missing or empty',
+        _fixtureWith('{de: Turm, en: tower}', '{de: Turm, en: " "}'),
+      );
+    });
+
+    test('S20: a plain string where the languages belong', () {
+      _expectRejected(
+        'S20',
+        'part nom: give a map of the languages [de, en]',
+        _fixtureWith(
+          '  nom:        {label: {de: Nominativ, en: Nominative}}',
+          '  nom:        {label: Nominativ}',
+        ),
+      );
+    });
+
+    test('S20: two types with one display', () {
+      _expectRejected(
+        'S20',
+        'types i-Deklination-mf and i-Deklination-n share the en display',
+        _fixtureWith(
+          'display: {de: i-Deklination-n, en: i-Deklination-n}',
+          'display: {de: i-Deklination-n, en: i-Deklination-mf}',
+        ),
+      );
+    });
+
+    test('S20: an abstract type with a display', () {
+      _expectRejected(
+        'S20',
+        'type a-o-Endungen is abstract, so it takes no "display"',
+        _fixtureWith(
+          '  a-o-Endungen:\n    abstract: true',
+          '  a-o-Endungen:\n    abstract: true\n'
+              '    display: {de: Endungen, en: endings}',
+        ),
       );
     });
 
@@ -575,8 +620,8 @@ void main() {
         'S17',
         'override names the unknown code "futur"',
         _fixtureWith(
-          '- {when: {modus: [inf, part]}, axis: tempus, values: {fut: Futur}}',
-          '- {when: {modus: [inf, part]}, axis: tempus, values: {futur: Futur}}',
+          'values: {fut: {de: Futur, en: Future}}',
+          'values: {futur: {de: Futur, en: Future}}',
         ),
       );
     });
@@ -605,8 +650,10 @@ void main() {
         'S19',
         'type i-Deklination-mf names the unknown class "verb"',
         _fixtureWith(
-          '    class: deklination\n    required_stems: [stamm]',
-          '    class: verb\n    required_stems: [stamm]',
+          '    class: deklination\n'
+              '    display: {de: i-Deklination-mf, en: i-Deklination-mf}',
+          '    class: verb\n'
+              '    display: {de: i-Deklination-mf, en: i-Deklination-mf}',
         ),
       );
     });
@@ -652,7 +699,11 @@ const _oneItemSource = '''
 data_file_id: mini
 
 axes:
-  numerus: {name: Numerus, values: {sg: Singular, pl: Plural}}
+  numerus:
+    name: {de: Numerus, en: Number}
+    values:
+      sg: {de: Singular, en: Singular}
+      pl: {de: Plural, en: Plural}
 
 label:
   head: [numerus]
@@ -660,7 +711,7 @@ label:
   merge_axis: numerus
 
 parts:
-  praesens_1sg: {label: "1. Person Singular"}
+  praesens_1sg: {label: {de: "1. Person Singular", en: "1st person singular"}}
 
 defaults:
   given_part: praesens_1sg
@@ -671,15 +722,16 @@ classes: [konjugation]
 types:
   I-Konjugation:
     class: konjugation
+    display: {de: I-Konjugation, en: 4th conjugation}
     required_stems: [wurzel]
     stems:
-      wurzel: {from: praesens_1sg, remove: "iō", display: Wortstock}
+      wurzel: {from: praesens_1sg, remove: "iō", display: {de: Wortstock, en: Root}}
     forms:
       sg: "{wurzel}iō"
       pl: "{wurzel}īmus"
 
 items:
   - type: I-Konjugation
-    translation: fassen
+    translation: {de: fassen, en: seize}
     parts: {praesens_1sg: capiō}
 ''';

@@ -203,7 +203,7 @@ final class PracticableItemsByTypeProvider
 }
 
 String _$practicableItemsByTypeHash() =>
-    r'bba275e933a85544902c953d2478c7e58dc0a60c';
+    r'f23e82cdc0665f095bfe801c1dbc33d9fd1bc290';
 
 /// Provider for due items by exercise type
 
@@ -399,7 +399,7 @@ final class TranslationChoicesProvider
 }
 
 String _$translationChoicesHash() =>
-    r'36d436ac4492981cb25617621d9401d01a9c6e9d';
+    r'50cfd3b0eced1c41f679ec323bf54e58bdad5b34';
 
 /// Provides shuffled translation choices for a practice item:
 /// the correct translation plus 3 distractors from the chosen strategy.

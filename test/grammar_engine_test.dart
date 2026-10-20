@@ -588,8 +588,8 @@ void main() {
       expect(
         () => _patched({
           '  - type: Mischkonjugation\n'
-                  '    translation: fassen':
-              '  - translation: fassen',
+                  '    translation: {de: fassen':
+              '  - translation: {de: fassen',
         }),
         throwsA(isA<SchemaError>()),
       );
@@ -866,7 +866,11 @@ const _miniSource = '''
 data_file_id: mini
 
 axes:
-  numerus: {name: Numerus, values: {sg: Singular, pl: Plural}}
+  numerus:
+    name: {de: Numerus, en: Number}
+    values:
+      sg: {de: Singular, en: Singular}
+      pl: {de: Plural, en: Plural}
 
 label:
   head: [numerus]
@@ -874,7 +878,7 @@ label:
   merge_axis: numerus
 
 parts:
-  praesens_1sg: {label: "1. Person Singular"}
+  praesens_1sg: {label: {de: "1. Person Singular", en: "1st person singular"}}
 
 defaults:
   given_part: praesens_1sg
@@ -889,24 +893,26 @@ classes: [konjugation]
 types:
   I-Konjugation:
     class: konjugation
+    display: {de: I-Konjugation, en: 4th conjugation}
     required_stems: [wurzel]
     stems:
-      wurzel: {from: praesens_1sg, remove: "iō", display: Wortstock}
+      wurzel: {from: praesens_1sg, remove: "iō", display: {de: Wortstock, en: Root}}
     forms:
       sg: "{wurzel}iō"
       pl: "{wurzel}īmus"
 
   Mischkonjugation:
     class: konjugation
+    display: {de: Mischkonjugation, en: mixed conjugation}
     required_stems: [wurzel]
     stems:
-      wurzel: {from: praesens_1sg, remove: "iō", display: Wortstock}
+      wurzel: {from: praesens_1sg, remove: "iō", display: {de: Wortstock, en: Root}}
     forms:
       sg: "{wurzel}iō"
       pl: "{wurzel}imus"
 
 items:
   - type: Mischkonjugation
-    translation: fassen
+    translation: {de: fassen, en: seize}
     parts: {praesens_1sg: capiō}
 ''';

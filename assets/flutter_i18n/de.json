@@ -30,6 +30,13 @@
     "verbs": "Verben (Konjugation)",
     "error": "Fehler: {error}",
     "inputMode": "Eingabemodus:",
+    "inputStrategies": {
+      "text_field": "Texteingabe",
+      "dropdown_all_forms": "Dropdown (alle Formen)",
+      "dropdown_distractors": "Dropdown (mit Distraktoren)",
+      "dropdown_regular_distractor": "Dropdown (reguläre Formen als Distraktoren)"
+    },
+    "lesson": "Lektion {n}",
     "distractorMode": "Auswahl falscher Übersetzungen:",
     "distractors": { "random": "Zufällig" },
     "types": "Typen",

@@ -244,7 +244,17 @@ final class Grammar {
   /// S19: concrete type → its word class. Abstract types are absent.
   final Map<String, String> classByType;
 
-  const Grammar(this.templatesByType, this.classByType);
+  /// S20: concrete type → what the learner reads for it, in [language].
+  final Map<String, String> displayByType;
+
+  final String language;
+
+  const Grammar(
+    this.templatesByType,
+    this.classByType,
+    this.displayByType,
+    this.language,
+  );
 }
 
 final class Derivation {

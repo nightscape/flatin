@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/practice_data.dart';
 import '../models/course_filter.dart';
+import '../providers/locale_provider.dart';
 import '../providers/settings_provider.dart';
 import 'course_scope.dart';
 import 'settings_widgets.dart';
@@ -21,9 +22,14 @@ class SettingsGrammarPage extends ConsumerStatefulWidget {
 }
 
 class _SettingsGrammarPageState extends ConsumerState<SettingsGrammarPage> {
-  late final Future<FormMetadata> _metadata = getFormMetadata(
-    'lib/data/latin_${widget.dataFileId}.yaml',
-  );
+  late final Future<FormMetadata> _metadata = ref
+      .read(dataLanguageProvider.future)
+      .then(
+        (language) => getFormMetadata(
+          'lib/data/latin_${widget.dataFileId}.yaml',
+          language: language,
+        ),
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +67,7 @@ class _SettingsGrammarPageState extends ConsumerState<SettingsGrammarPage> {
         if (metadata.availableTypes.isNotEmpty) ...[
           SectionTitle(FlutterI18n.translate(context, 'settings.types')),
           for (final typeName in metadata.availableTypes)
-            _typeTile(context, filter, typeName),
+            _typeTile(context, filter, metadata, typeName),
         ],
         const Divider(),
         SectionTitle(FlutterI18n.translate(context, 'settings.features')),
@@ -93,13 +99,18 @@ class _SettingsGrammarPageState extends ConsumerState<SettingsGrammarPage> {
     );
   }
 
-  Widget _typeTile(BuildContext context, CourseFilter filter, String typeName) {
+  Widget _typeTile(
+    BuildContext context,
+    CourseFilter filter,
+    FormMetadata metadata,
+    String typeName,
+  ) {
     final id = widget.dataFileId;
     final gap = filter.typeGap(id, typeName);
     return CheckboxListTile(
       key: Key('type.$id.$typeName'),
       title: Text(
-        typeName,
+        metadata.displayByType[typeName]!,
         style: TextStyle(color: rowTextColor(context, greyed: gap != null)),
       ),
       subtitle: gap == null ? null : Text(gapText(context, gap)),

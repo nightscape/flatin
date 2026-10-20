@@ -13,20 +13,36 @@ void main() {
     expect(titleOf(tester), 'Latein Übung');
   });
 
-  for (final device in const [Locale('en', 'US'), Locale('fr', 'FR')]) {
-    testWidgets('a $device device shows the German home title', (tester) async {
-      SharedPreferences.setMockInitialValues({});
-      await pumpAppOnDevice(tester, device);
+  testWidgets('an en_US device shows the English home title', (tester) async {
+    SharedPreferences.setMockInitialValues({});
+    await pumpAppOnDevice(tester, const Locale('en', 'US'));
 
-      expect(titleOf(tester), 'Latein Übung');
-    });
-  }
+    expect(titleOf(tester), 'Latin Practice');
+  });
 
-  testWidgets('a stored language the app no longer offers is dropped', (
+  testWidgets('a fr_FR device shows the German home title', (tester) async {
+    SharedPreferences.setMockInitialValues({});
+    await pumpAppOnDevice(tester, const Locale('fr', 'FR'));
+
+    expect(titleOf(tester), 'Latein Übung');
+  });
+
+  testWidgets('a stored English choice survives the load', (tester) async {
+    SharedPreferences.setMockInitialValues({'app_locale': 'en'});
+    await pumpAppOnDevice(tester, const Locale('de', 'DE'));
+
+    expect(titleOf(tester), 'Latin Practice');
+    expect(
+      (await SharedPreferences.getInstance()).getString('app_locale'),
+      'en',
+    );
+  });
+
+  testWidgets('a stored language the app does not offer is dropped', (
     tester,
   ) async {
-    SharedPreferences.setMockInitialValues({'app_locale': 'en'});
-    await pumpAppOnDevice(tester, const Locale('en', 'US'));
+    SharedPreferences.setMockInitialValues({'app_locale': 'fr'});
+    await pumpAppOnDevice(tester, const Locale('fr', 'FR'));
 
     expect(titleOf(tester), 'Latein Übung');
     expect(
@@ -40,7 +56,10 @@ void main() {
       resolveLocale([const Locale('fr'), const Locale('de')]),
       const Locale('de'),
     );
-    expect(resolveLocale([const Locale('en')]), courseLocale);
+    expect(
+      resolveLocale([const Locale('fr'), const Locale('en', 'GB')]),
+      const Locale('en'),
+    );
     expect(resolveLocale([const Locale('fr')]), courseLocale);
     expect(resolveLocale(null), courseLocale);
   });

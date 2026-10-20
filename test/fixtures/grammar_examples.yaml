@@ -1,4 +1,4 @@
-# Worked examples of schema 3.1 (plan sections 3.4-3.6) and one representative
+# Worked examples of schema 3.2 (plan sections 3.4-3.6) and one representative
 # of every S-rule that can be shown in valid data. The nouns data file; the
 # verbs one is grammar_examples_verbs.yaml and delegates into this one (S12).
 # test/grammar_schema_test.dart parses both and checks the labels, the key
@@ -6,11 +6,37 @@
 data_file_id: nouns
 
 axes:
-  kasus:   {name: Kasus, values: {nom: Nominativ, gen: Genitiv, dat: Dativ, akk: Akkusativ, abl: Ablativ, vok: Vokativ}}
-  numerus: {name: Numerus, values: {sg: Singular, pl: Plural}}
-  genus:   {name: Genus, values: {m: maskulin, f: feminin, n: neutrum}}
-  adverb:  {name: Adverb, values: {adv: Adverb}}
-  grad:    {name: Grad, values: {pos: Positiv, komp: Komparativ, sup: Superlativ}, hidden_in_label: [pos]}
+  kasus:
+    name: {de: Kasus, en: Case}
+    values:
+      nom: {de: Nominativ, en: Nominative}
+      gen: {de: Genitiv, en: Genitive}
+      dat: {de: Dativ, en: Dative}
+      akk: {de: Akkusativ, en: Accusative}
+      abl: {de: Ablativ, en: Ablative}
+      vok: {de: Vokativ, en: Vocative}
+  numerus:
+    name: {de: Numerus, en: Number}
+    values:
+      sg: {de: Singular, en: Singular}
+      pl: {de: Plural, en: Plural}
+  genus:
+    name: {de: Genus, en: Gender}
+    values:
+      m: {de: maskulin, en: masculine}
+      f: {de: feminin, en: feminine}
+      n: {de: neutrum, en: neuter}
+  adverb:
+    name: {de: Adverb, en: Adverb}
+    values:
+      adv: {de: Adverb, en: Adverb}
+  grad:
+    name: {de: Grad, en: Degree}
+    values:
+      pos: {de: Positiv, en: Positive}
+      komp: {de: Komparativ, en: Comparative}
+      sup: {de: Superlativ, en: Superlative}
+    hidden_in_label: [pos]
 
 label:
   head: [adverb, grad, genus]
@@ -18,12 +44,12 @@ label:
   merge_axis: kasus
 
 parts:
-  nom:        {label: Nominativ}
-  gen:        {label: Genitiv}
-  nom_f:      {label: Nominativ feminin}
-  nom_n:      {label: Nominativ neutrum}
-  komparativ: {label: Komparativ}
-  superlativ: {label: Superlativ}
+  nom:        {label: {de: Nominativ, en: Nominative}}
+  gen:        {label: {de: Genitiv, en: Genitive}}
+  nom_f:      {label: {de: Nominativ feminin, en: Nominative feminine}}
+  nom_n:      {label: {de: Nominativ neutrum, en: Nominative neuter}}
+  komparativ: {label: {de: Komparativ, en: Comparative}}
+  superlativ: {label: {de: Superlativ, en: Superlative}}
 
 defaults:
   given_part: nom
@@ -172,10 +198,11 @@ types:
 
   Adjektiv-a-o:
     class: adjektiv
+    display: {de: Adjektiv-a-o, en: "adjective, 1st/2nd declension"}
     stems:
-      stamm:  {from: nom, remove: "us", display: Stamm}
-      kstamm: {from: komparativ, remove: "or", default: "{stamm}i", display: Komparativstamm}
-      sup:    {from: superlativ, remove: "us", default: "{stamm}issim", display: Superlativstamm}
+      stamm:  {from: nom, remove: "us", display: {de: Stamm, en: Stem}}
+      kstamm: {from: komparativ, remove: "or", default: "{stamm}i", display: {de: Komparativstamm, en: Comparative stem}}
+      sup:    {from: superlativ, remove: "us", default: "{stamm}issim", display: {de: Superlativstamm, en: Superlative stem}}
     delegate:
       - {name: pos,  type: a-o-Endungen, bind: {stamm: stamm}, set: {grad: pos}}
       - {name: komp, type: Komparativ-Endungen, bind: {kstamm: kstamm}, set: {grad: komp}}
@@ -186,19 +213,20 @@ types:
 
   Adjektiv-a-o-er:
     class: adjektiv
+    display: {de: Adjektiv-a-o-er, en: "adjective, 1st/2nd declension in -er"}
     inherits_from: Adjektiv-a-o
     stems:
-      stamm: {from: nom_f, remove: "a", display: Stamm}
-      nom_m: {from: nom, remove: "", display: Nominativ}
-      sup:   {from: superlativ, remove: "us", default: "{nom_m}rim", display: Superlativstamm}
+      stamm: {from: nom_f, remove: "a", display: {de: Stamm, en: Stem}}
+      nom_m: {from: nom, remove: "", display: {de: Nominativ, en: Nominative}}
+      sup:   {from: superlativ, remove: "us", default: "{nom_m}rim", display: {de: Superlativstamm, en: Superlative stem}}
     delegate:
       - {name: pos, type: a-o-er-Endungen, bind: {stamm: stamm, nom_m: nom_m}, set: {grad: pos}}
 
   Adjektiv-3:
     abstract: true
     stems:
-      kstamm: {from: komparativ, remove: "or", default: "{stamm}i", display: Komparativstamm}
-      sup:    {from: superlativ, remove: "us", default: "{stamm}issim", display: Superlativstamm}
+      kstamm: {from: komparativ, remove: "or", default: "{stamm}i", display: {de: Komparativstamm, en: Comparative stem}}
+      sup:    {from: superlativ, remove: "us", default: "{stamm}issim", display: {de: Superlativstamm, en: Superlative stem}}
     delegate:
       - {name: pos,  type: 3-Endungen, bind: {stamm: stamm, nom_m: nom_m, nom_f: nom_f, nom_n: nom_n}, set: {grad: pos}}
       - {name: komp, type: Komparativ-Endungen, bind: {kstamm: kstamm}, set: {grad: komp}}
@@ -209,29 +237,32 @@ types:
 
   Adjektiv-zweiendig:
     class: adjektiv
+    display: {de: Adjektiv-zweiendig, en: "adjective, 3rd declension, two endings"}
     inherits_from: Adjektiv-3
     stems:
-      stamm: {from: nom, remove: "is", display: Stamm}
-      nom_m: {from: nom, remove: "", display: Nominativ}
-      nom_f: {template: "{nom_m}", display: Nominativ}
-      nom_n: {from: nom_n, remove: "", display: Nominativ neutrum}
+      stamm: {from: nom, remove: "is", display: {de: Stamm, en: Stem}}
+      nom_m: {from: nom, remove: "", display: {de: Nominativ, en: Nominative}}
+      nom_f: {template: "{nom_m}", display: {de: Nominativ, en: Nominative}}
+      nom_n: {from: nom_n, remove: "", display: {de: Nominativ neutrum, en: Nominative neuter}}
 
   Adjektiv-dreiendig:
     class: adjektiv
+    display: {de: Adjektiv-dreiendig, en: "adjective, 3rd declension, three endings"}
     inherits_from: Adjektiv-3
     stems:
-      stamm: {from: nom_f, remove: "is", display: Stamm}
-      nom_m: {from: nom, remove: "", display: Nominativ}
-      nom_f: {from: nom_f, remove: "", display: Nominativ feminin}
-      nom_n: {from: nom_n, remove: "", display: Nominativ neutrum}
-      sup:   {from: superlativ, remove: "us", default: "{nom_m}rim", display: Superlativstamm}
+      stamm: {from: nom_f, remove: "is", display: {de: Stamm, en: Stem}}
+      nom_m: {from: nom, remove: "", display: {de: Nominativ, en: Nominative}}
+      nom_f: {from: nom_f, remove: "", display: {de: Nominativ feminin, en: Nominative feminine}}
+      nom_n: {from: nom_n, remove: "", display: {de: Nominativ neutrum, en: Nominative neuter}}
+      sup:   {from: superlativ, remove: "us", default: "{nom_m}rim", display: {de: Superlativstamm, en: Superlative stem}}
 
   i-Deklination-mf:
     class: deklination
+    display: {de: i-Deklination-mf, en: i-Deklination-mf}
     required_stems: [stamm]
     stems:
-      stamm: {from: gen, remove: "is", display: Stamm}
-      nom:   {from: nom, remove: "", display: Nominativ}
+      stamm: {from: gen, remove: "is", display: {de: Stamm, en: Stem}}
+      nom:   {from: nom, remove: "", display: {de: Nominativ, en: Nominative}}
     forms:
       nom.sg: "{nom}"
       gen.sg: "{stamm}is"
@@ -248,9 +279,10 @@ types:
 
   i-Deklination-n:
     class: deklination
+    display: {de: i-Deklination-n, en: i-Deklination-n}
     stems:
-      stamm: {from: gen, remove: "is", display: Stamm}
-      nom:   {from: nom, remove: "", display: Nominativ}
+      stamm: {from: gen, remove: "is", display: {de: Stamm, en: Stem}}
+      nom:   {from: nom, remove: "", display: {de: Nominativ, en: Nominative}}
     forms:
       nom.sg: "{nom}"
       gen.sg: "{stamm}is"
@@ -267,36 +299,37 @@ types:
 
   Pronomen:
     class: pronomen
+    display: {de: Pronomen, en: Pronomen}
 
 items:
   - type: i-Deklination-mf
-    translation: Turm
+    translation: {de: Turm, en: tower}
     parts: {nom: turris, gen: turris}
 
   - type: i-Deklination-n
-    translation: Meer
+    translation: {de: Meer, en: sea}
     parts: {nom: mare, gen: maris}
 
   - type: Adjektiv-a-o
-    translation: gut
+    translation: {de: gut, en: good}
     parts: {nom: bonus, nom_f: bona, nom_n: bonum, komparativ: melior, superlativ: [optimus, optumus]}
     forms:
       adv.pos: "bene"
 
   - type: Adjektiv-a-o-er
-    translation: frei
+    translation: {de: frei, en: free}
     parts: {nom: līber, nom_f: lībera, nom_n: līberum}
 
   - type: Adjektiv-zweiendig
-    translation: tapfer
+    translation: {de: tapfer, en: brave}
     parts: {nom: fortis, nom_n: forte}
 
   - type: Adjektiv-dreiendig
-    translation: scharf
+    translation: {de: scharf, en: sharp}
     parts: {nom: ācer, nom_f: ācris, nom_n: ācre}
 
   - type: Pronomen
-    translation: dieser
+    translation: {de: dieser, en: this}
     parts: {nom: hic}
     forms:
       nom.sg.m: "hic"

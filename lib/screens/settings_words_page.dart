@@ -67,6 +67,7 @@ class _WordList extends ConsumerWidget {
     final needle = normalizeDiacritics(query.trim()).toLowerCase();
 
     final rows = <Object>[];
+    int? shownLesson;
     for (final name in filter.lessons.lessonNames) {
       // A word several lessons list belongs to the one that introduces it,
       // so it gets one row and one toggle.
@@ -78,9 +79,11 @@ class _WordList extends ConsumerWidget {
             byLemma[lemma]!,
       ];
       if (matches.isEmpty) continue;
-      rows
-        ..add(name)
-        ..addAll(matches);
+      if (lessonNumber(name) != shownLesson) {
+        shownLesson = lessonNumber(name);
+        rows.add(shownLesson);
+      }
+      rows.addAll(matches);
     }
 
     return ListView.builder(
@@ -88,7 +91,15 @@ class _WordList extends ConsumerWidget {
       itemCount: rows.length,
       itemBuilder: (context, index) {
         final row = rows[index];
-        if (row is String) return SectionTitle(row);
+        if (row is int) {
+          return SectionTitle(
+            FlutterI18n.translate(
+              context,
+              'settings.lesson',
+              translationParams: {'n': '$row'},
+            ),
+          );
+        }
         return _wordTile(context, ref, row as PracticeItem);
       },
     );

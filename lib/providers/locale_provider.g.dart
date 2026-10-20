@@ -36,7 +36,7 @@ final class LocaleOverrideProvider
   LocaleOverride create() => LocaleOverride();
 }
 
-String _$localeOverrideHash() => r'8f722d2575e2555828de6890e7107912b0d9a2d3';
+String _$localeOverrideHash() => r'235f3535113471c91927b167fa8f967cc11a3520';
 
 /// The language the learner picked, or null while they follow the device.
 
@@ -58,3 +58,47 @@ abstract class _$LocaleOverride extends $AsyncNotifier<Locale?> {
     element.handleValue(ref, created);
   }
 }
+
+/// The language of the data texts: the language the app shows.
+// shortcut: reads the device languages once, so a change of them while the
+// app runs shows in the data texts after a restart; upgrade when that matters.
+
+@ProviderFor(dataLanguage)
+const dataLanguageProvider = DataLanguageProvider._();
+
+/// The language of the data texts: the language the app shows.
+// shortcut: reads the device languages once, so a change of them while the
+// app runs shows in the data texts after a restart; upgrade when that matters.
+
+final class DataLanguageProvider
+    extends $FunctionalProvider<AsyncValue<String>, String, FutureOr<String>>
+    with $FutureModifier<String>, $FutureProvider<String> {
+  /// The language of the data texts: the language the app shows.
+  // shortcut: reads the device languages once, so a change of them while the
+  // app runs shows in the data texts after a restart; upgrade when that matters.
+  const DataLanguageProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'dataLanguageProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$dataLanguageHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<String> $createElement($ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<String> create(Ref ref) {
+    return dataLanguage(ref);
+  }
+}
+
+String _$dataLanguageHash() => r'e5c577a8f85beea621dc95cbcdac600fc3a469ec';

@@ -3,8 +3,8 @@
     "title": "Latin Practice"
   },
   "home": {
-    "nouns": "Nouns (Deklination)",
-    "verbs": "Verbs (Konjugation)",
+    "nouns": "Nouns (declension)",
+    "verbs": "Verbs (conjugation)",
     "wordClassification": "Word Classification",
     "due": "due",
     "error": "Error: {error}",
@@ -26,10 +26,17 @@
   },
   "settings": {
     "title": "Settings",
-    "nouns": "Nouns (Deklination)",
-    "verbs": "Verbs (Konjugation)",
+    "nouns": "Nouns (declension)",
+    "verbs": "Verbs (conjugation)",
     "error": "Error: {error}",
     "inputMode": "Input mode:",
+    "inputStrategies": {
+      "text_field": "Text input",
+      "dropdown_all_forms": "Dropdown (all forms)",
+      "dropdown_distractors": "Dropdown (with distractors)",
+      "dropdown_regular_distractor": "Dropdown (regular forms as distractors)"
+    },
+    "lesson": "Lesson {n}",
     "distractorMode": "Wrong translation choices:",
     "distractors": { "random": "Random" },
     "types": "Types",
@@ -54,8 +61,8 @@
     }
   },
   "wordClassification": {
-    "declension": "Deklination",
-    "conjugation": "Konjugation",
+    "declension": "Declension",
+    "conjugation": "Conjugation",
     "noWordsAvailable": "No words available",
     "addCombination": "Add Combination",
     "allCorrectCombinations": "All correct combinations:",
@@ -74,8 +81,8 @@
   },
   "drawer": {
     "title": "Latin Practice",
-    "nouns": "Nouns (Deklination)",
-    "verbs": "Verbs (Konjugation)",
+    "nouns": "Nouns (declension)",
+    "verbs": "Verbs (conjugation)",
     "wordClassification": "Word Classification",
     "settings": "Settings",
     "errorLoadingData": "Error loading data",

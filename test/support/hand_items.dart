@@ -94,7 +94,7 @@ PracticeItem handItem({
         for (final key in keys)
           key: GivenForm(formKey: key, variants: forms[key]!),
       },
-      grammar: const Grammar({}, {}),
+      grammar: const Grammar({}, {}, {}, 'de'),
     ),
   );
 }

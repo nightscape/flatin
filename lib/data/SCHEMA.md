@@ -1,4 +1,4 @@
-# Grammar data schema 3.1
+# Grammar data schema 3.2
 
 A data file describes one word class: its feature axes, how a label reads, the
 principal parts an item gives, the declension or conjugation types, and the
@@ -17,19 +17,22 @@ axis names, because a code names only one axis (S1).
 data_file_id: verbs                  # 'nouns' | 'verbs'; part of a card id
 
 axes:                                # declaration order = key order = label order
-  modus:   {name: Modus, values: {ind: Indikativ, konj: Konjunktiv, ...},
-            hidden_in_label: [ind]}  # codes a label does not name
+  modus:                             # S20: every learner text is {de, en}
+    name: {de: Modus, en: Mood}
+    values: {ind: {de: Indikativ, en: Indicative}, ...}
+    hidden_in_label: [ind]           # codes a label does not name
 
 label:
   head: [modus, tempus, genus_verbi] # axes before the colon
   tail: [person, numerus]            # axes after it
   merge_axis: person                 # the axis describeLabels joins with "/"
   overrides:                         # S17
-    - {when: {modus: [inf, part]}, axis: tempus, values: {fut: Futur}}
+    - {when: {modus: [inf, part]}, axis: tempus,
+       values: {fut: {de: Futur, en: Future}}}
 
 parts:                               # the principal parts an item may give
-  infinitiv:    {label: Infinitiv}
-  praefix:      {label: Präfix, display: false}
+  infinitiv:    {label: {de: Infinitiv, en: Infinitive}}
+  praefix:      {label: {de: Präfix, en: Prefix}, display: false}
 
 defaults:
   given_part: praesens_1sg           # the form the practice screen shows
@@ -42,21 +45,25 @@ type_inference:                      # S11; keyed by part, rules in list order
 
 sandhi:                              # S16; the file's rule library
   kurz_nt: {end: vowel, before: [nt, nd], replace: short,
-            explain: "Vokal vor nt/nd wird kurz"}
+            explain: {de: "Vokal vor nt/nd wird kurz",
+                      en: "a vowel before nt/nd is short"}}
 
 classes: [konjugation]               # S19; the word classes types may name
 
 types:
   Verb-Basis:
-    abstract: true                   # no item uses it directly, so no "class"
+    abstract: true                   # no item uses it, so no class or display
 
   A-Konjugation:
     class: konjugation               # S19; every concrete type names one
+    display: {de: A-Konjugation, en: 1st conjugation}  # S20
     inherits_from: Verb-Basis        # S6
     required_stems: [praesens]       # S4
     stems:
-      wurzel:   {from: infinitiv, remove: [āre, ārī], display: Verbstamm}
-      praesens: {template: "{wurzel}ā", display: Präsensstamm}
+      wurzel:   {from: infinitiv, remove: [āre, ārī],
+                 display: {de: Verbstamm, en: Verb stem}}
+      praesens: {template: "{wurzel}ā",
+                 display: {de: Präsensstamm, en: Present stem}}
       perfekt:  {from: perfekt_1sg, remove: "ī", default: "{praesens}v"}
     forms:
       ind.praes.akt.1.sg: "{praesens}ō"
@@ -80,7 +87,7 @@ shared:                              # YAML anchors items alias; nothing reads i
 items:
   - type: Unregelmäßig               # omitted when inference decides (S11)
     id: esse                         # defaults to the normalized lemma
-    translation: sein
+    translation: {de: sein, en: be}
     parts: {infinitiv: esse, perfekt_1sg: fuī}
     forms: {ind.praes.akt.1.sg: sum} # overrides
     deponent: [perf, plusq, fut2]
@@ -195,7 +202,7 @@ item overrides.
 
 **S16. Sandhi rules.** The file's `sandhi:` map is the rule library; a type lists
 rule ids in the order they are tried, and an unknown id throws. A rule has
-`end`, `before`, `replace`, `explain` (the German text the explanation shows)
+`end`, `before`, `replace`, `explain` (the text the explanation shows, S20)
 and optionally `variant`. It matches a seam (S18) on normalized text:
 
 - `end`: a letter string the left side ends with, or `vowel` / `consonant` (its
@@ -235,6 +242,15 @@ concrete type names one of them in `class:` — the class a learner weighs its
 types against, so the ESEL Erkennen step draws its distractors from it. A
 concrete type without `class`, a class the file does not list, and a `class` on
 an abstract type each throw, naming the type and the file.
+
+**S20. Languages.** Every text a learner reads — an axis `name`, a value text
+(also in a label override), a part `label`, a stem `display`, a sandhi
+`explain`, a type `display` and an item `translation` — is a map from each data
+language (`dataLanguages` in `lib/grammar/schema.dart`) to a non-empty text. A
+plain string, a missing or extra language and an empty text each throw. A
+parse picks one language; ids, codes and type names stay the same in every
+language. Every concrete type has a `display`, an abstract one has none, and
+no two types of a file share a display in one language.
 
 **Collisions.** A key produced twice — by own forms, by delegation or by
 composition — throws. There is no precedence between them; inheritance (S6) is

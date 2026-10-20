@@ -189,8 +189,8 @@ void main() {
       await tester.pumpWidget(wrapInApp(const LatinPracticeApp()));
       await letItLoad(tester);
 
-      expect(find.text('Nomen (Deklination)'), findsOneWidget);
-      expect(find.text('Verben (Konjugation)'), findsOneWidget);
+      expect(find.text('Nouns (declension)'), findsOneWidget);
+      expect(find.text('Verbs (conjugation)'), findsOneWidget);
     });
   }
 }

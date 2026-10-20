@@ -25,24 +25,44 @@ class FormMetadata {
   /// The types that items of the file have, sorted.
   final List<String> availableTypes;
 
+  /// S20: each of [availableTypes] as the learner reads it.
+  final Map<String, String> displayByType;
+
   FormMetadata({
     required this.dataFileId,
     required this.axes,
     required this.formOrder,
     required this.formLabelsByKey,
     required this.availableTypes,
+    required this.displayByType,
   });
 }
 
-class _Loaded {
+/// One parse of the data files, with every text in one language.
+class _Parsed {
   final GrammarEngine engine;
   final Map<String, List<PracticeItem>> itemsByFile = {};
   final Map<String, FormMetadata> metadataByFile = {};
 
-  _Loaded(this.engine);
+  _Parsed(this.engine);
 
   GrammarFile file(String dataFileId) =>
       engine.files.singleWhere((f) => f.dataFileId == dataFileId);
+}
+
+/// The texts of the data files, parsed once per language on first use. The
+/// course language is parsed at once, so a broken file fails the first load.
+class _Loaded {
+  final Map<String, String> sources;
+  final Map<String, _Parsed> _byLanguage = {};
+
+  _Loaded(this.sources) {
+    parsed(courseLanguage);
+  }
+
+  _Parsed parsed(String language) => _byLanguage[language] ??= _Parsed(
+    GrammarEngine(parseGrammarFiles(sources, language: language)),
+  );
 }
 
 _Loaded? _loaded;
@@ -101,14 +121,17 @@ Future<_Loaded> _parse() async {
   final sources = {
     for (final path in _assets.values) path: await loadAssetText(path),
   };
-  return _Loaded(GrammarEngine(parseGrammarFiles(sources)));
+  return _Loaded(sources);
 }
 
 String _dataFileIdOf(String assetPath) =>
     _assets.entries.singleWhere((e) => e.value == assetPath).key;
 
-Future<FormMetadata> getFormMetadata(String assetPath) async {
-  final loaded = await _load();
+Future<FormMetadata> getFormMetadata(
+  String assetPath, {
+  String language = courseLanguage,
+}) async {
+  final loaded = (await _load()).parsed(language);
   final dataFileId = _dataFileIdOf(assetPath);
   return loaded.metadataByFile[dataFileId] ??= _metadata(
     loaded.file(dataFileId),
@@ -123,6 +146,7 @@ FormMetadata _metadata(GrammarFile file) {
         (a, b) =>
             file.axes.compare(file.axes.parseKey(a), file.axes.parseKey(b)),
       );
+  final types = {for (final item in file.items) item.typeName}.toList()..sort();
   return FormMetadata(
     dataFileId: file.dataFileId,
     axes: file.axes,
@@ -130,13 +154,16 @@ FormMetadata _metadata(GrammarFile file) {
     formLabelsByKey: {
       for (final key in keys) key: FormLabel.fromKey(key, file.axes),
     },
-    availableTypes: {for (final item in file.items) item.typeName}.toList()
-      ..sort(),
+    availableTypes: types,
+    displayByType: {for (final type in types) type: file.type(type).display!},
   );
 }
 
-Future<List<PracticeItem>> loadPracticeItems(String assetPath) async {
-  final loaded = await _load();
+Future<List<PracticeItem>> loadPracticeItems(
+  String assetPath, {
+  String language = courseLanguage,
+}) async {
+  final loaded = (await _load()).parsed(language);
   final file = loaded.file(_dataFileIdOf(assetPath));
   return loaded.itemsByFile[file.dataFileId] ??= [
     for (final item in file.items) _practiceItem(loaded.engine, file, item),
@@ -144,8 +171,11 @@ Future<List<PracticeItem>> loadPracticeItems(String assetPath) async {
 }
 
 /// The items of every data file, nouns first.
-Future<List<PracticeItem>> loadAllPracticeItems() async => [
-  for (final path in _assets.values) ...await loadPracticeItems(path),
+Future<List<PracticeItem>> loadAllPracticeItems({
+  String language = courseLanguage,
+}) async => [
+  for (final path in _assets.values)
+    ...await loadPracticeItems(path, language: language),
 ];
 
 PracticeItem _practiceItem(

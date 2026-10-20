@@ -200,9 +200,10 @@ SandhiRule? _seamRule(ComposedForm form) => form.parts
 /// A distractor of the Erkennen step is a type of the same word class (S19),
 /// so the choice is between the types a learner weighs against each other.
 EselStep _erkennen(PracticeItem item, FormKey formKey) {
-  final String right = item.derivation.type;
-  final classByType = item.derivation.grammar.classByType;
-  final String wordClass = classByType[right]!;
+  final grammar = item.derivation.grammar;
+  final String right = grammar.displayByType[item.derivation.type]!;
+  final classByType = grammar.classByType;
+  final String wordClass = classByType[item.derivation.type]!;
   final recognition = item.derivation.recognition;
   final sameEnding = recognition is TypeByRule
       ? recognition.candidateTypes
@@ -214,8 +215,8 @@ EselStep _erkennen(PracticeItem item, FormKey formKey) {
   ]..sort();
   final others = [
     for (final type in sameEnding)
-      if (classByType[type] == wordClass) type,
-    ...sameClass,
+      if (classByType[type] == wordClass) grammar.displayByType[type]!,
+    for (final type in sameClass) grammar.displayByType[type]!,
   ];
 
   return EselStep(
@@ -325,7 +326,7 @@ EselStep _endung(
     answer: emptyEnding != null
         ? ''
         : borrowed
-        ? '$right (${endingTypePhrase(form.endingType)})'
+        ? '$right (${endingTypePhrase(form.endingType, item.derivation.grammar.language)})'
         : right,
     answerKey: emptyEnding,
     options: _options(

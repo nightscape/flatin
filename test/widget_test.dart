@@ -21,7 +21,7 @@ void main() {
     await tester.pumpAndSettle();
 
     // Verify that the home screen buttons are displayed.
-    expect(find.text('Nomen (Deklination)'), findsOneWidget);
-    expect(find.text('Verben (Konjugation)'), findsOneWidget);
+    expect(find.text('Nouns (declension)'), findsOneWidget);
+    expect(find.text('Verbs (conjugation)'), findsOneWidget);
   });
 }

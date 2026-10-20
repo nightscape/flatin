@@ -35,7 +35,15 @@ class SettingsInputPage extends ConsumerWidget {
                 value: settings.getInputStrategyId(id),
                 items: [
                   for (final s in InputStrategy.all)
-                    DropdownMenuItem(value: s.id, child: Text(s.displayName)),
+                    DropdownMenuItem(
+                      value: s.id,
+                      child: Text(
+                        FlutterI18n.translate(
+                          context,
+                          'settings.inputStrategies.${s.id}',
+                        ),
+                      ),
+                    ),
                 ],
                 onChanged: (value) => ref
                     .read(settingsProvider.notifier)

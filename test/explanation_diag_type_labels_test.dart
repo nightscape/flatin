@@ -38,7 +38,7 @@ void main() {
 
   test('a type without a phrase throws, naming the type', () {
     expect(
-      () => typePhrase('Ohne-Etikett'),
+      () => typePhrase('Ohne-Etikett', 'de'),
       throwsA(
         isA<StateError>().having(
           (e) => e.message,
@@ -59,8 +59,8 @@ void main() {
           ...item.derivation.grammar.templatesByType.keys,
       };
       final phrases = [
-        ...endingTypePhrases.values,
-        ...diagnosisOnlyTypePhrases.values,
+        for (final phrase in endingTypePhrases.values) phrase['de']!,
+        for (final phrase in diagnosisOnlyTypePhrases.values) phrase['de']!,
       ]..sort((a, b) => b.length.compareTo(a.length));
       var lines = 0;
       for (final item in items) {

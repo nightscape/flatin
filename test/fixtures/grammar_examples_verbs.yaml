@@ -1,15 +1,61 @@
-# The verbs data file of the schema 3.1 worked examples; the nouns one is
+# The verbs data file of the schema 3.2 worked examples; the nouns one is
 # grammar_examples.yaml, into which the participle types delegate (S12).
 data_file_id: verbs
 
 axes:
-  modus:       {name: Modus, values: {ind: Indikativ, konj: Konjunktiv, imp: Imperativ, inf: Infinitiv, part: Partizip, ger: Gerundium, gerv: Gerundivum, sup: Supinum}, hidden_in_label: [ind]}
-  tempus:      {name: Tempus, values: {praes: Präsens, impf: Imperfekt, fut: Futur I, perf: Perfekt, plusq: Plusquamperfekt, fut2: Futur II}}
-  genus_verbi: {name: Genus verbi, values: {akt: Aktiv, pass: Passiv}, hidden_in_label: [akt]}
-  person:      {name: Person, values: {"1": 1. Person, "2": 2. Person, "3": 3. Person}}
-  numerus:     {name: Numerus, values: {sg: Singular, pl: Plural}}
-  kasus:       {name: Kasus, values: {nom: Nominativ, gen: Genitiv, dat: Dativ, akk: Akkusativ, abl: Ablativ, vok: Vokativ}}
-  genus:       {name: Genus, values: {m: maskulin, f: feminin, n: neutrum}}
+  modus:
+    name: {de: Modus, en: Mood}
+    values:
+      ind: {de: Indikativ, en: Indicative}
+      konj: {de: Konjunktiv, en: Subjunctive}
+      imp: {de: Imperativ, en: Imperative}
+      inf: {de: Infinitiv, en: Infinitive}
+      part: {de: Partizip, en: Participle}
+      ger: {de: Gerundium, en: Gerund}
+      gerv: {de: Gerundivum, en: Gerundive}
+      sup: {de: Supinum, en: Supine}
+    hidden_in_label: [ind]
+  tempus:
+    name: {de: Tempus, en: Tense}
+    values:
+      praes: {de: Präsens, en: Present}
+      impf: {de: Imperfekt, en: Imperfect}
+      fut: {de: Futur I, en: Future}
+      perf: {de: Perfekt, en: Perfect}
+      plusq: {de: Plusquamperfekt, en: Pluperfect}
+      fut2: {de: Futur II, en: Future perfect}
+  genus_verbi:
+    name: {de: Genus verbi, en: Voice}
+    values:
+      akt: {de: Aktiv, en: Active}
+      pass: {de: Passiv, en: Passive}
+    hidden_in_label: [akt]
+  person:
+    name: {de: Person, en: Person}
+    values:
+      "1": {de: "1. Person", en: "1st person"}
+      "2": {de: "2. Person", en: "2nd person"}
+      "3": {de: "3. Person", en: "3rd person"}
+  numerus:
+    name: {de: Numerus, en: Number}
+    values:
+      sg: {de: Singular, en: Singular}
+      pl: {de: Plural, en: Plural}
+  kasus:
+    name: {de: Kasus, en: Case}
+    values:
+      nom: {de: Nominativ, en: Nominative}
+      gen: {de: Genitiv, en: Genitive}
+      dat: {de: Dativ, en: Dative}
+      akk: {de: Akkusativ, en: Accusative}
+      abl: {de: Ablativ, en: Ablative}
+      vok: {de: Vokativ, en: Vocative}
+  genus:
+    name: {de: Genus, en: Gender}
+    values:
+      m: {de: maskulin, en: masculine}
+      f: {de: feminin, en: feminine}
+      n: {de: neutrum, en: neuter}
 
 label:
   head: [modus, tempus, genus_verbi]
@@ -17,19 +63,19 @@ label:
   merge_axis: person
   overrides:
     # Only a finite form counts the futures, so "Futur I" needs no number here.
-    - {when: {modus: [inf, part]}, axis: tempus, values: {fut: Futur}}
+    - {when: {modus: [inf, part]}, axis: tempus, values: {fut: {de: Futur, en: Future}}}
 
 parts:
-  praesens_1sg:   {label: "1. Person Singular"}
-  infinitiv:      {label: Infinitiv}
-  perfekt_1sg:    {label: Perfekt}
-  supinum:        {label: Supinum}
-  praefix:        {label: Präfix, display: false}
-  praesens_stamm: {label: Präsensstamm, display: false}
-  futurpartizip:  {label: Partizip Futur}
-  ppa_nom:        {label: Partizip Präsens}
-  ppa_gen:        {label: Partizip Präsens Genitiv}
-  gerundiv:       {label: Gerundivum}
+  praesens_1sg:   {label: {de: "1. Person Singular", en: "1st person singular"}}
+  infinitiv:      {label: {de: Infinitiv, en: Infinitive}}
+  perfekt_1sg:    {label: {de: Perfekt, en: Perfect}}
+  supinum:        {label: {de: Supinum, en: Supine}}
+  praefix:        {label: {de: Präfix, en: Prefix}, display: false}
+  praesens_stamm: {label: {de: Präsensstamm, en: Present stem}, display: false}
+  futurpartizip:  {label: {de: Partizip Futur, en: Future participle}}
+  ppa_nom:        {label: {de: Partizip Präsens, en: Present participle}}
+  ppa_gen:        {label: {de: Partizip Präsens Genitiv, en: Present participle genitive}}
+  gerundiv:       {label: {de: Gerundivum, en: Gerundive}}
 
 defaults:
   given_part: praesens_1sg
@@ -47,16 +93,16 @@ type_inference:
     - {suffix: "ere", min_length: 5, types: [Konsonantische, Mischkonjugation, E-Konjugation]}
 
 sandhi:
-  t_s:         {end: t, before: [s], replace: s, explain: "t wird vor s zu s"}
-  d_ausfall:   {end: d, before: consonant, replace: "", explain: "d fällt vor Konsonant aus"}
-  d_angleich:  {end: d, before: [f, l, t], replace: double_next, variant: true, explain: "d gleicht sich an"}
-  a_ausfall:   {end: a, before: vowel, replace: "", explain: "ā fällt vor Vokal aus"}
-  vokal_kurz:  {end: vowel, before: vowel, replace: short, explain: "Vokal vor Vokal wird kurz"}
-  kurz_nt:     {end: vowel, before: [nt, nd], replace: short, explain: "Vokal vor nt/nd wird kurz"}
-  kurz_t:      {end: vowel, before: ["t$"], replace: short, explain: "Vokal vor -t am Wortende wird kurz"}
-  i_ausfall:   {end: i, before: [i], replace: "", explain: "i fällt vor ī aus"}
-  i_e_r:       {end: i, before: [r], replace: e, explain: "i wird vor r zu e"}
-  i_e_auslaut: {end: i, before: ["$"], replace: e, explain: "i wird am Wortende zu e"}
+  t_s:         {end: t, before: [s], replace: s, explain: {de: t wird vor s zu s, en: t becomes s before s}}
+  d_ausfall:   {end: d, before: consonant, replace: "", explain: {de: d fällt vor Konsonant aus, en: d drops before a consonant}}
+  d_angleich:  {end: d, before: [f, l, t], replace: double_next, variant: true, explain: {de: d gleicht sich an, en: d assimilates}}
+  a_ausfall:   {end: a, before: vowel, replace: "", explain: {de: ā fällt vor Vokal aus, en: ā drops before a vowel}}
+  vokal_kurz:  {end: vowel, before: vowel, replace: short, explain: {de: Vokal vor Vokal wird kurz, en: a vowel before a vowel is short}}
+  kurz_nt:     {end: vowel, before: [nt, nd], replace: short, explain: {de: Vokal vor nt/nd wird kurz, en: a vowel before nt/nd is short}}
+  kurz_t:      {end: vowel, before: ["t$"], replace: short, explain: {de: Vokal vor -t am Wortende wird kurz, en: a vowel before word-final -t is short}}
+  i_ausfall:   {end: i, before: [i], replace: "", explain: {de: i fällt vor ī aus, en: i drops before ī}}
+  i_e_r:       {end: i, before: [r], replace: e, explain: {de: i wird vor r zu e, en: i becomes e before r}}
+  i_e_auslaut: {end: i, before: ["$"], replace: e, explain: {de: i wird am Wortende zu e, en: i becomes e at the end of a word}}
 
 classes: [konjugation]
 
@@ -64,7 +110,7 @@ types:
   Perfekt-System:
     abstract: true
     stems:
-      perfekt: {from: perfekt_1sg, remove: "ī", display: Perfektstamm}
+      perfekt: {from: perfekt_1sg, remove: "ī", display: {de: Perfektstamm, en: Perfect stem}}
     forms:
       ind.perf.akt.1.sg: "{perfekt}ī"
       ind.perf.akt.2.sg: "{perfekt}istī"
@@ -102,8 +148,8 @@ types:
     abstract: true
     inherits_from: Perfekt-System
     stems:
-      ppp: {from: supinum, remove: "um", display: PPP-Stamm}
-      pfa: {from: futurpartizip, remove: "us", default: "{ppp}ūr", display: PFA-Stamm}
+      ppp: {from: supinum, remove: "um", display: {de: PPP-Stamm, en: PPP stem}}
+      pfa: {from: futurpartizip, remove: "us", default: "{ppp}ūr", display: {de: PFA-Stamm, en: Future participle stem}}
     delegate:
       - {name: pfa, type: a-o-Endungen, bind: {stamm: pfa}, set: {modus: part, tempus: fut, genus_verbi: akt}}
       - {name: ppa, type: 3-Endungen-Partizip, bind: {stamm: ppa, nom_m: ppa_nom, nom_f: ppa_nom, nom_n: ppa_nom}, set: {modus: part, tempus: praes, genus_verbi: akt}}
@@ -139,15 +185,16 @@ types:
 
   A-Konjugation:
     class: konjugation
+    display: {de: A-Konjugation, en: "1st conjugation"}
     inherits_from: Verb-Vollständig
     stems:
-      wurzel:   {from: infinitiv, remove: ["āre", "ārī"], display: Wurzel}
-      praesens: {template: "{wurzel}ā", display: Präsensstamm}
-      perfekt:  {from: perfekt_1sg, remove: "ī", default: "{praesens}v", display: Perfektstamm}
-      ppp:      {from: supinum, remove: "um", default: "{praesens}t", display: PPP-Stamm}
-      ppa:      {template: "{praesens}nt", display: PPA-Stamm}
-      ppa_nom:  {template: "{praesens}ns", display: PPA Nominativ}
-      gerv:     {template: "{praesens}nd", display: Gerundivstamm}
+      wurzel:   {from: infinitiv, remove: ["āre", "ārī"], display: {de: Wurzel, en: Root}}
+      praesens: {template: "{wurzel}ā", display: {de: Präsensstamm, en: Present stem}}
+      perfekt:  {from: perfekt_1sg, remove: "ī", default: "{praesens}v", display: {de: Perfektstamm, en: Perfect stem}}
+      ppp:      {from: supinum, remove: "um", default: "{praesens}t", display: {de: PPP-Stamm, en: PPP stem}}
+      ppa:      {template: "{praesens}nt", display: {de: PPA-Stamm, en: Present participle stem}}
+      ppa_nom:  {template: "{praesens}ns", display: {de: PPA Nominativ, en: Present participle nominative}}
+      gerv:     {template: "{praesens}nd", display: {de: Gerundivstamm, en: Gerundive stem}}
     sandhi: [a_ausfall, kurz_nt, kurz_t]
     forms:
       ind.praes.akt.1.sg: "{praesens}ō"
@@ -226,12 +273,13 @@ types:
       inf.praes.pass: "{praesens}rī"
   E-Konjugation:
     class: konjugation
+    display: {de: E-Konjugation, en: "2nd conjugation"}
     inherits_from: A-Konjugation
     stems:
-      wurzel:   {from: infinitiv, remove: ["ēre", "ērī"], display: Wurzel}
-      praesens: {template: "{wurzel}ē", display: Präsensstamm}
-      perfekt:  {from: perfekt_1sg, remove: "ī", default: "{wurzel}u", display: Perfektstamm}
-      ppp:      {from: supinum, remove: "um", default: "{wurzel}it", display: PPP-Stamm}
+      wurzel:   {from: infinitiv, remove: ["ēre", "ērī"], display: {de: Wurzel, en: Root}}
+      praesens: {template: "{wurzel}ē", display: {de: Präsensstamm, en: Present stem}}
+      perfekt:  {from: perfekt_1sg, remove: "ī", default: "{wurzel}u", display: {de: Perfektstamm, en: Perfect stem}}
+      ppp:      {from: supinum, remove: "um", default: "{wurzel}it", display: {de: PPP-Stamm, en: PPP stem}}
     sandhi: [vokal_kurz, kurz_nt, kurz_t]
     forms:
       konj.praes.akt.1.sg: "{praesens}am"
@@ -248,15 +296,16 @@ types:
       konj.praes.pass.3.pl: "{praesens}antur"
   I-Konjugation:
     class: konjugation
+    display: {de: I-Konjugation, en: "4th conjugation"}
     inherits_from: Verb-Vollständig
     stems:
-      wurzel:   {from: infinitiv, remove: ["īre", "īrī"], display: Wurzel}
-      praesens: {template: "{wurzel}ī", display: Präsensstamm}
-      perfekt:  {from: perfekt_1sg, remove: "ī", default: "{praesens}v", display: Perfektstamm}
-      ppp:      {from: supinum, remove: "um", default: "{praesens}t", display: PPP-Stamm}
-      ppa:      {template: "{praesens}ent", display: PPA-Stamm}
-      ppa_nom:  {template: "{praesens}ēns", display: PPA Nominativ}
-      gerv:     {template: "{praesens}end", display: Gerundivstamm}
+      wurzel:   {from: infinitiv, remove: ["īre", "īrī"], display: {de: Wurzel, en: Root}}
+      praesens: {template: "{wurzel}ī", display: {de: Präsensstamm, en: Present stem}}
+      perfekt:  {from: perfekt_1sg, remove: "ī", default: "{praesens}v", display: {de: Perfektstamm, en: Perfect stem}}
+      ppp:      {from: supinum, remove: "um", default: "{praesens}t", display: {de: PPP-Stamm, en: PPP stem}}
+      ppa:      {template: "{praesens}ent", display: {de: PPA-Stamm, en: Present participle stem}}
+      ppa_nom:  {template: "{praesens}ēns", display: {de: PPA Nominativ, en: Present participle nominative}}
+      gerv:     {template: "{praesens}end", display: {de: Gerundivstamm, en: Gerundive stem}}
     sandhi: [vokal_kurz, kurz_t]
     forms:
       ind.praes.akt.1.sg: "{praesens}ō"
@@ -335,23 +384,25 @@ types:
       inf.praes.pass: "{praesens}rī"
   Mischkonjugation:
     class: konjugation
+    display: {de: Mischkonjugation, en: "mixed conjugation (3rd -iō)"}
     inherits_from: I-Konjugation
     stems:
-      wurzel:   {from: praesens_1sg, remove: ["iō", "ior"], display: Wurzel}
-      praesens: {template: "{wurzel}i", display: Präsensstamm}
-      perfekt:  {from: perfekt_1sg, remove: "ī", display: Perfektstamm}
-      ppp:      {from: supinum, remove: "um", display: PPP-Stamm}
+      wurzel:   {from: praesens_1sg, remove: ["iō", "ior"], display: {de: Wurzel, en: Root}}
+      praesens: {template: "{wurzel}i", display: {de: Präsensstamm, en: Present stem}}
+      perfekt:  {from: perfekt_1sg, remove: "ī", display: {de: Perfektstamm, en: Perfect stem}}
+      ppp:      {from: supinum, remove: "um", display: {de: PPP-Stamm, en: PPP stem}}
     sandhi: [i_ausfall, i_e_r, i_e_auslaut]
     forms:
       inf.praes.pass: "{praesens}ī"
   Konsonantische:
     class: konjugation
+    display: {de: Konsonantische, en: "3rd conjugation"}
     inherits_from: Verb-Vollständig
     stems:
-      praesens: {from: praesens_1sg, remove: ["ō", "or"], display: Präsensstamm}
-      ppa:      {template: "{praesens}ent", display: PPA-Stamm}
-      ppa_nom:  {template: "{praesens}ēns", display: PPA Nominativ}
-      gerv:     {template: "{praesens}end", display: Gerundivstamm}
+      praesens: {from: praesens_1sg, remove: ["ō", "or"], display: {de: Präsensstamm, en: Present stem}}
+      ppa:      {template: "{praesens}ent", display: {de: PPA-Stamm, en: Present participle stem}}
+      ppa_nom:  {template: "{praesens}ēns", display: {de: PPA Nominativ, en: Present participle nominative}}
+      gerv:     {template: "{praesens}end", display: {de: Gerundivstamm, en: Gerundive stem}}
     forms:
       ind.praes.akt.1.sg: "{praesens}ō"
       ind.praes.akt.2.sg: "{praesens}is"
@@ -430,23 +481,25 @@ types:
 
   esse-Typ:
     class: konjugation
+    display: {de: esse-Typ, en: esse type}
     inherits_from: Perfekt-System
     stems:
-      pfa: {from: futurpartizip, remove: "us", display: PFA-Stamm}
+      pfa: {from: futurpartizip, remove: "us", display: {de: PFA-Stamm, en: Future participle stem}}
     delegate:
       - {name: pfa, type: a-o-Endungen, bind: {stamm: pfa}, set: {modus: part, tempus: fut, genus_verbi: akt}}
 
   Unregelmäßig:
     class: konjugation
+    display: {de: Unregelmäßig, en: irregular}
     inherits_from: Verb-Basis
     stems:
-      ppa:     {from: ppa_gen, remove: "is", display: PPA-Stamm}
-      ppa_nom: {from: ppa_nom, remove: "", display: PPA Nominativ}
-      gerv:    {from: gerundiv, remove: "us", display: Gerundivstamm}
+      ppa:     {from: ppa_gen, remove: "is", display: {de: PPA-Stamm, en: Present participle stem}}
+      ppa_nom: {from: ppa_nom, remove: "", display: {de: PPA Nominativ, en: Present participle nominative}}
+      gerv:    {from: gerundiv, remove: "us", display: {de: Gerundivstamm, en: Gerundive stem}}
       # Only a Kompositum of esse gives these two parts; without them the
       # rules below produce no key (S4), and the other items stay untouched.
-      praefix:  {from: praefix, display: Präfix}
-      praesens: {from: praesens_stamm, display: Präsensstamm}
+      praefix:  {from: praefix, display: {de: Präfix, en: Prefix}}
+      praesens: {from: praesens_stamm, display: {de: Präsensstamm, en: Present stem}}
     sandhi: [t_s]
     compose:
       - match: {modus: ind, tempus: [praes, impf, fut]}
@@ -469,9 +522,10 @@ types:
 
   esse-Kompositum:
     class: konjugation
+    display: {de: esse-Kompositum, en: compound of esse}
     inherits_from: Perfekt-System
     stems:
-      praefix: {from: praefix, remove: "", display: Präfix}
+      praefix: {from: praefix, remove: "", display: {de: Präfix, en: Prefix}}
     compose:
       - match: {tempus: [praes, impf, fut]}
         join: ""
@@ -480,8 +534,9 @@ types:
 
   ire-Kompositum:
     class: konjugation
+    display: {de: ire-Kompositum, en: ire-Kompositum}
     stems:
-      praefix: {from: praefix, remove: "", display: Präfix}
+      praefix: {from: praefix, remove: "", display: {de: Präfix, en: Prefix}}
     compose:
       - match: {}
         join: ""
@@ -489,8 +544,9 @@ types:
 
   ferre-Kompositum:
     class: konjugation
+    display: {de: ferre-Kompositum, en: ferre-Kompositum}
     stems:
-      praefix: {from: praefix, remove: "", display: Präfix}
+      praefix: {from: praefix, remove: "", display: {de: Präfix, en: Prefix}}
     compose:
       - match: {}
         join: ""
@@ -500,7 +556,7 @@ types:
 items:
   - id: esse
     type: esse-Typ
-    translation: sein
+    translation: {de: sein, en: be}
     parts: {infinitiv: esse, praesens_1sg: sum, perfekt_1sg: fuī, futurpartizip: futūrus}
     forms:
       ind.praes.akt.1.sg: "sum"
@@ -542,56 +598,56 @@ items:
       inf.praes.akt: "esse"
       inf.fut.akt: "futūrum esse"
 
-  - translation: lieben
+  - translation: {de: lieben, en: love}
     parts: {infinitiv: amāre, praesens_1sg: amō}
 
   - type: Konsonantische
-    translation: treiben, handeln
+    translation: {de: "treiben, handeln", en: "drive, do"}
     parts: {infinitiv: agere, praesens_1sg: agō, perfekt_1sg: ēgī, supinum: āctum}
 
   - type: Mischkonjugation
-    translation: fassen
+    translation: {de: fassen, en: seize}
     parts: {infinitiv: capere, praesens_1sg: capiō, perfekt_1sg: cēpī, supinum: captum}
 
-  - translation: ermahnen
+  - translation: {de: ermahnen, en: admonish}
     parts: {infinitiv: hortārī, praesens_1sg: hortor}
     deponent: all
 
   - type: Mischkonjugation
-    translation: leiden
+    translation: {de: leiden, en: suffer}
     parts: {infinitiv: patī, praesens_1sg: patior, supinum: passum}
     deponent: all
 
   - type: I-Konjugation
-    translation: schenken
+    translation: {de: schenken, en: give}
     parts: {infinitiv: largīrī, praesens_1sg: largior}
     deponent: all
 
-  - translation: mahnen
+  - translation: {de: mahnen, en: warn}
     parts: {infinitiv: monēre, praesens_1sg: moneō}
 
-  - translation: hören
+  - translation: {de: hören, en: hear}
     parts: {infinitiv: audīre, praesens_1sg: audiō, perfekt_1sg: [audīvī, audiī]}
 
   - type: Konsonantische
-    translation: lenken
+    translation: {de: lenken, en: steer}
     parts: {infinitiv: regere, praesens_1sg: regō, perfekt_1sg: rēxī, supinum: rēctum}
 
-  - translation: wagen
+  - translation: {de: wagen, en: dare}
     parts: {infinitiv: audēre, praesens_1sg: audeō, supinum: ausum}
     deponent: [perf, plusq, fut2]
 
   - type: Unregelmäßig
-    translation: können
+    translation: {de: können, en: be able}
     parts: {infinitiv: posse, praesens_1sg: possum, praefix: pot, praesens_stamm: pos, perfekt_1sg: potuī}
 
   - type: esse-Kompositum
-    translation: nützen
+    translation: {de: nützen, en: be useful}
     parts: {infinitiv: prōdesse, praesens_1sg: prōsum, praefix: prōd, perfekt_1sg: prōfuī}
 
   - id: ire
     type: Unregelmäßig
-    translation: gehen
+    translation: {de: gehen, en: go}
     parts: {infinitiv: īre, praesens_1sg: eō, perfekt_1sg: [iī, īvī], supinum: itum, ppa_nom: iēns, ppa_gen: euntis, gerundiv: eundus}
     forms:
       ind.praes.akt.1.sg: "eō"
@@ -637,15 +693,15 @@ items:
       ger.abl: "eundō"
 
   - type: ire-Kompositum
-    translation: weggehen
+    translation: {de: weggehen, en: go away}
     parts: {infinitiv: abīre, praesens_1sg: abeō, praefix: ab}
 
   - type: ire-Kompositum
-    translation: zurückkehren
+    translation: {de: zurückkehren, en: return}
     parts: {infinitiv: redīre, praesens_1sg: redeō, praefix: red}
 
   - type: Konsonantische
-    translation: tragen
+    translation: {de: tragen, en: carry}
     parts: {infinitiv: ferre, praesens_1sg: ferō, perfekt_1sg: tulī, supinum: lātum}
     forms:
       ind.praes.akt.2.sg: "fers"
@@ -675,5 +731,5 @@ items:
       konj.impf.pass.3.pl: "ferrentur"
 
   - type: ferre-Kompositum
-    translation: herbeibringen
+    translation: {de: herbeibringen, en: bring}
     parts: {infinitiv: afferre, praesens_1sg: afferō, praefix: ad}

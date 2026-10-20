@@ -171,6 +171,16 @@ final class GrammarEngine {
           for (final type in file.declaredTypes.entries)
             if (type.value.wordClass case final wordClass?) type.key: wordClass,
       },
+      {
+        for (final file in files)
+          for (final type in file.declaredTypes.entries)
+            if (type.value.display case final display?) type.key: display,
+      },
+      files.first.language,
+    );
+    assert(
+      files.every((file) => file.language == grammar.language),
+      'files parsed in different languages',
     );
   }
 

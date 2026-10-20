@@ -1,13 +1,59 @@
 data_file_id: verbs
 
 axes:
-  modus:       {name: Modus, values: {ind: Indikativ, konj: Konjunktiv, imp: Imperativ, inf: Infinitiv, part: Partizip, ger: Gerundium, gerv: Gerundivum, sup: Supinum}, hidden_in_label: [ind]}
-  tempus:      {name: Tempus, values: {praes: Präsens, impf: Imperfekt, fut: Futur I, perf: Perfekt, plusq: Plusquamperfekt, fut2: Futur II}}
-  genus_verbi: {name: Genus verbi, values: {akt: Aktiv, pass: Passiv}, hidden_in_label: [akt]}
-  person:      {name: Person, values: {"1": 1. Person, "2": 2. Person, "3": 3. Person}}
-  numerus:     {name: Numerus, values: {sg: Singular, pl: Plural}}
-  kasus:       {name: Kasus, values: {nom: Nominativ, gen: Genitiv, dat: Dativ, akk: Akkusativ, abl: Ablativ, vok: Vokativ}}
-  genus:       {name: Genus, values: {m: maskulin, f: feminin, n: neutrum}}
+  modus:
+    name: {de: Modus, en: Mood}
+    values:
+      ind: {de: Indikativ, en: Indicative}
+      konj: {de: Konjunktiv, en: Subjunctive}
+      imp: {de: Imperativ, en: Imperative}
+      inf: {de: Infinitiv, en: Infinitive}
+      part: {de: Partizip, en: Participle}
+      ger: {de: Gerundium, en: Gerund}
+      gerv: {de: Gerundivum, en: Gerundive}
+      sup: {de: Supinum, en: Supine}
+    hidden_in_label: [ind]
+  tempus:
+    name: {de: Tempus, en: Tense}
+    values:
+      praes: {de: Präsens, en: Present}
+      impf: {de: Imperfekt, en: Imperfect}
+      fut: {de: Futur I, en: Future}
+      perf: {de: Perfekt, en: Perfect}
+      plusq: {de: Plusquamperfekt, en: Pluperfect}
+      fut2: {de: Futur II, en: Future perfect}
+  genus_verbi:
+    name: {de: Genus verbi, en: Voice}
+    values:
+      akt: {de: Aktiv, en: Active}
+      pass: {de: Passiv, en: Passive}
+    hidden_in_label: [akt]
+  person:
+    name: {de: Person, en: Person}
+    values:
+      "1": {de: "1. Person", en: "1st person"}
+      "2": {de: "2. Person", en: "2nd person"}
+      "3": {de: "3. Person", en: "3rd person"}
+  numerus:
+    name: {de: Numerus, en: Number}
+    values:
+      sg: {de: Singular, en: Singular}
+      pl: {de: Plural, en: Plural}
+  kasus:
+    name: {de: Kasus, en: Case}
+    values:
+      nom: {de: Nominativ, en: Nominative}
+      gen: {de: Genitiv, en: Genitive}
+      dat: {de: Dativ, en: Dative}
+      akk: {de: Akkusativ, en: Accusative}
+      abl: {de: Ablativ, en: Ablative}
+      vok: {de: Vokativ, en: Vocative}
+  genus:
+    name: {de: Genus, en: Gender}
+    values:
+      m: {de: maskulin, en: masculine}
+      f: {de: feminin, en: feminine}
+      n: {de: neutrum, en: neuter}
 
 label:
   head: [modus, tempus, genus_verbi]
@@ -15,16 +61,16 @@ label:
   merge_axis: person
 
 parts:
-  praesens_1sg:   {label: "1. Person Singular"}
-  infinitiv:      {label: Infinitiv}
-  perfekt_1sg:    {label: Perfekt}
-  supinum:        {label: Supinum}
-  praefix:        {label: Präfix, display: false}
-  praesens_stamm: {label: Präsensstamm, display: false}
-  futurpartizip:  {label: Partizip Futur}
-  ppa_nom:        {label: Partizip Präsens}
-  ppa_gen:        {label: Partizip Präsens Genitiv}
-  gerundiv:       {label: Gerundivum}
+  praesens_1sg:   {label: {de: "1. Person Singular", en: "1st person singular"}}
+  infinitiv:      {label: {de: Infinitiv, en: Infinitive}}
+  perfekt_1sg:    {label: {de: Perfekt, en: Perfect}}
+  supinum:        {label: {de: Supinum, en: Supine}}
+  praefix:        {label: {de: Präfix, en: Prefix}, display: false}
+  praesens_stamm: {label: {de: Präsensstamm, en: Present stem}, display: false}
+  futurpartizip:  {label: {de: Partizip Futur, en: Future participle}}
+  ppa_nom:        {label: {de: Partizip Präsens, en: Present participle}}
+  ppa_gen:        {label: {de: Partizip Präsens Genitiv, en: Present participle genitive}}
+  gerundiv:       {label: {de: Gerundivum, en: Gerundive}}
 
 defaults:
   given_part: praesens_1sg
@@ -42,16 +88,16 @@ type_inference:
     - {suffix: "ere", min_length: 5, types: [Konsonantische, Mischkonjugation, E-Konjugation]}
 
 sandhi:
-  t_s:         {end: t, before: [s], replace: s, explain: "t wird vor s zu s"}
-  d_ausfall:   {end: d, before: consonant, replace: "", explain: "d fällt vor Konsonant aus"}
-  d_angleich:  {end: d, before: [f, l, t], replace: double_next, explain: "d gleicht sich dem folgenden Laut an"}
-  a_ausfall:   {end: a, before: vowel, replace: "", explain: "ā fällt vor Vokal aus"}
-  vokal_kurz:  {end: vowel, before: vowel, replace: short, explain: "Vokal vor Vokal wird kurz"}
-  kurz_nt:     {end: vowel, before: [nt, nd], replace: short, explain: "Vokal vor nt/nd wird kurz"}
-  kurz_t:      {end: vowel, before: ["t$"], replace: short, explain: "Vokal vor -t am Wortende wird kurz"}
-  i_ausfall:   {end: i, before: [i], replace: "", explain: "i fällt vor langem ī aus"}
-  i_e_r:       {end: i, before: [r], replace: e, explain: "i wird vor r zu e"}
-  i_e_auslaut: {end: i, before: ["$"], replace: e, explain: "i wird am Wortende zu e"}
+  t_s:         {end: t, before: [s], replace: s, explain: {de: t wird vor s zu s, en: t becomes s before s}}
+  d_ausfall:   {end: d, before: consonant, replace: "", explain: {de: d fällt vor Konsonant aus, en: d drops before a consonant}}
+  d_angleich:  {end: d, before: [f, l, t], replace: double_next, explain: {de: d gleicht sich dem folgenden Laut an, en: d assimilates to the following sound}}
+  a_ausfall:   {end: a, before: vowel, replace: "", explain: {de: ā fällt vor Vokal aus, en: ā drops before a vowel}}
+  vokal_kurz:  {end: vowel, before: vowel, replace: short, explain: {de: Vokal vor Vokal wird kurz, en: a vowel before a vowel is short}}
+  kurz_nt:     {end: vowel, before: [nt, nd], replace: short, explain: {de: Vokal vor nt/nd wird kurz, en: a vowel before nt/nd is short}}
+  kurz_t:      {end: vowel, before: ["t$"], replace: short, explain: {de: Vokal vor -t am Wortende wird kurz, en: a vowel before word-final -t is short}}
+  i_ausfall:   {end: i, before: [i], replace: "", explain: {de: i fällt vor langem ī aus, en: i drops before long ī}}
+  i_e_r:       {end: i, before: [r], replace: e, explain: {de: i wird vor r zu e, en: i becomes e before r}}
+  i_e_auslaut: {end: i, before: ["$"], replace: e, explain: {de: i wird am Wortende zu e, en: i becomes e at the end of a word}}
 
 classes: [konjugation]
 
@@ -59,7 +105,7 @@ types:
   Perfekt-System:
     abstract: true
     stems:
-      perfekt: {from: perfekt_1sg, remove: "ī", display: Perfektstamm}
+      perfekt: {from: perfekt_1sg, remove: "ī", display: {de: Perfektstamm, en: Perfect stem}}
     forms:
       ind.perf.akt.1.sg: "{perfekt}ī"
       ind.perf.akt.2.sg: "{perfekt}istī"
@@ -97,8 +143,8 @@ types:
     abstract: true
     inherits_from: Perfekt-System
     stems:
-      ppp: {from: supinum, remove: "um", display: PPP-Stamm}
-      pfa: {from: futurpartizip, remove: "us", default: "{ppp}ūr", display: PFA-Stamm}
+      ppp: {from: supinum, remove: "um", display: {de: PPP-Stamm, en: PPP stem}}
+      pfa: {from: futurpartizip, remove: "us", default: "{ppp}ūr", display: {de: PFA-Stamm, en: Future participle stem}}
     delegate:
       - {name: pfa, type: a-o-Endungen, bind: {stamm: pfa}, set: {modus: part, tempus: fut, genus_verbi: akt}}
       - {name: ppa, type: 3-Endungen-Partizip, bind: {stamm: ppa, nom_m: ppa_nom, nom_f: ppa_nom, nom_n: ppa_nom}, set: {modus: part, tempus: praes, genus_verbi: akt}}
@@ -134,15 +180,16 @@ types:
 
   A-Konjugation:
     class: konjugation
+    display: {de: A-Konjugation, en: "1st conjugation"}
     inherits_from: Verb-Vollständig
     stems:
-      wurzel:   {from: infinitiv, remove: ["āre", "ārī"], display: Wurzel}
-      praesens: {from: praesens_stamm, default: "{wurzel}ā", display: Präsensstamm}
-      perfekt:  {from: perfekt_1sg, remove: "ī", default: "{praesens}v", display: Perfektstamm}
-      ppp:      {from: supinum, remove: "um", default: "{praesens}t", display: PPP-Stamm}
-      ppa:      {template: "{praesens}nt", display: PPA-Stamm}
-      ppa_nom:  {template: "{praesens}ns", display: PPA Nominativ}
-      gerv:     {template: "{praesens}nd", display: Gerundivstamm}
+      wurzel:   {from: infinitiv, remove: ["āre", "ārī"], display: {de: Wurzel, en: Root}}
+      praesens: {from: praesens_stamm, default: "{wurzel}ā", display: {de: Präsensstamm, en: Present stem}}
+      perfekt:  {from: perfekt_1sg, remove: "ī", default: "{praesens}v", display: {de: Perfektstamm, en: Perfect stem}}
+      ppp:      {from: supinum, remove: "um", default: "{praesens}t", display: {de: PPP-Stamm, en: PPP stem}}
+      ppa:      {template: "{praesens}nt", display: {de: PPA-Stamm, en: Present participle stem}}
+      ppa_nom:  {template: "{praesens}ns", display: {de: PPA Nominativ, en: Present participle nominative}}
+      gerv:     {template: "{praesens}nd", display: {de: Gerundivstamm, en: Gerundive stem}}
     sandhi: [a_ausfall, kurz_nt, kurz_t]
     forms:
       ind.praes.akt.1.sg: "{praesens}ō"
@@ -221,12 +268,13 @@ types:
       inf.praes.pass: "{praesens}rī"
   E-Konjugation:
     class: konjugation
+    display: {de: E-Konjugation, en: "2nd conjugation"}
     inherits_from: A-Konjugation
     stems:
-      wurzel:   {from: infinitiv, remove: ["ēre", "ērī"], display: Wurzel}
-      praesens: {template: "{wurzel}ē", display: Präsensstamm}
-      perfekt:  {from: perfekt_1sg, remove: "ī", default: "{wurzel}u", display: Perfektstamm}
-      ppp:      {from: supinum, remove: "um", default: "{wurzel}it", display: PPP-Stamm}
+      wurzel:   {from: infinitiv, remove: ["ēre", "ērī"], display: {de: Wurzel, en: Root}}
+      praesens: {template: "{wurzel}ē", display: {de: Präsensstamm, en: Present stem}}
+      perfekt:  {from: perfekt_1sg, remove: "ī", default: "{wurzel}u", display: {de: Perfektstamm, en: Perfect stem}}
+      ppp:      {from: supinum, remove: "um", default: "{wurzel}it", display: {de: PPP-Stamm, en: PPP stem}}
     sandhi: [vokal_kurz, kurz_nt, kurz_t]
     forms:
       konj.praes.akt.1.sg: "{praesens}am"
@@ -243,15 +291,16 @@ types:
       konj.praes.pass.3.pl: "{praesens}antur"
   I-Konjugation:
     class: konjugation
+    display: {de: I-Konjugation, en: "4th conjugation"}
     inherits_from: Verb-Vollständig
     stems:
-      wurzel:   {from: infinitiv, remove: ["īre", "īrī"], display: Wurzel}
-      praesens: {template: "{wurzel}ī", display: Präsensstamm}
-      perfekt:  {from: perfekt_1sg, remove: "ī", default: "{praesens}v", display: Perfektstamm}
-      ppp:      {from: supinum, remove: "um", default: "{praesens}t", display: PPP-Stamm}
-      ppa:      {template: "{praesens}ent", display: PPA-Stamm}
-      ppa_nom:  {template: "{praesens}ēns", display: PPA Nominativ}
-      gerv:     {template: "{praesens}end", display: Gerundivstamm}
+      wurzel:   {from: infinitiv, remove: ["īre", "īrī"], display: {de: Wurzel, en: Root}}
+      praesens: {template: "{wurzel}ī", display: {de: Präsensstamm, en: Present stem}}
+      perfekt:  {from: perfekt_1sg, remove: "ī", default: "{praesens}v", display: {de: Perfektstamm, en: Perfect stem}}
+      ppp:      {from: supinum, remove: "um", default: "{praesens}t", display: {de: PPP-Stamm, en: PPP stem}}
+      ppa:      {template: "{praesens}ent", display: {de: PPA-Stamm, en: Present participle stem}}
+      ppa_nom:  {template: "{praesens}ēns", display: {de: PPA Nominativ, en: Present participle nominative}}
+      gerv:     {template: "{praesens}end", display: {de: Gerundivstamm, en: Gerundive stem}}
     sandhi: [vokal_kurz, kurz_t]
     forms:
       ind.praes.akt.1.sg: "{praesens}ō"
@@ -330,23 +379,25 @@ types:
       inf.praes.pass: "{praesens}rī"
   Mischkonjugation:
     class: konjugation
+    display: {de: Mischkonjugation, en: "mixed conjugation (3rd -iō)"}
     inherits_from: I-Konjugation
     stems:
-      wurzel:   {from: praesens_1sg, remove: ["iō", "ior"], display: Wurzel}
-      praesens: {template: "{wurzel}i", display: Präsensstamm}
-      perfekt:  {from: perfekt_1sg, remove: "ī", display: Perfektstamm}
-      ppp:      {from: supinum, remove: "um", display: PPP-Stamm}
+      wurzel:   {from: praesens_1sg, remove: ["iō", "ior"], display: {de: Wurzel, en: Root}}
+      praesens: {template: "{wurzel}i", display: {de: Präsensstamm, en: Present stem}}
+      perfekt:  {from: perfekt_1sg, remove: "ī", display: {de: Perfektstamm, en: Perfect stem}}
+      ppp:      {from: supinum, remove: "um", display: {de: PPP-Stamm, en: PPP stem}}
     sandhi: [i_ausfall, i_e_r, i_e_auslaut]
     forms:
       inf.praes.pass: "{praesens}ī"
   Konsonantische:
     class: konjugation
+    display: {de: Konsonantische, en: "3rd conjugation"}
     inherits_from: Verb-Vollständig
     stems:
-      praesens: {from: praesens_1sg, remove: ["ō", "or"], display: Präsensstamm}
-      ppa:      {template: "{praesens}ent", display: PPA-Stamm}
-      ppa_nom:  {template: "{praesens}ēns", display: PPA Nominativ}
-      gerv:     {template: "{praesens}end", display: Gerundivstamm}
+      praesens: {from: praesens_1sg, remove: ["ō", "or"], display: {de: Präsensstamm, en: Present stem}}
+      ppa:      {template: "{praesens}ent", display: {de: PPA-Stamm, en: Present participle stem}}
+      ppa_nom:  {template: "{praesens}ēns", display: {de: PPA Nominativ, en: Present participle nominative}}
+      gerv:     {template: "{praesens}end", display: {de: Gerundivstamm, en: Gerundive stem}}
     forms:
       ind.praes.akt.1.sg: "{praesens}ō"
       ind.praes.akt.2.sg: "{praesens}is"
@@ -425,19 +476,21 @@ types:
 
   esse-Typ:
     class: konjugation
+    display: {de: esse-Typ, en: esse type}
     inherits_from: Perfekt-System
     stems:
-      pfa: {from: futurpartizip, remove: "us", display: PFA-Stamm}
+      pfa: {from: futurpartizip, remove: "us", display: {de: PFA-Stamm, en: Future participle stem}}
     delegate:
       - {name: pfa, type: a-o-Endungen, bind: {stamm: pfa}, set: {modus: part, tempus: fut, genus_verbi: akt}}
 
   esse-Kompositum:
     class: konjugation
+    display: {de: esse-Kompositum, en: compound of esse}
     inherits_from: esse-Typ
     stems:
-      praefix: {from: infinitiv, remove: "esse", display: Präfix}
-      ppa:     {from: ppa_gen, remove: "is", display: PPA-Stamm}
-      ppa_nom: {from: ppa_nom, remove: "", display: PPA Nominativ}
+      praefix: {from: infinitiv, remove: "esse", display: {de: Präfix, en: Prefix}}
+      ppa:     {from: ppa_gen, remove: "is", display: {de: PPA-Stamm, en: Present participle stem}}
+      ppa_nom: {from: ppa_nom, remove: "", display: {de: PPA Nominativ, en: Present participle nominative}}
     delegate:
       - {name: ppa, type: 3-Endungen-Partizip, bind: {stamm: ppa, nom_m: ppa_nom, nom_f: ppa_nom, nom_n: ppa_nom}, set: {modus: part, tempus: praes, genus_verbi: akt}}
     compose:
@@ -454,15 +507,16 @@ types:
 
   Unregelmäßig:
     class: konjugation
+    display: {de: Unregelmäßig, en: irregular}
     inherits_from: Verb-Vollständig
     stems:
-      ppa:     {from: ppa_gen, remove: "is", display: PPA-Stamm}
-      ppa_nom: {from: ppa_nom, remove: "", display: PPA Nominativ}
-      gerv:    {from: gerundiv, remove: "us", display: Gerundivstamm}
+      ppa:     {from: ppa_gen, remove: "is", display: {de: PPA-Stamm, en: Present participle stem}}
+      ppa_nom: {from: ppa_nom, remove: "", display: {de: PPA Nominativ, en: Present participle nominative}}
+      gerv:    {from: gerundiv, remove: "us", display: {de: Gerundivstamm, en: Gerundive stem}}
       # Only a Kompositum of esse gives these two parts; without them the
       # rules below produce no key (S4), and the other items stay untouched.
-      praefix:  {from: praefix, display: Präfix}
-      praesens: {from: praesens_stamm, display: Präsensstamm}
+      praefix:  {from: praefix, display: {de: Präfix, en: Prefix}}
+      praesens: {from: praesens_stamm, display: {de: Präsensstamm, en: Present stem}}
     sandhi: [t_s]
     compose:
       - match: {modus: ind, tempus: [praes, impf, fut]}
@@ -484,156 +538,156 @@ types:
       inf.praes.akt: "{praesens}se"
 
 items:
-  - translation: "lieben, gern haben"
+  - translation: {de: "lieben, gern haben", en: "love, like"}
     parts: {infinitiv: "amāre", praesens_1sg: "amō", supinum: "amātum"}
-  - translation: "haben, halten"
+  - translation: {de: "haben, halten", en: "have, hold"}
     parts: {infinitiv: "habēre", praesens_1sg: "habeō", supinum: "habitum"}
-  - translation: "hören"
+  - translation: {de: hören, en: hear}
     parts: {infinitiv: "audīre", praesens_1sg: "audiō", supinum: "audītum"}
   - type: Mischkonjugation
-    translation: "nehmen"
+    translation: {de: nehmen, en: "take, seize"}
     parts: {infinitiv: "capere", praesens_1sg: "capiō", perfekt_1sg: "cēpī", supinum: "captum"}
   - id: parere2
     type: Mischkonjugation
-    translation: "gebären; hervorbringen"
+    translation: {de: "gebären; hervorbringen", en: "give birth to; produce"}
     parts: {infinitiv: "parere", praesens_1sg: "pariō", perfekt_1sg: "peperī", supinum: "partum"}
-  - translation: "kommen"
+  - translation: {de: kommen, en: come}
     parts: {infinitiv: "venīre", praesens_1sg: "veniō", perfekt_1sg: "vēnī", supinum: "ventum"}
-  - translation: "eintreten, betreten"
+  - translation: {de: "eintreten, betreten", en: enter}
     parts: {infinitiv: "intrāre", praesens_1sg: "intrō", supinum: "intrātum"}
-  - translation: "erscheinen, auftauchen, sich zeigen"
+  - translation: {de: "erscheinen, auftauchen, sich zeigen", en: "appear, show oneself"}
     parts: {infinitiv: "appārēre", praesens_1sg: "appāreō", supinum: "appāritum"}
-  - translation: "bauen, erbauen"
+  - translation: {de: "bauen, erbauen", en: build}
     parts: {infinitiv: "aedificāre", praesens_1sg: "aedificō", supinum: "aedificātum"}
-  - translation: "gehen, spazieren gehen"
+  - translation: {de: "gehen, spazieren gehen", en: "walk, go for a walk"}
     parts: {infinitiv: "ambulāre", praesens_1sg: "ambulō", supinum: "ambulātum"}
-  - translation: "herbeibringen, hintragen"
+  - translation: {de: "herbeibringen, hintragen", en: "bring, carry (to)"}
     parts: {infinitiv: "apportāre", praesens_1sg: "apportō", supinum: "apportātum"}
-  - translation: "sich nähern, herankommen"
+  - translation: {de: "sich nähern, herankommen", en: "approach, come near"}
     parts: {infinitiv: "appropinquāre", praesens_1sg: "appropinquō", supinum: "appropinquātum"}
-  - translation: "zögern, sich nicht beeilen"
+  - translation: {de: "zögern, sich nicht beeilen", en: "hesitate, delay"}
     parts: {infinitiv: "cessāre", praesens_1sg: "cessō", supinum: "cessātum"}
-  - translation: "rufen, schreien"
+  - translation: {de: "rufen, schreien", en: "shout, call out"}
     parts: {infinitiv: "clāmāre", praesens_1sg: "clāmō", supinum: "clāmātum"}
-  - translation: "zusammenkommen, sich versammeln"
+  - translation: {de: "zusammenkommen, sich versammeln", en: "come together, meet"}
     parts: {infinitiv: "convenīre", praesens_1sg: "conveniō", perfekt_1sg: "convēnī", supinum: "conventum"}
-  - translation: "speisen, essen"
+  - translation: {de: "speisen, essen", en: "dine, eat"}
     parts: {infinitiv: "cēnāre", praesens_1sg: "cēnō", supinum: "cēnātum"}
-  - translation: "sorgen (für), sich kümmern (um)"
+  - translation: {de: "sorgen (für), sich kümmern (um)", en: "care (for), look after"}
     parts: {infinitiv: "cūrāre", praesens_1sg: "cūrō", supinum: "cūrātum"}
   - type: A-Konjugation
-    translation: "geben, schenken"
+    translation: {de: "geben, schenken", en: give}
     parts: {infinitiv: "dare", praesens_1sg: "dō", perfekt_1sg: "dedī", supinum: "datum", praesens_stamm: "da"}
-  - translation: "schlafen"
+  - translation: {de: schlafen, en: sleep}
     parts: {infinitiv: "dormīre", praesens_1sg: "dormiō", supinum: "dormītum"}
-  - translation: "(jmd.) erfreuen, unterhalten"
+  - translation: {de: "(jmd.) erfreuen, unterhalten", en: "delight, entertain"}
     parts: {infinitiv: "dēlectāre", praesens_1sg: "dēlectō", supinum: "dēlectātum"}
-  - translation: "wünschen, verlangen; vermissen"
+  - translation: {de: "wünschen, verlangen; vermissen", en: "long for, desire; miss"}
     parts: {infinitiv: "dēsīderāre", praesens_1sg: "dēsīderō", supinum: "dēsīderātum"}
-  - translation: "erklären, darlegen"
+  - translation: {de: "erklären, darlegen", en: "explain, set out"}
     parts: {infinitiv: "explicāre", praesens_1sg: "explicō", supinum: "explicātum"}
-  - translation: "warten, erwarten"
+  - translation: {de: "warten, erwarten", en: "wait (for), expect"}
     parts: {infinitiv: "exspectāre", praesens_1sg: "exspectō", supinum: "exspectātum"}
-  - translation: "in die Flucht schlagen, vertreiben"
+  - translation: {de: "in die Flucht schlagen, vertreiben", en: "put to flight, drive away"}
     parts: {infinitiv: "fugāre", praesens_1sg: "fugō", supinum: "fugātum"}
-  - translation: "sich freuen"
+  - translation: {de: sich freuen, en: "be glad, rejoice"}
     parts: {infinitiv: "gaudēre", praesens_1sg: "gaudeō", supinum: "gāvīsum"}
     deponent: ["perf", "plusq", "fut2"]
-  - translation: "befehlen, (be)herrschen"
+  - translation: {de: "befehlen, (be)herrschen", en: "command, order; rule"}
     parts: {infinitiv: "imperāre", praesens_1sg: "imperō", supinum: "imperātum"}
-  - translation: "arbeiten, sich anstrengen"
+  - translation: {de: "arbeiten, sich anstrengen", en: "work, toil"}
     parts: {infinitiv: "labōrāre", praesens_1sg: "labōrō", supinum: "labōrātum"}
-  - translation: "bleiben, warten; erwarten"
+  - translation: {de: "bleiben, warten; erwarten", en: "stay, remain; wait for"}
     parts: {infinitiv: "manēre", praesens_1sg: "maneō", perfekt_1sg: "mānsī", supinum: "mānsum"}
-  - translation: "töten"
+  - translation: {de: töten, en: kill}
     parts: {infinitiv: "necāre", praesens_1sg: "necō", supinum: "necātum"}
-  - translation: "bereiten, vorbereiten, zubereiten"
+  - translation: {de: "bereiten, vorbereiten, zubereiten", en: "prepare, get ready"}
     parts: {infinitiv: "parāre", praesens_1sg: "parō", supinum: "parātum"}
-  - translation: "gefallen"
+  - translation: {de: gefallen, en: please}
     parts: {infinitiv: "placēre", praesens_1sg: "placeō", supinum: "placitum"}
-  - translation: "tragen, bringen"
+  - translation: {de: "tragen, bringen", en: "carry, bring"}
     parts: {infinitiv: "portāre", praesens_1sg: "portō", supinum: "portātum"}
-  - translation: "(etwas) für gut befinden; prüfen, beweisen"
+  - translation: {de: "(etwas) für gut befinden; prüfen, beweisen", en: "approve; test, prove"}
     parts: {infinitiv: "probāre", praesens_1sg: "probō", supinum: "probātum"}
-  - translation: "verhindern, hindern; abhalten"
+  - translation: {de: "verhindern, hindern; abhalten", en: "prevent, hinder; keep away"}
     parts: {infinitiv: "prohibēre", praesens_1sg: "prohibeō", supinum: "prohibitum"}
-  - translation: "eilen, sich beeilen"
+  - translation: {de: "eilen, sich beeilen", en: hurry}
     parts: {infinitiv: "properāre", praesens_1sg: "properō", supinum: "properātum"}
-  - translation: "gehorchen"
+  - translation: {de: gehorchen, en: obey}
     parts: {infinitiv: "pārēre", praesens_1sg: "pāreō", supinum: "pāritum"}
-  - translation: "kämpfen, streiten"
+  - translation: {de: "kämpfen, streiten", en: fight}
     parts: {infinitiv: "pūgnāre", praesens_1sg: "pūgnō", supinum: "pūgnātum"}
-  - translation: "antworten, erwidern"
+  - translation: {de: "antworten, erwidern", en: "answer, reply"}
     parts: {infinitiv: "respondēre", praesens_1sg: "respondeō", perfekt_1sg: "respondī", supinum: "respōnsum"}
-  - translation: "fragen; bitten"
+  - translation: {de: "fragen; bitten", en: "ask; request"}
     parts: {infinitiv: "rogāre", praesens_1sg: "rogō", supinum: "rogātum"}
-  - translation: "König sein, herrschen"
+  - translation: {de: "König sein, herrschen", en: "be king, reign"}
     parts: {infinitiv: "rēgnāre", praesens_1sg: "rēgnō", supinum: "rēgnātum"}
-  - translation: "lachen; über etw. lachen"
+  - translation: {de: "lachen; über etw. lachen", en: "laugh; laugh at"}
     parts: {infinitiv: "rīdēre", praesens_1sg: "rīdeō", perfekt_1sg: "rīsī", supinum: "rīsum"}
-  - translation: "opfern"
+  - translation: {de: opfern, en: sacrifice}
     parts: {infinitiv: "sacrificāre", praesens_1sg: "sacrificō", supinum: "sacrificātum"}
-  - translation: "grüßen, begrüßen"
+  - translation: {de: "grüßen, begrüßen", en: greet}
     parts: {infinitiv: "salūtāre", praesens_1sg: "salūtō", supinum: "salūtātum"}
-  - translation: "wissen, kennen, verstehen"
+  - translation: {de: "wissen, kennen, verstehen", en: "know, understand"}
     parts: {infinitiv: "scīre", praesens_1sg: "sciō", supinum: "scītum"}
-  - translation: "sitzen"
+  - translation: {de: sitzen, en: sit}
     parts: {infinitiv: "sedēre", praesens_1sg: "sedeō", perfekt_1sg: "sēdī", supinum: "sessum"}
-  - translation: "schützen, retten, bewahren"
+  - translation: {de: "schützen, retten, bewahren", en: "save, protect, keep"}
     parts: {infinitiv: "servāre", praesens_1sg: "servō", supinum: "servātum"}
-  - translation: "dienen"
+  - translation: {de: dienen, en: "serve, be a slave"}
     parts: {infinitiv: "servīre", praesens_1sg: "serviō", supinum: "servītum"}
-  - translation: "anschauen, betrachten"
+  - translation: {de: "anschauen, betrachten", en: "look at, watch"}
     parts: {infinitiv: "spectāre", praesens_1sg: "spectō", supinum: "spectātum"}
-  - translation: "staunen, verblüfft sein"
+  - translation: {de: "staunen, verblüfft sein", en: "be amazed, be stunned"}
     parts: {infinitiv: "stupēre", praesens_1sg: "stupeō"}
     absent: &ohne_supinum [{genus_verbi: pass, tempus: perf}, {genus_verbi: pass, tempus: plusq}, {genus_verbi: pass, tempus: fut2}, {modus: inf, tempus: fut}, {modus: part, tempus: fut}, {modus: sup}]
-  - translation: "übertreffen, überwinden, besiegen"
+  - translation: {de: "übertreffen, überwinden, besiegen", en: "surpass, overcome, defeat"}
     parts: {infinitiv: "superāre", praesens_1sg: "superō", supinum: "superātum"}
-  - translation: "schweigen, still sein"
+  - translation: {de: "schweigen, still sein", en: be silent}
     parts: {infinitiv: "tacēre", praesens_1sg: "taceō", supinum: "tacitum"}
-  - translation: "angreifen; versuchen, prüfen"
+  - translation: {de: "angreifen; versuchen, prüfen", en: "attack; try, test"}
     parts: {infinitiv: "temptāre", praesens_1sg: "temptō", supinum: "temptātum"}
-  - translation: "(sich) fürchten, Angst haben"
+  - translation: {de: "(sich) fürchten, Angst haben", en: "fear, be afraid"}
     parts: {infinitiv: "timēre", praesens_1sg: "timeō"}
     absent: *ohne_supinum
-  - translation: "sehen"
+  - translation: {de: sehen, en: see}
     parts: {infinitiv: "vidēre", praesens_1sg: "videō", perfekt_1sg: "vīdī", supinum: "vīsum"}
-  - translation: "rufen, nennen"
+  - translation: {de: "rufen, nennen", en: "call, name"}
     parts: {infinitiv: "vocāre", praesens_1sg: "vocō", supinum: "vocātum"}
-  - translation: "besuchen"
+  - translation: {de: besuchen, en: visit}
     parts: {infinitiv: "vīsitāre", praesens_1sg: "vīsitō", supinum: "vīsitātum"}
   - type: Konsonantische
-    translation: "treiben, handeln, tun"
+    translation: {de: "treiben, handeln, tun", en: "drive, do, act"}
     parts: {infinitiv: "agere", praesens_1sg: "agō", perfekt_1sg: "ēgī", supinum: "āctum"}
   - type: Konsonantische
-    translation: "sagen, sprechen"
+    translation: {de: "sagen, sprechen", en: "say, speak"}
     parts: {infinitiv: "dīcere", praesens_1sg: "dīcō", perfekt_1sg: "dīxī", supinum: "dictum"}
     forms:
       imp.praes.akt.2.sg: "dīc"
   - type: Konsonantische
-    translation: "führen, ziehen"
+    translation: {de: "führen, ziehen", en: "lead, draw"}
     parts: {infinitiv: "dūcere", praesens_1sg: "dūcō", perfekt_1sg: "dūxī", supinum: "ductum"}
     forms:
       imp.praes.akt.2.sg: "dūc"
   - type: Konsonantische
-    translation: "schreiben"
+    translation: {de: schreiben, en: write}
     parts: {infinitiv: "scrībere", praesens_1sg: "scrībō", perfekt_1sg: "scrīpsī", supinum: "scrīptum"}
   - type: Konsonantische
-    translation: "lesen; sammeln, auswählen"
+    translation: {de: "lesen; sammeln, auswählen", en: "read; gather, choose"}
     parts: {infinitiv: "legere", praesens_1sg: "legō", perfekt_1sg: "lēgī", supinum: "lēctum"}
   - type: Konsonantische
-    translation: "schicken, senden; loslassen"
+    translation: {de: "schicken, senden; loslassen", en: "send; let go"}
     parts: {infinitiv: "mittere", praesens_1sg: "mittō", perfekt_1sg: "mīsī", supinum: "missum"}
   - type: Konsonantische
-    translation: "siegen, besiegen"
+    translation: {de: "siegen, besiegen", en: "conquer, win"}
     parts: {infinitiv: "vincere", praesens_1sg: "vincō", perfekt_1sg: "vīcī", supinum: "victum"}
   - type: Konsonantische
-    translation: "setzen, stellen, legen"
+    translation: {de: "setzen, stellen, legen", en: "put, place, lay"}
     parts: {infinitiv: "pōnere", praesens_1sg: "pōnō", perfekt_1sg: "posuī", supinum: "positum"}
   - id: ferre
     type: Unregelmäßig
-    translation: "tragen; bringen; ertragen"
+    translation: {de: "tragen; bringen; ertragen", en: "carry; bring; endure"}
     parts: {infinitiv: "ferre", praesens_1sg: "ferō", perfekt_1sg: "tulī", supinum: "lātum", ppa_nom: "ferēns", ppa_gen: "ferentis", gerundiv: "ferendus"}
     forms:
       ind.praes.akt.1.sg: "ferō"
@@ -708,11 +762,11 @@ items:
       inf.praes.pass: "ferrī"
   - id: posse
     type: Unregelmäßig
-    translation: "können"
+    translation: {de: können, en: "be able, can"}
     parts: {infinitiv: "posse", praesens_1sg: "possum", perfekt_1sg: "potuī", praefix: "pot", praesens_stamm: "pos"}
   - id: ire
     type: Unregelmäßig
-    translation: "gehen"
+    translation: {de: gehen, en: go}
     parts: {infinitiv: "īre", praesens_1sg: "eō", perfekt_1sg: ["iī", "īvī"], supinum: "itum", ppa_nom: "iēns", ppa_gen: "euntis", gerundiv: "eundus"}
     forms:
       ind.praes.akt.1.sg: "eō"
@@ -778,7 +832,7 @@ items:
       ger.abl: "eundō"
   - id: velle
     type: Unregelmäßig
-    translation: "wollen"
+    translation: {de: wollen, en: "want, be willing"}
     parts: {infinitiv: "velle", praesens_1sg: "volō", perfekt_1sg: "voluī", ppa_nom: "volēns", ppa_gen: "volentis"}
     forms:
       ind.praes.akt.1.sg: "volō"
@@ -814,7 +868,7 @@ items:
       inf.praes.akt: "velle"
   - id: nolle
     type: Unregelmäßig
-    translation: "nicht wollen"
+    translation: {de: nicht wollen, en: "not want, be unwilling"}
     parts: {infinitiv: "nōlle", praesens_1sg: "nōlō", perfekt_1sg: "nōluī", ppa_nom: "nōlēns", ppa_gen: "nōlentis"}
     forms:
       ind.praes.akt.1.sg: "nōlō"
@@ -856,7 +910,7 @@ items:
       inf.praes.akt: "nōlle"
   - id: malle
     type: Unregelmäßig
-    translation: "lieber wollen"
+    translation: {de: lieber wollen, en: prefer}
     parts: {infinitiv: "mālle", praesens_1sg: "mālō", perfekt_1sg: "māluī"}
     forms:
       ind.praes.akt.1.sg: "mālō"
@@ -892,7 +946,7 @@ items:
       inf.praes.akt: "mālle"
   - id: esse
     type: esse-Typ
-    translation: "sein"
+    translation: {de: sein, en: be}
     parts: {infinitiv: "esse", praesens_1sg: "sum", perfekt_1sg: "fuī", futurpartizip: "futūrus"}
     forms:
       ind.praes.akt.1.sg: "sum"
@@ -933,16 +987,16 @@ items:
       imp.fut.akt.3.pl: "suntō"
       inf.praes.akt: "esse"
       inf.fut.akt: "futūrum esse"
-  - translation: "vorhersehen"
+  - translation: {de: vorhersehen, en: foresee}
     parts: {infinitiv: "prōvidēre", praesens_1sg: "prōvideō", perfekt_1sg: "prōvīdī", supinum: "prōvīsum"}
-  - translation: "erregen, beunruhigen"
+  - translation: {de: "erregen, beunruhigen", en: "stir up, disturb"}
     parts: {infinitiv: "sollicitāre", praesens_1sg: "sollicitō", perfekt_1sg: "sollicitāvī"}
     absent: *ohne_supinum
   - type: Konsonantische
-    translation: "an etw./jmd. heranrücken"
+    translation: {de: an etw./jmd. heranrücken, en: "advance (on)"}
     parts: {infinitiv: "incēdere", praesens_1sg: "incēdō", perfekt_1sg: "incessī"}
   - type: Unregelmäßig
-    translation: "entgegenbringen, anbieten"
+    translation: {de: "entgegenbringen, anbieten", en: offer}
     parts: {infinitiv: "offerre", praesens_1sg: "offerō", perfekt_1sg: "obtulī", supinum: "oblātum", ppa_nom: "offerēns", ppa_gen: "offerentis", gerundiv: "offerendus"}
     forms:
       ind.praes.akt.1.sg: "offerō"
@@ -983,13 +1037,13 @@ items:
       imp.fut.akt.3.pl: "offeruntō"
       inf.praes.akt: "offerre"
   - type: Konsonantische
-    translation: "sich anstrengen"
+    translation: {de: sich anstrengen, en: "stretch; strive, exert oneself"}
     parts: {infinitiv: "tendere", praesens_1sg: "tendō", perfekt_1sg: "tetendī"}
   - type: Konsonantische
-    translation: "berühren"
+    translation: {de: berühren, en: touch}
     parts: {infinitiv: "tangere", praesens_1sg: "tangō", perfekt_1sg: "tetigī", supinum: "tāctum"}
   - type: Unregelmäßig
-    translation: "weggehen"
+    translation: {de: weggehen, en: go away}
     parts: {infinitiv: "abīre", praesens_1sg: "abeō", perfekt_1sg: ["abiī", "abīvī"], ppa_nom: "abiēns", ppa_gen: "abeuntis", gerundiv: "abeundus"}
     forms:
       ind.praes.akt.1.sg: "abeō"
@@ -1043,7 +1097,7 @@ items:
       ger.akk: "abeundum"
       ger.abl: "abeundō"
   - type: Unregelmäßig
-    translation: "hineintragen"
+    translation: {de: hineintragen, en: "carry in, bring in"}
     parts: {infinitiv: "īnferre", praesens_1sg: "īnferō", perfekt_1sg: "intulī", supinum: "illātum", ppa_nom: "īnferēns", ppa_gen: "īnferentis", gerundiv: "īnferendus"}
     forms:
       ind.praes.akt.1.sg: "īnferō"
@@ -1084,7 +1138,7 @@ items:
       imp.fut.akt.3.pl: "īnferuntō"
       inf.praes.akt: "īnferre"
   - type: Unregelmäßig
-    translation: "zurückbringen"
+    translation: {de: zurückbringen, en: "bring back; report"}
     parts: {infinitiv: "referre", praesens_1sg: "referō", perfekt_1sg: "rettulī", supinum: "relātum", ppa_nom: "referēns", ppa_gen: "referentis", gerundiv: "referendus"}
     forms:
       ind.praes.akt.1.sg: "referō"
@@ -1125,7 +1179,7 @@ items:
       imp.fut.akt.3.pl: "referuntō"
       inf.praes.akt: "referre"
   - type: Unregelmäßig
-    translation: "wegtragen, wegbringen"
+    translation: {de: "wegtragen, wegbringen", en: "carry away, take away"}
     parts: {infinitiv: "auferre", praesens_1sg: "auferō", perfekt_1sg: "abstulī", supinum: "ablātum", ppa_nom: "auferēns", ppa_gen: "auferentis", gerundiv: "auferendus"}
     forms:
       ind.praes.akt.1.sg: "auferō"
@@ -1165,11 +1219,11 @@ items:
       imp.fut.akt.2.pl: "aufertōte"
       imp.fut.akt.3.pl: "auferuntō"
       inf.praes.akt: "auferre"
-  - translation: "verändern, verwandeln"
+  - translation: {de: "verändern, verwandeln", en: "change, transform"}
     parts: {infinitiv: "mūtāre", praesens_1sg: "mūtō", perfekt_1sg: "mūtāvī"}
     absent: *ohne_supinum
   - type: Unregelmäßig
-    translation: "ertragen, aushalten"
+    translation: {de: "ertragen, aushalten", en: "endure, bear"}
     parts: {infinitiv: "perferre", praesens_1sg: "perferō", perfekt_1sg: "pertulī", supinum: "perlātum", ppa_nom: "perferēns", ppa_gen: "perferentis", gerundiv: "perferendus"}
     forms:
       ind.praes.akt.1.sg: "perferō"
@@ -1209,214 +1263,214 @@ items:
       imp.fut.akt.2.pl: "perfertōte"
       imp.fut.akt.3.pl: "perferuntō"
       inf.praes.akt: "perferre"
-  - translation: "unterrichten, lehren"
+  - translation: {de: "unterrichten, lehren", en: teach}
     parts: {infinitiv: "docēre", praesens_1sg: "doceō", perfekt_1sg: "docuī", supinum: "doctum"}
-  - translation: "halten, festhalten"
+  - translation: {de: "halten, festhalten", en: "hold, keep"}
     parts: {infinitiv: "tenēre", praesens_1sg: "teneō", perfekt_1sg: "tenuī", supinum: "tentum"}
-  - translation: "zurückhalten, festhalten"
+  - translation: {de: "zurückhalten, festhalten", en: "hold back, keep"}
     parts: {infinitiv: "retinēre", praesens_1sg: "retineō", perfekt_1sg: "retinuī", supinum: "retentum"}
-  - translation: "aushalten, ertragen"
+  - translation: {de: "aushalten, ertragen", en: "hold up, endure"}
     parts: {infinitiv: "sustinēre", praesens_1sg: "sustineō", perfekt_1sg: "sustinuī"}
     absent: *ohne_supinum
-  - translation: "bitten, beten"
+  - translation: {de: "bitten, beten", en: "beg, pray"}
     parts: {infinitiv: "ōrāre", praesens_1sg: "ōrō", perfekt_1sg: "ōrāvī", supinum: "ōrātum"}
-  - translation: "befestigen"
+  - translation: {de: befestigen, en: fortify}
     parts: {infinitiv: "munīre", praesens_1sg: "muniō", perfekt_1sg: "munīvī", supinum: "munītum"}
-  - translation: "wohnen, bewohnen"
+  - translation: {de: "wohnen, bewohnen", en: "live (in), inhabit"}
     parts: {infinitiv: "habitāre", praesens_1sg: "habitō", perfekt_1sg: "habitāvī", supinum: "habitātum"}
-  - translation: "zögern"
+  - translation: {de: zögern, en: "hesitate; doubt"}
     parts: {infinitiv: "dubitāre", praesens_1sg: "dubitō", perfekt_1sg: "dubitāvī", supinum: "dubitātum"}
-  - translation: "segeln, fahren"
+  - translation: {de: "segeln, fahren", en: sail}
     parts: {infinitiv: "nāvigāre", praesens_1sg: "nāvigō", perfekt_1sg: "nāvigāvī", supinum: "nāvigātum"}
-  - translation: "befestigen"
+  - translation: {de: befestigen, en: "strengthen, confirm"}
     parts: {infinitiv: "cōnfirmāre", praesens_1sg: "cōnfirmō", perfekt_1sg: "cōnfirmāvī", supinum: "cōnfirmātum"}
-  - translation: "hinhalten"
+  - translation: {de: hinhalten, en: "hold out, offer"}
     parts: {infinitiv: "praebēre", praesens_1sg: "praebeō", perfekt_1sg: "praebuī"}
     absent: *ohne_supinum
-  - translation: "übergeben, anvertrauen"
+  - translation: {de: "übergeben, anvertrauen", en: "hand over, entrust; order"}
     parts: {infinitiv: "mandāre", praesens_1sg: "mandō", perfekt_1sg: "mandāvī", supinum: "mandātum"}
-  - translation: "zeigen"
+  - translation: {de: zeigen, en: "show, point out"}
     parts: {infinitiv: "dēmōnstrāre", praesens_1sg: "dēmōnstrō", perfekt_1sg: "dēmōnstrāvī", supinum: "dēmōnstrātum"}
-  - translation: "bewegen, antreiben"
+  - translation: {de: "bewegen, antreiben", en: "move, stir up"}
     parts: {infinitiv: "commovēre", praesens_1sg: "commoveō", perfekt_1sg: "commōvī", supinum: "commōtum"}
-  - translation: "besitzen"
+  - translation: {de: besitzen, en: "possess, own"}
     parts: {infinitiv: "possidēre", praesens_1sg: "possideō", perfekt_1sg: "possēdī", supinum: "possessum"}
-  - translation: "üben, trainieren"
+  - translation: {de: "üben, trainieren", en: "exercise, train"}
     parts: {infinitiv: "exercēre", praesens_1sg: "exerceō", perfekt_1sg: "exercuī", supinum: "exercitum"}
   - type: Mischkonjugation
-    translation: "zustande bringen, vollenden"
+    translation: {de: "zustande bringen, vollenden", en: "complete, accomplish"}
     parts: {infinitiv: "cōnficere", praesens_1sg: "cōnficiō", perfekt_1sg: "cōnfēcī", supinum: "cōnfectum"}
   - type: Mischkonjugation
-    translation: "erblicken, ansehen"
+    translation: {de: "erblicken, ansehen", en: "catch sight of, see"}
     parts: {infinitiv: "cōnspicere", praesens_1sg: "cōnspiciō", perfekt_1sg: "cōnspexī", supinum: "cōnspectum"}
-  - translation: "weinen, beweinen"
+  - translation: {de: "weinen, beweinen", en: "weep, weep for"}
     parts: {infinitiv: "flēre", praesens_1sg: "fleō", perfekt_1sg: "flēvī", supinum: "flētum"}
-  - translation: "zerstören"
+  - translation: {de: zerstören, en: destroy}
     parts: {infinitiv: "dēlēre", praesens_1sg: "dēleō", perfekt_1sg: "dēlēvī", supinum: "dēlētum"}
-  - translation: "bewegen, veranlassen"
+  - translation: {de: "bewegen, veranlassen", en: "move, cause"}
     parts: {infinitiv: "movēre", praesens_1sg: "moveō", perfekt_1sg: "mōvī", supinum: "mōtum"}
-  - translation: "finden, erfinden"
+  - translation: {de: "finden, erfinden", en: "find, discover"}
     parts: {infinitiv: "invenīre", praesens_1sg: "inveniō", perfekt_1sg: "invēnī", supinum: "inventum"}
   - type: Mischkonjugation
-    translation: "erblicken, ansehen"
+    translation: {de: "erblicken, ansehen", en: "look at, catch sight of"}
     parts: {infinitiv: "aspicere", praesens_1sg: "aspiciō", perfekt_1sg: "aspexī", supinum: "aspectum"}
   - type: Mischkonjugation
-    translation: "machen"
+    translation: {de: machen, en: "make, do"}
     parts: {infinitiv: "facere", praesens_1sg: "faciō", perfekt_1sg: "fēcī", supinum: "factum"}
     forms:
       imp.praes.akt.2.sg: "fac"
   - type: Mischkonjugation
-    translation: "versehen"
+    translation: {de: versehen, en: "affect, provide (with)"}
     parts: {infinitiv: "afficere", praesens_1sg: "afficiō", perfekt_1sg: "affēcī", supinum: "affectum"}
   - type: Konsonantische
-    translation: "suchen"
+    translation: {de: suchen, en: "look for, seek; ask"}
     parts: {infinitiv: "quaerere", praesens_1sg: "quaerō", perfekt_1sg: "quaesīvī", supinum: "quaesītum"}
-  - translation: "bestrafen"
+  - translation: {de: bestrafen, en: punish}
     parts: {infinitiv: "pūnīre", praesens_1sg: "pūniō", perfekt_1sg: "pūnīvī", supinum: "pūnītum"}
   - type: Konsonantische
-    translation: "verletzen, beschädigen"
+    translation: {de: "verletzen, beschädigen", en: "hurt, damage"}
     parts: {infinitiv: "laedere", praesens_1sg: "laedō", perfekt_1sg: "laesī", supinum: "laesum"}
   - type: Konsonantische
-    translation: "wiederholen"
+    translation: {de: wiederholen, en: "repeat; seek again"}
     parts: {infinitiv: "repetere", praesens_1sg: "repetō", perfekt_1sg: "repetīvī", supinum: "repetītum"}
   - type: Konsonantische
-    translation: "anzünden, entflammen"
+    translation: {de: "anzünden, entflammen", en: "set on fire, inflame"}
     parts: {infinitiv: "incendere", praesens_1sg: "incendō", perfekt_1sg: "incendī", supinum: "incēnsum"}
   - type: Konsonantische
-    translation: "verbinden, vereinigen"
+    translation: {de: "verbinden, vereinigen", en: "join, unite"}
     parts: {infinitiv: "iungere", praesens_1sg: "iungō", perfekt_1sg: "iūnxī", supinum: "iūnctum"}
   - type: Konsonantische
-    translation: "gehen lassen, entlassen"
+    translation: {de: "gehen lassen, entlassen", en: "send away, dismiss"}
     parts: {infinitiv: "dīmittere", praesens_1sg: "dīmittō", perfekt_1sg: "dīmīsī", supinum: "dīmissum"}
   - type: Mischkonjugation
-    translation: "zurückblicken, anschauen"
+    translation: {de: "zurückblicken, anschauen", en: "look back, look at"}
     parts: {infinitiv: "respicere", praesens_1sg: "respiciō", perfekt_1sg: "respexī", supinum: "respectum"}
   - type: Konsonantische
-    translation: "kennenlernen, erkennen"
+    translation: {de: "kennenlernen, erkennen", en: "get to know, recognize"}
     parts: {infinitiv: "cōgnōscere", praesens_1sg: "cōgnōscō", perfekt_1sg: "cōgnōvī", supinum: "cōgnitum"}
   - type: Konsonantische
-    translation: "bitten, verlangen"
+    translation: {de: "bitten, verlangen", en: "ask for, seek; attack"}
     parts: {infinitiv: "petere", praesens_1sg: "petō", perfekt_1sg: "petīvī", supinum: "petītum"}
   - type: Konsonantische
-    translation: "wegführen"
+    translation: {de: wegführen, en: lead away}
     parts: {infinitiv: "abdūcere", praesens_1sg: "abdūcō", perfekt_1sg: "abdūxī", supinum: "abductum"}
   - type: Konsonantische
-    translation: "zurückführen, zurückbringen"
+    translation: {de: "zurückführen, zurückbringen", en: "lead back, bring back"}
     parts: {infinitiv: "redūcere", praesens_1sg: "redūcō", perfekt_1sg: "redūxī", supinum: "reductum"}
   - type: Konsonantische
-    translation: "biegen, beugen, umstimmen"
+    translation: {de: "biegen, beugen, umstimmen", en: "bend; change someone's mind"}
     parts: {infinitiv: "flectere", praesens_1sg: "flectō", perfekt_1sg: "flexī", supinum: "flexum"}
   - type: Konsonantische
-    translation: "herabsteigen"
+    translation: {de: herabsteigen, en: "go down, descend"}
     parts: {infinitiv: "dēscendere", praesens_1sg: "dēscendō", perfekt_1sg: "dēscendī", supinum: "dēscēnsum"}
   - type: Konsonantische
-    translation: "bedecken"
+    translation: {de: bedecken, en: cover}
     parts: {infinitiv: "tegere", praesens_1sg: "tegō", perfekt_1sg: "tēxī", supinum: "tēctum"}
   - type: Konsonantische
-    translation: "gründen"
+    translation: {de: gründen, en: "found; hide"}
     parts: {infinitiv: "condere", praesens_1sg: "condō", perfekt_1sg: "condidī", supinum: "conditum"}
-  - translation: "befehlen"
+  - translation: {de: befehlen, en: "order, command"}
     parts: {infinitiv: "iubēre", praesens_1sg: "iubeō", perfekt_1sg: "iussī", supinum: "iussum"}
   - type: Konsonantische
-    translation: "heranführen"
+    translation: {de: heranführen, en: "lead to, bring"}
     parts: {infinitiv: "addūcere", praesens_1sg: "addūcō", perfekt_1sg: "addūxī", supinum: "adductum"}
   - type: Mischkonjugation
-    translation: "töten"
+    translation: {de: töten, en: kill}
     parts: {infinitiv: "interficere", praesens_1sg: "interficiō", perfekt_1sg: "interfēcī", supinum: "interfectum"}
-  - translation: "ablehnen"
+  - translation: {de: ablehnen, en: "deny, refuse"}
     parts: {infinitiv: "negāre", praesens_1sg: "negō", perfekt_1sg: "negāvī", supinum: "negātum"}
-  - translation: "verbieten"
+  - translation: {de: verbieten, en: forbid}
     parts: {infinitiv: "vetāre", praesens_1sg: "vetō", perfekt_1sg: "vetuī", supinum: "vetitum"}
   - type: Konsonantische
-    translation: "aufstellen, festsetzen, beschließen"
+    translation: {de: "aufstellen, festsetzen, beschließen", en: "set up, decide"}
     parts: {infinitiv: "statuere", praesens_1sg: "statuō", perfekt_1sg: "statuī", supinum: "statūtum"}
-  - translation: "angreifen, belagern"
+  - translation: {de: "angreifen, belagern", en: "attack, besiege"}
     parts: {infinitiv: "oppūgnāre", praesens_1sg: "oppūgnō", perfekt_1sg: "oppūgnāvī", supinum: "oppūgnātum"}
   - type: Konsonantische
-    translation: "vernachlässigen, nicht beachten"
+    translation: {de: "vernachlässigen, nicht beachten", en: "neglect, ignore"}
     parts: {infinitiv: "neglegere", praesens_1sg: "neglegō", perfekt_1sg: "neglēxī", supinum: "neglēctum"}
   - type: A-Konjugation
-    translation: "umgeben, herumlegen"
+    translation: {de: "umgeben, herumlegen", en: "surround, put around"}
     parts: {infinitiv: "circumdare", praesens_1sg: "circumdō", perfekt_1sg: "circumdedī", supinum: "circumdatum", praesens_stamm: "circumda"}
   - type: Konsonantische
-    translation: "vernichten"
+    translation: {de: vernichten, en: "destroy; lose"}
     parts: {infinitiv: "perdere", praesens_1sg: "perdō", perfekt_1sg: "perdidī", supinum: "perditum"}
   - type: Konsonantische
-    translation: "übergeben, überliefern"
+    translation: {de: "übergeben, überliefern", en: "hand over, pass on"}
     parts: {infinitiv: "trādere", praesens_1sg: "trādō", perfekt_1sg: "trādidī", supinum: "trāditum"}
   - type: Konsonantische
-    translation: "aufstellen, beschließen"
+    translation: {de: "aufstellen, beschließen", en: "set up, decide"}
     parts: {infinitiv: "cōnstituere", praesens_1sg: "cōnstituō", perfekt_1sg: "cōnstituī", supinum: "cōnstitūtum"}
   - type: Mischkonjugation
-    translation: "annehmen, aufnehmen"
+    translation: {de: "annehmen, aufnehmen", en: "receive, accept"}
     parts: {infinitiv: "accipere", praesens_1sg: "accipiō", perfekt_1sg: "accēpī", supinum: "acceptum"}
   - type: Mischkonjugation
-    translation: "anfangen, beginnen"
+    translation: {de: "anfangen, beginnen", en: begin}
     parts: {infinitiv: "incipere", praesens_1sg: "incipiō", perfekt_1sg: "incēpī", supinum: "coeptum"}
   - type: Konsonantische
-    translation: "zurückhalten"
+    translation: {de: zurückhalten, en: "hold back; blame"}
     parts: {infinitiv: "reprehendere", praesens_1sg: "reprehendō", perfekt_1sg: "reprehendī", supinum: "reprehēnsum"}
-  - translation: "ansprechen"
+  - translation: {de: ansprechen, en: "address, call"}
     parts: {infinitiv: "appellāre", praesens_1sg: "appellō", perfekt_1sg: "appellāvī", supinum: "appellātum"}
   - type: Konsonantische
-    translation: "erkennen, begreifen"
+    translation: {de: "erkennen, begreifen", en: "understand, realize"}
     parts: {infinitiv: "intellegere", praesens_1sg: "intellegō", perfekt_1sg: "intellēxī", supinum: "intellēctum"}
   - type: Mischkonjugation
-    translation: "begehren, wünschen"
+    translation: {de: "begehren, wünschen", en: "desire, wish"}
     parts: {infinitiv: "cupere", praesens_1sg: "cupiō", perfekt_1sg: "cupīvī", supinum: "cupītum"}
-  - translation: "mäßigen, zurückhalten"
+  - translation: {de: "mäßigen, zurückhalten", en: "moderate, restrain"}
     parts: {infinitiv: "temperāre", praesens_1sg: "temperō", perfekt_1sg: "temperāvī", supinum: "temperātum"}
   - type: Konsonantische
-    translation: "niederschlagen, töten"
+    translation: {de: "niederschlagen, töten", en: "cut down, kill"}
     parts: {infinitiv: "caedere", praesens_1sg: "caedō", perfekt_1sg: "cecīdī", supinum: "caesum"}
-  - translation: "beurteilen, meinen"
+  - translation: {de: "beurteilen, meinen", en: "judge, think"}
     parts: {infinitiv: "exīstimāre", praesens_1sg: "exīstimō", perfekt_1sg: "exīstimāvī", supinum: "exīstimātum"}
   - type: Konsonantische
-    translation: "ernähren, großziehen"
+    translation: {de: "ernähren, großziehen", en: "feed, raise"}
     parts: {infinitiv: "alere", praesens_1sg: "alō", perfekt_1sg: "aluī", supinum: "alitum"}
   - type: Konsonantische
-    translation: "glauben"
+    translation: {de: glauben, en: "believe, trust"}
     parts: {infinitiv: "crēdere", praesens_1sg: "crēdō", perfekt_1sg: "crēdidī", supinum: "crēditum"}
   - type: Konsonantische
-    translation: "auslöschen, vernichten"
+    translation: {de: "auslöschen, vernichten", en: "extinguish, destroy"}
     parts: {infinitiv: "exstinguere", praesens_1sg: "exstinguō", perfekt_1sg: "exstīnxī", supinum: "exstīnctum"}
-  - translation: "unterstützen"
+  - translation: {de: unterstützen, en: "help, support"}
     parts: {infinitiv: "adiuvāre", praesens_1sg: "adiuvō", perfekt_1sg: "adiūvī", supinum: "adiūtum"}
   - type: Konsonantische
-    translation: "bebauen, pflegen, verehren"
+    translation: {de: "bebauen, pflegen, verehren", en: "cultivate, look after, worship"}
     parts: {infinitiv: "colere", praesens_1sg: "colō", perfekt_1sg: "coluī", supinum: "cultum"}
   - type: Konsonantische
-    translation: "ablegen, niederlegen"
+    translation: {de: "ablegen, niederlegen", en: "put down, lay aside"}
     parts: {infinitiv: "dēpōnere", praesens_1sg: "dēpōnō", perfekt_1sg: "dēposuī", supinum: "dēpositum"}
-  - translation: "werfen"
+  - translation: {de: werfen, en: "throw, toss"}
     parts: {infinitiv: "iactāre", praesens_1sg: "iactō", perfekt_1sg: "iactāvī", supinum: "iactātum"}
   - type: Konsonantische
-    translation: "entlassen, gehen lassen"
+    translation: {de: "entlassen, gehen lassen", en: "lose; let go"}
     parts: {infinitiv: "āmittere", praesens_1sg: "āmittō", perfekt_1sg: "āmīsī", supinum: "āmissum"}
   - type: Konsonantische
-    translation: "hinaufsteigen, besteigen"
+    translation: {de: "hinaufsteigen, besteigen", en: "climb, go up"}
     parts: {infinitiv: "ascendere", praesens_1sg: "ascendō", perfekt_1sg: "ascendī", supinum: "ascēnsum"}
   - type: Konsonantische
-    translation: "stoßen, schlagen"
+    translation: {de: "stoßen, schlagen", en: "push, strike; drive away"}
     parts: {infinitiv: "pellere", praesens_1sg: "pellō", perfekt_1sg: "pepulī", supinum: "pulsum"}
   - type: Konsonantische
-    translation: "veranstalten"
+    translation: {de: veranstalten, en: "entrust; bring about, stage"}
     parts: {infinitiv: "committere", praesens_1sg: "committō", perfekt_1sg: "commīsī", supinum: "commissum"}
   - type: Konsonantische
-    translation: "verkaufen"
+    translation: {de: verkaufen, en: sell}
     parts: {infinitiv: "vendere", praesens_1sg: "vendō", perfekt_1sg: "vendidī", supinum: "venditum"}
   - type: Konsonantische
-    translation: "verlassen, im Stich lassen"
+    translation: {de: "verlassen, im Stich lassen", en: "desert, abandon"}
     parts: {infinitiv: "dēserere", praesens_1sg: "dēserō", perfekt_1sg: "dēseruī", supinum: "dēsertum"}
-  - translation: "öffnen"
+  - translation: {de: öffnen, en: open}
     parts: {infinitiv: "aperīre", praesens_1sg: "aperiō", perfekt_1sg: "aperuī", supinum: "apertum"}
   - type: Konsonantische
-    translation: "wahrnehmen, bemerken"
+    translation: {de: "wahrnehmen, bemerken", en: "notice, perceive"}
     parts: {infinitiv: "animadvertere", praesens_1sg: "animadvertō", perfekt_1sg: "animadvertī", supinum: "animadversum"}
-  - translation: "hinzuziehen"
+  - translation: {de: hinzuziehen, en: "call in, apply"}
     parts: {infinitiv: "adhibēre", praesens_1sg: "adhibeō", perfekt_1sg: "adhibuī", supinum: "adhibitum"}
   - type: Unregelmäßig
-    translation: "hineingehen"
+    translation: {de: hineingehen, en: "go in, enter"}
     parts: {infinitiv: "inīre", praesens_1sg: "ineō", perfekt_1sg: ["iniī", "inīvī"], supinum: "initum", ppa_nom: "iniēns", ppa_gen: "ineuntis", gerundiv: "ineundus"}
     forms:
       ind.praes.akt.1.sg: "ineō"
@@ -1469,34 +1523,34 @@ items:
       ger.dat: "ineundō"
       ger.akk: "ineundum"
       ger.abl: "ineundō"
-  - translation: "sich vor jmd. in Acht nehmen"
+  - translation: {de: sich vor jmd. in Acht nehmen, en: "beware (of), be on guard"}
     parts: {infinitiv: "cavēre", praesens_1sg: "caveō", perfekt_1sg: "cāvī", supinum: "cautum"}
   - type: esse-Kompositum
-    translation: "an der Spitze stehen von, voranstehen"
+    translation: {de: "an der Spitze stehen von, voranstehen", en: "be in charge (of)"}
     parts: {infinitiv: "praeesse", praesens_1sg: "praesum", perfekt_1sg: "praefuī", futurpartizip: "praefutūrus", ppa_nom: "praesēns", ppa_gen: "praesentis"}
-  - translation: "stehen, sich befinden"
+  - translation: {de: "stehen, sich befinden", en: stand}
     parts: {infinitiv: "stāre", praesens_1sg: "stō", perfekt_1sg: "stetī"}
     absent: *ohne_supinum
-  - translation: "sich bemühen, streben"
+  - translation: {de: "sich bemühen, streben", en: "strive (for), be eager"}
     parts: {infinitiv: "studēre", praesens_1sg: "studeō", perfekt_1sg: "studuī"}
     absent: *ohne_supinum
   - type: Konsonantische
-    translation: "verteidigen"
+    translation: {de: verteidigen, en: defend}
     parts: {infinitiv: "dēfendere", praesens_1sg: "dēfendō", perfekt_1sg: "dēfendī", supinum: "dēfēnsum"}
   - type: Mischkonjugation
-    translation: "genau betrachten, durchschauen, erkennen"
+    translation: {de: "genau betrachten, durchschauen, erkennen", en: "examine closely, see through"}
     parts: {infinitiv: "perspicere", praesens_1sg: "perspiciō", perfekt_1sg: "perspexī", supinum: "perspectum"}
-  - translation: "fragen"
+  - translation: {de: fragen, en: "ask, question"}
     parts: {infinitiv: "interrogāre", praesens_1sg: "interrogō", perfekt_1sg: "interrogāvī", supinum: "interrogātum"}
-  - translation: "anzeigen, sagen"
+  - translation: {de: "anzeigen, sagen", en: "show, indicate"}
     parts: {infinitiv: "indicāre", praesens_1sg: "indicō", perfekt_1sg: "indicāvī", supinum: "indicātum"}
   - type: Konsonantische
-    translation: "niederschlagen, töten"
+    translation: {de: "niederschlagen, töten", en: "cut down, kill"}
     parts: {infinitiv: "occīdere", praesens_1sg: "occīdō", perfekt_1sg: "occīdī", supinum: "occīsum"}
-  - translation: "melden, benachrichtigen"
+  - translation: {de: "melden, benachrichtigen", en: "announce, report"}
     parts: {infinitiv: "nūntiāre", praesens_1sg: "nūntiō", perfekt_1sg: "nūntiāvī", supinum: "nūntiātum"}
   - type: Unregelmäßig
-    translation: "herbeitragen, hinzufügen"
+    translation: {de: "herbeitragen, hinzufügen", en: "bring (to); add"}
     parts: {infinitiv: "afferre", praesens_1sg: "afferō", perfekt_1sg: "attulī", supinum: "allātum", ppa_nom: "afferēns", ppa_gen: "afferentis", gerundiv: "afferendus"}
     forms:
       ind.praes.akt.1.sg: "afferō"
@@ -1536,23 +1590,23 @@ items:
       imp.fut.akt.2.pl: "affertōte"
       imp.fut.akt.3.pl: "afferuntō"
       inf.praes.akt: "afferre"
-  - translation: "erforschen, auskundschaften"
+  - translation: {de: "erforschen, auskundschaften", en: "explore, investigate"}
     parts: {infinitiv: "explōrāre", praesens_1sg: "explōrō", perfekt_1sg: "explōrāvī", supinum: "explōrātum"}
-  - translation: "hindern, verhindern"
+  - translation: {de: "hindern, verhindern", en: "hinder, prevent"}
     parts: {infinitiv: "impedīre", praesens_1sg: "impediō", perfekt_1sg: "impedīvī", supinum: "impedītum"}
   - type: Konsonantische
-    translation: "zusammenbringen, zwingen"
+    translation: {de: "zusammenbringen, zwingen", en: "gather; force"}
     parts: {infinitiv: "cōgere", praesens_1sg: "cōgō", perfekt_1sg: "coēgī", supinum: "coāctum"}
   - type: Konsonantische
-    translation: "zurückstoßen, vertreiben"
+    translation: {de: "zurückstoßen, vertreiben", en: "push back, drive back"}
     parts: {infinitiv: "repellere", praesens_1sg: "repellō", perfekt_1sg: "reppulī", supinum: "repulsum"}
   - type: Konsonantische
-    translation: "verlassen, zurücklassen"
+    translation: {de: "verlassen, zurücklassen", en: "leave, leave behind"}
     parts: {infinitiv: "relinquere", praesens_1sg: "relinquō", perfekt_1sg: "relīquī", supinum: "relictum"}
-  - translation: "fordern, verlangen"
+  - translation: {de: "fordern, verlangen", en: demand}
     parts: {infinitiv: "pōstulāre", praesens_1sg: "pōstulō", perfekt_1sg: "pōstulāvī", supinum: "pōstulātum"}
   - type: Unregelmäßig
-    translation: "zusammentragen, zusammenbringen"
+    translation: {de: "zusammentragen, zusammenbringen", en: "bring together, gather; compare"}
     parts: {infinitiv: "cōnferre", praesens_1sg: "cōnferō", perfekt_1sg: "contulī", supinum: "collātum", ppa_nom: "cōnferēns", ppa_gen: "cōnferentis", gerundiv: "cōnferendus"}
     forms:
       ind.praes.akt.1.sg: "cōnferō"
@@ -1593,122 +1647,122 @@ items:
       imp.fut.akt.3.pl: "cōnferuntō"
       inf.praes.akt: "cōnferre"
   - type: Konsonantische
-    translation: "zusammenstellen"
+    translation: {de: zusammenstellen, en: "put together, compose"}
     parts: {infinitiv: "compōnere", praesens_1sg: "compōnō", perfekt_1sg: "composuī", supinum: "compositum"}
-  - translation: "vortragen, vorlesen"
+  - translation: {de: "vortragen, vorlesen", en: "recite, read aloud"}
     parts: {infinitiv: "recitāre", praesens_1sg: "recitō", perfekt_1sg: "recitāvī", supinum: "recitātum"}
-  - translation: "loben"
+  - translation: {de: loben, en: praise}
     parts: {infinitiv: "laudāre", praesens_1sg: "laudō", perfekt_1sg: "laudāvī", supinum: "laudātum"}
-  - translation: "bereiten, verschaffen"
+  - translation: {de: "bereiten, verschaffen", en: "prepare, provide; compare"}
     parts: {infinitiv: "comparāre", praesens_1sg: "comparō", perfekt_1sg: "comparāvī", supinum: "comparātum"}
   - type: Konsonantische
-    translation: "spielen, scherzen"
+    translation: {de: "spielen, scherzen", en: "play, joke"}
     parts: {infinitiv: "lūdere", praesens_1sg: "lūdō", perfekt_1sg: "lūsī", supinum: "lūsum"}
   - type: Konsonantische
-    translation: "lösen, befreien"
+    translation: {de: "lösen, befreien", en: "loosen, release, free"}
     parts: {infinitiv: "solvere", praesens_1sg: "solvō", perfekt_1sg: "solvī", supinum: "solūtum"}
-  - translation: "erreichen, durchsetzen"
+  - translation: {de: "erreichen, durchsetzen", en: "obtain, achieve"}
     parts: {infinitiv: "impetrāre", praesens_1sg: "impetrō", perfekt_1sg: "impetrāvī", supinum: "impetrātum"}
   - type: Mischkonjugation
-    translation: "bewirken, zustande bringen, schaffen"
+    translation: {de: "bewirken, zustande bringen, schaffen", en: "bring about, accomplish"}
     parts: {infinitiv: "efficere", praesens_1sg: "efficiō", perfekt_1sg: "effēcī", supinum: "effectum"}
   - type: Mischkonjugation
-    translation: "rauben, wegreißen"
+    translation: {de: "rauben, wegreißen", en: "seize, snatch"}
     parts: {infinitiv: "rapere", praesens_1sg: "rapiō", perfekt_1sg: "rapuī", supinum: "raptum"}
-  - translation: "wünschen"
+  - translation: {de: wünschen, en: wish}
     parts: {infinitiv: "optāre", praesens_1sg: "optō", perfekt_1sg: "optāvī", supinum: "optātum"}
-  - translation: "vergrößern, vermehren"
+  - translation: {de: "vergrößern, vermehren", en: increase}
     parts: {infinitiv: "augēre", praesens_1sg: "augeō", perfekt_1sg: "auxī", supinum: "auctum"}
   - type: Konsonantische
-    translation: "lenken, leiten"
+    translation: {de: "lenken, leiten", en: "steer, guide, rule"}
     parts: {infinitiv: "regere", praesens_1sg: "regō", perfekt_1sg: "rēxī", supinum: "rēctum"}
   - type: Konsonantische
-    translation: "sich erheben, aufstehen"
+    translation: {de: "sich erheben, aufstehen", en: "rise, get up"}
     parts: {infinitiv: "surgere", praesens_1sg: "surgō", perfekt_1sg: "surrēxī", supinum: "surrēctum"}
   - type: Mischkonjugation
-    translation: "entreißen"
+    translation: {de: entreißen, en: "snatch away, rescue"}
     parts: {infinitiv: "ēripere", praesens_1sg: "ēripiō", perfekt_1sg: "ēripuī", supinum: "ēreptum"}
-  - translation: "nicht wissen, nicht verstehen"
+  - translation: {de: "nicht wissen, nicht verstehen", en: not know}
     parts: {infinitiv: "nescīre", praesens_1sg: "nesciō", perfekt_1sg: "nescīvī"}
     absent: *ohne_supinum
-  - translation: "belagern, besetzt halten"
+  - translation: {de: "belagern, besetzt halten", en: "besiege, occupy"}
     parts: {infinitiv: "obsidēre", praesens_1sg: "obsideō", perfekt_1sg: "obsēdī", supinum: "obsessum"}
   - type: Mischkonjugation
-    translation: "hineinwerfen"
+    translation: {de: hineinwerfen, en: throw in}
     parts: {infinitiv: "inicere", praesens_1sg: "iniciō", perfekt_1sg: "iniēcī", supinum: "iniectum"}
-  - translation: "verwüsten"
+  - translation: {de: verwüsten, en: "lay waste, devastate"}
     parts: {infinitiv: "vāstāre", praesens_1sg: "vāstō", perfekt_1sg: "vāstāvī", supinum: "vāstātum"}
-  - translation: "hingelangen, ankommen"
+  - translation: {de: "hingelangen, ankommen", en: "arrive, reach"}
     parts: {infinitiv: "pervenīre", praesens_1sg: "perveniō", perfekt_1sg: "pervēnī", supinum: "perventum"}
-  - translation: "abwehren"
+  - translation: {de: abwehren, en: "keep away, ward off"}
     parts: {infinitiv: "arcēre", praesens_1sg: "arceō", perfekt_1sg: "arcuī"}
     absent: *ohne_supinum
-  - translation: "zusammenhalten, festhalten"
+  - translation: {de: "zusammenhalten, festhalten", en: "hold together, contain"}
     parts: {infinitiv: "continēre", praesens_1sg: "contineō", perfekt_1sg: "continuī", supinum: "contentum"}
   - type: Konsonantische
-    translation: "hinausgehen, entkommen"
+    translation: {de: "hinausgehen, entkommen", en: "go out, escape"}
     parts: {infinitiv: "ēvādere", praesens_1sg: "ēvādō", perfekt_1sg: "ēvāsī", supinum: "ēvāsum"}
   - type: Konsonantische
-    translation: "berühren"
+    translation: {de: berühren, en: "touch, reach"}
     parts: {infinitiv: "attingere", praesens_1sg: "attingō", perfekt_1sg: "attigī", supinum: "attāctum"}
   - type: Konsonantische
-    translation: "hinaustreiben, vertreiben"
+    translation: {de: "hinaustreiben, vertreiben", en: "drive out, expel"}
     parts: {infinitiv: "expellere", praesens_1sg: "expellō", perfekt_1sg: "expulī", supinum: "expulsum"}
   - type: Konsonantische
-    translation: "wieder herstellen, wieder aufbauen"
+    translation: {de: "wieder herstellen, wieder aufbauen", en: "restore, rebuild"}
     parts: {infinitiv: "restituere", praesens_1sg: "restituō", perfekt_1sg: "restituī", supinum: "restitūtum"}
-  - translation: "friedlich machen, beruhigen"
+  - translation: {de: "friedlich machen, beruhigen", en: pacify}
     parts: {infinitiv: "pācāre", praesens_1sg: "pācō", perfekt_1sg: "pācāvī", supinum: "pācātum"}
   - type: Konsonantische
-    translation: "beraten"
+    translation: {de: beraten, en: "consult; take care of"}
     parts: {infinitiv: "cōnsulere", praesens_1sg: "cōnsulō", perfekt_1sg: "cōnsuluī", supinum: "cōnsultum"}
   - type: Mischkonjugation
-    translation: "unterwerfen"
+    translation: {de: unterwerfen, en: "place under, subject"}
     parts: {infinitiv: "subicere", praesens_1sg: "subiciō", perfekt_1sg: "subiēcī", supinum: "subiectum"}
   - type: Konsonantische
-    translation: "entscheiden, beschließen"
+    translation: {de: "entscheiden, beschließen", en: decide}
     parts: {infinitiv: "dēcernere", praesens_1sg: "dēcernō", perfekt_1sg: "dēcrēvī", supinum: "dēcrētum"}
-  - translation: "befreien"
+  - translation: {de: befreien, en: "free, set free"}
     parts: {infinitiv: "līberāre", praesens_1sg: "līberō", perfekt_1sg: "līberāvī", supinum: "līberātum"}
   - type: Konsonantische
-    translation: "zerbrechen"
+    translation: {de: zerbrechen, en: break}
     parts: {infinitiv: "frangere", praesens_1sg: "frangō", perfekt_1sg: "frēgī", supinum: "frāctum"}
-  - translation: "herankommen"
+  - translation: {de: herankommen, en: "arrive, come up"}
     parts: {infinitiv: "advenīre", praesens_1sg: "adveniō", perfekt_1sg: "advēnī", supinum: "adventum"}
   - type: Konsonantische
-    translation: "unterdrücken, überfallen"
+    translation: {de: "unterdrücken, überfallen", en: "oppress, overwhelm"}
     parts: {infinitiv: "opprimere", praesens_1sg: "opprimō", perfekt_1sg: "oppressī", supinum: "oppressum"}
   - type: Konsonantische
-    translation: "hinabführen, wegführen, führen"
+    translation: {de: "hinabführen, wegführen, führen", en: "lead down, lead away"}
     parts: {infinitiv: "dēdūcere", praesens_1sg: "dēdūcō", perfekt_1sg: "dēdūxī", supinum: "dēductum"}
   - type: Konsonantische
-    translation: "anhalten"
+    translation: {de: anhalten, en: "stop, halt"}
     parts: {infinitiv: "cōnsistere", praesens_1sg: "cōnsistō", perfekt_1sg: "cōnstitī"}
-  - translation: "erbitten, anflehen"
+  - translation: {de: "erbitten, anflehen", en: "beg, implore"}
     parts: {infinitiv: "obsecrāre", praesens_1sg: "obsecrō", perfekt_1sg: "obsecrāvī", supinum: "obsecrātum"}
   - type: Konsonantische
-    translation: "nehmen"
+    translation: {de: nehmen, en: take}
     parts: {infinitiv: "sūmere", praesens_1sg: "sūmō", perfekt_1sg: "sūmpsī", supinum: "sūmptum"}
   - type: Konsonantische
-    translation: "zurückgeben"
+    translation: {de: zurückgeben, en: "give back, return"}
     parts: {infinitiv: "reddere", praesens_1sg: "reddō", perfekt_1sg: "reddidī", supinum: "redditum"}
   - type: Konsonantische
-    translation: "trinken"
+    translation: {de: trinken, en: drink}
     parts: {infinitiv: "bibere", praesens_1sg: "bibō", perfekt_1sg: "bibī"}
   - type: Konsonantische
-    translation: "kaufen"
+    translation: {de: kaufen, en: buy}
     parts: {infinitiv: "emere", praesens_1sg: "emō", perfekt_1sg: "ēmī", supinum: "ēmptum"}
-  - translation: "nennen"
+  - translation: {de: nennen, en: "name, call"}
     parts: {infinitiv: "nōmināre", praesens_1sg: "nōminō", perfekt_1sg: "nōmināvī", supinum: "nōminātum"}
   - type: Konsonantische
-    translation: "zeigen, erklären"
+    translation: {de: "zeigen, erklären", en: "show, point out"}
     parts: {infinitiv: "ostendere", praesens_1sg: "ostendō", perfekt_1sg: "ostendī", supinum: "ostentum"}
-  - translation: "verkünden"
+  - translation: {de: verkünden, en: "proclaim, announce"}
     parts: {infinitiv: "praedicāre", praesens_1sg: "praedicō", perfekt_1sg: "praedicāvī", supinum: "praedicātum"}
-  - translation: "veranlassen"
+  - translation: {de: veranlassen, en: "move deeply, induce"}
     parts: {infinitiv: "permovēre", praesens_1sg: "permoveō", perfekt_1sg: "permōvī", supinum: "permōtum"}
   - type: Unregelmäßig
-    translation: "wegbringen"
+    translation: {de: wegbringen, en: "carry out; raise"}
     parts: {infinitiv: "efferre", praesens_1sg: "efferō", perfekt_1sg: "extulī", supinum: "ēlātum", ppa_nom: "efferēns", ppa_gen: "efferentis", gerundiv: "efferendus"}
     forms:
       ind.praes.akt.1.sg: "efferō"
@@ -1749,138 +1803,138 @@ items:
       imp.fut.akt.3.pl: "efferuntō"
       inf.praes.akt: "efferre"
   - type: Konsonantische
-    translation: "sich ausdenken, sich vorstellen"
+    translation: {de: "sich ausdenken, sich vorstellen", en: "invent, imagine"}
     parts: {infinitiv: "fingere", praesens_1sg: "fingō", perfekt_1sg: "fīnxī", supinum: "fictum"}
   - type: Konsonantische
-    translation: "wachsen"
+    translation: {de: wachsen, en: grow}
     parts: {infinitiv: "crēscere", praesens_1sg: "crēscō", perfekt_1sg: "crēvī", supinum: "crētum"}
   - type: Konsonantische
-    translation: "täuschen, betrügen"
+    translation: {de: "täuschen, betrügen", en: "deceive, cheat"}
     parts: {infinitiv: "fallere", praesens_1sg: "fallō", perfekt_1sg: "fefellī"}
-  - translation: "verbergen, verstecken"
+  - translation: {de: "verbergen, verstecken", en: "hide, conceal"}
     parts: {infinitiv: "occultāre", praesens_1sg: "occultō", perfekt_1sg: "occultāvī", supinum: "occultātum"}
   - type: Konsonantische
-    translation: "benetzen, färben"
+    translation: {de: "benetzen, färben", en: "wet, dye"}
     parts: {infinitiv: "tingere", praesens_1sg: "tingō", perfekt_1sg: "tīnxī", supinum: "tīnctum"}
   - type: Konsonantische
-    translation: "abstreifen, ziehen"
+    translation: {de: "abstreifen, ziehen", en: "strip off; draw (a sword)"}
     parts: {infinitiv: "stringere", praesens_1sg: "stringō", perfekt_1sg: "strīnxī", supinum: "strictum"}
   - type: Konsonantische
-    translation: "ziehen, wegschleppen"
+    translation: {de: "ziehen, wegschleppen", en: "draw, drag"}
     parts: {infinitiv: "trahere", praesens_1sg: "trahō", perfekt_1sg: "trāxī", supinum: "tractum"}
-  - translation: "erregen, wecken"
+  - translation: {de: "erregen, wecken", en: "stir up, rouse, wake"}
     parts: {infinitiv: "excitāre", praesens_1sg: "excitō", perfekt_1sg: "excitāvī"}
     absent: *ohne_supinum
-  - translation: "umherirren, sich irren"
+  - translation: {de: "umherirren, sich irren", en: "wander; be mistaken"}
     parts: {infinitiv: "errāre", praesens_1sg: "errō", perfekt_1sg: "errāvī"}
     absent: *ohne_supinum
-  - translation: "zusammenrufen"
+  - translation: {de: zusammenrufen, en: call together}
     parts: {infinitiv: "convocāre", praesens_1sg: "convocō", perfekt_1sg: "convocāvī"}
     absent: *ohne_supinum
-  - translation: "erzählen"
+  - translation: {de: erzählen, en: "tell, narrate"}
     parts: {infinitiv: "nārrāre", praesens_1sg: "nārrō", perfekt_1sg: "nārrāvī"}
     absent: *ohne_supinum
-  - translation: "verzweifeln"
+  - translation: {de: verzweifeln, en: despair}
     parts: {infinitiv: "dēspērāre", praesens_1sg: "dēspērō", perfekt_1sg: "dēspērāvī"}
     absent: *ohne_supinum
-  - translation: "verwirren"
+  - translation: {de: verwirren, en: "confuse, disturb"}
     parts: {infinitiv: "turbāre", praesens_1sg: "turbō", perfekt_1sg: "turbāvī"}
     absent: *ohne_supinum
-  - translation: "völlig verwirren"
+  - translation: {de: völlig verwirren, en: throw into confusion}
     parts: {infinitiv: "perturbāre", praesens_1sg: "perturbō", perfekt_1sg: "perturbāvī"}
     absent: *ohne_supinum
-  - translation: "nachdenken"
+  - translation: {de: nachdenken, en: "think, consider"}
     parts: {infinitiv: "cōgitāre", praesens_1sg: "cōgitō", perfekt_1sg: "cōgitāvī"}
     absent: *ohne_supinum
-  - translation: "quälen"
+  - translation: {de: quälen, en: "torment, harass"}
     parts: {infinitiv: "vexāre", praesens_1sg: "vexō", perfekt_1sg: "vexāvī"}
     absent: *ohne_supinum
-  - translation: "nicht kennen"
+  - translation: {de: nicht kennen, en: not know}
     parts: {infinitiv: "īgnōrāre", praesens_1sg: "īgnōrō", perfekt_1sg: "īgnōrāvī"}
     absent: *ohne_supinum
-  - translation: "verletzen"
+  - translation: {de: verletzen, en: "violate, injure"}
     parts: {infinitiv: "violāre", praesens_1sg: "violō", perfekt_1sg: "violāvī"}
     absent: *ohne_supinum
-  - translation: "bevorstehen, drohen"
+  - translation: {de: "bevorstehen, drohen", en: "be at hand, threaten"}
     parts: {infinitiv: "īnstāre", praesens_1sg: "īnstō", perfekt_1sg: "īnstitī"}
     absent: *ohne_supinum
-  - translation: "glauben, meinen"
+  - translation: {de: "glauben, meinen", en: "think, believe"}
     parts: {infinitiv: "putāre", praesens_1sg: "putō", perfekt_1sg: "putāvī"}
     absent: *ohne_supinum
-  - translation: "verborgen sein"
+  - translation: {de: verborgen sein, en: be hidden}
     parts: {infinitiv: "latēre", praesens_1sg: "lateō", perfekt_1sg: "latuī"}
     absent: *ohne_supinum
-  - translation: "müssen"
+  - translation: {de: müssen, en: "must, have to; owe"}
     parts: {infinitiv: "dēbēre", praesens_1sg: "dēbeō", perfekt_1sg: "dēbuī"}
     absent: *ohne_supinum
-  - translation: "nicht haben, frei sein von"
+  - translation: {de: "nicht haben, frei sein von", en: "lack, be free from"}
     parts: {infinitiv: "carēre", praesens_1sg: "careō", perfekt_1sg: "caruī"}
     absent: *ohne_supinum
-  - translation: "Schmerz empfinden, traurig sein"
+  - translation: {de: "Schmerz empfinden, traurig sein", en: "feel pain, grieve"}
     parts: {infinitiv: "dolēre", praesens_1sg: "doleō", perfekt_1sg: "doluī"}
     absent: *ohne_supinum
-  - translation: "sehr erschrecken"
+  - translation: {de: sehr erschrecken, en: frighten badly}
     parts: {infinitiv: "perterrēre", praesens_1sg: "perterreō", perfekt_1sg: "perterruī"}
     absent: *ohne_supinum
-  - translation: "erschrecken"
+  - translation: {de: erschrecken, en: frighten}
     parts: {infinitiv: "terrēre", praesens_1sg: "terreō", perfekt_1sg: "terruī"}
     absent: *ohne_supinum
-  - translation: "stark sein, gelten"
+  - translation: {de: "stark sein, gelten", en: "be strong, be worth"}
     parts: {infinitiv: "valēre", praesens_1sg: "valeō", perfekt_1sg: "valuī"}
     absent: *ohne_supinum
-  - translation: "brennen"
+  - translation: {de: brennen, en: burn}
     parts: {infinitiv: "ārdēre", praesens_1sg: "ārdeō", perfekt_1sg: "ārsī"}
     absent: *ohne_supinum
-  - translation: "ermahnen, warnen"
+  - translation: {de: "ermahnen, warnen", en: "warn, advise"}
     parts: {infinitiv: "monēre", praesens_1sg: "moneō", perfekt_1sg: "monuī"}
     absent: *ohne_supinum
-  - translation: "liegen"
+  - translation: {de: liegen, en: lie}
     parts: {infinitiv: "iacēre", praesens_1sg: "iaceō", perfekt_1sg: "iacuī"}
     absent: *ohne_supinum
-  - translation: "beenden"
+  - translation: {de: beenden, en: "finish, end"}
     parts: {infinitiv: "fīnīre", praesens_1sg: "fīniō", perfekt_1sg: "fīnīvī"}
     absent: *ohne_supinum
-  - translation: "bewachen"
+  - translation: {de: bewachen, en: guard}
     parts: {infinitiv: "cūstōdīre", praesens_1sg: "cūstōdiō", perfekt_1sg: "cūstōdīvī"}
     absent: *ohne_supinum
   - type: Konsonantische
-    translation: "sich anstrengen, eilen, kämpfen"
+    translation: {de: "sich anstrengen, eilen, kämpfen", en: "strive, hurry; fight"}
     parts: {infinitiv: "contendere", praesens_1sg: "contendō", perfekt_1sg: "contendī"}
   - type: Konsonantische
-    translation: "herantreten"
+    translation: {de: herantreten, en: approach}
     parts: {infinitiv: "accēdere", praesens_1sg: "accēdō", perfekt_1sg: "accessī"}
   - type: Konsonantische
-    translation: "schonen"
+    translation: {de: schonen, en: spare}
     parts: {infinitiv: "parcere", praesens_1sg: "parcō", perfekt_1sg: "pepercī"}
   - type: Konsonantische
-    translation: "Widerstand leisten"
+    translation: {de: Widerstand leisten, en: resist}
     parts: {infinitiv: "resistere", praesens_1sg: "resistō", perfekt_1sg: "restitī"}
   - type: Konsonantische
-    translation: "leben"
+    translation: {de: leben, en: live}
     parts: {infinitiv: "vīvere", praesens_1sg: "vīvō", perfekt_1sg: "vīxī"}
   - type: Konsonantische
-    translation: "weggehen"
+    translation: {de: weggehen, en: "go away, depart"}
     parts: {infinitiv: "discēdere", praesens_1sg: "discēdō", perfekt_1sg: "discessī"}
   - type: Konsonantische
-    translation: "tragen, ausführen"
+    translation: {de: "tragen, ausführen", en: "carry, carry out, wage"}
     parts: {infinitiv: "gerere", praesens_1sg: "gerō", perfekt_1sg: "gessī"}
   - type: Konsonantische
-    translation: "fallen"
+    translation: {de: fallen, en: fall}
     parts: {infinitiv: "cadere", praesens_1sg: "cadō", perfekt_1sg: "cecidī"}
   - type: Konsonantische
-    translation: "stürzen, eilen"
+    translation: {de: "stürzen, eilen", en: "rush; fall"}
     parts: {infinitiv: "ruere", praesens_1sg: "ruō", perfekt_1sg: "ruī"}
   - type: Konsonantische
-    translation: "fürchten"
+    translation: {de: fürchten, en: fear}
     parts: {infinitiv: "metuere", praesens_1sg: "metuō", perfekt_1sg: "metuī"}
   - type: Mischkonjugation
-    translation: "fliehen"
+    translation: {de: fliehen, en: flee}
     parts: {infinitiv: "fugere", praesens_1sg: "fugiō", perfekt_1sg: "fūgī"}
   - type: Mischkonjugation
-    translation: "entkommen"
+    translation: {de: entkommen, en: escape}
     parts: {infinitiv: "effugere", praesens_1sg: "effugiō", perfekt_1sg: "effūgī"}
   - type: Unregelmäßig
-    translation: "hinausgehen"
+    translation: {de: hinausgehen, en: go out}
     parts: {infinitiv: "exīre", praesens_1sg: "exeō", perfekt_1sg: ["exiī", "exīvī"], ppa_nom: "exiēns", ppa_gen: "exeuntis", gerundiv: "exeundus"}
     forms:
       ind.praes.akt.1.sg: "exeō"
@@ -1934,7 +1988,7 @@ items:
       ger.akk: "exeundum"
       ger.abl: "exeundō"
   - type: Unregelmäßig
-    translation: "zurückkehren"
+    translation: {de: zurückkehren, en: "return, go back"}
     parts: {infinitiv: "redīre", praesens_1sg: "redeō", perfekt_1sg: ["rediī", "redīvī"], ppa_nom: "rediēns", ppa_gen: "redeuntis", gerundiv: "redeundus"}
     forms:
       ind.praes.akt.1.sg: "redeō"
@@ -1988,7 +2042,7 @@ items:
       ger.akk: "redeundum"
       ger.abl: "redeundō"
   - type: Unregelmäßig
-    translation: "herangehen, auf sich nehmen"
+    translation: {de: "herangehen, auf sich nehmen", en: "approach; undergo"}
     parts: {infinitiv: "subīre", praesens_1sg: "subeō", perfekt_1sg: ["subiī", "subīvī"], ppa_nom: "subiēns", ppa_gen: "subeuntis", gerundiv: "subeundus"}
     forms:
       ind.praes.akt.1.sg: "subeō"
@@ -2042,7 +2096,7 @@ items:
       ger.akk: "subeundum"
       ger.abl: "subeundō"
   - type: Unregelmäßig
-    translation: "zugrunde gehen"
+    translation: {de: zugrunde gehen, en: "perish, die"}
     parts: {infinitiv: "perīre", praesens_1sg: "pereō", perfekt_1sg: ["periī", "perīvī"], ppa_nom: "periēns", ppa_gen: "pereuntis", gerundiv: "pereundus"}
     forms:
       ind.praes.akt.1.sg: "pereō"
@@ -2096,7 +2150,7 @@ items:
       ger.akk: "pereundum"
       ger.abl: "pereundō"
   - type: Unregelmäßig
-    translation: "herangehen, aufsuchen"
+    translation: {de: "herangehen, aufsuchen", en: "approach, visit"}
     parts: {infinitiv: "adīre", praesens_1sg: "adeō", perfekt_1sg: ["adiī", "adīvī"], ppa_nom: "adiēns", ppa_gen: "adeuntis", gerundiv: "adeundus"}
     forms:
       ind.praes.akt.1.sg: "adeō"
@@ -2150,11 +2204,11 @@ items:
       ger.akk: "adeundum"
       ger.abl: "adeundō"
   - type: esse-Kompositum
-    translation: "abwesend sein, fehlen"
+    translation: {de: "abwesend sein, fehlen", en: "be absent, be away"}
     parts: {infinitiv: "abesse", praesens_1sg: "absum", perfekt_1sg: "āfuī", futurpartizip: "āfutūrus", ppa_nom: "absēns", ppa_gen: "absentis"}
   - type: esse-Kompositum
-    translation: "da sein, helfen"
+    translation: {de: "da sein, helfen", en: "be present, help"}
     parts: {infinitiv: "adesse", praesens_1sg: "adsum", perfekt_1sg: "affuī", futurpartizip: "adfutūrus"}
   - type: esse-Kompositum
-    translation: "fehlen"
+    translation: {de: fehlen, en: "be missing, be lacking"}
     parts: {infinitiv: "dēesse", praesens_1sg: "dēsum", perfekt_1sg: "dēfuī", futurpartizip: "dēfutūrus"}
