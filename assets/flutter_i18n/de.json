@@ -187,6 +187,9 @@
     },
     "build": {
       "question": "{label} von {word}"
+    },
+    "oddone": {
+      "question": "Welche Form gehört nicht zu den anderen?"
     }
   }
 }
