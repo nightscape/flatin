@@ -4,7 +4,6 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:latin_practice/data/german_forms.dart';
 import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/models/exercise.dart';
 import 'package:latin_practice/screens/exercise_screen.dart';
@@ -20,9 +19,12 @@ final _word = RegExp(r'[A-Za-zÄÖÜäöüß]+');
 Future<Exercise> _choice() async {
   final verbs = await loadPracticeItems('lib/data/latin_verbs.yaml');
   final vocare = verbs.singleWhere((i) => i.id == 'verbs:vocare');
-  final built = const FakeLatDeGenerator(
-    FakeGermanForms(),
-  ).build(vocare, 'ind.fut2.pass', Random(1));
+  final built = const FakeLatDeGenerator().build(
+    vocare,
+    'ind.fut2.pass',
+    fakeExerciseContext(unlocked: {'ind.fut2.pass'}, pool: [vocare]),
+    Random(1),
+  );
   return Exercise(
     wordCardId: built.wordCardId,
     grammarCardId: built.grammarCardId,

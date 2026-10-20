@@ -4,17 +4,35 @@ import 'package:latin_practice/data/german_forms.dart';
 import 'package:latin_practice/models/exercise.dart';
 import 'package:latin_practice/models/practice_item.dart';
 
-/// Latin form → choose its German text among the other forms of the bundle.
-class FakeLatDeGenerator implements ExerciseGenerator {
-  final GermanForms german;
+/// An [ExerciseContext] whose German texts come from [FakeGermanForms].
+ExerciseContext fakeExerciseContext({
+  Set<GrammarBundle> unlocked = const {},
+  List<PracticeItem> pool = const [],
+}) => ExerciseContext(
+  unlocked: unlocked,
+  pool: pool,
+  german: const FakeGermanForms(),
+);
 
-  const FakeLatDeGenerator(this.german);
+/// Latin form → choose its German text among the other forms of the bundle.
+/// Builds only for an unlocked bundle and a word of the pool.
+class FakeLatDeGenerator implements ExerciseGenerator {
+  const FakeLatDeGenerator();
 
   @override
   ExerciseKind get kind => ExerciseKind.latDeWahl;
 
   @override
-  Exercise build(PracticeItem word, GrammarBundle bundle, Random rng) {
+  Exercise build(
+    PracticeItem word,
+    GrammarBundle bundle,
+    ExerciseContext ctx,
+    Random rng,
+  ) {
+    if (!ctx.unlocked.contains(bundle)) throw CannotBuild('$bundle is locked');
+    if (!ctx.pool.contains(word)) {
+      throw CannotBuild('${word.id} is not in the pool');
+    }
     final keys = [
       for (final key in word.formOrder)
         if (bundleOf(word, key) == bundle) key,
@@ -26,7 +44,7 @@ class FakeLatDeGenerator implements ExerciseGenerator {
     final options = [
       for (final key in keys)
         FormOption(
-          text: german.render(word, key),
+          text: ctx.german.render(word, key),
           formKey: key,
           lexemeId: word.id,
         ),

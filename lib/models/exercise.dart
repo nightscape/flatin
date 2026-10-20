@@ -5,11 +5,13 @@ library;
 import 'dart:math';
 
 import '../data/diagnosis.dart';
+import '../data/german_forms.dart';
 import 'derivation.dart' show norm;
 import 'practice_item.dart';
 
 /// A form bundle of one data file: for verbs the codes of Modus, Tempus and
 /// Genus verbi (`ind.fut2.pass`), for nouns the type (`U-Deklination`).
+/// Produced by [bundleOf]; read by the selection and the generators.
 typedef GrammarBundle = String;
 
 const _bundleAxes = {'modus', 'tempus', 'genus_verbi'};
@@ -180,17 +182,41 @@ final class CannotBuild implements Exception {
   String toString() => 'CannotBuild: $reason';
 }
 
+/// What an exercise may draw on beyond its word: it changes at runtime with
+/// the course range and the settings, so it comes with each call.
+/// Produced by the selection; read by the generators.
+final class ExerciseContext {
+  /// The bundles the learner has reached; distractors come only from these.
+  final Set<GrammarBundle> unlocked;
+
+  /// The words an exercise may take other words from.
+  final List<PracticeItem> pool;
+  final GermanForms german;
+
+  const ExerciseContext({
+    required this.unlocked,
+    required this.pool,
+    required this.german,
+  });
+}
+
 /// Builds the exercises of one kind.
 /// Implemented once per kind; read by the selection through [generatorFor].
 abstract interface class ExerciseGenerator {
   ExerciseKind get kind;
 
   /// Throws [CannotBuild] when [word] has no exercise of [kind] in [bundle].
-  Exercise build(PracticeItem word, GrammarBundle bundle, Random rng);
+  Exercise build(
+    PracticeItem word,
+    GrammarBundle bundle,
+    ExerciseContext ctx,
+    Random rng,
+  );
 }
 
-/// The generators the app ships, one per kind.
-final List<ExerciseGenerator> exerciseGenerators = [];
+/// The generators the app ships, one per kind. They are stateless: everything
+/// that varies per call comes from [ExerciseContext].
+const List<ExerciseGenerator> exerciseGenerators = [];
 
 /// The one generator of [kind] in [registry].
 ExerciseGenerator generatorFor(
