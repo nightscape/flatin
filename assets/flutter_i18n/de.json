@@ -174,5 +174,16 @@
     "title": "Sprache",
     "search": "Suchen",
     "system": "System (Gerätesprache)"
+  },
+  "exercise": {
+    "screen": {
+      "title": "Aufgabe",
+      "inputHint": "Antwort eingeben",
+      "check": "prüfen",
+      "next": "weiter",
+      "right": "Richtig",
+      "wrong": "Falsch. Richtig ist: {answer}",
+      "sampleQuestion": "Was bedeutet {form}?"
+    }
   }
 }

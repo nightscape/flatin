@@ -174,5 +174,16 @@
     "title": "Language",
     "search": "Search",
     "system": "System (device language)"
+  },
+  "exercise": {
+    "screen": {
+      "title": "Exercise",
+      "inputHint": "Enter the answer",
+      "check": "check",
+      "next": "next",
+      "right": "Correct",
+      "wrong": "Wrong. The right answer is: {answer}",
+      "sampleQuestion": "What does {form} mean?"
+    }
   }
 }

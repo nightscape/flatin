@@ -1,0 +1,178 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
+
+import '../models/derivation.dart' show norm;
+import '../models/exercise.dart';
+
+/// Shows one multiple-choice or typed [Exercise]; after the feedback, the
+/// "next" button hands the learner's response to [onResponse] once.
+/// Produced here for the caller that wires the exercises into the app.
+class ExerciseScreen extends StatefulWidget {
+  final Exercise exercise;
+  final void Function(ExerciseResponse response) onResponse;
+
+  const ExerciseScreen({
+    super.key,
+    required this.exercise,
+    required this.onResponse,
+  });
+
+  @override
+  State<ExerciseScreen> createState() => _ExerciseScreenState();
+}
+
+class _ExerciseScreenState extends State<ExerciseScreen> {
+  static const _contentWidth = 600.0;
+
+  final _input = TextEditingController();
+  ExerciseResponse? _response;
+  bool _reported = false;
+
+  @override
+  void didUpdateWidget(ExerciseScreen old) {
+    super.didUpdateWidget(old);
+    if (old.exercise != widget.exercise) {
+      _response = null;
+      _reported = false;
+      _input.clear();
+    }
+  }
+
+  @override
+  void dispose() {
+    _input.dispose();
+    super.dispose();
+  }
+
+  bool get _isRight => switch ((widget.exercise.answer, _response!)) {
+    (ChoiceAnswer(:final right), ChosenOption(:final chosen)) => identical(
+      chosen,
+      right,
+    ),
+    (TypedAnswer(:final accepted), TypedText(:final text)) => accepted.any(
+      (form) => norm(form) == norm(text),
+    ),
+    _ => throw StateError('response does not fit the answer'),
+  };
+
+  String get _rightText => switch (widget.exercise.answer) {
+    ChoiceAnswer(:final right) => right.text,
+    TypedAnswer(:final expected) => expected.text,
+    MatchingAnswer() => throw UnsupportedError('matching'),
+  };
+
+  void _respond(ExerciseResponse response) =>
+      setState(() => _response = response);
+
+  String _t(String key, [Map<String, String>? params]) =>
+      FlutterI18n.translate(context, key, translationParams: params);
+
+  @override
+  Widget build(BuildContext context) {
+    final exercise = widget.exercise;
+    return Scaffold(
+      appBar: AppBar(title: Text(_t('exercise.screen.title'))),
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: _contentWidth),
+          child: ListView(
+            padding: const EdgeInsets.all(16),
+            children: [
+              Text(
+                _t(exercise.questionKey, exercise.questionParams),
+                key: const Key('exercise.question'),
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              const SizedBox(height: 16),
+              switch (exercise.answer) {
+                ChoiceAnswer() => _choices(exercise.answer as ChoiceAnswer),
+                TypedAnswer() => _typed(),
+                MatchingAnswer() => throw UnsupportedError('matching'),
+              },
+              if (_response != null) ..._feedback(),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _choices(ChoiceAnswer answer) {
+    final chosen = (_response as ChosenOption?)?.chosen;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        for (final (i, option) in answer.options.indexed)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: OutlinedButton(
+              key: Key('exercise.option.$i'),
+              style: _response == null
+                  ? null
+                  : OutlinedButton.styleFrom(
+                      backgroundColor: identical(option, answer.right)
+                          ? Colors.green.shade100
+                          : identical(option, chosen)
+                          ? Colors.red.shade100
+                          : null,
+                    ),
+              onPressed: _response == null
+                  ? () => _respond(ChosenOption(option))
+                  : null,
+              child: Text(option.text),
+            ),
+          ),
+      ],
+    );
+  }
+
+  Widget _typed() => Column(
+    crossAxisAlignment: CrossAxisAlignment.stretch,
+    children: [
+      TextField(
+        key: const Key('exercise.input'),
+        controller: _input,
+        enabled: _response == null,
+        autofocus: true,
+        decoration: InputDecoration(
+          hintText: _t('exercise.screen.inputHint'),
+          border: const OutlineInputBorder(),
+        ),
+        onSubmitted: (_) => _check(),
+      ),
+      if (_response == null) ...[
+        const SizedBox(height: 8),
+        ElevatedButton(
+          key: const Key('exercise.check.button'),
+          onPressed: _check,
+          child: Text(_t('exercise.screen.check')),
+        ),
+      ],
+    ],
+  );
+
+  void _check() => _respond(TypedText(_input.text));
+
+  List<Widget> _feedback() => [
+    const SizedBox(height: 16),
+    Text(
+      _isRight
+          ? _t('exercise.screen.right')
+          : _t('exercise.screen.wrong', {'answer': _rightText}),
+      key: const Key('exercise.feedback'),
+      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+        color: _isRight ? Colors.green.shade800 : Colors.red.shade800,
+      ),
+    ),
+    const SizedBox(height: 8),
+    ElevatedButton(
+      key: const Key('exercise.next.button'),
+      onPressed: () {
+        if (_reported) return;
+        setState(() => _reported = true);
+        widget.onResponse(_response!);
+      },
+      child: Text(_t('exercise.screen.next')),
+    ),
+  ];
+}
