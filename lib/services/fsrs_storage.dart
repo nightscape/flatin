@@ -1,5 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
+import 'package:fsrs/fsrs.dart' show Card;
+import '../models/exercise.dart';
 import '../models/practice_item.dart';
 import '../models/fsrs_card.dart';
 
@@ -79,6 +81,31 @@ class FsrsStorage {
 
     return syncedCards;
   }
+
+  /// Creates a new card for every grammar bundle of [currentItems] that has
+  /// none; the cards of the other namespaces stay as they are.
+  static Future<Map<String, PracticeItemCard>> syncGrammarCards(
+    List<PracticeItem> currentItems,
+  ) async {
+    final storedCards = await loadCards();
+    final syncedCards = Map<String, PracticeItemCard>.from(storedCards);
+    for (final item in currentItems) {
+      for (final key in item.formOrder) {
+        final bundleId = GrammarCardId.of(item, key);
+        syncedCards.putIfAbsent(bundleId, () => _newGrammarCard(bundleId));
+      }
+    }
+    if (syncedCards.length != storedCards.length) {
+      await saveCards(syncedCards);
+    }
+    return syncedCards;
+  }
+
+  static PracticeItemCard _newGrammarCard(GrammarCardId id) => PracticeItemCard(
+    itemId: id,
+    card: Card(cardId: id.hashCode),
+    due: DateTime.now().toUtc(),
+  );
 
   /// Clear all cards (for testing/reset)
   static Future<void> clearCards() async {
