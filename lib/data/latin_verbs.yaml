@@ -540,6 +540,7 @@ types:
 items:
   - translation: {de: "lieben, gern haben", en: "love, like"}
     parts: {infinitiv: "amāre", praesens_1sg: "amō", supinum: "amātum"}
+    de_verb: "lieben"
   - translation: {de: "haben, halten", en: "have, hold"}
     parts: {infinitiv: "habēre", praesens_1sg: "habeō", supinum: "habitum"}
   - translation: {de: hören, en: hear}
@@ -553,6 +554,7 @@ items:
     parts: {infinitiv: "parere", praesens_1sg: "pariō", perfekt_1sg: "peperī", supinum: "partum"}
   - translation: {de: kommen, en: come}
     parts: {infinitiv: "venīre", praesens_1sg: "veniō", perfekt_1sg: "vēnī", supinum: "ventum"}
+    de_verb: "kommen"
   - translation: {de: "eintreten, betreten", en: enter}
     parts: {infinitiv: "intrāre", praesens_1sg: "intrō", supinum: "intrātum"}
   - translation: {de: "erscheinen, auftauchen, sich zeigen", en: "appear, show oneself"}
@@ -592,11 +594,13 @@ items:
     parts: {infinitiv: "fugāre", praesens_1sg: "fugō", supinum: "fugātum"}
   - translation: {de: sich freuen, en: "be glad, rejoice"}
     parts: {infinitiv: "gaudēre", praesens_1sg: "gaudeō", supinum: "gāvīsum"}
+    de_verb: "sich freuen"
     deponent: ["perf", "plusq", "fut2"]
   - translation: {de: "befehlen, (be)herrschen", en: "command, order; rule"}
     parts: {infinitiv: "imperāre", praesens_1sg: "imperō", supinum: "imperātum"}
   - translation: {de: "arbeiten, sich anstrengen", en: "work, toil"}
     parts: {infinitiv: "labōrāre", praesens_1sg: "labōrō", supinum: "labōrātum"}
+    de_verb: "arbeiten"
   - translation: {de: "bleiben, warten; erwarten", en: "stay, remain; wait for"}
     parts: {infinitiv: "manēre", praesens_1sg: "maneō", perfekt_1sg: "mānsī", supinum: "mānsum"}
   - translation: {de: töten, en: kill}
@@ -631,6 +635,7 @@ items:
     parts: {infinitiv: "salūtāre", praesens_1sg: "salūtō", supinum: "salūtātum"}
   - translation: {de: "wissen, kennen, verstehen", en: "know, understand"}
     parts: {infinitiv: "scīre", praesens_1sg: "sciō", supinum: "scītum"}
+    de_verb: "wissen"
   - translation: {de: sitzen, en: sit}
     parts: {infinitiv: "sedēre", praesens_1sg: "sedeō", perfekt_1sg: "sēdī", supinum: "sessum"}
   - translation: {de: "schützen, retten, bewahren", en: "save, protect, keep"}
@@ -655,6 +660,7 @@ items:
     parts: {infinitiv: "vidēre", praesens_1sg: "videō", perfekt_1sg: "vīdī", supinum: "vīsum"}
   - translation: {de: "rufen, nennen", en: "call, name"}
     parts: {infinitiv: "vocāre", praesens_1sg: "vocō", supinum: "vocātum"}
+    de_verb: "rufen"
   - translation: {de: besuchen, en: visit}
     parts: {infinitiv: "vīsitāre", praesens_1sg: "vīsitō", supinum: "vīsitātum"}
   - type: Konsonantische
@@ -689,6 +695,7 @@ items:
     type: Unregelmäßig
     translation: {de: "tragen; bringen; ertragen", en: "carry; bring; endure"}
     parts: {infinitiv: "ferre", praesens_1sg: "ferō", perfekt_1sg: "tulī", supinum: "lātum", ppa_nom: "ferēns", ppa_gen: "ferentis", gerundiv: "ferendus"}
+    de_verb: "tragen"
     forms:
       ind.praes.akt.1.sg: "ferō"
       ind.praes.akt.2.sg: "fers"
@@ -948,6 +955,7 @@ items:
     type: esse-Typ
     translation: {de: sein, en: be}
     parts: {infinitiv: "esse", praesens_1sg: "sum", perfekt_1sg: "fuī", futurpartizip: "futūrus"}
+    de_verb: "sein"
     forms:
       ind.praes.akt.1.sg: "sum"
       ind.praes.akt.2.sg: "es"
@@ -1525,6 +1533,7 @@ items:
       ger.abl: "ineundō"
   - translation: {de: sich vor jmd. in Acht nehmen, en: "beware (of), be on guard"}
     parts: {infinitiv: "cavēre", praesens_1sg: "caveō", perfekt_1sg: "cāvī", supinum: "cautum"}
+    de_verb: "sich in acht nehmen"
   - type: esse-Kompositum
     translation: {de: "an der Spitze stehen von, voranstehen", en: "be in charge (of)"}
     parts: {infinitiv: "praeesse", praesens_1sg: "praesum", perfekt_1sg: "praefuī", futurpartizip: "praefutūrus", ppa_nom: "praesēns", ppa_gen: "praesentis"}
@@ -1830,6 +1839,7 @@ items:
     absent: *ohne_supinum
   - translation: {de: zusammenrufen, en: call together}
     parts: {infinitiv: "convocāre", praesens_1sg: "convocō", perfekt_1sg: "convocāvī"}
+    de_verb: "zusammenrufen"
     absent: *ohne_supinum
   - translation: {de: erzählen, en: "tell, narrate"}
     parts: {infinitiv: "nārrāre", praesens_1sg: "nārrō", perfekt_1sg: "nārrāvī"}

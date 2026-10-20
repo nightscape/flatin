@@ -359,6 +359,9 @@ final class GrammarItem {
 
   final DeponentSpec? deponent;
 
+  /// The id of the item in german_verbs.yaml that translates this verb.
+  final String? deVerb;
+
   /// S15: feature patterns whose keys this item does not have.
   final List<Map<String, String>> absent;
 
@@ -381,6 +384,7 @@ final class GrammarItem {
     required this.typeName,
     required this.lemma,
     this.deponent,
+    this.deVerb,
     this.declaredType,
     this.typeRule,
   });
@@ -1199,6 +1203,7 @@ class _FileParser {
           typeName: '', // settled by _Linker
           lemma: lemma,
           deponent: _deponent(spec['deponent'], 'item $id'),
+          deVerb: spec['de_verb'] as String?,
         ),
       );
     }
@@ -1422,6 +1427,7 @@ class _Linker {
       typeName: name,
       lemma: item.lemma,
       deponent: item.deponent,
+      deVerb: item.deVerb,
       declaredType: declared,
       typeRule: matched,
     );

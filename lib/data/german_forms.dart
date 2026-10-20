@@ -1,9 +1,56 @@
+import '../grammar/engine.dart';
+import '../grammar/schema.dart';
 import '../models/practice_item.dart';
 
 /// The German text of one Latin form.
 /// Implemented by the German form data; read by the generators.
 abstract interface class GermanForms {
   String render(PracticeItem item, FormKey key);
+}
+
+/// Renders a Latin verb form from `german_verbs.yaml`, for the Latin items
+/// with a `de_verb`: the German key is the Latin key, cut to modus, tempus and
+/// genus verbi for an infinitive or a participle.
+class GrammarGermanForms implements GermanForms {
+  GrammarGermanForms(String germanVerbsYaml, GrammarFile latinVerbs)
+    : _engine = GrammarEngine(
+        parseGrammarFiles({'lib/data/german_verbs.yaml': germanVerbsYaml}),
+      ),
+      germanVerbOf = {
+        for (final item in latinVerbs.items)
+          if (item.deVerb != null)
+            '${latinVerbs.dataFileId}:${item.id}': item.deVerb!,
+      } {
+    for (final germanId in germanVerbOf.values) {
+      _engine.of('german_verbs', germanId);
+    }
+  }
+
+  final GrammarEngine _engine;
+
+  /// Practice item id → id of its German verb.
+  final Map<String, String> germanVerbOf;
+
+  @override
+  String render(PracticeItem item, FormKey key) {
+    final germanId = germanVerbOf[item.id];
+    if (germanId == null) throw ArgumentError('no German verb for ${item.id}');
+    final germanKey = germanKeyOf(key);
+    final form = _engine.of('german_verbs', germanId).forms[germanKey];
+    if (form == null) {
+      throw ArgumentError('$germanId has no German form $germanKey ($key)');
+    }
+    return form.variants.first;
+  }
+
+  static FormKey germanKeyOf(FormKey latinKey) {
+    final codes = latinKey.split('.');
+    return switch (codes.first) {
+      'ind' || 'konj' => latinKey,
+      'inf' || 'part' => codes.take(3).join('.'),
+      _ => throw ArgumentError('the course gives no German form for $latinKey'),
+    };
+  }
 }
 
 /// Renders `<lemma>@<key>`, so every form has its own German text.

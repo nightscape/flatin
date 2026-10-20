@@ -1,0 +1,611 @@
+# German verb forms that translate a Latin verb form, in the course
+# convention: a finite form carries its subject pronoun, the indicative stands
+# in main-clause order, the subjunctive in the verb-final order of an indirect
+# question ("ob ..."). Keys without genus_verbi are raw forms, the building
+# blocks of the compose rules; keys with genus_verbi are the German forms.
+data_file_id: german_verbs
+
+axes:
+  modus:
+    name: {de: Modus, en: Mood}
+    values:
+      ind: {de: Indikativ, en: Indicative}
+      konj: {de: Konjunktiv, en: Subjunctive}
+      inf: {de: Infinitiv, en: Infinitive}
+      part: {de: Partizip, en: Participle}
+    hidden_in_label: [ind]
+  tempus:
+    name: {de: Tempus, en: Tense}
+    values:
+      praes: {de: Präsens, en: Present}
+      impf: {de: Imperfekt, en: Imperfect}
+      fut: {de: Futur I, en: Future}
+      perf: {de: Perfekt, en: Perfect}
+      plusq: {de: Plusquamperfekt, en: Pluperfect}
+      fut2: {de: Futur II, en: Future perfect}
+  genus_verbi:
+    name: {de: Genus verbi, en: Voice}
+    values:
+      akt: {de: Aktiv, en: Active}
+      pass: {de: Passiv, en: Passive}
+    hidden_in_label: [akt]
+  person:
+    name: {de: Person, en: Person}
+    values:
+      "1": {de: "1. Person", en: "1st person"}
+      "2": {de: "2. Person", en: "2nd person"}
+      "3": {de: "3. Person", en: "3rd person"}
+  numerus:
+    name: {de: Numerus, en: Number}
+    values:
+      sg: {de: Singular, en: Singular}
+      pl: {de: Plural, en: Plural}
+
+label:
+  head: [modus, tempus, genus_verbi]
+  tail: [person, numerus]
+  merge_axis: person
+
+parts:
+  infinitiv:    {label: {de: Infinitiv, en: Infinitive}}
+  grundverb:    {label: {de: Grundverb, en: Base verb}}
+  partikel:     {label: {de: Verbzusatz, en: Verb particle}}
+  praesens_1sg: {label: {de: "1. Person Singular Präsens", en: "1st person singular present"}}
+  praesens_2sg: {label: {de: "2. Person Singular Präsens", en: "2nd person singular present"}}
+  praesens_3sg: {label: {de: "3. Person Singular Präsens", en: "3rd person singular present"}}
+  praesens_1pl: {label: {de: "1. Person Plural Präsens", en: "1st person plural present"}}
+  praesens_2pl: {label: {de: "2. Person Plural Präsens", en: "2nd person plural present"}}
+  praeteritum:  {label: {de: Präteritum, en: Preterite}}
+  konjunktiv2:  {label: {de: Konjunktiv II, en: Subjunctive II}}
+  partizip2:    {label: {de: Partizip II, en: Past participle}}
+
+defaults:
+  given_part: infinitiv
+  lemma_part: infinitiv
+
+sandhi:
+  dental_t: {end: t, before: [t, st], replace: te, explain: {de: nach t wird ein e eingeschoben, en: an e is inserted after t}}
+  dental_d: {end: d, before: [t, st], replace: de, explain: {de: nach d wird ein e eingeschoben, en: an e is inserted after d}}
+  e_en:     {end: e, before: [en], replace: "", explain: {de: e fällt vor -en aus, en: e drops before -en}}
+
+classes: [konjugation, pronomen, bindewort]
+
+shared:
+  ind_akt_einfach: &ind_akt_einfach
+    match: {modus: ind, tempus: [praes, impf], genus_verbi: akt}
+    join: " "
+    parts:
+      - {lexeme: pron, pass: [person, numerus]}
+      - {self: roh, pass: [modus, tempus, person, numerus]}
+  konj_praes_akt_einfach: &konj_praes_akt_einfach
+    match: {modus: konj, tempus: praes, genus_verbi: akt}
+    join: " "
+    parts:
+      - {lexeme: pron, pass: [person, numerus]}
+      - {self: roh, set: {modus: ind}, pass: [tempus, person, numerus]}
+  praeteritum_schwach: &praeteritum_schwach
+    {from: praeteritum, default: "{praes}te", display: {de: Präteritalstamm, en: Preterite stem}}
+  praesens_grundverb: &praesens_grundverb
+    {from: grundverb, remove: [en, n], display: {de: Präsensstamm, en: Present stem}}
+
+types:
+  Verbformen:
+    abstract: true
+    forms:
+      ind.praes.1.sg: "{p1sg}"
+      ind.praes.2.sg: "{p2sg}"
+      ind.praes.3.sg: "{p3sg}"
+      ind.praes.1.pl: "{p1pl}"
+      ind.praes.2.pl: "{p2pl}"
+      ind.praes.3.pl: "{p1pl}"
+      ind.impf.1.sg: "{praet}"
+      ind.impf.2.sg: "{praet}st"
+      ind.impf.3.sg: "{praet}"
+      ind.impf.1.pl: "{praet}en"
+      ind.impf.2.pl: "{praet}t"
+      ind.impf.3.pl: "{praet}en"
+      konj.impf.1.sg: "{k2}"
+      konj.impf.2.sg: "{k2}st"
+      konj.impf.3.sg: "{k2}"
+      konj.impf.1.pl: "{k2}en"
+      konj.impf.2.pl: "{k2}t"
+      konj.impf.3.pl: "{k2}en"
+      inf: "{inf}"
+      part.praes: "{inf}d"
+      part.perf: "{p2}"
+
+  Verbstamm:
+    abstract: true
+    required_stems: [praes, praet, inf, p2]
+    stems:
+      praes: {from: infinitiv, remove: [en, n], display: {de: Präsensstamm, en: Present stem}}
+      # Only the vowel change ends in -t; "weiß" and "wird" keep their spelling.
+      p23:   {from: praesens_3sg, remove: [t, ""], default: "{praes}", display: {de: Präsensstamm 2./3. Sg., en: Present stem 2nd/3rd sg}}
+      p1sg:  {from: praesens_1sg, default: "{praes}e", display: {de: 1. Sg. Präsens, en: 1st sg present}}
+      p2sg:  {from: praesens_2sg, default: "{p23}st", display: {de: 2. Sg. Präsens, en: 2nd sg present}}
+      p3sg:  {from: praesens_3sg, default: "{p23}t", display: {de: 3. Sg. Präsens, en: 3rd sg present}}
+      p1pl:  {from: praesens_1pl, default: "{praes}en", display: {de: 1. Pl. Präsens, en: 1st pl present}}
+      p2pl:  {from: praesens_2pl, default: "{praes}t", display: {de: 2. Pl. Präsens, en: 2nd pl present}}
+      praet: {from: praeteritum, display: {de: Präteritalstamm, en: Preterite stem}}
+      k2:    {from: konjunktiv2, display: {de: Konjunktiv-II-Stamm, en: Subjunctive II stem}}
+      inf:   {from: infinitiv, display: {de: Infinitiv, en: Infinitive}}
+      p2:    {from: partizip2, display: {de: Partizip II, en: Past participle}}
+    delegate:
+      - name: roh
+        type: Verbformen
+        bind: {p1sg: p1sg, p2sg: p2sg, p3sg: p3sg, p1pl: p1pl, p2pl: p2pl, praet: praet, k2: k2, inf: inf, p2: p2}
+        set: {}
+        emit: false
+    sandhi: [dental_t, dental_d, e_en]
+
+  Hilfsverb:
+    class: konjugation
+    display: {de: Hilfsverb, en: Auxiliary verb}
+    inherits_from: Verbstamm
+
+  Verb-einfach:
+    abstract: true
+    inherits_from: Verbstamm
+    compose:
+      - match: {modus: ind, tempus: fut, genus_verbi: akt}
+        join: " "
+        parts:
+          - {lexeme: pron, pass: [person, numerus]}
+          - {lexeme: hv_werden, set: {modus: ind, tempus: praes}, pass: [person, numerus]}
+          - {self: roh, set: {modus: inf}}
+      - match: {modus: konj, tempus: impf, genus_verbi: akt}
+        join: " "
+        parts:
+          - {lexeme: pron, pass: [person, numerus]}
+          - {self: roh, set: {modus: inf}}
+          - {lexeme: hv_werden, pass: [modus, tempus, person, numerus]}
+      - match: {modus: inf, tempus: praes, genus_verbi: akt}
+        parts:
+          - {self: roh, set: {modus: inf}}
+      - match: {modus: part, tempus: praes, genus_verbi: akt}
+        parts:
+          - {self: roh, set: {modus: part, tempus: praes}}
+      - match: {modus: part, tempus: perf, genus_verbi: akt}
+        parts:
+          - {self: roh, set: {modus: part, tempus: perf}}
+
+  Verb-haben:
+    abstract: true
+    inherits_from: Verb-einfach
+    compose:
+      - match: {modus: ind, tempus: plusq, genus_verbi: akt}
+        join: " "
+        parts:
+          - {lexeme: pron, pass: [person, numerus]}
+          - {lexeme: hv_haben, set: {modus: ind, tempus: impf}, pass: [person, numerus]}
+          - {self: roh, set: {modus: part, tempus: perf}}
+      - match: {modus: ind, tempus: fut2, genus_verbi: akt}
+        join: " "
+        parts:
+          - {lexeme: pron, pass: [person, numerus]}
+          - {lexeme: hv_werden, set: {modus: ind, tempus: praes}, pass: [person, numerus]}
+          - {self: roh, set: {modus: part, tempus: perf}}
+          - {lexeme: hv_haben, set: {modus: inf}}
+      - match: {modus: konj, tempus: perf, genus_verbi: akt}
+        join: " "
+        parts:
+          - {lexeme: pron, pass: [person, numerus]}
+          - {self: roh, set: {modus: part, tempus: perf}}
+          - {lexeme: hv_haben, set: {modus: ind, tempus: praes}, pass: [person, numerus]}
+      - match: {modus: konj, tempus: plusq, genus_verbi: akt}
+        join: " "
+        parts:
+          - {lexeme: pron, pass: [person, numerus]}
+          - {self: roh, set: {modus: part, tempus: perf}}
+          - {lexeme: hv_haben, set: {modus: konj, tempus: impf}, pass: [person, numerus]}
+      - match: {modus: inf, tempus: perf, genus_verbi: akt}
+        join: " "
+        parts:
+          - {self: roh, set: {modus: part, tempus: perf}}
+          - {lexeme: hv_haben, set: {modus: inf}}
+      # The passive: only a verb with "haben" has one.
+      - match: {modus: ind, tempus: [praes, impf], genus_verbi: pass}
+        join: " "
+        parts:
+          - {lexeme: pron, pass: [person, numerus]}
+          - {lexeme: hv_werden, set: {modus: ind}, pass: [tempus, person, numerus]}
+          - {self: roh, set: {modus: part, tempus: perf}}
+      - match: {modus: ind, tempus: fut, genus_verbi: pass}
+        join: " "
+        parts:
+          - {lexeme: pron, pass: [person, numerus]}
+          - {lexeme: hv_werden, set: {modus: ind, tempus: praes}, pass: [person, numerus]}
+          - {self: roh, set: {modus: part, tempus: perf}}
+          - {lexeme: hv_werden, set: {modus: inf}}
+      - match: {modus: ind, tempus: [perf, plusq], genus_verbi: pass}
+        join: " "
+        parts:
+          - {lexeme: pron, pass: [person, numerus]}
+          - {lexeme: hv_sein, set: {modus: ind}, map: {tempus: {perf: praes, plusq: impf}}, pass: [person, numerus]}
+          - {self: roh, set: {modus: part, tempus: perf}}
+          - {lexeme: hv_werden, set: {modus: part, tempus: perf}}
+      - match: {modus: ind, tempus: fut2, genus_verbi: pass}
+        join: " "
+        parts:
+          - {lexeme: pron, pass: [person, numerus]}
+          - {lexeme: hv_werden, set: {modus: ind, tempus: praes}, pass: [person, numerus]}
+          - {self: roh, set: {modus: part, tempus: perf}}
+          - {lexeme: hv_werden, set: {modus: part, tempus: perf}}
+          - {lexeme: hv_sein, set: {modus: inf}}
+      - match: {modus: konj, tempus: praes, genus_verbi: pass}
+        join: " "
+        parts:
+          - {lexeme: pron, pass: [person, numerus]}
+          - {self: roh, set: {modus: part, tempus: perf}}
+          - {lexeme: hv_werden, set: {modus: ind, tempus: praes}, pass: [person, numerus]}
+      - match: {modus: konj, tempus: impf, genus_verbi: pass}
+        join: " "
+        parts:
+          - {lexeme: pron, pass: [person, numerus]}
+          - {self: roh, set: {modus: part, tempus: perf}}
+          - {lexeme: hv_werden, set: {modus: konj, tempus: impf}, pass: [person, numerus]}
+      - match: {modus: konj, tempus: perf, genus_verbi: pass}
+        join: " "
+        parts:
+          - {lexeme: pron, pass: [person, numerus]}
+          - {self: roh, set: {modus: part, tempus: perf}}
+          - {lexeme: hv_werden, set: {modus: part, tempus: perf}}
+          - {lexeme: hv_sein, set: {modus: ind, tempus: praes}, pass: [person, numerus]}
+      - match: {modus: konj, tempus: plusq, genus_verbi: pass}
+        join: " "
+        parts:
+          - {lexeme: pron, pass: [person, numerus]}
+          - {self: roh, set: {modus: part, tempus: perf}}
+          - {lexeme: hv_werden, set: {modus: part, tempus: perf}}
+          - {lexeme: hv_sein, set: {modus: konj, tempus: impf}, pass: [person, numerus]}
+      - match: {modus: inf, tempus: praes, genus_verbi: pass}
+        join: " "
+        parts:
+          - {self: roh, set: {modus: part, tempus: perf}}
+          - {lexeme: hv_werden, set: {modus: inf}}
+      - match: {modus: inf, tempus: perf, genus_verbi: pass}
+        join: " "
+        parts:
+          - {self: roh, set: {modus: part, tempus: perf}}
+          - {lexeme: hv_werden, set: {modus: part, tempus: perf}}
+          - {lexeme: hv_sein, set: {modus: inf}}
+      - match: {modus: part, tempus: perf, genus_verbi: pass}
+        parts:
+          - {self: roh, set: {modus: part, tempus: perf}}
+
+  Verb-haben-untrennbar:
+    abstract: true
+    inherits_from: Verb-haben
+    compose:
+      - *ind_akt_einfach
+      - *konj_praes_akt_einfach
+      - match: {modus: ind, tempus: perf, genus_verbi: akt}
+        join: " "
+        parts:
+          - {lexeme: pron, pass: [person, numerus]}
+          - {lexeme: hv_haben, set: {modus: ind, tempus: praes}, pass: [person, numerus]}
+          - {self: roh, set: {modus: part, tempus: perf}}
+          - {lexeme: oder, set: {modus: ind}}
+          - {self: roh, set: {modus: ind, tempus: impf}, pass: [person, numerus]}
+
+  schwach:
+    class: konjugation
+    display: {de: schwach, en: weak}
+    inherits_from: Verb-haben-untrennbar
+    stems:
+      praet: *praeteritum_schwach
+
+  stark:
+    class: konjugation
+    display: {de: stark, en: strong}
+    inherits_from: Verb-haben-untrennbar
+
+  gemischt:
+    class: konjugation
+    display: {de: gemischt, en: mixed}
+    inherits_from: Verb-haben-untrennbar
+
+  # A separable verb in verb-final order joins its particle without a space,
+  # which a compose rule cannot write; the item gives konj.praes.akt.
+  stark-trennbar:
+    class: konjugation
+    display: {de: stark trennbar, en: strong separable}
+    inherits_from: Verb-haben
+    stems:
+      praes: *praesens_grundverb
+      partikel: {from: partikel, display: {de: Verbzusatz, en: Verb particle}}
+    compose:
+      - match: {modus: ind, tempus: [praes, impf], genus_verbi: akt}
+        join: " "
+        parts:
+          - {lexeme: pron, pass: [person, numerus]}
+          - {self: roh, pass: [modus, tempus, person, numerus]}
+          - {stem: partikel}
+      - match: {modus: ind, tempus: perf, genus_verbi: akt}
+        join: " "
+        parts:
+          - {lexeme: pron, pass: [person, numerus]}
+          - {lexeme: hv_haben, set: {modus: ind, tempus: praes}, pass: [person, numerus]}
+          - {self: roh, set: {modus: part, tempus: perf}}
+          - {lexeme: oder, set: {modus: ind}}
+          - {self: roh, set: {modus: ind, tempus: impf}, pass: [person, numerus]}
+          - {stem: partikel}
+
+  stark-sein:
+    class: konjugation
+    display: {de: stark mit sein, en: strong with sein}
+    inherits_from: Verb-einfach
+    compose:
+      - *ind_akt_einfach
+      - *konj_praes_akt_einfach
+      - match: {modus: ind, tempus: perf, genus_verbi: akt}
+        join: " "
+        parts:
+          - {lexeme: pron, pass: [person, numerus]}
+          - {lexeme: hv_sein, set: {modus: ind, tempus: praes}, pass: [person, numerus]}
+          - {self: roh, set: {modus: part, tempus: perf}}
+          - {lexeme: oder, set: {modus: ind}}
+          - {self: roh, set: {modus: ind, tempus: impf}, pass: [person, numerus]}
+      - match: {modus: ind, tempus: plusq, genus_verbi: akt}
+        join: " "
+        parts:
+          - {lexeme: pron, pass: [person, numerus]}
+          - {lexeme: hv_sein, set: {modus: ind, tempus: impf}, pass: [person, numerus]}
+          - {self: roh, set: {modus: part, tempus: perf}}
+      - match: {modus: ind, tempus: fut2, genus_verbi: akt}
+        join: " "
+        parts:
+          - {lexeme: pron, pass: [person, numerus]}
+          - {lexeme: hv_werden, set: {modus: ind, tempus: praes}, pass: [person, numerus]}
+          - {self: roh, set: {modus: part, tempus: perf}}
+          - {lexeme: hv_sein, set: {modus: inf}}
+      - match: {modus: konj, tempus: perf, genus_verbi: akt}
+        join: " "
+        parts:
+          - {lexeme: pron, pass: [person, numerus]}
+          - {self: roh, set: {modus: part, tempus: perf}}
+          - {lexeme: hv_sein, set: {modus: ind, tempus: praes}, pass: [person, numerus]}
+      - match: {modus: konj, tempus: plusq, genus_verbi: akt}
+        join: " "
+        parts:
+          - {lexeme: pron, pass: [person, numerus]}
+          - {self: roh, set: {modus: part, tempus: perf}}
+          - {lexeme: hv_sein, set: {modus: konj, tempus: impf}, pass: [person, numerus]}
+      - match: {modus: inf, tempus: perf, genus_verbi: akt}
+        join: " "
+        parts:
+          - {self: roh, set: {modus: part, tempus: perf}}
+          - {lexeme: hv_sein, set: {modus: inf}}
+
+  # The reflexive pronoun follows the finite verb in main-clause order and the
+  # subject in verb-final order; reflexive verbs have no passive.
+  Verb-reflexiv:
+    abstract: true
+    inherits_from: Verbstamm
+    compose:
+      - match: {modus: ind, tempus: fut, genus_verbi: akt}
+        join: " "
+        parts:
+          - {lexeme: pron, pass: [person, numerus]}
+          - {lexeme: hv_werden, set: {modus: ind, tempus: praes}, pass: [person, numerus]}
+          - {lexeme: refl, pass: [person, numerus]}
+          - {self: roh, set: {modus: inf}}
+      - match: {modus: ind, tempus: plusq, genus_verbi: akt}
+        join: " "
+        parts:
+          - {lexeme: pron, pass: [person, numerus]}
+          - {lexeme: hv_haben, set: {modus: ind, tempus: impf}, pass: [person, numerus]}
+          - {lexeme: refl, pass: [person, numerus]}
+          - {self: roh, set: {modus: part, tempus: perf}}
+      - match: {modus: ind, tempus: fut2, genus_verbi: akt}
+        join: " "
+        parts:
+          - {lexeme: pron, pass: [person, numerus]}
+          - {lexeme: hv_werden, set: {modus: ind, tempus: praes}, pass: [person, numerus]}
+          - {lexeme: refl, pass: [person, numerus]}
+          - {self: roh, set: {modus: part, tempus: perf}}
+          - {lexeme: hv_haben, set: {modus: inf}}
+      - match: {modus: konj, tempus: impf, genus_verbi: akt}
+        join: " "
+        parts:
+          - {lexeme: pron, pass: [person, numerus]}
+          - {lexeme: refl, pass: [person, numerus]}
+          - {self: roh, set: {modus: inf}}
+          - {lexeme: hv_werden, pass: [modus, tempus, person, numerus]}
+      - match: {modus: konj, tempus: perf, genus_verbi: akt}
+        join: " "
+        parts:
+          - {lexeme: pron, pass: [person, numerus]}
+          - {lexeme: refl, pass: [person, numerus]}
+          - {self: roh, set: {modus: part, tempus: perf}}
+          - {lexeme: hv_haben, set: {modus: ind, tempus: praes}, pass: [person, numerus]}
+      - match: {modus: konj, tempus: plusq, genus_verbi: akt}
+        join: " "
+        parts:
+          - {lexeme: pron, pass: [person, numerus]}
+          - {lexeme: refl, pass: [person, numerus]}
+          - {self: roh, set: {modus: part, tempus: perf}}
+          - {lexeme: hv_haben, set: {modus: konj, tempus: impf}, pass: [person, numerus]}
+      - match: {modus: inf, tempus: praes, genus_verbi: akt}
+        join: " "
+        parts:
+          - {lexeme: refl, set: {person: "3", numerus: sg}}
+          - {self: roh, set: {modus: inf}}
+      - match: {modus: inf, tempus: perf, genus_verbi: akt}
+        join: " "
+        parts:
+          - {lexeme: refl, set: {person: "3", numerus: sg}}
+          - {self: roh, set: {modus: part, tempus: perf}}
+          - {lexeme: hv_haben, set: {modus: inf}}
+      - match: {modus: part, tempus: praes, genus_verbi: akt}
+        join: " "
+        parts:
+          - {lexeme: refl, set: {person: "3", numerus: sg}}
+          - {self: roh, set: {modus: part, tempus: praes}}
+      - match: {modus: part, tempus: perf, genus_verbi: akt}
+        join: " "
+        parts:
+          - {lexeme: refl, set: {person: "3", numerus: sg}}
+          - {self: roh, set: {modus: part, tempus: perf}}
+
+  schwach-reflexiv:
+    class: konjugation
+    display: {de: schwach reflexiv, en: weak reflexive}
+    inherits_from: Verb-reflexiv
+    stems:
+      praet: *praeteritum_schwach
+    compose:
+      - match: {modus: ind, tempus: [praes, impf], genus_verbi: akt}
+        join: " "
+        parts:
+          - {lexeme: pron, pass: [person, numerus]}
+          - {self: roh, pass: [modus, tempus, person, numerus]}
+          - {lexeme: refl, pass: [person, numerus]}
+      - match: {modus: ind, tempus: perf, genus_verbi: akt}
+        join: " "
+        parts:
+          - {lexeme: pron, pass: [person, numerus]}
+          - {lexeme: hv_haben, set: {modus: ind, tempus: praes}, pass: [person, numerus]}
+          - {lexeme: refl, pass: [person, numerus]}
+          - {self: roh, set: {modus: part, tempus: perf}}
+          - {lexeme: oder, set: {modus: ind}}
+          - {self: roh, set: {modus: ind, tempus: impf}, pass: [person, numerus]}
+          - {lexeme: refl, pass: [person, numerus]}
+      - match: {modus: konj, tempus: praes, genus_verbi: akt}
+        join: " "
+        parts:
+          - {lexeme: pron, pass: [person, numerus]}
+          - {lexeme: refl, pass: [person, numerus]}
+          - {self: roh, set: {modus: ind}, pass: [tempus, person, numerus]}
+
+  # A particle of several words keeps its space in every word order.
+  stark-reflexiv-mehrwortig:
+    class: konjugation
+    display: {de: stark reflexiv mehrwortig, en: strong reflexive multi-word}
+    inherits_from: Verb-reflexiv
+    stems:
+      praes: *praesens_grundverb
+      partikel: {from: partikel, display: {de: Verbzusatz, en: Verb particle}}
+    compose:
+      - match: {modus: ind, tempus: [praes, impf], genus_verbi: akt}
+        join: " "
+        parts:
+          - {lexeme: pron, pass: [person, numerus]}
+          - {self: roh, pass: [modus, tempus, person, numerus]}
+          - {lexeme: refl, pass: [person, numerus]}
+          - {stem: partikel}
+      - match: {modus: ind, tempus: perf, genus_verbi: akt}
+        join: " "
+        parts:
+          - {lexeme: pron, pass: [person, numerus]}
+          - {lexeme: hv_haben, set: {modus: ind, tempus: praes}, pass: [person, numerus]}
+          - {lexeme: refl, pass: [person, numerus]}
+          - {self: roh, set: {modus: part, tempus: perf}}
+          - {lexeme: oder, set: {modus: ind}}
+          - {self: roh, set: {modus: ind, tempus: impf}, pass: [person, numerus]}
+          - {lexeme: refl, pass: [person, numerus]}
+          - {stem: partikel}
+      - match: {modus: konj, tempus: praes, genus_verbi: akt}
+        join: " "
+        parts:
+          - {lexeme: pron, pass: [person, numerus]}
+          - {lexeme: refl, pass: [person, numerus]}
+          - {stem: partikel}
+          - {self: roh, set: {modus: ind}, pass: [tempus, person, numerus]}
+
+  Personalpronomen:
+    class: pronomen
+    display: {de: Personalpronomen, en: Personal pronoun}
+    forms:
+      1.sg: ich
+      2.sg: du
+      3.sg: sie (Sg.)
+      1.pl: wir
+      2.pl: ihr
+      3.pl: sie (Pl.)
+
+  Reflexivpronomen:
+    class: pronomen
+    display: {de: Reflexivpronomen, en: Reflexive pronoun}
+    forms:
+      1.sg: mich
+      2.sg: dich
+      3.sg: sich
+      1.pl: uns
+      2.pl: euch
+      3.pl: sich
+
+  # The perfect gives the preterite as a second translation.
+  Bindewort:
+    class: bindewort
+    display: {de: Bindewort, en: Conjunction}
+    forms:
+      ind: oder
+
+items:
+  - id: oder
+    type: Bindewort
+    translation: {de: oder, en: or}
+    parts: {infinitiv: oder}
+  - id: pron
+    type: Personalpronomen
+    translation: {de: Personalpronomen, en: personal pronoun}
+    parts: {infinitiv: ich}
+  - id: refl
+    type: Reflexivpronomen
+    translation: {de: Reflexivpronomen, en: reflexive pronoun}
+    parts: {infinitiv: sich}
+
+  - id: hv_haben
+    type: Hilfsverb
+    translation: {de: haben, en: have}
+    parts: {infinitiv: haben, praesens_2sg: hast, praesens_3sg: hat, praeteritum: hatte, konjunktiv2: hätte, partizip2: gehabt}
+  - id: hv_sein
+    type: Hilfsverb
+    translation: {de: sein, en: be}
+    parts: {infinitiv: sein, praesens_1sg: bin, praesens_2sg: bist, praesens_3sg: ist, praesens_1pl: sind, praesens_2pl: seid, praeteritum: war, konjunktiv2: wäre, partizip2: gewesen}
+  - id: hv_werden
+    type: Hilfsverb
+    translation: {de: werden, en: become}
+    parts: {infinitiv: werden, praesens_2sg: wirst, praesens_3sg: wird, praeteritum: wurde, konjunktiv2: würde, partizip2: worden}
+
+  - type: schwach
+    translation: {de: lieben, en: love}
+    parts: {infinitiv: lieben, partizip2: geliebt}
+  - type: schwach
+    translation: {de: arbeiten, en: work}
+    parts: {infinitiv: arbeiten, partizip2: gearbeitet}
+  - type: stark
+    translation: {de: rufen, en: call}
+    parts: {infinitiv: rufen, praeteritum: rief, partizip2: gerufen}
+  - type: stark
+    translation: {de: tragen, en: carry}
+    parts: {infinitiv: tragen, praesens_3sg: trägt, praeteritum: trug, partizip2: getragen}
+  - type: gemischt
+    translation: {de: wissen, en: know}
+    parts: {infinitiv: wissen, praesens_1sg: weiß, praesens_2sg: weißt, praesens_3sg: weiß, praeteritum: wusste, partizip2: gewusst}
+  - type: stark-sein
+    translation: {de: kommen, en: come}
+    parts: {infinitiv: kommen, praeteritum: kam, partizip2: gekommen}
+  - type: stark-sein
+    translation: {de: sein, en: be}
+    parts: {infinitiv: sein, praesens_1sg: bin, praesens_2sg: bist, praesens_3sg: ist, praesens_1pl: sind, praesens_2pl: seid, praeteritum: war, partizip2: gewesen}
+    forms: {part.praes.akt: seiend}
+  - type: stark-trennbar
+    translation: {de: zusammenrufen, en: call together}
+    parts: {infinitiv: zusammenrufen, grundverb: rufen, partikel: zusammen, praeteritum: rief, partizip2: zusammengerufen}
+    forms:
+      konj.praes.akt.1.sg: ich zusammenrufe
+      konj.praes.akt.2.sg: du zusammenrufst
+      konj.praes.akt.3.sg: sie (Sg.) zusammenruft
+      konj.praes.akt.1.pl: wir zusammenrufen
+      konj.praes.akt.2.pl: ihr zusammenruft
+      konj.praes.akt.3.pl: sie (Pl.) zusammenrufen
+  - id: sich freuen
+    type: schwach-reflexiv
+    translation: {de: sich freuen, en: rejoice}
+    parts: {infinitiv: freuen, partizip2: gefreut}
+  - id: sich in acht nehmen
+    type: stark-reflexiv-mehrwortig
+    translation: {de: sich in Acht nehmen, en: beware}
+    parts: {infinitiv: in Acht nehmen, grundverb: nehmen, partikel: in Acht, praesens_3sg: nimmt, praeteritum: nahm, partizip2: in Acht genommen}
