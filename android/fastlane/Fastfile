@@ -105,13 +105,13 @@ platform :android do
     )
   end
 
-  desc "Build APK and publish it as a GitHub Release asset"
+  desc "Publish the APK that the deploy workflow built and verified as a GitHub Release asset"
   lane :github_release do
     tag_name = ENV["GITHUB_REF_NAME"] || ENV["TAG_NAME"]
     UI.user_error!("GITHUB_REF_NAME or TAG_NAME must be set") if tag_name.nil? || tag_name.empty?
 
-    sh("cd #{project_root} && flutter build apk --release")
     apk_path = "#{project_root}/build/app/outputs/flutter-apk/app-release.apk"
+    UI.user_error!("#{apk_path} is missing: build and verify the release APK before this lane") unless File.file?(apk_path)
     versioned_apk = "#{project_root}/build/app/outputs/flutter-apk/latin-practice-#{tag_name}.apk"
     sh("cp #{apk_path} #{versioned_apk}")
 

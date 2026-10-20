@@ -55,11 +55,15 @@ android {
 
     buildTypes {
         release {
-            signingConfig = if (keystorePropertiesFile.exists()) {
-                signingConfigs.getByName("release")
-            } else {
-                signingConfigs.getByName("debug")
-            }
+            signingConfig = signingConfigs.getByName("release")
+        }
+    }
+}
+
+tasks.matching { it.name == "preReleaseBuild" }.configureEach {
+    doFirst {
+        if (!rootProject.file("key.properties").exists()) {
+            throw GradleException("Release build needs android/key.properties with the release keystore (see FASTLANE_SETUP.md)")
         }
     }
 }
