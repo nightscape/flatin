@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:latin_practice/data/attribution.dart';
 import 'package:latin_practice/data/german_forms.dart';
 import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/models/exercise.dart';
@@ -51,18 +50,4 @@ void main() {
       );
     },
   );
-
-  test('attribute is still to be written', () async {
-    final verbs = await loadPracticeItems('lib/data/latin_verbs.yaml');
-    final vocare = verbs.singleWhere((i) => i.id == 'verbs:vocare');
-    final exercise = const FakeLatDeGenerator(
-      FakeGermanForms(),
-    ).build(vocare, 'ind.fut2.pass', Random(1));
-    final right = (exercise.answer as ChoiceAnswer).right;
-
-    expect(
-      () => attribute(vocare, exercise, ChosenOption(right)),
-      throwsA(isA<UnimplementedError>()),
-    );
-  });
 }
