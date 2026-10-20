@@ -5,6 +5,7 @@ library;
 import 'dart:math';
 
 import '../data/diagnosis.dart';
+import '../data/exercise_build.dart';
 import '../data/german_forms.dart';
 import 'derivation.dart' show norm;
 import 'practice_item.dart';
@@ -216,7 +217,7 @@ abstract interface class ExerciseGenerator {
 
 /// The generators the app ships, one per kind. They are stateless: everything
 /// that varies per call comes from [ExerciseContext].
-const List<ExerciseGenerator> exerciseGenerators = [];
+const List<ExerciseGenerator> exerciseGenerators = [BuildFormGenerator()];
 
 /// The one generator of [kind] in [registry].
 ExerciseGenerator generatorFor(

@@ -184,6 +184,9 @@
       "right": "Correct",
       "wrong": "Wrong. The right answer is: {answer}",
       "sampleQuestion": "What does {form} mean?"
+    },
+    "build": {
+      "question": "{label} of {word}"
     }
   }
 }
