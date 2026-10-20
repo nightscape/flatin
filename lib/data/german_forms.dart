@@ -5,6 +5,9 @@ import '../models/practice_item.dart';
 /// The German text of one Latin form.
 /// Implemented by the German form data; read by the generators.
 abstract interface class GermanForms {
+  /// Whether [render] has German text for the forms of [item].
+  bool covers(PracticeItem item);
+
   String render(PracticeItem item, FormKey key);
 }
 
@@ -30,6 +33,9 @@ class GrammarGermanForms implements GermanForms {
 
   /// Practice item id → id of its German verb.
   final Map<String, String> germanVerbOf;
+
+  @override
+  bool covers(PracticeItem item) => germanVerbOf.containsKey(item.id);
 
   @override
   String render(PracticeItem item, FormKey key) => accepted(item, key).first;
@@ -59,7 +65,12 @@ class GrammarGermanForms implements GermanForms {
 /// Renders `<lemma>@<key>`, so every form has its own German text.
 /// Stands in for the German form data in tests of generators and screens.
 class FakeGermanForms implements GermanForms {
-  const FakeGermanForms();
+  const FakeGermanForms({this.coversAll = true});
+
+  final bool coversAll;
+
+  @override
+  bool covers(PracticeItem item) => coversAll;
 
   @override
   String render(PracticeItem item, FormKey key) => '${item.lemma}@$key';

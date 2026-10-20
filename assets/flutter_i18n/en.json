@@ -197,6 +197,10 @@
     },
     "finderror": {
       "question": "{label} of {word}: \"{wrong}\" is wrong. What is the right form?"
+    },
+    "match": {
+      "question": "Match the forms of {word}",
+      "hint": "Tap a Latin form first, then the German form that fits it."
     }
   }
 }

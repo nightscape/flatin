@@ -31,6 +31,15 @@ void main() {
     latinVerbs,
   );
 
+  test('covers exactly the items with a German verb', () async {
+    final items = await loadPracticeItems('lib/data/latin_verbs.yaml');
+    final covered = items.where(german.covers).map((i) => i.id).toSet();
+    expect(covered, german.germanVerbOf.keys.toSet());
+    expect(items.any((i) => !german.covers(i)), isTrue);
+    final nouns = await loadPracticeItems('lib/data/latin_nouns.yaml');
+    expect(nouns.any(german.covers), isFalse);
+  });
+
   test('the ten spike verbs name their German verb', () {
     expect(german.germanVerbOf, {
       'verbs:amare': 'lieben',

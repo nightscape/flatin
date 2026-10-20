@@ -16,6 +16,9 @@ class _SameGerman implements GermanForms {
   const _SameGerman(this.byKey);
 
   @override
+  bool covers(PracticeItem item) => true;
+
+  @override
   String render(PracticeItem item, FormKey key) => byKey[key] ?? key;
 }
 

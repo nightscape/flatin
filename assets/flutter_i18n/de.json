@@ -197,6 +197,10 @@
     },
     "finderror": {
       "question": "{label} von {word}: „{wrong}“ ist falsch. Wie lautet die richtige Form?"
+    },
+    "match": {
+      "question": "Ordne die Formen von {word} zu",
+      "hint": "Tippe erst eine lateinische, dann die passende deutsche Form."
     }
   }
 }
