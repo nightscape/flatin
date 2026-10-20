@@ -100,22 +100,23 @@ This guide will help you set up automated deployment to Google Play Store and Ap
 
 ### 3. Set Up App Signing
 
-**IMPORTANT**: You're currently using debug signing. For production:
+**IMPORTANT**: A release build needs `android/key.properties`. Without it the build fails; there is no debug-key fallback.
 
-1. Generate a keystore:
+1. Generate a keystore outside the repository:
    ```bash
    keytool -genkey -v -keystore ~/android-keystore.jks -keyalg RSA -keysize 2048 -validity 10000 -alias latin-practice
    ```
 
-2. Create `android/key.properties`:
+2. Create `android/key.properties` with these four keys (`android/app/build.gradle.kts` reads exactly these):
    ```properties
    storePassword=<your-password>
    keyPassword=<your-password>
    keyAlias=latin-practice
    storeFile=/path/to/android-keystore.jks
    ```
+   `storeFile` points to the keystore. A relative `storeFile` resolves against the `android/` directory.
 
-3. Update `android/app/build.gradle.kts` to use the keystore (see Android signing docs)
+3. Never commit `android/key.properties` or any `.jks` file. `android/.gitignore` already ignores both.
 
 ### 4. Deploy to Play Store
 
