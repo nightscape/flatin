@@ -743,12 +743,8 @@ void _checkInvariants(GrammarFile file, GrammarItem item, Derivation d) {
         expect(seam.text + ending, form.result, reason: '$where $key');
 
       // I3.
-      case ComposedForm(:final parts, :final join):
-        expect(
-          parts.map((part) => part.text).join(join),
-          form.result,
-          reason: '$where $key',
-        );
+      case ComposedForm(:final parts):
+        expect(form.joinedText, form.result, reason: '$where $key');
         for (final part in parts) {
           if (part is LexemeFormPart) {
             expect(part.derivation.result, part.text, reason: '$where $key');
@@ -850,12 +846,12 @@ String _trace(FormDerivation form) => switch (form) {
   ) =>
     '{$stemName}+$ending [$endingType]'
         '${sandhiRule == null ? "" : " [${sandhiRule.id}]"}',
-  ComposedForm(:final parts, :final join) =>
+  ComposedForm(:final parts, :final joins) =>
     'compose(${parts.map((part) => switch (part) {
       AffixPart(:final stemName, :final text, :final sandhiRule) => '$stemName:$text'
           '${sandhiRule == null ? "" : "(${sandhiRule.id})"}',
       LexemeFormPart(:final lexemeId, :final key) => '$lexemeId[$key]=${part.text}',
-    }).join(" + ")}, join="$join")',
+    }).join(" + ")}, join="${joins.join("|")}")',
   IrregularForm(:final regular) =>
     'irregular${regular == null ? "" : " (rule: ${regular.result})"}',
 };

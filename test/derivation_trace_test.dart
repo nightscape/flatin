@@ -161,12 +161,8 @@ void main() {
                 contains((form.endingType, ending)),
                 reason: where,
               );
-            case ComposedForm(:final parts, :final join):
-              expect(
-                norm([for (final part in parts) part.text].join(join)),
-                norm(form.result),
-                reason: where,
-              );
+            case ComposedForm(:final parts):
+              expect(norm(form.joinedText), norm(form.result), reason: where);
               for (int p = 0; p < parts.length; p++) {
                 final part = parts[p];
                 final at = '$where part $p';

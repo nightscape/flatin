@@ -189,6 +189,14 @@ final class DelegateSpec {
 }
 
 sealed class ComposePart {
+  /// S21: the text between this part and the next one; null takes the rule's.
+  final String? join;
+
+  /// S22: a part without a form drops out instead of removing the key.
+  final bool optional;
+
+  ComposePart({this.join, this.optional = false});
+
   /// Feature axis id → code set on the looked-up key.
   Map<String, String> get set;
 
@@ -219,6 +227,8 @@ final class SelfPart extends ComposePart {
     this.set = const {},
     this.pass = const [],
     this.map = const {},
+    super.join,
+    super.optional,
   });
 }
 
@@ -240,6 +250,30 @@ final class LexemePart extends ComposePart {
     this.pass = const [],
     this.map = const {},
     this.passAll = false,
+    super.join,
+    super.optional,
+  });
+}
+
+/// S23: a form of the item that the composing item names for [slot].
+final class SlotPart extends ComposePart {
+  final String slot;
+  @override
+  final Map<String, String> set;
+  @override
+  final List<String> pass;
+  @override
+  final Map<String, Map<String, String>> map;
+  @override
+  bool get passAll => false;
+
+  SlotPart({
+    required this.slot,
+    this.set = const {},
+    this.pass = const [],
+    this.map = const {},
+    super.join,
+    super.optional,
   });
 }
 
@@ -255,8 +289,12 @@ final class StemPart extends ComposePart {
   @override
   bool get passAll => false;
 
-  StemPart(this.stem);
+  StemPart(this.stem, {super.join, super.optional});
 }
+
+/// S23: the item id a slot names for [item]: its own, else its type's.
+String? slotFiller(GrammarType type, GrammarItem item, String slot) =>
+    item.slots[slot] ?? type.slots[slot];
 
 /// One composition rule (S13).
 final class ComposeSpec {
@@ -265,7 +303,15 @@ final class ComposeSpec {
   final String join;
   final List<ComposePart> parts;
 
-  ComposeSpec({required this.match, required this.join, required this.parts});
+  /// S24: the rule adds accepted variants to keys another rule makes.
+  final bool variant;
+
+  ComposeSpec({
+    required this.match,
+    required this.join,
+    required this.parts,
+    this.variant = false,
+  });
 }
 
 /// S10: the tempora in which a word is deponent.
@@ -300,6 +346,9 @@ final class GrammarType {
   final List<DelegateSpec> delegates;
   final List<ComposeSpec> composes;
 
+  /// S23: slot name → the item id a slot part reads unless the item names one.
+  final Map<String, String> slots;
+
   /// Sandhi rule ids of the file's library, in application order (S16).
   final List<String> sandhi;
 
@@ -316,6 +365,7 @@ final class GrammarType {
     this.forms = const {},
     this.delegates = const [],
     this.composes = const [],
+    this.slots = const {},
     this.sandhi = const [],
     this.deponent,
   });
@@ -323,7 +373,8 @@ final class GrammarType {
   bool get isLeaf => delegates.isEmpty && composes.isEmpty;
 
   /// S6: parent first, child wins per stem name, per key and per delegate name;
-  /// compose lists append; a child's sandhi list replaces the parent's.
+  /// compose lists append; a child's sandhi list replaces the parent's; the
+  /// child wins per slot name.
   GrammarType inheriting(GrammarType parent) => GrammarType(
     name: name,
     isAbstract: isAbstract,
@@ -341,6 +392,7 @@ final class GrammarType {
       ),
     ],
     composes: [...parent.composes, ...composes],
+    slots: {...parent.slots, ...slots},
     sandhi: sandhi.isNotEmpty ? sandhi : parent.sandhi,
     deponent: deponent ?? parent.deponent,
   );
@@ -361,6 +413,9 @@ final class GrammarItem {
 
   /// The id of the item in german_verbs.yaml that translates this verb.
   final String? deVerb;
+
+  /// S23: slot name → item id of the same file.
+  final Map<String, String> slots;
 
   /// S15: feature patterns whose keys this item does not have.
   final List<Map<String, String>> absent;
@@ -385,6 +440,7 @@ final class GrammarItem {
     required this.lemma,
     this.deponent,
     this.deVerb,
+    this.slots = const {},
     this.declaredType,
     this.typeRule,
   });
@@ -859,6 +915,7 @@ class _FileParser {
         forms: _forms(name, spec['forms'] as YamlMap?, axes),
         delegates: _delegates(name, spec['delegate'] as YamlList?),
         composes: _composes(name, spec['compose'] as YamlList?, axes),
+        slots: _slots(spec['slots'], 'type $name'),
         sandhi: [
           for (final id in (spec['sandhi'] as YamlList?) ?? const []) '$id',
         ],
@@ -1027,6 +1084,11 @@ class _FileParser {
     final composes = <ComposeSpec>[];
     for (final entry in node ?? const []) {
       final spec = entry as YamlMap;
+      for (final key in spec.keys) {
+        if (!_composeKeys.contains(key)) {
+          _bad('S13', 'type $type: a compose rule has no key "$key"');
+        }
+      }
       final match = <String, List<String>>{};
       for (final m in ((spec['match'] as YamlMap?) ?? YamlMap()).entries) {
         final axisId = '${m.key}';
@@ -1045,21 +1107,58 @@ class _FileParser {
         }
         match[axisId] = codes;
       }
+      final parts = [
+        for (final part in spec['parts'] as YamlList)
+          _composePart(type, part as YamlMap, axes),
+      ];
+      if (parts.last.join != null) {
+        _bad('S21', 'type $type: the last compose part takes no "join"');
+      }
+      if (parts.every((part) => part.optional)) {
+        _bad(
+          'S22',
+          'type $type: a compose rule needs a part that is not optional',
+        );
+      }
       composes.add(
         ComposeSpec(
           match: match,
           join: '${spec['join'] ?? ''}',
-          parts: [
-            for (final part in spec['parts'] as YamlList)
-              _composePart(type, part as YamlMap, axes),
-          ],
+          parts: parts,
+          variant: spec['variant'] as bool? ?? false,
         ),
       );
     }
     return composes;
   }
 
+  static const _composeKeys = {'match', 'join', 'parts', 'variant'};
+  static const _partKeys = {
+    'self',
+    'lexeme',
+    'slot',
+    'stem',
+    'set',
+    'pass',
+    'map',
+    'join',
+    'optional',
+  };
+
+  /// S23: slot name → item id.
+  Map<String, String> _slots(Object? node, String where) => {
+    for (final entry in ((node as YamlMap?) ?? YamlMap()).entries)
+      '${entry.key}': '${entry.value}',
+  };
+
   ComposePart _composePart(String type, YamlMap spec, Axes axes) {
+    for (final key in spec.keys) {
+      if (!_partKeys.contains(key)) {
+        _bad('S13', 'type $type: a compose part has no key "$key"');
+      }
+    }
+    final join = spec['join'] as String?;
+    final optional = spec['optional'] as bool? ?? false;
     final set = {
       for (final s in ((spec['set'] as YamlMap?) ?? YamlMap()).entries)
         '${s.key}': '${s.value}',
@@ -1100,17 +1199,29 @@ class _FileParser {
       if (set.isNotEmpty || pass.isNotEmpty || map.isNotEmpty || passAll) {
         _bad('S13', 'type $type: a "stem" part takes no set, pass or map');
       }
-      return StemPart('${spec['stem']}');
+      return StemPart('${spec['stem']}', join: join, optional: optional);
+    }
+    if (passAll && !spec.containsKey('lexeme')) {
+      _bad('S13', 'type $type: "pass: all" is only allowed on a lexeme part');
     }
     if (spec.containsKey('self')) {
-      if (passAll) {
-        _bad('S13', 'type $type: "pass: all" is only allowed on a lexeme part');
-      }
       return SelfPart(
         delegate: '${spec['self']}',
         set: set,
         pass: pass,
         map: map,
+        join: join,
+        optional: optional,
+      );
+    }
+    if (spec.containsKey('slot')) {
+      return SlotPart(
+        slot: '${spec['slot']}',
+        set: set,
+        pass: pass,
+        map: map,
+        join: join,
+        optional: optional,
       );
     }
     if (spec.containsKey('lexeme')) {
@@ -1120,9 +1231,11 @@ class _FileParser {
         pass: pass,
         map: map,
         passAll: passAll,
+        join: join,
+        optional: optional,
       );
     }
-    _bad('S13', 'type $type: a compose part needs self, lexeme or stem');
+    _bad('S13', 'type $type: a compose part needs self, lexeme, slot or stem');
   }
 
   DeponentSpec? _deponent(Object? node, String where) {
@@ -1204,6 +1317,7 @@ class _FileParser {
           lemma: lemma,
           deponent: _deponent(spec['deponent'], 'item $id'),
           deVerb: spec['de_verb'] as String?,
+          slots: _slots(spec['slots'], 'item $id'),
         ),
       );
     }
@@ -1428,6 +1542,7 @@ class _Linker {
       lemma: item.lemma,
       deponent: item.deponent,
       deVerb: item.deVerb,
+      slots: item.slots,
       declaredType: declared,
       typeRule: matched,
     );
@@ -1439,6 +1554,7 @@ class _Linker {
       final type = file.type(item.typeName);
       _checkStems(file, item, type);
       _checkDeponent(file, item, type);
+      _checkSlots(file, item, type);
       _checkLexemeAcyclic(file, item, [item.id]);
     }
     for (final item in file.items) {
@@ -1594,21 +1710,47 @@ class _Linker {
     }
   }
 
-  /// S5: an item's forms must not depend on the item itself through `lexeme:`.
+  /// S23: an item names only slots that a part of its type reads.
+  void _checkSlots(GrammarFile file, GrammarItem item, GrammarType type) {
+    final read = {
+      for (final compose in type.composes)
+        for (final part in compose.parts)
+          if (part is SlotPart) part.slot,
+    };
+    for (final slot in item.slots.keys) {
+      if (!read.contains(slot)) {
+        _fail(
+          'S23',
+          file.path,
+          'no compose part of ${type.name} reads the slot "$slot"',
+          item: item.id,
+        );
+      }
+    }
+  }
+
+  /// S5: an item's forms must not depend on the item itself through `lexeme:`
+  /// or `slot:`.
   void _checkLexemeAcyclic(
     GrammarFile file,
     GrammarItem item,
     List<String> chain,
   ) {
-    for (final compose in file.type(item.typeName).composes) {
+    final type = file.type(item.typeName);
+    for (final compose in type.composes) {
       for (final part in compose.parts) {
-        if (part is! LexemePart) continue;
-        final target = file.items.where((i) => i.id == part.lexeme).firstOrNull;
+        final lexeme = switch (part) {
+          LexemePart(:final lexeme) => lexeme,
+          SlotPart(:final slot) => slotFiller(type, item, slot),
+          _ => null,
+        };
+        if (lexeme == null) continue;
+        final target = file.items.where((i) => i.id == lexeme).firstOrNull;
         if (target == null) {
           _fail(
             'S5',
             file.path,
-            'compose names the unknown lexeme "${part.lexeme}"',
+            'compose names the unknown lexeme "$lexeme"',
             item: item.id,
           );
         }
@@ -1680,9 +1822,28 @@ class _Linker {
       }
     }
 
-    for (final compose in type.composes) {
+    final composed = <FormKey>{};
+    for (final compose in type.composes.where((c) => !c.variant)) {
       for (final key in _composedKeys(file, item, compose, stems)) {
         add(key, 'a compose rule of ${type.name}');
+        composed.add(key);
+      }
+    }
+    for (final compose in type.composes.where((c) => c.variant)) {
+      final orphan = _composedKeys(
+        file,
+        item,
+        compose,
+        stems,
+      ).difference(composed);
+      if (orphan.isNotEmpty) {
+        _fail(
+          'S24',
+          file.path,
+          'a variant rule of ${type.name} makes a key no other rule makes',
+          item: item.id,
+          key: orphan.first,
+        );
       }
     }
 
@@ -1824,7 +1985,7 @@ class _Linker {
     final keys = <FormKey>{};
     for (final bundle in bundles) {
       if (compose.parts.every(
-        (p) => _partResolves(file, item, type, p, bundle, stems),
+        (p) => p.optional || _partResolves(file, item, type, p, bundle, stems),
       )) {
         keys.add(axes.formatKey(bundle));
       }
@@ -1878,8 +2039,13 @@ class _Linker {
       });
     }
 
-    final lexeme = part as LexemePart;
-    final target = file.item(lexeme.lexeme);
+    final lexeme = switch (part) {
+      LexemePart(:final lexeme) => lexeme,
+      SlotPart(:final slot) => slotFiller(type, item, slot),
+      _ => throw StateError('$part is a self or stem part'),
+    };
+    if (lexeme == null) return false;
+    final target = file.item(lexeme);
     return _planKeys(file, target).has(file.axes.formatKey(features));
   }
 }

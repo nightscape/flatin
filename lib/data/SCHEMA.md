@@ -78,6 +78,14 @@ types:
           - {self: ppp, pass: [numerus], set: {kasus: nom, genus: m}}
           - {lexeme: esse, pass: [modus, person, numerus],
              map: {tempus: {perf: praes, plusq: impf, fut2: fut}}}
+      - match: {tempus: perf, genus_verbi: akt}
+        variant: true                # S24: adds accepted texts only
+        join: " "
+        parts:
+          - {slot: reflexiv, optional: true}  # S22, S23
+          - {stem: partikel, join: ""}        # S21: the text after this part
+          - {self: roh, pass: [person, numerus]}
+    slots: {hilfsverb: hv_haben}     # S23: default item of a slot
     sandhi: [a_ausfall, kurz_nt]     # rule ids of this file, in this order
     deponent: all                    # S10; or a list of tempus codes
 
@@ -92,6 +100,7 @@ items:
     forms: {ind.praes.akt.1.sg: sum} # overrides
     deponent: [perf, plusq, fut2]
     absent: [{modus: imp}]           # S15
+    slots: {hilfsverb: hv_sein}      # S23
 ```
 
 One file is exactly one YAML document; a `---` separated second document throws.
@@ -130,8 +139,8 @@ stem listed in `required_stems` must be available for every item of the type,
 else load throws.
 
 **S5. Acyclicity.** Inheritance, stem templates, delegation and composition form
-an acyclic graph. `lexeme:` names an item `id` of the same file, and an item's
-forms must not depend on that same item.
+an acyclic graph. `lexeme:` and a filled `slot:` (S23) name an item `id` of the
+same file, and an item's forms must not depend on that same item.
 
 **S6. `inherits_from`.** Parent first; the child wins per stem name, per key and
 per delegate `name`. `compose` lists append, a child's `sandhi` list replaces
@@ -149,7 +158,8 @@ show in the settings. Composed forms are always emitted.
 are equal after normalizing quantity marks — a list holds different words, never
 different spellings of one word. The first is shown and traced, all are
 accepted. Variants come from a template list, a part list, a composition (the
-product of its parts' variants) or a `variant: true` sandhi rule. An item
+product of its parts' variants), a `variant: true` compose rule (S24) or a
+`variant: true` sandhi rule. An item
 override list replaces the whole list.
 
 **S10. Deponents.** Let D be the item's `deponent`, else the type's; `all` means
@@ -185,9 +195,11 @@ plus every axis a part names in `pass` or `map`. An axis in `match` takes the
 listed codes, any other axis every code of the axis. With `pass: all` the keys
 are instead the lexeme's own keys, emitted and internal, that agree with
 `match`; `map` is not allowed with it. A key is emitted only if every part
-resolves — one absent part removes it. A part is `self:` (a delegate of the same
-type), `lexeme:` (an item) or `stem:` (an affix; it takes no `set`, `pass` or
-`map`). The looked-up key is `set` plus the passed codes plus the mapped codes;
+resolves — one absent part that is not optional (S22) removes it. A part is
+`self:` (a delegate of the same type), `lexeme:` (an item), `slot:` (the item a
+slot names, S23) or `stem:` (an affix; it takes no `set`, `pass` or `map`).
+A rule takes only the keys `match`, `join`, `parts` and `variant`; a part only
+its kind and `set`, `pass`, `map`, `join`, `optional`. The looked-up key is `set` plus the passed codes plus the mapped codes;
 an axis in `map` is passed implicitly and a code the table does not list passes
 unchanged. `pass: all` is only allowed on `lexeme:`.
 
@@ -231,7 +243,9 @@ selector text.
 (left: each variant of stem `s`, right: `e`, word-final), at every stem
 `default` or `template` `{b}r` (left: each variant of `b`, right: `r`, not
 word-final), and after every `stem:` part of a composition (left: the affix,
-right: the next part's text, not word-final). It applies inside delegated
+right: the next part's text, not word-final; when the separator after the affix
+is not empty, or the affix is the last part, the seam is word-final with an
+empty right side). It applies inside delegated
 templates too, since delegate targets have no list of their own. Present stems
 are school stems (`amā-`, `monē-`, `audī-`, `capi-`, `reg-`), built as root plus
 theme vowel, so the quantity change at the seam is data: `amā` + `ō` → `amō`,
@@ -252,6 +266,26 @@ parse picks one language; ids, codes and type names stay the same in every
 language. Every concrete type has a `display`, an abstract one has none, and
 no two types of a file share a display in one language.
 
+**S21. Separators.** A rule's `join` is the default text between two parts. A
+part's own `join` is the text between it and the next present part, so one
+rule can join a particle to the verb without a space and the pronoun with one.
+The last part takes no `join`; one there throws.
+
+**S22. Optional parts.** A part with `optional: true` that has no form drops out
+together with its own separator; the key stays. A rule whose parts are all
+optional throws.
+
+**S23. Slots.** A `slot: <name>` part reads the item that the composing item
+names in `slots: {<name>: <item id>}`, else the one its type names in `slots:`
+(inherited, the child wins per name). A slot no one fills has no form, so the
+part removes the key unless it is optional. An item slot that no compose part of
+its type reads throws.
+
+**S24. Variant rules.** A compose rule with `variant: true` makes no key of its
+own: its texts follow, as accepted variants, the texts of the rule that makes
+the key, and the shown text, the parts and the trace stay those of that rule. A
+variant rule that would make a key no other rule of the type makes throws.
+
 **Collisions.** A key produced twice — by own forms, by delegation or by
-composition — throws. There is no precedence between them; inheritance (S6) is
+composition other than a variant rule (S24) — throws. There is no precedence between them; inheritance (S6) is
 the only override mechanism besides item overrides.

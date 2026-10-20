@@ -509,14 +509,37 @@ final class _ItemBuilder {
           ? axes.formatKey({...axes.parseKey(key), 'genus_verbi': 'pass'})
           : key;
       final features = axes.parseKey(source);
-      for (final spec in type.composes) {
+      for (final spec in type.composes.where((c) => !c.variant)) {
         final form = _composed(spec, features, source);
         if (form == null) continue;
-        made[key] = form;
+        made[key] = _withVariantRules(form, features, source);
         if (source != key) deponentKeys.add(key);
         break;
       }
     }
+  }
+
+  /// S24: the texts of `variant: true` rules follow the main rule's texts.
+  _Made _withVariantRules(
+    _Made main,
+    Map<String, String> features,
+    FormKey key,
+  ) {
+    final extra = [
+      for (final spec in type.composes.where((c) => c.variant))
+        ...?_composed(spec, features, key)?.variants,
+    ];
+    if (extra.isEmpty) return main;
+    final variants = _distinct([...main.variants, ...extra]);
+    return _Made(variants, (formKey) {
+      final shown = main.build(formKey) as ComposedForm;
+      return ComposedForm(
+        formKey: formKey,
+        variants: variants,
+        parts: shown.parts,
+        joins: shown.joins,
+      );
+    });
   }
 
   /// S13: the composition [spec] gives for [key], or null if it does not
@@ -544,11 +567,17 @@ final class _ItemBuilder {
     }
 
     final sources = <_PartSource>[];
+    final joins = <String>[];
     for (final part in spec.parts) {
       final source = _partSource(part, features, key);
-      if (source == null) return null;
+      if (source == null) {
+        if (part.optional) continue;
+        return null;
+      }
       sources.add(source);
+      joins.add(part.join ?? spec.join);
     }
+    joins.removeLast();
 
     final seen = <String>{};
     final variants = <String>[];
@@ -556,8 +585,8 @@ final class _ItemBuilder {
     for (final combination in _product([
       for (final source in sources) source.variants,
     ])) {
-      for (final rendering in _render(sources, combination)) {
-        final text = rendering.texts.join(spec.join);
+      for (final rendering in _render(sources, joins, combination)) {
+        final text = _joined(rendering.texts, joins);
         if (!seen.add(norm(text))) continue;
         variants.add(text);
         shown ??= rendering.parts;
@@ -569,7 +598,7 @@ final class _ItemBuilder {
         formKey: formKey,
         variants: variants,
         parts: shown!,
-        join: spec.join,
+        joins: joins,
       ),
     );
   }
@@ -611,7 +640,13 @@ final class _ItemBuilder {
       lookup = axes.formatKey({...delegate.set, ...wanted});
       form = delegated[part.delegate]![lookup];
     } else {
-      final target = file.item((part as LexemePart).lexeme);
+      final lexeme = switch (part) {
+        LexemePart(:final lexeme) => lexeme,
+        SlotPart(:final slot) => slotFiller(type, item, slot),
+        _ => throw StateError('$part is a self or stem part'),
+      };
+      if (lexeme == null) return null;
+      final target = file.item(lexeme);
       final derivation = engine._derive(file, target);
       lexemeId = target.id;
       lookup = part.passAll ? key : axes.formatKey(wanted);
@@ -629,7 +664,11 @@ final class _ItemBuilder {
   /// S18 c: the seam after an affix may add a variant of the whole word.
   /// A part's text is its own spelling; only [FormPart]s of the shown
   /// rendering are kept, so a `lexeme:` part keeps its own derivation (I3).
-  List<_Rendering> _render(List<_PartSource> sources, List<String> texts) {
+  List<_Rendering> _render(
+    List<_PartSource> sources,
+    List<String> joins,
+    List<String> texts,
+  ) {
     var renderings = <_Rendering>[(parts: [], texts: [])];
     for (var i = 0; i < sources.length; i++) {
       final source = sources[i];
@@ -643,7 +682,7 @@ final class _ItemBuilder {
         ];
         continue;
       }
-      final last = i == sources.length - 1;
+      final last = i == sources.length - 1 || joins[i].isNotEmpty;
       final seams = sandhiSeam(
         rules,
         texts[i],
@@ -690,6 +729,14 @@ final class _ItemBuilder {
     return {for (final key in keys) key: forms[key]!.build(key)};
   }
 }
+
+/// S21: [texts] with the separator after each part but the last.
+String _joined(List<String> texts, List<String> joins) => [
+  for (var i = 0; i < texts.length; i++) ...[
+    texts[i],
+    if (i < joins.length) joins[i],
+  ],
+].join();
 
 bool _sameWriting(List<String> a, List<String> b) {
   if (a.length != b.length) return false;

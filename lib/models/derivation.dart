@@ -163,14 +163,24 @@ final class GeneratedForm extends FormDerivation {
 /// Several forms joined, e.g. amātus + est (S13).
 final class ComposedForm extends FormDerivation {
   final List<FormPart> parts;
-  final String join;
+
+  /// The text after each part but the last (S21).
+  final List<String> joins;
 
   ComposedForm({
     required super.formKey,
     required super.variants,
     required this.parts,
-    required this.join,
-  }) : assert(parts.isNotEmpty);
+    required this.joins,
+  }) : assert(parts.isNotEmpty && joins.length == parts.length - 1);
+
+  /// The parts' texts with their separators.
+  String get joinedText => [
+    for (var i = 0; i < parts.length; i++) ...[
+      parts[i].text,
+      if (i < joins.length) joins[i],
+    ],
+  ].join();
 }
 
 /// Explicit and different from the rule, or no rule at all.

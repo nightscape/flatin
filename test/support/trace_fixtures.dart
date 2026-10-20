@@ -235,7 +235,7 @@ PracticeItem amare() {
         'konj.plusq.pass.1.sg': ComposedForm(
           formKey: 'konj.plusq.pass.1.sg',
           variants: const ['amātus essem'],
-          join: ' ',
+          joins: [' '],
           parts: [
             LexemeFormPart(
               lexemeId: 'verbs:amare',
@@ -258,7 +258,7 @@ PracticeItem amare() {
         'inf.fut.akt': ComposedForm(
           formKey: 'inf.fut.akt',
           variants: const ['amātūrum esse'],
-          join: ' ',
+          joins: [' '],
           parts: [
             LexemeFormPart(
               lexemeId: 'verbs:amare',
@@ -402,7 +402,7 @@ PracticeItem posse() {
   ) => ComposedForm(
     formKey: key,
     variants: [result],
-    join: '',
+    joins: [''],
     parts: [
       AffixPart(stemName: 'praesens', text: affix, sandhiRule: rule),
       LexemeFormPart(

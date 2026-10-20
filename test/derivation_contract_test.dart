@@ -180,7 +180,7 @@ void main() {
             derivation: GivenForm(formKey: 'praes.1.sg', variants: ['sum']),
           ),
         ],
-        join: ' ',
+        joins: [' '],
       );
       final irregular = IrregularForm(
         formKey: 'perf.1.sg',
@@ -192,10 +192,7 @@ void main() {
         derivationOf({'perf.1.sg': irregular}).forms['perf.1.sg'],
         same(irregular),
       );
-      expect(
-        composed.parts.map((p) => p.text).join(composed.join),
-        composed.result,
-      );
+      expect(composed.joinedText, composed.result);
     });
   });
 

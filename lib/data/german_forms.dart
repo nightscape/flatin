@@ -32,7 +32,10 @@ class GrammarGermanForms implements GermanForms {
   final Map<String, String> germanVerbOf;
 
   @override
-  String render(PracticeItem item, FormKey key) {
+  String render(PracticeItem item, FormKey key) => accepted(item, key).first;
+
+  /// Every German text accepted for [key]; the first is the shown one (S9).
+  List<String> accepted(PracticeItem item, FormKey key) {
     final germanId = germanVerbOf[item.id];
     if (germanId == null) throw ArgumentError('no German verb for ${item.id}');
     final germanKey = germanKeyOf(key);
@@ -40,7 +43,7 @@ class GrammarGermanForms implements GermanForms {
     if (form == null) {
       throw ArgumentError('$germanId has no German form $germanKey ($key)');
     }
-    return form.variants.first;
+    return form.variants;
   }
 
   static FormKey germanKeyOf(FormKey latinKey) {

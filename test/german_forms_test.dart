@@ -5,11 +5,16 @@ import 'package:latin_practice/data/german_forms.dart';
 import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/grammar/schema.dart';
 
-/// Run with GERMAN_GOLDEN_UPDATE=1 to rewrite the golden table.
-const _golden = 'test/golden/german_forms_table.md';
+/// Run with GERMAN_GOLDEN_UPDATE=1 to rewrite the golden tables.
+const _goldenDir = 'test/golden';
 
-/// German verbs with "sein" or a reflexive pronoun form no passive.
-const _withoutGermanPassive = {'verbs:venire', 'verbs:cavere'};
+/// Their German verbs carry `absent: *ohne_passiv`.
+const _withoutGermanPassive = {
+  'verbs:venire',
+  'verbs:cavere',
+  'verbs:laborare',
+  'verbs:scire',
+};
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -41,43 +46,49 @@ void main() {
     });
   });
 
-  test(
-    'every course bundle of the ten verbs renders as in the table',
-    () async {
+  final tables = {
+    'german_forms_table.md': (List<String> codes) => codes.length != 5,
+    for (final person in ['1', '2', '3'])
+      'german_forms_person$person.md': (List<String> codes) =>
+          codes.length == 5 && codes[3] == person,
+  };
+  for (final MapEntry(key: name, value: inTable) in tables.entries) {
+    test('every course form of the ten verbs renders as in $name', () async {
       final verbs = await loadPracticeItems('lib/data/latin_verbs.yaml');
       final rows = <String>[
-        '| Latin verb | bundle | Latin form | German form |',
-        '| --- | --- | --- | --- |',
+        '| Latin verb | key | Latin form | German form | also accepted |',
+        '| --- | --- | --- | --- | --- |',
       ];
       for (final id in german.germanVerbOf.keys) {
         final item = verbs.singleWhere((i) => i.id == id);
         final shown = <String>{};
         for (final (index, key) in item.formOrder.indexed) {
           final codes = key.split('.');
-          if (!_inCourse(codes)) continue;
-          final bundle = codes.take(3).join('.');
-          final finite = codes.length == 5;
-          if (finite ? !key.endsWith('.3.pl') : !shown.add(bundle)) continue;
-          final String text;
+          if (!_inCourse(codes) || !inTable(codes)) continue;
+          final germanKey = GrammarGermanForms.germanKeyOf(key);
+          if (!shown.add(germanKey)) continue;
+          final List<String> texts;
           if (codes[2] == 'pass' && _withoutGermanPassive.contains(id)) {
             expect(() => german.render(item, key), throwsArgumentError);
-            text = '—';
+            texts = ['—'];
           } else {
-            text = german.render(item, key);
+            texts = german.accepted(item, key);
+            expect(german.render(item, key), texts.first);
           }
           rows.add(
-            '| ${item.lemma} | ${finite ? key : bundle} | ${item.forms[index]} '
-            '| $text |',
+            '| ${item.lemma} | $germanKey | ${item.forms[index]} '
+            '| ${texts.first} | ${texts.skip(1).join('; ')} |',
           );
         }
       }
       final table = '${rows.join('\n')}\n';
+      final golden = File('$_goldenDir/$name');
       if (Platform.environment['GERMAN_GOLDEN_UPDATE'] == '1') {
-        File(_golden).writeAsStringSync(table);
+        golden.writeAsStringSync(table);
       }
-      expect(table, File(_golden).readAsStringSync());
-    },
-  );
+      expect(table, golden.readAsStringSync());
+    });
+  }
 
   test('a form outside the course convention has no German text', () async {
     final verbs = await loadPracticeItems('lib/data/latin_verbs.yaml');
