@@ -178,6 +178,10 @@ Future<List<PracticeItem>> loadAllPracticeItems({
     ...await loadPracticeItems(path, language: language),
 ];
 
+/// The parsed data file [dataFileId] in the course language.
+Future<GrammarFile> loadGrammarFile(String dataFileId) async =>
+    (await _load()).parsed(courseLanguage).file(dataFileId);
+
 PracticeItem _practiceItem(
   GrammarEngine engine,
   GrammarFile file,

@@ -4,6 +4,7 @@ import 'package:flutter_i18n/flutter_i18n.dart';
 import '../widgets/app_drawer.dart';
 import '../models/practice_item.dart';
 import '../providers/fsrs_provider.dart';
+import 'grammar_exercise_page.dart';
 import 'word_classification_screen.dart';
 import 'practice_screen.dart';
 
@@ -59,6 +60,10 @@ class HomeScreen extends ConsumerWidget {
                 labelKey: 'home.verbs',
                 buttonKey: Key('home.verbs.button'),
               ),
+            ),
+            Padding(
+              padding: buttonPadding,
+              child: const _GrammarExerciseButton(),
             ),
             Padding(
               padding: buttonPadding,
@@ -180,6 +185,54 @@ class _PracticeTypeButton extends ConsumerWidget {
                 ),
               ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Entry point for the grammar exercises; disabled while no card is due.
+class _GrammarExerciseButton extends ConsumerWidget {
+  const _GrammarExerciseButton();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isMobile = MediaQuery.of(context).size.width < 600;
+    final next = ref.watch(nextGrammarExerciseProvider);
+    if (next.hasError) {
+      return Text(
+        FlutterI18n.translate(
+          context,
+          'home.error',
+          translationParams: {'error': next.error.toString()},
+        ),
+        style: TextStyle(fontSize: isMobile ? 14.0 : 16.0),
+      );
+    }
+    return SizedBox(
+      width: double.infinity,
+      height: isMobile ? 70.0 : 80.0,
+      child: ElevatedButton(
+        key: const Key('home.grammar.button'),
+        onPressed: next.value == null
+            ? null
+            : () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const GrammarExercisePage(),
+                ),
+              ),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: const Color(0xFFD0D0D0),
+          foregroundColor: Colors.black,
+          elevation: 0,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        ),
+        child: Text(
+          FlutterI18n.translate(context, 'exercise.home.grammar'),
+          style: TextStyle(
+            fontSize: isMobile ? 18.0 : 20.0,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
     );

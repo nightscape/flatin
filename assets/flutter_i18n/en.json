@@ -201,6 +201,10 @@
     "match": {
       "question": "Match the forms of {word}",
       "hint": "Tap a Latin form first, then the German form that fits it."
+    },
+    "home": {
+      "grammar": "Grammar",
+      "nothingDue": "Nothing is due right now."
     }
   }
 }

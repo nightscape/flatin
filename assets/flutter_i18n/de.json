@@ -201,6 +201,10 @@
     "match": {
       "question": "Ordne die Formen von {word} zu",
       "hint": "Tippe erst eine lateinische, dann die passende deutsche Form."
+    },
+    "home": {
+      "grammar": "Grammatik",
+      "nothingDue": "Gerade ist nichts fällig."
     }
   }
 }
