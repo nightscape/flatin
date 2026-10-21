@@ -4,6 +4,7 @@ import '../models/course_filter.dart';
 import '../models/exercise.dart';
 import '../models/fsrs_card.dart';
 import '../models/practice_item.dart';
+import 'curriculum.dart';
 
 /// The retrievability R of a card, 0..1.
 typedef Retrievability = double Function(PracticeItemCard card);
@@ -31,6 +32,14 @@ final class SelectedPair {
   GrammarCardId get grammarCardId => GrammarCardId(word.dataFileId, bundle);
 }
 
+/// The lesson that introduces form [key] of [word]: its type and its form
+/// are both taught. A bundle's lesson is the minimum over its forms.
+/// Produced here; read by [BundleIndex] and the topics.
+int grammarLesson(Curriculum curriculum, PracticeItem word, FormKey key) => max(
+  curriculum.typeLesson(word.dataFileId, word.type),
+  curriculum.formLesson(word.dataFileId, key),
+);
+
 /// Which bundles each practised word has, which words each bundle has, and
 /// the first lesson and the data file of every card.
 /// Produced here from the items and the course; read by [selectPair].
@@ -54,20 +63,12 @@ final class BundleIndex {
         word.dataFileId,
         filter.lessons.lessonNumberOf(word),
       );
-      final typeLesson = filter.curriculum.typeLesson(
-        word.dataFileId,
-        word.type,
-      );
       for (final label in word.formLabels) {
         if (!filter.formPracticed(word.dataFileId, label)) continue;
-        final formLesson = filter.curriculum.formLesson(
-          word.dataFileId,
-          label.key,
-        );
         teach(
           GrammarCardId.of(word, label.key),
           word.dataFileId,
-          max(typeLesson, formLesson),
+          grammarLesson(filter.curriculum, word, label.key),
         );
       }
       final bundles = {
