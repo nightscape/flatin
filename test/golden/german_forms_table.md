@@ -1332,3 +1332,191 @@
 | convocāre | inf.perf.pass | convocātum esse | zusammengerufen worden sein |  |
 | convocāre | part.praes.akt | convocāns | zusammenrufend |  |
 | convocāre | part.perf.pass | convocātus | zusammengerufen |  |
+| nārrāre | inf.praes.akt | nārrāre | erzählen |  |
+| nārrāre | inf.praes.pass | nārrārī | erzählt werden |  |
+| nārrāre | inf.perf.akt | nārrāvisse | erzählt haben |  |
+| nārrāre | inf.perf.pass | nārrātum esse | erzählt worden sein |  |
+| nārrāre | part.praes.akt | nārrāns | erzählend |  |
+| nārrāre | part.perf.pass | nārrātus | erzählt |  |
+| dēspērāre | inf.praes.akt | dēspērāre | verzweifeln |  |
+| dēspērāre | inf.praes.pass | dēspērārī | — |  |
+| dēspērāre | inf.perf.akt | dēspērāvisse | verzweifelt sein |  |
+| dēspērāre | inf.perf.pass | dēspērātum esse | — |  |
+| dēspērāre | part.praes.akt | dēspērāns | verzweifelnd |  |
+| dēspērāre | part.perf.pass | dēspērātus | — |  |
+| turbāre | inf.praes.akt | turbāre | verwirren |  |
+| turbāre | inf.praes.pass | turbārī | verwirrt werden |  |
+| turbāre | inf.perf.akt | turbāvisse | verwirrt haben |  |
+| turbāre | inf.perf.pass | turbātum esse | verwirrt worden sein |  |
+| turbāre | part.praes.akt | turbāns | verwirrend |  |
+| turbāre | part.perf.pass | turbātus | verwirrt |  |
+| perturbāre | inf.praes.akt | perturbāre | verwirren |  |
+| perturbāre | inf.praes.pass | perturbārī | verwirrt werden |  |
+| perturbāre | inf.perf.akt | perturbāvisse | verwirrt haben |  |
+| perturbāre | inf.perf.pass | perturbātum esse | verwirrt worden sein |  |
+| perturbāre | part.praes.akt | perturbāns | verwirrend |  |
+| perturbāre | part.perf.pass | perturbātus | verwirrt |  |
+| cōgitāre | inf.praes.akt | cōgitāre | nachdenken |  |
+| cōgitāre | inf.praes.pass | cōgitārī | — |  |
+| cōgitāre | inf.perf.akt | cōgitāvisse | nachgedacht haben |  |
+| cōgitāre | inf.perf.pass | cōgitātum esse | — |  |
+| cōgitāre | part.praes.akt | cōgitāns | nachdenkend |  |
+| cōgitāre | part.perf.pass | cōgitātus | — |  |
+| vexāre | inf.praes.akt | vexāre | quälen |  |
+| vexāre | inf.praes.pass | vexārī | gequält werden |  |
+| vexāre | inf.perf.akt | vexāvisse | gequält haben |  |
+| vexāre | inf.perf.pass | vexātum esse | gequält worden sein |  |
+| vexāre | part.praes.akt | vexāns | quälend |  |
+| vexāre | part.perf.pass | vexātus | gequält |  |
+| īgnōrāre | inf.praes.akt | īgnōrāre | nicht kennen |  |
+| īgnōrāre | inf.praes.pass | īgnōrārī | nicht gekannt werden |  |
+| īgnōrāre | inf.perf.akt | īgnōrāvisse | nicht gekannt haben |  |
+| īgnōrāre | inf.perf.pass | īgnōrātum esse | nicht gekannt worden sein |  |
+| īgnōrāre | part.praes.akt | īgnōrāns | nicht kennend |  |
+| īgnōrāre | part.perf.pass | īgnōrātus | nicht gekannt |  |
+| violāre | inf.praes.akt | violāre | verletzen |  |
+| violāre | inf.praes.pass | violārī | verletzt werden |  |
+| violāre | inf.perf.akt | violāvisse | verletzt haben |  |
+| violāre | inf.perf.pass | violātum esse | verletzt worden sein |  |
+| violāre | part.praes.akt | violāns | verletzend |  |
+| violāre | part.perf.pass | violātus | verletzt |  |
+| īnstāre | inf.praes.akt | īnstāre | bevorstehen |  |
+| īnstāre | inf.praes.pass | īnstārī | — |  |
+| īnstāre | inf.perf.akt | īnstitisse | bevorgestanden haben |  |
+| īnstāre | part.praes.akt | īnstāns | bevorstehend |  |
+| putāre | inf.praes.akt | putāre | glauben |  |
+| putāre | inf.praes.pass | putārī | geglaubt werden |  |
+| putāre | inf.perf.akt | putāvisse | geglaubt haben |  |
+| putāre | inf.perf.pass | putātum esse | geglaubt worden sein |  |
+| putāre | part.praes.akt | putāns | glaubend |  |
+| putāre | part.perf.pass | putātus | geglaubt |  |
+| latēre | inf.praes.akt | latēre | verborgen sein |  |
+| latēre | inf.praes.pass | latērī | — |  |
+| latēre | inf.perf.akt | latuisse | verborgen gewesen sein |  |
+| latēre | part.praes.akt | latēns | verborgen seiend |  |
+| dēbēre | inf.praes.akt | dēbēre | müssen |  |
+| dēbēre | inf.praes.pass | dēbērī | — |  |
+| dēbēre | inf.perf.akt | dēbuisse | gemusst haben |  |
+| dēbēre | inf.perf.pass | dēbitum esse | — |  |
+| dēbēre | part.praes.akt | dēbēns | müssend |  |
+| dēbēre | part.perf.pass | dēbitus | — |  |
+| carēre | inf.praes.akt | carēre | nicht haben |  |
+| carēre | inf.praes.pass | carērī | — |  |
+| carēre | inf.perf.akt | caruisse | nicht gehabt haben |  |
+| carēre | part.praes.akt | carēns | nicht habend |  |
+| dolēre | inf.praes.akt | dolēre | Schmerz empfinden |  |
+| dolēre | inf.praes.pass | dolērī | — |  |
+| dolēre | inf.perf.akt | doluisse | Schmerz empfunden haben |  |
+| dolēre | part.praes.akt | dolēns | Schmerz empfindend |  |
+| perterrēre | inf.praes.akt | perterrēre | erschrecken |  |
+| perterrēre | inf.praes.pass | perterrērī | erschreckt werden |  |
+| perterrēre | inf.perf.akt | perterruisse | erschreckt haben |  |
+| perterrēre | inf.perf.pass | perterritum esse | erschreckt worden sein |  |
+| perterrēre | part.praes.akt | perterrēns | erschreckend |  |
+| perterrēre | part.perf.pass | perterritus | erschreckt |  |
+| terrēre | inf.praes.akt | terrēre | erschrecken |  |
+| terrēre | inf.praes.pass | terrērī | erschreckt werden |  |
+| terrēre | inf.perf.akt | terruisse | erschreckt haben |  |
+| terrēre | inf.perf.pass | territum esse | erschreckt worden sein |  |
+| terrēre | part.praes.akt | terrēns | erschreckend |  |
+| terrēre | part.perf.pass | territus | erschreckt |  |
+| valēre | inf.praes.akt | valēre | stark sein |  |
+| valēre | inf.praes.pass | valērī | — |  |
+| valēre | inf.perf.akt | valuisse | stark gewesen sein |  |
+| valēre | part.praes.akt | valēns | stark seiend |  |
+| ārdēre | inf.praes.akt | ārdēre | brennen |  |
+| ārdēre | inf.praes.pass | ārdērī | — |  |
+| ārdēre | inf.perf.akt | ārsisse | gebrannt haben |  |
+| ārdēre | part.praes.akt | ārdēns | brennend |  |
+| monēre | inf.praes.akt | monēre | ermahnen |  |
+| monēre | inf.praes.pass | monērī | ermahnt werden |  |
+| monēre | inf.perf.akt | monuisse | ermahnt haben |  |
+| monēre | inf.perf.pass | monitum esse | ermahnt worden sein |  |
+| monēre | part.praes.akt | monēns | ermahnend |  |
+| monēre | part.perf.pass | monitus | ermahnt |  |
+| iacēre | inf.praes.akt | iacēre | liegen |  |
+| iacēre | inf.praes.pass | iacērī | — |  |
+| iacēre | inf.perf.akt | iacuisse | gelegen haben |  |
+| iacēre | part.praes.akt | iacēns | liegend |  |
+| fīnīre | inf.praes.akt | fīnīre | beenden |  |
+| fīnīre | inf.praes.pass | fīnīrī | beendet werden |  |
+| fīnīre | inf.perf.akt | fīnīvisse | beendet haben |  |
+| fīnīre | inf.perf.pass | fīnītum esse | beendet worden sein |  |
+| fīnīre | part.praes.akt | fīniēns | beendend |  |
+| fīnīre | part.perf.pass | fīnītus | beendet |  |
+| cūstōdīre | inf.praes.akt | cūstōdīre | bewachen |  |
+| cūstōdīre | inf.praes.pass | cūstōdīrī | bewacht werden |  |
+| cūstōdīre | inf.perf.akt | cūstōdīvisse | bewacht haben |  |
+| cūstōdīre | inf.perf.pass | cūstōdītum esse | bewacht worden sein |  |
+| cūstōdīre | part.praes.akt | cūstōdiēns | bewachend |  |
+| cūstōdīre | part.perf.pass | cūstōdītus | bewacht |  |
+| contendere | inf.praes.akt | contendere | sich anstrengen |  |
+| contendere | inf.praes.pass | contendī | — |  |
+| contendere | inf.perf.akt | contendisse | sich angestrengt haben |  |
+| contendere | part.praes.akt | contendēns | sich anstrengend |  |
+| accēdere | inf.praes.akt | accēdere | herantreten |  |
+| accēdere | inf.praes.pass | accēdī | — |  |
+| accēdere | inf.perf.akt | accessisse | herangetreten sein |  |
+| accēdere | part.praes.akt | accēdēns | herantretend |  |
+| parcere | inf.praes.akt | parcere | schonen |  |
+| parcere | inf.praes.pass | parcī | geschont werden |  |
+| parcere | inf.perf.akt | pepercisse | geschont haben |  |
+| parcere | part.praes.akt | parcēns | schonend |  |
+| resistere | inf.praes.akt | resistere | Widerstand leisten |  |
+| resistere | inf.praes.pass | resistī | — |  |
+| resistere | inf.perf.akt | restitisse | Widerstand geleistet haben |  |
+| resistere | part.praes.akt | resistēns | Widerstand leistend |  |
+| vīvere | inf.praes.akt | vīvere | leben |  |
+| vīvere | inf.praes.pass | vīvī | — |  |
+| vīvere | inf.perf.akt | vīxisse | gelebt haben |  |
+| vīvere | part.praes.akt | vīvēns | lebend |  |
+| discēdere | inf.praes.akt | discēdere | weggehen |  |
+| discēdere | inf.praes.pass | discēdī | — |  |
+| discēdere | inf.perf.akt | discessisse | weggegangen sein |  |
+| discēdere | part.praes.akt | discēdēns | weggehend |  |
+| gerere | inf.praes.akt | gerere | tragen |  |
+| gerere | inf.praes.pass | gerī | getragen werden |  |
+| gerere | inf.perf.akt | gessisse | getragen haben |  |
+| gerere | part.praes.akt | gerēns | tragend |  |
+| cadere | inf.praes.akt | cadere | fallen |  |
+| cadere | inf.praes.pass | cadī | — |  |
+| cadere | inf.perf.akt | cecidisse | gefallen sein |  |
+| cadere | part.praes.akt | cadēns | fallend |  |
+| ruere | inf.praes.akt | ruere | stürzen |  |
+| ruere | inf.praes.pass | ruī | — |  |
+| ruere | inf.perf.akt | ruisse | gestürzt sein |  |
+| ruere | part.praes.akt | ruēns | stürzend |  |
+| metuere | inf.praes.akt | metuere | fürchten |  |
+| metuere | inf.praes.pass | metuī | gefürchtet werden |  |
+| metuere | inf.perf.akt | metuisse | gefürchtet haben |  |
+| metuere | part.praes.akt | metuēns | fürchtend |  |
+| fugere | inf.praes.akt | fugere | fliehen |  |
+| fugere | inf.praes.pass | fugī | — |  |
+| fugere | inf.perf.akt | fūgisse | geflohen sein |  |
+| fugere | part.praes.akt | fugiēns | fliehend |  |
+| effugere | inf.praes.akt | effugere | entkommen |  |
+| effugere | inf.praes.pass | effugī | — |  |
+| effugere | inf.perf.akt | effūgisse | entkommen sein |  |
+| effugere | part.praes.akt | effugiēns | entkommend |  |
+| exīre | inf.praes.akt | exīre | hinausgehen |  |
+| exīre | inf.perf.akt | exīsse | hinausgegangen sein |  |
+| exīre | part.praes.akt | exiēns | hinausgehend |  |
+| redīre | inf.praes.akt | redīre | zurückkehren |  |
+| redīre | inf.perf.akt | redīsse | zurückgekehrt sein |  |
+| redīre | part.praes.akt | rediēns | zurückkehrend |  |
+| subīre | inf.praes.akt | subīre | herangehen |  |
+| subīre | inf.perf.akt | subīsse | herangegangen sein |  |
+| subīre | part.praes.akt | subiēns | herangehend |  |
+| perīre | inf.praes.akt | perīre | zugrunde gehen |  |
+| perīre | inf.perf.akt | perīsse | zugrunde gegangen sein |  |
+| perīre | part.praes.akt | periēns | zugrunde gehend |  |
+| adīre | inf.praes.akt | adīre | herangehen |  |
+| adīre | inf.perf.akt | adīsse | herangegangen sein |  |
+| adīre | part.praes.akt | adiēns | herangehend |  |
+| abesse | inf.praes.akt | abesse | abwesend sein |  |
+| abesse | inf.perf.akt | āfuisse | abwesend gewesen sein |  |
+| abesse | part.praes.akt | absēns | abwesend seiend |  |
+| adesse | inf.praes.akt | adesse | da sein |  |
+| adesse | inf.perf.akt | affuisse | da gewesen sein |  |
+| dēesse | inf.praes.akt | dēesse | fehlen |  |
+| dēesse | inf.perf.akt | dēfuisse | gefehlt haben |  |

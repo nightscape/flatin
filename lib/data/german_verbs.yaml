@@ -1149,6 +1149,139 @@ items:
 
 
   # package 6
-
-
-
+  - type: schwach
+    translation: {de: erzählen, en: tell}
+    parts: {infinitiv: erzählen, partizip2: erzählt}
+  - type: schwach
+    translation: {de: verzweifeln, en: despair}
+    parts: {infinitiv: verzweifeln, praesens_1sg: verzweifle, praesens_1pl: verzweifeln, partizip2: verzweifelt}
+    slots: {hilfsverb: hv_sein}
+    absent: *ohne_passiv
+  - type: schwach
+    translation: {de: verwirren, en: confuse}
+    parts: {infinitiv: verwirren, partizip2: verwirrt}
+  - type: gemischt
+    translation: {de: nachdenken, en: think}
+    parts: {infinitiv: nachdenken, grundverb: denken, partikel: nach, praeteritum: dachte, konjunktiv2: dächte, partizip2: nachgedacht}
+    absent: *ohne_passiv
+  - type: schwach
+    translation: {de: quälen, en: torment}
+    parts: {infinitiv: quälen, partizip2: gequält}
+  - type: gemischt
+    translation: {de: nicht kennen, en: not know}
+    parts: {infinitiv: nicht kennen, grundverb: kennen, wortgruppe: nicht, praeteritum: kannte, konjunktiv2: kennte, partizip2: nicht gekannt}
+  - type: stark
+    translation: {de: bevorstehen, en: be imminent}
+    parts: {infinitiv: bevorstehen, grundverb: stehen, partikel: bevor, praeteritum: stand, partizip2: bevorgestanden}
+    absent: *ohne_passiv
+  - type: stark
+    translation: {de: verborgen sein, en: be hidden}
+    parts: {infinitiv: verborgen sein, grundverb: sein, wortgruppe: verborgen, praesens_1sg: bin, praesens_2sg: bist, praesens_3sg: ist, praesens_1pl: sind, praesens_2pl: seid, praeteritum: war, partizip2: verborgen gewesen}
+    slots: {hilfsverb: hv_sein}
+    forms: {part.praes.akt: verborgen seiend}
+    absent: *ohne_passiv
+  - type: gemischt
+    translation: {de: müssen, en: must}
+    parts: {infinitiv: müssen, praesens_1sg: muss, praesens_2sg: musst, praesens_3sg: muss, praeteritum: musste, konjunktiv2: müsste, partizip2: gemusst}
+    absent: *ohne_passiv
+  - type: gemischt
+    translation: {de: nicht haben, en: lack}
+    parts: {infinitiv: nicht haben, grundverb: haben, wortgruppe: nicht, praesens_2sg: hast, praesens_3sg: hat, praeteritum: hatte, konjunktiv2: hätte, partizip2: nicht gehabt}
+    absent: *ohne_passiv
+  - type: stark
+    translation: {de: Schmerz empfinden, en: feel pain}
+    parts: {infinitiv: Schmerz empfinden, grundverb: empfinden, wortgruppe: Schmerz, praeteritum: empfand, partizip2: Schmerz empfunden}
+    absent: *ohne_passiv
+  - type: schwach
+    translation: {de: erschrecken, en: frighten}
+    parts: {infinitiv: erschrecken, partizip2: erschreckt}
+  - type: stark
+    translation: {de: stark sein, en: be strong}
+    parts: {infinitiv: stark sein, grundverb: sein, wortgruppe: stark, praesens_1sg: bin, praesens_2sg: bist, praesens_3sg: ist, praesens_1pl: sind, praesens_2pl: seid, praeteritum: war, partizip2: stark gewesen}
+    slots: {hilfsverb: hv_sein}
+    forms: {part.praes.akt: stark seiend}
+    absent: *ohne_passiv
+  - type: gemischt
+    translation: {de: brennen, en: burn}
+    parts: {infinitiv: brennen, praeteritum: brannte, konjunktiv2: brennte, partizip2: gebrannt}
+    absent: *ohne_passiv
+  - type: schwach
+    translation: {de: ermahnen, en: warn}
+    parts: {infinitiv: ermahnen, partizip2: ermahnt}
+  - type: stark
+    translation: {de: liegen, en: lie}
+    parts: {infinitiv: liegen, praeteritum: lag, partizip2: gelegen}
+    absent: *ohne_passiv
+  - type: schwach
+    translation: {de: beenden, en: finish}
+    parts: {infinitiv: beenden, partizip2: beendet}
+  - type: schwach
+    translation: {de: bewachen, en: guard}
+    parts: {infinitiv: bewachen, partizip2: bewacht}
+  - type: stark
+    translation: {de: herantreten, en: approach}
+    parts: {infinitiv: herantreten, grundverb: treten, partikel: heran, praesens_2sg: trittst, praesens_3sg: tritt, praeteritum: trat, partizip2: herangetreten}
+    slots: {hilfsverb: hv_sein}
+    absent: *ohne_passiv
+  - type: schwach
+    translation: {de: schonen, en: spare}
+    parts: {infinitiv: schonen, partizip2: geschont}
+  - type: schwach
+    translation: {de: Widerstand leisten, en: resist}
+    parts: {infinitiv: Widerstand leisten, grundverb: leisten, wortgruppe: Widerstand, partizip2: Widerstand geleistet}
+    absent: *ohne_passiv
+  - type: schwach
+    translation: {de: leben, en: live}
+    parts: {infinitiv: leben, partizip2: gelebt}
+    absent: *ohne_passiv
+  - type: stark
+    translation: {de: fallen, en: fall}
+    parts: {infinitiv: fallen, praesens_2sg: fällst, praesens_3sg: fällt, praeteritum: fiel, partizip2: gefallen}
+    slots: {hilfsverb: hv_sein}
+    absent: *ohne_passiv
+  - type: schwach
+    translation: {de: stürzen, en: rush}
+    parts: {infinitiv: stürzen, praesens_2sg: stürzt, partizip2: gestürzt}
+    slots: {hilfsverb: hv_sein}
+    absent: *ohne_passiv
+  - type: stark
+    translation: {de: fliehen, en: flee}
+    parts: {infinitiv: fliehen, praeteritum: floh, partizip2: geflohen}
+    slots: {hilfsverb: hv_sein}
+    absent: *ohne_passiv
+  - type: stark
+    translation: {de: entkommen, en: escape}
+    parts: {infinitiv: entkommen, praeteritum: entkam, partizip2: entkommen}
+    slots: {hilfsverb: hv_sein}
+    absent: *ohne_passiv
+  - type: schwach
+    translation: {de: zurückkehren, en: return}
+    parts: {infinitiv: zurückkehren, grundverb: kehren, partikel: zurück, partizip2: zurückgekehrt}
+    slots: {hilfsverb: hv_sein}
+    absent: *ohne_passiv
+  - type: stark
+    translation: {de: herangehen, en: approach}
+    parts: {infinitiv: herangehen, grundverb: gehen, partikel: heran, praeteritum: ging, partizip2: herangegangen}
+    slots: {hilfsverb: hv_sein}
+    absent: *ohne_passiv
+  - type: stark
+    translation: {de: zugrunde gehen, en: perish}
+    parts: {infinitiv: zugrunde gehen, grundverb: gehen, wortgruppe: zugrunde, praeteritum: ging, partizip2: zugrunde gegangen}
+    slots: {hilfsverb: hv_sein}
+    absent: *ohne_passiv
+  - type: stark
+    translation: {de: abwesend sein, en: be absent}
+    parts: {infinitiv: abwesend sein, grundverb: sein, wortgruppe: abwesend, praesens_1sg: bin, praesens_2sg: bist, praesens_3sg: ist, praesens_1pl: sind, praesens_2pl: seid, praeteritum: war, partizip2: abwesend gewesen}
+    slots: {hilfsverb: hv_sein}
+    forms: {part.praes.akt: abwesend seiend}
+    absent: *ohne_passiv
+  - type: stark
+    translation: {de: da sein, en: be present}
+    parts: {infinitiv: da sein, grundverb: sein, wortgruppe: da, praesens_1sg: bin, praesens_2sg: bist, praesens_3sg: ist, praesens_1pl: sind, praesens_2pl: seid, praeteritum: war, partizip2: da gewesen}
+    slots: {hilfsverb: hv_sein}
+    forms: {part.praes.akt: da seiend}
+    absent: *ohne_passiv
+  - type: schwach
+    translation: {de: fehlen, en: be missing}
+    parts: {infinitiv: fehlen, partizip2: gefehlt}
+    absent: *ohne_passiv

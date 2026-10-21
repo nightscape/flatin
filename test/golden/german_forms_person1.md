@@ -8500,3 +8500,1163 @@
 | convocāre | konj.plusq.akt.1.pl | convocāvissēmus | wir zusammengerufen hätten |  |
 | convocāre | konj.plusq.pass.1.sg | convocātus essem | ich zusammengerufen worden wäre |  |
 | convocāre | konj.plusq.pass.1.pl | convocātī essēmus | wir zusammengerufen worden wären |  |
+| nārrāre | ind.praes.akt.1.sg | nārrō | ich erzähle |  |
+| nārrāre | ind.praes.akt.1.pl | nārrāmus | wir erzählen |  |
+| nārrāre | ind.praes.pass.1.sg | nārror | ich werde erzählt |  |
+| nārrāre | ind.praes.pass.1.pl | nārrāmur | wir werden erzählt |  |
+| nārrāre | ind.impf.akt.1.sg | nārrābam | ich erzählte |  |
+| nārrāre | ind.impf.akt.1.pl | nārrābāmus | wir erzählten |  |
+| nārrāre | ind.impf.pass.1.sg | nārrābar | ich wurde erzählt |  |
+| nārrāre | ind.impf.pass.1.pl | nārrābāmur | wir wurden erzählt |  |
+| nārrāre | ind.fut.akt.1.sg | nārrābō | ich werde erzählen |  |
+| nārrāre | ind.fut.akt.1.pl | nārrābimus | wir werden erzählen |  |
+| nārrāre | ind.fut.pass.1.sg | nārrābor | ich werde erzählt werden |  |
+| nārrāre | ind.fut.pass.1.pl | nārrābimur | wir werden erzählt werden |  |
+| nārrāre | ind.perf.akt.1.sg | nārrāvī | ich habe erzählt | ich erzählte |
+| nārrāre | ind.perf.akt.1.pl | nārrāvimus | wir haben erzählt | wir erzählten |
+| nārrāre | ind.perf.pass.1.sg | nārrātus sum | ich bin erzählt worden |  |
+| nārrāre | ind.perf.pass.1.pl | nārrātī sumus | wir sind erzählt worden |  |
+| nārrāre | ind.plusq.akt.1.sg | nārrāveram | ich hatte erzählt |  |
+| nārrāre | ind.plusq.akt.1.pl | nārrāverāmus | wir hatten erzählt |  |
+| nārrāre | ind.plusq.pass.1.sg | nārrātus eram | ich war erzählt worden |  |
+| nārrāre | ind.plusq.pass.1.pl | nārrātī erāmus | wir waren erzählt worden |  |
+| nārrāre | ind.fut2.akt.1.sg | nārrāverō | ich werde erzählt haben |  |
+| nārrāre | ind.fut2.akt.1.pl | nārrāverimus | wir werden erzählt haben |  |
+| nārrāre | ind.fut2.pass.1.sg | nārrātus erō | ich werde erzählt worden sein |  |
+| nārrāre | ind.fut2.pass.1.pl | nārrātī erimus | wir werden erzählt worden sein |  |
+| nārrāre | konj.praes.akt.1.sg | nārrem | ich erzähle |  |
+| nārrāre | konj.praes.akt.1.pl | nārrēmus | wir erzählen |  |
+| nārrāre | konj.praes.pass.1.sg | nārrer | ich erzählt werde |  |
+| nārrāre | konj.praes.pass.1.pl | nārrēmur | wir erzählt werden |  |
+| nārrāre | konj.impf.akt.1.sg | nārrārem | ich erzählen würde |  |
+| nārrāre | konj.impf.akt.1.pl | nārrārēmus | wir erzählen würden |  |
+| nārrāre | konj.impf.pass.1.sg | nārrārer | ich erzählt würde |  |
+| nārrāre | konj.impf.pass.1.pl | nārrārēmur | wir erzählt würden |  |
+| nārrāre | konj.perf.akt.1.sg | nārrāverim | ich erzählt habe |  |
+| nārrāre | konj.perf.akt.1.pl | nārrāverimus | wir erzählt haben |  |
+| nārrāre | konj.perf.pass.1.sg | nārrātus sim | ich erzählt worden bin |  |
+| nārrāre | konj.perf.pass.1.pl | nārrātī sīmus | wir erzählt worden sind |  |
+| nārrāre | konj.plusq.akt.1.sg | nārrāvissem | ich erzählt hätte |  |
+| nārrāre | konj.plusq.akt.1.pl | nārrāvissēmus | wir erzählt hätten |  |
+| nārrāre | konj.plusq.pass.1.sg | nārrātus essem | ich erzählt worden wäre |  |
+| nārrāre | konj.plusq.pass.1.pl | nārrātī essēmus | wir erzählt worden wären |  |
+| dēspērāre | ind.praes.akt.1.sg | dēspērō | ich verzweifle |  |
+| dēspērāre | ind.praes.akt.1.pl | dēspērāmus | wir verzweifeln |  |
+| dēspērāre | ind.praes.pass.1.sg | dēspēror | — |  |
+| dēspērāre | ind.praes.pass.1.pl | dēspērāmur | — |  |
+| dēspērāre | ind.impf.akt.1.sg | dēspērābam | ich verzweifelte |  |
+| dēspērāre | ind.impf.akt.1.pl | dēspērābāmus | wir verzweifelten |  |
+| dēspērāre | ind.impf.pass.1.sg | dēspērābar | — |  |
+| dēspērāre | ind.impf.pass.1.pl | dēspērābāmur | — |  |
+| dēspērāre | ind.fut.akt.1.sg | dēspērābō | ich werde verzweifeln |  |
+| dēspērāre | ind.fut.akt.1.pl | dēspērābimus | wir werden verzweifeln |  |
+| dēspērāre | ind.fut.pass.1.sg | dēspērābor | — |  |
+| dēspērāre | ind.fut.pass.1.pl | dēspērābimur | — |  |
+| dēspērāre | ind.perf.akt.1.sg | dēspērāvī | ich bin verzweifelt | ich verzweifelte |
+| dēspērāre | ind.perf.akt.1.pl | dēspērāvimus | wir sind verzweifelt | wir verzweifelten |
+| dēspērāre | ind.perf.pass.1.sg | dēspērātus sum | — |  |
+| dēspērāre | ind.perf.pass.1.pl | dēspērātī sumus | — |  |
+| dēspērāre | ind.plusq.akt.1.sg | dēspērāveram | ich war verzweifelt |  |
+| dēspērāre | ind.plusq.akt.1.pl | dēspērāverāmus | wir waren verzweifelt |  |
+| dēspērāre | ind.plusq.pass.1.sg | dēspērātus eram | — |  |
+| dēspērāre | ind.plusq.pass.1.pl | dēspērātī erāmus | — |  |
+| dēspērāre | ind.fut2.akt.1.sg | dēspērāverō | ich werde verzweifelt sein |  |
+| dēspērāre | ind.fut2.akt.1.pl | dēspērāverimus | wir werden verzweifelt sein |  |
+| dēspērāre | ind.fut2.pass.1.sg | dēspērātus erō | — |  |
+| dēspērāre | ind.fut2.pass.1.pl | dēspērātī erimus | — |  |
+| dēspērāre | konj.praes.akt.1.sg | dēspērem | ich verzweifle |  |
+| dēspērāre | konj.praes.akt.1.pl | dēspērēmus | wir verzweifeln |  |
+| dēspērāre | konj.praes.pass.1.sg | dēspērer | — |  |
+| dēspērāre | konj.praes.pass.1.pl | dēspērēmur | — |  |
+| dēspērāre | konj.impf.akt.1.sg | dēspērārem | ich verzweifeln würde |  |
+| dēspērāre | konj.impf.akt.1.pl | dēspērārēmus | wir verzweifeln würden |  |
+| dēspērāre | konj.impf.pass.1.sg | dēspērārer | — |  |
+| dēspērāre | konj.impf.pass.1.pl | dēspērārēmur | — |  |
+| dēspērāre | konj.perf.akt.1.sg | dēspērāverim | ich verzweifelt bin |  |
+| dēspērāre | konj.perf.akt.1.pl | dēspērāverimus | wir verzweifelt sind |  |
+| dēspērāre | konj.perf.pass.1.sg | dēspērātus sim | — |  |
+| dēspērāre | konj.perf.pass.1.pl | dēspērātī sīmus | — |  |
+| dēspērāre | konj.plusq.akt.1.sg | dēspērāvissem | ich verzweifelt wäre |  |
+| dēspērāre | konj.plusq.akt.1.pl | dēspērāvissēmus | wir verzweifelt wären |  |
+| dēspērāre | konj.plusq.pass.1.sg | dēspērātus essem | — |  |
+| dēspērāre | konj.plusq.pass.1.pl | dēspērātī essēmus | — |  |
+| turbāre | ind.praes.akt.1.sg | turbō | ich verwirre |  |
+| turbāre | ind.praes.akt.1.pl | turbāmus | wir verwirren |  |
+| turbāre | ind.praes.pass.1.sg | turbor | ich werde verwirrt |  |
+| turbāre | ind.praes.pass.1.pl | turbāmur | wir werden verwirrt |  |
+| turbāre | ind.impf.akt.1.sg | turbābam | ich verwirrte |  |
+| turbāre | ind.impf.akt.1.pl | turbābāmus | wir verwirrten |  |
+| turbāre | ind.impf.pass.1.sg | turbābar | ich wurde verwirrt |  |
+| turbāre | ind.impf.pass.1.pl | turbābāmur | wir wurden verwirrt |  |
+| turbāre | ind.fut.akt.1.sg | turbābō | ich werde verwirren |  |
+| turbāre | ind.fut.akt.1.pl | turbābimus | wir werden verwirren |  |
+| turbāre | ind.fut.pass.1.sg | turbābor | ich werde verwirrt werden |  |
+| turbāre | ind.fut.pass.1.pl | turbābimur | wir werden verwirrt werden |  |
+| turbāre | ind.perf.akt.1.sg | turbāvī | ich habe verwirrt | ich verwirrte |
+| turbāre | ind.perf.akt.1.pl | turbāvimus | wir haben verwirrt | wir verwirrten |
+| turbāre | ind.perf.pass.1.sg | turbātus sum | ich bin verwirrt worden |  |
+| turbāre | ind.perf.pass.1.pl | turbātī sumus | wir sind verwirrt worden |  |
+| turbāre | ind.plusq.akt.1.sg | turbāveram | ich hatte verwirrt |  |
+| turbāre | ind.plusq.akt.1.pl | turbāverāmus | wir hatten verwirrt |  |
+| turbāre | ind.plusq.pass.1.sg | turbātus eram | ich war verwirrt worden |  |
+| turbāre | ind.plusq.pass.1.pl | turbātī erāmus | wir waren verwirrt worden |  |
+| turbāre | ind.fut2.akt.1.sg | turbāverō | ich werde verwirrt haben |  |
+| turbāre | ind.fut2.akt.1.pl | turbāverimus | wir werden verwirrt haben |  |
+| turbāre | ind.fut2.pass.1.sg | turbātus erō | ich werde verwirrt worden sein |  |
+| turbāre | ind.fut2.pass.1.pl | turbātī erimus | wir werden verwirrt worden sein |  |
+| turbāre | konj.praes.akt.1.sg | turbem | ich verwirre |  |
+| turbāre | konj.praes.akt.1.pl | turbēmus | wir verwirren |  |
+| turbāre | konj.praes.pass.1.sg | turber | ich verwirrt werde |  |
+| turbāre | konj.praes.pass.1.pl | turbēmur | wir verwirrt werden |  |
+| turbāre | konj.impf.akt.1.sg | turbārem | ich verwirren würde |  |
+| turbāre | konj.impf.akt.1.pl | turbārēmus | wir verwirren würden |  |
+| turbāre | konj.impf.pass.1.sg | turbārer | ich verwirrt würde |  |
+| turbāre | konj.impf.pass.1.pl | turbārēmur | wir verwirrt würden |  |
+| turbāre | konj.perf.akt.1.sg | turbāverim | ich verwirrt habe |  |
+| turbāre | konj.perf.akt.1.pl | turbāverimus | wir verwirrt haben |  |
+| turbāre | konj.perf.pass.1.sg | turbātus sim | ich verwirrt worden bin |  |
+| turbāre | konj.perf.pass.1.pl | turbātī sīmus | wir verwirrt worden sind |  |
+| turbāre | konj.plusq.akt.1.sg | turbāvissem | ich verwirrt hätte |  |
+| turbāre | konj.plusq.akt.1.pl | turbāvissēmus | wir verwirrt hätten |  |
+| turbāre | konj.plusq.pass.1.sg | turbātus essem | ich verwirrt worden wäre |  |
+| turbāre | konj.plusq.pass.1.pl | turbātī essēmus | wir verwirrt worden wären |  |
+| perturbāre | ind.praes.akt.1.sg | perturbō | ich verwirre |  |
+| perturbāre | ind.praes.akt.1.pl | perturbāmus | wir verwirren |  |
+| perturbāre | ind.praes.pass.1.sg | perturbor | ich werde verwirrt |  |
+| perturbāre | ind.praes.pass.1.pl | perturbāmur | wir werden verwirrt |  |
+| perturbāre | ind.impf.akt.1.sg | perturbābam | ich verwirrte |  |
+| perturbāre | ind.impf.akt.1.pl | perturbābāmus | wir verwirrten |  |
+| perturbāre | ind.impf.pass.1.sg | perturbābar | ich wurde verwirrt |  |
+| perturbāre | ind.impf.pass.1.pl | perturbābāmur | wir wurden verwirrt |  |
+| perturbāre | ind.fut.akt.1.sg | perturbābō | ich werde verwirren |  |
+| perturbāre | ind.fut.akt.1.pl | perturbābimus | wir werden verwirren |  |
+| perturbāre | ind.fut.pass.1.sg | perturbābor | ich werde verwirrt werden |  |
+| perturbāre | ind.fut.pass.1.pl | perturbābimur | wir werden verwirrt werden |  |
+| perturbāre | ind.perf.akt.1.sg | perturbāvī | ich habe verwirrt | ich verwirrte |
+| perturbāre | ind.perf.akt.1.pl | perturbāvimus | wir haben verwirrt | wir verwirrten |
+| perturbāre | ind.perf.pass.1.sg | perturbātus sum | ich bin verwirrt worden |  |
+| perturbāre | ind.perf.pass.1.pl | perturbātī sumus | wir sind verwirrt worden |  |
+| perturbāre | ind.plusq.akt.1.sg | perturbāveram | ich hatte verwirrt |  |
+| perturbāre | ind.plusq.akt.1.pl | perturbāverāmus | wir hatten verwirrt |  |
+| perturbāre | ind.plusq.pass.1.sg | perturbātus eram | ich war verwirrt worden |  |
+| perturbāre | ind.plusq.pass.1.pl | perturbātī erāmus | wir waren verwirrt worden |  |
+| perturbāre | ind.fut2.akt.1.sg | perturbāverō | ich werde verwirrt haben |  |
+| perturbāre | ind.fut2.akt.1.pl | perturbāverimus | wir werden verwirrt haben |  |
+| perturbāre | ind.fut2.pass.1.sg | perturbātus erō | ich werde verwirrt worden sein |  |
+| perturbāre | ind.fut2.pass.1.pl | perturbātī erimus | wir werden verwirrt worden sein |  |
+| perturbāre | konj.praes.akt.1.sg | perturbem | ich verwirre |  |
+| perturbāre | konj.praes.akt.1.pl | perturbēmus | wir verwirren |  |
+| perturbāre | konj.praes.pass.1.sg | perturber | ich verwirrt werde |  |
+| perturbāre | konj.praes.pass.1.pl | perturbēmur | wir verwirrt werden |  |
+| perturbāre | konj.impf.akt.1.sg | perturbārem | ich verwirren würde |  |
+| perturbāre | konj.impf.akt.1.pl | perturbārēmus | wir verwirren würden |  |
+| perturbāre | konj.impf.pass.1.sg | perturbārer | ich verwirrt würde |  |
+| perturbāre | konj.impf.pass.1.pl | perturbārēmur | wir verwirrt würden |  |
+| perturbāre | konj.perf.akt.1.sg | perturbāverim | ich verwirrt habe |  |
+| perturbāre | konj.perf.akt.1.pl | perturbāverimus | wir verwirrt haben |  |
+| perturbāre | konj.perf.pass.1.sg | perturbātus sim | ich verwirrt worden bin |  |
+| perturbāre | konj.perf.pass.1.pl | perturbātī sīmus | wir verwirrt worden sind |  |
+| perturbāre | konj.plusq.akt.1.sg | perturbāvissem | ich verwirrt hätte |  |
+| perturbāre | konj.plusq.akt.1.pl | perturbāvissēmus | wir verwirrt hätten |  |
+| perturbāre | konj.plusq.pass.1.sg | perturbātus essem | ich verwirrt worden wäre |  |
+| perturbāre | konj.plusq.pass.1.pl | perturbātī essēmus | wir verwirrt worden wären |  |
+| cōgitāre | ind.praes.akt.1.sg | cōgitō | ich denke nach |  |
+| cōgitāre | ind.praes.akt.1.pl | cōgitāmus | wir denken nach |  |
+| cōgitāre | ind.praes.pass.1.sg | cōgitor | — |  |
+| cōgitāre | ind.praes.pass.1.pl | cōgitāmur | — |  |
+| cōgitāre | ind.impf.akt.1.sg | cōgitābam | ich dachte nach |  |
+| cōgitāre | ind.impf.akt.1.pl | cōgitābāmus | wir dachten nach |  |
+| cōgitāre | ind.impf.pass.1.sg | cōgitābar | — |  |
+| cōgitāre | ind.impf.pass.1.pl | cōgitābāmur | — |  |
+| cōgitāre | ind.fut.akt.1.sg | cōgitābō | ich werde nachdenken |  |
+| cōgitāre | ind.fut.akt.1.pl | cōgitābimus | wir werden nachdenken |  |
+| cōgitāre | ind.fut.pass.1.sg | cōgitābor | — |  |
+| cōgitāre | ind.fut.pass.1.pl | cōgitābimur | — |  |
+| cōgitāre | ind.perf.akt.1.sg | cōgitāvī | ich habe nachgedacht | ich dachte nach |
+| cōgitāre | ind.perf.akt.1.pl | cōgitāvimus | wir haben nachgedacht | wir dachten nach |
+| cōgitāre | ind.perf.pass.1.sg | cōgitātus sum | — |  |
+| cōgitāre | ind.perf.pass.1.pl | cōgitātī sumus | — |  |
+| cōgitāre | ind.plusq.akt.1.sg | cōgitāveram | ich hatte nachgedacht |  |
+| cōgitāre | ind.plusq.akt.1.pl | cōgitāverāmus | wir hatten nachgedacht |  |
+| cōgitāre | ind.plusq.pass.1.sg | cōgitātus eram | — |  |
+| cōgitāre | ind.plusq.pass.1.pl | cōgitātī erāmus | — |  |
+| cōgitāre | ind.fut2.akt.1.sg | cōgitāverō | ich werde nachgedacht haben |  |
+| cōgitāre | ind.fut2.akt.1.pl | cōgitāverimus | wir werden nachgedacht haben |  |
+| cōgitāre | ind.fut2.pass.1.sg | cōgitātus erō | — |  |
+| cōgitāre | ind.fut2.pass.1.pl | cōgitātī erimus | — |  |
+| cōgitāre | konj.praes.akt.1.sg | cōgitem | ich nachdenke |  |
+| cōgitāre | konj.praes.akt.1.pl | cōgitēmus | wir nachdenken |  |
+| cōgitāre | konj.praes.pass.1.sg | cōgiter | — |  |
+| cōgitāre | konj.praes.pass.1.pl | cōgitēmur | — |  |
+| cōgitāre | konj.impf.akt.1.sg | cōgitārem | ich nachdenken würde | ich nachdächte |
+| cōgitāre | konj.impf.akt.1.pl | cōgitārēmus | wir nachdenken würden | wir nachdächten |
+| cōgitāre | konj.impf.pass.1.sg | cōgitārer | — |  |
+| cōgitāre | konj.impf.pass.1.pl | cōgitārēmur | — |  |
+| cōgitāre | konj.perf.akt.1.sg | cōgitāverim | ich nachgedacht habe |  |
+| cōgitāre | konj.perf.akt.1.pl | cōgitāverimus | wir nachgedacht haben |  |
+| cōgitāre | konj.perf.pass.1.sg | cōgitātus sim | — |  |
+| cōgitāre | konj.perf.pass.1.pl | cōgitātī sīmus | — |  |
+| cōgitāre | konj.plusq.akt.1.sg | cōgitāvissem | ich nachgedacht hätte |  |
+| cōgitāre | konj.plusq.akt.1.pl | cōgitāvissēmus | wir nachgedacht hätten |  |
+| cōgitāre | konj.plusq.pass.1.sg | cōgitātus essem | — |  |
+| cōgitāre | konj.plusq.pass.1.pl | cōgitātī essēmus | — |  |
+| vexāre | ind.praes.akt.1.sg | vexō | ich quäle |  |
+| vexāre | ind.praes.akt.1.pl | vexāmus | wir quälen |  |
+| vexāre | ind.praes.pass.1.sg | vexor | ich werde gequält |  |
+| vexāre | ind.praes.pass.1.pl | vexāmur | wir werden gequält |  |
+| vexāre | ind.impf.akt.1.sg | vexābam | ich quälte |  |
+| vexāre | ind.impf.akt.1.pl | vexābāmus | wir quälten |  |
+| vexāre | ind.impf.pass.1.sg | vexābar | ich wurde gequält |  |
+| vexāre | ind.impf.pass.1.pl | vexābāmur | wir wurden gequält |  |
+| vexāre | ind.fut.akt.1.sg | vexābō | ich werde quälen |  |
+| vexāre | ind.fut.akt.1.pl | vexābimus | wir werden quälen |  |
+| vexāre | ind.fut.pass.1.sg | vexābor | ich werde gequält werden |  |
+| vexāre | ind.fut.pass.1.pl | vexābimur | wir werden gequält werden |  |
+| vexāre | ind.perf.akt.1.sg | vexāvī | ich habe gequält | ich quälte |
+| vexāre | ind.perf.akt.1.pl | vexāvimus | wir haben gequält | wir quälten |
+| vexāre | ind.perf.pass.1.sg | vexātus sum | ich bin gequält worden |  |
+| vexāre | ind.perf.pass.1.pl | vexātī sumus | wir sind gequält worden |  |
+| vexāre | ind.plusq.akt.1.sg | vexāveram | ich hatte gequält |  |
+| vexāre | ind.plusq.akt.1.pl | vexāverāmus | wir hatten gequält |  |
+| vexāre | ind.plusq.pass.1.sg | vexātus eram | ich war gequält worden |  |
+| vexāre | ind.plusq.pass.1.pl | vexātī erāmus | wir waren gequält worden |  |
+| vexāre | ind.fut2.akt.1.sg | vexāverō | ich werde gequält haben |  |
+| vexāre | ind.fut2.akt.1.pl | vexāverimus | wir werden gequält haben |  |
+| vexāre | ind.fut2.pass.1.sg | vexātus erō | ich werde gequält worden sein |  |
+| vexāre | ind.fut2.pass.1.pl | vexātī erimus | wir werden gequält worden sein |  |
+| vexāre | konj.praes.akt.1.sg | vexem | ich quäle |  |
+| vexāre | konj.praes.akt.1.pl | vexēmus | wir quälen |  |
+| vexāre | konj.praes.pass.1.sg | vexer | ich gequält werde |  |
+| vexāre | konj.praes.pass.1.pl | vexēmur | wir gequält werden |  |
+| vexāre | konj.impf.akt.1.sg | vexārem | ich quälen würde |  |
+| vexāre | konj.impf.akt.1.pl | vexārēmus | wir quälen würden |  |
+| vexāre | konj.impf.pass.1.sg | vexārer | ich gequält würde |  |
+| vexāre | konj.impf.pass.1.pl | vexārēmur | wir gequält würden |  |
+| vexāre | konj.perf.akt.1.sg | vexāverim | ich gequält habe |  |
+| vexāre | konj.perf.akt.1.pl | vexāverimus | wir gequält haben |  |
+| vexāre | konj.perf.pass.1.sg | vexātus sim | ich gequält worden bin |  |
+| vexāre | konj.perf.pass.1.pl | vexātī sīmus | wir gequält worden sind |  |
+| vexāre | konj.plusq.akt.1.sg | vexāvissem | ich gequält hätte |  |
+| vexāre | konj.plusq.akt.1.pl | vexāvissēmus | wir gequält hätten |  |
+| vexāre | konj.plusq.pass.1.sg | vexātus essem | ich gequält worden wäre |  |
+| vexāre | konj.plusq.pass.1.pl | vexātī essēmus | wir gequält worden wären |  |
+| īgnōrāre | ind.praes.akt.1.sg | īgnōrō | ich kenne nicht |  |
+| īgnōrāre | ind.praes.akt.1.pl | īgnōrāmus | wir kennen nicht |  |
+| īgnōrāre | ind.praes.pass.1.sg | īgnōror | ich werde nicht gekannt |  |
+| īgnōrāre | ind.praes.pass.1.pl | īgnōrāmur | wir werden nicht gekannt |  |
+| īgnōrāre | ind.impf.akt.1.sg | īgnōrābam | ich kannte nicht |  |
+| īgnōrāre | ind.impf.akt.1.pl | īgnōrābāmus | wir kannten nicht |  |
+| īgnōrāre | ind.impf.pass.1.sg | īgnōrābar | ich wurde nicht gekannt |  |
+| īgnōrāre | ind.impf.pass.1.pl | īgnōrābāmur | wir wurden nicht gekannt |  |
+| īgnōrāre | ind.fut.akt.1.sg | īgnōrābō | ich werde nicht kennen |  |
+| īgnōrāre | ind.fut.akt.1.pl | īgnōrābimus | wir werden nicht kennen |  |
+| īgnōrāre | ind.fut.pass.1.sg | īgnōrābor | ich werde nicht gekannt werden |  |
+| īgnōrāre | ind.fut.pass.1.pl | īgnōrābimur | wir werden nicht gekannt werden |  |
+| īgnōrāre | ind.perf.akt.1.sg | īgnōrāvī | ich habe nicht gekannt | ich kannte nicht |
+| īgnōrāre | ind.perf.akt.1.pl | īgnōrāvimus | wir haben nicht gekannt | wir kannten nicht |
+| īgnōrāre | ind.perf.pass.1.sg | īgnōrātus sum | ich bin nicht gekannt worden |  |
+| īgnōrāre | ind.perf.pass.1.pl | īgnōrātī sumus | wir sind nicht gekannt worden |  |
+| īgnōrāre | ind.plusq.akt.1.sg | īgnōrāveram | ich hatte nicht gekannt |  |
+| īgnōrāre | ind.plusq.akt.1.pl | īgnōrāverāmus | wir hatten nicht gekannt |  |
+| īgnōrāre | ind.plusq.pass.1.sg | īgnōrātus eram | ich war nicht gekannt worden |  |
+| īgnōrāre | ind.plusq.pass.1.pl | īgnōrātī erāmus | wir waren nicht gekannt worden |  |
+| īgnōrāre | ind.fut2.akt.1.sg | īgnōrāverō | ich werde nicht gekannt haben |  |
+| īgnōrāre | ind.fut2.akt.1.pl | īgnōrāverimus | wir werden nicht gekannt haben |  |
+| īgnōrāre | ind.fut2.pass.1.sg | īgnōrātus erō | ich werde nicht gekannt worden sein |  |
+| īgnōrāre | ind.fut2.pass.1.pl | īgnōrātī erimus | wir werden nicht gekannt worden sein |  |
+| īgnōrāre | konj.praes.akt.1.sg | īgnōrem | ich nicht kenne |  |
+| īgnōrāre | konj.praes.akt.1.pl | īgnōrēmus | wir nicht kennen |  |
+| īgnōrāre | konj.praes.pass.1.sg | īgnōrer | ich nicht gekannt werde |  |
+| īgnōrāre | konj.praes.pass.1.pl | īgnōrēmur | wir nicht gekannt werden |  |
+| īgnōrāre | konj.impf.akt.1.sg | īgnōrārem | ich nicht kennen würde | ich nicht kennte |
+| īgnōrāre | konj.impf.akt.1.pl | īgnōrārēmus | wir nicht kennen würden | wir nicht kennten |
+| īgnōrāre | konj.impf.pass.1.sg | īgnōrārer | ich nicht gekannt würde |  |
+| īgnōrāre | konj.impf.pass.1.pl | īgnōrārēmur | wir nicht gekannt würden |  |
+| īgnōrāre | konj.perf.akt.1.sg | īgnōrāverim | ich nicht gekannt habe |  |
+| īgnōrāre | konj.perf.akt.1.pl | īgnōrāverimus | wir nicht gekannt haben |  |
+| īgnōrāre | konj.perf.pass.1.sg | īgnōrātus sim | ich nicht gekannt worden bin |  |
+| īgnōrāre | konj.perf.pass.1.pl | īgnōrātī sīmus | wir nicht gekannt worden sind |  |
+| īgnōrāre | konj.plusq.akt.1.sg | īgnōrāvissem | ich nicht gekannt hätte |  |
+| īgnōrāre | konj.plusq.akt.1.pl | īgnōrāvissēmus | wir nicht gekannt hätten |  |
+| īgnōrāre | konj.plusq.pass.1.sg | īgnōrātus essem | ich nicht gekannt worden wäre |  |
+| īgnōrāre | konj.plusq.pass.1.pl | īgnōrātī essēmus | wir nicht gekannt worden wären |  |
+| violāre | ind.praes.akt.1.sg | violō | ich verletze |  |
+| violāre | ind.praes.akt.1.pl | violāmus | wir verletzen |  |
+| violāre | ind.praes.pass.1.sg | violor | ich werde verletzt |  |
+| violāre | ind.praes.pass.1.pl | violāmur | wir werden verletzt |  |
+| violāre | ind.impf.akt.1.sg | violābam | ich verletzte |  |
+| violāre | ind.impf.akt.1.pl | violābāmus | wir verletzten |  |
+| violāre | ind.impf.pass.1.sg | violābar | ich wurde verletzt |  |
+| violāre | ind.impf.pass.1.pl | violābāmur | wir wurden verletzt |  |
+| violāre | ind.fut.akt.1.sg | violābō | ich werde verletzen |  |
+| violāre | ind.fut.akt.1.pl | violābimus | wir werden verletzen |  |
+| violāre | ind.fut.pass.1.sg | violābor | ich werde verletzt werden |  |
+| violāre | ind.fut.pass.1.pl | violābimur | wir werden verletzt werden |  |
+| violāre | ind.perf.akt.1.sg | violāvī | ich habe verletzt | ich verletzte |
+| violāre | ind.perf.akt.1.pl | violāvimus | wir haben verletzt | wir verletzten |
+| violāre | ind.perf.pass.1.sg | violātus sum | ich bin verletzt worden |  |
+| violāre | ind.perf.pass.1.pl | violātī sumus | wir sind verletzt worden |  |
+| violāre | ind.plusq.akt.1.sg | violāveram | ich hatte verletzt |  |
+| violāre | ind.plusq.akt.1.pl | violāverāmus | wir hatten verletzt |  |
+| violāre | ind.plusq.pass.1.sg | violātus eram | ich war verletzt worden |  |
+| violāre | ind.plusq.pass.1.pl | violātī erāmus | wir waren verletzt worden |  |
+| violāre | ind.fut2.akt.1.sg | violāverō | ich werde verletzt haben |  |
+| violāre | ind.fut2.akt.1.pl | violāverimus | wir werden verletzt haben |  |
+| violāre | ind.fut2.pass.1.sg | violātus erō | ich werde verletzt worden sein |  |
+| violāre | ind.fut2.pass.1.pl | violātī erimus | wir werden verletzt worden sein |  |
+| violāre | konj.praes.akt.1.sg | violem | ich verletze |  |
+| violāre | konj.praes.akt.1.pl | violēmus | wir verletzen |  |
+| violāre | konj.praes.pass.1.sg | violer | ich verletzt werde |  |
+| violāre | konj.praes.pass.1.pl | violēmur | wir verletzt werden |  |
+| violāre | konj.impf.akt.1.sg | violārem | ich verletzen würde |  |
+| violāre | konj.impf.akt.1.pl | violārēmus | wir verletzen würden |  |
+| violāre | konj.impf.pass.1.sg | violārer | ich verletzt würde |  |
+| violāre | konj.impf.pass.1.pl | violārēmur | wir verletzt würden |  |
+| violāre | konj.perf.akt.1.sg | violāverim | ich verletzt habe |  |
+| violāre | konj.perf.akt.1.pl | violāverimus | wir verletzt haben |  |
+| violāre | konj.perf.pass.1.sg | violātus sim | ich verletzt worden bin |  |
+| violāre | konj.perf.pass.1.pl | violātī sīmus | wir verletzt worden sind |  |
+| violāre | konj.plusq.akt.1.sg | violāvissem | ich verletzt hätte |  |
+| violāre | konj.plusq.akt.1.pl | violāvissēmus | wir verletzt hätten |  |
+| violāre | konj.plusq.pass.1.sg | violātus essem | ich verletzt worden wäre |  |
+| violāre | konj.plusq.pass.1.pl | violātī essēmus | wir verletzt worden wären |  |
+| īnstāre | ind.praes.akt.1.sg | īnstō | ich stehe bevor |  |
+| īnstāre | ind.praes.akt.1.pl | īnstāmus | wir stehen bevor |  |
+| īnstāre | ind.impf.akt.1.sg | īnstābam | ich stand bevor |  |
+| īnstāre | ind.impf.akt.1.pl | īnstābāmus | wir standen bevor |  |
+| īnstāre | ind.fut.akt.1.sg | īnstābō | ich werde bevorstehen |  |
+| īnstāre | ind.fut.akt.1.pl | īnstābimus | wir werden bevorstehen |  |
+| īnstāre | ind.perf.akt.1.sg | īnstitī | ich habe bevorgestanden | ich stand bevor |
+| īnstāre | ind.perf.akt.1.pl | īnstitimus | wir haben bevorgestanden | wir standen bevor |
+| īnstāre | ind.plusq.akt.1.sg | īnstiteram | ich hatte bevorgestanden |  |
+| īnstāre | ind.plusq.akt.1.pl | īnstiterāmus | wir hatten bevorgestanden |  |
+| īnstāre | ind.fut2.akt.1.sg | īnstiterō | ich werde bevorgestanden haben |  |
+| īnstāre | ind.fut2.akt.1.pl | īnstiterimus | wir werden bevorgestanden haben |  |
+| īnstāre | konj.praes.akt.1.sg | īnstem | ich bevorstehe |  |
+| īnstāre | konj.praes.akt.1.pl | īnstēmus | wir bevorstehen |  |
+| īnstāre | konj.impf.akt.1.sg | īnstārem | ich bevorstehen würde |  |
+| īnstāre | konj.impf.akt.1.pl | īnstārēmus | wir bevorstehen würden |  |
+| īnstāre | konj.perf.akt.1.sg | īnstiterim | ich bevorgestanden habe |  |
+| īnstāre | konj.perf.akt.1.pl | īnstiterimus | wir bevorgestanden haben |  |
+| īnstāre | konj.plusq.akt.1.sg | īnstitissem | ich bevorgestanden hätte |  |
+| īnstāre | konj.plusq.akt.1.pl | īnstitissēmus | wir bevorgestanden hätten |  |
+| putāre | ind.praes.akt.1.sg | putō | ich glaube |  |
+| putāre | ind.praes.akt.1.pl | putāmus | wir glauben |  |
+| putāre | ind.praes.pass.1.sg | putor | ich werde geglaubt |  |
+| putāre | ind.praes.pass.1.pl | putāmur | wir werden geglaubt |  |
+| putāre | ind.impf.akt.1.sg | putābam | ich glaubte |  |
+| putāre | ind.impf.akt.1.pl | putābāmus | wir glaubten |  |
+| putāre | ind.impf.pass.1.sg | putābar | ich wurde geglaubt |  |
+| putāre | ind.impf.pass.1.pl | putābāmur | wir wurden geglaubt |  |
+| putāre | ind.fut.akt.1.sg | putābō | ich werde glauben |  |
+| putāre | ind.fut.akt.1.pl | putābimus | wir werden glauben |  |
+| putāre | ind.fut.pass.1.sg | putābor | ich werde geglaubt werden |  |
+| putāre | ind.fut.pass.1.pl | putābimur | wir werden geglaubt werden |  |
+| putāre | ind.perf.akt.1.sg | putāvī | ich habe geglaubt | ich glaubte |
+| putāre | ind.perf.akt.1.pl | putāvimus | wir haben geglaubt | wir glaubten |
+| putāre | ind.perf.pass.1.sg | putātus sum | ich bin geglaubt worden |  |
+| putāre | ind.perf.pass.1.pl | putātī sumus | wir sind geglaubt worden |  |
+| putāre | ind.plusq.akt.1.sg | putāveram | ich hatte geglaubt |  |
+| putāre | ind.plusq.akt.1.pl | putāverāmus | wir hatten geglaubt |  |
+| putāre | ind.plusq.pass.1.sg | putātus eram | ich war geglaubt worden |  |
+| putāre | ind.plusq.pass.1.pl | putātī erāmus | wir waren geglaubt worden |  |
+| putāre | ind.fut2.akt.1.sg | putāverō | ich werde geglaubt haben |  |
+| putāre | ind.fut2.akt.1.pl | putāverimus | wir werden geglaubt haben |  |
+| putāre | ind.fut2.pass.1.sg | putātus erō | ich werde geglaubt worden sein |  |
+| putāre | ind.fut2.pass.1.pl | putātī erimus | wir werden geglaubt worden sein |  |
+| putāre | konj.praes.akt.1.sg | putem | ich glaube |  |
+| putāre | konj.praes.akt.1.pl | putēmus | wir glauben |  |
+| putāre | konj.praes.pass.1.sg | puter | ich geglaubt werde |  |
+| putāre | konj.praes.pass.1.pl | putēmur | wir geglaubt werden |  |
+| putāre | konj.impf.akt.1.sg | putārem | ich glauben würde |  |
+| putāre | konj.impf.akt.1.pl | putārēmus | wir glauben würden |  |
+| putāre | konj.impf.pass.1.sg | putārer | ich geglaubt würde |  |
+| putāre | konj.impf.pass.1.pl | putārēmur | wir geglaubt würden |  |
+| putāre | konj.perf.akt.1.sg | putāverim | ich geglaubt habe |  |
+| putāre | konj.perf.akt.1.pl | putāverimus | wir geglaubt haben |  |
+| putāre | konj.perf.pass.1.sg | putātus sim | ich geglaubt worden bin |  |
+| putāre | konj.perf.pass.1.pl | putātī sīmus | wir geglaubt worden sind |  |
+| putāre | konj.plusq.akt.1.sg | putāvissem | ich geglaubt hätte |  |
+| putāre | konj.plusq.akt.1.pl | putāvissēmus | wir geglaubt hätten |  |
+| putāre | konj.plusq.pass.1.sg | putātus essem | ich geglaubt worden wäre |  |
+| putāre | konj.plusq.pass.1.pl | putātī essēmus | wir geglaubt worden wären |  |
+| latēre | ind.praes.akt.1.sg | lateō | ich bin verborgen |  |
+| latēre | ind.praes.akt.1.pl | latēmus | wir sind verborgen |  |
+| latēre | ind.impf.akt.1.sg | latēbam | ich war verborgen |  |
+| latēre | ind.impf.akt.1.pl | latēbāmus | wir waren verborgen |  |
+| latēre | ind.fut.akt.1.sg | latēbō | ich werde verborgen sein |  |
+| latēre | ind.fut.akt.1.pl | latēbimus | wir werden verborgen sein |  |
+| latēre | ind.perf.akt.1.sg | latuī | ich bin verborgen gewesen | ich war verborgen |
+| latēre | ind.perf.akt.1.pl | latuimus | wir sind verborgen gewesen | wir waren verborgen |
+| latēre | ind.plusq.akt.1.sg | latueram | ich war verborgen gewesen |  |
+| latēre | ind.plusq.akt.1.pl | latuerāmus | wir waren verborgen gewesen |  |
+| latēre | ind.fut2.akt.1.sg | latuerō | ich werde verborgen gewesen sein |  |
+| latēre | ind.fut2.akt.1.pl | latuerimus | wir werden verborgen gewesen sein |  |
+| latēre | konj.praes.akt.1.sg | lateam | ich verborgen bin |  |
+| latēre | konj.praes.akt.1.pl | lateāmus | wir verborgen sind |  |
+| latēre | konj.impf.akt.1.sg | latērem | ich verborgen sein würde |  |
+| latēre | konj.impf.akt.1.pl | latērēmus | wir verborgen sein würden |  |
+| latēre | konj.perf.akt.1.sg | latuerim | ich verborgen gewesen bin |  |
+| latēre | konj.perf.akt.1.pl | latuerimus | wir verborgen gewesen sind |  |
+| latēre | konj.plusq.akt.1.sg | latuissem | ich verborgen gewesen wäre |  |
+| latēre | konj.plusq.akt.1.pl | latuissēmus | wir verborgen gewesen wären |  |
+| dēbēre | ind.praes.akt.1.sg | dēbeō | ich muss |  |
+| dēbēre | ind.praes.akt.1.pl | dēbēmus | wir müssen |  |
+| dēbēre | ind.praes.pass.1.sg | dēbeor | — |  |
+| dēbēre | ind.praes.pass.1.pl | dēbēmur | — |  |
+| dēbēre | ind.impf.akt.1.sg | dēbēbam | ich musste |  |
+| dēbēre | ind.impf.akt.1.pl | dēbēbāmus | wir mussten |  |
+| dēbēre | ind.impf.pass.1.sg | dēbēbar | — |  |
+| dēbēre | ind.impf.pass.1.pl | dēbēbāmur | — |  |
+| dēbēre | ind.fut.akt.1.sg | dēbēbō | ich werde müssen |  |
+| dēbēre | ind.fut.akt.1.pl | dēbēbimus | wir werden müssen |  |
+| dēbēre | ind.fut.pass.1.sg | dēbēbor | — |  |
+| dēbēre | ind.fut.pass.1.pl | dēbēbimur | — |  |
+| dēbēre | ind.perf.akt.1.sg | dēbuī | ich habe gemusst | ich musste |
+| dēbēre | ind.perf.akt.1.pl | dēbuimus | wir haben gemusst | wir mussten |
+| dēbēre | ind.perf.pass.1.sg | dēbitus sum | — |  |
+| dēbēre | ind.perf.pass.1.pl | dēbitī sumus | — |  |
+| dēbēre | ind.plusq.akt.1.sg | dēbueram | ich hatte gemusst |  |
+| dēbēre | ind.plusq.akt.1.pl | dēbuerāmus | wir hatten gemusst |  |
+| dēbēre | ind.plusq.pass.1.sg | dēbitus eram | — |  |
+| dēbēre | ind.plusq.pass.1.pl | dēbitī erāmus | — |  |
+| dēbēre | ind.fut2.akt.1.sg | dēbuerō | ich werde gemusst haben |  |
+| dēbēre | ind.fut2.akt.1.pl | dēbuerimus | wir werden gemusst haben |  |
+| dēbēre | ind.fut2.pass.1.sg | dēbitus erō | — |  |
+| dēbēre | ind.fut2.pass.1.pl | dēbitī erimus | — |  |
+| dēbēre | konj.praes.akt.1.sg | dēbeam | ich muss |  |
+| dēbēre | konj.praes.akt.1.pl | dēbeāmus | wir müssen |  |
+| dēbēre | konj.praes.pass.1.sg | dēbear | — |  |
+| dēbēre | konj.praes.pass.1.pl | dēbeāmur | — |  |
+| dēbēre | konj.impf.akt.1.sg | dēbērem | ich müssen würde | ich müsste |
+| dēbēre | konj.impf.akt.1.pl | dēbērēmus | wir müssen würden | wir müssten |
+| dēbēre | konj.impf.pass.1.sg | dēbērer | — |  |
+| dēbēre | konj.impf.pass.1.pl | dēbērēmur | — |  |
+| dēbēre | konj.perf.akt.1.sg | dēbuerim | ich gemusst habe |  |
+| dēbēre | konj.perf.akt.1.pl | dēbuerimus | wir gemusst haben |  |
+| dēbēre | konj.perf.pass.1.sg | dēbitus sim | — |  |
+| dēbēre | konj.perf.pass.1.pl | dēbitī sīmus | — |  |
+| dēbēre | konj.plusq.akt.1.sg | dēbuissem | ich gemusst hätte |  |
+| dēbēre | konj.plusq.akt.1.pl | dēbuissēmus | wir gemusst hätten |  |
+| dēbēre | konj.plusq.pass.1.sg | dēbitus essem | — |  |
+| dēbēre | konj.plusq.pass.1.pl | dēbitī essēmus | — |  |
+| carēre | ind.praes.akt.1.sg | careō | ich habe nicht |  |
+| carēre | ind.praes.akt.1.pl | carēmus | wir haben nicht |  |
+| carēre | ind.impf.akt.1.sg | carēbam | ich hatte nicht |  |
+| carēre | ind.impf.akt.1.pl | carēbāmus | wir hatten nicht |  |
+| carēre | ind.fut.akt.1.sg | carēbō | ich werde nicht haben |  |
+| carēre | ind.fut.akt.1.pl | carēbimus | wir werden nicht haben |  |
+| carēre | ind.perf.akt.1.sg | caruī | ich habe nicht gehabt | ich hatte nicht |
+| carēre | ind.perf.akt.1.pl | caruimus | wir haben nicht gehabt | wir hatten nicht |
+| carēre | ind.plusq.akt.1.sg | carueram | ich hatte nicht gehabt |  |
+| carēre | ind.plusq.akt.1.pl | caruerāmus | wir hatten nicht gehabt |  |
+| carēre | ind.fut2.akt.1.sg | caruerō | ich werde nicht gehabt haben |  |
+| carēre | ind.fut2.akt.1.pl | caruerimus | wir werden nicht gehabt haben |  |
+| carēre | konj.praes.akt.1.sg | caream | ich nicht habe |  |
+| carēre | konj.praes.akt.1.pl | careāmus | wir nicht haben |  |
+| carēre | konj.impf.akt.1.sg | carērem | ich nicht haben würde | ich nicht hätte |
+| carēre | konj.impf.akt.1.pl | carērēmus | wir nicht haben würden | wir nicht hätten |
+| carēre | konj.perf.akt.1.sg | caruerim | ich nicht gehabt habe |  |
+| carēre | konj.perf.akt.1.pl | caruerimus | wir nicht gehabt haben |  |
+| carēre | konj.plusq.akt.1.sg | caruissem | ich nicht gehabt hätte |  |
+| carēre | konj.plusq.akt.1.pl | caruissēmus | wir nicht gehabt hätten |  |
+| dolēre | ind.praes.akt.1.sg | doleō | ich empfinde Schmerz |  |
+| dolēre | ind.praes.akt.1.pl | dolēmus | wir empfinden Schmerz |  |
+| dolēre | ind.impf.akt.1.sg | dolēbam | ich empfand Schmerz |  |
+| dolēre | ind.impf.akt.1.pl | dolēbāmus | wir empfanden Schmerz |  |
+| dolēre | ind.fut.akt.1.sg | dolēbō | ich werde Schmerz empfinden |  |
+| dolēre | ind.fut.akt.1.pl | dolēbimus | wir werden Schmerz empfinden |  |
+| dolēre | ind.perf.akt.1.sg | doluī | ich habe Schmerz empfunden | ich empfand Schmerz |
+| dolēre | ind.perf.akt.1.pl | doluimus | wir haben Schmerz empfunden | wir empfanden Schmerz |
+| dolēre | ind.plusq.akt.1.sg | dolueram | ich hatte Schmerz empfunden |  |
+| dolēre | ind.plusq.akt.1.pl | doluerāmus | wir hatten Schmerz empfunden |  |
+| dolēre | ind.fut2.akt.1.sg | doluerō | ich werde Schmerz empfunden haben |  |
+| dolēre | ind.fut2.akt.1.pl | doluerimus | wir werden Schmerz empfunden haben |  |
+| dolēre | konj.praes.akt.1.sg | doleam | ich Schmerz empfinde |  |
+| dolēre | konj.praes.akt.1.pl | doleāmus | wir Schmerz empfinden |  |
+| dolēre | konj.impf.akt.1.sg | dolērem | ich Schmerz empfinden würde |  |
+| dolēre | konj.impf.akt.1.pl | dolērēmus | wir Schmerz empfinden würden |  |
+| dolēre | konj.perf.akt.1.sg | doluerim | ich Schmerz empfunden habe |  |
+| dolēre | konj.perf.akt.1.pl | doluerimus | wir Schmerz empfunden haben |  |
+| dolēre | konj.plusq.akt.1.sg | doluissem | ich Schmerz empfunden hätte |  |
+| dolēre | konj.plusq.akt.1.pl | doluissēmus | wir Schmerz empfunden hätten |  |
+| perterrēre | ind.praes.akt.1.sg | perterreō | ich erschrecke |  |
+| perterrēre | ind.praes.akt.1.pl | perterrēmus | wir erschrecken |  |
+| perterrēre | ind.praes.pass.1.sg | perterreor | ich werde erschreckt |  |
+| perterrēre | ind.praes.pass.1.pl | perterrēmur | wir werden erschreckt |  |
+| perterrēre | ind.impf.akt.1.sg | perterrēbam | ich erschreckte |  |
+| perterrēre | ind.impf.akt.1.pl | perterrēbāmus | wir erschreckten |  |
+| perterrēre | ind.impf.pass.1.sg | perterrēbar | ich wurde erschreckt |  |
+| perterrēre | ind.impf.pass.1.pl | perterrēbāmur | wir wurden erschreckt |  |
+| perterrēre | ind.fut.akt.1.sg | perterrēbō | ich werde erschrecken |  |
+| perterrēre | ind.fut.akt.1.pl | perterrēbimus | wir werden erschrecken |  |
+| perterrēre | ind.fut.pass.1.sg | perterrēbor | ich werde erschreckt werden |  |
+| perterrēre | ind.fut.pass.1.pl | perterrēbimur | wir werden erschreckt werden |  |
+| perterrēre | ind.perf.akt.1.sg | perterruī | ich habe erschreckt | ich erschreckte |
+| perterrēre | ind.perf.akt.1.pl | perterruimus | wir haben erschreckt | wir erschreckten |
+| perterrēre | ind.perf.pass.1.sg | perterritus sum | ich bin erschreckt worden |  |
+| perterrēre | ind.perf.pass.1.pl | perterritī sumus | wir sind erschreckt worden |  |
+| perterrēre | ind.plusq.akt.1.sg | perterrueram | ich hatte erschreckt |  |
+| perterrēre | ind.plusq.akt.1.pl | perterruerāmus | wir hatten erschreckt |  |
+| perterrēre | ind.plusq.pass.1.sg | perterritus eram | ich war erschreckt worden |  |
+| perterrēre | ind.plusq.pass.1.pl | perterritī erāmus | wir waren erschreckt worden |  |
+| perterrēre | ind.fut2.akt.1.sg | perterruerō | ich werde erschreckt haben |  |
+| perterrēre | ind.fut2.akt.1.pl | perterruerimus | wir werden erschreckt haben |  |
+| perterrēre | ind.fut2.pass.1.sg | perterritus erō | ich werde erschreckt worden sein |  |
+| perterrēre | ind.fut2.pass.1.pl | perterritī erimus | wir werden erschreckt worden sein |  |
+| perterrēre | konj.praes.akt.1.sg | perterream | ich erschrecke |  |
+| perterrēre | konj.praes.akt.1.pl | perterreāmus | wir erschrecken |  |
+| perterrēre | konj.praes.pass.1.sg | perterrear | ich erschreckt werde |  |
+| perterrēre | konj.praes.pass.1.pl | perterreāmur | wir erschreckt werden |  |
+| perterrēre | konj.impf.akt.1.sg | perterrērem | ich erschrecken würde |  |
+| perterrēre | konj.impf.akt.1.pl | perterrērēmus | wir erschrecken würden |  |
+| perterrēre | konj.impf.pass.1.sg | perterrērer | ich erschreckt würde |  |
+| perterrēre | konj.impf.pass.1.pl | perterrērēmur | wir erschreckt würden |  |
+| perterrēre | konj.perf.akt.1.sg | perterruerim | ich erschreckt habe |  |
+| perterrēre | konj.perf.akt.1.pl | perterruerimus | wir erschreckt haben |  |
+| perterrēre | konj.perf.pass.1.sg | perterritus sim | ich erschreckt worden bin |  |
+| perterrēre | konj.perf.pass.1.pl | perterritī sīmus | wir erschreckt worden sind |  |
+| perterrēre | konj.plusq.akt.1.sg | perterruissem | ich erschreckt hätte |  |
+| perterrēre | konj.plusq.akt.1.pl | perterruissēmus | wir erschreckt hätten |  |
+| perterrēre | konj.plusq.pass.1.sg | perterritus essem | ich erschreckt worden wäre |  |
+| perterrēre | konj.plusq.pass.1.pl | perterritī essēmus | wir erschreckt worden wären |  |
+| terrēre | ind.praes.akt.1.sg | terreō | ich erschrecke |  |
+| terrēre | ind.praes.akt.1.pl | terrēmus | wir erschrecken |  |
+| terrēre | ind.praes.pass.1.sg | terreor | ich werde erschreckt |  |
+| terrēre | ind.praes.pass.1.pl | terrēmur | wir werden erschreckt |  |
+| terrēre | ind.impf.akt.1.sg | terrēbam | ich erschreckte |  |
+| terrēre | ind.impf.akt.1.pl | terrēbāmus | wir erschreckten |  |
+| terrēre | ind.impf.pass.1.sg | terrēbar | ich wurde erschreckt |  |
+| terrēre | ind.impf.pass.1.pl | terrēbāmur | wir wurden erschreckt |  |
+| terrēre | ind.fut.akt.1.sg | terrēbō | ich werde erschrecken |  |
+| terrēre | ind.fut.akt.1.pl | terrēbimus | wir werden erschrecken |  |
+| terrēre | ind.fut.pass.1.sg | terrēbor | ich werde erschreckt werden |  |
+| terrēre | ind.fut.pass.1.pl | terrēbimur | wir werden erschreckt werden |  |
+| terrēre | ind.perf.akt.1.sg | terruī | ich habe erschreckt | ich erschreckte |
+| terrēre | ind.perf.akt.1.pl | terruimus | wir haben erschreckt | wir erschreckten |
+| terrēre | ind.perf.pass.1.sg | territus sum | ich bin erschreckt worden |  |
+| terrēre | ind.perf.pass.1.pl | territī sumus | wir sind erschreckt worden |  |
+| terrēre | ind.plusq.akt.1.sg | terrueram | ich hatte erschreckt |  |
+| terrēre | ind.plusq.akt.1.pl | terruerāmus | wir hatten erschreckt |  |
+| terrēre | ind.plusq.pass.1.sg | territus eram | ich war erschreckt worden |  |
+| terrēre | ind.plusq.pass.1.pl | territī erāmus | wir waren erschreckt worden |  |
+| terrēre | ind.fut2.akt.1.sg | terruerō | ich werde erschreckt haben |  |
+| terrēre | ind.fut2.akt.1.pl | terruerimus | wir werden erschreckt haben |  |
+| terrēre | ind.fut2.pass.1.sg | territus erō | ich werde erschreckt worden sein |  |
+| terrēre | ind.fut2.pass.1.pl | territī erimus | wir werden erschreckt worden sein |  |
+| terrēre | konj.praes.akt.1.sg | terream | ich erschrecke |  |
+| terrēre | konj.praes.akt.1.pl | terreāmus | wir erschrecken |  |
+| terrēre | konj.praes.pass.1.sg | terrear | ich erschreckt werde |  |
+| terrēre | konj.praes.pass.1.pl | terreāmur | wir erschreckt werden |  |
+| terrēre | konj.impf.akt.1.sg | terrērem | ich erschrecken würde |  |
+| terrēre | konj.impf.akt.1.pl | terrērēmus | wir erschrecken würden |  |
+| terrēre | konj.impf.pass.1.sg | terrērer | ich erschreckt würde |  |
+| terrēre | konj.impf.pass.1.pl | terrērēmur | wir erschreckt würden |  |
+| terrēre | konj.perf.akt.1.sg | terruerim | ich erschreckt habe |  |
+| terrēre | konj.perf.akt.1.pl | terruerimus | wir erschreckt haben |  |
+| terrēre | konj.perf.pass.1.sg | territus sim | ich erschreckt worden bin |  |
+| terrēre | konj.perf.pass.1.pl | territī sīmus | wir erschreckt worden sind |  |
+| terrēre | konj.plusq.akt.1.sg | terruissem | ich erschreckt hätte |  |
+| terrēre | konj.plusq.akt.1.pl | terruissēmus | wir erschreckt hätten |  |
+| terrēre | konj.plusq.pass.1.sg | territus essem | ich erschreckt worden wäre |  |
+| terrēre | konj.plusq.pass.1.pl | territī essēmus | wir erschreckt worden wären |  |
+| valēre | ind.praes.akt.1.sg | valeō | ich bin stark |  |
+| valēre | ind.praes.akt.1.pl | valēmus | wir sind stark |  |
+| valēre | ind.impf.akt.1.sg | valēbam | ich war stark |  |
+| valēre | ind.impf.akt.1.pl | valēbāmus | wir waren stark |  |
+| valēre | ind.fut.akt.1.sg | valēbō | ich werde stark sein |  |
+| valēre | ind.fut.akt.1.pl | valēbimus | wir werden stark sein |  |
+| valēre | ind.perf.akt.1.sg | valuī | ich bin stark gewesen | ich war stark |
+| valēre | ind.perf.akt.1.pl | valuimus | wir sind stark gewesen | wir waren stark |
+| valēre | ind.plusq.akt.1.sg | valueram | ich war stark gewesen |  |
+| valēre | ind.plusq.akt.1.pl | valuerāmus | wir waren stark gewesen |  |
+| valēre | ind.fut2.akt.1.sg | valuerō | ich werde stark gewesen sein |  |
+| valēre | ind.fut2.akt.1.pl | valuerimus | wir werden stark gewesen sein |  |
+| valēre | konj.praes.akt.1.sg | valeam | ich stark bin |  |
+| valēre | konj.praes.akt.1.pl | valeāmus | wir stark sind |  |
+| valēre | konj.impf.akt.1.sg | valērem | ich stark sein würde |  |
+| valēre | konj.impf.akt.1.pl | valērēmus | wir stark sein würden |  |
+| valēre | konj.perf.akt.1.sg | valuerim | ich stark gewesen bin |  |
+| valēre | konj.perf.akt.1.pl | valuerimus | wir stark gewesen sind |  |
+| valēre | konj.plusq.akt.1.sg | valuissem | ich stark gewesen wäre |  |
+| valēre | konj.plusq.akt.1.pl | valuissēmus | wir stark gewesen wären |  |
+| ārdēre | ind.praes.akt.1.sg | ārdeō | ich brenne |  |
+| ārdēre | ind.praes.akt.1.pl | ārdēmus | wir brennen |  |
+| ārdēre | ind.impf.akt.1.sg | ārdēbam | ich brannte |  |
+| ārdēre | ind.impf.akt.1.pl | ārdēbāmus | wir brannten |  |
+| ārdēre | ind.fut.akt.1.sg | ārdēbō | ich werde brennen |  |
+| ārdēre | ind.fut.akt.1.pl | ārdēbimus | wir werden brennen |  |
+| ārdēre | ind.perf.akt.1.sg | ārsī | ich habe gebrannt | ich brannte |
+| ārdēre | ind.perf.akt.1.pl | ārsimus | wir haben gebrannt | wir brannten |
+| ārdēre | ind.plusq.akt.1.sg | ārseram | ich hatte gebrannt |  |
+| ārdēre | ind.plusq.akt.1.pl | ārserāmus | wir hatten gebrannt |  |
+| ārdēre | ind.fut2.akt.1.sg | ārserō | ich werde gebrannt haben |  |
+| ārdēre | ind.fut2.akt.1.pl | ārserimus | wir werden gebrannt haben |  |
+| ārdēre | konj.praes.akt.1.sg | ārdeam | ich brenne |  |
+| ārdēre | konj.praes.akt.1.pl | ārdeāmus | wir brennen |  |
+| ārdēre | konj.impf.akt.1.sg | ārdērem | ich brennen würde | ich brennte |
+| ārdēre | konj.impf.akt.1.pl | ārdērēmus | wir brennen würden | wir brennten |
+| ārdēre | konj.perf.akt.1.sg | ārserim | ich gebrannt habe |  |
+| ārdēre | konj.perf.akt.1.pl | ārserimus | wir gebrannt haben |  |
+| ārdēre | konj.plusq.akt.1.sg | ārsissem | ich gebrannt hätte |  |
+| ārdēre | konj.plusq.akt.1.pl | ārsissēmus | wir gebrannt hätten |  |
+| monēre | ind.praes.akt.1.sg | moneō | ich ermahne |  |
+| monēre | ind.praes.akt.1.pl | monēmus | wir ermahnen |  |
+| monēre | ind.praes.pass.1.sg | moneor | ich werde ermahnt |  |
+| monēre | ind.praes.pass.1.pl | monēmur | wir werden ermahnt |  |
+| monēre | ind.impf.akt.1.sg | monēbam | ich ermahnte |  |
+| monēre | ind.impf.akt.1.pl | monēbāmus | wir ermahnten |  |
+| monēre | ind.impf.pass.1.sg | monēbar | ich wurde ermahnt |  |
+| monēre | ind.impf.pass.1.pl | monēbāmur | wir wurden ermahnt |  |
+| monēre | ind.fut.akt.1.sg | monēbō | ich werde ermahnen |  |
+| monēre | ind.fut.akt.1.pl | monēbimus | wir werden ermahnen |  |
+| monēre | ind.fut.pass.1.sg | monēbor | ich werde ermahnt werden |  |
+| monēre | ind.fut.pass.1.pl | monēbimur | wir werden ermahnt werden |  |
+| monēre | ind.perf.akt.1.sg | monuī | ich habe ermahnt | ich ermahnte |
+| monēre | ind.perf.akt.1.pl | monuimus | wir haben ermahnt | wir ermahnten |
+| monēre | ind.perf.pass.1.sg | monitus sum | ich bin ermahnt worden |  |
+| monēre | ind.perf.pass.1.pl | monitī sumus | wir sind ermahnt worden |  |
+| monēre | ind.plusq.akt.1.sg | monueram | ich hatte ermahnt |  |
+| monēre | ind.plusq.akt.1.pl | monuerāmus | wir hatten ermahnt |  |
+| monēre | ind.plusq.pass.1.sg | monitus eram | ich war ermahnt worden |  |
+| monēre | ind.plusq.pass.1.pl | monitī erāmus | wir waren ermahnt worden |  |
+| monēre | ind.fut2.akt.1.sg | monuerō | ich werde ermahnt haben |  |
+| monēre | ind.fut2.akt.1.pl | monuerimus | wir werden ermahnt haben |  |
+| monēre | ind.fut2.pass.1.sg | monitus erō | ich werde ermahnt worden sein |  |
+| monēre | ind.fut2.pass.1.pl | monitī erimus | wir werden ermahnt worden sein |  |
+| monēre | konj.praes.akt.1.sg | moneam | ich ermahne |  |
+| monēre | konj.praes.akt.1.pl | moneāmus | wir ermahnen |  |
+| monēre | konj.praes.pass.1.sg | monear | ich ermahnt werde |  |
+| monēre | konj.praes.pass.1.pl | moneāmur | wir ermahnt werden |  |
+| monēre | konj.impf.akt.1.sg | monērem | ich ermahnen würde |  |
+| monēre | konj.impf.akt.1.pl | monērēmus | wir ermahnen würden |  |
+| monēre | konj.impf.pass.1.sg | monērer | ich ermahnt würde |  |
+| monēre | konj.impf.pass.1.pl | monērēmur | wir ermahnt würden |  |
+| monēre | konj.perf.akt.1.sg | monuerim | ich ermahnt habe |  |
+| monēre | konj.perf.akt.1.pl | monuerimus | wir ermahnt haben |  |
+| monēre | konj.perf.pass.1.sg | monitus sim | ich ermahnt worden bin |  |
+| monēre | konj.perf.pass.1.pl | monitī sīmus | wir ermahnt worden sind |  |
+| monēre | konj.plusq.akt.1.sg | monuissem | ich ermahnt hätte |  |
+| monēre | konj.plusq.akt.1.pl | monuissēmus | wir ermahnt hätten |  |
+| monēre | konj.plusq.pass.1.sg | monitus essem | ich ermahnt worden wäre |  |
+| monēre | konj.plusq.pass.1.pl | monitī essēmus | wir ermahnt worden wären |  |
+| iacēre | ind.praes.akt.1.sg | iaceō | ich liege |  |
+| iacēre | ind.praes.akt.1.pl | iacēmus | wir liegen |  |
+| iacēre | ind.impf.akt.1.sg | iacēbam | ich lag |  |
+| iacēre | ind.impf.akt.1.pl | iacēbāmus | wir lagen |  |
+| iacēre | ind.fut.akt.1.sg | iacēbō | ich werde liegen |  |
+| iacēre | ind.fut.akt.1.pl | iacēbimus | wir werden liegen |  |
+| iacēre | ind.perf.akt.1.sg | iacuī | ich habe gelegen | ich lag |
+| iacēre | ind.perf.akt.1.pl | iacuimus | wir haben gelegen | wir lagen |
+| iacēre | ind.plusq.akt.1.sg | iacueram | ich hatte gelegen |  |
+| iacēre | ind.plusq.akt.1.pl | iacuerāmus | wir hatten gelegen |  |
+| iacēre | ind.fut2.akt.1.sg | iacuerō | ich werde gelegen haben |  |
+| iacēre | ind.fut2.akt.1.pl | iacuerimus | wir werden gelegen haben |  |
+| iacēre | konj.praes.akt.1.sg | iaceam | ich liege |  |
+| iacēre | konj.praes.akt.1.pl | iaceāmus | wir liegen |  |
+| iacēre | konj.impf.akt.1.sg | iacērem | ich liegen würde |  |
+| iacēre | konj.impf.akt.1.pl | iacērēmus | wir liegen würden |  |
+| iacēre | konj.perf.akt.1.sg | iacuerim | ich gelegen habe |  |
+| iacēre | konj.perf.akt.1.pl | iacuerimus | wir gelegen haben |  |
+| iacēre | konj.plusq.akt.1.sg | iacuissem | ich gelegen hätte |  |
+| iacēre | konj.plusq.akt.1.pl | iacuissēmus | wir gelegen hätten |  |
+| fīnīre | ind.praes.akt.1.sg | fīniō | ich beende |  |
+| fīnīre | ind.praes.akt.1.pl | fīnīmus | wir beenden |  |
+| fīnīre | ind.praes.pass.1.sg | fīnior | ich werde beendet |  |
+| fīnīre | ind.praes.pass.1.pl | fīnīmur | wir werden beendet |  |
+| fīnīre | ind.impf.akt.1.sg | fīniēbam | ich beendete |  |
+| fīnīre | ind.impf.akt.1.pl | fīniēbāmus | wir beendeten |  |
+| fīnīre | ind.impf.pass.1.sg | fīniēbar | ich wurde beendet |  |
+| fīnīre | ind.impf.pass.1.pl | fīniēbāmur | wir wurden beendet |  |
+| fīnīre | ind.fut.akt.1.sg | fīniam | ich werde beenden |  |
+| fīnīre | ind.fut.akt.1.pl | fīniēmus | wir werden beenden |  |
+| fīnīre | ind.fut.pass.1.sg | fīniar | ich werde beendet werden |  |
+| fīnīre | ind.fut.pass.1.pl | fīniēmur | wir werden beendet werden |  |
+| fīnīre | ind.perf.akt.1.sg | fīnīvī | ich habe beendet | ich beendete |
+| fīnīre | ind.perf.akt.1.pl | fīnīvimus | wir haben beendet | wir beendeten |
+| fīnīre | ind.perf.pass.1.sg | fīnītus sum | ich bin beendet worden |  |
+| fīnīre | ind.perf.pass.1.pl | fīnītī sumus | wir sind beendet worden |  |
+| fīnīre | ind.plusq.akt.1.sg | fīnīveram | ich hatte beendet |  |
+| fīnīre | ind.plusq.akt.1.pl | fīnīverāmus | wir hatten beendet |  |
+| fīnīre | ind.plusq.pass.1.sg | fīnītus eram | ich war beendet worden |  |
+| fīnīre | ind.plusq.pass.1.pl | fīnītī erāmus | wir waren beendet worden |  |
+| fīnīre | ind.fut2.akt.1.sg | fīnīverō | ich werde beendet haben |  |
+| fīnīre | ind.fut2.akt.1.pl | fīnīverimus | wir werden beendet haben |  |
+| fīnīre | ind.fut2.pass.1.sg | fīnītus erō | ich werde beendet worden sein |  |
+| fīnīre | ind.fut2.pass.1.pl | fīnītī erimus | wir werden beendet worden sein |  |
+| fīnīre | konj.praes.akt.1.sg | fīniam | ich beende |  |
+| fīnīre | konj.praes.akt.1.pl | fīniāmus | wir beenden |  |
+| fīnīre | konj.praes.pass.1.sg | fīniar | ich beendet werde |  |
+| fīnīre | konj.praes.pass.1.pl | fīniāmur | wir beendet werden |  |
+| fīnīre | konj.impf.akt.1.sg | fīnīrem | ich beenden würde |  |
+| fīnīre | konj.impf.akt.1.pl | fīnīrēmus | wir beenden würden |  |
+| fīnīre | konj.impf.pass.1.sg | fīnīrer | ich beendet würde |  |
+| fīnīre | konj.impf.pass.1.pl | fīnīrēmur | wir beendet würden |  |
+| fīnīre | konj.perf.akt.1.sg | fīnīverim | ich beendet habe |  |
+| fīnīre | konj.perf.akt.1.pl | fīnīverimus | wir beendet haben |  |
+| fīnīre | konj.perf.pass.1.sg | fīnītus sim | ich beendet worden bin |  |
+| fīnīre | konj.perf.pass.1.pl | fīnītī sīmus | wir beendet worden sind |  |
+| fīnīre | konj.plusq.akt.1.sg | fīnīvissem | ich beendet hätte |  |
+| fīnīre | konj.plusq.akt.1.pl | fīnīvissēmus | wir beendet hätten |  |
+| fīnīre | konj.plusq.pass.1.sg | fīnītus essem | ich beendet worden wäre |  |
+| fīnīre | konj.plusq.pass.1.pl | fīnītī essēmus | wir beendet worden wären |  |
+| cūstōdīre | ind.praes.akt.1.sg | cūstōdiō | ich bewache |  |
+| cūstōdīre | ind.praes.akt.1.pl | cūstōdīmus | wir bewachen |  |
+| cūstōdīre | ind.praes.pass.1.sg | cūstōdior | ich werde bewacht |  |
+| cūstōdīre | ind.praes.pass.1.pl | cūstōdīmur | wir werden bewacht |  |
+| cūstōdīre | ind.impf.akt.1.sg | cūstōdiēbam | ich bewachte |  |
+| cūstōdīre | ind.impf.akt.1.pl | cūstōdiēbāmus | wir bewachten |  |
+| cūstōdīre | ind.impf.pass.1.sg | cūstōdiēbar | ich wurde bewacht |  |
+| cūstōdīre | ind.impf.pass.1.pl | cūstōdiēbāmur | wir wurden bewacht |  |
+| cūstōdīre | ind.fut.akt.1.sg | cūstōdiam | ich werde bewachen |  |
+| cūstōdīre | ind.fut.akt.1.pl | cūstōdiēmus | wir werden bewachen |  |
+| cūstōdīre | ind.fut.pass.1.sg | cūstōdiar | ich werde bewacht werden |  |
+| cūstōdīre | ind.fut.pass.1.pl | cūstōdiēmur | wir werden bewacht werden |  |
+| cūstōdīre | ind.perf.akt.1.sg | cūstōdīvī | ich habe bewacht | ich bewachte |
+| cūstōdīre | ind.perf.akt.1.pl | cūstōdīvimus | wir haben bewacht | wir bewachten |
+| cūstōdīre | ind.perf.pass.1.sg | cūstōdītus sum | ich bin bewacht worden |  |
+| cūstōdīre | ind.perf.pass.1.pl | cūstōdītī sumus | wir sind bewacht worden |  |
+| cūstōdīre | ind.plusq.akt.1.sg | cūstōdīveram | ich hatte bewacht |  |
+| cūstōdīre | ind.plusq.akt.1.pl | cūstōdīverāmus | wir hatten bewacht |  |
+| cūstōdīre | ind.plusq.pass.1.sg | cūstōdītus eram | ich war bewacht worden |  |
+| cūstōdīre | ind.plusq.pass.1.pl | cūstōdītī erāmus | wir waren bewacht worden |  |
+| cūstōdīre | ind.fut2.akt.1.sg | cūstōdīverō | ich werde bewacht haben |  |
+| cūstōdīre | ind.fut2.akt.1.pl | cūstōdīverimus | wir werden bewacht haben |  |
+| cūstōdīre | ind.fut2.pass.1.sg | cūstōdītus erō | ich werde bewacht worden sein |  |
+| cūstōdīre | ind.fut2.pass.1.pl | cūstōdītī erimus | wir werden bewacht worden sein |  |
+| cūstōdīre | konj.praes.akt.1.sg | cūstōdiam | ich bewache |  |
+| cūstōdīre | konj.praes.akt.1.pl | cūstōdiāmus | wir bewachen |  |
+| cūstōdīre | konj.praes.pass.1.sg | cūstōdiar | ich bewacht werde |  |
+| cūstōdīre | konj.praes.pass.1.pl | cūstōdiāmur | wir bewacht werden |  |
+| cūstōdīre | konj.impf.akt.1.sg | cūstōdīrem | ich bewachen würde |  |
+| cūstōdīre | konj.impf.akt.1.pl | cūstōdīrēmus | wir bewachen würden |  |
+| cūstōdīre | konj.impf.pass.1.sg | cūstōdīrer | ich bewacht würde |  |
+| cūstōdīre | konj.impf.pass.1.pl | cūstōdīrēmur | wir bewacht würden |  |
+| cūstōdīre | konj.perf.akt.1.sg | cūstōdīverim | ich bewacht habe |  |
+| cūstōdīre | konj.perf.akt.1.pl | cūstōdīverimus | wir bewacht haben |  |
+| cūstōdīre | konj.perf.pass.1.sg | cūstōdītus sim | ich bewacht worden bin |  |
+| cūstōdīre | konj.perf.pass.1.pl | cūstōdītī sīmus | wir bewacht worden sind |  |
+| cūstōdīre | konj.plusq.akt.1.sg | cūstōdīvissem | ich bewacht hätte |  |
+| cūstōdīre | konj.plusq.akt.1.pl | cūstōdīvissēmus | wir bewacht hätten |  |
+| cūstōdīre | konj.plusq.pass.1.sg | cūstōdītus essem | ich bewacht worden wäre |  |
+| cūstōdīre | konj.plusq.pass.1.pl | cūstōdītī essēmus | wir bewacht worden wären |  |
+| contendere | ind.praes.akt.1.sg | contendō | ich strenge mich an |  |
+| contendere | ind.praes.akt.1.pl | contendimus | wir strengen uns an |  |
+| contendere | ind.impf.akt.1.sg | contendēbam | ich strengte mich an |  |
+| contendere | ind.impf.akt.1.pl | contendēbāmus | wir strengten uns an |  |
+| contendere | ind.fut.akt.1.sg | contendam | ich werde mich anstrengen |  |
+| contendere | ind.fut.akt.1.pl | contendēmus | wir werden uns anstrengen |  |
+| contendere | ind.perf.akt.1.sg | contendī | ich habe mich angestrengt | ich strengte mich an |
+| contendere | ind.perf.akt.1.pl | contendimus | wir haben uns angestrengt | wir strengten uns an |
+| contendere | ind.plusq.akt.1.sg | contenderam | ich hatte mich angestrengt |  |
+| contendere | ind.plusq.akt.1.pl | contenderāmus | wir hatten uns angestrengt |  |
+| contendere | ind.fut2.akt.1.sg | contenderō | ich werde mich angestrengt haben |  |
+| contendere | ind.fut2.akt.1.pl | contenderimus | wir werden uns angestrengt haben |  |
+| contendere | konj.praes.akt.1.sg | contendam | ich mich anstrenge |  |
+| contendere | konj.praes.akt.1.pl | contendāmus | wir uns anstrengen |  |
+| contendere | konj.impf.akt.1.sg | contenderem | ich mich anstrengen würde |  |
+| contendere | konj.impf.akt.1.pl | contenderēmus | wir uns anstrengen würden |  |
+| contendere | konj.perf.akt.1.sg | contenderim | ich mich angestrengt habe |  |
+| contendere | konj.perf.akt.1.pl | contenderimus | wir uns angestrengt haben |  |
+| contendere | konj.plusq.akt.1.sg | contendissem | ich mich angestrengt hätte |  |
+| contendere | konj.plusq.akt.1.pl | contendissēmus | wir uns angestrengt hätten |  |
+| accēdere | ind.praes.akt.1.sg | accēdō | ich trete heran |  |
+| accēdere | ind.praes.akt.1.pl | accēdimus | wir treten heran |  |
+| accēdere | ind.impf.akt.1.sg | accēdēbam | ich trat heran |  |
+| accēdere | ind.impf.akt.1.pl | accēdēbāmus | wir traten heran |  |
+| accēdere | ind.fut.akt.1.sg | accēdam | ich werde herantreten |  |
+| accēdere | ind.fut.akt.1.pl | accēdēmus | wir werden herantreten |  |
+| accēdere | ind.perf.akt.1.sg | accessī | ich bin herangetreten | ich trat heran |
+| accēdere | ind.perf.akt.1.pl | accessimus | wir sind herangetreten | wir traten heran |
+| accēdere | ind.plusq.akt.1.sg | accesseram | ich war herangetreten |  |
+| accēdere | ind.plusq.akt.1.pl | accesserāmus | wir waren herangetreten |  |
+| accēdere | ind.fut2.akt.1.sg | accesserō | ich werde herangetreten sein |  |
+| accēdere | ind.fut2.akt.1.pl | accesserimus | wir werden herangetreten sein |  |
+| accēdere | konj.praes.akt.1.sg | accēdam | ich herantrete |  |
+| accēdere | konj.praes.akt.1.pl | accēdāmus | wir herantreten |  |
+| accēdere | konj.impf.akt.1.sg | accēderem | ich herantreten würde |  |
+| accēdere | konj.impf.akt.1.pl | accēderēmus | wir herantreten würden |  |
+| accēdere | konj.perf.akt.1.sg | accesserim | ich herangetreten bin |  |
+| accēdere | konj.perf.akt.1.pl | accesserimus | wir herangetreten sind |  |
+| accēdere | konj.plusq.akt.1.sg | accessissem | ich herangetreten wäre |  |
+| accēdere | konj.plusq.akt.1.pl | accessissēmus | wir herangetreten wären |  |
+| parcere | ind.praes.akt.1.sg | parcō | ich schone |  |
+| parcere | ind.praes.akt.1.pl | parcimus | wir schonen |  |
+| parcere | ind.impf.akt.1.sg | parcēbam | ich schonte |  |
+| parcere | ind.impf.akt.1.pl | parcēbāmus | wir schonten |  |
+| parcere | ind.fut.akt.1.sg | parcam | ich werde schonen |  |
+| parcere | ind.fut.akt.1.pl | parcēmus | wir werden schonen |  |
+| parcere | ind.perf.akt.1.sg | pepercī | ich habe geschont | ich schonte |
+| parcere | ind.perf.akt.1.pl | pepercimus | wir haben geschont | wir schonten |
+| parcere | ind.plusq.akt.1.sg | peperceram | ich hatte geschont |  |
+| parcere | ind.plusq.akt.1.pl | pepercerāmus | wir hatten geschont |  |
+| parcere | ind.fut2.akt.1.sg | pepercerō | ich werde geschont haben |  |
+| parcere | ind.fut2.akt.1.pl | pepercerimus | wir werden geschont haben |  |
+| parcere | konj.praes.akt.1.sg | parcam | ich schone |  |
+| parcere | konj.praes.akt.1.pl | parcāmus | wir schonen |  |
+| parcere | konj.impf.akt.1.sg | parcerem | ich schonen würde |  |
+| parcere | konj.impf.akt.1.pl | parcerēmus | wir schonen würden |  |
+| parcere | konj.perf.akt.1.sg | pepercerim | ich geschont habe |  |
+| parcere | konj.perf.akt.1.pl | pepercerimus | wir geschont haben |  |
+| parcere | konj.plusq.akt.1.sg | pepercissem | ich geschont hätte |  |
+| parcere | konj.plusq.akt.1.pl | pepercissēmus | wir geschont hätten |  |
+| resistere | ind.praes.akt.1.sg | resistō | ich leiste Widerstand |  |
+| resistere | ind.praes.akt.1.pl | resistimus | wir leisten Widerstand |  |
+| resistere | ind.impf.akt.1.sg | resistēbam | ich leistete Widerstand |  |
+| resistere | ind.impf.akt.1.pl | resistēbāmus | wir leisteten Widerstand |  |
+| resistere | ind.fut.akt.1.sg | resistam | ich werde Widerstand leisten |  |
+| resistere | ind.fut.akt.1.pl | resistēmus | wir werden Widerstand leisten |  |
+| resistere | ind.perf.akt.1.sg | restitī | ich habe Widerstand geleistet | ich leistete Widerstand |
+| resistere | ind.perf.akt.1.pl | restitimus | wir haben Widerstand geleistet | wir leisteten Widerstand |
+| resistere | ind.plusq.akt.1.sg | restiteram | ich hatte Widerstand geleistet |  |
+| resistere | ind.plusq.akt.1.pl | restiterāmus | wir hatten Widerstand geleistet |  |
+| resistere | ind.fut2.akt.1.sg | restiterō | ich werde Widerstand geleistet haben |  |
+| resistere | ind.fut2.akt.1.pl | restiterimus | wir werden Widerstand geleistet haben |  |
+| resistere | konj.praes.akt.1.sg | resistam | ich Widerstand leiste |  |
+| resistere | konj.praes.akt.1.pl | resistāmus | wir Widerstand leisten |  |
+| resistere | konj.impf.akt.1.sg | resisterem | ich Widerstand leisten würde |  |
+| resistere | konj.impf.akt.1.pl | resisterēmus | wir Widerstand leisten würden |  |
+| resistere | konj.perf.akt.1.sg | restiterim | ich Widerstand geleistet habe |  |
+| resistere | konj.perf.akt.1.pl | restiterimus | wir Widerstand geleistet haben |  |
+| resistere | konj.plusq.akt.1.sg | restitissem | ich Widerstand geleistet hätte |  |
+| resistere | konj.plusq.akt.1.pl | restitissēmus | wir Widerstand geleistet hätten |  |
+| vīvere | ind.praes.akt.1.sg | vīvō | ich lebe |  |
+| vīvere | ind.praes.akt.1.pl | vīvimus | wir leben |  |
+| vīvere | ind.impf.akt.1.sg | vīvēbam | ich lebte |  |
+| vīvere | ind.impf.akt.1.pl | vīvēbāmus | wir lebten |  |
+| vīvere | ind.fut.akt.1.sg | vīvam | ich werde leben |  |
+| vīvere | ind.fut.akt.1.pl | vīvēmus | wir werden leben |  |
+| vīvere | ind.perf.akt.1.sg | vīxī | ich habe gelebt | ich lebte |
+| vīvere | ind.perf.akt.1.pl | vīximus | wir haben gelebt | wir lebten |
+| vīvere | ind.plusq.akt.1.sg | vīxeram | ich hatte gelebt |  |
+| vīvere | ind.plusq.akt.1.pl | vīxerāmus | wir hatten gelebt |  |
+| vīvere | ind.fut2.akt.1.sg | vīxerō | ich werde gelebt haben |  |
+| vīvere | ind.fut2.akt.1.pl | vīxerimus | wir werden gelebt haben |  |
+| vīvere | konj.praes.akt.1.sg | vīvam | ich lebe |  |
+| vīvere | konj.praes.akt.1.pl | vīvāmus | wir leben |  |
+| vīvere | konj.impf.akt.1.sg | vīverem | ich leben würde |  |
+| vīvere | konj.impf.akt.1.pl | vīverēmus | wir leben würden |  |
+| vīvere | konj.perf.akt.1.sg | vīxerim | ich gelebt habe |  |
+| vīvere | konj.perf.akt.1.pl | vīxerimus | wir gelebt haben |  |
+| vīvere | konj.plusq.akt.1.sg | vīxissem | ich gelebt hätte |  |
+| vīvere | konj.plusq.akt.1.pl | vīxissēmus | wir gelebt hätten |  |
+| discēdere | ind.praes.akt.1.sg | discēdō | ich gehe weg |  |
+| discēdere | ind.praes.akt.1.pl | discēdimus | wir gehen weg |  |
+| discēdere | ind.impf.akt.1.sg | discēdēbam | ich ging weg |  |
+| discēdere | ind.impf.akt.1.pl | discēdēbāmus | wir gingen weg |  |
+| discēdere | ind.fut.akt.1.sg | discēdam | ich werde weggehen |  |
+| discēdere | ind.fut.akt.1.pl | discēdēmus | wir werden weggehen |  |
+| discēdere | ind.perf.akt.1.sg | discessī | ich bin weggegangen | ich ging weg |
+| discēdere | ind.perf.akt.1.pl | discessimus | wir sind weggegangen | wir gingen weg |
+| discēdere | ind.plusq.akt.1.sg | discesseram | ich war weggegangen |  |
+| discēdere | ind.plusq.akt.1.pl | discesserāmus | wir waren weggegangen |  |
+| discēdere | ind.fut2.akt.1.sg | discesserō | ich werde weggegangen sein |  |
+| discēdere | ind.fut2.akt.1.pl | discesserimus | wir werden weggegangen sein |  |
+| discēdere | konj.praes.akt.1.sg | discēdam | ich weggehe |  |
+| discēdere | konj.praes.akt.1.pl | discēdāmus | wir weggehen |  |
+| discēdere | konj.impf.akt.1.sg | discēderem | ich weggehen würde |  |
+| discēdere | konj.impf.akt.1.pl | discēderēmus | wir weggehen würden |  |
+| discēdere | konj.perf.akt.1.sg | discesserim | ich weggegangen bin |  |
+| discēdere | konj.perf.akt.1.pl | discesserimus | wir weggegangen sind |  |
+| discēdere | konj.plusq.akt.1.sg | discessissem | ich weggegangen wäre |  |
+| discēdere | konj.plusq.akt.1.pl | discessissēmus | wir weggegangen wären |  |
+| gerere | ind.praes.akt.1.sg | gerō | ich trage |  |
+| gerere | ind.praes.akt.1.pl | gerimus | wir tragen |  |
+| gerere | ind.praes.pass.1.sg | geror | ich werde getragen |  |
+| gerere | ind.praes.pass.1.pl | gerimur | wir werden getragen |  |
+| gerere | ind.impf.akt.1.sg | gerēbam | ich trug |  |
+| gerere | ind.impf.akt.1.pl | gerēbāmus | wir trugen |  |
+| gerere | ind.impf.pass.1.sg | gerēbar | ich wurde getragen |  |
+| gerere | ind.impf.pass.1.pl | gerēbāmur | wir wurden getragen |  |
+| gerere | ind.fut.akt.1.sg | geram | ich werde tragen |  |
+| gerere | ind.fut.akt.1.pl | gerēmus | wir werden tragen |  |
+| gerere | ind.fut.pass.1.sg | gerar | ich werde getragen werden |  |
+| gerere | ind.fut.pass.1.pl | gerēmur | wir werden getragen werden |  |
+| gerere | ind.perf.akt.1.sg | gessī | ich habe getragen | ich trug |
+| gerere | ind.perf.akt.1.pl | gessimus | wir haben getragen | wir trugen |
+| gerere | ind.plusq.akt.1.sg | gesseram | ich hatte getragen |  |
+| gerere | ind.plusq.akt.1.pl | gesserāmus | wir hatten getragen |  |
+| gerere | ind.fut2.akt.1.sg | gesserō | ich werde getragen haben |  |
+| gerere | ind.fut2.akt.1.pl | gesserimus | wir werden getragen haben |  |
+| gerere | konj.praes.akt.1.sg | geram | ich trage |  |
+| gerere | konj.praes.akt.1.pl | gerāmus | wir tragen |  |
+| gerere | konj.praes.pass.1.sg | gerar | ich getragen werde |  |
+| gerere | konj.praes.pass.1.pl | gerāmur | wir getragen werden |  |
+| gerere | konj.impf.akt.1.sg | gererem | ich tragen würde |  |
+| gerere | konj.impf.akt.1.pl | gererēmus | wir tragen würden |  |
+| gerere | konj.impf.pass.1.sg | gererer | ich getragen würde |  |
+| gerere | konj.impf.pass.1.pl | gererēmur | wir getragen würden |  |
+| gerere | konj.perf.akt.1.sg | gesserim | ich getragen habe |  |
+| gerere | konj.perf.akt.1.pl | gesserimus | wir getragen haben |  |
+| gerere | konj.plusq.akt.1.sg | gessissem | ich getragen hätte |  |
+| gerere | konj.plusq.akt.1.pl | gessissēmus | wir getragen hätten |  |
+| cadere | ind.praes.akt.1.sg | cadō | ich falle |  |
+| cadere | ind.praes.akt.1.pl | cadimus | wir fallen |  |
+| cadere | ind.impf.akt.1.sg | cadēbam | ich fiel |  |
+| cadere | ind.impf.akt.1.pl | cadēbāmus | wir fielen |  |
+| cadere | ind.fut.akt.1.sg | cadam | ich werde fallen |  |
+| cadere | ind.fut.akt.1.pl | cadēmus | wir werden fallen |  |
+| cadere | ind.perf.akt.1.sg | cecidī | ich bin gefallen | ich fiel |
+| cadere | ind.perf.akt.1.pl | cecidimus | wir sind gefallen | wir fielen |
+| cadere | ind.plusq.akt.1.sg | cecideram | ich war gefallen |  |
+| cadere | ind.plusq.akt.1.pl | ceciderāmus | wir waren gefallen |  |
+| cadere | ind.fut2.akt.1.sg | ceciderō | ich werde gefallen sein |  |
+| cadere | ind.fut2.akt.1.pl | ceciderimus | wir werden gefallen sein |  |
+| cadere | konj.praes.akt.1.sg | cadam | ich falle |  |
+| cadere | konj.praes.akt.1.pl | cadāmus | wir fallen |  |
+| cadere | konj.impf.akt.1.sg | caderem | ich fallen würde |  |
+| cadere | konj.impf.akt.1.pl | caderēmus | wir fallen würden |  |
+| cadere | konj.perf.akt.1.sg | ceciderim | ich gefallen bin |  |
+| cadere | konj.perf.akt.1.pl | ceciderimus | wir gefallen sind |  |
+| cadere | konj.plusq.akt.1.sg | cecidissem | ich gefallen wäre |  |
+| cadere | konj.plusq.akt.1.pl | cecidissēmus | wir gefallen wären |  |
+| ruere | ind.praes.akt.1.sg | ruō | ich stürze |  |
+| ruere | ind.praes.akt.1.pl | ruimus | wir stürzen |  |
+| ruere | ind.impf.akt.1.sg | ruēbam | ich stürzte |  |
+| ruere | ind.impf.akt.1.pl | ruēbāmus | wir stürzten |  |
+| ruere | ind.fut.akt.1.sg | ruam | ich werde stürzen |  |
+| ruere | ind.fut.akt.1.pl | ruēmus | wir werden stürzen |  |
+| ruere | ind.perf.akt.1.sg | ruī | ich bin gestürzt | ich stürzte |
+| ruere | ind.perf.akt.1.pl | ruimus | wir sind gestürzt | wir stürzten |
+| ruere | ind.plusq.akt.1.sg | rueram | ich war gestürzt |  |
+| ruere | ind.plusq.akt.1.pl | ruerāmus | wir waren gestürzt |  |
+| ruere | ind.fut2.akt.1.sg | ruerō | ich werde gestürzt sein |  |
+| ruere | ind.fut2.akt.1.pl | ruerimus | wir werden gestürzt sein |  |
+| ruere | konj.praes.akt.1.sg | ruam | ich stürze |  |
+| ruere | konj.praes.akt.1.pl | ruāmus | wir stürzen |  |
+| ruere | konj.impf.akt.1.sg | ruerem | ich stürzen würde |  |
+| ruere | konj.impf.akt.1.pl | ruerēmus | wir stürzen würden |  |
+| ruere | konj.perf.akt.1.sg | ruerim | ich gestürzt bin |  |
+| ruere | konj.perf.akt.1.pl | ruerimus | wir gestürzt sind |  |
+| ruere | konj.plusq.akt.1.sg | ruissem | ich gestürzt wäre |  |
+| ruere | konj.plusq.akt.1.pl | ruissēmus | wir gestürzt wären |  |
+| metuere | ind.praes.akt.1.sg | metuō | ich fürchte |  |
+| metuere | ind.praes.akt.1.pl | metuimus | wir fürchten |  |
+| metuere | ind.praes.pass.1.sg | metuor | ich werde gefürchtet |  |
+| metuere | ind.praes.pass.1.pl | metuimur | wir werden gefürchtet |  |
+| metuere | ind.impf.akt.1.sg | metuēbam | ich fürchtete |  |
+| metuere | ind.impf.akt.1.pl | metuēbāmus | wir fürchteten |  |
+| metuere | ind.impf.pass.1.sg | metuēbar | ich wurde gefürchtet |  |
+| metuere | ind.impf.pass.1.pl | metuēbāmur | wir wurden gefürchtet |  |
+| metuere | ind.fut.akt.1.sg | metuam | ich werde fürchten |  |
+| metuere | ind.fut.akt.1.pl | metuēmus | wir werden fürchten |  |
+| metuere | ind.fut.pass.1.sg | metuar | ich werde gefürchtet werden |  |
+| metuere | ind.fut.pass.1.pl | metuēmur | wir werden gefürchtet werden |  |
+| metuere | ind.perf.akt.1.sg | metuī | ich habe gefürchtet | ich fürchtete |
+| metuere | ind.perf.akt.1.pl | metuimus | wir haben gefürchtet | wir fürchteten |
+| metuere | ind.plusq.akt.1.sg | metueram | ich hatte gefürchtet |  |
+| metuere | ind.plusq.akt.1.pl | metuerāmus | wir hatten gefürchtet |  |
+| metuere | ind.fut2.akt.1.sg | metuerō | ich werde gefürchtet haben |  |
+| metuere | ind.fut2.akt.1.pl | metuerimus | wir werden gefürchtet haben |  |
+| metuere | konj.praes.akt.1.sg | metuam | ich fürchte |  |
+| metuere | konj.praes.akt.1.pl | metuāmus | wir fürchten |  |
+| metuere | konj.praes.pass.1.sg | metuar | ich gefürchtet werde |  |
+| metuere | konj.praes.pass.1.pl | metuāmur | wir gefürchtet werden |  |
+| metuere | konj.impf.akt.1.sg | metuerem | ich fürchten würde |  |
+| metuere | konj.impf.akt.1.pl | metuerēmus | wir fürchten würden |  |
+| metuere | konj.impf.pass.1.sg | metuerer | ich gefürchtet würde |  |
+| metuere | konj.impf.pass.1.pl | metuerēmur | wir gefürchtet würden |  |
+| metuere | konj.perf.akt.1.sg | metuerim | ich gefürchtet habe |  |
+| metuere | konj.perf.akt.1.pl | metuerimus | wir gefürchtet haben |  |
+| metuere | konj.plusq.akt.1.sg | metuissem | ich gefürchtet hätte |  |
+| metuere | konj.plusq.akt.1.pl | metuissēmus | wir gefürchtet hätten |  |
+| fugere | ind.praes.akt.1.sg | fugiō | ich fliehe |  |
+| fugere | ind.praes.akt.1.pl | fugimus | wir fliehen |  |
+| fugere | ind.impf.akt.1.sg | fugiēbam | ich floh |  |
+| fugere | ind.impf.akt.1.pl | fugiēbāmus | wir flohen |  |
+| fugere | ind.fut.akt.1.sg | fugiam | ich werde fliehen |  |
+| fugere | ind.fut.akt.1.pl | fugiēmus | wir werden fliehen |  |
+| fugere | ind.perf.akt.1.sg | fūgī | ich bin geflohen | ich floh |
+| fugere | ind.perf.akt.1.pl | fūgimus | wir sind geflohen | wir flohen |
+| fugere | ind.plusq.akt.1.sg | fūgeram | ich war geflohen |  |
+| fugere | ind.plusq.akt.1.pl | fūgerāmus | wir waren geflohen |  |
+| fugere | ind.fut2.akt.1.sg | fūgerō | ich werde geflohen sein |  |
+| fugere | ind.fut2.akt.1.pl | fūgerimus | wir werden geflohen sein |  |
+| fugere | konj.praes.akt.1.sg | fugiam | ich fliehe |  |
+| fugere | konj.praes.akt.1.pl | fugiāmus | wir fliehen |  |
+| fugere | konj.impf.akt.1.sg | fugerem | ich fliehen würde |  |
+| fugere | konj.impf.akt.1.pl | fugerēmus | wir fliehen würden |  |
+| fugere | konj.perf.akt.1.sg | fūgerim | ich geflohen bin |  |
+| fugere | konj.perf.akt.1.pl | fūgerimus | wir geflohen sind |  |
+| fugere | konj.plusq.akt.1.sg | fūgissem | ich geflohen wäre |  |
+| fugere | konj.plusq.akt.1.pl | fūgissēmus | wir geflohen wären |  |
+| effugere | ind.praes.akt.1.sg | effugiō | ich entkomme |  |
+| effugere | ind.praes.akt.1.pl | effugimus | wir entkommen |  |
+| effugere | ind.impf.akt.1.sg | effugiēbam | ich entkam |  |
+| effugere | ind.impf.akt.1.pl | effugiēbāmus | wir entkamen |  |
+| effugere | ind.fut.akt.1.sg | effugiam | ich werde entkommen |  |
+| effugere | ind.fut.akt.1.pl | effugiēmus | wir werden entkommen |  |
+| effugere | ind.perf.akt.1.sg | effūgī | ich bin entkommen | ich entkam |
+| effugere | ind.perf.akt.1.pl | effūgimus | wir sind entkommen | wir entkamen |
+| effugere | ind.plusq.akt.1.sg | effūgeram | ich war entkommen |  |
+| effugere | ind.plusq.akt.1.pl | effūgerāmus | wir waren entkommen |  |
+| effugere | ind.fut2.akt.1.sg | effūgerō | ich werde entkommen sein |  |
+| effugere | ind.fut2.akt.1.pl | effūgerimus | wir werden entkommen sein |  |
+| effugere | konj.praes.akt.1.sg | effugiam | ich entkomme |  |
+| effugere | konj.praes.akt.1.pl | effugiāmus | wir entkommen |  |
+| effugere | konj.impf.akt.1.sg | effugerem | ich entkommen würde |  |
+| effugere | konj.impf.akt.1.pl | effugerēmus | wir entkommen würden |  |
+| effugere | konj.perf.akt.1.sg | effūgerim | ich entkommen bin |  |
+| effugere | konj.perf.akt.1.pl | effūgerimus | wir entkommen sind |  |
+| effugere | konj.plusq.akt.1.sg | effūgissem | ich entkommen wäre |  |
+| effugere | konj.plusq.akt.1.pl | effūgissēmus | wir entkommen wären |  |
+| exīre | ind.praes.akt.1.sg | exeō | ich gehe hinaus |  |
+| exīre | ind.praes.akt.1.pl | exīmus | wir gehen hinaus |  |
+| exīre | ind.impf.akt.1.sg | exībam | ich ging hinaus |  |
+| exīre | ind.impf.akt.1.pl | exībāmus | wir gingen hinaus |  |
+| exīre | ind.fut.akt.1.sg | exībō | ich werde hinausgehen |  |
+| exīre | ind.fut.akt.1.pl | exībimus | wir werden hinausgehen |  |
+| exīre | ind.perf.akt.1.sg | exiī | ich bin hinausgegangen | ich ging hinaus |
+| exīre | ind.perf.akt.1.pl | exiimus | wir sind hinausgegangen | wir gingen hinaus |
+| exīre | ind.plusq.akt.1.sg | exieram | ich war hinausgegangen |  |
+| exīre | ind.plusq.akt.1.pl | exierāmus | wir waren hinausgegangen |  |
+| exīre | ind.fut2.akt.1.sg | exierō | ich werde hinausgegangen sein |  |
+| exīre | ind.fut2.akt.1.pl | exierimus | wir werden hinausgegangen sein |  |
+| exīre | konj.praes.akt.1.sg | exeam | ich hinausgehe |  |
+| exīre | konj.praes.akt.1.pl | exeāmus | wir hinausgehen |  |
+| exīre | konj.impf.akt.1.sg | exīrem | ich hinausgehen würde |  |
+| exīre | konj.impf.akt.1.pl | exīrēmus | wir hinausgehen würden |  |
+| exīre | konj.perf.akt.1.sg | exierim | ich hinausgegangen bin |  |
+| exīre | konj.perf.akt.1.pl | exierimus | wir hinausgegangen sind |  |
+| exīre | konj.plusq.akt.1.sg | exīssem | ich hinausgegangen wäre |  |
+| exīre | konj.plusq.akt.1.pl | exīssēmus | wir hinausgegangen wären |  |
+| redīre | ind.praes.akt.1.sg | redeō | ich kehre zurück |  |
+| redīre | ind.praes.akt.1.pl | redīmus | wir kehren zurück |  |
+| redīre | ind.impf.akt.1.sg | redībam | ich kehrte zurück |  |
+| redīre | ind.impf.akt.1.pl | redībāmus | wir kehrten zurück |  |
+| redīre | ind.fut.akt.1.sg | redībō | ich werde zurückkehren |  |
+| redīre | ind.fut.akt.1.pl | redībimus | wir werden zurückkehren |  |
+| redīre | ind.perf.akt.1.sg | rediī | ich bin zurückgekehrt | ich kehrte zurück |
+| redīre | ind.perf.akt.1.pl | rediimus | wir sind zurückgekehrt | wir kehrten zurück |
+| redīre | ind.plusq.akt.1.sg | redieram | ich war zurückgekehrt |  |
+| redīre | ind.plusq.akt.1.pl | redierāmus | wir waren zurückgekehrt |  |
+| redīre | ind.fut2.akt.1.sg | redierō | ich werde zurückgekehrt sein |  |
+| redīre | ind.fut2.akt.1.pl | redierimus | wir werden zurückgekehrt sein |  |
+| redīre | konj.praes.akt.1.sg | redeam | ich zurückkehre |  |
+| redīre | konj.praes.akt.1.pl | redeāmus | wir zurückkehren |  |
+| redīre | konj.impf.akt.1.sg | redīrem | ich zurückkehren würde |  |
+| redīre | konj.impf.akt.1.pl | redīrēmus | wir zurückkehren würden |  |
+| redīre | konj.perf.akt.1.sg | redierim | ich zurückgekehrt bin |  |
+| redīre | konj.perf.akt.1.pl | redierimus | wir zurückgekehrt sind |  |
+| redīre | konj.plusq.akt.1.sg | redīssem | ich zurückgekehrt wäre |  |
+| redīre | konj.plusq.akt.1.pl | redīssēmus | wir zurückgekehrt wären |  |
+| subīre | ind.praes.akt.1.sg | subeō | ich gehe heran |  |
+| subīre | ind.praes.akt.1.pl | subīmus | wir gehen heran |  |
+| subīre | ind.impf.akt.1.sg | subībam | ich ging heran |  |
+| subīre | ind.impf.akt.1.pl | subībāmus | wir gingen heran |  |
+| subīre | ind.fut.akt.1.sg | subībō | ich werde herangehen |  |
+| subīre | ind.fut.akt.1.pl | subībimus | wir werden herangehen |  |
+| subīre | ind.perf.akt.1.sg | subiī | ich bin herangegangen | ich ging heran |
+| subīre | ind.perf.akt.1.pl | subiimus | wir sind herangegangen | wir gingen heran |
+| subīre | ind.plusq.akt.1.sg | subieram | ich war herangegangen |  |
+| subīre | ind.plusq.akt.1.pl | subierāmus | wir waren herangegangen |  |
+| subīre | ind.fut2.akt.1.sg | subierō | ich werde herangegangen sein |  |
+| subīre | ind.fut2.akt.1.pl | subierimus | wir werden herangegangen sein |  |
+| subīre | konj.praes.akt.1.sg | subeam | ich herangehe |  |
+| subīre | konj.praes.akt.1.pl | subeāmus | wir herangehen |  |
+| subīre | konj.impf.akt.1.sg | subīrem | ich herangehen würde |  |
+| subīre | konj.impf.akt.1.pl | subīrēmus | wir herangehen würden |  |
+| subīre | konj.perf.akt.1.sg | subierim | ich herangegangen bin |  |
+| subīre | konj.perf.akt.1.pl | subierimus | wir herangegangen sind |  |
+| subīre | konj.plusq.akt.1.sg | subīssem | ich herangegangen wäre |  |
+| subīre | konj.plusq.akt.1.pl | subīssēmus | wir herangegangen wären |  |
+| perīre | ind.praes.akt.1.sg | pereō | ich gehe zugrunde |  |
+| perīre | ind.praes.akt.1.pl | perīmus | wir gehen zugrunde |  |
+| perīre | ind.impf.akt.1.sg | perībam | ich ging zugrunde |  |
+| perīre | ind.impf.akt.1.pl | perībāmus | wir gingen zugrunde |  |
+| perīre | ind.fut.akt.1.sg | perībō | ich werde zugrunde gehen |  |
+| perīre | ind.fut.akt.1.pl | perībimus | wir werden zugrunde gehen |  |
+| perīre | ind.perf.akt.1.sg | periī | ich bin zugrunde gegangen | ich ging zugrunde |
+| perīre | ind.perf.akt.1.pl | periimus | wir sind zugrunde gegangen | wir gingen zugrunde |
+| perīre | ind.plusq.akt.1.sg | perieram | ich war zugrunde gegangen |  |
+| perīre | ind.plusq.akt.1.pl | perierāmus | wir waren zugrunde gegangen |  |
+| perīre | ind.fut2.akt.1.sg | perierō | ich werde zugrunde gegangen sein |  |
+| perīre | ind.fut2.akt.1.pl | perierimus | wir werden zugrunde gegangen sein |  |
+| perīre | konj.praes.akt.1.sg | peream | ich zugrunde gehe |  |
+| perīre | konj.praes.akt.1.pl | pereāmus | wir zugrunde gehen |  |
+| perīre | konj.impf.akt.1.sg | perīrem | ich zugrunde gehen würde |  |
+| perīre | konj.impf.akt.1.pl | perīrēmus | wir zugrunde gehen würden |  |
+| perīre | konj.perf.akt.1.sg | perierim | ich zugrunde gegangen bin |  |
+| perīre | konj.perf.akt.1.pl | perierimus | wir zugrunde gegangen sind |  |
+| perīre | konj.plusq.akt.1.sg | perīssem | ich zugrunde gegangen wäre |  |
+| perīre | konj.plusq.akt.1.pl | perīssēmus | wir zugrunde gegangen wären |  |
+| adīre | ind.praes.akt.1.sg | adeō | ich gehe heran |  |
+| adīre | ind.praes.akt.1.pl | adīmus | wir gehen heran |  |
+| adīre | ind.impf.akt.1.sg | adībam | ich ging heran |  |
+| adīre | ind.impf.akt.1.pl | adībāmus | wir gingen heran |  |
+| adīre | ind.fut.akt.1.sg | adībō | ich werde herangehen |  |
+| adīre | ind.fut.akt.1.pl | adībimus | wir werden herangehen |  |
+| adīre | ind.perf.akt.1.sg | adiī | ich bin herangegangen | ich ging heran |
+| adīre | ind.perf.akt.1.pl | adiimus | wir sind herangegangen | wir gingen heran |
+| adīre | ind.plusq.akt.1.sg | adieram | ich war herangegangen |  |
+| adīre | ind.plusq.akt.1.pl | adierāmus | wir waren herangegangen |  |
+| adīre | ind.fut2.akt.1.sg | adierō | ich werde herangegangen sein |  |
+| adīre | ind.fut2.akt.1.pl | adierimus | wir werden herangegangen sein |  |
+| adīre | konj.praes.akt.1.sg | adeam | ich herangehe |  |
+| adīre | konj.praes.akt.1.pl | adeāmus | wir herangehen |  |
+| adīre | konj.impf.akt.1.sg | adīrem | ich herangehen würde |  |
+| adīre | konj.impf.akt.1.pl | adīrēmus | wir herangehen würden |  |
+| adīre | konj.perf.akt.1.sg | adierim | ich herangegangen bin |  |
+| adīre | konj.perf.akt.1.pl | adierimus | wir herangegangen sind |  |
+| adīre | konj.plusq.akt.1.sg | adīssem | ich herangegangen wäre |  |
+| adīre | konj.plusq.akt.1.pl | adīssēmus | wir herangegangen wären |  |
+| abesse | ind.praes.akt.1.sg | absum | ich bin abwesend |  |
+| abesse | ind.praes.akt.1.pl | absumus | wir sind abwesend |  |
+| abesse | ind.impf.akt.1.sg | aberam | ich war abwesend |  |
+| abesse | ind.impf.akt.1.pl | aberāmus | wir waren abwesend |  |
+| abesse | ind.fut.akt.1.sg | aberō | ich werde abwesend sein |  |
+| abesse | ind.fut.akt.1.pl | aberimus | wir werden abwesend sein |  |
+| abesse | ind.perf.akt.1.sg | āfuī | ich bin abwesend gewesen | ich war abwesend |
+| abesse | ind.perf.akt.1.pl | āfuimus | wir sind abwesend gewesen | wir waren abwesend |
+| abesse | ind.plusq.akt.1.sg | āfueram | ich war abwesend gewesen |  |
+| abesse | ind.plusq.akt.1.pl | āfuerāmus | wir waren abwesend gewesen |  |
+| abesse | ind.fut2.akt.1.sg | āfuerō | ich werde abwesend gewesen sein |  |
+| abesse | ind.fut2.akt.1.pl | āfuerimus | wir werden abwesend gewesen sein |  |
+| abesse | konj.praes.akt.1.sg | absim | ich abwesend bin |  |
+| abesse | konj.praes.akt.1.pl | absīmus | wir abwesend sind |  |
+| abesse | konj.impf.akt.1.sg | abessem | ich abwesend sein würde |  |
+| abesse | konj.impf.akt.1.pl | abessēmus | wir abwesend sein würden |  |
+| abesse | konj.perf.akt.1.sg | āfuerim | ich abwesend gewesen bin |  |
+| abesse | konj.perf.akt.1.pl | āfuerimus | wir abwesend gewesen sind |  |
+| abesse | konj.plusq.akt.1.sg | āfuissem | ich abwesend gewesen wäre |  |
+| abesse | konj.plusq.akt.1.pl | āfuissēmus | wir abwesend gewesen wären |  |
+| adesse | ind.praes.akt.1.sg | adsum | ich bin da |  |
+| adesse | ind.praes.akt.1.pl | adsumus | wir sind da |  |
+| adesse | ind.impf.akt.1.sg | aderam | ich war da |  |
+| adesse | ind.impf.akt.1.pl | aderāmus | wir waren da |  |
+| adesse | ind.fut.akt.1.sg | aderō | ich werde da sein |  |
+| adesse | ind.fut.akt.1.pl | aderimus | wir werden da sein |  |
+| adesse | ind.perf.akt.1.sg | affuī | ich bin da gewesen | ich war da |
+| adesse | ind.perf.akt.1.pl | affuimus | wir sind da gewesen | wir waren da |
+| adesse | ind.plusq.akt.1.sg | affueram | ich war da gewesen |  |
+| adesse | ind.plusq.akt.1.pl | affuerāmus | wir waren da gewesen |  |
+| adesse | ind.fut2.akt.1.sg | affuerō | ich werde da gewesen sein |  |
+| adesse | ind.fut2.akt.1.pl | affuerimus | wir werden da gewesen sein |  |
+| adesse | konj.praes.akt.1.sg | adsim | ich da bin |  |
+| adesse | konj.praes.akt.1.pl | adsīmus | wir da sind |  |
+| adesse | konj.impf.akt.1.sg | adessem | ich da sein würde |  |
+| adesse | konj.impf.akt.1.pl | adessēmus | wir da sein würden |  |
+| adesse | konj.perf.akt.1.sg | affuerim | ich da gewesen bin |  |
+| adesse | konj.perf.akt.1.pl | affuerimus | wir da gewesen sind |  |
+| adesse | konj.plusq.akt.1.sg | affuissem | ich da gewesen wäre |  |
+| adesse | konj.plusq.akt.1.pl | affuissēmus | wir da gewesen wären |  |
+| dēesse | ind.praes.akt.1.sg | dēsum | ich fehle |  |
+| dēesse | ind.praes.akt.1.pl | dēsumus | wir fehlen |  |
+| dēesse | ind.impf.akt.1.sg | dēeram | ich fehlte |  |
+| dēesse | ind.impf.akt.1.pl | dēerāmus | wir fehlten |  |
+| dēesse | ind.fut.akt.1.sg | dēerō | ich werde fehlen |  |
+| dēesse | ind.fut.akt.1.pl | dēerimus | wir werden fehlen |  |
+| dēesse | ind.perf.akt.1.sg | dēfuī | ich habe gefehlt | ich fehlte |
+| dēesse | ind.perf.akt.1.pl | dēfuimus | wir haben gefehlt | wir fehlten |
+| dēesse | ind.plusq.akt.1.sg | dēfueram | ich hatte gefehlt |  |
+| dēesse | ind.plusq.akt.1.pl | dēfuerāmus | wir hatten gefehlt |  |
+| dēesse | ind.fut2.akt.1.sg | dēfuerō | ich werde gefehlt haben |  |
+| dēesse | ind.fut2.akt.1.pl | dēfuerimus | wir werden gefehlt haben |  |
+| dēesse | konj.praes.akt.1.sg | dēsim | ich fehle |  |
+| dēesse | konj.praes.akt.1.pl | dēsīmus | wir fehlen |  |
+| dēesse | konj.impf.akt.1.sg | dēessem | ich fehlen würde |  |
+| dēesse | konj.impf.akt.1.pl | dēessēmus | wir fehlen würden |  |
+| dēesse | konj.perf.akt.1.sg | dēfuerim | ich gefehlt habe |  |
+| dēesse | konj.perf.akt.1.pl | dēfuerimus | wir gefehlt haben |  |
+| dēesse | konj.plusq.akt.1.sg | dēfuissem | ich gefehlt hätte |  |
+| dēesse | konj.plusq.akt.1.pl | dēfuissēmus | wir gefehlt hätten |  |
