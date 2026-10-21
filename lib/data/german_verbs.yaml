@@ -443,7 +443,160 @@ items:
     absent: *ohne_passiv
 
   # package 1
-
+  - id: haben vollverb
+    type: unregelmäßig
+    translation: {de: haben, en: have}
+    parts: {infinitiv: haben, praesens_2sg: hast, praesens_3sg: hat, praeteritum: hatte, konjunktiv2: hätte, partizip2: gehabt}
+    absent: *ohne_passiv
+  - type: schwach
+    translation: {de: hören, en: hear}
+    parts: {infinitiv: hören, partizip2: gehört}
+  - type: stark
+    translation: {de: nehmen, en: take}
+    parts: {infinitiv: nehmen, praesens_3sg: nimmt, praeteritum: nahm, partizip2: genommen}
+  - type: stark
+    translation: {de: gebären, en: give birth to}
+    parts: {infinitiv: gebären, praeteritum: gebar, partizip2: geboren}
+  - type: stark
+    translation: {de: eintreten, en: enter}
+    parts: {infinitiv: eintreten, grundverb: treten, partikel: ein, praesens_2sg: trittst, praesens_3sg: tritt, praeteritum: trat, partizip2: eingetreten}
+    slots: {hilfsverb: hv_sein}
+    absent: *ohne_passiv
+  - type: stark
+    translation: {de: erscheinen, en: appear}
+    parts: {infinitiv: erscheinen, praeteritum: erschien, partizip2: erschienen}
+    slots: {hilfsverb: hv_sein}
+    absent: *ohne_passiv
+  - type: schwach
+    translation: {de: bauen, en: build}
+    parts: {infinitiv: bauen, partizip2: gebaut}
+  - type: stark
+    translation: {de: gehen, en: go}
+    parts: {infinitiv: gehen, praeteritum: ging, partizip2: gegangen}
+    slots: {hilfsverb: hv_sein}
+    absent: *ohne_passiv
+  - type: gemischt
+    translation: {de: herbeibringen, en: bring}
+    parts: {infinitiv: herbeibringen, grundverb: bringen, partikel: herbei, praeteritum: brachte, partizip2: herbeigebracht}
+  - id: sich nähern
+    type: schwach
+    translation: {de: sich nähern, en: approach}
+    parts: {infinitiv: nähern, praesens_1pl: nähern, partizip2: genähert}
+    slots: {reflexiv: refl}
+    absent: *ohne_passiv
+  - type: schwach
+    translation: {de: zögern, en: hesitate}
+    parts: {infinitiv: zögern, praesens_1pl: zögern, partizip2: gezögert}
+    absent: *ohne_passiv
+  - type: stark
+    translation: {de: zusammenkommen, en: come together}
+    parts: {infinitiv: zusammenkommen, grundverb: kommen, partikel: zusammen, praeteritum: kam, partizip2: zusammengekommen}
+    slots: {hilfsverb: hv_sein}
+    absent: *ohne_passiv
+  - type: schwach
+    translation: {de: speisen, en: dine}
+    parts: {infinitiv: speisen, praesens_2sg: speist, partizip2: gespeist}
+  - type: schwach
+    translation: {de: sorgen, en: care}
+    parts: {infinitiv: sorgen, partizip2: gesorgt}
+    absent: *ohne_passiv
+  - type: stark
+    translation: {de: geben, en: give}
+    parts: {infinitiv: geben, praesens_3sg: gibt, praeteritum: gab, partizip2: gegeben}
+  - type: stark
+    translation: {de: schlafen, en: sleep}
+    parts: {infinitiv: schlafen, praesens_3sg: schläft, praeteritum: schlief, partizip2: geschlafen}
+    absent: *ohne_passiv
+  - type: schwach
+    translation: {de: erfreuen, en: delight}
+    parts: {infinitiv: erfreuen, partizip2: erfreut}
+  - type: schwach
+    translation: {de: wünschen, en: wish}
+    parts: {infinitiv: wünschen, partizip2: gewünscht}
+  - type: schwach
+    translation: {de: erklären, en: explain}
+    parts: {infinitiv: erklären, partizip2: erklärt}
+  - type: schwach
+    translation: {de: warten, en: wait}
+    parts: {infinitiv: warten, partizip2: gewartet}
+    absent: *ohne_passiv
+  - id: in die flucht schlagen
+    type: stark
+    translation: {de: in die Flucht schlagen, en: put to flight}
+    parts: {infinitiv: in die Flucht schlagen, grundverb: schlagen, wortgruppe: in die Flucht, praesens_3sg: schlägt, praeteritum: schlug, partizip2: in die Flucht geschlagen}
+  - type: stark
+    translation: {de: befehlen, en: order}
+    parts: {infinitiv: befehlen, praesens_3sg: befiehlt, praeteritum: befahl, partizip2: befohlen}
+  - type: stark
+    translation: {de: bleiben, en: stay}
+    parts: {infinitiv: bleiben, praeteritum: blieb, partizip2: geblieben}
+    slots: {hilfsverb: hv_sein}
+    absent: *ohne_passiv
+  - type: schwach
+    translation: {de: töten, en: kill}
+    parts: {infinitiv: töten, partizip2: getötet}
+  - type: schwach
+    translation: {de: bereiten, en: prepare}
+    parts: {infinitiv: bereiten, partizip2: bereitet}
+  - type: stark
+    translation: {de: gefallen, en: please}
+    parts: {infinitiv: gefallen, praesens_3sg: gefällt, praeteritum: gefiel, partizip2: gefallen}
+    absent: *ohne_passiv
+  - id: für gut befinden
+    type: stark
+    translation: {de: für gut befinden, en: approve}
+    parts: {infinitiv: für gut befinden, grundverb: befinden, wortgruppe: für gut, praeteritum: befand, partizip2: für gut befunden}
+  - type: schwach
+    translation: {de: verhindern, en: prevent}
+    parts: {infinitiv: verhindern, praesens_1pl: verhindern, partizip2: verhindert}
+  - type: schwach
+    translation: {de: eilen, en: hurry}
+    parts: {infinitiv: eilen, partizip2: geeilt}
+    slots: {hilfsverb: hv_sein}
+    absent: *ohne_passiv
+  - type: schwach
+    translation: {de: gehorchen, en: obey}
+    parts: {infinitiv: gehorchen, partizip2: gehorcht}
+    absent: *ohne_passiv
+  - type: schwach
+    translation: {de: kämpfen, en: fight}
+    parts: {infinitiv: kämpfen, partizip2: gekämpft}
+    absent: *ohne_passiv
+  - type: schwach
+    translation: {de: antworten, en: answer}
+    parts: {infinitiv: antworten, partizip2: geantwortet}
+    absent: *ohne_passiv
+  - type: schwach
+    translation: {de: fragen, en: ask}
+    parts: {infinitiv: fragen, partizip2: gefragt}
+  - type: schwach
+    translation: {de: lachen, en: laugh}
+    parts: {infinitiv: lachen, partizip2: gelacht}
+    absent: *ohne_passiv
+  - type: schwach
+    translation: {de: opfern, en: sacrifice}
+    parts: {infinitiv: opfern, praesens_1pl: opfern, partizip2: geopfert}
+  - type: schwach
+    translation: {de: grüßen, en: greet}
+    parts: {infinitiv: grüßen, praesens_2sg: grüßt, partizip2: gegrüßt}
+  - type: stark
+    translation: {de: sitzen, en: sit}
+    parts: {infinitiv: sitzen, praesens_2sg: sitzt, praeteritum: saß, partizip2: gesessen}
+    absent: *ohne_passiv
+  - type: schwach
+    translation: {de: schützen, en: protect}
+    parts: {infinitiv: schützen, praesens_2sg: schützt, partizip2: geschützt}
+  - type: schwach
+    translation: {de: dienen, en: serve}
+    parts: {infinitiv: dienen, partizip2: gedient}
+    absent: *ohne_passiv
+  - id: könig sein
+    type: stark
+    translation: {de: König sein, en: be king}
+    parts: {infinitiv: König sein, grundverb: sein, wortgruppe: König, praesens_1sg: bin, praesens_2sg: bist, praesens_3sg: ist, praesens_1pl: sind, praesens_2pl: seid, praeteritum: war, partizip2: König gewesen}
+    slots: {hilfsverb: hv_sein}
+    forms: {part.praes.akt: König seiend}
+    absent: *ohne_passiv
 
 
 
