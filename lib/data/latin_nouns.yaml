@@ -543,7 +543,7 @@ items:
   - translation: {de: Der Tag, en: day}
     parts: {nom: "diēs"}
   - type: U-Deklination
-    translation: {de: Die Hand, en: hand}
+    translation: {de: "Die Hand; der Trupp („Handvoll Leute“)", en: hand}
     parts: {nom: "manus"}
   - translation: {de: Der Gott, en: god}
     parts: {nom: "deus"}
@@ -696,7 +696,7 @@ items:
     translation: {de: die Stadt, en: city}
     parts: {nom: "urbs", gen: "urbis"}
   - type: Konsonantische-Deklination-i-mf
-    translation: {de: der Teil, en: part}
+    translation: {de: "der Teil; die Seite", en: part}
     parts: {nom: "pars", gen: "partis"}
   - type: Konsonantische-Deklination-i-n
     translation: {de: das Meer, en: sea}
@@ -741,7 +741,7 @@ items:
       akk.pl: "vōs"
       abl.pl: "vōbīs"
   - type: Pronomen-hic
-    translation: {de: "dieser hier, diese hier, dieses hier", en: "this (here)"}
+    translation: {de: "dieser hier, diese hier, dieses hier; der/die/das Folgende", en: "this (here)"}
     parts: {nom: "hic"}
     forms:
       nom.sg.m: "hic"
@@ -843,7 +843,7 @@ items:
       akk.pl.n: "ista"
       abl.pl.n: "istīs"
   - type: Pronomen-ipse
-    translation: {de: selbst, en: "self, himself, herself, itself"}
+    translation: {de: "selbst; gerade; sogar", en: "self, himself, herself, itself"}
     parts: {nom: "ipse"}
     forms:
       nom.sg.m: "ipse"
@@ -977,7 +977,7 @@ items:
       akk.pl: "mīlia"
       abl.pl: "mīlibus"
   - type: Pronomen-idem
-    translation: {de: "derselbe, dieselbe, dasselbe", en: the same}
+    translation: {de: "derselbe, dieselbe, dasselbe; (und) zugleich", en: the same}
     parts: {nom: "īdem"}
     forms:
       nom.sg.m: "īdem"
@@ -1033,7 +1033,7 @@ items:
     translation: {de: die Liebe, en: love}
     parts: {nom: "amor", gen: "amōris"}
   - type: Konsonantische-Deklination-mf
-    translation: {de: "das Wohlergehen, die Rettung", en: "well-being, safety, rescue"}
+    translation: {de: "das Wohlergehen, die Rettung; die Gesundheit", en: "well-being, safety, rescue"}
     parts: {nom: "salūs", gen: "salūtis"}
   - type: Konsonantische-Deklination-mf
     translation: {de: "die Angst, die Furcht", en: fear}
@@ -1050,22 +1050,22 @@ items:
   - type: Konsonantische-Deklination-mf
     translation: {de: das junge Mädchen, en: "girl, young woman"}
     parts: {nom: "virgō", gen: "virginis"}
-  - translation: {de: die Insel, en: island}
+  - translation: {de: "die Insel; der Wohnblock", en: island}
     parts: {nom: "īnsula", gen: "īnsulae"}
   - type: Konsonantische-Deklination-mf
     translation: {de: der Schmerz, en: "pain, grief"}
     parts: {nom: "dolor", gen: "dolōris"}
   - type: Adjektiv-a-o
-    translation: {de: wunderbar, en: "wonderful, strange"}
+    translation: {de: "wunderbar; erstaunlich", en: "wonderful, strange"}
     parts: {nom: "mīrus", nom_f: "mīra", nom_n: "mīrum"}
   - type: Adjektiv-a-o
-    translation: {de: hoch, en: "high; deep"}
+    translation: {de: "hoch; tief", en: "high; deep"}
     parts: {nom: "altus", nom_f: "alta", nom_n: "altum"}
   - type: Adjektiv-zweiendig
     translation: {de: "grausam, gefühllos", en: "cruel, unfeeling"}
     parts: {nom: "crūdēlis", nom_n: "crūdēle"}
   - type: Konsonantische-Deklination-mf
-    translation: {de: das Geschrei, en: "shouting, outcry"}
+    translation: {de: "das Geschrei; der Lärm", en: "shouting, outcry"}
     parts: {nom: "clāmor", gen: "clāmōris"}
   - translation: {de: "der Kampf, die Schlacht", en: "fight, battle"}
     parts: {nom: "pūgna", gen: "pūgnae"}
@@ -1080,12 +1080,12 @@ items:
     parts: {nom: "fuga", gen: "fugae"}
   - translation: {de: die Hoffnung, en: hope}
     parts: {nom: "spēs", gen: "speī"}
-  - translation: {de: der Himmel, en: "sky, heaven"}
+  - translation: {de: "der Himmel; das Wetter, Klima", en: "sky, heaven"}
     parts: {nom: "caelum", gen: "caelī"}
   - type: Adjektiv-zweiendig
     translation: {de: unglaublich, en: unbelievable}
     parts: {nom: "incrēdibilis", nom_n: "incrēdibile"}
-  - translation: {de: "die Treue, das Vertrauen", en: "loyalty, trust"}
+  - translation: {de: "die Treue, das Vertrauen; der Glaube; das Versprechen", en: "loyalty, trust"}
     parts: {nom: "fidēs", gen: "fideī"}
   - type: Adjektiv-a-o
     translation: {de: "mittlerer, in der Mitte", en: "middle, in the middle"}
@@ -1102,7 +1102,7 @@ items:
     translation: {de: "bekannt, berühmt", en: "known, famous"}
     parts: {nom: "nōtus", nom_f: "nōta", nom_n: "nōtum"}
   - type: Adjektiv-a-o
-    translation: {de: wahr, en: "true"}
+    translation: {de: "wahr; wahrhaftig", en: "true"}
     parts: {nom: "vērus", nom_f: "vēra", nom_n: "vērum"}
   - type: Konsonantische-Deklination-mf
     translation: {de: der Staub, en: dust}
@@ -1111,7 +1111,7 @@ items:
     translation: {de: der Wächter/die Wächterin, en: guard}
     parts: {nom: "cūstōs", gen: "cūstōdis"}
   - type: Konsonantische-Deklination-mf
-    translation: {de: das Gesetz, en: law}
+    translation: {de: "das Gesetz; die Bedingung", en: law}
     parts: {nom: "lēx", gen: "lēgis"}
   - translation: {de: "das Schicksal, Glück", en: "fate, fortune, luck"}
     parts: {nom: "fortūna", gen: "fortūnae"}
@@ -1125,7 +1125,7 @@ items:
     translation: {de: "die Begierde, das Verlangen", en: "desire, greed"}
     parts: {nom: "cupiditās", gen: "cupiditātis"}
   - type: Adjektiv-a-o
-    translation: {de: glücklich, en: "happy, blessed"}
+    translation: {de: "glücklich; reich", en: "happy, blessed"}
     parts: {nom: "beātus", nom_f: "beāta", nom_n: "beātum"}
   - type: Adjektiv-a-o
     translation: {de: "der höchste, der oberste", en: "highest, top"}
@@ -1142,14 +1142,14 @@ items:
   - translation: {de: die Antwort, en: answer}
     parts: {nom: "respōnsum", gen: "respōnsī"}
   - type: Konsonantische-Deklination-mf
-    translation: {de: der Urheber, en: "originator, author"}
+    translation: {de: "der Urheber; der Schriftsteller", en: "originator, author"}
     parts: {nom: "auctor", gen: "auctōris"}
   - translation: {de: "das Gedächtnis, die Erinnerung", en: memory}
     parts: {nom: "memoria", gen: "memoriae"}
   - translation: {de: "der Hass, die Abneigung", en: "hatred, dislike"}
     parts: {nom: "odium", gen: "odiī"}
   - type: Konsonantische-Deklination-mf
-    translation: {de: die Würde, en: "dignity, rank"}
+    translation: {de: "die Würde; die Pracht", en: "dignity, rank"}
     parts: {nom: "dignitās", gen: "dignitātis"}
   - type: Konsonantische-Deklination-i-mf
     translation: {de: "das Gebäude, der Tempel", en: "temple; (plural) house"}
@@ -1157,10 +1157,10 @@ items:
   - type: Konsonantische-Deklination-n
     translation: {de: "die Macht (eines Gottes)", en: "divine power, divinity"}
     parts: {nom: "nūmen", gen: "nūminis"}
-  - translation: {de: das Maß, en: "measure; way, manner"}
+  - translation: {de: "das Maß; die Art und Weise", en: "measure; way, manner"}
     parts: {nom: "modus", gen: "modī"}
   - type: Adjektiv-a-o
-    translation: {de: "hell, klar", en: "bright, clear; famous"}
+    translation: {de: "hell, klar; angesehen, berühmt", en: "bright, clear; famous"}
     parts: {nom: "clārus", nom_f: "clāra", nom_n: "clārum"}
   - type: Konsonantische-Deklination-mf
     translation: {de: "der Sturm, das Unwetter", en: "storm; weather"}
@@ -1176,7 +1176,7 @@ items:
   - type: Adjektiv-a-o
     translation: {de: "feindlich, bedrohlich", en: "hostile, threatening"}
     parts: {nom: "īnfēstus", nom_f: "īnfēsta", nom_n: "īnfēstum"}
-  - translation: {de: der Ort, en: place}
+  - translation: {de: "der Ort; die Gegend", en: place}
     parts: {nom: "locus", gen: "locī"}
   - type: Konsonantische-Deklination-n
     translation: {de: das Verbrechen, en: crime}
@@ -1189,16 +1189,16 @@ items:
     parts: {nom: "morbus", gen: "morbī"}
   - translation: {de: "das Eisen, Schwert", en: "iron; sword"}
     parts: {nom: "ferrum", gen: "ferrī"}
-  - translation: {de: "die Meinung, Ansicht", en: "opinion, view"}
+  - translation: {de: "die Meinung, Ansicht; der Satz", en: "opinion, view"}
     parts: {nom: "sententia", gen: "sententiae"}
   - type: Konsonantische-Deklination-mf
-    translation: {de: "der Brauch, die Sitte", en: "custom, habit"}
+    translation: {de: "der Brauch, die Sitte; Pl.: der Charakter", en: "custom, habit"}
     parts: {nom: "mōs", gen: "mōris"}
   - type: Konsonantische-Deklination-i-mf
-    translation: {de: die Familie, en: "clan, family; people"}
+    translation: {de: "die Familie; das Volk", en: "clan, family; people"}
     parts: {nom: "gēns", gen: "gentis"}
   - type: Adjektiv-a-o
-    translation: {de: "ausländisch, barbarisch", en: "foreign, barbarian"}
+    translation: {de: "ausländisch, barbarisch; Substantiv: der Ausländer; Barbar", en: "foreign, barbarian"}
     parts: {nom: "barbarus", nom_f: "barbara", nom_n: "barbarum"}
   - type: Konsonantische-Deklination-i-mf
     translation: {de: "der Kreis, Kreislauf", en: "circle, cycle"}
@@ -1212,10 +1212,10 @@ items:
     parts: {nom: "sepulcrum", gen: "sepulcrī"}
   - translation: {de: "das Wissen, die Kenntnis", en: knowledge}
     parts: {nom: "scientia", gen: "scientiae"}
-  - translation: {de: "der Eifer, die Beschäftigung", en: "eagerness, zeal; pursuit, study"}
+  - translation: {de: "der Eifer, die Beschäftigung; das Studium", en: "eagerness, zeal; pursuit, study"}
     parts: {nom: "studium", gen: "studiī"}
   - type: Konsonantische-Deklination-mf
-    translation: {de: der Feldherr, en: "general, commander"}
+    translation: {de: "der Feldherr; der Kaiser, Herrscher", en: "general, commander"}
     parts: {nom: "imperātor", gen: "imperātōris"}
   - type: Konsonantische-Deklination-mf
     translation: {de: der alte Mann, en: old man}
@@ -1236,13 +1236,13 @@ items:
     translation: {de: "sehr groß, der Größte", en: "greatest, very great"}
     parts: {nom: "māximus", nom_f: "māxima", nom_n: "māximum"}
     absent: *ohne_steigerung
-  - translation: {de: der Bote, en: "messenger; message"}
+  - translation: {de: "der Bote; die Botschaft", en: "messenger; message"}
     parts: {nom: "nūntius", gen: "nūntiī"}
   - type: Konsonantische-Deklination-mf
     translation: {de: "die Macht, Herrschaft", en: "power, authority"}
     parts: {nom: "potestās", gen: "potestātis"}
   - type: Konsonantische-Deklination-n
-    translation: {de: der Unterschied, en: "difference; crisis, danger"}
+    translation: {de: "der Unterschied; die Gefahr", en: "difference; crisis, danger"}
     parts: {nom: "discrīmen", gen: "discrīminis"}
   - type: Adjektiv-a-o
     translation: {de: "lebendig, lebend", en: "alive, living"}
@@ -1256,16 +1256,16 @@ items:
   - translation: {de: "das Schweigen, die Stille", en: silence}
     parts: {nom: "silentium", gen: "silentiī"}
   - type: Konsonantische-Deklination-mf
-    translation: {de: Gaius Iulius Caesar, en: Gaius Julius Caesar}
+    translation: {de: "Gaius Iulius Caesar; (später als Beiname römischer Herrscher:) der Kaiser", en: Gaius Julius Caesar}
     parts: {nom: "Caesar", gen: "Caesaris"}
   - type: U-Deklination
     translation: {de: "die Flut, Welle", en: "wave, flood"}
     parts: {nom: "flūctus", gen: "flūctūs"}
   - type: Konsonantische-Deklination-i-mf
-    translation: {de: die Flotte, en: fleet}
+    translation: {de: "die Flotte; die Abteilung", en: fleet}
     parts: {nom: "classis", gen: "classis"}
   - type: U-Deklination
-    translation: {de: der Anblick, en: "sight, view"}
+    translation: {de: "der Anblick; das Blickfeld", en: "sight, view"}
     parts: {nom: "cōnspectus", gen: "cōnspectūs"}
   - type: U-Deklination
     translation: {de: "die Angst, Furcht", en: fear}
@@ -1274,10 +1274,10 @@ items:
     translation: {de: "das Seufzen, Brüllen", en: "groan, sigh; roar"}
     parts: {nom: "gemitus", gen: "gemitūs"}
   - type: U-Deklination
-    translation: {de: der Lauf, en: "course, run"}
+    translation: {de: "der Lauf; die Laufbahn; der Kurs", en: "course, run"}
     parts: {nom: "cursus", gen: "cursūs"}
   - type: U-Deklination
-    translation: {de: der Angriff, en: "attack; force"}
+    translation: {de: "der Angriff; der Schwung", en: "attack; force"}
     parts: {nom: "impetus", gen: "impetūs"}
   - type: Konsonantische-Deklination-mf
     translation: {de: "der Begleiter, Gefährte/die Begleiterin", en: companion}
@@ -1285,7 +1285,7 @@ items:
   - translation: {de: "das Geld, die Summe, das Vermögen", en: "money, sum; wealth"}
     parts: {nom: "pecūnia", gen: "pecūniae"}
   - type: Konsonantische-Deklination-n
-    translation: {de: der Kopf, en: head}
+    translation: {de: "der Kopf; das Leben; die Hauptstadt", en: head}
     parts: {nom: "caput", gen: "capitis"}
   - type: U-Deklination
     translation: {de: "der Vers, die Zeile", en: "verse, line"}
@@ -1297,7 +1297,7 @@ items:
     translation: {de: "die Tat, Untat, das Verbrechen", en: "deed; crime"}
     parts: {nom: "facinus", gen: "facinoris"}
   - type: Adjektiv-a-o
-    translation: {de: "(einer Sache) unwürdig", en: "unworthy (of something)"}
+    translation: {de: "(einer Sache) unwürdig; abscheulich", en: "unworthy (of something)"}
     parts: {nom: "indignus", nom_f: "indigna", nom_n: "indignum"}
   - type: Konsonantische-Deklination-mf
     translation: {de: das Bild, en: "image, picture"}
@@ -1308,7 +1308,7 @@ items:
   - translation: {de: die Königin, en: queen}
     parts: {nom: "rēgīna", gen: "rēgīnae"}
   - type: U-Deklination
-    translation: {de: der Sinn, en: "sense, feeling"}
+    translation: {de: "der Sinn; die Wahrnehmung, das Gefühl, der Gedanke", en: "sense, feeling"}
     parts: {nom: "sēnsus", gen: "sēnsūs"}
   - type: Adjektiv-a-o
     translation: {de: "wie viel, wie groß", en: "how much, how great"}
@@ -1335,7 +1335,7 @@ items:
   - type: Konsonantische-Deklination-mf
     translation: {de: der Konsul, en: consul}
     parts: {nom: "cōnsul", gen: "cōnsulis"}
-  - translation: {de: der Gesandte, en: "envoy, ambassador"}
+  - translation: {de: "der Gesandte; der Legat (Offizier)", en: "envoy, ambassador"}
     parts: {nom: "lēgātus", gen: "lēgātī"}
   - type: Konsonantische-Deklination-n
     translation: {de: "die Reise, der Weg, Marsch", en: "journey, way, march"}
@@ -1355,31 +1355,31 @@ items:
     translation: {de: schnell, en: "quick, fast"}
     parts: {nom: "celer", nom_f: "celeris", nom_n: "celere"}
   - type: Adjektiv-a-o
-    translation: {de: leer, en: "empty, desolate; vast"}
+    translation: {de: "leer; verwüstet; unermesslich", en: "empty, desolate; vast"}
     parts: {nom: "vāstus", nom_f: "vāsta", nom_n: "vāstum"}
   - type: Adjektiv-a-o
-    translation: {de: bitter, en: bitter}
+    translation: {de: "bitter; scharf, schmerzlich", en: bitter}
     parts: {nom: "acerbus", nom_f: "acerba", nom_n: "acerbum"}
   - type: Adjektiv-a-o
-    translation: {de: gottlos, en: "wicked, impious"}
+    translation: {de: "gottlos; verbrecherisch; unanständig", en: "wicked, impious"}
     parts: {nom: "nefārius", nom_f: "nefāria", nom_n: "nefārium"}
-  - translation: {de: die Schärfe, en: "sharp edge; battle line"}
+  - translation: {de: "die Schärfe; das (zur Schlacht bereite) Heer; die Schlacht", en: "sharp edge; battle line"}
     parts: {nom: "aciēs", gen: "aciēī"}
   - type: Adjektiv-a-o-er
-    translation: {de: grob, en: "rough, harsh"}
+    translation: {de: "grob; unangenehm; wild", en: "rough, harsh"}
     parts: {nom: "asper", nom_f: "aspera", nom_n: "asperum"}
   - type: Adjektiv-a-o
     translation: {de: "bewaffnet, gerüstet", en: armed}
     parts: {nom: "armātus", nom_f: "armāta", nom_n: "armātum"}
   - translation: {de: "die Verbannung, das Exil", en: exile}
     parts: {nom: "exilium", gen: "exiliī"}
-  - translation: {de: die Gnade, en: "pardon, mercy"}
+  - translation: {de: "die Gnade; die Verzeihung; die Erlaubnis", en: "pardon, mercy"}
     parts: {nom: "venia", gen: "veniae"}
   - type: U-Deklination
     translation: {de: die Rückkehr, en: return}
     parts: {nom: "reditus", gen: "reditūs"}
   - type: Konsonantische-Deklination-mf
-    translation: {de: "die Erhabenheit, das Ansehen", en: "majesty, greatness, prestige"}
+    translation: {de: "die Erhabenheit, das Ansehen; die Pracht", en: "majesty, greatness, prestige"}
     parts: {nom: "māiestās", gen: "māiestātis"}
   - type: U-Deklination
     translation: {de: "die Wasserleitung, der Aquädukt", en: aqueduct}
@@ -1388,27 +1388,27 @@ items:
     translation: {de: die Brücke, en: bridge}
     parts: {nom: "pōns", gen: "pontis"}
   - type: Konsonantische-Deklination-mf
-    translation: {de: "der Ranghöchste, Anführer", en: "first man, leader"}
+    translation: {de: "der Ranghöchste, Anführer; der Kaiser", en: "first man, leader"}
     parts: {nom: "prīnceps", gen: "prīncipis"}
   - type: Konsonantische-Deklination-n
-    translation: {de: die Aufgabe, en: "task, duty; gift"}
+    translation: {de: "die Aufgabe; das Amt; das Geschenk; das Gladiatorenspiel", en: "task, duty; gift"}
     parts: {nom: "mūnus", gen: "mūneris"}
   - type: Konsonantische-Deklination-i-mf
-    translation: {de: die Grenze, en: "end, boundary"}
+    translation: {de: "die Grenze; das Ende; Pl.: das Gebiet", en: "end, boundary"}
     parts: {nom: "fīnis", gen: "fīnis"}
-  - translation: {de: die Milde, en: "mercy, mildness"}
+  - translation: {de: "die Milde; die Schonung, Gnade", en: "mercy, mildness"}
     parts: {nom: "clēmentia", gen: "clēmentiae"}
   - translation: {de: die Gerechtigkeit, en: justice}
     parts: {nom: "iūstitia", gen: "iūstitiae"}
   - type: Konsonantische-Deklination-mf
-    translation: {de: das Pflichtbewusstsein, en: "sense of duty, devotion"}
+    translation: {de: "das Pflichtbewusstsein; die Liebe; die Frömmigkeit", en: "sense of duty, devotion"}
     parts: {nom: "pietās", gen: "pietātis"}
-  - translation: {de: der Grund, en: "cause, reason"}
+  - translation: {de: "der Grund; die Angelegenheit; der Prozess", en: "cause, reason"}
     parts: {nom: "causa", gen: "causae"}
   - type: U-Deklination
     translation: {de: "das Amt des Konsuls, Konsulat", en: consulship}
     parts: {nom: "cōnsulātus", gen: "cōnsulātūs"}
-  - translation: {de: "der (gute/schlechte) Ruf", en: "reputation (good or bad); rumour"}
+  - translation: {de: "der (gute/schlechte) Ruf; das Gerede, Gerücht", en: "reputation (good or bad); rumour"}
     parts: {nom: "fāma", gen: "fāmae"}
   - translation: {de: "der Jähzorn, Wutanfall", en: "hot temper, rage"}
     parts: {nom: "īrācundia", gen: "īrācundiae"}
@@ -1429,14 +1429,14 @@ items:
     translation: {de: "lieb, teuer", en: "dear, beloved; expensive"}
     parts: {nom: "cārus", nom_f: "cāra", nom_n: "cārum"}
   - type: Adjektiv-zweiendig
-    translation: {de: "schlimm, unanständig", en: "shameful, disgraceful"}
+    translation: {de: "schlimm, unanständig; hässlich", en: "shameful, disgraceful"}
     parts: {nom: "turpis", nom_n: "turpe"}
   - type: Konsonantische-Deklination-n
-    translation: {de: das Herz, en: heart}
+    translation: {de: "das Herz; die Stimmung; der Mut; der Verstand", en: heart}
     parts: {nom: "cor", gen: "cordis"}
     forms:
       gen.pl: "cordium"
-  - translation: {de: der Spott, en: mockery}
+  - translation: {de: "der Spott; das Spiel", en: mockery}
     parts: {nom: "lūdibrium", gen: "lūdibriī"}
   - type: Konsonantische-Deklination-mf
     translation: {de: "die Lust, das Vergnügen", en: "pleasure, delight"}
@@ -1445,7 +1445,7 @@ items:
     translation: {de: die Schönheit, en: beauty}
     parts: {nom: "pulchritūdō", gen: "pulchritūdinis"}
   - type: Konsonantische-Deklination-n
-    translation: {de: der Mund, en: "mouth; face"}
+    translation: {de: "der Mund; das Gesicht", en: "mouth; face"}
     parts: {nom: "ōs", gen: "ōris"}
   - translation: {de: der Finger, en: finger}
     parts: {nom: "digitus", gen: "digitī"}
@@ -1479,7 +1479,7 @@ items:
     translation: {de: der Baum, en: tree}
     parts: {nom: "arbor", gen: "arboris"}
   - type: U-Deklination
-    translation: {de: "die Frucht, der Ertrag", en: "fruit, profit"}
+    translation: {de: "die Frucht, der Ertrag; der Nutzen", en: "fruit, profit"}
     parts: {nom: "frūctus", gen: "frūctūs"}
   - type: Adjektiv-a-o
     translation: {de: "weiß, hell", en: "white, bright"}
