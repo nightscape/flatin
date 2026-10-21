@@ -335,12 +335,14 @@ final class NextDueItemFamily extends $Family
   String toString() => r'nextDueItemProvider';
 }
 
-/// The German texts of the Latin verbs.
+/// The German texts of the Latin verbs; none for a UI language other than
+/// German, so the kinds that show them are not built.
 
 @ProviderFor(germanForms)
 const germanFormsProvider = GermanFormsProvider._();
 
-/// The German texts of the Latin verbs.
+/// The German texts of the Latin verbs; none for a UI language other than
+/// German, so the kinds that show them are not built.
 
 final class GermanFormsProvider
     extends
@@ -350,7 +352,8 @@ final class GermanFormsProvider
           FutureOr<GermanForms>
         >
     with $FutureModifier<GermanForms>, $FutureProvider<GermanForms> {
-  /// The German texts of the Latin verbs.
+  /// The German texts of the Latin verbs; none for a UI language other than
+  /// German, so the kinds that show them are not built.
   const GermanFormsProvider._()
     : super(
         from: null,
@@ -377,7 +380,7 @@ final class GermanFormsProvider
   }
 }
 
-String _$germanFormsHash() => r'1bf3cf0f72f458fda60f82b52892e4197309e7bf';
+String _$germanFormsHash() => r'0b654b99c941e8db5c1d5156bcd7a1632593ab82';
 
 /// The randomness of the grammar exercises; a test overrides it with a seed.
 

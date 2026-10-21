@@ -6,6 +6,7 @@ import 'package:latin_practice/data/attribution.dart';
 import 'package:latin_practice/main.dart' show noRetry;
 import 'package:latin_practice/models/exercise.dart';
 import 'package:latin_practice/providers/fsrs_provider.dart';
+import 'package:latin_practice/providers/locale_provider.dart';
 import 'package:latin_practice/services/fsrs_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -16,7 +17,10 @@ void main() {
 
   ProviderContainer container() => ProviderContainer(
     retry: noRetry,
-    overrides: [exerciseRandomProvider.overrideWithValue(Random(139))],
+    overrides: [
+      dataLanguageProvider.overrideWith((ref) => 'de'),
+      exerciseRandomProvider.overrideWithValue(Random(139)),
+    ],
   );
 
   for (final (name, pick) in [

@@ -15,6 +15,7 @@ import 'package:latin_practice/models/lesson_range.dart';
 import 'package:latin_practice/models/practice_item.dart';
 import 'package:latin_practice/models/settings.dart';
 import 'package:latin_practice/providers/fsrs_provider.dart';
+import 'package:latin_practice/providers/locale_provider.dart';
 
 import 'support/grammar_exercise_harness.dart';
 
@@ -46,7 +47,9 @@ void main() {
     items = await loadAllPracticeItems();
     curriculum = await loadCurriculum(curriculumAssets);
     lessons = await loadLessonData(lessonDataAssets);
-    final container = ProviderContainer();
+    final container = ProviderContainer(
+      overrides: [dataLanguageProvider.overrideWith((ref) => 'de')],
+    );
     german = await container.read(germanFormsProvider.future);
     container.dispose();
   });

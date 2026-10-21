@@ -77,6 +77,19 @@ class GrammarGermanForms implements GermanForms {
   }
 }
 
+/// The forms for a UI language without form texts: no form is covered, so
+/// the kinds that show form texts throw [CannotBuild].
+class NoForms implements GermanForms {
+  const NoForms();
+
+  @override
+  bool covers(PracticeItem item, FormKey key) => false;
+
+  @override
+  String render(PracticeItem item, FormKey key) =>
+      throw StateError('NoForms has no text for ${item.id} $key');
+}
+
 /// Renders `<lemma>@<key>`, so every form has its own German text.
 /// Stands in for the German form data in tests of generators and screens.
 class FakeGermanForms implements GermanForms {
