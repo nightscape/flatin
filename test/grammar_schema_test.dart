@@ -546,6 +546,44 @@ void main() {
       );
     });
 
+    const agereParts =
+        '    parts: {infinitiv: agere, praesens_1sg: agō, perfekt_1sg: ēgī, '
+        'supinum: āctum}';
+
+    test('S25: an impersonal passive is neuter and has no person', () {
+      final derivation = GrammarEngine(
+        parseGrammarFiles(
+          _fixtureWith(agereParts, '$agereParts\n    passiv: unpersönlich'),
+        ),
+      ).of('verbs', 'agere');
+      expect(derivation.forms['ind.perf.pass.3.sg']!.variants, ['āctum est']);
+      expect(derivation.forms['ind.praes.pass.3.sg'], isNotNull);
+      expect(derivation.forms['ind.praes.pass.3.pl'], isNull);
+      expect(derivation.forms['ind.perf.pass.1.sg'], isNull);
+      expect(derivation.forms['part.perf.pass.sg.nom.m'], isNull);
+      expect(derivation.internal['part.perf.pass.sg.nom.m'], isNotNull);
+    });
+
+    test('S25: a passiv value other than unpersönlich', () {
+      _expectRejected(
+        'S25',
+        'is not "unpersönlich"',
+        _fixtureWith(agereParts, '$agereParts\n    passiv: persönlich'),
+      );
+    });
+
+    test('S25: a deponent with an impersonal passive', () {
+      _expectRejected(
+        'S25',
+        'a deponent has no impersonal passive',
+        _fixtureWith(
+          '    parts: {infinitiv: hortārī, praesens_1sg: hortor}',
+          '    parts: {infinitiv: hortārī, praesens_1sg: hortor}\n'
+              '    passiv: unpersönlich',
+        ),
+      );
+    });
+
     test('S16: a before entry that is not letters', () {
       _expectRejected(
         'S16',

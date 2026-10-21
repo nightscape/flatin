@@ -433,6 +433,9 @@ final class GrammarItem {
   /// The lesson key: the first spelling of the file's lemma part.
   final String lemma;
 
+  /// S25: `passiv: unpersönlich`.
+  final bool impersonalPassive;
+
   GrammarItem({
     required this.id,
     required this.translation,
@@ -446,10 +449,25 @@ final class GrammarItem {
     this.slots = const {},
     this.declaredType,
     this.typeRule,
+    this.impersonalPassive = false,
   });
 
   /// The first spelling of [part], or null.
   String? part(String name) => parts[name]?.first;
+
+  /// S8, S25: whether the keys of [delegate] are practised.
+  bool emits(DelegateSpec delegate) =>
+      delegate.emit &&
+      !(impersonalPassive && delegate.set['genus_verbi'] == 'pass');
+
+  /// S25: the key a `self` part looks up, given the [genusVerbi] of the
+  /// composed key.
+  Map<String, String> selfLookup(
+    Map<String, String> wanted,
+    String? genusVerbi,
+  ) => impersonalPassive && genusVerbi == 'pass' && wanted.containsKey('genus')
+      ? {...wanted, 'genus': 'n'}
+      : wanted;
 }
 
 /// The keys one item has, after S4, S10, S13 and S15.
@@ -1295,10 +1313,25 @@ class _FileParser {
         forms[key] = spellings;
       }
 
+      final impersonal = switch (spec['passiv']) {
+        null => false,
+        'unpersönlich' => true,
+        final other => _bad(
+          'S25',
+          '"passiv: $other" is not "unpersönlich"',
+          item: id,
+        ),
+      };
+      if (impersonal && spec['deponent'] != null) {
+        _bad('S25', 'a deponent has no impersonal passive', item: id);
+      }
       final absent = <Map<String, String>>[];
-      for (final pattern in (spec['absent'] as YamlList?) ?? const []) {
+      for (final pattern in [
+        ...(spec['absent'] as YamlList?) ?? const [],
+        if (impersonal) ..._personalPassive,
+      ]) {
         final features = <String, String>{};
-        for (final a in (pattern as YamlMap).entries) {
+        for (final a in (pattern as Map).entries) {
           final axis = file.axes.axes
               .where((x) => x.id == '${a.key}')
               .firstOrNull;
@@ -1330,12 +1363,20 @@ class _FileParser {
           deponent: _deponent(spec['deponent'], 'item $id'),
           deVerb: spec['de_verb'] as String?,
           slots: _slots(spec['slots'], 'item $id'),
+          impersonalPassive: impersonal,
         ),
       );
     }
     return items;
   }
 }
+
+/// S25: the passive keys with a person as subject.
+const _personalPassive = [
+  {'genus_verbi': 'pass', 'person': '1'},
+  {'genus_verbi': 'pass', 'person': '2'},
+  {'genus_verbi': 'pass', 'person': '3', 'numerus': 'pl'},
+];
 
 Iterable<Object?> _asList(Object? node) => node is YamlList ? node : [node];
 
@@ -1557,6 +1598,7 @@ class _Linker {
       slots: item.slots,
       declaredType: declared,
       typeRule: matched,
+      impersonalPassive: item.impersonalPassive,
     );
   }
 
@@ -1826,7 +1868,7 @@ class _Linker {
           ...targetAxes.parseKey(entry.key),
           ...delegate.set,
         });
-        if (delegate.emit) {
+        if (item.emits(delegate)) {
           add(key, 'delegate ${delegate.name}');
         } else {
           internal.add(key);
@@ -2040,8 +2082,8 @@ class _Linker {
       }
       final target = _typeByName[delegate.type]!;
       final targetAxes = _fileOfType[delegate.type]!.axes;
-      final wanted = {...features}
-        ..removeWhere((axis, _) => delegate.set[axis] == features[axis]);
+      final wanted = {...item.selfLookup(features, bundle['genus_verbi'])}
+        ..removeWhere((axis, value) => delegate.set[axis] == value);
       return target.forms.entries.any((entry) {
         final targetStem = entry.value.first.stemName;
         if (targetStem != null && !stems.contains(delegate.bind[targetStem])) {

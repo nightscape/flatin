@@ -290,6 +290,12 @@ own: its texts follow, as accepted variants, the texts of the rule that makes
 the key, and the shown text, the parts and the trace stay those of that rule. A
 variant rule that would make a key no other rule of the type makes throws.
 
+**S25. Impersonal passive.** An item with `passiv: unpersönlich` has only the
+impersonal passive: its passive keys with `person: 1`, `person: 2` or
+`person: 3, numerus: pl` are absent (S15). A `self` part of a composed passive
+key that sets `genus` reads the neuter (`ventum est`), and its delegated passive
+keys are internal (S8). Any other value, and the key on a deponent, throws.
+
 **Collisions.** A key produced twice — by own forms, by delegation or by
 composition other than a variant rule (S24) — throws. There is no precedence between them; inheritance (S6) is
 the only override mechanism besides item overrides.

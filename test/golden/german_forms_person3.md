@@ -51,13 +51,13 @@
 | venīre | ind.fut.pass.3.sg | veniētur | — |  |
 | venīre | ind.perf.akt.3.sg | vēnit | er/sie/es ist gekommen | er/sie/es kam |
 | venīre | ind.perf.akt.3.pl | vēnērunt | sie (Pl.) sind gekommen | sie (Pl.) kamen |
-| venīre | ind.perf.pass.3.sg | ventus est | — |  |
+| venīre | ind.perf.pass.3.sg | ventum est | — |  |
 | venīre | ind.plusq.akt.3.sg | vēnerat | er/sie/es war gekommen |  |
 | venīre | ind.plusq.akt.3.pl | vēnerant | sie (Pl.) waren gekommen |  |
-| venīre | ind.plusq.pass.3.sg | ventus erat | — |  |
+| venīre | ind.plusq.pass.3.sg | ventum erat | — |  |
 | venīre | ind.fut2.akt.3.sg | vēnerit | er/sie/es wird gekommen sein |  |
 | venīre | ind.fut2.akt.3.pl | vēnerint | sie (Pl.) werden gekommen sein |  |
-| venīre | ind.fut2.pass.3.sg | ventus erit | — |  |
+| venīre | ind.fut2.pass.3.sg | ventum erit | — |  |
 | venīre | konj.praes.akt.3.sg | veniat | er/sie/es kommt |  |
 | venīre | konj.praes.akt.3.pl | veniant | sie (Pl.) kommen |  |
 | venīre | konj.praes.pass.3.sg | veniātur | — |  |
@@ -66,10 +66,10 @@
 | venīre | konj.impf.pass.3.sg | venīrētur | — |  |
 | venīre | konj.perf.akt.3.sg | vēnerit | er/sie/es gekommen ist |  |
 | venīre | konj.perf.akt.3.pl | vēnerint | sie (Pl.) gekommen sind |  |
-| venīre | konj.perf.pass.3.sg | ventus sit | — |  |
+| venīre | konj.perf.pass.3.sg | ventum sit | — |  |
 | venīre | konj.plusq.akt.3.sg | vēnisset | er/sie/es gekommen wäre |  |
 | venīre | konj.plusq.akt.3.pl | vēnissent | sie (Pl.) gekommen wären |  |
-| venīre | konj.plusq.pass.3.sg | ventus esset | — |  |
+| venīre | konj.plusq.pass.3.sg | ventum esset | — |  |
 | gaudēre | ind.praes.akt.3.sg | gaudet | er/sie/es freut sich |  |
 | gaudēre | ind.praes.akt.3.pl | gaudent | sie (Pl.) freuen sich |  |
 | gaudēre | ind.impf.akt.3.sg | gaudēbat | er/sie/es freute sich |  |
@@ -101,13 +101,13 @@
 | labōrāre | ind.fut.pass.3.sg | labōrābitur | — |  |
 | labōrāre | ind.perf.akt.3.sg | labōrāvit | er/sie/es hat gearbeitet | er/sie/es arbeitete |
 | labōrāre | ind.perf.akt.3.pl | labōrāvērunt | sie (Pl.) haben gearbeitet | sie (Pl.) arbeiteten |
-| labōrāre | ind.perf.pass.3.sg | labōrātus est | — |  |
+| labōrāre | ind.perf.pass.3.sg | labōrātum est | — |  |
 | labōrāre | ind.plusq.akt.3.sg | labōrāverat | er/sie/es hatte gearbeitet |  |
 | labōrāre | ind.plusq.akt.3.pl | labōrāverant | sie (Pl.) hatten gearbeitet |  |
-| labōrāre | ind.plusq.pass.3.sg | labōrātus erat | — |  |
+| labōrāre | ind.plusq.pass.3.sg | labōrātum erat | — |  |
 | labōrāre | ind.fut2.akt.3.sg | labōrāverit | er/sie/es wird gearbeitet haben |  |
 | labōrāre | ind.fut2.akt.3.pl | labōrāverint | sie (Pl.) werden gearbeitet haben |  |
-| labōrāre | ind.fut2.pass.3.sg | labōrātus erit | — |  |
+| labōrāre | ind.fut2.pass.3.sg | labōrātum erit | — |  |
 | labōrāre | konj.praes.akt.3.sg | labōret | er/sie/es arbeitet |  |
 | labōrāre | konj.praes.akt.3.pl | labōrent | sie (Pl.) arbeiten |  |
 | labōrāre | konj.praes.pass.3.sg | labōrētur | — |  |
@@ -116,10 +116,10 @@
 | labōrāre | konj.impf.pass.3.sg | labōrārētur | — |  |
 | labōrāre | konj.perf.akt.3.sg | labōrāverit | er/sie/es gearbeitet hat |  |
 | labōrāre | konj.perf.akt.3.pl | labōrāverint | sie (Pl.) gearbeitet haben |  |
-| labōrāre | konj.perf.pass.3.sg | labōrātus sit | — |  |
+| labōrāre | konj.perf.pass.3.sg | labōrātum sit | — |  |
 | labōrāre | konj.plusq.akt.3.sg | labōrāvisset | er/sie/es gearbeitet hätte |  |
 | labōrāre | konj.plusq.akt.3.pl | labōrāvissent | sie (Pl.) gearbeitet hätten |  |
-| labōrāre | konj.plusq.pass.3.sg | labōrātus esset | — |  |
+| labōrāre | konj.plusq.pass.3.sg | labōrātum esset | — |  |
 | scīre | ind.praes.akt.3.sg | scit | er/sie/es weiß |  |
 | scīre | ind.praes.akt.3.pl | sciunt | sie (Pl.) wissen |  |
 | scīre | ind.praes.pass.3.sg | scītur | — |  |

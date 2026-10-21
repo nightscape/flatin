@@ -11,7 +11,6 @@
 | venīre | inf.perf.akt | vēnisse | gekommen sein |  |
 | venīre | inf.perf.pass | ventum esse | — |  |
 | venīre | part.praes.akt | veniēns | kommend |  |
-| venīre | part.perf.pass | ventus | — |  |
 | gaudēre | inf.praes.akt | gaudēre | sich freuen |  |
 | gaudēre | inf.perf.akt | gāvīsum esse | sich gefreut haben |  |
 | gaudēre | part.praes.akt | gaudēns | sich freuend |  |
@@ -21,7 +20,6 @@
 | labōrāre | inf.perf.akt | labōrāvisse | gearbeitet haben |  |
 | labōrāre | inf.perf.pass | labōrātum esse | — |  |
 | labōrāre | part.praes.akt | labōrāns | arbeitend |  |
-| labōrāre | part.perf.pass | labōrātus | — |  |
 | scīre | inf.praes.akt | scīre | wissen |  |
 | scīre | inf.praes.pass | scīrī | — |  |
 | scīre | inf.perf.akt | scīvisse | gewusst haben |  |

@@ -129,7 +129,7 @@ void main() {
     for (final e in supines.entries) {
       final forms = formsOf(e.key);
       expect(forms['sup.akk'], e.value, reason: e.key);
-      expect(forms['part.perf.pass.sg.nom.m'], isNotNull, reason: e.key);
+      expect(forms['ind.perf.pass.3.sg'], isNotNull, reason: e.key);
       expect(forms['part.fut.akt.sg.nom.m'], isNotNull, reason: e.key);
     }
   });

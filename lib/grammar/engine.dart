@@ -387,7 +387,7 @@ final class _ItemBuilder {
           engine._endingType(delegate.type, entry.key),
         );
         output[key] = form.build(key);
-        (delegate.emit ? made : internal)[key] = form;
+        (item.emits(delegate) ? made : internal)[key] = form;
       }
     }
   }
@@ -643,7 +643,10 @@ final class _ItemBuilder {
         (candidate) => candidate.name == part.delegate,
       );
       lexemeId = item.id;
-      lookup = axes.formatKey({...delegate.set, ...wanted});
+      lookup = axes.formatKey({
+        ...delegate.set,
+        ...item.selfLookup(wanted, features['genus_verbi']),
+      });
       form = delegated[part.delegate]![lookup];
     } else {
       final lexeme = switch (part) {
