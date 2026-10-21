@@ -22,6 +22,14 @@ class _SameGerman implements GermanForms {
   String render(PracticeItem item, FormKey key) => byKey[key] ?? key;
 }
 
+class _CoversOnly extends _SameGerman {
+  final Set<FormKey> keys;
+  const _CoversOnly(this.keys) : super(const {});
+
+  @override
+  bool covers(PracticeItem item, FormKey key) => keys.contains(key);
+}
+
 const _target = 'ind.perf.akt.2.pl';
 
 PracticeItem _hand(Map<FormKey, List<String>> forms) => handItem(
@@ -91,7 +99,7 @@ void main() {
           2,
           Random(1),
         ),
-        throwsStateError,
+        throwsA(isA<CannotBuild>()),
       );
     });
   });
@@ -179,7 +187,7 @@ void main() {
           2,
           Random(1),
         ),
-        throwsStateError,
+        throwsA(isA<CannotBuild>()),
       );
     });
 
@@ -263,7 +271,60 @@ void main() {
           2,
           Random(1),
         ),
-        throwsStateError,
+        throwsA(isA<CannotBuild>()),
+      );
+    });
+  });
+
+  group('D3 German coverage per key', () {
+    final item = _hand({
+      'ind.praes.akt.2.pl': ['vocatis'],
+      'ind.fut.akt.2.pl': ['vocabitis'],
+      'ind.perf.akt.3.pl': ['vocaverunt'],
+      'ind.perf.akt.2.sg': ['vocavisti'],
+    });
+    final all = item.formOrder.toSet();
+
+    test('a neighbour without German text is never offered', () {
+      final german = _CoversOnly(all.difference({'ind.fut.akt.2.pl'}));
+      for (int seed = 0; seed < 20; seed++) {
+        final answer = formChoice(
+          item,
+          _target,
+          _bundles(item),
+          german,
+          3,
+          Random(seed),
+        );
+        expect(answer.options.map((o) => o.text), isNot(contains('vocabitis')));
+      }
+    });
+
+    test('a target without German text cannot be built', () {
+      expect(
+        () => formChoice(
+          item,
+          _target,
+          _bundles(item),
+          _CoversOnly(all.difference({_target})),
+          2,
+          Random(1),
+        ),
+        throwsA(isA<CannotBuild>()),
+      );
+    });
+
+    test('too few covered neighbours cannot be built', () {
+      expect(
+        () => formChoice(
+          item,
+          _target,
+          _bundles(item),
+          _CoversOnly(all.difference({'ind.fut.akt.2.pl'})),
+          4,
+          Random(1),
+        ),
+        throwsA(isA<CannotBuild>()),
       );
     });
   });

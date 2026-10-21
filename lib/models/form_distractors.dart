@@ -12,7 +12,8 @@ import 'practice_item.dart';
 /// A distractor is another form of [item] that differs from [target] in exactly
 /// one axis, or the ending another type uses for [target]. It lies in a bundle
 /// of [unlocked], and neither it nor its German text can be taken for the right
-/// answer. Throws when fewer than [count] such distractors exist.
+/// answer. A form without German text is no distractor. Throws [CannotBuild]
+/// when [target] has no German text or fewer than [count] distractors exist.
 ChoiceAnswer formChoice(
   PracticeItem item,
   FormKey target,
@@ -21,6 +22,9 @@ ChoiceAnswer formChoice(
   int count,
   Random rng,
 ) {
+  if (!german.covers(item, target)) {
+    throw CannotBuild('no German text for ${item.id} $target');
+  }
   final targetIndex = item.formOrder.indexOf(target);
   assert(
     unlocked.contains(bundleOf(item, target)),
@@ -45,6 +49,7 @@ ChoiceAnswer formChoice(
     if (distractors.length == count) break;
     if (taken.contains(norm(option.text))) continue;
     final realForm = option.builtWrongBy == null;
+    if (realForm && !german.covers(item, option.formKey)) continue;
     if (realForm && germanTaken.contains(german.render(item, option.formKey))) {
       continue;
     }
@@ -53,7 +58,7 @@ ChoiceAnswer formChoice(
     distractors.add(option);
   }
   if (distractors.length < count) {
-    throw StateError(
+    throw CannotBuild(
       'only ${distractors.length} distractors for $count of ${item.id} $target',
     );
   }
