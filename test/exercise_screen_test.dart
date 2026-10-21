@@ -278,4 +278,54 @@ void main() {
     );
     expect(tester.takeException(), isNull);
   });
+
+  testWidgets('a given title replaces the standard one', (tester) async {
+    final exercise = await _choice();
+    tester.view.physicalSize = _sizes['phone']!;
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+    await tester.pumpWidget(
+      wrapInApp(
+        ExerciseScreen(
+          word: await _vocare(),
+          exercise: exercise,
+          title: 'Aufgabe 3 von 10',
+          onResponse: (_) {},
+        ),
+        forcedLocale: const Locale('de'),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(
+      find.descendant(
+        of: find.byType(AppBar),
+        matching: find.text('Aufgabe 3 von 10'),
+      ),
+      findsOneWidget,
+    );
+  });
+
+  testWidgets('no title keeps the standard one', (tester) async {
+    final exercise = await _choice();
+    tester.view.physicalSize = _sizes['phone']!;
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+    await tester.pumpWidget(
+      wrapInApp(
+        ExerciseScreen(
+          word: await _vocare(),
+          exercise: exercise,
+          onResponse: (_) {},
+        ),
+        forcedLocale: const Locale('de'),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(
+      find.descendant(of: find.byType(AppBar), matching: find.text('Aufgabe')),
+      findsOneWidget,
+    );
+  });
 }

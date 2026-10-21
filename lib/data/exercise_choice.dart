@@ -60,7 +60,8 @@ Set<GrammarBundle> unlockedBundles(
 };
 
 /// Builds an exercise for [word] in [bundle]: the kinds of [registry] in the
-/// class [classFor] picks, in random order, then those of the other class. A
+/// class [classFor] picks, in random order, then those of the other class;
+/// kinds in [avoid] come after all others. A
 /// kind that throws [CannotBuild] does not fit the word, so the next is tried.
 ///
 /// Throws an [AssertionError] naming the pair when no kind fits: a data or
@@ -72,6 +73,7 @@ Exercise buildExercise(
   double stability,
   Random rng, {
   List<ExerciseGenerator> registry = exerciseGenerators,
+  Set<ExerciseKind> avoid = const {},
 }) {
   final first = classFor(stability, rng);
   List<ExerciseGenerator> ofClass(bool isFirst) => [
@@ -79,7 +81,11 @@ Exercise buildExercise(
       if ((classOf(g.kind) == first) == isFirst) g,
   ]..shuffle(rng);
   final reasons = <String>[];
-  for (final generator in [...ofClass(true), ...ofClass(false)]) {
+  final order = [...ofClass(true), ...ofClass(false)];
+  for (final generator in [
+    ...order.where((g) => !avoid.contains(g.kind)),
+    ...order.where((g) => avoid.contains(g.kind)),
+  ]) {
     try {
       return generator.build(word, bundle, ctx, rng);
     } on CannotBuild catch (e) {

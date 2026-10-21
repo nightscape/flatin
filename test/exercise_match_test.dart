@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
@@ -280,6 +281,7 @@ void main() {
       WidgetTester tester,
       Exercise exercise, {
       String language = 'de',
+      String? title,
     }) async {
       tester.view.physicalSize = const Size(390, 800);
       tester.view.devicePixelRatio = 1.0;
@@ -290,6 +292,7 @@ void main() {
           ExerciseMatchWidget(
             word: vocare,
             exercise: exercise,
+            title: title,
             onResponse: responses.add,
           ),
           forcedLocale: Locale(language),
@@ -315,6 +318,35 @@ void main() {
       await tester.tap(find.byKey(Key('exercise.match.right.$right')));
       await tester.pump();
     }
+
+    testWidgets('a given title replaces the standard one', (tester) async {
+      await pump(tester, build(vocare, _bundle), title: 'Aufgabe 3 von 10');
+
+      expect(
+        find.descendant(
+          of: find.byType(AppBar),
+          matching: find.text('Aufgabe 3 von 10'),
+        ),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('no title shows the standard title of the locale', (
+      tester,
+    ) async {
+      await pump(tester, build(vocare, _bundle));
+
+      final standard =
+          (jsonDecode(
+                File('assets/flutter_i18n/de.json').readAsStringSync(),
+              )['exercise']['screen']['title']
+              as String);
+      expect(standard, isNotEmpty);
+      expect(
+        find.descendant(of: find.byType(AppBar), matching: find.text(standard)),
+        findsOneWidget,
+      );
+    });
 
     testWidgets('right pairs say right and report the very options', (
       tester,

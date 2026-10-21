@@ -9,6 +9,9 @@ typedef Attribution = ({Rating word, Rating? grammar});
 
 const _good = (word: Rating.good, grammar: Rating.good);
 
+/// Whether the response was right: both cards rated Good.
+bool isRight(Attribution attribution) => attribution == _good;
+
 /// The ratings one [response] to [exercise] of [word] gives the word card and
 /// the grammar card; `grammar` is null when the response says nothing about
 /// the bundle.

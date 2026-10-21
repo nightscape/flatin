@@ -18,9 +18,75 @@ final class SelectedPair {
   /// lowest R.
   final bool anchorIsGrammar;
 
-  const SelectedPair(this.word, this.bundle, {required this.anchorIsGrammar});
+  /// Whether the anchor card has never been reviewed.
+  final bool anchorIsNew;
+
+  const SelectedPair(
+    this.word,
+    this.bundle, {
+    required this.anchorIsGrammar,
+    required this.anchorIsNew,
+  });
 
   GrammarCardId get grammarCardId => GrammarCardId(word.dataFileId, bundle);
+}
+
+/// Which bundles each practised word has, which words each bundle has, and
+/// the first lesson and the data file of every card.
+/// Produced here from the items and the course; read by [selectPair].
+final class BundleIndex {
+  final bundlesOfWord = <PracticeItem, Set<GrammarBundle>>{};
+  final wordsOfBundle =
+      <GrammarCardId, ({GrammarBundle bundle, List<PracticeItem> words})>{};
+  final lessonOf = <String, int>{};
+  final fileOf = <String, String>{};
+
+  BundleIndex(List<PracticeItem> items, CourseFilter filter) {
+    void teach(String cardId, String dataFileId, int lesson) {
+      fileOf[cardId] = dataFileId;
+      final known = lessonOf[cardId];
+      if (known == null || lesson < known) lessonOf[cardId] = lesson;
+    }
+
+    for (final word in items.where(filter.reachesPractice)) {
+      teach(
+        PracticeItemCard.generateItemId(word),
+        word.dataFileId,
+        filter.lessons.lessonNumberOf(word),
+      );
+      final typeLesson = filter.curriculum.typeLesson(
+        word.dataFileId,
+        word.type,
+      );
+      for (final label in word.formLabels) {
+        if (!filter.formPracticed(word.dataFileId, label)) continue;
+        final formLesson = filter.curriculum.formLesson(
+          word.dataFileId,
+          label.key,
+        );
+        teach(
+          GrammarCardId.of(word, label.key),
+          word.dataFileId,
+          max(typeLesson, formLesson),
+        );
+      }
+      final bundles = {
+        for (final label in word.formLabels)
+          if (filter.formPracticed(word.dataFileId, label))
+            bundleOf(word, label.key),
+      };
+      bundlesOfWord[word] = bundles;
+      for (final bundle in bundles) {
+        wordsOfBundle
+            .putIfAbsent(
+              GrammarCardId(word.dataFileId, bundle),
+              () => (bundle: bundle, words: <PracticeItem>[]),
+            )
+            .words
+            .add(word);
+      }
+    }
+  }
 }
 
 /// The next exercise's word and bundle, or null when no card is due.
@@ -36,6 +102,9 @@ final class SelectedPair {
 /// lesson is in range. Ties among reviewed anchors go to the earlier due date,
 /// then to the smaller card id.
 ///
+/// A card in [taken] is never the anchor and is a partner only when no
+/// untaken card matches the anchor.
+///
 /// [cards] holds a card for every word and bundle of [items].
 SelectedPair? selectPair({
   required Map<String, PracticeItemCard> cards,
@@ -43,53 +112,10 @@ SelectedPair? selectPair({
   required CourseFilter filter,
   required Retrievability retrievability,
   required DateTime now,
+  Set<String> taken = const {},
 }) {
-  final bundlesOfWord = <PracticeItem, Set<GrammarBundle>>{};
-  final wordsOfBundle =
-      <GrammarCardId, ({GrammarBundle bundle, List<PracticeItem> words})>{};
-  final lessonOf = <String, int>{};
-  final fileOf = <String, String>{};
-  void teach(String cardId, String dataFileId, int lesson) {
-    fileOf[cardId] = dataFileId;
-    final known = lessonOf[cardId];
-    if (known == null || lesson < known) lessonOf[cardId] = lesson;
-  }
-
-  for (final word in items.where(filter.reachesPractice)) {
-    teach(
-      PracticeItemCard.generateItemId(word),
-      word.dataFileId,
-      filter.lessons.lessonNumberOf(word),
-    );
-    final typeLesson = filter.curriculum.typeLesson(word.dataFileId, word.type);
-    for (final label in word.formLabels) {
-      if (!filter.formPracticed(word.dataFileId, label)) continue;
-      final formLesson = filter.curriculum.formLesson(
-        word.dataFileId,
-        label.key,
-      );
-      teach(
-        GrammarCardId.of(word, label.key),
-        word.dataFileId,
-        max(typeLesson, formLesson),
-      );
-    }
-    final bundles = {
-      for (final label in word.formLabels)
-        if (filter.formPracticed(word.dataFileId, label))
-          bundleOf(word, label.key),
-    };
-    bundlesOfWord[word] = bundles;
-    for (final bundle in bundles) {
-      wordsOfBundle
-          .putIfAbsent(
-            GrammarCardId(word.dataFileId, bundle),
-            () => (bundle: bundle, words: <PracticeItem>[]),
-          )
-          .words
-          .add(word);
-    }
-  }
+  final BundleIndex(:bundlesOfWord, :wordsOfBundle, :lessonOf, :fileOf) =
+      BundleIndex(items, filter);
 
   PracticeItemCard cardOf(String id) =>
       cards[id] ?? (throw StateError('no card "$id"'));
@@ -119,7 +145,7 @@ SelectedPair? selectPair({
       ...wordCardOf.values,
       ...wordsOfBundle.keys.map(cardOf),
     ])
-      if (isDue(card)) card,
+      if (isDue(card) && !taken.contains(card.itemId)) card,
   ];
   if (all.isEmpty) return null;
 
@@ -143,17 +169,22 @@ SelectedPair? selectPair({
       ? reviewedDue.reduce((a, b) => byWeakest(a, b) <= 0 ? a : b)
       : all.reduce((a, b) => inCourseOrder(a, b) <= 0 ? a : b);
 
-  T strongest<T>(
-    Iterable<T> candidates,
-    PracticeItemCard Function(T) cardFor,
-  ) => candidates.reduce(
-    (a, b) => byStrongest(cardFor(a), cardFor(b)) <= 0 ? a : b,
-  );
+  T strongest<T>(Iterable<T> candidates, PracticeItemCard Function(T) cardFor) {
+    final untaken = candidates.where((c) => !taken.contains(cardFor(c).itemId));
+    return (untaken.isEmpty ? candidates : untaken).reduce(
+      (a, b) => byStrongest(cardFor(a), cardFor(b)) <= 0 ? a : b,
+    );
+  }
 
   final anchorBundle = wordsOfBundle[anchor.itemId];
   if (anchorBundle != null) {
     final word = strongest(anchorBundle.words, (w) => wordCardOf[w]!);
-    return SelectedPair(word, anchorBundle.bundle, anchorIsGrammar: true);
+    return SelectedPair(
+      word,
+      anchorBundle.bundle,
+      anchorIsGrammar: true,
+      anchorIsNew: anchor.lastReview == null,
+    );
   }
 
   final word = wordCardOf.keys.singleWhere(
@@ -163,5 +194,10 @@ SelectedPair? selectPair({
     bundlesOfWord[word]!,
     (b) => cardOf(GrammarCardId(word.dataFileId, b)),
   );
-  return SelectedPair(word, bundle, anchorIsGrammar: false);
+  return SelectedPair(
+    word,
+    bundle,
+    anchorIsGrammar: false,
+    anchorIsNew: anchor.lastReview == null,
+  );
 }

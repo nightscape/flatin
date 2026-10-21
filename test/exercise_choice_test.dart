@@ -167,4 +167,50 @@ void main() {
       );
     });
   });
+
+  group('buildExercise avoid', () {
+    late PracticeItem vocare;
+    late GrammarBundle bundle;
+
+    setUpAll(() async {
+      TestWidgetsFlutterBinding.ensureInitialized();
+      vocare = (await loadPracticeItems(
+        'lib/data/latin_verbs.yaml',
+      )).singleWhere((i) => i.id == 'verbs:vocare');
+      bundle = bundleOf(vocare, 'ind.praes.akt.3.sg');
+    });
+
+    ExerciseKind build(Set<ExerciseKind> avoid, List<_Stub> registry) =>
+        buildExercise(
+          vocare,
+          bundle,
+          fakeExerciseContext(unlocked: {bundle}, pool: [vocare]),
+          0,
+          Random(1),
+          registry: registry,
+          avoid: avoid,
+        ).kind;
+
+    test('an avoided kind is tried after every other kind', () {
+      const registry = [
+        _Stub(ExerciseKind.zuordnen, fits: true),
+        _Stub(ExerciseKind.formBilden, fits: true),
+      ];
+      expect(build({}, registry), ExerciseKind.zuordnen);
+      expect(build({ExerciseKind.zuordnen}, registry), ExerciseKind.formBilden);
+    });
+
+    test('an avoided kind still builds when no other kind fits', () {
+      expect(
+        build(
+          {ExerciseKind.zuordnen},
+          const [
+            _Stub(ExerciseKind.zuordnen, fits: true),
+            _Stub(ExerciseKind.formBilden, fits: false),
+          ],
+        ),
+        ExerciseKind.zuordnen,
+      );
+    });
+  });
 }

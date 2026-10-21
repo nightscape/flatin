@@ -13,12 +13,16 @@ import '../widgets/explanation_lines.dart';
 class ExerciseScreen extends StatefulWidget {
   final PracticeItem word;
   final Exercise exercise;
+
+  /// The app bar title; null shows the standard exercise title.
+  final String? title;
   final void Function(ExerciseResponse response) onResponse;
 
   const ExerciseScreen({
     super.key,
     required this.word,
     required this.exercise,
+    this.title,
     required this.onResponse,
   });
 
@@ -76,7 +80,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
   Widget build(BuildContext context) {
     final exercise = widget.exercise;
     return Scaffold(
-      appBar: AppBar(title: Text(_t('exercise.screen.title'))),
+      appBar: AppBar(title: Text(widget.title ?? _t('exercise.screen.title'))),
       body: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: _contentWidth),

@@ -370,4 +370,68 @@ void main() {
     expect(pair.anchorIsGrammar, isTrue);
     expect(pair.word, isNot(outside));
   });
+
+  group('taken', () {
+    SelectedPair? selectTaken(
+      Map<String, PracticeItemCard> cards,
+      Map<String, double> r,
+      Set<String> taken,
+    ) => selectPair(
+      cards: cards,
+      items: _items,
+      filter: filter,
+      retrievability: (card) => r[card.itemId] ?? 0.5,
+      now: _now,
+      taken: taken,
+    );
+
+    test('a taken card is never the anchor', () {
+      final g = grammar(amare, bundleOf(amare, 'ind.praes.akt.3.sg'));
+      final w = _wordId(amare);
+      final cards = _cards(all, {g, w});
+      final r = {g: 0.1, w: 0.3};
+
+      expect(selectTaken(cards, r, {})!.grammarCardId, g);
+      final pair = selectTaken(cards, r, {g})!;
+      expect(pair.anchorIsGrammar, isFalse);
+      expect(pair.word, amare);
+      expect(selectTaken(cards, r, {g, w}), isNull);
+    });
+
+    test('a taken card is a partner only when no untaken card fits', () {
+      final bundle = bundleOf(amare, 'ind.praes.akt.3.sg');
+      final g = grammar(amare, bundle);
+      final words = _items
+          .where(
+            (w) =>
+                filter.reachesPractice(w) &&
+                w.formOrder.any((k) => grammar(w, bundleOf(w, k)) == g),
+          )
+          .toList();
+      final strongest = words.last;
+      final r = {
+        g: 0.1,
+        for (final w in words) _wordId(w): 0.4,
+        _wordId(strongest): 0.9,
+      };
+      final cards = _cards(all, {g});
+
+      expect(selectTaken(cards, r, {})!.word, strongest);
+      final others = selectTaken(cards, r, {_wordId(strongest)})!.word;
+      expect(others, isNot(strongest));
+      expect(
+        selectTaken(cards, r, {for (final w in words) _wordId(w)})!.word,
+        strongest,
+      );
+    });
+  });
+
+  test('anchorIsNew says whether the anchor card was never reviewed', () {
+    final g = grammar(amare, 'ind.praes.akt');
+    expect(_select(_cards(all, {g}), filter, {})!.anchorIsNew, isFalse);
+    expect(
+      _select(_cards(all, {g}, reviewed: false), filter, {})!.anchorIsNew,
+      isTrue,
+    );
+  });
 }

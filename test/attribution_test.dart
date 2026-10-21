@@ -217,4 +217,18 @@ void main() {
       expect(result.word, Rating.again);
     });
   });
+
+  group('isRight', () {
+    test('only Good/Good is right', () {
+      expect(isRight((word: Rating.good, grammar: Rating.good)), isTrue);
+      expect(isRight((word: Rating.good, grammar: Rating.again)), isFalse);
+      expect(isRight((word: Rating.again, grammar: Rating.good)), isFalse);
+      expect(isRight((word: Rating.good, grammar: null)), isFalse);
+    });
+
+    test('agrees with attribute on a typed answer', () {
+      expect(isRight(typed(vocare, _key, 'vocō')), isTrue);
+      expect(isRight(typed(vocare, _key, 'vocāmus')), isFalse);
+    });
+  });
 }
