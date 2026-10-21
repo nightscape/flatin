@@ -190,6 +190,32 @@ types:
           - {slot: reflexiv, pass: [person, numerus], optional: true}
           - {self: roh, set: {modus: part, tempus: perf}}
           - {slot: hilfsverb, set: {modus: inf}}
+      # Verbs of position also take sein in southern German; haben is shown.
+      - match: {modus: ind, tempus: perf, genus_verbi: akt}
+        variant: true
+        join: " "
+        parts:
+          - {lexeme: pron, pass: [person, numerus]}
+          - {slot: hilfsverb_alt, set: {modus: ind, tempus: praes}, pass: [person, numerus]}
+          - {slot: reflexiv, pass: [person, numerus], optional: true}
+          - {self: roh, set: {modus: part, tempus: perf}}
+      - match: {modus: ind, tempus: plusq, genus_verbi: akt}
+        variant: true
+        join: " "
+        parts:
+          - {lexeme: pron, pass: [person, numerus]}
+          - {slot: hilfsverb_alt, set: {modus: ind, tempus: impf}, pass: [person, numerus]}
+          - {slot: reflexiv, pass: [person, numerus], optional: true}
+          - {self: roh, set: {modus: part, tempus: perf}}
+      - match: {modus: ind, tempus: fut2, genus_verbi: akt}
+        variant: true
+        join: " "
+        parts:
+          - {lexeme: pron, pass: [person, numerus]}
+          - {lexeme: hv_werden, set: {modus: ind, tempus: praes}, pass: [person, numerus]}
+          - {slot: reflexiv, pass: [person, numerus], optional: true}
+          - {self: roh, set: {modus: part, tempus: perf}}
+          - {slot: hilfsverb_alt, set: {modus: inf}}
       - match: {modus: konj, tempus: praes, genus_verbi: akt}
         join: " "
         parts:
@@ -596,6 +622,7 @@ items:
   - type: stark
     translation: {de: sitzen, en: sit}
     parts: {infinitiv: sitzen, praesens_2sg: sitzt, praeteritum: saß, partizip2: gesessen}
+    slots: {hilfsverb_alt: hv_sein}
     absent: *ohne_passiv
   - type: schwach
     translation: {de: schützen, en: protect}
@@ -748,6 +775,7 @@ items:
   - type: schwach
     translation: {de: segeln, en: sail}
     parts: {infinitiv: segeln, praesens_1sg: segle, praesens_1pl: segeln, partizip2: gesegelt}
+    slots: {hilfsverb_alt: hv_sein}
     absent: *ohne_passiv
   - type: stark
     translation: {de: hinhalten, en: hold out}
@@ -945,6 +973,7 @@ items:
   - type: stark
     translation: {de: stehen, en: stand}
     parts: {infinitiv: stehen, praeteritum: stand, partizip2: gestanden}
+    slots: {hilfsverb_alt: hv_sein}
     absent: *ohne_passiv
   - id: sich bemühen
     type: schwach
@@ -1227,6 +1256,7 @@ items:
   - type: stark
     translation: {de: liegen, en: lie}
     parts: {infinitiv: liegen, praeteritum: lag, partizip2: gelegen}
+    slots: {hilfsverb_alt: hv_sein}
     absent: *ohne_passiv
   - type: schwach
     translation: {de: beenden, en: finish}

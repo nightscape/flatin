@@ -1629,14 +1629,14 @@
 | sedēre | ind.fut.akt.3.sg | sedēbit | er/sie/es wird sitzen |  |
 | sedēre | ind.fut.akt.3.pl | sedēbunt | sie (Pl.) werden sitzen |  |
 | sedēre | ind.fut.pass.3.sg | sedēbitur | — |  |
-| sedēre | ind.perf.akt.3.sg | sēdit | er/sie/es hat gesessen | er/sie/es saß |
-| sedēre | ind.perf.akt.3.pl | sēdērunt | sie (Pl.) haben gesessen | sie (Pl.) saßen |
+| sedēre | ind.perf.akt.3.sg | sēdit | er/sie/es hat gesessen | er/sie/es saß; er/sie/es ist gesessen |
+| sedēre | ind.perf.akt.3.pl | sēdērunt | sie (Pl.) haben gesessen | sie (Pl.) saßen; sie (Pl.) sind gesessen |
 | sedēre | ind.perf.pass.3.sg | sessum est | — |  |
-| sedēre | ind.plusq.akt.3.sg | sēderat | er/sie/es hatte gesessen |  |
-| sedēre | ind.plusq.akt.3.pl | sēderant | sie (Pl.) hatten gesessen |  |
+| sedēre | ind.plusq.akt.3.sg | sēderat | er/sie/es hatte gesessen | er/sie/es war gesessen |
+| sedēre | ind.plusq.akt.3.pl | sēderant | sie (Pl.) hatten gesessen | sie (Pl.) waren gesessen |
 | sedēre | ind.plusq.pass.3.sg | sessum erat | — |  |
-| sedēre | ind.fut2.akt.3.sg | sēderit | er/sie/es wird gesessen haben |  |
-| sedēre | ind.fut2.akt.3.pl | sēderint | sie (Pl.) werden gesessen haben |  |
+| sedēre | ind.fut2.akt.3.sg | sēderit | er/sie/es wird gesessen haben | er/sie/es wird gesessen sein |
+| sedēre | ind.fut2.akt.3.pl | sēderint | sie (Pl.) werden gesessen haben | sie (Pl.) werden gesessen sein |
 | sedēre | ind.fut2.pass.3.sg | sessum erit | — |  |
 | sedēre | konj.praes.akt.3.sg | sedeat | er/sie/es sitzt |  |
 | sedēre | konj.praes.akt.3.pl | sedeant | sie (Pl.) sitzen |  |
@@ -3239,14 +3239,14 @@
 | nāvigāre | ind.fut.akt.3.sg | nāvigābit | er/sie/es wird segeln |  |
 | nāvigāre | ind.fut.akt.3.pl | nāvigābunt | sie (Pl.) werden segeln |  |
 | nāvigāre | ind.fut.pass.3.sg | nāvigābitur | — |  |
-| nāvigāre | ind.perf.akt.3.sg | nāvigāvit | er/sie/es hat gesegelt | er/sie/es segelte |
-| nāvigāre | ind.perf.akt.3.pl | nāvigāvērunt | sie (Pl.) haben gesegelt | sie (Pl.) segelten |
+| nāvigāre | ind.perf.akt.3.sg | nāvigāvit | er/sie/es hat gesegelt | er/sie/es segelte; er/sie/es ist gesegelt |
+| nāvigāre | ind.perf.akt.3.pl | nāvigāvērunt | sie (Pl.) haben gesegelt | sie (Pl.) segelten; sie (Pl.) sind gesegelt |
 | nāvigāre | ind.perf.pass.3.sg | nāvigātum est | — |  |
-| nāvigāre | ind.plusq.akt.3.sg | nāvigāverat | er/sie/es hatte gesegelt |  |
-| nāvigāre | ind.plusq.akt.3.pl | nāvigāverant | sie (Pl.) hatten gesegelt |  |
+| nāvigāre | ind.plusq.akt.3.sg | nāvigāverat | er/sie/es hatte gesegelt | er/sie/es war gesegelt |
+| nāvigāre | ind.plusq.akt.3.pl | nāvigāverant | sie (Pl.) hatten gesegelt | sie (Pl.) waren gesegelt |
 | nāvigāre | ind.plusq.pass.3.sg | nāvigātum erat | — |  |
-| nāvigāre | ind.fut2.akt.3.sg | nāvigāverit | er/sie/es wird gesegelt haben |  |
-| nāvigāre | ind.fut2.akt.3.pl | nāvigāverint | sie (Pl.) werden gesegelt haben |  |
+| nāvigāre | ind.fut2.akt.3.sg | nāvigāverit | er/sie/es wird gesegelt haben | er/sie/es wird gesegelt sein |
+| nāvigāre | ind.fut2.akt.3.pl | nāvigāverint | sie (Pl.) werden gesegelt haben | sie (Pl.) werden gesegelt sein |
 | nāvigāre | ind.fut2.pass.3.sg | nāvigātum erit | — |  |
 | nāvigāre | konj.praes.akt.3.sg | nāviget | er/sie/es segelt |  |
 | nāvigāre | konj.praes.akt.3.pl | nāvigent | sie (Pl.) segeln |  |
@@ -6109,14 +6109,14 @@
 | stāre | ind.fut.akt.3.sg | stābit | er/sie/es wird stehen |  |
 | stāre | ind.fut.akt.3.pl | stābunt | sie (Pl.) werden stehen |  |
 | stāre | ind.fut.pass.3.sg | stābitur | — |  |
-| stāre | ind.perf.akt.3.sg | stetit | er/sie/es hat gestanden | er/sie/es stand |
-| stāre | ind.perf.akt.3.pl | stetērunt | sie (Pl.) haben gestanden | sie (Pl.) standen |
+| stāre | ind.perf.akt.3.sg | stetit | er/sie/es hat gestanden | er/sie/es stand; er/sie/es ist gestanden |
+| stāre | ind.perf.akt.3.pl | stetērunt | sie (Pl.) haben gestanden | sie (Pl.) standen; sie (Pl.) sind gestanden |
 | stāre | ind.perf.pass.3.sg | statum est | — |  |
-| stāre | ind.plusq.akt.3.sg | steterat | er/sie/es hatte gestanden |  |
-| stāre | ind.plusq.akt.3.pl | steterant | sie (Pl.) hatten gestanden |  |
+| stāre | ind.plusq.akt.3.sg | steterat | er/sie/es hatte gestanden | er/sie/es war gestanden |
+| stāre | ind.plusq.akt.3.pl | steterant | sie (Pl.) hatten gestanden | sie (Pl.) waren gestanden |
 | stāre | ind.plusq.pass.3.sg | statum erat | — |  |
-| stāre | ind.fut2.akt.3.sg | steterit | er/sie/es wird gestanden haben |  |
-| stāre | ind.fut2.akt.3.pl | steterint | sie (Pl.) werden gestanden haben |  |
+| stāre | ind.fut2.akt.3.sg | steterit | er/sie/es wird gestanden haben | er/sie/es wird gestanden sein |
+| stāre | ind.fut2.akt.3.pl | steterint | sie (Pl.) werden gestanden haben | sie (Pl.) werden gestanden sein |
 | stāre | ind.fut2.pass.3.sg | statum erit | — |  |
 | stāre | konj.praes.akt.3.sg | stet | er/sie/es steht |  |
 | stāre | konj.praes.akt.3.pl | stent | sie (Pl.) stehen |  |
@@ -9459,12 +9459,12 @@
 | iacēre | ind.fut.akt.3.sg | iacēbit | er/sie/es wird liegen |  |
 | iacēre | ind.fut.akt.3.pl | iacēbunt | sie (Pl.) werden liegen |  |
 | iacēre | ind.fut.pass.3.sg | iacēbitur | — |  |
-| iacēre | ind.perf.akt.3.sg | iacuit | er/sie/es hat gelegen | er/sie/es lag |
-| iacēre | ind.perf.akt.3.pl | iacuērunt | sie (Pl.) haben gelegen | sie (Pl.) lagen |
-| iacēre | ind.plusq.akt.3.sg | iacuerat | er/sie/es hatte gelegen |  |
-| iacēre | ind.plusq.akt.3.pl | iacuerant | sie (Pl.) hatten gelegen |  |
-| iacēre | ind.fut2.akt.3.sg | iacuerit | er/sie/es wird gelegen haben |  |
-| iacēre | ind.fut2.akt.3.pl | iacuerint | sie (Pl.) werden gelegen haben |  |
+| iacēre | ind.perf.akt.3.sg | iacuit | er/sie/es hat gelegen | er/sie/es lag; er/sie/es ist gelegen |
+| iacēre | ind.perf.akt.3.pl | iacuērunt | sie (Pl.) haben gelegen | sie (Pl.) lagen; sie (Pl.) sind gelegen |
+| iacēre | ind.plusq.akt.3.sg | iacuerat | er/sie/es hatte gelegen | er/sie/es war gelegen |
+| iacēre | ind.plusq.akt.3.pl | iacuerant | sie (Pl.) hatten gelegen | sie (Pl.) waren gelegen |
+| iacēre | ind.fut2.akt.3.sg | iacuerit | er/sie/es wird gelegen haben | er/sie/es wird gelegen sein |
+| iacēre | ind.fut2.akt.3.pl | iacuerint | sie (Pl.) werden gelegen haben | sie (Pl.) werden gelegen sein |
 | iacēre | konj.praes.akt.3.sg | iaceat | er/sie/es liegt |  |
 | iacēre | konj.praes.akt.3.pl | iaceant | sie (Pl.) liegen |  |
 | iacēre | konj.praes.pass.3.sg | iaceātur | — |  |

@@ -420,7 +420,8 @@ void main() {
     test('a variant rule for a key no other rule makes throws', () {
       final yaml = _replaceOnce(
         _course,
-        '      - match: {modus: ind, tempus: perf, genus_verbi: akt}\n'
+        '      # The simple past is also accepted for the perfect.\n'
+            '      - match: {modus: ind, tempus: perf, genus_verbi: akt}\n'
             '        variant: true\n',
         '      - match: {modus: konj, tempus: fut, genus_verbi: akt}\n'
             '        variant: true\n',

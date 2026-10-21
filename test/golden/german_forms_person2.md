@@ -1506,12 +1506,12 @@
 | sedēre | ind.impf.akt.2.pl | sedēbātis | ihr saßt |  |
 | sedēre | ind.fut.akt.2.sg | sedēbis | du wirst sitzen |  |
 | sedēre | ind.fut.akt.2.pl | sedēbitis | ihr werdet sitzen |  |
-| sedēre | ind.perf.akt.2.sg | sēdistī | du hast gesessen | du saßest |
-| sedēre | ind.perf.akt.2.pl | sēdistis | ihr habt gesessen | ihr saßt |
-| sedēre | ind.plusq.akt.2.sg | sēderās | du hattest gesessen |  |
-| sedēre | ind.plusq.akt.2.pl | sēderātis | ihr hattet gesessen |  |
-| sedēre | ind.fut2.akt.2.sg | sēderis | du wirst gesessen haben |  |
-| sedēre | ind.fut2.akt.2.pl | sēderitis | ihr werdet gesessen haben |  |
+| sedēre | ind.perf.akt.2.sg | sēdistī | du hast gesessen | du saßest; du bist gesessen |
+| sedēre | ind.perf.akt.2.pl | sēdistis | ihr habt gesessen | ihr saßt; ihr seid gesessen |
+| sedēre | ind.plusq.akt.2.sg | sēderās | du hattest gesessen | du warst gesessen |
+| sedēre | ind.plusq.akt.2.pl | sēderātis | ihr hattet gesessen | ihr wart gesessen |
+| sedēre | ind.fut2.akt.2.sg | sēderis | du wirst gesessen haben | du wirst gesessen sein |
+| sedēre | ind.fut2.akt.2.pl | sēderitis | ihr werdet gesessen haben | ihr werdet gesessen sein |
 | sedēre | konj.praes.akt.2.sg | sedeās | du sitzt |  |
 | sedēre | konj.praes.akt.2.pl | sedeātis | ihr sitzt |  |
 | sedēre | konj.impf.akt.2.sg | sedērēs | du sitzen würdest |  |
@@ -3056,12 +3056,12 @@
 | nāvigāre | ind.impf.akt.2.pl | nāvigābātis | ihr segeltet |  |
 | nāvigāre | ind.fut.akt.2.sg | nāvigābis | du wirst segeln |  |
 | nāvigāre | ind.fut.akt.2.pl | nāvigābitis | ihr werdet segeln |  |
-| nāvigāre | ind.perf.akt.2.sg | nāvigāvistī | du hast gesegelt | du segeltest |
-| nāvigāre | ind.perf.akt.2.pl | nāvigāvistis | ihr habt gesegelt | ihr segeltet |
-| nāvigāre | ind.plusq.akt.2.sg | nāvigāverās | du hattest gesegelt |  |
-| nāvigāre | ind.plusq.akt.2.pl | nāvigāverātis | ihr hattet gesegelt |  |
-| nāvigāre | ind.fut2.akt.2.sg | nāvigāveris | du wirst gesegelt haben |  |
-| nāvigāre | ind.fut2.akt.2.pl | nāvigāveritis | ihr werdet gesegelt haben |  |
+| nāvigāre | ind.perf.akt.2.sg | nāvigāvistī | du hast gesegelt | du segeltest; du bist gesegelt |
+| nāvigāre | ind.perf.akt.2.pl | nāvigāvistis | ihr habt gesegelt | ihr segeltet; ihr seid gesegelt |
+| nāvigāre | ind.plusq.akt.2.sg | nāvigāverās | du hattest gesegelt | du warst gesegelt |
+| nāvigāre | ind.plusq.akt.2.pl | nāvigāverātis | ihr hattet gesegelt | ihr wart gesegelt |
+| nāvigāre | ind.fut2.akt.2.sg | nāvigāveris | du wirst gesegelt haben | du wirst gesegelt sein |
+| nāvigāre | ind.fut2.akt.2.pl | nāvigāveritis | ihr werdet gesegelt haben | ihr werdet gesegelt sein |
 | nāvigāre | konj.praes.akt.2.sg | nāvigēs | du segelst |  |
 | nāvigāre | konj.praes.akt.2.pl | nāvigētis | ihr segelt |  |
 | nāvigāre | konj.impf.akt.2.sg | nāvigārēs | du segeln würdest |  |
@@ -5906,12 +5906,12 @@
 | stāre | ind.impf.akt.2.pl | stābātis | ihr standet |  |
 | stāre | ind.fut.akt.2.sg | stābis | du wirst stehen |  |
 | stāre | ind.fut.akt.2.pl | stābitis | ihr werdet stehen |  |
-| stāre | ind.perf.akt.2.sg | stetistī | du hast gestanden | du standest |
-| stāre | ind.perf.akt.2.pl | stetistis | ihr habt gestanden | ihr standet |
-| stāre | ind.plusq.akt.2.sg | steterās | du hattest gestanden |  |
-| stāre | ind.plusq.akt.2.pl | steterātis | ihr hattet gestanden |  |
-| stāre | ind.fut2.akt.2.sg | steteris | du wirst gestanden haben |  |
-| stāre | ind.fut2.akt.2.pl | steteritis | ihr werdet gestanden haben |  |
+| stāre | ind.perf.akt.2.sg | stetistī | du hast gestanden | du standest; du bist gestanden |
+| stāre | ind.perf.akt.2.pl | stetistis | ihr habt gestanden | ihr standet; ihr seid gestanden |
+| stāre | ind.plusq.akt.2.sg | steterās | du hattest gestanden | du warst gestanden |
+| stāre | ind.plusq.akt.2.pl | steterātis | ihr hattet gestanden | ihr wart gestanden |
+| stāre | ind.fut2.akt.2.sg | steteris | du wirst gestanden haben | du wirst gestanden sein |
+| stāre | ind.fut2.akt.2.pl | steteritis | ihr werdet gestanden haben | ihr werdet gestanden sein |
 | stāre | konj.praes.akt.2.sg | stēs | du stehst |  |
 | stāre | konj.praes.akt.2.pl | stētis | ihr steht |  |
 | stāre | konj.impf.akt.2.sg | stārēs | du stehen würdest |  |
@@ -9146,12 +9146,12 @@
 | iacēre | ind.impf.akt.2.pl | iacēbātis | ihr lagt |  |
 | iacēre | ind.fut.akt.2.sg | iacēbis | du wirst liegen |  |
 | iacēre | ind.fut.akt.2.pl | iacēbitis | ihr werdet liegen |  |
-| iacēre | ind.perf.akt.2.sg | iacuistī | du hast gelegen | du lagst |
-| iacēre | ind.perf.akt.2.pl | iacuistis | ihr habt gelegen | ihr lagt |
-| iacēre | ind.plusq.akt.2.sg | iacuerās | du hattest gelegen |  |
-| iacēre | ind.plusq.akt.2.pl | iacuerātis | ihr hattet gelegen |  |
-| iacēre | ind.fut2.akt.2.sg | iacueris | du wirst gelegen haben |  |
-| iacēre | ind.fut2.akt.2.pl | iacueritis | ihr werdet gelegen haben |  |
+| iacēre | ind.perf.akt.2.sg | iacuistī | du hast gelegen | du lagst; du bist gelegen |
+| iacēre | ind.perf.akt.2.pl | iacuistis | ihr habt gelegen | ihr lagt; ihr seid gelegen |
+| iacēre | ind.plusq.akt.2.sg | iacuerās | du hattest gelegen | du warst gelegen |
+| iacēre | ind.plusq.akt.2.pl | iacuerātis | ihr hattet gelegen | ihr wart gelegen |
+| iacēre | ind.fut2.akt.2.sg | iacueris | du wirst gelegen haben | du wirst gelegen sein |
+| iacēre | ind.fut2.akt.2.pl | iacueritis | ihr werdet gelegen haben | ihr werdet gelegen sein |
 | iacēre | konj.praes.akt.2.sg | iaceās | du liegst |  |
 | iacēre | konj.praes.akt.2.pl | iaceātis | ihr liegt |  |
 | iacēre | konj.impf.akt.2.sg | iacērēs | du liegen würdest |  |

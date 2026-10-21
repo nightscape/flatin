@@ -1506,12 +1506,12 @@
 | sedēre | ind.impf.akt.1.pl | sedēbāmus | wir saßen |  |
 | sedēre | ind.fut.akt.1.sg | sedēbō | ich werde sitzen |  |
 | sedēre | ind.fut.akt.1.pl | sedēbimus | wir werden sitzen |  |
-| sedēre | ind.perf.akt.1.sg | sēdī | ich habe gesessen | ich saß |
-| sedēre | ind.perf.akt.1.pl | sēdimus | wir haben gesessen | wir saßen |
-| sedēre | ind.plusq.akt.1.sg | sēderam | ich hatte gesessen |  |
-| sedēre | ind.plusq.akt.1.pl | sēderāmus | wir hatten gesessen |  |
-| sedēre | ind.fut2.akt.1.sg | sēderō | ich werde gesessen haben |  |
-| sedēre | ind.fut2.akt.1.pl | sēderimus | wir werden gesessen haben |  |
+| sedēre | ind.perf.akt.1.sg | sēdī | ich habe gesessen | ich saß; ich bin gesessen |
+| sedēre | ind.perf.akt.1.pl | sēdimus | wir haben gesessen | wir saßen; wir sind gesessen |
+| sedēre | ind.plusq.akt.1.sg | sēderam | ich hatte gesessen | ich war gesessen |
+| sedēre | ind.plusq.akt.1.pl | sēderāmus | wir hatten gesessen | wir waren gesessen |
+| sedēre | ind.fut2.akt.1.sg | sēderō | ich werde gesessen haben | ich werde gesessen sein |
+| sedēre | ind.fut2.akt.1.pl | sēderimus | wir werden gesessen haben | wir werden gesessen sein |
 | sedēre | konj.praes.akt.1.sg | sedeam | ich sitze |  |
 | sedēre | konj.praes.akt.1.pl | sedeāmus | wir sitzen |  |
 | sedēre | konj.impf.akt.1.sg | sedērem | ich sitzen würde |  |
@@ -3056,12 +3056,12 @@
 | nāvigāre | ind.impf.akt.1.pl | nāvigābāmus | wir segelten |  |
 | nāvigāre | ind.fut.akt.1.sg | nāvigābō | ich werde segeln |  |
 | nāvigāre | ind.fut.akt.1.pl | nāvigābimus | wir werden segeln |  |
-| nāvigāre | ind.perf.akt.1.sg | nāvigāvī | ich habe gesegelt | ich segelte |
-| nāvigāre | ind.perf.akt.1.pl | nāvigāvimus | wir haben gesegelt | wir segelten |
-| nāvigāre | ind.plusq.akt.1.sg | nāvigāveram | ich hatte gesegelt |  |
-| nāvigāre | ind.plusq.akt.1.pl | nāvigāverāmus | wir hatten gesegelt |  |
-| nāvigāre | ind.fut2.akt.1.sg | nāvigāverō | ich werde gesegelt haben |  |
-| nāvigāre | ind.fut2.akt.1.pl | nāvigāverimus | wir werden gesegelt haben |  |
+| nāvigāre | ind.perf.akt.1.sg | nāvigāvī | ich habe gesegelt | ich segelte; ich bin gesegelt |
+| nāvigāre | ind.perf.akt.1.pl | nāvigāvimus | wir haben gesegelt | wir segelten; wir sind gesegelt |
+| nāvigāre | ind.plusq.akt.1.sg | nāvigāveram | ich hatte gesegelt | ich war gesegelt |
+| nāvigāre | ind.plusq.akt.1.pl | nāvigāverāmus | wir hatten gesegelt | wir waren gesegelt |
+| nāvigāre | ind.fut2.akt.1.sg | nāvigāverō | ich werde gesegelt haben | ich werde gesegelt sein |
+| nāvigāre | ind.fut2.akt.1.pl | nāvigāverimus | wir werden gesegelt haben | wir werden gesegelt sein |
 | nāvigāre | konj.praes.akt.1.sg | nāvigem | ich segle |  |
 | nāvigāre | konj.praes.akt.1.pl | nāvigēmus | wir segeln |  |
 | nāvigāre | konj.impf.akt.1.sg | nāvigārem | ich segeln würde |  |
@@ -5906,12 +5906,12 @@
 | stāre | ind.impf.akt.1.pl | stābāmus | wir standen |  |
 | stāre | ind.fut.akt.1.sg | stābō | ich werde stehen |  |
 | stāre | ind.fut.akt.1.pl | stābimus | wir werden stehen |  |
-| stāre | ind.perf.akt.1.sg | stetī | ich habe gestanden | ich stand |
-| stāre | ind.perf.akt.1.pl | stetimus | wir haben gestanden | wir standen |
-| stāre | ind.plusq.akt.1.sg | steteram | ich hatte gestanden |  |
-| stāre | ind.plusq.akt.1.pl | steterāmus | wir hatten gestanden |  |
-| stāre | ind.fut2.akt.1.sg | steterō | ich werde gestanden haben |  |
-| stāre | ind.fut2.akt.1.pl | steterimus | wir werden gestanden haben |  |
+| stāre | ind.perf.akt.1.sg | stetī | ich habe gestanden | ich stand; ich bin gestanden |
+| stāre | ind.perf.akt.1.pl | stetimus | wir haben gestanden | wir standen; wir sind gestanden |
+| stāre | ind.plusq.akt.1.sg | steteram | ich hatte gestanden | ich war gestanden |
+| stāre | ind.plusq.akt.1.pl | steterāmus | wir hatten gestanden | wir waren gestanden |
+| stāre | ind.fut2.akt.1.sg | steterō | ich werde gestanden haben | ich werde gestanden sein |
+| stāre | ind.fut2.akt.1.pl | steterimus | wir werden gestanden haben | wir werden gestanden sein |
 | stāre | konj.praes.akt.1.sg | stem | ich stehe |  |
 | stāre | konj.praes.akt.1.pl | stēmus | wir stehen |  |
 | stāre | konj.impf.akt.1.sg | stārem | ich stehen würde |  |
@@ -9146,12 +9146,12 @@
 | iacēre | ind.impf.akt.1.pl | iacēbāmus | wir lagen |  |
 | iacēre | ind.fut.akt.1.sg | iacēbō | ich werde liegen |  |
 | iacēre | ind.fut.akt.1.pl | iacēbimus | wir werden liegen |  |
-| iacēre | ind.perf.akt.1.sg | iacuī | ich habe gelegen | ich lag |
-| iacēre | ind.perf.akt.1.pl | iacuimus | wir haben gelegen | wir lagen |
-| iacēre | ind.plusq.akt.1.sg | iacueram | ich hatte gelegen |  |
-| iacēre | ind.plusq.akt.1.pl | iacuerāmus | wir hatten gelegen |  |
-| iacēre | ind.fut2.akt.1.sg | iacuerō | ich werde gelegen haben |  |
-| iacēre | ind.fut2.akt.1.pl | iacuerimus | wir werden gelegen haben |  |
+| iacēre | ind.perf.akt.1.sg | iacuī | ich habe gelegen | ich lag; ich bin gelegen |
+| iacēre | ind.perf.akt.1.pl | iacuimus | wir haben gelegen | wir lagen; wir sind gelegen |
+| iacēre | ind.plusq.akt.1.sg | iacueram | ich hatte gelegen | ich war gelegen |
+| iacēre | ind.plusq.akt.1.pl | iacuerāmus | wir hatten gelegen | wir waren gelegen |
+| iacēre | ind.fut2.akt.1.sg | iacuerō | ich werde gelegen haben | ich werde gelegen sein |
+| iacēre | ind.fut2.akt.1.pl | iacuerimus | wir werden gelegen haben | wir werden gelegen sein |
 | iacēre | konj.praes.akt.1.sg | iaceam | ich liege |  |
 | iacēre | konj.praes.akt.1.pl | iaceāmus | wir liegen |  |
 | iacēre | konj.impf.akt.1.sg | iacērem | ich liegen würde |  |
