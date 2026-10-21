@@ -6,12 +6,12 @@
 | amāre | inf.perf.pass | amātum esse | geliebt worden sein |  |
 | amāre | part.praes.akt | amāns | liebend |  |
 | amāre | part.perf.pass | amātus | geliebt |  |
-| habēre | inf.praes.akt | habēre | haben |  |
-| habēre | inf.praes.pass | habērī | — |  |
-| habēre | inf.perf.akt | habuisse | gehabt haben |  |
-| habēre | inf.perf.pass | habitum esse | — |  |
-| habēre | part.praes.akt | habēns | habend |  |
-| habēre | part.perf.pass | habitus | — |  |
+| habēre | inf.praes.akt | habēre | halten |  |
+| habēre | inf.praes.pass | habērī | gehalten werden |  |
+| habēre | inf.perf.akt | habuisse | gehalten haben |  |
+| habēre | inf.perf.pass | habitum esse | gehalten worden sein |  |
+| habēre | part.praes.akt | habēns | haltend |  |
+| habēre | part.perf.pass | habitus | gehalten |  |
 | audīre | inf.praes.akt | audīre | hören |  |
 | audīre | inf.praes.pass | audīrī | gehört werden |  |
 | audīre | inf.perf.akt | audīvisse | gehört haben |  |
@@ -35,12 +35,12 @@
 | venīre | inf.perf.akt | vēnisse | gekommen sein |  |
 | venīre | inf.perf.pass | ventum esse | — |  |
 | venīre | part.praes.akt | veniēns | kommend |  |
-| intrāre | inf.praes.akt | intrāre | eintreten |  |
-| intrāre | inf.praes.pass | intrārī | — |  |
-| intrāre | inf.perf.akt | intrāvisse | eingetreten sein |  |
-| intrāre | inf.perf.pass | intrātum esse | — |  |
-| intrāre | part.praes.akt | intrāns | eintretend |  |
-| intrāre | part.perf.pass | intrātus | — |  |
+| intrāre | inf.praes.akt | intrāre | betreten |  |
+| intrāre | inf.praes.pass | intrārī | betreten werden |  |
+| intrāre | inf.perf.akt | intrāvisse | betreten haben |  |
+| intrāre | inf.perf.pass | intrātum esse | betreten worden sein |  |
+| intrāre | part.praes.akt | intrāns | betretend |  |
+| intrāre | part.perf.pass | intrātus | betreten |  |
 | appārēre | inf.praes.akt | appārēre | erscheinen |  |
 | appārēre | inf.praes.pass | appārērī | — |  |
 | appārēre | inf.perf.akt | appāruisse | erschienen sein |  |
@@ -85,11 +85,11 @@
 | convenīre | inf.perf.pass | conventum esse | — |  |
 | convenīre | part.praes.akt | conveniēns | zusammenkommend |  |
 | cēnāre | inf.praes.akt | cēnāre | speisen |  |
-| cēnāre | inf.praes.pass | cēnārī | gespeist werden |  |
+| cēnāre | inf.praes.pass | cēnārī | — |  |
 | cēnāre | inf.perf.akt | cēnāvisse | gespeist haben |  |
-| cēnāre | inf.perf.pass | cēnātum esse | gespeist worden sein |  |
+| cēnāre | inf.perf.pass | cēnātum esse | — |  |
 | cēnāre | part.praes.akt | cēnāns | speisend |  |
-| cēnāre | part.perf.pass | cēnātus | gespeist |  |
+| cēnāre | part.perf.pass | cēnātus | — |  |
 | cūrāre | inf.praes.akt | cūrāre | sorgen |  |
 | cūrāre | inf.praes.pass | cūrārī | — |  |
 | cūrāre | inf.perf.akt | cūrāvisse | gesorgt haben |  |
@@ -125,12 +125,12 @@
 | explicāre | inf.perf.pass | explicātum esse | erklärt worden sein |  |
 | explicāre | part.praes.akt | explicāns | erklärend |  |
 | explicāre | part.perf.pass | explicātus | erklärt |  |
-| exspectāre | inf.praes.akt | exspectāre | warten |  |
-| exspectāre | inf.praes.pass | exspectārī | — |  |
-| exspectāre | inf.perf.akt | exspectāvisse | gewartet haben |  |
-| exspectāre | inf.perf.pass | exspectātum esse | — |  |
-| exspectāre | part.praes.akt | exspectāns | wartend |  |
-| exspectāre | part.perf.pass | exspectātus | — |  |
+| exspectāre | inf.praes.akt | exspectāre | erwarten |  |
+| exspectāre | inf.praes.pass | exspectārī | erwartet werden |  |
+| exspectāre | inf.perf.akt | exspectāvisse | erwartet haben |  |
+| exspectāre | inf.perf.pass | exspectātum esse | erwartet worden sein |  |
+| exspectāre | part.praes.akt | exspectāns | erwartend |  |
+| exspectāre | part.perf.pass | exspectātus | erwartet |  |
 | fugāre | inf.praes.akt | fugāre | in die Flucht schlagen |  |
 | fugāre | inf.praes.pass | fugārī | in die Flucht geschlagen werden |  |
 | fugāre | inf.perf.akt | fugāvisse | in die Flucht geschlagen haben |  |
@@ -152,12 +152,12 @@
 | labōrāre | inf.perf.akt | labōrāvisse | gearbeitet haben |  |
 | labōrāre | inf.perf.pass | labōrātum esse | — |  |
 | labōrāre | part.praes.akt | labōrāns | arbeitend |  |
-| manēre | inf.praes.akt | manēre | bleiben |  |
-| manēre | inf.praes.pass | manērī | — |  |
-| manēre | inf.perf.akt | mānsisse | geblieben sein |  |
-| manēre | inf.perf.pass | mānsum esse | — |  |
-| manēre | part.praes.akt | manēns | bleibend |  |
-| manēre | part.perf.pass | mānsus | — |  |
+| manēre | inf.praes.akt | manēre | erwarten |  |
+| manēre | inf.praes.pass | manērī | erwartet werden |  |
+| manēre | inf.perf.akt | mānsisse | erwartet haben |  |
+| manēre | inf.perf.pass | mānsum esse | erwartet worden sein |  |
+| manēre | part.praes.akt | manēns | erwartend |  |
+| manēre | part.perf.pass | mānsus | erwartet |  |
 | necāre | inf.praes.akt | necāre | töten |  |
 | necāre | inf.praes.pass | necārī | getötet werden |  |
 | necāre | inf.perf.akt | necāvisse | getötet haben |  |
@@ -209,12 +209,12 @@
 | pūgnāre | inf.perf.akt | pūgnāvisse | gekämpft haben |  |
 | pūgnāre | inf.perf.pass | pūgnātum esse | — |  |
 | pūgnāre | part.praes.akt | pūgnāns | kämpfend |  |
-| respondēre | inf.praes.akt | respondēre | antworten |  |
-| respondēre | inf.praes.pass | respondērī | — |  |
-| respondēre | inf.perf.akt | respondisse | geantwortet haben |  |
-| respondēre | inf.perf.pass | respōnsum esse | — |  |
-| respondēre | part.praes.akt | respondēns | antwortend |  |
-| respondēre | part.perf.pass | respōnsus | — |  |
+| respondēre | inf.praes.akt | respondēre | erwidern |  |
+| respondēre | inf.praes.pass | respondērī | erwidert werden |  |
+| respondēre | inf.perf.akt | respondisse | erwidert haben |  |
+| respondēre | inf.perf.pass | respōnsum esse | erwidert worden sein |  |
+| respondēre | part.praes.akt | respondēns | erwidernd |  |
+| respondēre | part.perf.pass | respōnsus | erwidert |  |
 | rogāre | inf.praes.akt | rogāre | fragen |  |
 | rogāre | inf.praes.pass | rogārī | gefragt werden |  |
 | rogāre | inf.perf.akt | rogāvisse | gefragt haben |  |
@@ -351,12 +351,12 @@
 | mittere | inf.perf.pass | missum esse | geschickt worden sein |  |
 | mittere | part.praes.akt | mittēns | schickend |  |
 | mittere | part.perf.pass | missus | geschickt |  |
-| vincere | inf.praes.akt | vincere | siegen |  |
-| vincere | inf.praes.pass | vincī | — |  |
-| vincere | inf.perf.akt | vīcisse | gesiegt haben |  |
-| vincere | inf.perf.pass | victum esse | — |  |
-| vincere | part.praes.akt | vincēns | siegend |  |
-| vincere | part.perf.pass | victus | — |  |
+| vincere | inf.praes.akt | vincere | besiegen |  |
+| vincere | inf.praes.pass | vincī | besiegt werden |  |
+| vincere | inf.perf.akt | vīcisse | besiegt haben |  |
+| vincere | inf.perf.pass | victum esse | besiegt worden sein |  |
+| vincere | part.praes.akt | vincēns | besiegend |  |
+| vincere | part.perf.pass | victus | besiegt |  |
 | pōnere | inf.praes.akt | pōnere | setzen |  |
 | pōnere | inf.praes.pass | pōnī | gesetzt werden |  |
 | pōnere | inf.perf.akt | posuisse | gesetzt haben |  |
@@ -483,12 +483,12 @@
 | munīre | inf.perf.pass | munītum esse | befestigt worden sein |  |
 | munīre | part.praes.akt | muniēns | befestigend |  |
 | munīre | part.perf.pass | munītus | befestigt |  |
-| habitāre | inf.praes.akt | habitāre | wohnen |  |
-| habitāre | inf.praes.pass | habitārī | — |  |
-| habitāre | inf.perf.akt | habitāvisse | gewohnt haben |  |
-| habitāre | inf.perf.pass | habitātum esse | — |  |
-| habitāre | part.praes.akt | habitāns | wohnend |  |
-| habitāre | part.perf.pass | habitātus | — |  |
+| habitāre | inf.praes.akt | habitāre | bewohnen |  |
+| habitāre | inf.praes.pass | habitārī | bewohnt werden |  |
+| habitāre | inf.perf.akt | habitāvisse | bewohnt haben |  |
+| habitāre | inf.perf.pass | habitātum esse | bewohnt worden sein |  |
+| habitāre | part.praes.akt | habitāns | bewohnend |  |
+| habitāre | part.perf.pass | habitātus | bewohnt |  |
 | dubitāre | inf.praes.akt | dubitāre | zögern |  |
 | dubitāre | inf.praes.pass | dubitārī | — |  |
 | dubitāre | inf.perf.akt | dubitāvisse | gezögert haben |  |

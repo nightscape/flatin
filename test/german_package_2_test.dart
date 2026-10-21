@@ -16,7 +16,6 @@ const _notDone = <String>{};
 const _withoutGermanPassive = {
   'staunen',
   'schweigen',
-  'siegen',
   'können',
   'gehen',
   'wollen',
@@ -25,7 +24,6 @@ const _withoutGermanPassive = {
   'heranrücken',
   'sich anstrengen',
   'weggehen',
-  'wohnen',
   'zögern',
   'segeln',
 };

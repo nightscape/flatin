@@ -17,25 +17,21 @@ const _withoutGermanPassive = {
   'sein',
   'sich freuen',
   'arbeiten',
-  'eintreten',
   'erscheinen',
   'gehen',
   'sich nähern',
   'zögern',
   'zusammenkommen',
   'sorgen',
+  'speisen',
   'schlafen',
-  'warten',
-  'bleiben',
   'gefallen',
   'eilen',
   'gehorchen',
   'kämpfen',
-  'antworten',
   'lachen',
   'sitzen',
   'könig sein',
-  'haben vollverb',
   'dienen',
 };
 
@@ -91,5 +87,12 @@ void main() {
         }
       }
     }
+  });
+
+  test('erwidern keeps the infinitive in the plural present', () async {
+    final items = await loadPracticeItems('lib/data/latin_verbs.yaml');
+    final item = items.singleWhere((i) => i.id == 'verbs:respondere');
+    expect(german.render(item, 'ind.praes.akt.1.pl'), 'wir erwidern');
+    expect(german.render(item, 'ind.praes.akt.3.pl'), 'sie (Pl.) erwidern');
   });
 }

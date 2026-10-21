@@ -443,11 +443,6 @@ items:
     absent: *ohne_passiv
 
   # package 1
-  - id: haben vollverb
-    type: unregelmäßig
-    translation: {de: haben, en: have}
-    parts: {infinitiv: haben, praesens_2sg: hast, praesens_3sg: hat, praeteritum: hatte, konjunktiv2: hätte, partizip2: gehabt}
-    absent: *ohne_passiv
   - type: schwach
     translation: {de: hören, en: hear}
     parts: {infinitiv: hören, partizip2: gehört}
@@ -458,10 +453,8 @@ items:
     translation: {de: gebären, en: give birth to}
     parts: {infinitiv: gebären, praeteritum: gebar, partizip2: geboren}
   - type: stark
-    translation: {de: eintreten, en: enter}
-    parts: {infinitiv: eintreten, grundverb: treten, partikel: ein, praesens_2sg: trittst, praesens_3sg: tritt, praeteritum: trat, partizip2: eingetreten}
-    slots: {hilfsverb: hv_sein}
-    absent: *ohne_passiv
+    translation: {de: betreten, en: enter}
+    parts: {infinitiv: betreten, praesens_2sg: betrittst, praesens_3sg: betritt, praeteritum: betrat, partizip2: betreten}
   - type: stark
     translation: {de: erscheinen, en: appear}
     parts: {infinitiv: erscheinen, praeteritum: erschien, partizip2: erschienen}
@@ -496,6 +489,7 @@ items:
   - type: schwach
     translation: {de: speisen, en: dine}
     parts: {infinitiv: speisen, praesens_2sg: speist, partizip2: gespeist}
+    absent: *ohne_passiv
   - type: schwach
     translation: {de: sorgen, en: care}
     parts: {infinitiv: sorgen, partizip2: gesorgt}
@@ -517,9 +511,8 @@ items:
     translation: {de: erklären, en: explain}
     parts: {infinitiv: erklären, partizip2: erklärt}
   - type: schwach
-    translation: {de: warten, en: wait}
-    parts: {infinitiv: warten, partizip2: gewartet}
-    absent: *ohne_passiv
+    translation: {de: erwarten, en: expect}
+    parts: {infinitiv: erwarten, partizip2: erwartet}
   - id: in die flucht schlagen
     type: stark
     translation: {de: in die Flucht schlagen, en: put to flight}
@@ -527,11 +520,6 @@ items:
   - type: stark
     translation: {de: befehlen, en: order}
     parts: {infinitiv: befehlen, praesens_3sg: befiehlt, praeteritum: befahl, partizip2: befohlen}
-  - type: stark
-    translation: {de: bleiben, en: stay}
-    parts: {infinitiv: bleiben, praeteritum: blieb, partizip2: geblieben}
-    slots: {hilfsverb: hv_sein}
-    absent: *ohne_passiv
   - type: schwach
     translation: {de: töten, en: kill}
     parts: {infinitiv: töten, partizip2: getötet}
@@ -563,9 +551,8 @@ items:
     parts: {infinitiv: kämpfen, partizip2: gekämpft}
     absent: *ohne_passiv
   - type: schwach
-    translation: {de: antworten, en: answer}
-    parts: {infinitiv: antworten, partizip2: geantwortet}
-    absent: *ohne_passiv
+    translation: {de: erwidern, en: reply}
+    parts: {infinitiv: erwidern, praesens_1pl: erwidern, partizip2: erwidert}
   - type: schwach
     translation: {de: fragen, en: ask}
     parts: {infinitiv: fragen, partizip2: gefragt}
@@ -646,9 +633,8 @@ items:
     translation: {de: schicken, en: send}
     parts: {infinitiv: schicken, partizip2: geschickt}
   - type: schwach
-    translation: {de: siegen, en: win}
-    parts: {infinitiv: siegen, partizip2: gesiegt}
-    absent: *ohne_passiv
+    translation: {de: besiegen, en: defeat}
+    parts: {infinitiv: besiegen, partizip2: besiegt}
   - type: schwach
     translation: {de: setzen, en: put}
     parts: {infinitiv: setzen, praesens_2sg: setzt, partizip2: gesetzt}
@@ -730,9 +716,8 @@ items:
     translation: {de: befestigen, en: fortify}
     parts: {infinitiv: befestigen, partizip2: befestigt}
   - type: schwach
-    translation: {de: wohnen, en: live}
-    parts: {infinitiv: wohnen, partizip2: gewohnt}
-    absent: *ohne_passiv
+    translation: {de: bewohnen, en: inhabit}
+    parts: {infinitiv: bewohnen, partizip2: bewohnt}
   - type: schwach
     translation: {de: segeln, en: sail}
     parts: {infinitiv: segeln, praesens_1sg: segle, praesens_1pl: segeln, partizip2: gesegelt}
