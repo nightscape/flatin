@@ -745,6 +745,119 @@ items:
 
 
   # package 3
+  - type: stark
+    translation: {de: übergeben, en: hand over}
+    parts: {infinitiv: übergeben, praesens_3sg: übergibt, praeteritum: übergab, partizip2: übergeben}
+  - type: schwach
+    translation: {de: zeigen, en: show}
+    parts: {infinitiv: zeigen, partizip2: gezeigt}
+  - type: schwach
+    translation: {de: bewegen, en: move}
+    parts: {infinitiv: bewegen, partizip2: bewegt}
+  - type: stark
+    translation: {de: besitzen, en: possess}
+    parts: {infinitiv: besitzen, praesens_2sg: besitzt, praesens_3sg: besitzt, praeteritum: besaß, partizip2: besessen}
+  - type: schwach
+    translation: {de: üben, en: practise}
+    parts: {infinitiv: üben, partizip2: geübt}
+  - type: gemischt
+    translation: {de: zustande bringen, en: accomplish}
+    parts: {infinitiv: zustande bringen, grundverb: bringen, wortgruppe: zustande, praeteritum: brachte, konjunktiv2: brächte, partizip2: zustande gebracht}
+  - type: schwach
+    translation: {de: erblicken, en: catch sight of}
+    parts: {infinitiv: erblicken, partizip2: erblickt}
+  - type: schwach
+    translation: {de: beweinen, en: weep for}
+    parts: {infinitiv: beweinen, partizip2: beweint}
+  - type: schwach
+    translation: {de: zerstören, en: destroy}
+    parts: {infinitiv: zerstören, partizip2: zerstört}
+  - type: stark
+    translation: {de: finden, en: find}
+    parts: {infinitiv: finden, praeteritum: fand, partizip2: gefunden}
+  - type: schwach
+    translation: {de: machen, en: make}
+    parts: {infinitiv: machen, partizip2: gemacht}
+  - type: stark
+    translation: {de: versehen, en: provide}
+    parts: {infinitiv: versehen, praesens_3sg: versieht, praeteritum: versah, partizip2: versehen}
+  - type: schwach
+    translation: {de: suchen, en: look for}
+    parts: {infinitiv: suchen, partizip2: gesucht}
+  - type: schwach
+    translation: {de: bestrafen, en: punish}
+    parts: {infinitiv: bestrafen, partizip2: bestraft}
+  - type: schwach
+    translation: {de: verletzen, en: hurt}
+    parts: {infinitiv: verletzen, praesens_2sg: verletzt, partizip2: verletzt}
+  - type: schwach
+    translation: {de: wiederholen, en: repeat}
+    parts: {infinitiv: wiederholen, partizip2: wiederholt}
+  - type: schwach
+    translation: {de: anzünden, en: set on fire}
+    parts: {infinitiv: anzünden, grundverb: zünden, partikel: an, partizip2: angezündet}
+  - type: stark
+    translation: {de: verbinden, en: join}
+    parts: {infinitiv: verbinden, praeteritum: verband, partizip2: verbunden}
+  - type: stark
+    translation: {de: entlassen, en: dismiss}
+    parts: {infinitiv: entlassen, praesens_2sg: entlässt, praesens_3sg: entlässt, praeteritum: entließ, partizip2: entlassen}
+  - type: schwach
+    translation: {de: kennenlernen, en: get to know}
+    parts: {infinitiv: kennenlernen, grundverb: lernen, partikel: kennen, partizip2: kennengelernt}
+  - type: schwach
+    translation: {de: wegführen, en: lead away}
+    parts: {infinitiv: wegführen, grundverb: führen, partikel: weg, partizip2: weggeführt}
+  - type: schwach
+    translation: {de: zurückführen, en: lead back}
+    parts: {infinitiv: zurückführen, grundverb: führen, partikel: zurück, partizip2: zurückgeführt}
+  - type: stark
+    translation: {de: biegen, en: bend}
+    parts: {infinitiv: biegen, praeteritum: bog, partizip2: gebogen}
+  - type: stark
+    translation: {de: herabsteigen, en: descend}
+    parts: {infinitiv: herabsteigen, grundverb: steigen, partikel: herab, praeteritum: stieg, partizip2: herabgestiegen}
+    slots: {hilfsverb: hv_sein}
+    absent: *ohne_passiv
+  - type: schwach
+    translation: {de: bedecken, en: cover}
+    parts: {infinitiv: bedecken, partizip2: bedeckt}
+  - type: schwach
+    translation: {de: gründen, en: found}
+    parts: {infinitiv: gründen, partizip2: gegründet}
+  - type: schwach
+    translation: {de: heranführen, en: lead to}
+    parts: {infinitiv: heranführen, grundverb: führen, partikel: heran, partizip2: herangeführt}
+  - type: schwach
+    translation: {de: ablehnen, en: refuse}
+    parts: {infinitiv: ablehnen, grundverb: lehnen, partikel: ab, partizip2: abgelehnt}
+  - type: stark
+    translation: {de: verbieten, en: forbid}
+    parts: {infinitiv: verbieten, praeteritum: verbot, partizip2: verboten}
+  - type: schwach
+    translation: {de: aufstellen, en: set up}
+    parts: {infinitiv: aufstellen, grundverb: stellen, partikel: auf, partizip2: aufgestellt}
+  - type: schwach
+    translation: {de: vernachlässigen, en: neglect}
+    parts: {infinitiv: vernachlässigen, partizip2: vernachlässigt}
+  - type: stark
+    translation: {de: umgeben, en: surround}
+    parts: {infinitiv: umgeben, praesens_3sg: umgibt, praeteritum: umgab, partizip2: umgeben}
+  - type: schwach
+    translation: {de: vernichten, en: annihilate}
+    parts: {infinitiv: vernichten, partizip2: vernichtet}
+  - type: stark
+    translation: {de: annehmen, en: accept}
+    parts: {infinitiv: annehmen, grundverb: nehmen, partikel: an, praesens_3sg: nimmt, praeteritum: nahm, partizip2: angenommen}
+  - type: stark
+    translation: {de: anfangen, en: begin}
+    parts: {infinitiv: anfangen, grundverb: fangen, partikel: an, praesens_3sg: fängt, praeteritum: fing, partizip2: angefangen}
+  - type: stark
+    translation: {de: ansprechen, en: address}
+    parts: {infinitiv: ansprechen, grundverb: sprechen, partikel: an, praesens_3sg: spricht, praeteritum: sprach, partizip2: angesprochen}
+  - type: gemischt
+    translation: {de: erkennen, en: recognize}
+    parts: {infinitiv: erkennen, praeteritum: erkannte, konjunktiv2: erkennte, partizip2: erkannt}
 
 
 
