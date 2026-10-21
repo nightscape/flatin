@@ -40,6 +40,9 @@ const _testItems = '''
     translation: {de: Not tun, en: be needed}
     parts: {infinitiv: Not tun, grundverb: tun, wortgruppe: Not, praesens_1sg: tue, praesens_3sg: tut, praesens_1pl: tun, praeteritum: tat, partizip2: Not getan}
     absent: *ohne_passiv
+  - type: stark
+    translation: {de: mittragen, en: share}
+    parts: {infinitiv: mittragen, grundverb: tragen, partikel: mit, praesens_3sg: trägt, praeteritum: trug, konjunktiv2: trüge, partizip2: mitgetragen}
   - type: schwach
     translation: {de: mitteilen, en: inform}
     parts: {infinitiv: mitteilen, grundverb: teilen, partikel: mit, partizip2: mitgeteilt}
@@ -142,6 +145,39 @@ void main() {
         _course,
         '          - {self: roh, set: {modus: part, tempus: praes}}\n',
         '          - {self: roh, set: {modus: part, tempus: praes}, sandhi: false}\n',
+      );
+      expect(() => parseGrammarFiles({_path: yaml}), _schemaError('S13'));
+    });
+
+    test(
+      'a glued particle keeps its spelling in a synthetic konjunktiv II',
+      () {
+        expect(
+          accepted('mittragen', 'konj.impf.akt.1.sg'),
+          contains('ich mittrüge'),
+        );
+      },
+    );
+
+    test('every glued stem part of the German verbs skips sandhi', () {
+      final file = parseGrammarFiles({_path: _course}).single;
+      final glued = [
+        for (final type in file.types.values)
+          for (final compose in type.composes)
+            for (final part in compose.parts.whereType<StemPart>())
+              if (part.join == '') part,
+      ];
+      expect(glued, isNotEmpty);
+      expect(glued.where((part) => part.sandhi), isEmpty);
+    });
+
+    test('a non-boolean "sandhi" throws', () {
+      final yaml = _replaceOnce(
+        _course,
+        '          - {stem: partikel, optional: true, join: "", sandhi: false}\n'
+            '          - {self: roh, set: {modus: ind}',
+        '          - {stem: partikel, optional: true, join: "", sandhi: "no"}\n'
+            '          - {self: roh, set: {modus: ind}',
       );
       expect(() => parseGrammarFiles({_path: yaml}), _schemaError('S13'));
     });

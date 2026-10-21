@@ -1221,9 +1221,13 @@ class _FileParser {
       if (set.isNotEmpty || pass.isNotEmpty || map.isNotEmpty || passAll) {
         _bad('S13', 'type $type: a "stem" part takes no set, pass or map');
       }
+      final sandhi = spec['sandhi'] ?? true;
+      if (sandhi is! bool) {
+        _bad('S13', 'type $type: "sandhi" is true or false, not "$sandhi"');
+      }
       return StemPart(
         '${spec['stem']}',
-        sandhi: spec['sandhi'] as bool? ?? true,
+        sandhi: sandhi,
         join: join,
         optional: optional,
       );
