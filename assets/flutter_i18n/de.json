@@ -190,6 +190,10 @@
     },
     "oddone": {
       "question": "Welche Form gehört nicht zu den anderen?"
+    },
+    "transform": {
+      "question": "{start} von {word} umformen zu: {changes}",
+      "chainQuestion": "{start} von {word} der Reihe nach umformen: {changes}"
     }
   }
 }
