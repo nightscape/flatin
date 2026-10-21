@@ -9,6 +9,7 @@ import '../data/exercise_build.dart';
 import '../data/exercise_finderror.dart';
 import '../data/exercise_match.dart';
 import '../data/exercise_oddone.dart';
+import '../data/exercise_translate.dart';
 import '../data/exercise_transform.dart';
 import '../data/german_forms.dart';
 import 'derivation.dart' show norm;
@@ -228,6 +229,9 @@ const List<ExerciseGenerator> exerciseGenerators = [
   FormChainGenerator(),
   FindErrorGenerator(),
   MatchGenerator(),
+  LatDeChoiceGenerator(),
+  DeLatChoiceGenerator(),
+  DeLatTypeGenerator(),
 ];
 
 /// The one generator of [kind] in [registry].

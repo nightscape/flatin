@@ -202,6 +202,17 @@
       "question": "Match the forms of {word}",
       "hint": "Tap a Latin form first, then the German form that fits it."
     },
+    "translate": {
+      "latDe": {
+        "question": "What does {form} (of {word}) mean?"
+      },
+      "deLat": {
+        "question": "Which Latin form of {word} means: {german}"
+      },
+      "deLatType": {
+        "question": "Type the Latin form of {word} that means: {german}"
+      }
+    },
     "home": {
       "grammar": "Grammar",
       "nothingDue": "Nothing is due right now."

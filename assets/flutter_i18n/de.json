@@ -202,6 +202,17 @@
       "question": "Ordne die Formen von {word} zu",
       "hint": "Tippe erst eine lateinische, dann die passende deutsche Form."
     },
+    "translate": {
+      "latDe": {
+        "question": "Was bedeutet {form} (von {word})?"
+      },
+      "deLat": {
+        "question": "Welche lateinische Form von {word} bedeutet: {german}"
+      },
+      "deLatType": {
+        "question": "Schreibe die lateinische Form von {word}, die bedeutet: {german}"
+      }
+    },
     "home": {
       "grammar": "Grammatik",
       "nothingDue": "Gerade ist nichts fällig."

@@ -57,7 +57,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
 
   String get _rightText => switch (widget.exercise.answer) {
     ChoiceAnswer(:final right) => right.text,
-    TypedAnswer(:final expected) => expected.text,
+    TypedAnswer(:final accepted) => accepted.join(' / '),
     MatchingAnswer() => throw UnsupportedError('matching'),
   };
 
