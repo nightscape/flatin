@@ -427,6 +427,9 @@ final class GrammarItem {
   /// The id of the item in german_verbs.yaml that translates this verb.
   final String? deVerb;
 
+  /// The id of the item in german_nouns.yaml that translates this noun.
+  final String? deNoun;
+
   /// S23: slot name → item id of the same file.
   final Map<String, String> slots;
 
@@ -456,6 +459,7 @@ final class GrammarItem {
     required this.lemma,
     this.deponent,
     this.deVerb,
+    this.deNoun,
     this.slots = const {},
     this.declaredType,
     this.typeRule,
@@ -1402,6 +1406,7 @@ class _FileParser {
           lemma: lemma,
           deponent: _deponent(spec['deponent'], 'item $id'),
           deVerb: spec['de_verb'] as String?,
+          deNoun: spec['de_noun'] as String?,
           slots: _slots(spec['slots'], 'item $id'),
           impersonalPassive: impersonal,
         ),
@@ -1635,6 +1640,7 @@ class _Linker {
       lemma: item.lemma,
       deponent: item.deponent,
       deVerb: item.deVerb,
+      deNoun: item.deNoun,
       slots: item.slots,
       declaredType: declared,
       typeRule: matched,

@@ -1,0 +1,321 @@
+# German noun forms that translate a Latin noun form. The keys are the Latin
+# keys, so a Latin form reads its German text under its own key. A shown text
+# carries the article and a case frame; the bracketed part of the frame is
+# shown but is not part of the answer. Keys with wortform are raw forms, the
+# building blocks of the compose rules.
+data_file_id: german_nouns
+
+axes:
+  kasus:
+    name: {de: Kasus, en: Case}
+    values:
+      nom: {de: Nominativ, en: Nominative}
+      gen: {de: Genitiv, en: Genitive}
+      dat: {de: Dativ, en: Dative}
+      akk: {de: Akkusativ, en: Accusative}
+      abl: {de: Ablativ, en: Ablative}
+      vok: {de: Vokativ, en: Vocative}
+  numerus:
+    name: {de: Numerus, en: Number}
+    values:
+      sg: {de: Singular, en: Singular}
+      pl: {de: Plural, en: Plural}
+  wortform:
+    name: {de: Wortform, en: Word form}
+    values:
+      roh: {de: ohne Artikel, en: without article}
+
+label:
+  head: [wortform]
+  tail: [kasus, numerus]
+  merge_axis: kasus
+
+parts:
+  nominativ:          {label: {de: Nominativ Singular, en: Nominative singular}}
+  genitiv:            {label: {de: Genitiv Singular, en: Genitive singular}}
+  plural:             {label: {de: Nominativ Plural, en: Nominative plural}}
+  dativ_singular:     {label: {de: Dativ Singular, en: Dative singular}}
+  akkusativ_singular: {label: {de: Akkusativ Singular, en: Accusative singular}}
+  dativ_plural:       {label: {de: Dativ Plural, en: Dative plural}}
+
+defaults:
+  given_part: nominativ
+  lemma_part: nominativ
+
+sandhi:
+  n_dativ: {end: n, before: [n], replace: "", explain: {de: der Dativ Plural bekommt kein zweites n, en: the dative plural takes no second n}}
+
+classes: [substantiv, artikel, rahmen]
+
+shared:
+  nur_plural: &nur_plural [{numerus: sg}]
+
+types:
+  Substantivformen:
+    abstract: true
+    forms:
+      nom.sg: "{nom}"
+      gen.sg: "{gen}"
+      dat.sg: "{dsg}"
+      akk.sg: "{asg}"
+      nom.pl: "{pl}"
+      gen.pl: "{pl}"
+      dat.pl: "{dpl}"
+      akk.pl: "{pl}"
+
+  Substantivstamm:
+    abstract: true
+    stems:
+      nom: {from: nominativ}
+      gen: {from: genitiv}
+      pl:  {from: plural}
+      dsg: {from: dativ_singular, default: "{nom}"}
+      asg: {from: akkusativ_singular, default: "{nom}"}
+      dpl: {from: dativ_plural, default: "{pl}n"}
+    delegate:
+      - name: roh
+        type: Substantivformen
+        bind: {nom: nom, gen: gen, dsg: dsg, asg: asg, pl: pl, dpl: dpl}
+        set: {wortform: roh}
+        emit: false
+    sandhi: [n_dativ]
+
+  # The ablative reads "mit/von" with the dative; "durch" with the accusative
+  # and "vom" are accepted too.
+  Substantiv:
+    abstract: true
+    inherits_from: Substantivstamm
+    compose:
+      - match: {kasus: nom}
+        join: " "
+        parts:
+          - {slot: artikel, pass: [kasus, numerus]}
+          - {self: roh, pass: [kasus, numerus]}
+          - {lexeme: rahmen, pass: [kasus, numerus]}
+      - match: {kasus: [gen, dat, akk, abl]}
+        join: " "
+        parts:
+          - {lexeme: rahmen, pass: [kasus, numerus]}
+          - {slot: artikel, pass: [numerus], map: {kasus: {abl: dat}}}
+          - {self: roh, pass: [numerus], map: {kasus: {abl: dat}}}
+      - match: {kasus: vok}
+        join: " "
+        parts:
+          - {lexeme: rahmen, pass: [kasus, numerus]}
+          - {self: roh, pass: [numerus], set: {kasus: nom}, join: ""}
+          - {lexeme: ausruf, pass: [kasus, numerus]}
+      - match: {kasus: abl}
+        variant: true
+        join: " "
+        parts:
+          - {lexeme: durch, pass: [kasus, numerus]}
+          - {slot: artikel, pass: [numerus], map: {kasus: {abl: akk}}}
+          - {self: roh, pass: [numerus], map: {kasus: {abl: akk}}}
+      - match: {kasus: abl}
+        variant: true
+        join: " "
+        parts:
+          - {slot: vom, pass: [kasus, numerus]}
+          - {self: roh, pass: [numerus], map: {kasus: {abl: dat}}}
+
+  Maskulinum:
+    class: substantiv
+    display: {de: Maskulinum, en: Masculine}
+    inherits_from: Substantiv
+    required_stems: [nom, gen]
+    slots: {artikel: art_m, vom: vom}
+
+  # n-declension: every case but the nominative singular takes the genitive.
+  Maskulinum-schwach:
+    class: substantiv
+    display: {de: Maskulinum (n-Deklination), en: Masculine (weak)}
+    inherits_from: Maskulinum
+    stems:
+      dsg: {from: dativ_singular, default: "{gen}"}
+      asg: {from: akkusativ_singular, default: "{gen}"}
+
+  Neutrum:
+    class: substantiv
+    display: {de: Neutrum, en: Neuter}
+    inherits_from: Substantiv
+    required_stems: [nom, gen]
+    slots: {artikel: art_n, vom: vom}
+
+  Femininum:
+    class: substantiv
+    display: {de: Femininum, en: Feminine}
+    inherits_from: Substantiv
+    required_stems: [nom]
+    stems:
+      gen: {from: genitiv, default: "{nom}"}
+    slots: {artikel: art_f}
+
+  Eigenname:
+    class: substantiv
+    display: {de: Eigenname, en: Proper name}
+    inherits_from: Substantivstamm
+    required_stems: [nom, gen]
+    compose:
+      - match: {kasus: nom}
+        join: " "
+        parts:
+          - {self: roh, pass: [kasus, numerus]}
+          - {lexeme: rahmen, pass: [kasus, numerus]}
+      - match: {kasus: [gen, dat, akk, abl]}
+        join: " "
+        parts:
+          - {lexeme: rahmen, pass: [kasus, numerus]}
+          - {self: roh, pass: [numerus], map: {kasus: {abl: dat}}}
+      - match: {kasus: vok}
+        join: " "
+        parts:
+          - {lexeme: rahmen, pass: [kasus, numerus]}
+          - {self: roh, pass: [numerus], set: {kasus: nom}, join: ""}
+          - {lexeme: ausruf, pass: [kasus, numerus]}
+      - match: {kasus: abl}
+        variant: true
+        join: " "
+        parts:
+          - {lexeme: durch, pass: [kasus, numerus]}
+          - {self: roh, pass: [numerus], map: {kasus: {abl: akk}}}
+
+  Artikel-Plural:
+    abstract: true
+    forms:
+      nom.pl: die
+      gen.pl: der
+      dat.pl: den
+      akk.pl: die
+
+  Artikel-m:
+    class: artikel
+    display: {de: Artikel maskulin, en: Masculine article}
+    inherits_from: Artikel-Plural
+    forms:
+      nom.sg: der
+      gen.sg: des
+      dat.sg: dem
+      akk.sg: den
+
+  Artikel-f:
+    class: artikel
+    display: {de: Artikel feminin, en: Feminine article}
+    inherits_from: Artikel-Plural
+    forms:
+      nom.sg: die
+      gen.sg: der
+      dat.sg: der
+      akk.sg: die
+
+  Artikel-n:
+    class: artikel
+    display: {de: Artikel neutrum, en: Neuter article}
+    inherits_from: Artikel-Plural
+    forms:
+      nom.sg: das
+      gen.sg: des
+      dat.sg: dem
+      akk.sg: das
+
+  Rahmen:
+    class: rahmen
+    display: {de: Kasusrahmen, en: Case frame}
+    forms:
+      nom.sg: "(ist da)"
+      gen.sg: "(das Haus)"
+      dat.sg: "(ich helfe)"
+      akk.sg: "(ich sehe)"
+      abl.sg: [mit, von]
+      vok.sg: "(o)"
+      nom.pl: "(sind da)"
+      gen.pl: "(das Haus)"
+      dat.pl: "(ich helfe)"
+      akk.pl: "(ich sehe)"
+      abl.pl: [mit, von]
+      vok.pl: "(o)"
+
+  Ausruf:
+    class: rahmen
+    display: {de: Ausruf, en: Exclamation}
+    forms:
+      vok.sg: "!"
+      vok.pl: "!"
+
+  Durch:
+    class: rahmen
+    display: {de: Präposition durch, en: Preposition durch}
+    forms:
+      abl.sg: durch
+      abl.pl: durch
+
+  # "vom" replaces the article, so it exists only for the singular.
+  Vom:
+    class: rahmen
+    display: {de: Präposition vom, en: Preposition vom}
+    forms:
+      abl.sg: vom
+
+items:
+  - id: art_m
+    type: Artikel-m
+    translation: {de: Artikel maskulin, en: masculine article}
+    parts: {nominativ: der}
+  - id: art_f
+    type: Artikel-f
+    translation: {de: Artikel feminin, en: feminine article}
+    parts: {nominativ: die}
+  - id: art_n
+    type: Artikel-n
+    translation: {de: Artikel neutrum, en: neuter article}
+    parts: {nominativ: das}
+  - id: rahmen
+    type: Rahmen
+    translation: {de: Kasusrahmen, en: case frame}
+    parts: {nominativ: "(ist da)"}
+  - id: ausruf
+    type: Ausruf
+    translation: {de: Ausruf, en: exclamation}
+    parts: {nominativ: "!"}
+  - id: durch
+    type: Durch
+    translation: {de: durch, en: through}
+    parts: {nominativ: durch}
+  - id: vom
+    type: Vom
+    translation: {de: vom, en: from the}
+    parts: {nominativ: vom}
+
+  - type: Maskulinum-schwach
+    translation: {de: Sklave, en: slave}
+    parts: {nominativ: Sklave, genitiv: Sklaven, plural: Sklaven}
+  - type: Maskulinum-schwach
+    translation: {de: Bote, en: messenger}
+    parts: {nominativ: Bote, genitiv: Boten, plural: Boten}
+  - type: Maskulinum
+    translation: {de: Tempel, en: temple}
+    parts: {nominativ: Tempel, genitiv: Tempels, plural: Tempel}
+  - type: Maskulinum
+    translation: {de: Römer, en: Roman}
+    parts: {nominativ: Römer, genitiv: Römers, plural: Römer}
+  - type: Neutrum
+    translation: {de: Geschenk, en: gift}
+    parts: {nominativ: Geschenk, genitiv: Geschenks, plural: Geschenke}
+  - type: Neutrum
+    translation: {de: Haus, en: house}
+    parts: {nominativ: Haus, genitiv: Hauses, plural: Häuser}
+  - type: Femininum
+    translation: {de: Rose, en: rose}
+    parts: {nominativ: Rose, plural: Rosen}
+  - type: Femininum
+    translation: {de: Tochter, en: daughter}
+    parts: {nominativ: Tochter, plural: Töchter}
+  - type: Neutrum
+    translation: {de: Herz, en: heart}
+    parts: {nominativ: Herz, genitiv: Herzens, plural: Herzen, dativ_singular: Herzen}
+  - type: Femininum
+    translation: {de: Eltern, en: parents}
+    parts: {nominativ: Eltern, plural: Eltern}
+    absent: *nur_plural
+  - type: Eigenname
+    translation: {de: Rom, en: Rome}
+    parts: {nominativ: Rom, genitiv: Roms}

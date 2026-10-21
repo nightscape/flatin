@@ -148,14 +148,18 @@ PracticeItemCard _reviewed(
   );
 }
 
-/// The German texts of the Latin verbs; none for a UI language other than
-/// German, so the kinds that show them are not built.
+/// The German texts of the Latin verbs and nouns; none for a UI language
+/// other than German, so the kinds that show them are not built.
 @riverpod
 Future<GermanForms> germanForms(Ref ref) async =>
     await ref.watch(dataLanguageProvider.future) == 'de'
     ? GrammarGermanForms(
         await loadAssetText('lib/data/german_verbs.yaml'),
         await loadGrammarFile('verbs'),
+        nouns: (
+          yaml: await loadAssetText('lib/data/german_nouns.yaml'),
+          latin: await loadGrammarFile('nouns'),
+        ),
       )
     : const NoForms();
 

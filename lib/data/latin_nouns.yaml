@@ -540,6 +540,7 @@ items:
     parts: {nom: "dominus"}
   - translation: {de: Die Rose, en: rose}
     parts: {nom: "rosa"}
+    de_noun: "rose"
   - translation: {de: Der Tag, en: day}
     parts: {nom: "diēs"}
   - type: U-Deklination
@@ -551,6 +552,7 @@ items:
     parts: {nom: "Capitōlium"}
   - translation: {de: der Römer, en: Roman}
     parts: {nom: "Rōmānus"}
+    de_noun: "römer"
   - translation: {de: "die Unterwelt; der Tartarus", en: "the underworld; Tartarus"}
     parts: {nom: "Tartarus"}
   - translation: {de: "der Gegner, Feind", en: "opponent, enemy"}
@@ -579,6 +581,7 @@ items:
     parts: {nom: "domina"}
   - translation: {de: "das Geschenk, die Gabe", en: gift}
     parts: {nom: "dōnum"}
+    de_noun: "geschenk"
   - translation: {de: das Pferd, en: horse}
     parts: {nom: "equus"}
   - translation: {de: "die Familie; die Hausgemeinschaft", en: "family; household"}
@@ -591,6 +594,7 @@ items:
     parts: {nom: "fēmina"}
   - translation: {de: die Tochter, en: daughter}
     parts: {nom: "fīlia"}
+    de_noun: "tochter"
   - translation: {de: der Sohn, en: son}
     parts: {nom: "fīlius"}
   - translation: {de: der Garten, en: garden}
@@ -623,6 +627,7 @@ items:
     parts: {nom: "serva"}
   - translation: {de: der Sklave, en: slave}
     parts: {nom: "servus"}
+    de_noun: "sklave"
   - translation: {de: "das Bild, Götterbild", en: "image, statue of a god"}
     parts: {nom: "simulācrum"}
   - translation: {de: das Schauspiel, en: "show, spectacle"}
@@ -635,6 +640,7 @@ items:
     parts: {nom: "tabula"}
   - translation: {de: der Tempel, en: temple}
     parts: {nom: "templum"}
+    de_noun: "tempel"
   - translation: {de: "das Obergewand (die Toga)", en: toga}
     parts: {nom: "toga"}
   - translation: {de: "die Menschenmenge; die Unordnung; der Lärm", en: "crowd; confusion; noise"}
@@ -645,6 +651,7 @@ items:
     parts: {nom: "verbum"}
   - translation: {de: "das Haus, Landhaus", en: "country house, villa"}
     parts: {nom: "vīlla"}
+    de_noun: "haus"
   - translation: {de: der Wein, en: wine}
     parts: {nom: "vīnum"}
   - translation: {de: der Altar, en: altar}
@@ -1238,6 +1245,7 @@ items:
     absent: *ohne_steigerung
   - translation: {de: "der Bote; die Botschaft", en: "messenger; message"}
     parts: {nom: "nūntius", gen: "nūntiī"}
+    de_noun: "bote"
   - type: Konsonantische-Deklination-mf
     translation: {de: "die Macht, Herrschaft", en: "power, authority"}
     parts: {nom: "potestās", gen: "potestātis"}
@@ -1434,6 +1442,7 @@ items:
   - type: Konsonantische-Deklination-n
     translation: {de: "das Herz; die Stimmung; der Mut; der Verstand", en: heart}
     parts: {nom: "cor", gen: "cordis"}
+    de_noun: "herz"
     forms:
       gen.pl: "cordium"
   - translation: {de: "der Spott; das Spiel", en: mockery}
@@ -1584,6 +1593,7 @@ items:
     parts: {nom: "lingua"}
   - translation: {de: "(die Stadt) Rom", en: Rome}
     parts: {nom: "Rōma"}
+    de_noun: "rom"
   - translation: {de: die Kammer, en: "room, storeroom"}
     parts: {nom: "cella"}
   - translation: {de: der Dichter, en: poet}
