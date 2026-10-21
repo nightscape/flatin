@@ -7,6 +7,11 @@ tags:
   oracle:
     skip: "run tool/oracle/fetch_collatinus.sh, then flutter test --tags oracle --run-skipped"
 
+  # The pair sweep takes minutes, so it is skipped by default and run with
+  #   flutter test --tags sweep --run-skipped
+  sweep:
+    skip: "run flutter test --tags sweep --run-skipped"
+
   # Needs a private paradigm file: see test/printed/README.md. The group
   # skips itself unless PRINTED_PARADIGMS is set.
   printed: {}
