@@ -226,10 +226,12 @@ and optionally `variant`. It matches a seam (S18) on normalized text:
 - `replace`: a literal replaces the last n letters of the left side, quantity
   marks included (n is the length of `end`, 1 for a class); `short` removes the
   quantity mark of the left side's last letter; `double_next` is the right
-  side's first letter.
+  side's first letter; `drop_next` keeps the left side and removes the matched
+  `before` entry from the right side (it needs a `before` list, else load
+  throws; at a seam after a `stem:` part it throws).
 
-The first matching rule applies, at most one per seam, and a rule changes only
-the left side. A rule whose output equals its input is not recorded. With
+The first matching rule applies, at most one per seam, and only `drop_next`
+changes the right side. A rule whose output equals its input is not recorded. With
 `variant: true` both spellings are produced; the shown one is the one whose left
 side agrees with the start of the item's lemma part.
 

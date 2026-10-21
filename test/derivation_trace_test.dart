@@ -178,16 +178,20 @@ void main() {
           switch (form) {
             case GeneratedForm(:final stemName, :final ending):
               final stem = item.derivation.stems[stemName]!.stem;
-              final left = form.sandhiRule == null
-                  ? stem
+              final Seam seam = form.sandhiRule == null
+                  ? (text: stem, right: ending, rule: null)
                   : sandhiSeam(
                       rules,
                       stem,
                       ending,
                       wordFinal: true,
                       lemma: item.lemma,
-                    ).first.text;
-              expect(norm(left + ending), norm(form.result), reason: where);
+                    ).first;
+              expect(
+                norm(seam.text + seam.right),
+                norm(form.result),
+                reason: where,
+              );
               expect(
                 _endingSources(owners, file, item, form.formKey),
                 contains((form.endingType, ending)),

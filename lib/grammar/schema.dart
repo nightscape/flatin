@@ -85,7 +85,7 @@ final class InferenceRule {
   String toString() => '$part suffix "$suffix" → ${types.join("/")}';
 }
 
-enum SandhiReplace { literal, short, doubleNext }
+enum SandhiReplace { literal, short, doubleNext, dropNext }
 
 /// One rule of a file's sandhi library (S16).
 final class SandhiRuleSpec {
@@ -873,6 +873,7 @@ class _FileParser {
       final replace = switch (replaceText) {
         'short' => SandhiReplace.short,
         'double_next' => SandhiReplace.doubleNext,
+        'drop_next' => SandhiReplace.dropNext,
         _ => SandhiReplace.literal,
       };
       if (replace == SandhiReplace.literal &&
@@ -880,8 +881,12 @@ class _FileParser {
           !_letters.hasMatch(replaceText)) {
         _bad(
           'S16',
-          'rule $id: "replace" must be letters, short or double_next',
+          'rule $id: "replace" must be letters, short, double_next or '
+              'drop_next',
         );
+      }
+      if (replace == SandhiReplace.dropNext && beforeStarts == null) {
+        _bad('S16', 'rule $id: drop_next needs a "before" list');
       }
 
       final explain = _text(spec['explain'], 'sandhi rule $id explain');

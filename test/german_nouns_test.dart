@@ -355,6 +355,25 @@ void main() {
       );
     });
 
+    test('the dative plural adds n only to a plural in neither n nor s', () {
+      final engine = _engineOf('''
+$_yaml  - type: Neutrum
+    translation: {de: Kino, en: cinema}
+    parts: {nominativ: Kino, genitiv: Kinos, plural: Kinos}
+''');
+      expect(
+        {
+          for (final id in ['kino', 'rose', 'geschenk'])
+            id: engine.of('german_nouns', id).forms['dat.pl']!.variants,
+        },
+        {
+          'kino': ['(ich helfe) den Kinos'],
+          'rose': ['(ich helfe) den Rosen'],
+          'geschenk': ['(ich helfe) den Geschenken'],
+        },
+      );
+    });
+
     test('a noun without plural has no dative plural', () {
       final rom = latin('Rōma');
       expect(german.covers(rom, 'dat.pl'), isFalse);

@@ -43,7 +43,8 @@ defaults:
   lemma_part: nominativ
 
 sandhi:
-  n_dativ: {end: n, before: [n], replace: "", explain: {de: der Dativ Plural bekommt kein zweites n, en: the dative plural takes no second n}}
+  n_dativ: {end: n, before: [n], replace: drop_next, explain: {de: der Dativ Plural bekommt kein zweites n, en: the dative plural takes no second n}}
+  s_dativ: {end: s, before: [n], replace: drop_next, explain: {de: ein Plural auf -s bekommt im Dativ kein n, en: a plural in -s takes no n in the dative}}
 
 classes: [substantiv, artikel, rahmen]
 
@@ -78,7 +79,7 @@ types:
         bind: {nom: nom, gen: gen, dsg: dsg, asg: asg, pl: pl, dpl: dpl}
         set: {wortform: roh}
         emit: false
-    sandhi: [n_dativ]
+    sandhi: [n_dativ, s_dativ]
 
   # The ablative reads "mit/von" with the dative; "durch" with the accusative
   # and "vom" are accepted too.

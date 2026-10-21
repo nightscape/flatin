@@ -38,9 +38,9 @@ bool _isVowel(String letter) => _vowels.contains(_short(letter).toLowerCase());
 
 // ---------------------------------------------------------------- sandhi
 
-/// A seam after S16: the left side as it is written, and the rule that
-/// changed it.
-typedef Seam = ({String text, SandhiRule? rule});
+/// A seam after S16: the left side as it is written, the right side that
+/// follows it, and the rule that changed them.
+typedef Seam = ({String text, String right, SandhiRule? rule});
 
 /// S16: the first rule of [rules] that matches the seam [left]|[right].
 ///
@@ -54,17 +54,23 @@ List<Seam> sandhiSeam(
   String lemma = '',
 }) {
   final leftLetters = letters(left);
-  final Seam plain = (text: left, rule: null);
+  final Seam plain = (text: left, right: right, rule: null);
   if (leftLetters.isEmpty) return [plain];
 
   for (final spec in rules) {
     final cut = _endMatch(spec, leftLetters);
     if (cut == 0) continue;
-    if (!_beforeMatch(spec, right, wordFinal: wordFinal)) continue;
+    final matched = _beforeMatch(spec, right, wordFinal: wordFinal);
+    if (matched == null) continue;
     final text = _replace(spec, leftLetters, cut, right);
-    if (text == left) return [plain]; // a no-op rule is not recorded
+    final rest = spec.replace == SandhiReplace.dropNext
+        ? letters(right).sublist(letters(matched).length).join()
+        : right;
+    // a no-op rule is not recorded
+    if (text == left && rest == right) return [plain];
     final applied = (
       text: text,
+      right: rest,
       rule: SandhiRule(id: spec.id, explain: spec.explain),
     );
     if (!spec.variant) return [applied];
@@ -100,7 +106,9 @@ int _endMatch(SandhiRuleSpec spec, List<String> left) {
   return want.length;
 }
 
-bool _beforeMatch(
+/// The prefix of the right side that the rule's `before` matched, null if it
+/// does not match.
+String? _beforeMatch(
   SandhiRuleSpec spec,
   String right, {
   required bool wordFinal,
@@ -108,20 +116,22 @@ bool _beforeMatch(
   final rightLetters = letters(right);
   final beforeClass = spec.beforeClass;
   if (beforeClass != null) {
-    if (rightLetters.isEmpty) return false;
-    return _isVowel(rightLetters.first) == (beforeClass == 'vowel');
+    if (rightLetters.isEmpty) return null;
+    return _isVowel(rightLetters.first) == (beforeClass == 'vowel')
+        ? rightLetters.first
+        : null;
   }
   for (final start in spec.beforeStarts!) {
     if (start == r'$') {
-      if (wordFinal && right.isEmpty) return true;
+      if (wordFinal && right.isEmpty) return '';
     } else if (start.endsWith(r'$')) {
       final want = start.substring(0, start.length - 1);
-      if (wordFinal && norm(right) == norm(want)) return true;
+      if (wordFinal && norm(right) == norm(want)) return right;
     } else if (norm(right).startsWith(norm(start))) {
-      return true;
+      return start;
     }
   }
-  return false;
+  return null;
 }
 
 String _replace(SandhiRuleSpec spec, List<String> left, int cut, String right) {
@@ -131,6 +141,7 @@ String _replace(SandhiRuleSpec spec, List<String> left, int cut, String right) {
     SandhiReplace.literal => kept + spec.replaceText,
     SandhiReplace.short => kept + replaced.map(_short).join(),
     SandhiReplace.doubleNext => kept + letters(right).first,
+    SandhiReplace.dropNext => left.join(),
   };
 }
 
@@ -329,7 +340,7 @@ final class _ItemBuilder {
       );
       for (final seam in seams) {
         if (variants.isEmpty) rule = seam.rule;
-        variants.add(seam.text + template.ending);
+        variants.add(seam.text + seam.right);
       }
     }
     return stems[name] = StemFromDefault(
@@ -418,7 +429,7 @@ final class _ItemBuilder {
         );
         for (final seam in seams) {
           if (variants.isEmpty) rule = seam.rule;
-          variants.add(seam.text + template.ending);
+          variants.add(seam.text + seam.right);
         }
       }
     }
@@ -702,13 +713,17 @@ final class _ItemBuilder {
         continue;
       }
       final last = i == sources.length - 1 || joins[i].isNotEmpty;
+      final right = last ? '' : texts[i + 1];
       final seams = sandhiSeam(
         rules,
         texts[i],
-        last ? '' : texts[i + 1],
+        right,
         wordFinal: last,
         lemma: item.lemma,
       );
+      if (seams.any((seam) => seam.right != right)) {
+        throw StateError('S16: drop_next at the affix seam of ${item.lemma}');
+      }
       renderings = [
         for (final rendering in renderings)
           for (final seam in seams)

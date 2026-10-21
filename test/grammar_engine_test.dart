@@ -740,7 +740,7 @@ void _checkInvariants(GrammarFile file, GrammarItem item, Derivation d) {
           lemma: item.lemma,
         );
         expect(seam.rule?.id, sandhiRule?.id, reason: '$where $key');
-        expect(seam.text + ending, form.result, reason: '$where $key');
+        expect(seam.text + seam.right, form.result, reason: '$where $key');
 
       // I3.
       case ComposedForm(:final parts):
@@ -779,7 +779,7 @@ void _checkInvariants(GrammarFile file, GrammarItem item, Derivation d) {
       lemma: item.lemma,
     );
     expect(seam.rule?.id, stem.sandhiRule?.id, reason: '$where ${stem.name}');
-    expect(seam.text + rest, stem.stem, reason: '$where ${stem.name}');
+    expect(seam.text + seam.right, stem.stem, reason: '$where ${stem.name}');
   }
 
   // I5.

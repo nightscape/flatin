@@ -604,6 +604,17 @@ void main() {
       );
     });
 
+    test('S16: drop_next without a before list', () {
+      _expectRejected(
+        'S16',
+        'rule d_ausfall: drop_next needs a "before" list',
+        _fixtureWith(
+          'before: consonant, replace: ""',
+          'before: consonant, replace: drop_next',
+        ),
+      );
+    });
+
     test('S16: an end with a digit', () {
       _expectRejected(
         'S16',
