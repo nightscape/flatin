@@ -8,14 +8,6 @@ import 'package:latin_practice/grammar/schema.dart';
 /// Run with GERMAN_GOLDEN_UPDATE=1 to rewrite the golden tables.
 const _goldenDir = 'test/golden';
 
-/// Their German verbs carry `absent: *ohne_passiv`.
-const _withoutGermanPassive = {
-  'verbs:venire',
-  'verbs:cavere',
-  'verbs:laborare',
-  'verbs:scire',
-};
-
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -58,7 +50,7 @@ void main() {
   );
 
   test('the ten spike verbs name their German verb', () {
-    expect(german.germanVerbOf, {
+    final spike = {
       'verbs:amare': 'lieben',
       'verbs:venire': 'kommen',
       'verbs:gaudere': 'sich freuen',
@@ -69,8 +61,25 @@ void main() {
       'verbs:esse': 'sein',
       'verbs:cavere': 'sich in acht nehmen',
       'verbs:convocare': 'zusammenrufen',
-    });
+    };
+    for (final MapEntry(:key, :value) in spike.entries) {
+      expect(german.germanVerbOf[key], value, reason: key);
+    }
   });
+
+  final germanItems = parseGrammarFiles({
+    'lib/data/german_verbs.yaml': File(
+      'lib/data/german_verbs.yaml',
+    ).readAsStringSync(),
+  }).single.items;
+  final withoutGermanPassive = {
+    for (final MapEntry(:key, :value) in german.germanVerbOf.entries)
+      if (germanItems
+          .singleWhere((i) => i.id == value)
+          .absent
+          .any((a) => a.length == 1 && a['genus_verbi'] == 'pass'))
+        key,
+  };
 
   final tables = {
     'german_forms_table.md': (List<String> codes) => codes.length != 5,
@@ -94,7 +103,7 @@ void main() {
           final germanKey = GrammarGermanForms.germanKeyOf(key);
           if (!shown.add(germanKey)) continue;
           final List<String> texts;
-          if (codes[2] == 'pass' && _withoutGermanPassive.contains(id)) {
+          if (codes[2] == 'pass' && withoutGermanPassive.contains(id)) {
             expect(() => german.render(item, key), throwsArgumentError);
             texts = ['—'];
           } else {
