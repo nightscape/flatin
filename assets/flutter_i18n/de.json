@@ -194,6 +194,9 @@
     "transform": {
       "question": "{start} von {word} umformen zu: {changes}",
       "chainQuestion": "{start} von {word} der Reihe nach umformen: {changes}"
+    },
+    "finderror": {
+      "question": "{label} von {word}: „{wrong}“ ist falsch. Wie lautet die richtige Form?"
     }
   }
 }

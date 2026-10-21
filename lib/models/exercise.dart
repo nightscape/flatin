@@ -6,6 +6,7 @@ import 'dart:math';
 
 import '../data/diagnosis.dart';
 import '../data/exercise_build.dart';
+import '../data/exercise_finderror.dart';
 import '../data/exercise_oddone.dart';
 import '../data/exercise_transform.dart';
 import '../data/german_forms.dart';
@@ -224,6 +225,7 @@ const List<ExerciseGenerator> exerciseGenerators = [
   OddOneOutGenerator(),
   TransformGenerator(),
   FormChainGenerator(),
+  FindErrorGenerator(),
 ];
 
 /// The one generator of [kind] in [registry].

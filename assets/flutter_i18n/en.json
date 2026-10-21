@@ -194,6 +194,9 @@
     "transform": {
       "question": "Change {start} of {word} to: {changes}",
       "chainQuestion": "Change {start} of {word} step by step: {changes}"
+    },
+    "finderror": {
+      "question": "{label} of {word}: \"{wrong}\" is wrong. What is the right form?"
     }
   }
 }
