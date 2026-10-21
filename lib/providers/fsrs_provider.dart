@@ -100,8 +100,14 @@ Future<PracticeItem?> nextDueItem(Ref ref, String dataFileId) async {
   return items.isNotEmpty ? items.first : null;
 }
 
-/// Review a card with a rating
-Future<void> reviewCard(WidgetRef ref, PracticeItem item, Rating rating) async {
+/// Review a card with a rating; the grammar cards of [grammar] are reviewed
+/// with theirs, in the same save. A grammar card that does not exist throws.
+Future<void> reviewCard(
+  WidgetRef ref,
+  PracticeItem item,
+  Rating rating, [
+  Map<GrammarBundle, Rating> grammar = const {},
+]) async {
   final scheduler = ref.read(fsrsSchedulerProvider);
   final cardsAsync = await ref.read(fsrsCardsProvider.future);
   final cards = Map<String, PracticeItemCard>.from(cardsAsync);
@@ -115,6 +121,14 @@ Future<void> reviewCard(WidgetRef ref, PracticeItem item, Rating rating) async {
   }
 
   cards[itemId] = _reviewed(scheduler, cards[itemId]!, rating);
+  for (final MapEntry(key: bundle, value: r) in grammar.entries) {
+    final id = GrammarCardId(item.dataFileId, bundle);
+    cards[id] = _reviewed(
+      scheduler,
+      cards[id] ?? (throw StateError('no card "$id"')),
+      r,
+    );
+  }
   await FsrsStorage.saveCards(cards);
 
   // Invalidate providers to refresh UI
@@ -251,10 +265,11 @@ Future<bool> reviewCardReportingErrors(
   BuildContext context,
   WidgetRef ref,
   PracticeItem item,
-  Rating rating,
-) async {
+  Rating rating, [
+  Map<GrammarBundle, Rating> grammar = const {},
+]) async {
   try {
-    await reviewCard(ref, item, rating);
+    await reviewCard(ref, item, rating, grammar);
     return true;
   } catch (e) {
     if (context.mounted) {

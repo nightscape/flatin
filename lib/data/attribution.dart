@@ -44,6 +44,13 @@ Attribution _typed(PracticeItem word, TypedAnswer answer, String text) {
   return _byDiagnosis(diagnose(word, answer.expected.formKey, text));
 }
 
+/// The ratings one typed [text] for the form [key] of [word] gives.
+/// Produced here; read by the paradigm screen.
+Attribution attributeTypedRow(PracticeItem word, FormKey key, String text) =>
+    word.accepts(word.formOrder.indexOf(key), text)
+    ? _good
+    : _byDiagnosis(diagnose(word, key, text));
+
 Attribution _byDiagnosis(Diagnosis diagnosis) => switch (diagnosis) {
   OtherFormOfWord() ||
   EndingOfOtherType() => (word: Rating.good, grammar: Rating.again),

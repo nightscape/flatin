@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:fsrs/fsrs.dart';
+import '../data/attribution.dart';
 import '../data/diagnosis.dart' show diagnose;
 import '../data/esel_steps.dart';
 import '../data/explanation.dart' show ExplanationLine;
+import '../models/exercise.dart' show bundleOf;
 import '../models/practice_item.dart';
 import '../models/input_strategy.dart';
 import '../providers/curriculum_provider.dart';
@@ -108,7 +110,29 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
   }
 
   Future<void> _rateCard(Rating rating) async {
-    if (!await reviewCardReportingErrors(context, ref, widget.item, rating)) {
+    final results = ref.read(practiceProvider(widget.item)).validationResults;
+    final rows = [
+      for (var i = 0; i < _filteredKeys.length; i++)
+        if (results[i] != null)
+          (
+            bundle: bundleOf(widget.item, _filteredKeys[i]),
+            rating: attributeTypedRow(
+              widget.item,
+              _filteredKeys[i],
+              _userAnswers[i],
+            ),
+          ),
+    ];
+    final grammar = rows.isEmpty
+        ? <String, Rating>{}
+        : attributeParadigm(rows).grammar;
+    if (!await reviewCardReportingErrors(
+      context,
+      ref,
+      widget.item,
+      rating,
+      grammar,
+    )) {
       return;
     }
 

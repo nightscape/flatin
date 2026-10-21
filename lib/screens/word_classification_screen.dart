@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:fsrs/fsrs.dart';
+import '../data/attribution.dart' show attributeParadigm;
 import '../data/esel_groups.dart';
 import '../data/esel_steps.dart';
 import '../models/derivation.dart' show norm;
+import '../models/exercise.dart' show bundleOf;
 import '../models/practice_item.dart';
 import '../models/course_filter.dart';
 import '../providers/curriculum_provider.dart';
@@ -306,13 +308,48 @@ class _WordClassificationScreenState
   Future<void> _rateCard(Rating rating) async {
     if (_currentItem == null) return;
 
-    // Review the card with FSRS
-    if (!await reviewCardReportingErrors(context, ref, _currentItem!, rating)) {
+    if (!await reviewCardReportingErrors(
+      context,
+      ref,
+      _currentItem!,
+      rating,
+      _shownBundleRatings(),
+    )) {
       return;
     }
 
     // Load next word
     _loadRandomWord();
+  }
+
+  /// Each bundle of the shown spelling is rated on its own: Again when one
+  /// of its forms was not picked or a wrong combination of that bundle was
+  /// picked, otherwise Good. Wrong picks in other bundles rate nothing.
+  Map<String, Rating> _shownBundleRatings() {
+    final item = _currentItem!;
+    final picked = {
+      for (final c in _selectedAnswers.where(_selectors.isComplete))
+        _combinationToFormLabel(c),
+    };
+    final wrongBundles = {
+      for (final c in _wrongCombinations)
+        if (_combinationToFormLabel(c) case final label?)
+          bundleOf(item, item.formOrder[item.formLabels.indexOf(label)]),
+    };
+    return attributeParadigm([
+      for (final i in _correctFormIndices)
+        (
+          bundle: bundleOf(item, item.formOrder[i]),
+          rating: (
+            word: Rating.good,
+            grammar:
+                picked.contains(item.formLabels[i]) &&
+                    !wrongBundles.contains(bundleOf(item, item.formOrder[i]))
+                ? Rating.good
+                : Rating.again,
+          ),
+        ),
+    ]).grammar;
   }
 
   /// The form keys the course leaves on for [item].
