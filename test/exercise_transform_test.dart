@@ -170,6 +170,85 @@ void main() {
     });
   });
 
+  group('D5: the chain pins start, steps, filter and variants', () {
+    final cube = syntheticVerb({
+      for (final tempus in ['praes', 'fut'])
+        for (final genus in ['akt', 'pass'])
+          for (final numerus in ['sg', 'pl'])
+            'ind.$tempus.$genus.$numerus': [
+              '$tempus$genus$numerus',
+              '$tempus$genus$numerus-v',
+            ],
+    });
+    const changeable = ['tempus', 'genus_verbi', 'numerus'];
+
+    Iterable<List<String>> orders(List<String> axes) sync* {
+      if (axes.length <= 1) {
+        yield axes;
+        return;
+      }
+      for (final axis in axes) {
+        for (final rest in orders([...axes]..remove(axis))) {
+          yield [axis, ...rest];
+        }
+      }
+    }
+
+    test('shows the first spelling of the start and one label per step', () {
+      final axes = cube.formLabels.first.axes;
+      for (int seed = 0; seed < 40; seed++) {
+        final e = _chain.build(cube, 'ind.praes.akt', ctx(cube), Random(seed));
+        final start = cube.formOrder.singleWhere(
+          (k) => spelling(cube, k) == e.questionParams['start'],
+        );
+        final target = features(cube, typed(e).expected.formKey);
+        final differing = [
+          for (final axis in changeable)
+            if (features(cube, start)[axis] != target[axis]) axis,
+        ];
+        final readings = {
+          for (final order in orders(differing))
+            () {
+              final reached = {...features(cube, start)};
+              return order
+                  .map((axis) {
+                    reached[axis] = target[axis]!;
+                    return axes.displayOf(axis, reached);
+                  })
+                  .join(' → ');
+            }(),
+        };
+        expect(readings, contains(e.questionParams['changes']));
+        expect(
+          e.questionParams['changes']!.split(' → '),
+          hasLength(differing.length),
+        );
+      }
+    });
+
+    test('the typed answer accepts every variant of the target', () {
+      final e = _chain.build(cube, 'ind.praes.akt', ctx(cube), Random(0));
+      final index = cube.formOrder.indexOf(typed(e).expected.formKey);
+      expect(typed(e).accepted, hasLength(2));
+      expect(typed(e).accepted, cube.acceptedForms[index]);
+    });
+
+    test('a start that is spelled like the target cannot be built', () {
+      final square = syntheticVerb({
+        'ind.akt.sg': ['a'],
+        'ind.akt.pl': ['b'],
+        'ind.pass.sg': ['b'],
+        'ind.pass.pl': ['a'],
+      });
+      for (int seed = 0; seed < 20; seed++) {
+        expect(
+          () => _chain.build(square, 'ind.akt', ctx(square), Random(seed)),
+          throwsA(isA<CannotBuild>()),
+        );
+      }
+    });
+  });
+
   group('D1: cannot build', () {
     for (final (name, generator) in [
       ('transform', _transform),

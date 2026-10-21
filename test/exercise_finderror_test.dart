@@ -92,6 +92,31 @@ void main() {
     });
   });
 
+  group('D1: a swapped form that is a valid form', () {
+    final allValid = syntheticVerb({
+      'ind.fut.pass.sg': ['amātus est', 'amātī est'],
+      'ind.fut.pass.pl': ['amātī sunt', 'amātus sunt'],
+    });
+    final oneValid = syntheticVerb({
+      'ind.fut.pass.sg': ['amātus est', 'amātī est'],
+      'ind.fut.pass.pl': ['amātī sunt'],
+    });
+    const bundle = 'ind.fut.pass';
+
+    test('is never offered as the wrong form', () {
+      for (int seed = 0; seed < 30; seed++) {
+        expect(
+          build(oneValid, bundle, seed).questionParams['wrong'],
+          'amātus sunt',
+        );
+      }
+    });
+
+    test('leaves nothing to spoil when every swap is a valid form', () {
+      expect(() => build(allValid, bundle, 0), throwsA(isA<CannotBuild>()));
+    });
+  });
+
   group('D1: cannot build', () {
     test('when the bundle has no two-word form', () {
       expect(

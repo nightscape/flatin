@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ import 'package:latin_practice/data/attribution.dart';
 import 'package:latin_practice/data/exercise_match.dart';
 import 'package:latin_practice/data/german_forms.dart';
 import 'package:latin_practice/data/practice_data.dart';
+import 'package:latin_practice/grammar/schema.dart';
 import 'package:latin_practice/models/derivation.dart' show norm;
 import 'package:latin_practice/models/exercise.dart';
 import 'package:latin_practice/models/practice_item.dart';
@@ -75,6 +77,42 @@ void main() {
       }
       expect(pairs.map((p) => norm(p.$1.text)).toSet(), hasLength(4));
       expect(pairs.map((p) => p.$2.text).toSet(), hasLength(4));
+    });
+
+    test('a real verb gets the German texts of the German verb data', () {
+      final latinVerbs = parseGrammarFiles({
+        for (final path in [
+          'lib/data/latin_nouns.yaml',
+          'lib/data/latin_verbs.yaml',
+        ])
+          path: File(path).readAsStringSync(),
+      }).singleWhere((f) => f.dataFileId == 'verbs');
+      final german = GrammarGermanForms(
+        File('lib/data/german_verbs.yaml').readAsStringSync(),
+        latinVerbs,
+      );
+      final exercise = build(
+        vocare,
+        _bundle,
+        ctx: ExerciseContext(
+          unlocked: {_bundle},
+          pool: [vocare],
+          german: german,
+        ),
+      );
+      const expected = {
+        'ind.praes.akt.1.sg': 'ich rufe',
+        'ind.praes.akt.1.pl': 'wir rufen',
+        'ind.praes.akt.2.sg': 'du rufst',
+        'ind.praes.akt.2.pl': 'ihr ruft',
+        'ind.praes.akt.3.sg': 'er/sie/es ruft',
+        'ind.praes.akt.3.pl': 'sie (Pl.) rufen',
+      };
+      final pairs = answerOf(exercise).pairs;
+      expect(pairs, hasLength(4));
+      for (final (latin, germanOption) in pairs) {
+        expect(germanOption.text, expected[latin.formKey]);
+      }
     });
 
     test('a noun bundle builds as well', () {
