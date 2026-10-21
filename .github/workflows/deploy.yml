@@ -56,7 +56,9 @@ jobs:
             "storePassword=$ANDROID_KEYSTORE_PASSWORD" > android/key.properties
 
       - name: Build release APK
-        run: flutter build apk --release
+        run: |
+          cd android
+          bundle exec fastlane build
 
       - name: Verify signature
         shell: bash

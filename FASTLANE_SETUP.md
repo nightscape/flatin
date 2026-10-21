@@ -135,6 +135,10 @@ fastlane beta
 fastlane release
 ```
 
+## Releasing a Version
+
+A release is a pushed tag `vX.Y.Z`; no commit and no `pubspec.yaml` edit is needed. Release builds pass `--build-name=X.Y.Z --build-number=X*10000+Y*100+Z` (`v1.5.0` -> `10500`), derived by `fastlane/version_from_tag.rb` from `GITHUB_REF_NAME` or `TAG_NAME`. Minor and patch must be below 100; any other tag form fails the build. For a local run set `TAG_NAME=v1.5.0`. Test: `ruby fastlane/version_from_tag_test.rb`. A `workflow_dispatch` run from a branch has no tag, so the build fails there; dispatch only on a tag ref.
+
 ## iOS Setup (Apple App Store)
 
 ### 1. Set Up App Store Connect API Key

@@ -5,16 +5,23 @@ default_platform(:android)
 
 # Get the project root directory (two levels up from fastlane directory)
 project_root = File.expand_path(File.join(File.dirname(__FILE__), "..", ".."))
+require File.join(project_root, "fastlane", "version_from_tag")
+
+def release_build_flags
+  VersionFromTag.build_flags
+rescue ArgumentError => e
+  UI.user_error!(e.message)
+end
 
 platform :android do
   desc "Build the Android release APK"
   lane :build do
-    sh("cd #{project_root} && flutter build apk --release")
+    sh("cd #{project_root} && flutter build apk --release #{release_build_flags}")
   end
 
   desc "Build the Android App Bundle (AAB) for Play Store"
   lane :build_bundle do
-    sh("cd #{project_root} && flutter build appbundle --release")
+    sh("cd #{project_root} && flutter build appbundle --release #{release_build_flags}")
   end
 
   desc "Run integration tests and collect screenshots"
