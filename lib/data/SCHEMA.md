@@ -218,7 +218,7 @@ rule ids in the order they are tried, and an unknown id throws. A rule has
 and optionally `variant`. It matches a seam (S18) on normalized text:
 
 - `end`: a letter string the left side ends with, or `vowel` / `consonant` (its
-  last letter).
+  last letter). Letters are a–z, the Latin quantity marks and `ä ö ü ß`.
 - `before`: `vowel` / `consonant` (the right side's first letter; the right side
   is not empty), or a list whose entry `p` matches when the right side starts
   with `p`, and whose entry `p$` matches only at a word-final seam and only when

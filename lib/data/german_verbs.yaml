@@ -68,6 +68,8 @@ sandhi:
   dental_t: {end: t, before: [t, st], replace: te, explain: {de: nach t wird ein e eingeschoben, en: an e is inserted after t}}
   dental_d: {end: d, before: [t, st], replace: de, explain: {de: nach d wird ein e eingeschoben, en: an e is inserted after d}}
   e_en:     {end: e, before: [en], replace: "", explain: {de: e fällt vor -en aus, en: e drops before -en}}
+  s_est:    {end: s, before: [st$], replace: se, explain: {de: nach s wird vor -st ein e eingeschoben, en: an e is inserted after s before -st}}
+  sz_est:   {end: ß, before: [st$], replace: ße, explain: {de: nach ß wird vor -st ein e eingeschoben, en: an e is inserted after ß before -st}}
 
 classes: [konjugation, pronomen]
 
@@ -126,7 +128,7 @@ types:
         bind: {p1sg: p1sg, p2sg: p2sg, p3sg: p3sg, p1pl: p1pl, p2pl: p2pl, praet: praet, k2: k2, inf: inf, p2: p2}
         set: {}
         emit: false
-    sandhi: [dental_t, dental_d, e_en]
+    sandhi: [dental_t, dental_d, e_en, s_est, sz_est]
 
   Hilfsverb:
     class: konjugation

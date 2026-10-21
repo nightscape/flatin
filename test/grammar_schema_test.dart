@@ -190,6 +190,18 @@ void main() {
         expect(item.typeName, item.typeRule!.types.single, reason: item.id);
       }
     });
+
+    test('ä, ö, ü and ß are letters in a sandhi rule (S16)', () {
+      final verbs = parseGrammarFiles(
+        _fixtureWith(
+          '{end: t, before: [s], replace: s,',
+          '{end: äöüß, before: [äöüß], replace: äöüß,',
+        ),
+      ).firstWhere((f) => f.dataFileId == 'verbs');
+      expect(verbs.sandhi['t_s']!.end, 'äöüß');
+      expect(verbs.sandhi['t_s']!.beforeStarts, ['äöüß']);
+      expect(verbs.sandhi['t_s']!.replaceText, 'äöüß');
+    });
   });
 
   group('labels', () {
@@ -589,6 +601,22 @@ void main() {
         'S16',
         '"before" entry "1" is not letters',
         _fixtureWith('before: [s], replace: s', 'before: [1], replace: s'),
+      );
+    });
+
+    test('S16: an end with a digit', () {
+      _expectRejected(
+        'S16',
+        'rule t_s: "end" must be letters',
+        _fixtureWith('{end: t, before: [s]', '{end: t1, before: [s]'),
+      );
+    });
+
+    test('S16: an end with a space', () {
+      _expectRejected(
+        'S16',
+        'rule t_s: "end" must be letters',
+        _fixtureWith('{end: t, before: [s]', '{end: "t s", before: [s]'),
       );
     });
 

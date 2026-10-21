@@ -41,7 +41,7 @@ const dataLanguages = ['de', 'en'];
 /// data language is asked for.
 const courseLanguage = 'de';
 
-final _letters = RegExp(r'^[a-zāēīōūȳăĕĭŏŭ]+$', caseSensitive: false);
+final _letters = RegExp(r'^[a-zāēīōūȳăĕĭŏŭäöüß]+$', caseSensitive: false);
 final _macron = RegExp(r'[āēīōūȳĀĒĪŌŪȲ]');
 
 // ---------------------------------------------------------------- model

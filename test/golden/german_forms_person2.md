@@ -1502,11 +1502,11 @@
 | scīre | konj.plusq.pass.2.pl | scītī essētis | — |  |
 | sedēre | ind.praes.akt.2.sg | sedēs | du sitzt |  |
 | sedēre | ind.praes.akt.2.pl | sedētis | ihr sitzt |  |
-| sedēre | ind.impf.akt.2.sg | sedēbās | du saßst |  |
+| sedēre | ind.impf.akt.2.sg | sedēbās | du saßest |  |
 | sedēre | ind.impf.akt.2.pl | sedēbātis | ihr saßt |  |
 | sedēre | ind.fut.akt.2.sg | sedēbis | du wirst sitzen |  |
 | sedēre | ind.fut.akt.2.pl | sedēbitis | ihr werdet sitzen |  |
-| sedēre | ind.perf.akt.2.sg | sēdistī | du hast gesessen | du saßst |
+| sedēre | ind.perf.akt.2.sg | sēdistī | du hast gesessen | du saßest |
 | sedēre | ind.perf.akt.2.pl | sēdistis | ihr habt gesessen | ihr saßt |
 | sedēre | ind.plusq.akt.2.sg | sēderās | du hattest gesessen |  |
 | sedēre | ind.plusq.akt.2.pl | sēderātis | ihr hattet gesessen |  |
@@ -2054,7 +2054,7 @@
 | legere | ind.praes.akt.2.pl | legitis | ihr lest |  |
 | legere | ind.praes.pass.2.sg | legeris | du wirst gelesen |  |
 | legere | ind.praes.pass.2.pl | legiminī | ihr werdet gelesen |  |
-| legere | ind.impf.akt.2.sg | legēbās | du lasst |  |
+| legere | ind.impf.akt.2.sg | legēbās | du lasest |  |
 | legere | ind.impf.akt.2.pl | legēbātis | ihr last |  |
 | legere | ind.impf.pass.2.sg | legēbāris | du wurdest gelesen |  |
 | legere | ind.impf.pass.2.pl | legēbāminī | ihr wurdet gelesen |  |
@@ -2062,7 +2062,7 @@
 | legere | ind.fut.akt.2.pl | legētis | ihr werdet lesen |  |
 | legere | ind.fut.pass.2.sg | legēris | du wirst gelesen werden |  |
 | legere | ind.fut.pass.2.pl | legēminī | ihr werdet gelesen werden |  |
-| legere | ind.perf.akt.2.sg | lēgistī | du hast gelesen | du lasst |
+| legere | ind.perf.akt.2.sg | lēgistī | du hast gelesen | du lasest |
 | legere | ind.perf.akt.2.pl | lēgistis | ihr habt gelesen | ihr last |
 | legere | ind.perf.pass.2.sg | lēctus es | du bist gelesen worden |  |
 | legere | ind.perf.pass.2.pl | lēctī estis | ihr seid gelesen worden |  |
@@ -3274,7 +3274,7 @@
 | possidēre | ind.praes.akt.2.pl | possidētis | ihr besitzt |  |
 | possidēre | ind.praes.pass.2.sg | possidēris | du wirst besessen |  |
 | possidēre | ind.praes.pass.2.pl | possidēminī | ihr werdet besessen |  |
-| possidēre | ind.impf.akt.2.sg | possidēbās | du besaßst |  |
+| possidēre | ind.impf.akt.2.sg | possidēbās | du besaßest |  |
 | possidēre | ind.impf.akt.2.pl | possidēbātis | ihr besaßt |  |
 | possidēre | ind.impf.pass.2.sg | possidēbāris | du wurdest besessen |  |
 | possidēre | ind.impf.pass.2.pl | possidēbāminī | ihr wurdet besessen |  |
@@ -3282,7 +3282,7 @@
 | possidēre | ind.fut.akt.2.pl | possidēbitis | ihr werdet besitzen |  |
 | possidēre | ind.fut.pass.2.sg | possidēberis | du wirst besessen werden |  |
 | possidēre | ind.fut.pass.2.pl | possidēbiminī | ihr werdet besessen werden |  |
-| possidēre | ind.perf.akt.2.sg | possēdistī | du hast besessen | du besaßst |
+| possidēre | ind.perf.akt.2.sg | possēdistī | du hast besessen | du besaßest |
 | possidēre | ind.perf.akt.2.pl | possēdistis | ihr habt besessen | ihr besaßt |
 | possidēre | ind.perf.pass.2.sg | possessus es | du bist besessen worden |  |
 | possidēre | ind.perf.pass.2.pl | possessī estis | ihr seid besessen worden |  |
@@ -3954,7 +3954,7 @@
 | dīmittere | ind.praes.akt.2.pl | dīmittitis | ihr entlasst |  |
 | dīmittere | ind.praes.pass.2.sg | dīmitteris | du wirst entlassen |  |
 | dīmittere | ind.praes.pass.2.pl | dīmittiminī | ihr werdet entlassen |  |
-| dīmittere | ind.impf.akt.2.sg | dīmittēbās | du entließst |  |
+| dīmittere | ind.impf.akt.2.sg | dīmittēbās | du entließest |  |
 | dīmittere | ind.impf.akt.2.pl | dīmittēbātis | ihr entließt |  |
 | dīmittere | ind.impf.pass.2.sg | dīmittēbāris | du wurdest entlassen |  |
 | dīmittere | ind.impf.pass.2.pl | dīmittēbāminī | ihr wurdet entlassen |  |
@@ -3962,7 +3962,7 @@
 | dīmittere | ind.fut.akt.2.pl | dīmittētis | ihr werdet entlassen |  |
 | dīmittere | ind.fut.pass.2.sg | dīmittēris | du wirst entlassen werden |  |
 | dīmittere | ind.fut.pass.2.pl | dīmittēminī | ihr werdet entlassen werden |  |
-| dīmittere | ind.perf.akt.2.sg | dīmīsistī | du hast entlassen | du entließst |
+| dīmittere | ind.perf.akt.2.sg | dīmīsistī | du hast entlassen | du entließest |
 | dīmittere | ind.perf.akt.2.pl | dīmīsistis | ihr habt entlassen | ihr entließt |
 | dīmittere | ind.perf.pass.2.sg | dīmissus es | du bist entlassen worden |  |
 | dīmittere | ind.perf.pass.2.pl | dīmissī estis | ihr seid entlassen worden |  |
@@ -5454,7 +5454,7 @@
 | āmittere | ind.praes.akt.2.pl | āmittitis | ihr entlasst |  |
 | āmittere | ind.praes.pass.2.sg | āmitteris | du wirst entlassen |  |
 | āmittere | ind.praes.pass.2.pl | āmittiminī | ihr werdet entlassen |  |
-| āmittere | ind.impf.akt.2.sg | āmittēbās | du entließst |  |
+| āmittere | ind.impf.akt.2.sg | āmittēbās | du entließest |  |
 | āmittere | ind.impf.akt.2.pl | āmittēbātis | ihr entließt |  |
 | āmittere | ind.impf.pass.2.sg | āmittēbāris | du wurdest entlassen |  |
 | āmittere | ind.impf.pass.2.pl | āmittēbāminī | ihr wurdet entlassen |  |
@@ -5462,7 +5462,7 @@
 | āmittere | ind.fut.akt.2.pl | āmittētis | ihr werdet entlassen |  |
 | āmittere | ind.fut.pass.2.sg | āmittēris | du wirst entlassen werden |  |
 | āmittere | ind.fut.pass.2.pl | āmittēminī | ihr werdet entlassen werden |  |
-| āmittere | ind.perf.akt.2.sg | āmīsistī | du hast entlassen | du entließst |
+| āmittere | ind.perf.akt.2.sg | āmīsistī | du hast entlassen | du entließest |
 | āmittere | ind.perf.akt.2.pl | āmīsistis | ihr habt entlassen | ihr entließt |
 | āmittere | ind.perf.pass.2.sg | āmissus es | du bist entlassen worden |  |
 | āmittere | ind.perf.pass.2.pl | āmissī estis | ihr seid entlassen worden |  |
@@ -5534,7 +5534,7 @@
 | pellere | ind.praes.akt.2.pl | pellitis | ihr stoßt |  |
 | pellere | ind.praes.pass.2.sg | pelleris | du wirst gestoßen |  |
 | pellere | ind.praes.pass.2.pl | pelliminī | ihr werdet gestoßen |  |
-| pellere | ind.impf.akt.2.sg | pellēbās | du stießst |  |
+| pellere | ind.impf.akt.2.sg | pellēbās | du stießest |  |
 | pellere | ind.impf.akt.2.pl | pellēbātis | ihr stießt |  |
 | pellere | ind.impf.pass.2.sg | pellēbāris | du wurdest gestoßen |  |
 | pellere | ind.impf.pass.2.pl | pellēbāminī | ihr wurdet gestoßen |  |
@@ -5542,7 +5542,7 @@
 | pellere | ind.fut.akt.2.pl | pellētis | ihr werdet stoßen |  |
 | pellere | ind.fut.pass.2.sg | pellēris | du wirst gestoßen werden |  |
 | pellere | ind.fut.pass.2.pl | pellēminī | ihr werdet gestoßen werden |  |
-| pellere | ind.perf.akt.2.sg | pepulistī | du hast gestoßen | du stießst |
+| pellere | ind.perf.akt.2.sg | pepulistī | du hast gestoßen | du stießest |
 | pellere | ind.perf.akt.2.pl | pepulistis | ihr habt gestoßen | ihr stießt |
 | pellere | ind.perf.pass.2.sg | pulsus es | du bist gestoßen worden |  |
 | pellere | ind.perf.pass.2.pl | pulsī estis | ihr seid gestoßen worden |  |
@@ -5654,7 +5654,7 @@
 | dēserere | ind.praes.akt.2.pl | dēseritis | ihr verlasst |  |
 | dēserere | ind.praes.pass.2.sg | dēsereris | du wirst verlassen |  |
 | dēserere | ind.praes.pass.2.pl | dēseriminī | ihr werdet verlassen |  |
-| dēserere | ind.impf.akt.2.sg | dēserēbās | du verließst |  |
+| dēserere | ind.impf.akt.2.sg | dēserēbās | du verließest |  |
 | dēserere | ind.impf.akt.2.pl | dēserēbātis | ihr verließt |  |
 | dēserere | ind.impf.pass.2.sg | dēserēbāris | du wurdest verlassen |  |
 | dēserere | ind.impf.pass.2.pl | dēserēbāminī | ihr wurdet verlassen |  |
@@ -5662,7 +5662,7 @@
 | dēserere | ind.fut.akt.2.pl | dēserētis | ihr werdet verlassen |  |
 | dēserere | ind.fut.pass.2.sg | dēserēris | du wirst verlassen werden |  |
 | dēserere | ind.fut.pass.2.pl | dēserēminī | ihr werdet verlassen werden |  |
-| dēserere | ind.perf.akt.2.sg | dēseruistī | du hast verlassen | du verließst |
+| dēserere | ind.perf.akt.2.sg | dēseruistī | du hast verlassen | du verließest |
 | dēserere | ind.perf.akt.2.pl | dēseruistis | ihr habt verlassen | ihr verließt |
 | dēserere | ind.perf.pass.2.sg | dēsertus es | du bist verlassen worden |  |
 | dēserere | ind.perf.pass.2.pl | dēsertī estis | ihr seid verlassen worden |  |
@@ -6334,7 +6334,7 @@
 | repellere | ind.praes.akt.2.pl | repellitis | ihr stoßt zurück |  |
 | repellere | ind.praes.pass.2.sg | repelleris | du wirst zurückgestoßen |  |
 | repellere | ind.praes.pass.2.pl | repelliminī | ihr werdet zurückgestoßen |  |
-| repellere | ind.impf.akt.2.sg | repellēbās | du stießst zurück |  |
+| repellere | ind.impf.akt.2.sg | repellēbās | du stießest zurück |  |
 | repellere | ind.impf.akt.2.pl | repellēbātis | ihr stießt zurück |  |
 | repellere | ind.impf.pass.2.sg | repellēbāris | du wurdest zurückgestoßen |  |
 | repellere | ind.impf.pass.2.pl | repellēbāminī | ihr wurdet zurückgestoßen |  |
@@ -6342,7 +6342,7 @@
 | repellere | ind.fut.akt.2.pl | repellētis | ihr werdet zurückstoßen |  |
 | repellere | ind.fut.pass.2.sg | repellēris | du wirst zurückgestoßen werden |  |
 | repellere | ind.fut.pass.2.pl | repellēminī | ihr werdet zurückgestoßen werden |  |
-| repellere | ind.perf.akt.2.sg | reppulistī | du hast zurückgestoßen | du stießst zurück |
+| repellere | ind.perf.akt.2.sg | reppulistī | du hast zurückgestoßen | du stießest zurück |
 | repellere | ind.perf.akt.2.pl | reppulistis | ihr habt zurückgestoßen | ihr stießt zurück |
 | repellere | ind.perf.pass.2.sg | repulsus es | du bist zurückgestoßen worden |  |
 | repellere | ind.perf.pass.2.pl | repulsī estis | ihr seid zurückgestoßen worden |  |
@@ -6374,7 +6374,7 @@
 | relinquere | ind.praes.akt.2.pl | relinquitis | ihr verlasst |  |
 | relinquere | ind.praes.pass.2.sg | relinqueris | du wirst verlassen |  |
 | relinquere | ind.praes.pass.2.pl | relinquiminī | ihr werdet verlassen |  |
-| relinquere | ind.impf.akt.2.sg | relinquēbās | du verließst |  |
+| relinquere | ind.impf.akt.2.sg | relinquēbās | du verließest |  |
 | relinquere | ind.impf.akt.2.pl | relinquēbātis | ihr verließt |  |
 | relinquere | ind.impf.pass.2.sg | relinquēbāris | du wurdest verlassen |  |
 | relinquere | ind.impf.pass.2.pl | relinquēbāminī | ihr wurdet verlassen |  |
@@ -6382,7 +6382,7 @@
 | relinquere | ind.fut.akt.2.pl | relinquētis | ihr werdet verlassen |  |
 | relinquere | ind.fut.pass.2.sg | relinquēris | du wirst verlassen werden |  |
 | relinquere | ind.fut.pass.2.pl | relinquēminī | ihr werdet verlassen werden |  |
-| relinquere | ind.perf.akt.2.sg | relīquistī | du hast verlassen | du verließst |
+| relinquere | ind.perf.akt.2.sg | relīquistī | du hast verlassen | du verließest |
 | relinquere | ind.perf.akt.2.pl | relīquistis | ihr habt verlassen | ihr verließt |
 | relinquere | ind.perf.pass.2.sg | relictus es | du bist verlassen worden |  |
 | relinquere | ind.perf.pass.2.pl | relictī estis | ihr seid verlassen worden |  |
@@ -6984,7 +6984,7 @@
 | ēripere | ind.praes.akt.2.pl | ēripitis | ihr entreißt |  |
 | ēripere | ind.praes.pass.2.sg | ēriperis | du wirst entrissen |  |
 | ēripere | ind.praes.pass.2.pl | ēripiminī | ihr werdet entrissen |  |
-| ēripere | ind.impf.akt.2.sg | ēripiēbās | du entrissst |  |
+| ēripere | ind.impf.akt.2.sg | ēripiēbās | du entrissest |  |
 | ēripere | ind.impf.akt.2.pl | ēripiēbātis | ihr entrisst |  |
 | ēripere | ind.impf.pass.2.sg | ēripiēbāris | du wurdest entrissen |  |
 | ēripere | ind.impf.pass.2.pl | ēripiēbāminī | ihr wurdet entrissen |  |
@@ -6992,7 +6992,7 @@
 | ēripere | ind.fut.akt.2.pl | ēripiētis | ihr werdet entreißen |  |
 | ēripere | ind.fut.pass.2.sg | ēripiēris | du wirst entrissen werden |  |
 | ēripere | ind.fut.pass.2.pl | ēripiēminī | ihr werdet entrissen werden |  |
-| ēripere | ind.perf.akt.2.sg | ēripuistī | du hast entrissen | du entrissst |
+| ēripere | ind.perf.akt.2.sg | ēripuistī | du hast entrissen | du entrissest |
 | ēripere | ind.perf.akt.2.pl | ēripuistis | ihr habt entrissen | ihr entrisst |
 | ēripere | ind.perf.pass.2.sg | ēreptus es | du bist entrissen worden |  |
 | ēripere | ind.perf.pass.2.pl | ēreptī estis | ihr seid entrissen worden |  |
@@ -8192,11 +8192,11 @@
 | fingere | konj.plusq.pass.2.pl | fictī essētis | — |  |
 | crēscere | ind.praes.akt.2.sg | crēscis | du wächst |  |
 | crēscere | ind.praes.akt.2.pl | crēscitis | ihr wachst |  |
-| crēscere | ind.impf.akt.2.sg | crēscēbās | du wuchsst |  |
+| crēscere | ind.impf.akt.2.sg | crēscēbās | du wuchsest |  |
 | crēscere | ind.impf.akt.2.pl | crēscēbātis | ihr wuchst |  |
 | crēscere | ind.fut.akt.2.sg | crēscēs | du wirst wachsen |  |
 | crēscere | ind.fut.akt.2.pl | crēscētis | ihr werdet wachsen |  |
-| crēscere | ind.perf.akt.2.sg | crēvistī | du bist gewachsen | du wuchsst |
+| crēscere | ind.perf.akt.2.sg | crēvistī | du bist gewachsen | du wuchsest |
 | crēscere | ind.perf.akt.2.pl | crēvistis | ihr seid gewachsen | ihr wuchst |
 | crēscere | ind.plusq.akt.2.sg | crēverās | du warst gewachsen |  |
 | crēscere | ind.plusq.akt.2.pl | crēverātis | ihr wart gewachsen |  |
