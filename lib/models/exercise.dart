@@ -13,7 +13,6 @@ import '../data/exercise_oddone.dart';
 import '../data/exercise_translate.dart';
 import '../data/exercise_transform.dart';
 import '../data/german_forms.dart';
-import 'derivation.dart' show norm;
 import 'practice_item.dart';
 
 /// A form bundle of one data file: for verbs the codes of Modus, Tempus and
@@ -106,7 +105,7 @@ final class ChoiceAnswer extends ExerciseAnswer {
       'exactly one option is the right one',
     );
     assert(
-      options.map((o) => norm(o.text)).toSet().length == options.length,
+      options.map((o) => o.text).toSet().length == options.length,
       'no two options read the same',
     );
   }

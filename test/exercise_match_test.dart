@@ -29,6 +29,9 @@ class _SameGerman implements GermanForms {
 
   @override
   String render(PracticeItem item, FormKey key) => 'immer gleich';
+
+  @override
+  List<String> accepted(PracticeItem item, FormKey key) => [render(item, key)];
 }
 
 void main() {

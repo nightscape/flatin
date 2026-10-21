@@ -9,6 +9,9 @@ abstract interface class GermanForms {
   bool covers(PracticeItem item, FormKey key);
 
   String render(PracticeItem item, FormKey key);
+
+  /// Every German text accepted for [key]; the first is [render]'s (S9).
+  List<String> accepted(PracticeItem item, FormKey key);
 }
 
 /// Renders a Latin form from `german_verbs.yaml` for the Latin items with a
@@ -65,7 +68,7 @@ class GrammarGermanForms implements GermanForms {
   @override
   String render(PracticeItem item, FormKey key) => accepted(item, key).first;
 
-  /// Every German text accepted for [key]; the first is the shown one (S9).
+  @override
   List<String> accepted(PracticeItem item, FormKey key) {
     final variants = _variants(item, key);
     if (variants == null) {
@@ -109,6 +112,10 @@ class NoForms implements GermanForms {
   @override
   String render(PracticeItem item, FormKey key) =>
       throw StateError('NoForms has no text for ${item.id} $key');
+
+  @override
+  List<String> accepted(PracticeItem item, FormKey key) =>
+      throw StateError('NoForms has no text for ${item.id} $key');
 }
 
 /// Renders `<lemma>@<key>`, so every form has its own German text.
@@ -123,4 +130,7 @@ class FakeGermanForms implements GermanForms {
 
   @override
   String render(PracticeItem item, FormKey key) => '${item.lemma}@$key';
+
+  @override
+  List<String> accepted(PracticeItem item, FormKey key) => [render(item, key)];
 }

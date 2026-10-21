@@ -20,6 +20,9 @@ class _SameGerman implements GermanForms {
 
   @override
   String render(PracticeItem item, FormKey key) => byKey[key] ?? key;
+
+  @override
+  List<String> accepted(PracticeItem item, FormKey key) => [render(item, key)];
 }
 
 class _CoversOnly extends _SameGerman {

@@ -12,6 +12,11 @@ tags:
   sweep:
     skip: "run flutter test --tags sweep --run-skipped"
 
+  # Compares the spec kinds with the old generators; takes hours, see
+  # test/exercise_cube_differential_test.dart.
+  differential:
+    skip: "run flutter test --tags differential --run-skipped, sharded"
+
   # Needs a private paradigm file: see test/printed/README.md. The group
   # skips itself unless PRINTED_PARADIGMS is set.
   printed: {}
