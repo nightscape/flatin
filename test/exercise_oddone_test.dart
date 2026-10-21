@@ -36,6 +36,25 @@ bool _loneOn(PracticeItem item, List<FormOption> options, FormOption lone) {
   });
 }
 
+class _CountingRandom implements Random {
+  _CountingRandom(this._inner);
+
+  final Random _inner;
+  int calls = 0;
+
+  @override
+  int nextInt(int max) {
+    calls++;
+    return _inner.nextInt(max);
+  }
+
+  @override
+  bool nextBool() => _inner.nextBool();
+
+  @override
+  double nextDouble() => _inner.nextDouble();
+}
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -109,6 +128,86 @@ void main() {
       };
       expect(left.length, greaterThan(1));
     });
+  });
+
+  group('D1 sampling', () {
+    test('an adjective bundle draws few quartets and still builds', () async {
+      final nouns = await loadPracticeItems('lib/data/latin_nouns.yaml');
+      final durus = nouns.reduce(
+        (a, b) => a.formOrder.length >= b.formOrder.length ? a : b,
+      );
+      final bundle = bundleOf(durus, durus.formOrder.first);
+      final rng = _CountingRandom(Random(1));
+      final answer =
+          const OddOneOutGenerator()
+                  .build(
+                    durus,
+                    bundle,
+                    fakeExerciseContext(unlocked: _bundles(durus)),
+                    rng,
+                  )
+                  .answer
+              as ChoiceAnswer;
+      expect(answer.options, hasLength(4));
+      expect(rng.calls, lessThan(OddOneOutGenerator.maxDraws * 5));
+    });
+
+    test('gives up at the bound of draws', () {
+      final item = handItem(
+        dataFileId: 'verbs',
+        lemma: 'vocare',
+        axes: fullVerbAxes,
+        forms: {
+          'ind.praes.akt.1.sg': ['voco'],
+          'ind.praes.akt.2.sg': ['voco'],
+          'ind.praes.akt.3.sg': ['voco'],
+          'ind.praes.akt.1.pl': ['vocamus'],
+        },
+      );
+      final rng = _CountingRandom(Random(0));
+      expect(
+        () => const OddOneOutGenerator().build(
+          item,
+          bundleOf(item, item.formOrder.first),
+          fakeExerciseContext(unlocked: _bundles(item)),
+          rng,
+        ),
+        throwsA(
+          isA<CannotBuild>().having(
+            (e) => e.reason,
+            'reason',
+            contains('after ${OddOneOutGenerator.maxDraws} draws'),
+          ),
+        ),
+      );
+      expect(rng.calls, lessThanOrEqualTo(OddOneOutGenerator.maxDraws * 5));
+      expect(rng.calls, greaterThan(OddOneOutGenerator.maxDraws));
+    });
+  });
+
+  test('draws exactly the bound of quartets before it gives up', () {
+    final item = handItem(
+      dataFileId: 'verbs',
+      lemma: 'vocare',
+      axes: fullVerbAxes,
+      forms: {
+        'ind.praes.akt.1.sg': ['voco'],
+        'ind.praes.akt.2.pl': ['vocatis'],
+        'ind.praes.akt.3.sg': ['vocat'],
+      },
+    );
+    final rng = _CountingRandom(Random(0));
+    expect(
+      () => const OddOneOutGenerator().build(
+        item,
+        bundleOf(item, item.formOrder.first),
+        fakeExerciseContext(unlocked: _bundles(item)),
+        rng,
+      ),
+      throwsA(isA<CannotBuild>()),
+    );
+    // Every draw of this item picks m0 and an axis, then finds no odd key.
+    expect(rng.calls, 2 * 200);
   });
 
   group('D1 cannot build', () {

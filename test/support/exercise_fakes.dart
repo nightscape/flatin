@@ -43,6 +43,11 @@ class FakeLatDeGenerator implements ExerciseGenerator {
       throw CannotBuild('${word.id} has fewer than 2 forms in $bundle');
     }
     final target = keys[rng.nextInt(keys.length)];
+    for (final key in keys) {
+      if (!ctx.german.covers(word, key)) {
+        throw CannotBuild('${word.id} has no German form $key');
+      }
+    }
     final options = [
       for (final key in keys)
         FormOption(

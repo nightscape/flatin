@@ -24,7 +24,7 @@ class _SameGerman implements GermanForms {
   const _SameGerman();
 
   @override
-  bool covers(PracticeItem item) => true;
+  bool covers(PracticeItem item, FormKey key) => true;
 
   @override
   String render(PracticeItem item, FormKey key) => 'immer gleich';
@@ -135,10 +135,41 @@ void main() {
           isA<CannotBuild>().having(
             (e) => e.reason,
             'reason',
-            contains('no German forms'),
+            contains('no German form'),
           ),
         ),
       );
+    });
+
+    test('a bundle with a form without German text cannot be built', () async {
+      final latinVerbs = parseGrammarFiles({
+        for (final path in [
+          'lib/data/latin_nouns.yaml',
+          'lib/data/latin_verbs.yaml',
+        ])
+          path: File(path).readAsStringSync(),
+      }).singleWhere((f) => f.dataFileId == 'verbs');
+      final german = GrammarGermanForms(
+        File('lib/data/german_verbs.yaml').readAsStringSync(),
+        latinVerbs,
+      );
+      final verbs = await loadPracticeItems('lib/data/latin_verbs.yaml');
+      final venire = verbs.singleWhere((i) => i.id == 'verbs:venire');
+      for (final bundle in ['ind.praes.pass', 'imp.praes.akt']) {
+        expect(
+          () => build(
+            venire,
+            bundle,
+            ctx: ExerciseContext(
+              unlocked: {bundle},
+              pool: [venire],
+              german: german,
+            ),
+          ),
+          throwsA(isA<CannotBuild>()),
+          reason: bundle,
+        );
+      }
     });
 
     test('a locked bundle cannot be built', () {

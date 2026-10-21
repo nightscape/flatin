@@ -5,8 +5,8 @@ import '../models/practice_item.dart';
 /// The German text of one Latin form.
 /// Implemented by the German form data; read by the generators.
 abstract interface class GermanForms {
-  /// Whether [render] has German text for the forms of [item].
-  bool covers(PracticeItem item);
+  /// Whether [render] has German text for the form [key] of [item].
+  bool covers(PracticeItem item, FormKey key);
 
   String render(PracticeItem item, FormKey key);
 }
@@ -35,7 +35,9 @@ class GrammarGermanForms implements GermanForms {
   final Map<String, String> germanVerbOf;
 
   @override
-  bool covers(PracticeItem item) => germanVerbOf.containsKey(item.id);
+  bool covers(PracticeItem item, FormKey key) =>
+      _courseGroups.contains(key.split('.').first) &&
+      _variants(item, key) != null;
 
   @override
   String render(PracticeItem item, FormKey key) => accepted(item, key).first;
@@ -45,11 +47,24 @@ class GrammarGermanForms implements GermanForms {
     final germanId = germanVerbOf[item.id];
     if (germanId == null) throw ArgumentError('no German verb for ${item.id}');
     final germanKey = germanKeyOf(key);
-    final form = _engine.of('german_verbs', germanId).forms[germanKey];
-    if (form == null) {
+    final variants = _variants(item, key);
+    if (variants == null) {
       throw ArgumentError('$germanId has no German form $germanKey ($key)');
     }
-    return form.variants;
+    return variants;
+  }
+
+  static const _courseGroups = {'ind', 'konj', 'inf', 'part'};
+
+  /// Null when [item] has no German verb or the verb lacks the form; [key]
+  /// must be in a course group.
+  List<String>? _variants(PracticeItem item, FormKey key) {
+    final germanId = germanVerbOf[item.id];
+    if (germanId == null) return null;
+    return _engine
+        .of('german_verbs', germanId)
+        .forms[germanKeyOf(key)]
+        ?.variants;
   }
 
   static FormKey germanKeyOf(FormKey latinKey) {
@@ -70,7 +85,7 @@ class FakeGermanForms implements GermanForms {
   final bool coversAll;
 
   @override
-  bool covers(PracticeItem item) => coversAll;
+  bool covers(PracticeItem item, FormKey key) => coversAll;
 
   @override
   String render(PracticeItem item, FormKey key) => '${item.lemma}@$key';

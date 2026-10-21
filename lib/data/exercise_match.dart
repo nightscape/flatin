@@ -21,14 +21,18 @@ class MatchGenerator implements ExerciseGenerator {
     ExerciseContext ctx,
     Random rng,
   ) {
-    if (!ctx.german.covers(word)) {
-      throw CannotBuild('${word.id} has no German forms');
-    }
     if (!ctx.unlocked.contains(bundle)) throw CannotBuild('$bundle is locked');
     final keys = [
       for (final key in word.formOrder)
         if (bundleOf(word, key) == bundle) key,
-    ]..shuffle(rng);
+    ];
+    final uncovered = keys.where((key) => !ctx.german.covers(word, key));
+    if (uncovered.isNotEmpty) {
+      throw CannotBuild(
+        '${word.id} has no German form ${uncovered.first} in $bundle',
+      );
+    }
+    keys.shuffle(rng);
 
     final latinTaken = <String>{};
     final germanTaken = <String>{};

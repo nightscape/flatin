@@ -31,14 +31,31 @@ void main() {
     latinVerbs,
   );
 
-  test('covers exactly the items with a German verb', () async {
-    final items = await loadPracticeItems('lib/data/latin_verbs.yaml');
-    final covered = items.where(german.covers).map((i) => i.id).toSet();
-    expect(covered, german.germanVerbOf.keys.toSet());
-    expect(items.any((i) => !german.covers(i)), isTrue);
-    final nouns = await loadPracticeItems('lib/data/latin_nouns.yaml');
-    expect(nouns.any(german.covers), isFalse);
-  });
+  test(
+    'covers exactly the course forms of the verbs with German text',
+    () async {
+      final items = await loadPracticeItems('lib/data/latin_verbs.yaml');
+      final covered = <String>{};
+      for (final item in items) {
+        for (final key in item.formOrder) {
+          final has = german.covers(item, key);
+          if (has) covered.add(item.id);
+          expect(
+            () => german.render(item, key),
+            has ? returnsNormally : throwsArgumentError,
+            reason: '${item.id} $key',
+          );
+        }
+      }
+      expect(covered, german.germanVerbOf.keys.toSet());
+      final venire = items.singleWhere((i) => i.id == 'verbs:venire');
+      expect(german.covers(venire, 'ind.praes.akt.1.sg'), isTrue);
+      expect(german.covers(venire, 'ind.praes.pass.3.sg'), isFalse);
+      expect(german.covers(venire, 'imp.praes.akt.2.sg'), isFalse);
+      final nouns = await loadPracticeItems('lib/data/latin_nouns.yaml');
+      expect(german.covers(nouns.first, nouns.first.formOrder.first), isFalse);
+    },
+  );
 
   test('the ten spike verbs name their German verb', () {
     expect(german.germanVerbOf, {
