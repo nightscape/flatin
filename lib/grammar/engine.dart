@@ -570,6 +570,7 @@ final class _ItemBuilder {
 
     final sources = <_PartSource>[];
     final joins = <String>[];
+    final present = <ComposePart>[];
     for (final part in spec.parts) {
       final source = _partSource(part, features, key);
       if (source == null) {
@@ -577,9 +578,18 @@ final class _ItemBuilder {
         return null;
       }
       sources.add(source);
+      present.add(part);
       joins.add(part.join ?? spec.join);
     }
     joins.removeLast();
+    for (var i = 0; i < joins.length; i++) {
+      final next = present[i + 1];
+      if (present[i] case StemPart(
+        :final glueBefore?,
+      ) when next is StemPart && next.stem == glueBefore) {
+        joins[i] = '';
+      }
+    }
 
     final seen = <String>{};
     final variants = <String>[];

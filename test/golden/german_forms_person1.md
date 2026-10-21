@@ -7394,8 +7394,8 @@
 | restituere | ind.fut2.akt.1.pl | restituerimus | wir werden wiederhergestellt haben |  |
 | restituere | ind.fut2.pass.1.sg | restitūtus erō | ich werde wiederhergestellt worden sein |  |
 | restituere | ind.fut2.pass.1.pl | restitūtī erimus | wir werden wiederhergestellt worden sein |  |
-| restituere | konj.praes.akt.1.sg | restituam | ich wieder herstelle |  |
-| restituere | konj.praes.akt.1.pl | restituāmus | wir wieder herstellen |  |
+| restituere | konj.praes.akt.1.sg | restituam | ich wiederherstelle |  |
+| restituere | konj.praes.akt.1.pl | restituāmus | wir wiederherstellen |  |
 | restituere | konj.praes.pass.1.sg | restituar | ich wiederhergestellt werde |  |
 | restituere | konj.praes.pass.1.pl | restituāmur | wir wiederhergestellt werden |  |
 | restituere | konj.impf.akt.1.sg | restituerem | ich wiederherstellen würde |  |

@@ -7,6 +7,7 @@ import 'package:latin_practice/grammar/engine.dart';
 import 'package:latin_practice/grammar/schema.dart';
 import 'package:latin_practice/models/derivation.dart';
 import 'package:latin_practice/models/form_label.dart';
+import 'package:yaml/yaml.dart';
 
 const _path = 'lib/data/german_verbs.yaml';
 
@@ -71,6 +72,9 @@ String _replaceOnce(String text, String from, String to) {
 Matcher _schemaError(String rule) =>
     throwsA(isA<SchemaError>().having((e) => e.rule, 'rule', rule));
 
+String accepted2(GrammarEngine e, String id) =>
+    _accepted(e, id, 'konj.praes.akt.3.sg')!.single;
+
 void main() {
   final engine = _engine(_withTestItems(_course));
   List<String>? accepted(String id, FormKey key) => _accepted(engine, id, key);
@@ -83,6 +87,61 @@ void main() {
       expect(accepted('zusammenrufen', 'konj.praes.akt.1.sg'), [
         'ich zusammenrufe',
       ]);
+    });
+
+    test(
+      'a word group and a particle glue to the verb in verb-final order',
+      () {
+        expect(accepted('wiederherstellen', 'konj.praes.akt.3.sg'), [
+          'er/sie/es wiederherstellt',
+        ]);
+        expect(accepted('wiederherstellen', 'konj.perf.akt.3.sg'), [
+          'er/sie/es wiederhergestellt hat',
+        ]);
+        expect(accepted('wiederherstellen', 'konj.plusq.akt.3.sg'), [
+          'er/sie/es wiederhergestellt hätte',
+        ]);
+        expect(accepted('wiederherstellen', 'ind.praes.akt.3.sg'), [
+          'er/sie/es stellt wieder her',
+        ]);
+      },
+    );
+
+    test('no form separates a word group from the particle that follows', () {
+      const synthetic = '''
+  - id: wiederherbringen
+    type: stark
+    translation: {de: wiederherbringen, en: bring back}
+    parts: {infinitiv: wiederherbringen, grundverb: bringen, wortgruppe: wieder, partikel: her, praesens_3sg: bringt, praeteritum: brachte, konjunktiv2: brächte, partizip2: wiederhergebracht}
+    absent: *ohne_passiv
+''';
+      final course = _withTestItems(_course) + synthetic;
+      final all = _engine(course);
+      final items = (loadYaml(course) as YamlMap)['items'] as YamlList;
+      var checked = 0;
+      for (final item in items) {
+        final parts = item['parts'] as YamlMap;
+        if (parts['partikel'] == null || parts['wortgruppe'] == null) continue;
+        final id = item['id'] ?? (item['translation'] as YamlMap)['de'];
+        final apart = RegExp(
+          '${parts['wortgruppe']} ${parts['partikel']}\\p{L}',
+          unicode: true,
+        );
+        for (final form in all.of('german_verbs', '$id').forms.entries) {
+          for (final text in form.value.variants) {
+            checked++;
+            expect(apart.hasMatch(text), isFalse, reason: '$id ${form.key}');
+          }
+        }
+      }
+      expect(checked, greaterThan(100));
+      expect(
+        all
+            .of('german_verbs', 'wiederherbringen')
+            .forms['konj.impf.akt.3.sg']!
+            .variants,
+        contains('er/sie/es wiederherbrächte'),
+      );
     });
 
     test('a particle stays a word of its own elsewhere', () {
@@ -165,10 +224,73 @@ void main() {
         for (final type in file.types.values)
           for (final compose in type.composes)
             for (final part in compose.parts.whereType<StemPart>())
-              if (part.join == '') part,
+              if (part.join == '' || part.glueBefore != null) part,
       ];
       expect(glued, isNotEmpty);
       expect(glued.where((part) => part.sandhi), isEmpty);
+    });
+
+    test('a "glue_before" that names no later stem of the rule throws', () {
+      for (final target in ['partikl', 'wortgruppe']) {
+        final yaml = _replaceOnce(
+          _course,
+          '          - {stem: wortgruppe, optional: true, glue_before: partikel}\n'
+              '          - {stem: partikel, optional: true, join: "", sandhi: false}\n'
+              '          - {self: roh, set: {modus: ind}',
+          '          - {stem: wortgruppe, optional: true, glue_before: $target}\n'
+              '          - {stem: partikel, optional: true, join: "", sandhi: false}\n'
+              '          - {self: roh, set: {modus: ind}',
+        );
+        expect(
+          () => parseGrammarFiles({_path: yaml}),
+          _schemaError('S21'),
+          reason: target,
+        );
+      }
+    });
+
+    test('a "glue_before" on the last part throws', () {
+      final yaml = _replaceOnce(
+        _course,
+        '          - {stem: partikel, optional: true}\n'
+            '      - match: {modus: ind, tempus: fut, genus_verbi: akt}',
+        '          - {stem: partikel, optional: true, glue_before: wortgruppe}\n'
+            '      - match: {modus: ind, tempus: fut, genus_verbi: akt}',
+      );
+      expect(() => parseGrammarFiles({_path: yaml}), _schemaError('S21'));
+    });
+
+    test('a non-string "glue_before" throws', () {
+      final yaml = _replaceOnce(
+        _course,
+        'glue_before: partikel}\n          - {stem: partikel, optional: true, join: "", sandhi: false}\n          - {self: roh, set: {modus: ind}',
+        'glue_before: 5}\n          - {stem: partikel, optional: true, join: "", sandhi: false}\n          - {self: roh, set: {modus: ind}',
+      );
+      expect(() => parseGrammarFiles({_path: yaml}), _schemaError('S21'));
+    });
+
+    test('a word group glued to a particle takes no sandhi at the seam', () {
+      const items = '''
+  - id: geradeentgegenstellen
+    type: schwach
+    translation: {de: geradeentgegenstellen, en: x}
+    parts: {infinitiv: geradeentgegenstellen, grundverb: stellen, wortgruppe: gerade, partikel: entgegen, partizip2: geradeentgegengestellt}
+  - id: sattteilnehmen
+    type: stark
+    translation: {de: sattteilnehmen, en: y}
+    parts: {infinitiv: sattteilnehmen, grundverb: nehmen, wortgruppe: satt, partikel: teil, praesens_3sg: nimmt, praeteritum: nahm, partizip2: sattteilgenommen}
+    absent: *ohne_passiv
+''';
+      final e = _engine(_withTestItems(_course) + items);
+      expect(
+        accepted2(e, 'geradeentgegenstellen'),
+        'er/sie/es geradeentgegenstellt',
+      );
+      expect(
+        accepted2(e, 'sattteilnehmen'),
+        'er/sie/es satt'
+        'teilnimmt',
+      );
     });
 
     test('a non-boolean "sandhi" throws', () {

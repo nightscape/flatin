@@ -199,7 +199,7 @@ resolves — one absent part that is not optional (S22) removes it. A part is
 `self:` (a delegate of the same type), `lexeme:` (an item), `slot:` (the item a
 slot names, S23) or `stem:` (an affix; it takes no `set`, `pass` or `map`).
 A rule takes only the keys `match`, `join`, `parts` and `variant`; a part only
-its kind and `set`, `pass`, `map`, `join`, `optional`. The looked-up key is `set` plus the passed codes plus the mapped codes;
+its kind and `set`, `pass`, `map`, `join`, `optional`, and on a `stem:` part `sandhi`, `glue_before`. The looked-up key is `set` plus the passed codes plus the mapped codes;
 an axis in `map` is passed implicitly and a code the table does not list passes
 unchanged. `pass: all` is only allowed on `lexeme:`.
 
@@ -273,7 +273,10 @@ no two types of a file share a display in one language.
 **S21. Separators.** A rule's `join` is the default text between two parts. A
 part's own `join` is the text between it and the next present part, so one
 rule can join a particle to the verb without a space and the pronoun with one.
-The last part takes no `join`; one there throws.
+The last part takes no `join`; one there throws. A `stem:` part with
+`glue_before: <stem>` joins with `""` and takes no sandhi when the next present
+part is that stem; the name must be a `stem:` part later in the same rule, else
+it throws.
 
 **S22. Optional parts.** A part with `optional: true` that has no form drops out
 together with its own separator; the key stays. A rule whose parts are all

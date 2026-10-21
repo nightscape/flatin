@@ -7639,8 +7639,8 @@
 | restituere | ind.fut2.akt.3.pl | restituerint | sie (Pl.) werden wiederhergestellt haben |  |
 | restituere | ind.fut2.pass.3.sg | restitūtus erit | er/sie/es wird wiederhergestellt worden sein |  |
 | restituere | ind.fut2.pass.3.pl | restitūtī erunt | sie (Pl.) werden wiederhergestellt worden sein |  |
-| restituere | konj.praes.akt.3.sg | restituat | er/sie/es wieder herstellt |  |
-| restituere | konj.praes.akt.3.pl | restituant | sie (Pl.) wieder herstellen |  |
+| restituere | konj.praes.akt.3.sg | restituat | er/sie/es wiederherstellt |  |
+| restituere | konj.praes.akt.3.pl | restituant | sie (Pl.) wiederherstellen |  |
 | restituere | konj.praes.pass.3.sg | restituātur | er/sie/es wiederhergestellt wird |  |
 | restituere | konj.praes.pass.3.pl | restituantur | sie (Pl.) wiederhergestellt werden |  |
 | restituere | konj.impf.akt.3.sg | restitueret | er/sie/es wiederherstellen würde |  |

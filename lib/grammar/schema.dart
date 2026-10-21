@@ -292,7 +292,17 @@ final class StemPart extends ComposePart {
   /// S18: false keeps the seam after the stem free of sandhi.
   final bool sandhi;
 
-  StemPart(this.stem, {this.sandhi = true, super.join, super.optional});
+  /// S21: the join is empty, and the seam free of sandhi, when the next present
+  /// part is the stem of this name.
+  final String? glueBefore;
+
+  StemPart(
+    this.stem, {
+    this.sandhi = true,
+    this.glueBefore,
+    super.join,
+    super.optional,
+  });
 }
 
 /// S23: the item id a slot names for [item]: its own, else its type's.
@@ -1135,6 +1145,20 @@ class _FileParser {
       if (parts.last.join != null) {
         _bad('S21', 'type $type: the last compose part takes no "join"');
       }
+      for (var i = 0; i < parts.length; i++) {
+        final glue = parts[i] is StemPart
+            ? (parts[i] as StemPart).glueBefore
+            : null;
+        if (glue != null &&
+            !parts
+                .skip(i + 1)
+                .any((later) => later is StemPart && later.stem == glue)) {
+          _bad(
+            'S21',
+            'type $type: "glue_before: $glue" names no later stem part',
+          );
+        }
+      }
       if (parts.every((part) => part.optional)) {
         _bad(
           'S22',
@@ -1165,6 +1189,7 @@ class _FileParser {
     'join',
     'optional',
     'sandhi',
+    'glue_before',
   };
 
   /// S23: slot name → item id.
@@ -1225,15 +1250,26 @@ class _FileParser {
       if (sandhi is! bool) {
         _bad('S13', 'type $type: "sandhi" is true or false, not "$sandhi"');
       }
+      final glueBefore = spec['glue_before'];
+      if (glueBefore != null && glueBefore is! String) {
+        _bad(
+          'S21',
+          'type $type: "glue_before" is a stem name, not "$glueBefore"',
+        );
+      }
       return StemPart(
         '${spec['stem']}',
-        sandhi: sandhi,
+        sandhi: sandhi && glueBefore == null,
+        glueBefore: glueBefore as String?,
         join: join,
         optional: optional,
       );
     }
     if (spec.containsKey('sandhi')) {
       _bad('S13', 'type $type: only a "stem" part takes "sandhi"');
+    }
+    if (spec.containsKey('glue_before')) {
+      _bad('S13', 'type $type: only a "stem" part takes "glue_before"');
     }
     if (passAll && !spec.containsKey('lexeme')) {
       _bad('S13', 'type $type: "pass: all" is only allowed on a lexeme part');

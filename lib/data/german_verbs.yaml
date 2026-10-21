@@ -195,7 +195,7 @@ types:
         parts:
           - {lexeme: pron, pass: [person, numerus]}
           - {slot: reflexiv, pass: [person, numerus], optional: true}
-          - {stem: wortgruppe, optional: true}
+          - {stem: wortgruppe, optional: true, glue_before: partikel}
           - {stem: partikel, optional: true, join: "", sandhi: false}
           - {self: roh, set: {modus: ind}, pass: [tempus, person, numerus]}
       # A synthetic subjunctive II is also accepted.
@@ -205,7 +205,7 @@ types:
         parts:
           - {lexeme: pron, pass: [person, numerus]}
           - {slot: reflexiv, pass: [person, numerus], optional: true}
-          - {stem: wortgruppe, optional: true}
+          - {stem: wortgruppe, optional: true, glue_before: partikel}
           - {stem: partikel, optional: true, join: "", sandhi: false}
           - {self: roh, pass: [modus, tempus, person, numerus]}
       - match: {modus: konj, tempus: perf, genus_verbi: akt}
