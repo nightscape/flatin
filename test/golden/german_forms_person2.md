@@ -1516,10 +1516,10 @@
 | sedēre | konj.praes.akt.2.pl | sedeātis | ihr sitzt |  |
 | sedēre | konj.impf.akt.2.sg | sedērēs | du sitzen würdest |  |
 | sedēre | konj.impf.akt.2.pl | sedērētis | ihr sitzen würdet |  |
-| sedēre | konj.perf.akt.2.sg | sēderis | du gesessen hast |  |
-| sedēre | konj.perf.akt.2.pl | sēderitis | ihr gesessen habt |  |
-| sedēre | konj.plusq.akt.2.sg | sēdissēs | du gesessen hättest |  |
-| sedēre | konj.plusq.akt.2.pl | sēdissētis | ihr gesessen hättet |  |
+| sedēre | konj.perf.akt.2.sg | sēderis | du gesessen hast | du gesessen seiest |
+| sedēre | konj.perf.akt.2.pl | sēderitis | ihr gesessen habt | ihr gesessen seiet |
+| sedēre | konj.plusq.akt.2.sg | sēdissēs | du gesessen hättest | du gesessen wärest |
+| sedēre | konj.plusq.akt.2.pl | sēdissētis | ihr gesessen hättet | ihr gesessen wäret |
 | servāre | ind.praes.akt.2.sg | servās | du schützt |  |
 | servāre | ind.praes.akt.2.pl | servātis | ihr schützt |  |
 | servāre | ind.praes.pass.2.sg | servāris | du wirst geschützt |  |
@@ -3066,10 +3066,10 @@
 | nāvigāre | konj.praes.akt.2.pl | nāvigētis | ihr segelt |  |
 | nāvigāre | konj.impf.akt.2.sg | nāvigārēs | du segeln würdest |  |
 | nāvigāre | konj.impf.akt.2.pl | nāvigārētis | ihr segeln würdet |  |
-| nāvigāre | konj.perf.akt.2.sg | nāvigāveris | du gesegelt hast |  |
-| nāvigāre | konj.perf.akt.2.pl | nāvigāveritis | ihr gesegelt habt |  |
-| nāvigāre | konj.plusq.akt.2.sg | nāvigāvissēs | du gesegelt hättest |  |
-| nāvigāre | konj.plusq.akt.2.pl | nāvigāvissētis | ihr gesegelt hättet |  |
+| nāvigāre | konj.perf.akt.2.sg | nāvigāveris | du gesegelt hast | du gesegelt seiest |
+| nāvigāre | konj.perf.akt.2.pl | nāvigāveritis | ihr gesegelt habt | ihr gesegelt seiet |
+| nāvigāre | konj.plusq.akt.2.sg | nāvigāvissēs | du gesegelt hättest | du gesegelt wärest |
+| nāvigāre | konj.plusq.akt.2.pl | nāvigāvissētis | ihr gesegelt hättet | ihr gesegelt wäret |
 | cōnfirmāre | ind.praes.akt.2.sg | cōnfirmās | du befestigst |  |
 | cōnfirmāre | ind.praes.akt.2.pl | cōnfirmātis | ihr befestigt |  |
 | cōnfirmāre | ind.praes.pass.2.sg | cōnfirmāris | du wirst befestigt |  |
@@ -5916,10 +5916,10 @@
 | stāre | konj.praes.akt.2.pl | stētis | ihr steht |  |
 | stāre | konj.impf.akt.2.sg | stārēs | du stehen würdest |  |
 | stāre | konj.impf.akt.2.pl | stārētis | ihr stehen würdet |  |
-| stāre | konj.perf.akt.2.sg | steteris | du gestanden hast |  |
-| stāre | konj.perf.akt.2.pl | steteritis | ihr gestanden habt |  |
-| stāre | konj.plusq.akt.2.sg | stetissēs | du gestanden hättest |  |
-| stāre | konj.plusq.akt.2.pl | stetissētis | ihr gestanden hättet |  |
+| stāre | konj.perf.akt.2.sg | steteris | du gestanden hast | du gestanden seiest |
+| stāre | konj.perf.akt.2.pl | steteritis | ihr gestanden habt | ihr gestanden seiet |
+| stāre | konj.plusq.akt.2.sg | stetissēs | du gestanden hättest | du gestanden wärest |
+| stāre | konj.plusq.akt.2.pl | stetissētis | ihr gestanden hättet | ihr gestanden wäret |
 | studēre | ind.praes.akt.2.sg | studēs | du bemühst dich |  |
 | studēre | ind.praes.akt.2.pl | studētis | ihr bemüht euch |  |
 | studēre | ind.impf.akt.2.sg | studēbās | du bemühtest dich |  |
@@ -9156,10 +9156,10 @@
 | iacēre | konj.praes.akt.2.pl | iaceātis | ihr liegt |  |
 | iacēre | konj.impf.akt.2.sg | iacērēs | du liegen würdest |  |
 | iacēre | konj.impf.akt.2.pl | iacērētis | ihr liegen würdet |  |
-| iacēre | konj.perf.akt.2.sg | iacueris | du gelegen hast |  |
-| iacēre | konj.perf.akt.2.pl | iacueritis | ihr gelegen habt |  |
-| iacēre | konj.plusq.akt.2.sg | iacuissēs | du gelegen hättest |  |
-| iacēre | konj.plusq.akt.2.pl | iacuissētis | ihr gelegen hättet |  |
+| iacēre | konj.perf.akt.2.sg | iacueris | du gelegen hast | du gelegen seiest |
+| iacēre | konj.perf.akt.2.pl | iacueritis | ihr gelegen habt | ihr gelegen seiet |
+| iacēre | konj.plusq.akt.2.sg | iacuissēs | du gelegen hättest | du gelegen wärest |
+| iacēre | konj.plusq.akt.2.pl | iacuissētis | ihr gelegen hättet | ihr gelegen wäret |
 | fīnīre | ind.praes.akt.2.sg | fīnīs | du beendest |  |
 | fīnīre | ind.praes.akt.2.pl | fīnītis | ihr beendet |  |
 | fīnīre | ind.praes.pass.2.sg | fīnīris | du wirst beendet |  |

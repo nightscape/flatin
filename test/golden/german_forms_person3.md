@@ -1644,11 +1644,11 @@
 | sedēre | konj.impf.akt.3.sg | sedēret | er/sie/es sitzen würde |  |
 | sedēre | konj.impf.akt.3.pl | sedērent | sie (Pl.) sitzen würden |  |
 | sedēre | konj.impf.pass.3.sg | sedērētur | — |  |
-| sedēre | konj.perf.akt.3.sg | sēderit | er/sie/es gesessen hat |  |
-| sedēre | konj.perf.akt.3.pl | sēderint | sie (Pl.) gesessen haben |  |
+| sedēre | konj.perf.akt.3.sg | sēderit | er/sie/es gesessen hat | er/sie/es gesessen sei |
+| sedēre | konj.perf.akt.3.pl | sēderint | sie (Pl.) gesessen haben | sie (Pl.) gesessen seien |
 | sedēre | konj.perf.pass.3.sg | sessum sit | — |  |
-| sedēre | konj.plusq.akt.3.sg | sēdisset | er/sie/es gesessen hätte |  |
-| sedēre | konj.plusq.akt.3.pl | sēdissent | sie (Pl.) gesessen hätten |  |
+| sedēre | konj.plusq.akt.3.sg | sēdisset | er/sie/es gesessen hätte | er/sie/es gesessen wäre |
+| sedēre | konj.plusq.akt.3.pl | sēdissent | sie (Pl.) gesessen hätten | sie (Pl.) gesessen wären |
 | sedēre | konj.plusq.pass.3.sg | sessum esset | — |  |
 | servāre | ind.praes.akt.3.sg | servat | er/sie/es schützt |  |
 | servāre | ind.praes.akt.3.pl | servant | sie (Pl.) schützen |  |
@@ -3254,11 +3254,11 @@
 | nāvigāre | konj.impf.akt.3.sg | nāvigāret | er/sie/es segeln würde |  |
 | nāvigāre | konj.impf.akt.3.pl | nāvigārent | sie (Pl.) segeln würden |  |
 | nāvigāre | konj.impf.pass.3.sg | nāvigārētur | — |  |
-| nāvigāre | konj.perf.akt.3.sg | nāvigāverit | er/sie/es gesegelt hat |  |
-| nāvigāre | konj.perf.akt.3.pl | nāvigāverint | sie (Pl.) gesegelt haben |  |
+| nāvigāre | konj.perf.akt.3.sg | nāvigāverit | er/sie/es gesegelt hat | er/sie/es gesegelt sei |
+| nāvigāre | konj.perf.akt.3.pl | nāvigāverint | sie (Pl.) gesegelt haben | sie (Pl.) gesegelt seien |
 | nāvigāre | konj.perf.pass.3.sg | nāvigātum sit | — |  |
-| nāvigāre | konj.plusq.akt.3.sg | nāvigāvisset | er/sie/es gesegelt hätte |  |
-| nāvigāre | konj.plusq.akt.3.pl | nāvigāvissent | sie (Pl.) gesegelt hätten |  |
+| nāvigāre | konj.plusq.akt.3.sg | nāvigāvisset | er/sie/es gesegelt hätte | er/sie/es gesegelt wäre |
+| nāvigāre | konj.plusq.akt.3.pl | nāvigāvissent | sie (Pl.) gesegelt hätten | sie (Pl.) gesegelt wären |
 | nāvigāre | konj.plusq.pass.3.sg | nāvigātum esset | — |  |
 | cōnfirmāre | ind.praes.akt.3.sg | cōnfirmat | er/sie/es befestigt |  |
 | cōnfirmāre | ind.praes.akt.3.pl | cōnfirmant | sie (Pl.) befestigen |  |
@@ -6124,11 +6124,11 @@
 | stāre | konj.impf.akt.3.sg | stāret | er/sie/es stehen würde |  |
 | stāre | konj.impf.akt.3.pl | stārent | sie (Pl.) stehen würden |  |
 | stāre | konj.impf.pass.3.sg | stārētur | — |  |
-| stāre | konj.perf.akt.3.sg | steterit | er/sie/es gestanden hat |  |
-| stāre | konj.perf.akt.3.pl | steterint | sie (Pl.) gestanden haben |  |
+| stāre | konj.perf.akt.3.sg | steterit | er/sie/es gestanden hat | er/sie/es gestanden sei |
+| stāre | konj.perf.akt.3.pl | steterint | sie (Pl.) gestanden haben | sie (Pl.) gestanden seien |
 | stāre | konj.perf.pass.3.sg | statum sit | — |  |
-| stāre | konj.plusq.akt.3.sg | stetisset | er/sie/es gestanden hätte |  |
-| stāre | konj.plusq.akt.3.pl | stetissent | sie (Pl.) gestanden hätten |  |
+| stāre | konj.plusq.akt.3.sg | stetisset | er/sie/es gestanden hätte | er/sie/es gestanden wäre |
+| stāre | konj.plusq.akt.3.pl | stetissent | sie (Pl.) gestanden hätten | sie (Pl.) gestanden wären |
 | stāre | konj.plusq.pass.3.sg | statum esset | — |  |
 | studēre | ind.praes.akt.3.sg | studet | er/sie/es bemüht sich |  |
 | studēre | ind.praes.akt.3.pl | student | sie (Pl.) bemühen sich |  |
@@ -9471,10 +9471,10 @@
 | iacēre | konj.impf.akt.3.sg | iacēret | er/sie/es liegen würde |  |
 | iacēre | konj.impf.akt.3.pl | iacērent | sie (Pl.) liegen würden |  |
 | iacēre | konj.impf.pass.3.sg | iacērētur | — |  |
-| iacēre | konj.perf.akt.3.sg | iacuerit | er/sie/es gelegen hat |  |
-| iacēre | konj.perf.akt.3.pl | iacuerint | sie (Pl.) gelegen haben |  |
-| iacēre | konj.plusq.akt.3.sg | iacuisset | er/sie/es gelegen hätte |  |
-| iacēre | konj.plusq.akt.3.pl | iacuissent | sie (Pl.) gelegen hätten |  |
+| iacēre | konj.perf.akt.3.sg | iacuerit | er/sie/es gelegen hat | er/sie/es gelegen sei |
+| iacēre | konj.perf.akt.3.pl | iacuerint | sie (Pl.) gelegen haben | sie (Pl.) gelegen seien |
+| iacēre | konj.plusq.akt.3.sg | iacuisset | er/sie/es gelegen hätte | er/sie/es gelegen wäre |
+| iacēre | konj.plusq.akt.3.pl | iacuissent | sie (Pl.) gelegen hätten | sie (Pl.) gelegen wären |
 | fīnīre | ind.praes.akt.3.sg | fīnit | er/sie/es beendet |  |
 | fīnīre | ind.praes.akt.3.pl | fīniunt | sie (Pl.) beenden |  |
 | fīnīre | ind.praes.pass.3.sg | fīnītur | er/sie/es wird beendet |  |

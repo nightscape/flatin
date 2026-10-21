@@ -216,6 +216,29 @@ types:
           - {slot: reflexiv, pass: [person, numerus], optional: true}
           - {self: roh, set: {modus: part, tempus: perf}}
           - {slot: hilfsverb_alt, set: {modus: inf}}
+      - match: {modus: konj, tempus: perf, genus_verbi: akt}
+        variant: true
+        join: " "
+        parts:
+          - {lexeme: pron, pass: [person, numerus]}
+          - {slot: reflexiv, pass: [person, numerus], optional: true}
+          - {self: roh, set: {modus: part, tempus: perf}}
+          - {slot: hilfsverb_alt, set: {modus: konj, tempus: praes}, pass: [person, numerus]}
+      - match: {modus: konj, tempus: plusq, genus_verbi: akt}
+        variant: true
+        join: " "
+        parts:
+          - {lexeme: pron, pass: [person, numerus]}
+          - {slot: reflexiv, pass: [person, numerus], optional: true}
+          - {self: roh, set: {modus: part, tempus: perf}}
+          - {slot: hilfsverb_alt, set: {modus: konj, tempus: impf}, pass: [person, numerus]}
+      - match: {modus: inf, tempus: perf, genus_verbi: akt}
+        variant: true
+        join: " "
+        parts:
+          - {slot: reflexiv, set: {person: "3", numerus: sg}, optional: true}
+          - {self: roh, set: {modus: part, tempus: perf}}
+          - {slot: hilfsverb_alt, set: {modus: inf}}
       - match: {modus: konj, tempus: praes, genus_verbi: akt}
         join: " "
         parts:
@@ -436,6 +459,13 @@ items:
     type: Hilfsverb
     translation: {de: sein, en: be}
     parts: {infinitiv: sein, praesens_1sg: bin, praesens_2sg: bist, praesens_3sg: ist, praesens_1pl: sind, praesens_2pl: seid, praeteritum: war, konjunktiv2: wäre, partizip2: gewesen}
+    forms:
+      konj.praes.1.sg: sei
+      konj.praes.2.sg: seiest
+      konj.praes.3.sg: sei
+      konj.praes.1.pl: seien
+      konj.praes.2.pl: seiet
+      konj.praes.3.pl: seien
   - id: hv_werden
     type: Hilfsverb
     translation: {de: werden, en: become}

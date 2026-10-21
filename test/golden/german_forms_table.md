@@ -252,7 +252,7 @@
 | scīre | part.perf.pass | scītus | — |  |
 | sedēre | inf.praes.akt | sedēre | sitzen |  |
 | sedēre | inf.praes.pass | sedērī | — |  |
-| sedēre | inf.perf.akt | sēdisse | gesessen haben |  |
+| sedēre | inf.perf.akt | sēdisse | gesessen haben | gesessen sein |
 | sedēre | inf.perf.pass | sessum esse | — |  |
 | sedēre | part.praes.akt | sedēns | sitzend |  |
 | servāre | inf.praes.akt | servāre | schützen |  |
@@ -496,7 +496,7 @@
 | dubitāre | part.praes.akt | dubitāns | zögernd |  |
 | nāvigāre | inf.praes.akt | nāvigāre | segeln |  |
 | nāvigāre | inf.praes.pass | nāvigārī | — |  |
-| nāvigāre | inf.perf.akt | nāvigāvisse | gesegelt haben |  |
+| nāvigāre | inf.perf.akt | nāvigāvisse | gesegelt haben | gesegelt sein |
 | nāvigāre | inf.perf.pass | nāvigātum esse | — |  |
 | nāvigāre | part.praes.akt | nāvigāns | segelnd |  |
 | cōnfirmāre | inf.praes.akt | cōnfirmāre | befestigen |  |
@@ -928,7 +928,7 @@
 | praeesse | part.praes.akt | praesēns | an der Spitze stehend |  |
 | stāre | inf.praes.akt | stāre | stehen |  |
 | stāre | inf.praes.pass | stārī | — |  |
-| stāre | inf.perf.akt | stetisse | gestanden haben |  |
+| stāre | inf.perf.akt | stetisse | gestanden haben | gestanden sein |
 | stāre | inf.perf.pass | statum esse | — |  |
 | stāre | part.praes.akt | stāns | stehend |  |
 | studēre | inf.praes.akt | studēre | sich bemühen |  |
@@ -1436,7 +1436,7 @@
 | monēre | part.perf.pass | monitus | ermahnt |  |
 | iacēre | inf.praes.akt | iacēre | liegen |  |
 | iacēre | inf.praes.pass | iacērī | — |  |
-| iacēre | inf.perf.akt | iacuisse | gelegen haben |  |
+| iacēre | inf.perf.akt | iacuisse | gelegen haben | gelegen sein |
 | iacēre | part.praes.akt | iacēns | liegend |  |
 | fīnīre | inf.praes.akt | fīnīre | beenden |  |
 | fīnīre | inf.praes.pass | fīnīrī | beendet werden |  |

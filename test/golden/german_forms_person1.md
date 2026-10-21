@@ -1516,10 +1516,10 @@
 | sedēre | konj.praes.akt.1.pl | sedeāmus | wir sitzen |  |
 | sedēre | konj.impf.akt.1.sg | sedērem | ich sitzen würde |  |
 | sedēre | konj.impf.akt.1.pl | sedērēmus | wir sitzen würden |  |
-| sedēre | konj.perf.akt.1.sg | sēderim | ich gesessen habe |  |
-| sedēre | konj.perf.akt.1.pl | sēderimus | wir gesessen haben |  |
-| sedēre | konj.plusq.akt.1.sg | sēdissem | ich gesessen hätte |  |
-| sedēre | konj.plusq.akt.1.pl | sēdissēmus | wir gesessen hätten |  |
+| sedēre | konj.perf.akt.1.sg | sēderim | ich gesessen habe | ich gesessen sei |
+| sedēre | konj.perf.akt.1.pl | sēderimus | wir gesessen haben | wir gesessen seien |
+| sedēre | konj.plusq.akt.1.sg | sēdissem | ich gesessen hätte | ich gesessen wäre |
+| sedēre | konj.plusq.akt.1.pl | sēdissēmus | wir gesessen hätten | wir gesessen wären |
 | servāre | ind.praes.akt.1.sg | servō | ich schütze |  |
 | servāre | ind.praes.akt.1.pl | servāmus | wir schützen |  |
 | servāre | ind.praes.pass.1.sg | servor | ich werde geschützt |  |
@@ -3066,10 +3066,10 @@
 | nāvigāre | konj.praes.akt.1.pl | nāvigēmus | wir segeln |  |
 | nāvigāre | konj.impf.akt.1.sg | nāvigārem | ich segeln würde |  |
 | nāvigāre | konj.impf.akt.1.pl | nāvigārēmus | wir segeln würden |  |
-| nāvigāre | konj.perf.akt.1.sg | nāvigāverim | ich gesegelt habe |  |
-| nāvigāre | konj.perf.akt.1.pl | nāvigāverimus | wir gesegelt haben |  |
-| nāvigāre | konj.plusq.akt.1.sg | nāvigāvissem | ich gesegelt hätte |  |
-| nāvigāre | konj.plusq.akt.1.pl | nāvigāvissēmus | wir gesegelt hätten |  |
+| nāvigāre | konj.perf.akt.1.sg | nāvigāverim | ich gesegelt habe | ich gesegelt sei |
+| nāvigāre | konj.perf.akt.1.pl | nāvigāverimus | wir gesegelt haben | wir gesegelt seien |
+| nāvigāre | konj.plusq.akt.1.sg | nāvigāvissem | ich gesegelt hätte | ich gesegelt wäre |
+| nāvigāre | konj.plusq.akt.1.pl | nāvigāvissēmus | wir gesegelt hätten | wir gesegelt wären |
 | cōnfirmāre | ind.praes.akt.1.sg | cōnfirmō | ich befestige |  |
 | cōnfirmāre | ind.praes.akt.1.pl | cōnfirmāmus | wir befestigen |  |
 | cōnfirmāre | ind.praes.pass.1.sg | cōnfirmor | ich werde befestigt |  |
@@ -5916,10 +5916,10 @@
 | stāre | konj.praes.akt.1.pl | stēmus | wir stehen |  |
 | stāre | konj.impf.akt.1.sg | stārem | ich stehen würde |  |
 | stāre | konj.impf.akt.1.pl | stārēmus | wir stehen würden |  |
-| stāre | konj.perf.akt.1.sg | steterim | ich gestanden habe |  |
-| stāre | konj.perf.akt.1.pl | steterimus | wir gestanden haben |  |
-| stāre | konj.plusq.akt.1.sg | stetissem | ich gestanden hätte |  |
-| stāre | konj.plusq.akt.1.pl | stetissēmus | wir gestanden hätten |  |
+| stāre | konj.perf.akt.1.sg | steterim | ich gestanden habe | ich gestanden sei |
+| stāre | konj.perf.akt.1.pl | steterimus | wir gestanden haben | wir gestanden seien |
+| stāre | konj.plusq.akt.1.sg | stetissem | ich gestanden hätte | ich gestanden wäre |
+| stāre | konj.plusq.akt.1.pl | stetissēmus | wir gestanden hätten | wir gestanden wären |
 | studēre | ind.praes.akt.1.sg | studeō | ich bemühe mich |  |
 | studēre | ind.praes.akt.1.pl | studēmus | wir bemühen uns |  |
 | studēre | ind.impf.akt.1.sg | studēbam | ich bemühte mich |  |
@@ -9156,10 +9156,10 @@
 | iacēre | konj.praes.akt.1.pl | iaceāmus | wir liegen |  |
 | iacēre | konj.impf.akt.1.sg | iacērem | ich liegen würde |  |
 | iacēre | konj.impf.akt.1.pl | iacērēmus | wir liegen würden |  |
-| iacēre | konj.perf.akt.1.sg | iacuerim | ich gelegen habe |  |
-| iacēre | konj.perf.akt.1.pl | iacuerimus | wir gelegen haben |  |
-| iacēre | konj.plusq.akt.1.sg | iacuissem | ich gelegen hätte |  |
-| iacēre | konj.plusq.akt.1.pl | iacuissēmus | wir gelegen hätten |  |
+| iacēre | konj.perf.akt.1.sg | iacuerim | ich gelegen habe | ich gelegen sei |
+| iacēre | konj.perf.akt.1.pl | iacuerimus | wir gelegen haben | wir gelegen seien |
+| iacēre | konj.plusq.akt.1.sg | iacuissem | ich gelegen hätte | ich gelegen wäre |
+| iacēre | konj.plusq.akt.1.pl | iacuissēmus | wir gelegen hätten | wir gelegen wären |
 | fīnīre | ind.praes.akt.1.sg | fīniō | ich beende |  |
 | fīnīre | ind.praes.akt.1.pl | fīnīmus | wir beenden |  |
 | fīnīre | ind.praes.pass.1.sg | fīnior | ich werde beendet |  |
