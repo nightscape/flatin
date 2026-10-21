@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/models/exercise.dart';
+import 'package:latin_practice/models/practice_item.dart';
 import 'package:latin_practice/screens/exercise_screen.dart';
 
 import 'support/exercise_fakes.dart';
@@ -13,12 +14,18 @@ import 'support/i18n_keys.dart';
 import 'support/word_classification_harness.dart';
 
 const _sizes = {'phone': Size(390, 800), 'wide': Size(1400, 800)};
+const _narrow = Size(320, 800);
 final _keyShape = RegExp(r'^[a-z][A-Za-z]*(\.[A-Za-z]+)+$');
 final _word = RegExp(r'[A-Za-zÄÖÜäöüß]+');
 
+Future<PracticeItem> _vocare({String language = 'de'}) async =>
+    (await loadPracticeItems(
+      'lib/data/latin_verbs.yaml',
+      language: language,
+    )).singleWhere((i) => i.id == 'verbs:vocare');
+
 Future<Exercise> _choice() async {
-  final verbs = await loadPracticeItems('lib/data/latin_verbs.yaml');
-  final vocare = verbs.singleWhere((i) => i.id == 'verbs:vocare');
+  final vocare = await _vocare();
   final built = const FakeLatDeGenerator().build(
     vocare,
     'ind.fut2.pass',
@@ -58,13 +65,17 @@ Future<List<ExerciseResponse>> _pump(
   String size, {
   String language = 'de',
 }) async {
-  tester.view.physicalSize = _sizes[size]!;
+  tester.view.physicalSize = size == 'narrow' ? _narrow : _sizes[size]!;
   tester.view.devicePixelRatio = 1.0;
   addTearDown(tester.view.reset);
   final responses = <ExerciseResponse>[];
   await tester.pumpWidget(
     wrapInApp(
-      ExerciseScreen(exercise: exercise, onResponse: responses.add),
+      ExerciseScreen(
+        word: await _vocare(language: language),
+        exercise: exercise,
+        onResponse: responses.add,
+      ),
       forcedLocale: Locale(language),
     ),
   );
@@ -100,6 +111,11 @@ void main() {
 
         expect(find.text('Richtig'), findsOneWidget);
         expect(responses, isEmpty);
+        await tester.scrollUntilVisible(
+          find.byKey(const Key('exercise.next.button')),
+          200,
+          scrollable: find.byType(Scrollable).first,
+        );
         await tester.tap(find.byKey(const Key('exercise.next.button')));
         expect((responses.single as ChosenOption).chosen, same(answer.right));
       });
@@ -111,7 +127,17 @@ void main() {
         final responses = await _pump(tester, exercise, size);
         await tester.tap(find.byKey(const Key('exercise.option.0')));
         await tester.pumpAndSettle();
+        await tester.scrollUntilVisible(
+          find.byKey(const Key('exercise.next.button')),
+          200,
+          scrollable: find.byType(Scrollable).first,
+        );
         await tester.tap(find.byKey(const Key('exercise.next.button')));
+        await tester.scrollUntilVisible(
+          find.byKey(const Key('exercise.next.button')),
+          200,
+          scrollable: find.byType(Scrollable).first,
+        );
         await tester.tap(find.byKey(const Key('exercise.next.button')));
         expect(responses, hasLength(1));
       });
@@ -134,6 +160,11 @@ void main() {
           findsOneWidget,
         );
         await tester.tap(find.byKey(Key('exercise.option.$wrong')));
+        await tester.scrollUntilVisible(
+          find.byKey(const Key('exercise.next.button')),
+          200,
+          scrollable: find.byType(Scrollable).first,
+        );
         await tester.tap(find.byKey(const Key('exercise.next.button')));
         expect(responses, hasLength(1));
         expect(
@@ -155,6 +186,11 @@ void main() {
         await tester.pumpAndSettle();
 
         expect(find.text('Richtig'), findsOneWidget);
+        await tester.scrollUntilVisible(
+          find.byKey(const Key('exercise.next.button')),
+          200,
+          scrollable: find.byType(Scrollable).first,
+        );
         await tester.tap(find.byKey(const Key('exercise.next.button')));
         expect((responses.single as TypedText).text, ' Vocare ');
       });
@@ -213,4 +249,33 @@ void main() {
       }
     });
   }
+
+  testWidgets('the longest feedback line wraps on a narrow screen', (
+    tester,
+  ) async {
+    final vocare = await _vocare();
+    FormOption option(int index) => FormOption(
+      text: vocare.forms[index],
+      formKey: vocare.formOrder[index],
+      lexemeId: vocare.id,
+    );
+    final right = option(vocare.forms.indexOf('vocātī essētis'));
+    final exercise = Exercise(
+      wordCardId: vocare.id,
+      grammarCardId: GrammarCardId.of(vocare, right.formKey),
+      kind: ExerciseKind.latDeWahl,
+      questionKey: 'exercise.screen.sampleQuestion',
+      answer: ChoiceAnswer([right, option(0)], right),
+    );
+    await _pump(tester, exercise, 'narrow');
+    await tester.tap(find.byKey(const Key('exercise.option.0')));
+    await tester.pumpAndSettle();
+    expect(
+      find.text(
+        'vocātī essētis – Konjunktiv Plusquamperfekt Passiv: 2. Person Plural (richtig, deine Wahl)',
+      ),
+      findsOneWidget,
+    );
+    expect(tester.takeException(), isNull);
+  });
 }

@@ -3,7 +3,10 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 
+import '../data/exercise_feedback.dart';
 import '../models/exercise.dart';
+import '../models/practice_item.dart';
+import '../widgets/explanation_lines.dart';
 
 /// Shows one matching [Exercise]: the learner pairs each Latin form with a
 /// German text; after the feedback, "next" hands the pairs to [onResponse]
@@ -11,11 +14,13 @@ import '../models/exercise.dart';
 /// compares them by identity.
 /// Produced here for the caller that wires the exercises into the app.
 class ExerciseMatchWidget extends StatefulWidget {
+  final PracticeItem word;
   final Exercise exercise;
   final void Function(MatchedPairs response) onResponse;
 
   const ExerciseMatchWidget({
     super.key,
+    required this.word,
     required this.exercise,
     required this.onResponse,
   });
@@ -207,6 +212,11 @@ class _ExerciseMatchWidgetState extends State<ExerciseMatchWidget> {
       style: Theme.of(context).textTheme.titleMedium?.copyWith(
         color: _isRight ? Colors.green.shade800 : Colors.red.shade800,
       ),
+    ),
+    const SizedBox(height: 8),
+    ExplanationLines(
+      feedbackLines(widget.word, widget.exercise, _response),
+      key: const Key('exercise.feedback.lines'),
     ),
     const SizedBox(height: 8),
     ElevatedButton(

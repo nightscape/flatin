@@ -287,7 +287,11 @@ void main() {
       final responses = <MatchedPairs>[];
       await tester.pumpWidget(
         wrapInApp(
-          ExerciseMatchWidget(exercise: exercise, onResponse: responses.add),
+          ExerciseMatchWidget(
+            word: vocare,
+            exercise: exercise,
+            onResponse: responses.add,
+          ),
           forcedLocale: Locale(language),
         ),
       );
@@ -297,8 +301,11 @@ void main() {
 
     Future<void> tapNext(WidgetTester tester) async {
       final next = find.byKey(const Key('exercise.next.button'));
-      await tester.ensureVisible(next);
-      await tester.pumpAndSettle();
+      await tester.scrollUntilVisible(
+        next,
+        200,
+        scrollable: find.byType(Scrollable).first,
+      );
       await tester.tap(next);
     }
 
@@ -364,6 +371,36 @@ void main() {
         word: Rating.good,
         grammar: Rating.again,
       ));
+    });
+
+    Future<void> seenLine(WidgetTester tester, String text) async {
+      await tester.scrollUntilVisible(
+        find.text(text),
+        200,
+        scrollable: find.byType(Scrollable).first,
+      );
+      expect(find.text(text), findsOneWidget);
+    }
+
+    String labelOf(PracticeItem word, FormKey key) =>
+        describeLabels([word.formLabels[word.formOrder.indexOf(key)]]);
+
+    testWidgets('a wrong pairing labels every pair', (tester) async {
+      final exercise = build(vocare, _bundle);
+      final right = answerOf(exercise).pairs;
+      await pump(tester, exercise);
+      await pair(tester, 0, 1);
+      await pair(tester, 1, 0);
+      await pair(tester, 2, 2);
+      await pair(tester, 3, 3);
+      await tester.tap(find.byKey(const Key('exercise.check.button')));
+      await tester.pumpAndSettle();
+      for (final (latin, _) in right) {
+        await seenLine(
+          tester,
+          '${latin.text} – ${labelOf(vocare, latin.formKey)}',
+        );
+      }
     });
 
     testWidgets('tapping a paired Latin form releases it', (tester) async {

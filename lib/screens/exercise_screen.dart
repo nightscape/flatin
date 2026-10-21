@@ -2,17 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 
 import '../models/derivation.dart' show norm;
+import '../data/exercise_feedback.dart';
 import '../models/exercise.dart';
+import '../models/practice_item.dart';
+import '../widgets/explanation_lines.dart';
 
 /// Shows one multiple-choice or typed [Exercise]; after the feedback, the
 /// "next" button hands the learner's response to [onResponse] once.
 /// Produced here for the caller that wires the exercises into the app.
 class ExerciseScreen extends StatefulWidget {
+  final PracticeItem word;
   final Exercise exercise;
   final void Function(ExerciseResponse response) onResponse;
 
   const ExerciseScreen({
     super.key,
+    required this.word,
     required this.exercise,
     required this.onResponse,
   });
@@ -163,6 +168,11 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
       style: Theme.of(context).textTheme.titleMedium?.copyWith(
         color: _isRight ? Colors.green.shade800 : Colors.red.shade800,
       ),
+    ),
+    const SizedBox(height: 8),
+    ExplanationLines(
+      feedbackLines(widget.word, widget.exercise, _response!),
+      key: const Key('exercise.feedback.lines'),
     ),
     const SizedBox(height: 8),
     ElevatedButton(

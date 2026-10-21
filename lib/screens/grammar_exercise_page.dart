@@ -46,10 +46,12 @@ class GrammarExercisePage extends ConsumerWidget {
                 reviewExercise(ref, asked, response);
             return switch (asked.exercise.answer) {
               MatchingAnswer() => ExerciseMatchWidget(
+                word: asked.word,
                 exercise: asked.exercise,
                 onResponse: respond,
               ),
               ChoiceAnswer() || TypedAnswer() => ExerciseScreen(
+                word: asked.word,
                 exercise: asked.exercise,
                 onResponse: respond,
               ),

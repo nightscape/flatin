@@ -377,7 +377,7 @@ void main() {
       final responses = <ExerciseResponse>[];
       await tester.pumpWidget(
         wrapInApp(
-          ExerciseScreen(exercise: e, onResponse: responses.add),
+          ExerciseScreen(word: vocare, exercise: e, onResponse: responses.add),
           forcedLocale: const Locale('de'),
         ),
       );
@@ -392,6 +392,11 @@ void main() {
       await tester.tap(find.text(answer.right.text));
       await tester.pumpAndSettle();
       expect(find.text('Richtig'), findsOneWidget);
+      await tester.scrollUntilVisible(
+        find.byKey(const Key('exercise.next.button')),
+        200,
+        scrollable: find.byType(Scrollable).first,
+      );
       await tester.tap(find.byKey(const Key('exercise.next.button')));
       expect((responses.single as ChosenOption).chosen, answer.right);
     });
@@ -403,7 +408,7 @@ void main() {
       final answer = e.answer as ChoiceAnswer;
       await tester.pumpWidget(
         wrapInApp(
-          ExerciseScreen(exercise: e, onResponse: (_) {}),
+          ExerciseScreen(word: vocare, exercise: e, onResponse: (_) {}),
           forcedLocale: const Locale('de'),
         ),
       );
@@ -426,7 +431,7 @@ void main() {
       final responses = <ExerciseResponse>[];
       await tester.pumpWidget(
         wrapInApp(
-          ExerciseScreen(exercise: e, onResponse: responses.add),
+          ExerciseScreen(word: vocare, exercise: e, onResponse: responses.add),
           forcedLocale: const Locale('de'),
         ),
       );
@@ -439,6 +444,11 @@ void main() {
       await tester.tap(find.byKey(const Key('exercise.check.button')));
       await tester.pumpAndSettle();
       expect(find.text('Richtig'), findsOneWidget);
+      await tester.scrollUntilVisible(
+        find.byKey(const Key('exercise.next.button')),
+        200,
+        scrollable: find.byType(Scrollable).first,
+      );
       await tester.tap(find.byKey(const Key('exercise.next.button')));
       expect((responses.single as TypedText).text, expected);
     });
@@ -454,7 +464,7 @@ void main() {
       ].firstWhere((e) => e.questionParams['german'] == 'ich liebte');
       await tester.pumpWidget(
         wrapInApp(
-          ExerciseScreen(exercise: e, onResponse: (_) {}),
+          ExerciseScreen(word: amare, exercise: e, onResponse: (_) {}),
           forcedLocale: const Locale('de'),
         ),
       );
@@ -568,4 +578,99 @@ void main() {
       });
     },
   );
+
+  group('feedback labels', () {
+    Future<void> seenLine(WidgetTester tester, String text) async {
+      await tester.scrollUntilVisible(
+        find.text(text),
+        200,
+        scrollable: find.byType(Scrollable).first,
+      );
+      expect(find.text(text), findsOneWidget);
+    }
+
+    String labelOf(PracticeItem word, FormKey key) =>
+        describeLabels([word.formLabels[word.formOrder.indexOf(key)]]);
+
+    testWidgets('latDeWahl: a wrong pick labels the right option', (
+      tester,
+    ) async {
+      final e = build(_latDe, vocare, 'konj.impf.pass', seed: 1);
+      final answer = e.answer as ChoiceAnswer;
+      tester.view.physicalSize = const Size(390, 800);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.reset);
+      await tester.pumpWidget(
+        wrapInApp(
+          ExerciseScreen(word: vocare, exercise: e, onResponse: (_) {}),
+          forcedLocale: const Locale('de'),
+        ),
+      );
+      await tester.pumpAndSettle();
+      final wrong = answer.options.indexWhere(
+        (o) => !identical(o, answer.right),
+      );
+      await tester.tap(find.byKey(Key('exercise.option.$wrong')));
+      await tester.pumpAndSettle();
+      await seenLine(
+        tester,
+        '${answer.right.text} – ${labelOf(vocare, answer.right.formKey)} (richtig)',
+      );
+    });
+
+    testWidgets('deLatWahl: a wrong pick labels the right option', (
+      tester,
+    ) async {
+      final e = build(_deLat, vocare, 'konj.impf.pass', seed: 1);
+      final answer = e.answer as ChoiceAnswer;
+      tester.view.physicalSize = const Size(390, 800);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.reset);
+      await tester.pumpWidget(
+        wrapInApp(
+          ExerciseScreen(word: vocare, exercise: e, onResponse: (_) {}),
+          forcedLocale: const Locale('de'),
+        ),
+      );
+      await tester.pumpAndSettle();
+      final wrong = answer.options.indexWhere(
+        (o) => !identical(o, answer.right),
+      );
+      await tester.tap(find.byKey(Key('exercise.option.$wrong')));
+      await tester.pumpAndSettle();
+      await seenLine(
+        tester,
+        '${answer.right.text} – ${labelOf(vocare, answer.right.formKey)} (richtig)',
+      );
+    });
+
+    testWidgets(
+      'deLatTippen: a wrong answer shows the target and the diagnosis',
+      (tester) async {
+        final e = build(_deLatType, vocare, _bundle, seed: 1);
+        final expected = (e.answer as TypedAnswer).expected;
+        tester.view.physicalSize = const Size(390, 800);
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(tester.view.reset);
+        await tester.pumpWidget(
+          wrapInApp(
+            ExerciseScreen(word: vocare, exercise: e, onResponse: (_) {}),
+            forcedLocale: const Locale('de'),
+          ),
+        );
+        await tester.pumpAndSettle();
+        await tester.enterText(find.byKey(const Key('exercise.input')), 'qqqq');
+        await tester.tap(find.byKey(const Key('exercise.check.button')));
+        await tester.pumpAndSettle();
+        await seenLine(
+          tester,
+          '${expected.text} – ${labelOf(vocare, expected.formKey)} (richtig)',
+        );
+        await seenLine(
+          tester,
+          'Du hast qqqq geschrieben – das passt zu keiner bekannten Form',
+        );
+      },
+    );
+  });
 }

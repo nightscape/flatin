@@ -183,7 +183,7 @@ void main() {
       final responses = <ExerciseResponse>[];
       await tester.pumpWidget(
         wrapInApp(
-          ExerciseScreen(exercise: e, onResponse: responses.add),
+          ExerciseScreen(word: audire, exercise: e, onResponse: responses.add),
           forcedLocale: const Locale('de'),
         ),
       );
@@ -201,6 +201,11 @@ void main() {
       await tester.tap(find.byKey(const Key('exercise.check.button')));
       await tester.pumpAndSettle();
       expect(find.text('Richtig'), findsOneWidget);
+      await tester.scrollUntilVisible(
+        find.byKey(const Key('exercise.next.button')),
+        200,
+        scrollable: find.byType(Scrollable).first,
+      );
       await tester.tap(find.byKey(const Key('exercise.next.button')));
       expect((responses.single as TypedText).text, typed(e).expected.text);
     });
@@ -210,5 +215,53 @@ void main() {
     for (final code in ['de', 'en']) {
       expect(translationKeys(code), contains('exercise.build.question'));
     }
+  });
+
+  group('feedback labels', () {
+    Future<void> seenLine(WidgetTester tester, String text) async {
+      await tester.scrollUntilVisible(
+        find.text(text),
+        200,
+        scrollable: find.byType(Scrollable).first,
+      );
+      expect(find.text(text), findsOneWidget);
+    }
+
+    String labelOf(PracticeItem word, FormKey key) =>
+        describeLabels([word.formLabels[word.formOrder.indexOf(key)]]);
+
+    testWidgets(
+      'formBilden: a wrong answer shows the target and the diagnosis',
+      (tester) async {
+        final e = _generator.build(
+          audire,
+          _bundle,
+          fakeExerciseContext(),
+          Random(1),
+        );
+        final expected = (e.answer as TypedAnswer).expected;
+        tester.view.physicalSize = const Size(390, 800);
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(tester.view.reset);
+        await tester.pumpWidget(
+          wrapInApp(
+            ExerciseScreen(word: audire, exercise: e, onResponse: (_) {}),
+            forcedLocale: const Locale('de'),
+          ),
+        );
+        await tester.pumpAndSettle();
+        await tester.enterText(find.byKey(const Key('exercise.input')), 'qqqq');
+        await tester.tap(find.byKey(const Key('exercise.check.button')));
+        await tester.pumpAndSettle();
+        await seenLine(
+          tester,
+          '${expected.text} – ${labelOf(audire, expected.formKey)} (richtig)',
+        );
+        await seenLine(
+          tester,
+          'Du hast qqqq geschrieben – das passt zu keiner bekannten Form',
+        );
+      },
+    );
   });
 }

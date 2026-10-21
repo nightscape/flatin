@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fsrs/fsrs.dart';
+import 'package:latin_practice/data/exercise_feedback.dart';
 import 'package:latin_practice/data/attribution.dart';
 import 'package:latin_practice/data/exercise_oddone.dart';
 import 'package:latin_practice/data/practice_data.dart';
@@ -346,7 +347,11 @@ void main() {
       final responses = <ExerciseResponse>[];
       await tester.pumpWidget(
         wrapInApp(
-          ExerciseScreen(exercise: exercise, onResponse: responses.add),
+          ExerciseScreen(
+            word: vocare,
+            exercise: exercise,
+            onResponse: responses.add,
+          ),
           forcedLocale: const Locale('de'),
         ),
       );
@@ -371,6 +376,11 @@ void main() {
       );
       await tester.pumpAndSettle();
       expect(find.text('Richtig'), findsOneWidget);
+      await tester.scrollUntilVisible(
+        find.byKey(const Key('exercise.next.button')),
+        200,
+        scrollable: find.byType(Scrollable).first,
+      );
       await tester.tap(find.byKey(const Key('exercise.next.button')));
       expect((responses.single as ChosenOption).chosen, same(answer.right));
     });
@@ -386,6 +396,54 @@ void main() {
         find.text('Falsch. Richtig ist: ${answer.right.text}'),
         findsOneWidget,
       );
+    });
+  });
+
+  group('feedback labels', () {
+    Future<void> seenLine(WidgetTester tester, String text) async {
+      await tester.scrollUntilVisible(
+        find.text(text),
+        200,
+        scrollable: find.byType(Scrollable).first,
+      );
+      expect(find.text(text), findsOneWidget);
+    }
+
+    String labelOf(PracticeItem word, FormKey key) =>
+        describeLabels([word.formLabels[word.formOrder.indexOf(key)]]);
+
+    testWidgets('irrlaeufer: a wrong pick labels the right option', (
+      tester,
+    ) async {
+      final e = build(vocare, _bundle, 5);
+      final answer = e.answer as ChoiceAnswer;
+      tester.view.physicalSize = const Size(390, 800);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.reset);
+      await tester.pumpWidget(
+        wrapInApp(
+          ExerciseScreen(word: vocare, exercise: e, onResponse: (_) {}),
+          forcedLocale: const Locale('de'),
+        ),
+      );
+      await tester.pumpAndSettle();
+      final wrong = answer.options.indexWhere(
+        (o) => !identical(o, answer.right),
+      );
+      await tester.tap(find.byKey(Key('exercise.option.$wrong')));
+      await tester.pumpAndSettle();
+      await seenLine(
+        tester,
+        '${answer.right.text} – ${labelOf(vocare, answer.right.formKey)} (richtig)',
+      );
+      final majority = answer.options.firstWhere(
+        (o) => !identical(o, answer.right),
+      );
+      final axis = oddAxes(vocare, answer).single;
+      final value = vocare
+          .formLabels[vocare.formOrder.indexOf(majority.formKey)]
+          .display(axis)!;
+      await seenLine(tester, 'Die anderen drei: $value');
     });
   });
 }

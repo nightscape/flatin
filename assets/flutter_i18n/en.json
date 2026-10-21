@@ -176,6 +176,13 @@
     "system": "System (device language)"
   },
   "exercise": {
+    "feedback": {
+      "option": "{form} – {label}",
+      "optionRight": "{form} – {label} (right)",
+      "optionChosen": "{form} – {label} (your choice)",
+      "optionRightChosen": "{form} – {label} (right, your choice)",
+      "oddAxes": "The other three: {values}"
+    },
     "screen": {
       "title": "Exercise",
       "inputHint": "Enter the answer",
