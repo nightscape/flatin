@@ -188,6 +188,9 @@
     "build": {
       "question": "{label} of {word}"
     },
+    "bestimmen": {
+      "question": "Determine {form} (of {word})"
+    },
     "oddone": {
       "question": "Which form does not belong with the others?"
     },

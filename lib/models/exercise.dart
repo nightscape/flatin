@@ -5,6 +5,7 @@ library;
 import 'dart:math';
 
 import '../data/diagnosis.dart';
+import '../data/exercise_bestimmen.dart';
 import '../data/exercise_build.dart';
 import '../data/exercise_finderror.dart';
 import '../data/exercise_match.dart';
@@ -223,6 +224,7 @@ abstract interface class ExerciseGenerator {
 /// The generators the app ships, one per kind. They are stateless: everything
 /// that varies per call comes from [ExerciseContext].
 const List<ExerciseGenerator> exerciseGenerators = [
+  BestimmenGenerator(),
   BuildFormGenerator(),
   OddOneOutGenerator(),
   TransformGenerator(),
