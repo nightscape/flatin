@@ -40,6 +40,13 @@ const _testItems = '''
     translation: {de: Not tun, en: be needed}
     parts: {infinitiv: Not tun, grundverb: tun, wortgruppe: Not, praesens_1sg: tue, praesens_3sg: tut, praesens_1pl: tun, praeteritum: tat, partizip2: Not getan}
     absent: *ohne_passiv
+  - type: schwach
+    translation: {de: mitteilen, en: inform}
+    parts: {infinitiv: mitteilen, grundverb: teilen, partikel: mit, partizip2: mitgeteilt}
+  - type: schwach
+    translation: {de: mitstimmen, en: vote along}
+    parts: {infinitiv: mitstimmen, grundverb: stimmen, partikel: mit, partizip2: mitgestimmt}
+    absent: *ohne_passiv
 ''';
 
 final _course = File(_path).readAsStringSync();
@@ -106,6 +113,43 @@ void main() {
         '          - {self: roh, set: {modus: ind}, pass: [tempus, person, numerus], join: " "}\n',
       );
       expect(() => parseGrammarFiles({_path: yaml}), _schemaError('S21'));
+    });
+  });
+
+  group('S18 seams', () {
+    const persons = ['ich', 'du', 'er/sie/es', 'wir', 'ihr', 'sie (Pl.)'];
+    const keys = ['1.sg', '2.sg', '3.sg', '1.pl', '2.pl', '3.pl'];
+
+    test('a glued particle keeps its spelling before t and st', () {
+      for (final (id, verb) in [
+        ('mitteilen', 'mitteil'),
+        ('mitstimmen', 'mitstimm'),
+      ]) {
+        final endings = ['e', 'st', 't', 'en', 't', 'en'];
+        for (var i = 0; i < keys.length; i++) {
+          expect(accepted(id, 'konj.praes.akt.${keys[i]}'), [
+            '${persons[i]} $verb${endings[i]}',
+          ], reason: '$id ${keys[i]}');
+        }
+      }
+      expect(accepted('mitteilen', 'ind.praes.akt.3.sg'), [
+        'er/sie/es teilt mit',
+      ]);
+    });
+
+    test('"sandhi" on a part that is not a stem part throws', () {
+      final yaml = _replaceOnce(
+        _course,
+        '          - {self: roh, set: {modus: part, tempus: praes}}\n',
+        '          - {self: roh, set: {modus: part, tempus: praes}, sandhi: false}\n',
+      );
+      expect(() => parseGrammarFiles({_path: yaml}), _schemaError('S13'));
+    });
+
+    test('the seam between verb stem and ending keeps its sandhi', () {
+      expect(accepted('arbeiten', 'ind.praes.akt.3.sg'), [
+        'er/sie/es arbeitet',
+      ]);
     });
   });
 

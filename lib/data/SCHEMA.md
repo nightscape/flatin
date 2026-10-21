@@ -249,7 +249,11 @@ empty right side). It applies inside delegated
 templates too, since delegate targets have no list of their own. Present stems
 are school stems (`amā-`, `monē-`, `audī-`, `capi-`, `reg-`), built as root plus
 theme vowel, so the quantity change at the seam is data: `amā` + `ō` → `amō`,
-`capi` + `re` → `capere`.
+`capi` + `re` → `capere`. A `stem:` part with `sandhi: false` has no sandhi at
+the seam after it: a German particle stays as written (`mit` + `teile` →
+`mitteile`), while sandhi inside the verb still applies (`arbeit` + `t` →
+`arbeitet`). Only a `stem:` part takes `sandhi`; on any other part it throws
+(S13).
 
 **S19. Word class.** `classes:` lists the word classes of a file, and every
 concrete type names one of them in `class:` — the class a learner weighs its

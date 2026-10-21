@@ -227,12 +227,14 @@ typedef _Rendering = ({List<FormPart> parts, List<String> texts});
 /// One part of a composition: what it may read, and how it is written down.
 final class _PartSource {
   final List<String> variants;
-  final bool isAffix;
+
+  /// S18: the seam after this part applies the type's sandhi list.
+  final bool sandhi;
   final FormPart Function(String text, SandhiRule? rule) make;
 
   _PartSource({
     required this.variants,
-    required this.isAffix,
+    required this.sandhi,
     required this.make,
   });
 }
@@ -613,9 +615,13 @@ final class _ItemBuilder {
       if (stem == null) return null;
       return _PartSource(
         variants: stem.variants,
-        isAffix: true,
-        make: (text, rule) =>
-            AffixPart(stemName: part.stem, text: text, sandhiRule: rule),
+        sandhi: part.sandhi,
+        make: (text, rule) => AffixPart(
+          stemName: part.stem,
+          text: text,
+          sandhi: part.sandhi,
+          sandhiRule: rule,
+        ),
       );
     }
 
@@ -655,7 +661,7 @@ final class _ItemBuilder {
     if (form == null) return null;
     return _PartSource(
       variants: form.variants,
-      isAffix: false,
+      sandhi: false,
       make: (text, _) =>
           LexemeFormPart(lexemeId: lexemeId, key: lookup, derivation: form!),
     );
@@ -672,7 +678,7 @@ final class _ItemBuilder {
     var renderings = <_Rendering>[(parts: [], texts: [])];
     for (var i = 0; i < sources.length; i++) {
       final source = sources[i];
-      if (!source.isAffix) {
+      if (!source.sandhi) {
         renderings = [
           for (final rendering in renderings)
             (

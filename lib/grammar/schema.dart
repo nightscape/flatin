@@ -289,7 +289,10 @@ final class StemPart extends ComposePart {
   @override
   bool get passAll => false;
 
-  StemPart(this.stem, {super.join, super.optional});
+  /// S18: false keeps the seam after the stem free of sandhi.
+  final bool sandhi;
+
+  StemPart(this.stem, {this.sandhi = true, super.join, super.optional});
 }
 
 /// S23: the item id a slot names for [item]: its own, else its type's.
@@ -1143,6 +1146,7 @@ class _FileParser {
     'map',
     'join',
     'optional',
+    'sandhi',
   };
 
   /// S23: slot name → item id.
@@ -1199,7 +1203,15 @@ class _FileParser {
       if (set.isNotEmpty || pass.isNotEmpty || map.isNotEmpty || passAll) {
         _bad('S13', 'type $type: a "stem" part takes no set, pass or map');
       }
-      return StemPart('${spec['stem']}', join: join, optional: optional);
+      return StemPart(
+        '${spec['stem']}',
+        sandhi: spec['sandhi'] as bool? ?? true,
+        join: join,
+        optional: optional,
+      );
+    }
+    if (spec.containsKey('sandhi')) {
+      _bad('S13', 'type $type: only a "stem" part takes "sandhi"');
     }
     if (passAll && !spec.containsKey('lexeme')) {
       _bad('S13', 'type $type: "pass: all" is only allowed on a lexeme part');

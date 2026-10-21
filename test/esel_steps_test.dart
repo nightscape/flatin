@@ -5,6 +5,7 @@ import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/models/derivation.dart';
 import 'package:latin_practice/models/practice_item.dart';
 
+import 'support/german_particle_verb.dart';
 import 'support/trace_fixtures.dart';
 
 const _nouns = 'lib/data/latin_nouns.yaml';
@@ -66,6 +67,12 @@ void main() {
         steps[3].options.firstWhere((o) => !o.isRight).textKey,
         'esel.noRule',
       );
+    });
+
+    test('ich mitteile: a glued particle offers no sound rule', () {
+      final steps = eselSteps(mitteilen(), 'konj.praes.akt.1.sg');
+      expect(steps[3].kind, EselKind.lautregel);
+      expect(steps[3].answerKey, 'esel.noRule');
     });
 
     test('amātus essem: the parts are the Verbinden answer', () {

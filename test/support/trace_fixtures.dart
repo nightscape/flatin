@@ -404,7 +404,12 @@ PracticeItem posse() {
     variants: [result],
     joins: [''],
     parts: [
-      AffixPart(stemName: 'praesens', text: affix, sandhiRule: rule),
+      AffixPart(
+        stemName: 'praesens',
+        text: affix,
+        sandhi: true,
+        sandhiRule: rule,
+      ),
       LexemeFormPart(
         lexemeId: 'verbs:esse',
         key: key,

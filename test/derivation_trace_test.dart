@@ -6,6 +6,8 @@ import 'package:latin_practice/grammar/schema.dart';
 import 'package:latin_practice/models/derivation.dart';
 import 'package:latin_practice/models/practice_item.dart';
 
+import 'support/german_particle_verb.dart';
+
 const _assets = ['lib/data/latin_nouns.yaml', 'lib/data/latin_verbs.yaml'];
 
 /// The sandhi library of each data file, by data file id. The engine keeps
@@ -91,6 +93,36 @@ String _beforeSeam(Derivation item, FormPart part) => switch (part) {
   LexemeFormPart(:final derivation) => derivation.result,
 };
 
+/// The affix at [p] of [parts] goes through the same S16 function the engine
+/// used, unless its seam takes no sandhi (S18).
+void _expectAffixSeam(
+  Derivation derivation,
+  String lemma,
+  List<SandhiRuleSpec> rules,
+  List<FormPart> parts,
+  int p,
+  String at,
+) {
+  final part = parts[p] as AffixPart;
+  final stem = derivation.stems[part.stemName];
+  expect(stem, isNotNull, reason: '$at: no stem ${part.stemName}');
+  if (!part.sandhi) {
+    expect(norm(part.text), norm(stem!.stem), reason: at);
+    expect(part.sandhiRule, isNull, reason: at);
+    return;
+  }
+  final last = p == parts.length - 1;
+  final seam = sandhiSeam(
+    rules,
+    stem!.stem,
+    last ? '' : _beforeSeam(derivation, parts[p + 1]),
+    wordFinal: last,
+    lemma: lemma,
+  ).first;
+  expect(norm(part.text), norm(seam.text), reason: at);
+  expect(part.sandhiRule?.id, seam.rule?.id, reason: at);
+}
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -167,20 +199,16 @@ void main() {
                 final part = parts[p];
                 final at = '$where part $p';
                 switch (part) {
-                  case AffixPart(:final stemName, :final sandhiRule):
+                  case AffixPart():
                     affixPartCount++;
-                    final stem = item.derivation.stems[stemName];
-                    expect(stem, isNotNull, reason: '$at: no stem $stemName');
-                    final last = p == parts.length - 1;
-                    final seam = sandhiSeam(
+                    _expectAffixSeam(
+                      item.derivation,
+                      item.lemma,
                       rules,
-                      stem!.stem,
-                      last ? '' : _beforeSeam(item.derivation, parts[p + 1]),
-                      wordFinal: last,
-                      lemma: item.lemma,
-                    ).first;
-                    expect(norm(part.text), norm(seam.text), reason: at);
-                    expect(sandhiRule?.id, seam.rule?.id, reason: at);
+                      parts,
+                      p,
+                      at,
+                    );
                   case LexemeFormPart(:final key, :final derivation):
                     lexemePartCount++;
                     expect(derivation.formKey, key, reason: at);
@@ -248,6 +276,30 @@ void main() {
       regularCount,
     );
     expect([affixPartCount, lexemePartCount], [172, 13898]);
+  });
+
+  test('T-trace-6 an affix whose seam takes no sandhi keeps its spelling', () {
+    final files = mitteilenFiles();
+    final file = files.single;
+    final derivation = GrammarEngine(files).of('german_verbs', 'mitteilen');
+    final rules = _rulesOf(file, 'schwach');
+    var withoutSandhi = 0;
+    for (final form in derivation.forms.values.whereType<ComposedForm>()) {
+      for (var p = 0; p < form.parts.length; p++) {
+        final part = form.parts[p];
+        if (part is! AffixPart) continue;
+        if (!part.sandhi) withoutSandhi++;
+        _expectAffixSeam(
+          derivation,
+          file.item('mitteilen').lemma,
+          rules,
+          form.parts,
+          p,
+          '${form.formKey} part $p',
+        );
+      }
+    }
+    expect(withoutSandhi, 6);
   });
 
   group('T-trace-4 a shown type rule agrees with the type', () {

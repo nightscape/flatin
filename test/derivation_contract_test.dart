@@ -173,7 +173,7 @@ void main() {
         formKey: 'perf.1.sg',
         variants: ['amātus sum'],
         parts: [
-          AffixPart(stemName: 'ppp', text: 'amātus'),
+          AffixPart(stemName: 'ppp', text: 'amātus', sandhi: true),
           LexemeFormPart(
             lexemeId: 'verbs:esse',
             key: 'praes.1.sg',

@@ -211,7 +211,15 @@ final class AffixPart extends FormPart {
   /// The rule that fired at the seam to the next part (S18 c).
   final SandhiRule? sandhiRule;
 
-  AffixPart({required this.stemName, required this.text, this.sandhiRule});
+  /// S18: false when the seam after the part takes no sandhi.
+  final bool sandhi;
+
+  AffixPart({
+    required this.stemName,
+    required this.text,
+    required this.sandhi,
+    this.sandhiRule,
+  });
 }
 
 /// A form of an item, either another one or the composing item itself.
