@@ -5210,6 +5210,836 @@
 | intellegere | konj.plusq.akt.3.pl | intellēxissent | sie (Pl.) erkannt hätten |  |
 | intellegere | konj.plusq.pass.3.sg | intellēctus esset | er/sie/es erkannt worden wäre |  |
 | intellegere | konj.plusq.pass.3.pl | intellēctī essent | sie (Pl.) erkannt worden wären |  |
+| cupere | ind.praes.akt.3.sg | cupit | er/sie/es begehrt |  |
+| cupere | ind.praes.akt.3.pl | cupiunt | sie (Pl.) begehren |  |
+| cupere | ind.praes.pass.3.sg | cupitur | er/sie/es wird begehrt |  |
+| cupere | ind.praes.pass.3.pl | cupiuntur | sie (Pl.) werden begehrt |  |
+| cupere | ind.impf.akt.3.sg | cupiēbat | er/sie/es begehrte |  |
+| cupere | ind.impf.akt.3.pl | cupiēbant | sie (Pl.) begehrten |  |
+| cupere | ind.impf.pass.3.sg | cupiēbātur | er/sie/es wurde begehrt |  |
+| cupere | ind.impf.pass.3.pl | cupiēbantur | sie (Pl.) wurden begehrt |  |
+| cupere | ind.fut.akt.3.sg | cupiet | er/sie/es wird begehren |  |
+| cupere | ind.fut.akt.3.pl | cupient | sie (Pl.) werden begehren |  |
+| cupere | ind.fut.pass.3.sg | cupiētur | er/sie/es wird begehrt werden |  |
+| cupere | ind.fut.pass.3.pl | cupientur | sie (Pl.) werden begehrt werden |  |
+| cupere | ind.perf.akt.3.sg | cupīvit | er/sie/es hat begehrt | er/sie/es begehrte |
+| cupere | ind.perf.akt.3.pl | cupīvērunt | sie (Pl.) haben begehrt | sie (Pl.) begehrten |
+| cupere | ind.perf.pass.3.sg | cupītus est | er/sie/es ist begehrt worden |  |
+| cupere | ind.perf.pass.3.pl | cupītī sunt | sie (Pl.) sind begehrt worden |  |
+| cupere | ind.plusq.akt.3.sg | cupīverat | er/sie/es hatte begehrt |  |
+| cupere | ind.plusq.akt.3.pl | cupīverant | sie (Pl.) hatten begehrt |  |
+| cupere | ind.plusq.pass.3.sg | cupītus erat | er/sie/es war begehrt worden |  |
+| cupere | ind.plusq.pass.3.pl | cupītī erant | sie (Pl.) waren begehrt worden |  |
+| cupere | ind.fut2.akt.3.sg | cupīverit | er/sie/es wird begehrt haben |  |
+| cupere | ind.fut2.akt.3.pl | cupīverint | sie (Pl.) werden begehrt haben |  |
+| cupere | ind.fut2.pass.3.sg | cupītus erit | er/sie/es wird begehrt worden sein |  |
+| cupere | ind.fut2.pass.3.pl | cupītī erunt | sie (Pl.) werden begehrt worden sein |  |
+| cupere | konj.praes.akt.3.sg | cupiat | er/sie/es begehrt |  |
+| cupere | konj.praes.akt.3.pl | cupiant | sie (Pl.) begehren |  |
+| cupere | konj.praes.pass.3.sg | cupiātur | er/sie/es begehrt wird |  |
+| cupere | konj.praes.pass.3.pl | cupiantur | sie (Pl.) begehrt werden |  |
+| cupere | konj.impf.akt.3.sg | cuperet | er/sie/es begehren würde |  |
+| cupere | konj.impf.akt.3.pl | cuperent | sie (Pl.) begehren würden |  |
+| cupere | konj.impf.pass.3.sg | cuperētur | er/sie/es begehrt würde |  |
+| cupere | konj.impf.pass.3.pl | cuperentur | sie (Pl.) begehrt würden |  |
+| cupere | konj.perf.akt.3.sg | cupīverit | er/sie/es begehrt hat |  |
+| cupere | konj.perf.akt.3.pl | cupīverint | sie (Pl.) begehrt haben |  |
+| cupere | konj.perf.pass.3.sg | cupītus sit | er/sie/es begehrt worden ist |  |
+| cupere | konj.perf.pass.3.pl | cupītī sint | sie (Pl.) begehrt worden sind |  |
+| cupere | konj.plusq.akt.3.sg | cupīvisset | er/sie/es begehrt hätte |  |
+| cupere | konj.plusq.akt.3.pl | cupīvissent | sie (Pl.) begehrt hätten |  |
+| cupere | konj.plusq.pass.3.sg | cupītus esset | er/sie/es begehrt worden wäre |  |
+| cupere | konj.plusq.pass.3.pl | cupītī essent | sie (Pl.) begehrt worden wären |  |
+| temperāre | ind.praes.akt.3.sg | temperat | er/sie/es mäßigt |  |
+| temperāre | ind.praes.akt.3.pl | temperant | sie (Pl.) mäßigen |  |
+| temperāre | ind.praes.pass.3.sg | temperātur | er/sie/es wird gemäßigt |  |
+| temperāre | ind.praes.pass.3.pl | temperantur | sie (Pl.) werden gemäßigt |  |
+| temperāre | ind.impf.akt.3.sg | temperābat | er/sie/es mäßigte |  |
+| temperāre | ind.impf.akt.3.pl | temperābant | sie (Pl.) mäßigten |  |
+| temperāre | ind.impf.pass.3.sg | temperābātur | er/sie/es wurde gemäßigt |  |
+| temperāre | ind.impf.pass.3.pl | temperābantur | sie (Pl.) wurden gemäßigt |  |
+| temperāre | ind.fut.akt.3.sg | temperābit | er/sie/es wird mäßigen |  |
+| temperāre | ind.fut.akt.3.pl | temperābunt | sie (Pl.) werden mäßigen |  |
+| temperāre | ind.fut.pass.3.sg | temperābitur | er/sie/es wird gemäßigt werden |  |
+| temperāre | ind.fut.pass.3.pl | temperābuntur | sie (Pl.) werden gemäßigt werden |  |
+| temperāre | ind.perf.akt.3.sg | temperāvit | er/sie/es hat gemäßigt | er/sie/es mäßigte |
+| temperāre | ind.perf.akt.3.pl | temperāvērunt | sie (Pl.) haben gemäßigt | sie (Pl.) mäßigten |
+| temperāre | ind.perf.pass.3.sg | temperātus est | er/sie/es ist gemäßigt worden |  |
+| temperāre | ind.perf.pass.3.pl | temperātī sunt | sie (Pl.) sind gemäßigt worden |  |
+| temperāre | ind.plusq.akt.3.sg | temperāverat | er/sie/es hatte gemäßigt |  |
+| temperāre | ind.plusq.akt.3.pl | temperāverant | sie (Pl.) hatten gemäßigt |  |
+| temperāre | ind.plusq.pass.3.sg | temperātus erat | er/sie/es war gemäßigt worden |  |
+| temperāre | ind.plusq.pass.3.pl | temperātī erant | sie (Pl.) waren gemäßigt worden |  |
+| temperāre | ind.fut2.akt.3.sg | temperāverit | er/sie/es wird gemäßigt haben |  |
+| temperāre | ind.fut2.akt.3.pl | temperāverint | sie (Pl.) werden gemäßigt haben |  |
+| temperāre | ind.fut2.pass.3.sg | temperātus erit | er/sie/es wird gemäßigt worden sein |  |
+| temperāre | ind.fut2.pass.3.pl | temperātī erunt | sie (Pl.) werden gemäßigt worden sein |  |
+| temperāre | konj.praes.akt.3.sg | temperet | er/sie/es mäßigt |  |
+| temperāre | konj.praes.akt.3.pl | temperent | sie (Pl.) mäßigen |  |
+| temperāre | konj.praes.pass.3.sg | temperētur | er/sie/es gemäßigt wird |  |
+| temperāre | konj.praes.pass.3.pl | temperentur | sie (Pl.) gemäßigt werden |  |
+| temperāre | konj.impf.akt.3.sg | temperāret | er/sie/es mäßigen würde |  |
+| temperāre | konj.impf.akt.3.pl | temperārent | sie (Pl.) mäßigen würden |  |
+| temperāre | konj.impf.pass.3.sg | temperārētur | er/sie/es gemäßigt würde |  |
+| temperāre | konj.impf.pass.3.pl | temperārentur | sie (Pl.) gemäßigt würden |  |
+| temperāre | konj.perf.akt.3.sg | temperāverit | er/sie/es gemäßigt hat |  |
+| temperāre | konj.perf.akt.3.pl | temperāverint | sie (Pl.) gemäßigt haben |  |
+| temperāre | konj.perf.pass.3.sg | temperātus sit | er/sie/es gemäßigt worden ist |  |
+| temperāre | konj.perf.pass.3.pl | temperātī sint | sie (Pl.) gemäßigt worden sind |  |
+| temperāre | konj.plusq.akt.3.sg | temperāvisset | er/sie/es gemäßigt hätte |  |
+| temperāre | konj.plusq.akt.3.pl | temperāvissent | sie (Pl.) gemäßigt hätten |  |
+| temperāre | konj.plusq.pass.3.sg | temperātus esset | er/sie/es gemäßigt worden wäre |  |
+| temperāre | konj.plusq.pass.3.pl | temperātī essent | sie (Pl.) gemäßigt worden wären |  |
+| caedere | ind.praes.akt.3.sg | caedit | er/sie/es schlägt nieder |  |
+| caedere | ind.praes.akt.3.pl | caedunt | sie (Pl.) schlagen nieder |  |
+| caedere | ind.praes.pass.3.sg | caeditur | er/sie/es wird niedergeschlagen |  |
+| caedere | ind.praes.pass.3.pl | caeduntur | sie (Pl.) werden niedergeschlagen |  |
+| caedere | ind.impf.akt.3.sg | caedēbat | er/sie/es schlug nieder |  |
+| caedere | ind.impf.akt.3.pl | caedēbant | sie (Pl.) schlugen nieder |  |
+| caedere | ind.impf.pass.3.sg | caedēbātur | er/sie/es wurde niedergeschlagen |  |
+| caedere | ind.impf.pass.3.pl | caedēbantur | sie (Pl.) wurden niedergeschlagen |  |
+| caedere | ind.fut.akt.3.sg | caedet | er/sie/es wird niederschlagen |  |
+| caedere | ind.fut.akt.3.pl | caedent | sie (Pl.) werden niederschlagen |  |
+| caedere | ind.fut.pass.3.sg | caedētur | er/sie/es wird niedergeschlagen werden |  |
+| caedere | ind.fut.pass.3.pl | caedentur | sie (Pl.) werden niedergeschlagen werden |  |
+| caedere | ind.perf.akt.3.sg | cecīdit | er/sie/es hat niedergeschlagen | er/sie/es schlug nieder |
+| caedere | ind.perf.akt.3.pl | cecīdērunt | sie (Pl.) haben niedergeschlagen | sie (Pl.) schlugen nieder |
+| caedere | ind.perf.pass.3.sg | caesus est | er/sie/es ist niedergeschlagen worden |  |
+| caedere | ind.perf.pass.3.pl | caesī sunt | sie (Pl.) sind niedergeschlagen worden |  |
+| caedere | ind.plusq.akt.3.sg | cecīderat | er/sie/es hatte niedergeschlagen |  |
+| caedere | ind.plusq.akt.3.pl | cecīderant | sie (Pl.) hatten niedergeschlagen |  |
+| caedere | ind.plusq.pass.3.sg | caesus erat | er/sie/es war niedergeschlagen worden |  |
+| caedere | ind.plusq.pass.3.pl | caesī erant | sie (Pl.) waren niedergeschlagen worden |  |
+| caedere | ind.fut2.akt.3.sg | cecīderit | er/sie/es wird niedergeschlagen haben |  |
+| caedere | ind.fut2.akt.3.pl | cecīderint | sie (Pl.) werden niedergeschlagen haben |  |
+| caedere | ind.fut2.pass.3.sg | caesus erit | er/sie/es wird niedergeschlagen worden sein |  |
+| caedere | ind.fut2.pass.3.pl | caesī erunt | sie (Pl.) werden niedergeschlagen worden sein |  |
+| caedere | konj.praes.akt.3.sg | caedat | er/sie/es niederschlägt |  |
+| caedere | konj.praes.akt.3.pl | caedant | sie (Pl.) niederschlagen |  |
+| caedere | konj.praes.pass.3.sg | caedātur | er/sie/es niedergeschlagen wird |  |
+| caedere | konj.praes.pass.3.pl | caedantur | sie (Pl.) niedergeschlagen werden |  |
+| caedere | konj.impf.akt.3.sg | caederet | er/sie/es niederschlagen würde |  |
+| caedere | konj.impf.akt.3.pl | caederent | sie (Pl.) niederschlagen würden |  |
+| caedere | konj.impf.pass.3.sg | caederētur | er/sie/es niedergeschlagen würde |  |
+| caedere | konj.impf.pass.3.pl | caederentur | sie (Pl.) niedergeschlagen würden |  |
+| caedere | konj.perf.akt.3.sg | cecīderit | er/sie/es niedergeschlagen hat |  |
+| caedere | konj.perf.akt.3.pl | cecīderint | sie (Pl.) niedergeschlagen haben |  |
+| caedere | konj.perf.pass.3.sg | caesus sit | er/sie/es niedergeschlagen worden ist |  |
+| caedere | konj.perf.pass.3.pl | caesī sint | sie (Pl.) niedergeschlagen worden sind |  |
+| caedere | konj.plusq.akt.3.sg | cecīdisset | er/sie/es niedergeschlagen hätte |  |
+| caedere | konj.plusq.akt.3.pl | cecīdissent | sie (Pl.) niedergeschlagen hätten |  |
+| caedere | konj.plusq.pass.3.sg | caesus esset | er/sie/es niedergeschlagen worden wäre |  |
+| caedere | konj.plusq.pass.3.pl | caesī essent | sie (Pl.) niedergeschlagen worden wären |  |
+| exīstimāre | ind.praes.akt.3.sg | exīstimat | er/sie/es beurteilt |  |
+| exīstimāre | ind.praes.akt.3.pl | exīstimant | sie (Pl.) beurteilen |  |
+| exīstimāre | ind.praes.pass.3.sg | exīstimātur | er/sie/es wird beurteilt |  |
+| exīstimāre | ind.praes.pass.3.pl | exīstimantur | sie (Pl.) werden beurteilt |  |
+| exīstimāre | ind.impf.akt.3.sg | exīstimābat | er/sie/es beurteilte |  |
+| exīstimāre | ind.impf.akt.3.pl | exīstimābant | sie (Pl.) beurteilten |  |
+| exīstimāre | ind.impf.pass.3.sg | exīstimābātur | er/sie/es wurde beurteilt |  |
+| exīstimāre | ind.impf.pass.3.pl | exīstimābantur | sie (Pl.) wurden beurteilt |  |
+| exīstimāre | ind.fut.akt.3.sg | exīstimābit | er/sie/es wird beurteilen |  |
+| exīstimāre | ind.fut.akt.3.pl | exīstimābunt | sie (Pl.) werden beurteilen |  |
+| exīstimāre | ind.fut.pass.3.sg | exīstimābitur | er/sie/es wird beurteilt werden |  |
+| exīstimāre | ind.fut.pass.3.pl | exīstimābuntur | sie (Pl.) werden beurteilt werden |  |
+| exīstimāre | ind.perf.akt.3.sg | exīstimāvit | er/sie/es hat beurteilt | er/sie/es beurteilte |
+| exīstimāre | ind.perf.akt.3.pl | exīstimāvērunt | sie (Pl.) haben beurteilt | sie (Pl.) beurteilten |
+| exīstimāre | ind.perf.pass.3.sg | exīstimātus est | er/sie/es ist beurteilt worden |  |
+| exīstimāre | ind.perf.pass.3.pl | exīstimātī sunt | sie (Pl.) sind beurteilt worden |  |
+| exīstimāre | ind.plusq.akt.3.sg | exīstimāverat | er/sie/es hatte beurteilt |  |
+| exīstimāre | ind.plusq.akt.3.pl | exīstimāverant | sie (Pl.) hatten beurteilt |  |
+| exīstimāre | ind.plusq.pass.3.sg | exīstimātus erat | er/sie/es war beurteilt worden |  |
+| exīstimāre | ind.plusq.pass.3.pl | exīstimātī erant | sie (Pl.) waren beurteilt worden |  |
+| exīstimāre | ind.fut2.akt.3.sg | exīstimāverit | er/sie/es wird beurteilt haben |  |
+| exīstimāre | ind.fut2.akt.3.pl | exīstimāverint | sie (Pl.) werden beurteilt haben |  |
+| exīstimāre | ind.fut2.pass.3.sg | exīstimātus erit | er/sie/es wird beurteilt worden sein |  |
+| exīstimāre | ind.fut2.pass.3.pl | exīstimātī erunt | sie (Pl.) werden beurteilt worden sein |  |
+| exīstimāre | konj.praes.akt.3.sg | exīstimet | er/sie/es beurteilt |  |
+| exīstimāre | konj.praes.akt.3.pl | exīstiment | sie (Pl.) beurteilen |  |
+| exīstimāre | konj.praes.pass.3.sg | exīstimētur | er/sie/es beurteilt wird |  |
+| exīstimāre | konj.praes.pass.3.pl | exīstimentur | sie (Pl.) beurteilt werden |  |
+| exīstimāre | konj.impf.akt.3.sg | exīstimāret | er/sie/es beurteilen würde |  |
+| exīstimāre | konj.impf.akt.3.pl | exīstimārent | sie (Pl.) beurteilen würden |  |
+| exīstimāre | konj.impf.pass.3.sg | exīstimārētur | er/sie/es beurteilt würde |  |
+| exīstimāre | konj.impf.pass.3.pl | exīstimārentur | sie (Pl.) beurteilt würden |  |
+| exīstimāre | konj.perf.akt.3.sg | exīstimāverit | er/sie/es beurteilt hat |  |
+| exīstimāre | konj.perf.akt.3.pl | exīstimāverint | sie (Pl.) beurteilt haben |  |
+| exīstimāre | konj.perf.pass.3.sg | exīstimātus sit | er/sie/es beurteilt worden ist |  |
+| exīstimāre | konj.perf.pass.3.pl | exīstimātī sint | sie (Pl.) beurteilt worden sind |  |
+| exīstimāre | konj.plusq.akt.3.sg | exīstimāvisset | er/sie/es beurteilt hätte |  |
+| exīstimāre | konj.plusq.akt.3.pl | exīstimāvissent | sie (Pl.) beurteilt hätten |  |
+| exīstimāre | konj.plusq.pass.3.sg | exīstimātus esset | er/sie/es beurteilt worden wäre |  |
+| exīstimāre | konj.plusq.pass.3.pl | exīstimātī essent | sie (Pl.) beurteilt worden wären |  |
+| alere | ind.praes.akt.3.sg | alit | er/sie/es ernährt |  |
+| alere | ind.praes.akt.3.pl | alunt | sie (Pl.) ernähren |  |
+| alere | ind.praes.pass.3.sg | alitur | er/sie/es wird ernährt |  |
+| alere | ind.praes.pass.3.pl | aluntur | sie (Pl.) werden ernährt |  |
+| alere | ind.impf.akt.3.sg | alēbat | er/sie/es ernährte |  |
+| alere | ind.impf.akt.3.pl | alēbant | sie (Pl.) ernährten |  |
+| alere | ind.impf.pass.3.sg | alēbātur | er/sie/es wurde ernährt |  |
+| alere | ind.impf.pass.3.pl | alēbantur | sie (Pl.) wurden ernährt |  |
+| alere | ind.fut.akt.3.sg | alet | er/sie/es wird ernähren |  |
+| alere | ind.fut.akt.3.pl | alent | sie (Pl.) werden ernähren |  |
+| alere | ind.fut.pass.3.sg | alētur | er/sie/es wird ernährt werden |  |
+| alere | ind.fut.pass.3.pl | alentur | sie (Pl.) werden ernährt werden |  |
+| alere | ind.perf.akt.3.sg | aluit | er/sie/es hat ernährt | er/sie/es ernährte |
+| alere | ind.perf.akt.3.pl | aluērunt | sie (Pl.) haben ernährt | sie (Pl.) ernährten |
+| alere | ind.perf.pass.3.sg | alitus est | er/sie/es ist ernährt worden |  |
+| alere | ind.perf.pass.3.pl | alitī sunt | sie (Pl.) sind ernährt worden |  |
+| alere | ind.plusq.akt.3.sg | aluerat | er/sie/es hatte ernährt |  |
+| alere | ind.plusq.akt.3.pl | aluerant | sie (Pl.) hatten ernährt |  |
+| alere | ind.plusq.pass.3.sg | alitus erat | er/sie/es war ernährt worden |  |
+| alere | ind.plusq.pass.3.pl | alitī erant | sie (Pl.) waren ernährt worden |  |
+| alere | ind.fut2.akt.3.sg | aluerit | er/sie/es wird ernährt haben |  |
+| alere | ind.fut2.akt.3.pl | aluerint | sie (Pl.) werden ernährt haben |  |
+| alere | ind.fut2.pass.3.sg | alitus erit | er/sie/es wird ernährt worden sein |  |
+| alere | ind.fut2.pass.3.pl | alitī erunt | sie (Pl.) werden ernährt worden sein |  |
+| alere | konj.praes.akt.3.sg | alat | er/sie/es ernährt |  |
+| alere | konj.praes.akt.3.pl | alant | sie (Pl.) ernähren |  |
+| alere | konj.praes.pass.3.sg | alātur | er/sie/es ernährt wird |  |
+| alere | konj.praes.pass.3.pl | alantur | sie (Pl.) ernährt werden |  |
+| alere | konj.impf.akt.3.sg | aleret | er/sie/es ernähren würde |  |
+| alere | konj.impf.akt.3.pl | alerent | sie (Pl.) ernähren würden |  |
+| alere | konj.impf.pass.3.sg | alerētur | er/sie/es ernährt würde |  |
+| alere | konj.impf.pass.3.pl | alerentur | sie (Pl.) ernährt würden |  |
+| alere | konj.perf.akt.3.sg | aluerit | er/sie/es ernährt hat |  |
+| alere | konj.perf.akt.3.pl | aluerint | sie (Pl.) ernährt haben |  |
+| alere | konj.perf.pass.3.sg | alitus sit | er/sie/es ernährt worden ist |  |
+| alere | konj.perf.pass.3.pl | alitī sint | sie (Pl.) ernährt worden sind |  |
+| alere | konj.plusq.akt.3.sg | aluisset | er/sie/es ernährt hätte |  |
+| alere | konj.plusq.akt.3.pl | aluissent | sie (Pl.) ernährt hätten |  |
+| alere | konj.plusq.pass.3.sg | alitus esset | er/sie/es ernährt worden wäre |  |
+| alere | konj.plusq.pass.3.pl | alitī essent | sie (Pl.) ernährt worden wären |  |
+| crēdere | ind.praes.akt.3.sg | crēdit | er/sie/es glaubt |  |
+| crēdere | ind.praes.akt.3.pl | crēdunt | sie (Pl.) glauben |  |
+| crēdere | ind.praes.pass.3.sg | crēditur | er/sie/es wird geglaubt |  |
+| crēdere | ind.praes.pass.3.pl | crēduntur | sie (Pl.) werden geglaubt |  |
+| crēdere | ind.impf.akt.3.sg | crēdēbat | er/sie/es glaubte |  |
+| crēdere | ind.impf.akt.3.pl | crēdēbant | sie (Pl.) glaubten |  |
+| crēdere | ind.impf.pass.3.sg | crēdēbātur | er/sie/es wurde geglaubt |  |
+| crēdere | ind.impf.pass.3.pl | crēdēbantur | sie (Pl.) wurden geglaubt |  |
+| crēdere | ind.fut.akt.3.sg | crēdet | er/sie/es wird glauben |  |
+| crēdere | ind.fut.akt.3.pl | crēdent | sie (Pl.) werden glauben |  |
+| crēdere | ind.fut.pass.3.sg | crēdētur | er/sie/es wird geglaubt werden |  |
+| crēdere | ind.fut.pass.3.pl | crēdentur | sie (Pl.) werden geglaubt werden |  |
+| crēdere | ind.perf.akt.3.sg | crēdidit | er/sie/es hat geglaubt | er/sie/es glaubte |
+| crēdere | ind.perf.akt.3.pl | crēdidērunt | sie (Pl.) haben geglaubt | sie (Pl.) glaubten |
+| crēdere | ind.perf.pass.3.sg | crēditus est | er/sie/es ist geglaubt worden |  |
+| crēdere | ind.perf.pass.3.pl | crēditī sunt | sie (Pl.) sind geglaubt worden |  |
+| crēdere | ind.plusq.akt.3.sg | crēdiderat | er/sie/es hatte geglaubt |  |
+| crēdere | ind.plusq.akt.3.pl | crēdiderant | sie (Pl.) hatten geglaubt |  |
+| crēdere | ind.plusq.pass.3.sg | crēditus erat | er/sie/es war geglaubt worden |  |
+| crēdere | ind.plusq.pass.3.pl | crēditī erant | sie (Pl.) waren geglaubt worden |  |
+| crēdere | ind.fut2.akt.3.sg | crēdiderit | er/sie/es wird geglaubt haben |  |
+| crēdere | ind.fut2.akt.3.pl | crēdiderint | sie (Pl.) werden geglaubt haben |  |
+| crēdere | ind.fut2.pass.3.sg | crēditus erit | er/sie/es wird geglaubt worden sein |  |
+| crēdere | ind.fut2.pass.3.pl | crēditī erunt | sie (Pl.) werden geglaubt worden sein |  |
+| crēdere | konj.praes.akt.3.sg | crēdat | er/sie/es glaubt |  |
+| crēdere | konj.praes.akt.3.pl | crēdant | sie (Pl.) glauben |  |
+| crēdere | konj.praes.pass.3.sg | crēdātur | er/sie/es geglaubt wird |  |
+| crēdere | konj.praes.pass.3.pl | crēdantur | sie (Pl.) geglaubt werden |  |
+| crēdere | konj.impf.akt.3.sg | crēderet | er/sie/es glauben würde |  |
+| crēdere | konj.impf.akt.3.pl | crēderent | sie (Pl.) glauben würden |  |
+| crēdere | konj.impf.pass.3.sg | crēderētur | er/sie/es geglaubt würde |  |
+| crēdere | konj.impf.pass.3.pl | crēderentur | sie (Pl.) geglaubt würden |  |
+| crēdere | konj.perf.akt.3.sg | crēdiderit | er/sie/es geglaubt hat |  |
+| crēdere | konj.perf.akt.3.pl | crēdiderint | sie (Pl.) geglaubt haben |  |
+| crēdere | konj.perf.pass.3.sg | crēditus sit | er/sie/es geglaubt worden ist |  |
+| crēdere | konj.perf.pass.3.pl | crēditī sint | sie (Pl.) geglaubt worden sind |  |
+| crēdere | konj.plusq.akt.3.sg | crēdidisset | er/sie/es geglaubt hätte |  |
+| crēdere | konj.plusq.akt.3.pl | crēdidissent | sie (Pl.) geglaubt hätten |  |
+| crēdere | konj.plusq.pass.3.sg | crēditus esset | er/sie/es geglaubt worden wäre |  |
+| crēdere | konj.plusq.pass.3.pl | crēditī essent | sie (Pl.) geglaubt worden wären |  |
+| exstinguere | ind.praes.akt.3.sg | exstinguit | er/sie/es löscht aus |  |
+| exstinguere | ind.praes.akt.3.pl | exstinguunt | sie (Pl.) löschen aus |  |
+| exstinguere | ind.praes.pass.3.sg | exstinguitur | er/sie/es wird ausgelöscht |  |
+| exstinguere | ind.praes.pass.3.pl | exstinguuntur | sie (Pl.) werden ausgelöscht |  |
+| exstinguere | ind.impf.akt.3.sg | exstinguēbat | er/sie/es löschte aus |  |
+| exstinguere | ind.impf.akt.3.pl | exstinguēbant | sie (Pl.) löschten aus |  |
+| exstinguere | ind.impf.pass.3.sg | exstinguēbātur | er/sie/es wurde ausgelöscht |  |
+| exstinguere | ind.impf.pass.3.pl | exstinguēbantur | sie (Pl.) wurden ausgelöscht |  |
+| exstinguere | ind.fut.akt.3.sg | exstinguet | er/sie/es wird auslöschen |  |
+| exstinguere | ind.fut.akt.3.pl | exstinguent | sie (Pl.) werden auslöschen |  |
+| exstinguere | ind.fut.pass.3.sg | exstinguētur | er/sie/es wird ausgelöscht werden |  |
+| exstinguere | ind.fut.pass.3.pl | exstinguentur | sie (Pl.) werden ausgelöscht werden |  |
+| exstinguere | ind.perf.akt.3.sg | exstīnxit | er/sie/es hat ausgelöscht | er/sie/es löschte aus |
+| exstinguere | ind.perf.akt.3.pl | exstīnxērunt | sie (Pl.) haben ausgelöscht | sie (Pl.) löschten aus |
+| exstinguere | ind.perf.pass.3.sg | exstīnctus est | er/sie/es ist ausgelöscht worden |  |
+| exstinguere | ind.perf.pass.3.pl | exstīnctī sunt | sie (Pl.) sind ausgelöscht worden |  |
+| exstinguere | ind.plusq.akt.3.sg | exstīnxerat | er/sie/es hatte ausgelöscht |  |
+| exstinguere | ind.plusq.akt.3.pl | exstīnxerant | sie (Pl.) hatten ausgelöscht |  |
+| exstinguere | ind.plusq.pass.3.sg | exstīnctus erat | er/sie/es war ausgelöscht worden |  |
+| exstinguere | ind.plusq.pass.3.pl | exstīnctī erant | sie (Pl.) waren ausgelöscht worden |  |
+| exstinguere | ind.fut2.akt.3.sg | exstīnxerit | er/sie/es wird ausgelöscht haben |  |
+| exstinguere | ind.fut2.akt.3.pl | exstīnxerint | sie (Pl.) werden ausgelöscht haben |  |
+| exstinguere | ind.fut2.pass.3.sg | exstīnctus erit | er/sie/es wird ausgelöscht worden sein |  |
+| exstinguere | ind.fut2.pass.3.pl | exstīnctī erunt | sie (Pl.) werden ausgelöscht worden sein |  |
+| exstinguere | konj.praes.akt.3.sg | exstinguat | er/sie/es auslöscht |  |
+| exstinguere | konj.praes.akt.3.pl | exstinguant | sie (Pl.) auslöschen |  |
+| exstinguere | konj.praes.pass.3.sg | exstinguātur | er/sie/es ausgelöscht wird |  |
+| exstinguere | konj.praes.pass.3.pl | exstinguantur | sie (Pl.) ausgelöscht werden |  |
+| exstinguere | konj.impf.akt.3.sg | exstingueret | er/sie/es auslöschen würde |  |
+| exstinguere | konj.impf.akt.3.pl | exstinguerent | sie (Pl.) auslöschen würden |  |
+| exstinguere | konj.impf.pass.3.sg | exstinguerētur | er/sie/es ausgelöscht würde |  |
+| exstinguere | konj.impf.pass.3.pl | exstinguerentur | sie (Pl.) ausgelöscht würden |  |
+| exstinguere | konj.perf.akt.3.sg | exstīnxerit | er/sie/es ausgelöscht hat |  |
+| exstinguere | konj.perf.akt.3.pl | exstīnxerint | sie (Pl.) ausgelöscht haben |  |
+| exstinguere | konj.perf.pass.3.sg | exstīnctus sit | er/sie/es ausgelöscht worden ist |  |
+| exstinguere | konj.perf.pass.3.pl | exstīnctī sint | sie (Pl.) ausgelöscht worden sind |  |
+| exstinguere | konj.plusq.akt.3.sg | exstīnxisset | er/sie/es ausgelöscht hätte |  |
+| exstinguere | konj.plusq.akt.3.pl | exstīnxissent | sie (Pl.) ausgelöscht hätten |  |
+| exstinguere | konj.plusq.pass.3.sg | exstīnctus esset | er/sie/es ausgelöscht worden wäre |  |
+| exstinguere | konj.plusq.pass.3.pl | exstīnctī essent | sie (Pl.) ausgelöscht worden wären |  |
+| adiuvāre | ind.praes.akt.3.sg | adiuvat | er/sie/es unterstützt |  |
+| adiuvāre | ind.praes.akt.3.pl | adiuvant | sie (Pl.) unterstützen |  |
+| adiuvāre | ind.praes.pass.3.sg | adiuvātur | er/sie/es wird unterstützt |  |
+| adiuvāre | ind.praes.pass.3.pl | adiuvantur | sie (Pl.) werden unterstützt |  |
+| adiuvāre | ind.impf.akt.3.sg | adiuvābat | er/sie/es unterstützte |  |
+| adiuvāre | ind.impf.akt.3.pl | adiuvābant | sie (Pl.) unterstützten |  |
+| adiuvāre | ind.impf.pass.3.sg | adiuvābātur | er/sie/es wurde unterstützt |  |
+| adiuvāre | ind.impf.pass.3.pl | adiuvābantur | sie (Pl.) wurden unterstützt |  |
+| adiuvāre | ind.fut.akt.3.sg | adiuvābit | er/sie/es wird unterstützen |  |
+| adiuvāre | ind.fut.akt.3.pl | adiuvābunt | sie (Pl.) werden unterstützen |  |
+| adiuvāre | ind.fut.pass.3.sg | adiuvābitur | er/sie/es wird unterstützt werden |  |
+| adiuvāre | ind.fut.pass.3.pl | adiuvābuntur | sie (Pl.) werden unterstützt werden |  |
+| adiuvāre | ind.perf.akt.3.sg | adiūvit | er/sie/es hat unterstützt | er/sie/es unterstützte |
+| adiuvāre | ind.perf.akt.3.pl | adiūvērunt | sie (Pl.) haben unterstützt | sie (Pl.) unterstützten |
+| adiuvāre | ind.perf.pass.3.sg | adiūtus est | er/sie/es ist unterstützt worden |  |
+| adiuvāre | ind.perf.pass.3.pl | adiūtī sunt | sie (Pl.) sind unterstützt worden |  |
+| adiuvāre | ind.plusq.akt.3.sg | adiūverat | er/sie/es hatte unterstützt |  |
+| adiuvāre | ind.plusq.akt.3.pl | adiūverant | sie (Pl.) hatten unterstützt |  |
+| adiuvāre | ind.plusq.pass.3.sg | adiūtus erat | er/sie/es war unterstützt worden |  |
+| adiuvāre | ind.plusq.pass.3.pl | adiūtī erant | sie (Pl.) waren unterstützt worden |  |
+| adiuvāre | ind.fut2.akt.3.sg | adiūverit | er/sie/es wird unterstützt haben |  |
+| adiuvāre | ind.fut2.akt.3.pl | adiūverint | sie (Pl.) werden unterstützt haben |  |
+| adiuvāre | ind.fut2.pass.3.sg | adiūtus erit | er/sie/es wird unterstützt worden sein |  |
+| adiuvāre | ind.fut2.pass.3.pl | adiūtī erunt | sie (Pl.) werden unterstützt worden sein |  |
+| adiuvāre | konj.praes.akt.3.sg | adiuvet | er/sie/es unterstützt |  |
+| adiuvāre | konj.praes.akt.3.pl | adiuvent | sie (Pl.) unterstützen |  |
+| adiuvāre | konj.praes.pass.3.sg | adiuvētur | er/sie/es unterstützt wird |  |
+| adiuvāre | konj.praes.pass.3.pl | adiuventur | sie (Pl.) unterstützt werden |  |
+| adiuvāre | konj.impf.akt.3.sg | adiuvāret | er/sie/es unterstützen würde |  |
+| adiuvāre | konj.impf.akt.3.pl | adiuvārent | sie (Pl.) unterstützen würden |  |
+| adiuvāre | konj.impf.pass.3.sg | adiuvārētur | er/sie/es unterstützt würde |  |
+| adiuvāre | konj.impf.pass.3.pl | adiuvārentur | sie (Pl.) unterstützt würden |  |
+| adiuvāre | konj.perf.akt.3.sg | adiūverit | er/sie/es unterstützt hat |  |
+| adiuvāre | konj.perf.akt.3.pl | adiūverint | sie (Pl.) unterstützt haben |  |
+| adiuvāre | konj.perf.pass.3.sg | adiūtus sit | er/sie/es unterstützt worden ist |  |
+| adiuvāre | konj.perf.pass.3.pl | adiūtī sint | sie (Pl.) unterstützt worden sind |  |
+| adiuvāre | konj.plusq.akt.3.sg | adiūvisset | er/sie/es unterstützt hätte |  |
+| adiuvāre | konj.plusq.akt.3.pl | adiūvissent | sie (Pl.) unterstützt hätten |  |
+| adiuvāre | konj.plusq.pass.3.sg | adiūtus esset | er/sie/es unterstützt worden wäre |  |
+| adiuvāre | konj.plusq.pass.3.pl | adiūtī essent | sie (Pl.) unterstützt worden wären |  |
+| colere | ind.praes.akt.3.sg | colit | er/sie/es bebaut |  |
+| colere | ind.praes.akt.3.pl | colunt | sie (Pl.) bebauen |  |
+| colere | ind.praes.pass.3.sg | colitur | er/sie/es wird bebaut |  |
+| colere | ind.praes.pass.3.pl | coluntur | sie (Pl.) werden bebaut |  |
+| colere | ind.impf.akt.3.sg | colēbat | er/sie/es bebaute |  |
+| colere | ind.impf.akt.3.pl | colēbant | sie (Pl.) bebauten |  |
+| colere | ind.impf.pass.3.sg | colēbātur | er/sie/es wurde bebaut |  |
+| colere | ind.impf.pass.3.pl | colēbantur | sie (Pl.) wurden bebaut |  |
+| colere | ind.fut.akt.3.sg | colet | er/sie/es wird bebauen |  |
+| colere | ind.fut.akt.3.pl | colent | sie (Pl.) werden bebauen |  |
+| colere | ind.fut.pass.3.sg | colētur | er/sie/es wird bebaut werden |  |
+| colere | ind.fut.pass.3.pl | colentur | sie (Pl.) werden bebaut werden |  |
+| colere | ind.perf.akt.3.sg | coluit | er/sie/es hat bebaut | er/sie/es bebaute |
+| colere | ind.perf.akt.3.pl | coluērunt | sie (Pl.) haben bebaut | sie (Pl.) bebauten |
+| colere | ind.perf.pass.3.sg | cultus est | er/sie/es ist bebaut worden |  |
+| colere | ind.perf.pass.3.pl | cultī sunt | sie (Pl.) sind bebaut worden |  |
+| colere | ind.plusq.akt.3.sg | coluerat | er/sie/es hatte bebaut |  |
+| colere | ind.plusq.akt.3.pl | coluerant | sie (Pl.) hatten bebaut |  |
+| colere | ind.plusq.pass.3.sg | cultus erat | er/sie/es war bebaut worden |  |
+| colere | ind.plusq.pass.3.pl | cultī erant | sie (Pl.) waren bebaut worden |  |
+| colere | ind.fut2.akt.3.sg | coluerit | er/sie/es wird bebaut haben |  |
+| colere | ind.fut2.akt.3.pl | coluerint | sie (Pl.) werden bebaut haben |  |
+| colere | ind.fut2.pass.3.sg | cultus erit | er/sie/es wird bebaut worden sein |  |
+| colere | ind.fut2.pass.3.pl | cultī erunt | sie (Pl.) werden bebaut worden sein |  |
+| colere | konj.praes.akt.3.sg | colat | er/sie/es bebaut |  |
+| colere | konj.praes.akt.3.pl | colant | sie (Pl.) bebauen |  |
+| colere | konj.praes.pass.3.sg | colātur | er/sie/es bebaut wird |  |
+| colere | konj.praes.pass.3.pl | colantur | sie (Pl.) bebaut werden |  |
+| colere | konj.impf.akt.3.sg | coleret | er/sie/es bebauen würde |  |
+| colere | konj.impf.akt.3.pl | colerent | sie (Pl.) bebauen würden |  |
+| colere | konj.impf.pass.3.sg | colerētur | er/sie/es bebaut würde |  |
+| colere | konj.impf.pass.3.pl | colerentur | sie (Pl.) bebaut würden |  |
+| colere | konj.perf.akt.3.sg | coluerit | er/sie/es bebaut hat |  |
+| colere | konj.perf.akt.3.pl | coluerint | sie (Pl.) bebaut haben |  |
+| colere | konj.perf.pass.3.sg | cultus sit | er/sie/es bebaut worden ist |  |
+| colere | konj.perf.pass.3.pl | cultī sint | sie (Pl.) bebaut worden sind |  |
+| colere | konj.plusq.akt.3.sg | coluisset | er/sie/es bebaut hätte |  |
+| colere | konj.plusq.akt.3.pl | coluissent | sie (Pl.) bebaut hätten |  |
+| colere | konj.plusq.pass.3.sg | cultus esset | er/sie/es bebaut worden wäre |  |
+| colere | konj.plusq.pass.3.pl | cultī essent | sie (Pl.) bebaut worden wären |  |
+| dēpōnere | ind.praes.akt.3.sg | dēpōnit | er/sie/es legt ab |  |
+| dēpōnere | ind.praes.akt.3.pl | dēpōnunt | sie (Pl.) legen ab |  |
+| dēpōnere | ind.praes.pass.3.sg | dēpōnitur | er/sie/es wird abgelegt |  |
+| dēpōnere | ind.praes.pass.3.pl | dēpōnuntur | sie (Pl.) werden abgelegt |  |
+| dēpōnere | ind.impf.akt.3.sg | dēpōnēbat | er/sie/es legte ab |  |
+| dēpōnere | ind.impf.akt.3.pl | dēpōnēbant | sie (Pl.) legten ab |  |
+| dēpōnere | ind.impf.pass.3.sg | dēpōnēbātur | er/sie/es wurde abgelegt |  |
+| dēpōnere | ind.impf.pass.3.pl | dēpōnēbantur | sie (Pl.) wurden abgelegt |  |
+| dēpōnere | ind.fut.akt.3.sg | dēpōnet | er/sie/es wird ablegen |  |
+| dēpōnere | ind.fut.akt.3.pl | dēpōnent | sie (Pl.) werden ablegen |  |
+| dēpōnere | ind.fut.pass.3.sg | dēpōnētur | er/sie/es wird abgelegt werden |  |
+| dēpōnere | ind.fut.pass.3.pl | dēpōnentur | sie (Pl.) werden abgelegt werden |  |
+| dēpōnere | ind.perf.akt.3.sg | dēposuit | er/sie/es hat abgelegt | er/sie/es legte ab |
+| dēpōnere | ind.perf.akt.3.pl | dēposuērunt | sie (Pl.) haben abgelegt | sie (Pl.) legten ab |
+| dēpōnere | ind.perf.pass.3.sg | dēpositus est | er/sie/es ist abgelegt worden |  |
+| dēpōnere | ind.perf.pass.3.pl | dēpositī sunt | sie (Pl.) sind abgelegt worden |  |
+| dēpōnere | ind.plusq.akt.3.sg | dēposuerat | er/sie/es hatte abgelegt |  |
+| dēpōnere | ind.plusq.akt.3.pl | dēposuerant | sie (Pl.) hatten abgelegt |  |
+| dēpōnere | ind.plusq.pass.3.sg | dēpositus erat | er/sie/es war abgelegt worden |  |
+| dēpōnere | ind.plusq.pass.3.pl | dēpositī erant | sie (Pl.) waren abgelegt worden |  |
+| dēpōnere | ind.fut2.akt.3.sg | dēposuerit | er/sie/es wird abgelegt haben |  |
+| dēpōnere | ind.fut2.akt.3.pl | dēposuerint | sie (Pl.) werden abgelegt haben |  |
+| dēpōnere | ind.fut2.pass.3.sg | dēpositus erit | er/sie/es wird abgelegt worden sein |  |
+| dēpōnere | ind.fut2.pass.3.pl | dēpositī erunt | sie (Pl.) werden abgelegt worden sein |  |
+| dēpōnere | konj.praes.akt.3.sg | dēpōnat | er/sie/es ablegt |  |
+| dēpōnere | konj.praes.akt.3.pl | dēpōnant | sie (Pl.) ablegen |  |
+| dēpōnere | konj.praes.pass.3.sg | dēpōnātur | er/sie/es abgelegt wird |  |
+| dēpōnere | konj.praes.pass.3.pl | dēpōnantur | sie (Pl.) abgelegt werden |  |
+| dēpōnere | konj.impf.akt.3.sg | dēpōneret | er/sie/es ablegen würde |  |
+| dēpōnere | konj.impf.akt.3.pl | dēpōnerent | sie (Pl.) ablegen würden |  |
+| dēpōnere | konj.impf.pass.3.sg | dēpōnerētur | er/sie/es abgelegt würde |  |
+| dēpōnere | konj.impf.pass.3.pl | dēpōnerentur | sie (Pl.) abgelegt würden |  |
+| dēpōnere | konj.perf.akt.3.sg | dēposuerit | er/sie/es abgelegt hat |  |
+| dēpōnere | konj.perf.akt.3.pl | dēposuerint | sie (Pl.) abgelegt haben |  |
+| dēpōnere | konj.perf.pass.3.sg | dēpositus sit | er/sie/es abgelegt worden ist |  |
+| dēpōnere | konj.perf.pass.3.pl | dēpositī sint | sie (Pl.) abgelegt worden sind |  |
+| dēpōnere | konj.plusq.akt.3.sg | dēposuisset | er/sie/es abgelegt hätte |  |
+| dēpōnere | konj.plusq.akt.3.pl | dēposuissent | sie (Pl.) abgelegt hätten |  |
+| dēpōnere | konj.plusq.pass.3.sg | dēpositus esset | er/sie/es abgelegt worden wäre |  |
+| dēpōnere | konj.plusq.pass.3.pl | dēpositī essent | sie (Pl.) abgelegt worden wären |  |
+| iactāre | ind.praes.akt.3.sg | iactat | er/sie/es wirft |  |
+| iactāre | ind.praes.akt.3.pl | iactant | sie (Pl.) werfen |  |
+| iactāre | ind.praes.pass.3.sg | iactātur | er/sie/es wird geworfen |  |
+| iactāre | ind.praes.pass.3.pl | iactantur | sie (Pl.) werden geworfen |  |
+| iactāre | ind.impf.akt.3.sg | iactābat | er/sie/es warf |  |
+| iactāre | ind.impf.akt.3.pl | iactābant | sie (Pl.) warfen |  |
+| iactāre | ind.impf.pass.3.sg | iactābātur | er/sie/es wurde geworfen |  |
+| iactāre | ind.impf.pass.3.pl | iactābantur | sie (Pl.) wurden geworfen |  |
+| iactāre | ind.fut.akt.3.sg | iactābit | er/sie/es wird werfen |  |
+| iactāre | ind.fut.akt.3.pl | iactābunt | sie (Pl.) werden werfen |  |
+| iactāre | ind.fut.pass.3.sg | iactābitur | er/sie/es wird geworfen werden |  |
+| iactāre | ind.fut.pass.3.pl | iactābuntur | sie (Pl.) werden geworfen werden |  |
+| iactāre | ind.perf.akt.3.sg | iactāvit | er/sie/es hat geworfen | er/sie/es warf |
+| iactāre | ind.perf.akt.3.pl | iactāvērunt | sie (Pl.) haben geworfen | sie (Pl.) warfen |
+| iactāre | ind.perf.pass.3.sg | iactātus est | er/sie/es ist geworfen worden |  |
+| iactāre | ind.perf.pass.3.pl | iactātī sunt | sie (Pl.) sind geworfen worden |  |
+| iactāre | ind.plusq.akt.3.sg | iactāverat | er/sie/es hatte geworfen |  |
+| iactāre | ind.plusq.akt.3.pl | iactāverant | sie (Pl.) hatten geworfen |  |
+| iactāre | ind.plusq.pass.3.sg | iactātus erat | er/sie/es war geworfen worden |  |
+| iactāre | ind.plusq.pass.3.pl | iactātī erant | sie (Pl.) waren geworfen worden |  |
+| iactāre | ind.fut2.akt.3.sg | iactāverit | er/sie/es wird geworfen haben |  |
+| iactāre | ind.fut2.akt.3.pl | iactāverint | sie (Pl.) werden geworfen haben |  |
+| iactāre | ind.fut2.pass.3.sg | iactātus erit | er/sie/es wird geworfen worden sein |  |
+| iactāre | ind.fut2.pass.3.pl | iactātī erunt | sie (Pl.) werden geworfen worden sein |  |
+| iactāre | konj.praes.akt.3.sg | iactet | er/sie/es wirft |  |
+| iactāre | konj.praes.akt.3.pl | iactent | sie (Pl.) werfen |  |
+| iactāre | konj.praes.pass.3.sg | iactētur | er/sie/es geworfen wird |  |
+| iactāre | konj.praes.pass.3.pl | iactentur | sie (Pl.) geworfen werden |  |
+| iactāre | konj.impf.akt.3.sg | iactāret | er/sie/es werfen würde |  |
+| iactāre | konj.impf.akt.3.pl | iactārent | sie (Pl.) werfen würden |  |
+| iactāre | konj.impf.pass.3.sg | iactārētur | er/sie/es geworfen würde |  |
+| iactāre | konj.impf.pass.3.pl | iactārentur | sie (Pl.) geworfen würden |  |
+| iactāre | konj.perf.akt.3.sg | iactāverit | er/sie/es geworfen hat |  |
+| iactāre | konj.perf.akt.3.pl | iactāverint | sie (Pl.) geworfen haben |  |
+| iactāre | konj.perf.pass.3.sg | iactātus sit | er/sie/es geworfen worden ist |  |
+| iactāre | konj.perf.pass.3.pl | iactātī sint | sie (Pl.) geworfen worden sind |  |
+| iactāre | konj.plusq.akt.3.sg | iactāvisset | er/sie/es geworfen hätte |  |
+| iactāre | konj.plusq.akt.3.pl | iactāvissent | sie (Pl.) geworfen hätten |  |
+| iactāre | konj.plusq.pass.3.sg | iactātus esset | er/sie/es geworfen worden wäre |  |
+| iactāre | konj.plusq.pass.3.pl | iactātī essent | sie (Pl.) geworfen worden wären |  |
+| āmittere | ind.praes.akt.3.sg | āmittit | er/sie/es entlässt |  |
+| āmittere | ind.praes.akt.3.pl | āmittunt | sie (Pl.) entlassen |  |
+| āmittere | ind.praes.pass.3.sg | āmittitur | er/sie/es wird entlassen |  |
+| āmittere | ind.praes.pass.3.pl | āmittuntur | sie (Pl.) werden entlassen |  |
+| āmittere | ind.impf.akt.3.sg | āmittēbat | er/sie/es entließ |  |
+| āmittere | ind.impf.akt.3.pl | āmittēbant | sie (Pl.) entließen |  |
+| āmittere | ind.impf.pass.3.sg | āmittēbātur | er/sie/es wurde entlassen |  |
+| āmittere | ind.impf.pass.3.pl | āmittēbantur | sie (Pl.) wurden entlassen |  |
+| āmittere | ind.fut.akt.3.sg | āmittet | er/sie/es wird entlassen |  |
+| āmittere | ind.fut.akt.3.pl | āmittent | sie (Pl.) werden entlassen |  |
+| āmittere | ind.fut.pass.3.sg | āmittētur | er/sie/es wird entlassen werden |  |
+| āmittere | ind.fut.pass.3.pl | āmittentur | sie (Pl.) werden entlassen werden |  |
+| āmittere | ind.perf.akt.3.sg | āmīsit | er/sie/es hat entlassen | er/sie/es entließ |
+| āmittere | ind.perf.akt.3.pl | āmīsērunt | sie (Pl.) haben entlassen | sie (Pl.) entließen |
+| āmittere | ind.perf.pass.3.sg | āmissus est | er/sie/es ist entlassen worden |  |
+| āmittere | ind.perf.pass.3.pl | āmissī sunt | sie (Pl.) sind entlassen worden |  |
+| āmittere | ind.plusq.akt.3.sg | āmīserat | er/sie/es hatte entlassen |  |
+| āmittere | ind.plusq.akt.3.pl | āmīserant | sie (Pl.) hatten entlassen |  |
+| āmittere | ind.plusq.pass.3.sg | āmissus erat | er/sie/es war entlassen worden |  |
+| āmittere | ind.plusq.pass.3.pl | āmissī erant | sie (Pl.) waren entlassen worden |  |
+| āmittere | ind.fut2.akt.3.sg | āmīserit | er/sie/es wird entlassen haben |  |
+| āmittere | ind.fut2.akt.3.pl | āmīserint | sie (Pl.) werden entlassen haben |  |
+| āmittere | ind.fut2.pass.3.sg | āmissus erit | er/sie/es wird entlassen worden sein |  |
+| āmittere | ind.fut2.pass.3.pl | āmissī erunt | sie (Pl.) werden entlassen worden sein |  |
+| āmittere | konj.praes.akt.3.sg | āmittat | er/sie/es entlässt |  |
+| āmittere | konj.praes.akt.3.pl | āmittant | sie (Pl.) entlassen |  |
+| āmittere | konj.praes.pass.3.sg | āmittātur | er/sie/es entlassen wird |  |
+| āmittere | konj.praes.pass.3.pl | āmittantur | sie (Pl.) entlassen werden |  |
+| āmittere | konj.impf.akt.3.sg | āmitteret | er/sie/es entlassen würde |  |
+| āmittere | konj.impf.akt.3.pl | āmitterent | sie (Pl.) entlassen würden |  |
+| āmittere | konj.impf.pass.3.sg | āmitterētur | er/sie/es entlassen würde |  |
+| āmittere | konj.impf.pass.3.pl | āmitterentur | sie (Pl.) entlassen würden |  |
+| āmittere | konj.perf.akt.3.sg | āmīserit | er/sie/es entlassen hat |  |
+| āmittere | konj.perf.akt.3.pl | āmīserint | sie (Pl.) entlassen haben |  |
+| āmittere | konj.perf.pass.3.sg | āmissus sit | er/sie/es entlassen worden ist |  |
+| āmittere | konj.perf.pass.3.pl | āmissī sint | sie (Pl.) entlassen worden sind |  |
+| āmittere | konj.plusq.akt.3.sg | āmīsisset | er/sie/es entlassen hätte |  |
+| āmittere | konj.plusq.akt.3.pl | āmīsissent | sie (Pl.) entlassen hätten |  |
+| āmittere | konj.plusq.pass.3.sg | āmissus esset | er/sie/es entlassen worden wäre |  |
+| āmittere | konj.plusq.pass.3.pl | āmissī essent | sie (Pl.) entlassen worden wären |  |
+| ascendere | ind.praes.akt.3.sg | ascendit | er/sie/es besteigt |  |
+| ascendere | ind.praes.akt.3.pl | ascendunt | sie (Pl.) besteigen |  |
+| ascendere | ind.praes.pass.3.sg | ascenditur | er/sie/es wird bestiegen |  |
+| ascendere | ind.praes.pass.3.pl | ascenduntur | sie (Pl.) werden bestiegen |  |
+| ascendere | ind.impf.akt.3.sg | ascendēbat | er/sie/es bestieg |  |
+| ascendere | ind.impf.akt.3.pl | ascendēbant | sie (Pl.) bestiegen |  |
+| ascendere | ind.impf.pass.3.sg | ascendēbātur | er/sie/es wurde bestiegen |  |
+| ascendere | ind.impf.pass.3.pl | ascendēbantur | sie (Pl.) wurden bestiegen |  |
+| ascendere | ind.fut.akt.3.sg | ascendet | er/sie/es wird besteigen |  |
+| ascendere | ind.fut.akt.3.pl | ascendent | sie (Pl.) werden besteigen |  |
+| ascendere | ind.fut.pass.3.sg | ascendētur | er/sie/es wird bestiegen werden |  |
+| ascendere | ind.fut.pass.3.pl | ascendentur | sie (Pl.) werden bestiegen werden |  |
+| ascendere | ind.perf.akt.3.sg | ascendit | er/sie/es hat bestiegen | er/sie/es bestieg |
+| ascendere | ind.perf.akt.3.pl | ascendērunt | sie (Pl.) haben bestiegen | sie (Pl.) bestiegen |
+| ascendere | ind.perf.pass.3.sg | ascēnsus est | er/sie/es ist bestiegen worden |  |
+| ascendere | ind.perf.pass.3.pl | ascēnsī sunt | sie (Pl.) sind bestiegen worden |  |
+| ascendere | ind.plusq.akt.3.sg | ascenderat | er/sie/es hatte bestiegen |  |
+| ascendere | ind.plusq.akt.3.pl | ascenderant | sie (Pl.) hatten bestiegen |  |
+| ascendere | ind.plusq.pass.3.sg | ascēnsus erat | er/sie/es war bestiegen worden |  |
+| ascendere | ind.plusq.pass.3.pl | ascēnsī erant | sie (Pl.) waren bestiegen worden |  |
+| ascendere | ind.fut2.akt.3.sg | ascenderit | er/sie/es wird bestiegen haben |  |
+| ascendere | ind.fut2.akt.3.pl | ascenderint | sie (Pl.) werden bestiegen haben |  |
+| ascendere | ind.fut2.pass.3.sg | ascēnsus erit | er/sie/es wird bestiegen worden sein |  |
+| ascendere | ind.fut2.pass.3.pl | ascēnsī erunt | sie (Pl.) werden bestiegen worden sein |  |
+| ascendere | konj.praes.akt.3.sg | ascendat | er/sie/es besteigt |  |
+| ascendere | konj.praes.akt.3.pl | ascendant | sie (Pl.) besteigen |  |
+| ascendere | konj.praes.pass.3.sg | ascendātur | er/sie/es bestiegen wird |  |
+| ascendere | konj.praes.pass.3.pl | ascendantur | sie (Pl.) bestiegen werden |  |
+| ascendere | konj.impf.akt.3.sg | ascenderet | er/sie/es besteigen würde |  |
+| ascendere | konj.impf.akt.3.pl | ascenderent | sie (Pl.) besteigen würden |  |
+| ascendere | konj.impf.pass.3.sg | ascenderētur | er/sie/es bestiegen würde |  |
+| ascendere | konj.impf.pass.3.pl | ascenderentur | sie (Pl.) bestiegen würden |  |
+| ascendere | konj.perf.akt.3.sg | ascenderit | er/sie/es bestiegen hat |  |
+| ascendere | konj.perf.akt.3.pl | ascenderint | sie (Pl.) bestiegen haben |  |
+| ascendere | konj.perf.pass.3.sg | ascēnsus sit | er/sie/es bestiegen worden ist |  |
+| ascendere | konj.perf.pass.3.pl | ascēnsī sint | sie (Pl.) bestiegen worden sind |  |
+| ascendere | konj.plusq.akt.3.sg | ascendisset | er/sie/es bestiegen hätte |  |
+| ascendere | konj.plusq.akt.3.pl | ascendissent | sie (Pl.) bestiegen hätten |  |
+| ascendere | konj.plusq.pass.3.sg | ascēnsus esset | er/sie/es bestiegen worden wäre |  |
+| ascendere | konj.plusq.pass.3.pl | ascēnsī essent | sie (Pl.) bestiegen worden wären |  |
+| pellere | ind.praes.akt.3.sg | pellit | er/sie/es stößt |  |
+| pellere | ind.praes.akt.3.pl | pellunt | sie (Pl.) stoßen |  |
+| pellere | ind.praes.pass.3.sg | pellitur | er/sie/es wird gestoßen |  |
+| pellere | ind.praes.pass.3.pl | pelluntur | sie (Pl.) werden gestoßen |  |
+| pellere | ind.impf.akt.3.sg | pellēbat | er/sie/es stieß |  |
+| pellere | ind.impf.akt.3.pl | pellēbant | sie (Pl.) stießen |  |
+| pellere | ind.impf.pass.3.sg | pellēbātur | er/sie/es wurde gestoßen |  |
+| pellere | ind.impf.pass.3.pl | pellēbantur | sie (Pl.) wurden gestoßen |  |
+| pellere | ind.fut.akt.3.sg | pellet | er/sie/es wird stoßen |  |
+| pellere | ind.fut.akt.3.pl | pellent | sie (Pl.) werden stoßen |  |
+| pellere | ind.fut.pass.3.sg | pellētur | er/sie/es wird gestoßen werden |  |
+| pellere | ind.fut.pass.3.pl | pellentur | sie (Pl.) werden gestoßen werden |  |
+| pellere | ind.perf.akt.3.sg | pepulit | er/sie/es hat gestoßen | er/sie/es stieß |
+| pellere | ind.perf.akt.3.pl | pepulērunt | sie (Pl.) haben gestoßen | sie (Pl.) stießen |
+| pellere | ind.perf.pass.3.sg | pulsus est | er/sie/es ist gestoßen worden |  |
+| pellere | ind.perf.pass.3.pl | pulsī sunt | sie (Pl.) sind gestoßen worden |  |
+| pellere | ind.plusq.akt.3.sg | pepulerat | er/sie/es hatte gestoßen |  |
+| pellere | ind.plusq.akt.3.pl | pepulerant | sie (Pl.) hatten gestoßen |  |
+| pellere | ind.plusq.pass.3.sg | pulsus erat | er/sie/es war gestoßen worden |  |
+| pellere | ind.plusq.pass.3.pl | pulsī erant | sie (Pl.) waren gestoßen worden |  |
+| pellere | ind.fut2.akt.3.sg | pepulerit | er/sie/es wird gestoßen haben |  |
+| pellere | ind.fut2.akt.3.pl | pepulerint | sie (Pl.) werden gestoßen haben |  |
+| pellere | ind.fut2.pass.3.sg | pulsus erit | er/sie/es wird gestoßen worden sein |  |
+| pellere | ind.fut2.pass.3.pl | pulsī erunt | sie (Pl.) werden gestoßen worden sein |  |
+| pellere | konj.praes.akt.3.sg | pellat | er/sie/es stößt |  |
+| pellere | konj.praes.akt.3.pl | pellant | sie (Pl.) stoßen |  |
+| pellere | konj.praes.pass.3.sg | pellātur | er/sie/es gestoßen wird |  |
+| pellere | konj.praes.pass.3.pl | pellantur | sie (Pl.) gestoßen werden |  |
+| pellere | konj.impf.akt.3.sg | pelleret | er/sie/es stoßen würde |  |
+| pellere | konj.impf.akt.3.pl | pellerent | sie (Pl.) stoßen würden |  |
+| pellere | konj.impf.pass.3.sg | pellerētur | er/sie/es gestoßen würde |  |
+| pellere | konj.impf.pass.3.pl | pellerentur | sie (Pl.) gestoßen würden |  |
+| pellere | konj.perf.akt.3.sg | pepulerit | er/sie/es gestoßen hat |  |
+| pellere | konj.perf.akt.3.pl | pepulerint | sie (Pl.) gestoßen haben |  |
+| pellere | konj.perf.pass.3.sg | pulsus sit | er/sie/es gestoßen worden ist |  |
+| pellere | konj.perf.pass.3.pl | pulsī sint | sie (Pl.) gestoßen worden sind |  |
+| pellere | konj.plusq.akt.3.sg | pepulisset | er/sie/es gestoßen hätte |  |
+| pellere | konj.plusq.akt.3.pl | pepulissent | sie (Pl.) gestoßen hätten |  |
+| pellere | konj.plusq.pass.3.sg | pulsus esset | er/sie/es gestoßen worden wäre |  |
+| pellere | konj.plusq.pass.3.pl | pulsī essent | sie (Pl.) gestoßen worden wären |  |
+| committere | ind.praes.akt.3.sg | committit | er/sie/es veranstaltet |  |
+| committere | ind.praes.akt.3.pl | committunt | sie (Pl.) veranstalten |  |
+| committere | ind.praes.pass.3.sg | committitur | er/sie/es wird veranstaltet |  |
+| committere | ind.praes.pass.3.pl | committuntur | sie (Pl.) werden veranstaltet |  |
+| committere | ind.impf.akt.3.sg | committēbat | er/sie/es veranstaltete |  |
+| committere | ind.impf.akt.3.pl | committēbant | sie (Pl.) veranstalteten |  |
+| committere | ind.impf.pass.3.sg | committēbātur | er/sie/es wurde veranstaltet |  |
+| committere | ind.impf.pass.3.pl | committēbantur | sie (Pl.) wurden veranstaltet |  |
+| committere | ind.fut.akt.3.sg | committet | er/sie/es wird veranstalten |  |
+| committere | ind.fut.akt.3.pl | committent | sie (Pl.) werden veranstalten |  |
+| committere | ind.fut.pass.3.sg | committētur | er/sie/es wird veranstaltet werden |  |
+| committere | ind.fut.pass.3.pl | committentur | sie (Pl.) werden veranstaltet werden |  |
+| committere | ind.perf.akt.3.sg | commīsit | er/sie/es hat veranstaltet | er/sie/es veranstaltete |
+| committere | ind.perf.akt.3.pl | commīsērunt | sie (Pl.) haben veranstaltet | sie (Pl.) veranstalteten |
+| committere | ind.perf.pass.3.sg | commissus est | er/sie/es ist veranstaltet worden |  |
+| committere | ind.perf.pass.3.pl | commissī sunt | sie (Pl.) sind veranstaltet worden |  |
+| committere | ind.plusq.akt.3.sg | commīserat | er/sie/es hatte veranstaltet |  |
+| committere | ind.plusq.akt.3.pl | commīserant | sie (Pl.) hatten veranstaltet |  |
+| committere | ind.plusq.pass.3.sg | commissus erat | er/sie/es war veranstaltet worden |  |
+| committere | ind.plusq.pass.3.pl | commissī erant | sie (Pl.) waren veranstaltet worden |  |
+| committere | ind.fut2.akt.3.sg | commīserit | er/sie/es wird veranstaltet haben |  |
+| committere | ind.fut2.akt.3.pl | commīserint | sie (Pl.) werden veranstaltet haben |  |
+| committere | ind.fut2.pass.3.sg | commissus erit | er/sie/es wird veranstaltet worden sein |  |
+| committere | ind.fut2.pass.3.pl | commissī erunt | sie (Pl.) werden veranstaltet worden sein |  |
+| committere | konj.praes.akt.3.sg | committat | er/sie/es veranstaltet |  |
+| committere | konj.praes.akt.3.pl | committant | sie (Pl.) veranstalten |  |
+| committere | konj.praes.pass.3.sg | committātur | er/sie/es veranstaltet wird |  |
+| committere | konj.praes.pass.3.pl | committantur | sie (Pl.) veranstaltet werden |  |
+| committere | konj.impf.akt.3.sg | committeret | er/sie/es veranstalten würde |  |
+| committere | konj.impf.akt.3.pl | committerent | sie (Pl.) veranstalten würden |  |
+| committere | konj.impf.pass.3.sg | committerētur | er/sie/es veranstaltet würde |  |
+| committere | konj.impf.pass.3.pl | committerentur | sie (Pl.) veranstaltet würden |  |
+| committere | konj.perf.akt.3.sg | commīserit | er/sie/es veranstaltet hat |  |
+| committere | konj.perf.akt.3.pl | commīserint | sie (Pl.) veranstaltet haben |  |
+| committere | konj.perf.pass.3.sg | commissus sit | er/sie/es veranstaltet worden ist |  |
+| committere | konj.perf.pass.3.pl | commissī sint | sie (Pl.) veranstaltet worden sind |  |
+| committere | konj.plusq.akt.3.sg | commīsisset | er/sie/es veranstaltet hätte |  |
+| committere | konj.plusq.akt.3.pl | commīsissent | sie (Pl.) veranstaltet hätten |  |
+| committere | konj.plusq.pass.3.sg | commissus esset | er/sie/es veranstaltet worden wäre |  |
+| committere | konj.plusq.pass.3.pl | commissī essent | sie (Pl.) veranstaltet worden wären |  |
+| vendere | ind.praes.akt.3.sg | vendit | er/sie/es verkauft |  |
+| vendere | ind.praes.akt.3.pl | vendunt | sie (Pl.) verkaufen |  |
+| vendere | ind.praes.pass.3.sg | venditur | er/sie/es wird verkauft |  |
+| vendere | ind.praes.pass.3.pl | venduntur | sie (Pl.) werden verkauft |  |
+| vendere | ind.impf.akt.3.sg | vendēbat | er/sie/es verkaufte |  |
+| vendere | ind.impf.akt.3.pl | vendēbant | sie (Pl.) verkauften |  |
+| vendere | ind.impf.pass.3.sg | vendēbātur | er/sie/es wurde verkauft |  |
+| vendere | ind.impf.pass.3.pl | vendēbantur | sie (Pl.) wurden verkauft |  |
+| vendere | ind.fut.akt.3.sg | vendet | er/sie/es wird verkaufen |  |
+| vendere | ind.fut.akt.3.pl | vendent | sie (Pl.) werden verkaufen |  |
+| vendere | ind.fut.pass.3.sg | vendētur | er/sie/es wird verkauft werden |  |
+| vendere | ind.fut.pass.3.pl | vendentur | sie (Pl.) werden verkauft werden |  |
+| vendere | ind.perf.akt.3.sg | vendidit | er/sie/es hat verkauft | er/sie/es verkaufte |
+| vendere | ind.perf.akt.3.pl | vendidērunt | sie (Pl.) haben verkauft | sie (Pl.) verkauften |
+| vendere | ind.perf.pass.3.sg | venditus est | er/sie/es ist verkauft worden |  |
+| vendere | ind.perf.pass.3.pl | venditī sunt | sie (Pl.) sind verkauft worden |  |
+| vendere | ind.plusq.akt.3.sg | vendiderat | er/sie/es hatte verkauft |  |
+| vendere | ind.plusq.akt.3.pl | vendiderant | sie (Pl.) hatten verkauft |  |
+| vendere | ind.plusq.pass.3.sg | venditus erat | er/sie/es war verkauft worden |  |
+| vendere | ind.plusq.pass.3.pl | venditī erant | sie (Pl.) waren verkauft worden |  |
+| vendere | ind.fut2.akt.3.sg | vendiderit | er/sie/es wird verkauft haben |  |
+| vendere | ind.fut2.akt.3.pl | vendiderint | sie (Pl.) werden verkauft haben |  |
+| vendere | ind.fut2.pass.3.sg | venditus erit | er/sie/es wird verkauft worden sein |  |
+| vendere | ind.fut2.pass.3.pl | venditī erunt | sie (Pl.) werden verkauft worden sein |  |
+| vendere | konj.praes.akt.3.sg | vendat | er/sie/es verkauft |  |
+| vendere | konj.praes.akt.3.pl | vendant | sie (Pl.) verkaufen |  |
+| vendere | konj.praes.pass.3.sg | vendātur | er/sie/es verkauft wird |  |
+| vendere | konj.praes.pass.3.pl | vendantur | sie (Pl.) verkauft werden |  |
+| vendere | konj.impf.akt.3.sg | venderet | er/sie/es verkaufen würde |  |
+| vendere | konj.impf.akt.3.pl | venderent | sie (Pl.) verkaufen würden |  |
+| vendere | konj.impf.pass.3.sg | venderētur | er/sie/es verkauft würde |  |
+| vendere | konj.impf.pass.3.pl | venderentur | sie (Pl.) verkauft würden |  |
+| vendere | konj.perf.akt.3.sg | vendiderit | er/sie/es verkauft hat |  |
+| vendere | konj.perf.akt.3.pl | vendiderint | sie (Pl.) verkauft haben |  |
+| vendere | konj.perf.pass.3.sg | venditus sit | er/sie/es verkauft worden ist |  |
+| vendere | konj.perf.pass.3.pl | venditī sint | sie (Pl.) verkauft worden sind |  |
+| vendere | konj.plusq.akt.3.sg | vendidisset | er/sie/es verkauft hätte |  |
+| vendere | konj.plusq.akt.3.pl | vendidissent | sie (Pl.) verkauft hätten |  |
+| vendere | konj.plusq.pass.3.sg | venditus esset | er/sie/es verkauft worden wäre |  |
+| vendere | konj.plusq.pass.3.pl | venditī essent | sie (Pl.) verkauft worden wären |  |
+| dēserere | ind.praes.akt.3.sg | dēserit | er/sie/es verlässt |  |
+| dēserere | ind.praes.akt.3.pl | dēserunt | sie (Pl.) verlassen |  |
+| dēserere | ind.praes.pass.3.sg | dēseritur | er/sie/es wird verlassen |  |
+| dēserere | ind.praes.pass.3.pl | dēseruntur | sie (Pl.) werden verlassen |  |
+| dēserere | ind.impf.akt.3.sg | dēserēbat | er/sie/es verließ |  |
+| dēserere | ind.impf.akt.3.pl | dēserēbant | sie (Pl.) verließen |  |
+| dēserere | ind.impf.pass.3.sg | dēserēbātur | er/sie/es wurde verlassen |  |
+| dēserere | ind.impf.pass.3.pl | dēserēbantur | sie (Pl.) wurden verlassen |  |
+| dēserere | ind.fut.akt.3.sg | dēseret | er/sie/es wird verlassen |  |
+| dēserere | ind.fut.akt.3.pl | dēserent | sie (Pl.) werden verlassen |  |
+| dēserere | ind.fut.pass.3.sg | dēserētur | er/sie/es wird verlassen werden |  |
+| dēserere | ind.fut.pass.3.pl | dēserentur | sie (Pl.) werden verlassen werden |  |
+| dēserere | ind.perf.akt.3.sg | dēseruit | er/sie/es hat verlassen | er/sie/es verließ |
+| dēserere | ind.perf.akt.3.pl | dēseruērunt | sie (Pl.) haben verlassen | sie (Pl.) verließen |
+| dēserere | ind.perf.pass.3.sg | dēsertus est | er/sie/es ist verlassen worden |  |
+| dēserere | ind.perf.pass.3.pl | dēsertī sunt | sie (Pl.) sind verlassen worden |  |
+| dēserere | ind.plusq.akt.3.sg | dēseruerat | er/sie/es hatte verlassen |  |
+| dēserere | ind.plusq.akt.3.pl | dēseruerant | sie (Pl.) hatten verlassen |  |
+| dēserere | ind.plusq.pass.3.sg | dēsertus erat | er/sie/es war verlassen worden |  |
+| dēserere | ind.plusq.pass.3.pl | dēsertī erant | sie (Pl.) waren verlassen worden |  |
+| dēserere | ind.fut2.akt.3.sg | dēseruerit | er/sie/es wird verlassen haben |  |
+| dēserere | ind.fut2.akt.3.pl | dēseruerint | sie (Pl.) werden verlassen haben |  |
+| dēserere | ind.fut2.pass.3.sg | dēsertus erit | er/sie/es wird verlassen worden sein |  |
+| dēserere | ind.fut2.pass.3.pl | dēsertī erunt | sie (Pl.) werden verlassen worden sein |  |
+| dēserere | konj.praes.akt.3.sg | dēserat | er/sie/es verlässt |  |
+| dēserere | konj.praes.akt.3.pl | dēserant | sie (Pl.) verlassen |  |
+| dēserere | konj.praes.pass.3.sg | dēserātur | er/sie/es verlassen wird |  |
+| dēserere | konj.praes.pass.3.pl | dēserantur | sie (Pl.) verlassen werden |  |
+| dēserere | konj.impf.akt.3.sg | dēsereret | er/sie/es verlassen würde |  |
+| dēserere | konj.impf.akt.3.pl | dēsererent | sie (Pl.) verlassen würden |  |
+| dēserere | konj.impf.pass.3.sg | dēsererētur | er/sie/es verlassen würde |  |
+| dēserere | konj.impf.pass.3.pl | dēsererentur | sie (Pl.) verlassen würden |  |
+| dēserere | konj.perf.akt.3.sg | dēseruerit | er/sie/es verlassen hat |  |
+| dēserere | konj.perf.akt.3.pl | dēseruerint | sie (Pl.) verlassen haben |  |
+| dēserere | konj.perf.pass.3.sg | dēsertus sit | er/sie/es verlassen worden ist |  |
+| dēserere | konj.perf.pass.3.pl | dēsertī sint | sie (Pl.) verlassen worden sind |  |
+| dēserere | konj.plusq.akt.3.sg | dēseruisset | er/sie/es verlassen hätte |  |
+| dēserere | konj.plusq.akt.3.pl | dēseruissent | sie (Pl.) verlassen hätten |  |
+| dēserere | konj.plusq.pass.3.sg | dēsertus esset | er/sie/es verlassen worden wäre |  |
+| dēserere | konj.plusq.pass.3.pl | dēsertī essent | sie (Pl.) verlassen worden wären |  |
+| aperīre | ind.praes.akt.3.sg | aperit | er/sie/es öffnet |  |
+| aperīre | ind.praes.akt.3.pl | aperiunt | sie (Pl.) öffnen |  |
+| aperīre | ind.praes.pass.3.sg | aperītur | er/sie/es wird geöffnet |  |
+| aperīre | ind.praes.pass.3.pl | aperiuntur | sie (Pl.) werden geöffnet |  |
+| aperīre | ind.impf.akt.3.sg | aperiēbat | er/sie/es öffnete |  |
+| aperīre | ind.impf.akt.3.pl | aperiēbant | sie (Pl.) öffneten |  |
+| aperīre | ind.impf.pass.3.sg | aperiēbātur | er/sie/es wurde geöffnet |  |
+| aperīre | ind.impf.pass.3.pl | aperiēbantur | sie (Pl.) wurden geöffnet |  |
+| aperīre | ind.fut.akt.3.sg | aperiet | er/sie/es wird öffnen |  |
+| aperīre | ind.fut.akt.3.pl | aperient | sie (Pl.) werden öffnen |  |
+| aperīre | ind.fut.pass.3.sg | aperiētur | er/sie/es wird geöffnet werden |  |
+| aperīre | ind.fut.pass.3.pl | aperientur | sie (Pl.) werden geöffnet werden |  |
+| aperīre | ind.perf.akt.3.sg | aperuit | er/sie/es hat geöffnet | er/sie/es öffnete |
+| aperīre | ind.perf.akt.3.pl | aperuērunt | sie (Pl.) haben geöffnet | sie (Pl.) öffneten |
+| aperīre | ind.perf.pass.3.sg | apertus est | er/sie/es ist geöffnet worden |  |
+| aperīre | ind.perf.pass.3.pl | apertī sunt | sie (Pl.) sind geöffnet worden |  |
+| aperīre | ind.plusq.akt.3.sg | aperuerat | er/sie/es hatte geöffnet |  |
+| aperīre | ind.plusq.akt.3.pl | aperuerant | sie (Pl.) hatten geöffnet |  |
+| aperīre | ind.plusq.pass.3.sg | apertus erat | er/sie/es war geöffnet worden |  |
+| aperīre | ind.plusq.pass.3.pl | apertī erant | sie (Pl.) waren geöffnet worden |  |
+| aperīre | ind.fut2.akt.3.sg | aperuerit | er/sie/es wird geöffnet haben |  |
+| aperīre | ind.fut2.akt.3.pl | aperuerint | sie (Pl.) werden geöffnet haben |  |
+| aperīre | ind.fut2.pass.3.sg | apertus erit | er/sie/es wird geöffnet worden sein |  |
+| aperīre | ind.fut2.pass.3.pl | apertī erunt | sie (Pl.) werden geöffnet worden sein |  |
+| aperīre | konj.praes.akt.3.sg | aperiat | er/sie/es öffnet |  |
+| aperīre | konj.praes.akt.3.pl | aperiant | sie (Pl.) öffnen |  |
+| aperīre | konj.praes.pass.3.sg | aperiātur | er/sie/es geöffnet wird |  |
+| aperīre | konj.praes.pass.3.pl | aperiantur | sie (Pl.) geöffnet werden |  |
+| aperīre | konj.impf.akt.3.sg | aperīret | er/sie/es öffnen würde |  |
+| aperīre | konj.impf.akt.3.pl | aperīrent | sie (Pl.) öffnen würden |  |
+| aperīre | konj.impf.pass.3.sg | aperīrētur | er/sie/es geöffnet würde |  |
+| aperīre | konj.impf.pass.3.pl | aperīrentur | sie (Pl.) geöffnet würden |  |
+| aperīre | konj.perf.akt.3.sg | aperuerit | er/sie/es geöffnet hat |  |
+| aperīre | konj.perf.akt.3.pl | aperuerint | sie (Pl.) geöffnet haben |  |
+| aperīre | konj.perf.pass.3.sg | apertus sit | er/sie/es geöffnet worden ist |  |
+| aperīre | konj.perf.pass.3.pl | apertī sint | sie (Pl.) geöffnet worden sind |  |
+| aperīre | konj.plusq.akt.3.sg | aperuisset | er/sie/es geöffnet hätte |  |
+| aperīre | konj.plusq.akt.3.pl | aperuissent | sie (Pl.) geöffnet hätten |  |
+| aperīre | konj.plusq.pass.3.sg | apertus esset | er/sie/es geöffnet worden wäre |  |
+| aperīre | konj.plusq.pass.3.pl | apertī essent | sie (Pl.) geöffnet worden wären |  |
+| animadvertere | ind.praes.akt.3.sg | animadvertit | er/sie/es nimmt wahr |  |
+| animadvertere | ind.praes.akt.3.pl | animadvertunt | sie (Pl.) nehmen wahr |  |
+| animadvertere | ind.praes.pass.3.sg | animadvertitur | er/sie/es wird wahrgenommen |  |
+| animadvertere | ind.praes.pass.3.pl | animadvertuntur | sie (Pl.) werden wahrgenommen |  |
+| animadvertere | ind.impf.akt.3.sg | animadvertēbat | er/sie/es nahm wahr |  |
+| animadvertere | ind.impf.akt.3.pl | animadvertēbant | sie (Pl.) nahmen wahr |  |
+| animadvertere | ind.impf.pass.3.sg | animadvertēbātur | er/sie/es wurde wahrgenommen |  |
+| animadvertere | ind.impf.pass.3.pl | animadvertēbantur | sie (Pl.) wurden wahrgenommen |  |
+| animadvertere | ind.fut.akt.3.sg | animadvertet | er/sie/es wird wahrnehmen |  |
+| animadvertere | ind.fut.akt.3.pl | animadvertent | sie (Pl.) werden wahrnehmen |  |
+| animadvertere | ind.fut.pass.3.sg | animadvertētur | er/sie/es wird wahrgenommen werden |  |
+| animadvertere | ind.fut.pass.3.pl | animadvertentur | sie (Pl.) werden wahrgenommen werden |  |
+| animadvertere | ind.perf.akt.3.sg | animadvertit | er/sie/es hat wahrgenommen | er/sie/es nahm wahr |
+| animadvertere | ind.perf.akt.3.pl | animadvertērunt | sie (Pl.) haben wahrgenommen | sie (Pl.) nahmen wahr |
+| animadvertere | ind.perf.pass.3.sg | animadversus est | er/sie/es ist wahrgenommen worden |  |
+| animadvertere | ind.perf.pass.3.pl | animadversī sunt | sie (Pl.) sind wahrgenommen worden |  |
+| animadvertere | ind.plusq.akt.3.sg | animadverterat | er/sie/es hatte wahrgenommen |  |
+| animadvertere | ind.plusq.akt.3.pl | animadverterant | sie (Pl.) hatten wahrgenommen |  |
+| animadvertere | ind.plusq.pass.3.sg | animadversus erat | er/sie/es war wahrgenommen worden |  |
+| animadvertere | ind.plusq.pass.3.pl | animadversī erant | sie (Pl.) waren wahrgenommen worden |  |
+| animadvertere | ind.fut2.akt.3.sg | animadverterit | er/sie/es wird wahrgenommen haben |  |
+| animadvertere | ind.fut2.akt.3.pl | animadverterint | sie (Pl.) werden wahrgenommen haben |  |
+| animadvertere | ind.fut2.pass.3.sg | animadversus erit | er/sie/es wird wahrgenommen worden sein |  |
+| animadvertere | ind.fut2.pass.3.pl | animadversī erunt | sie (Pl.) werden wahrgenommen worden sein |  |
+| animadvertere | konj.praes.akt.3.sg | animadvertat | er/sie/es wahrnimmt |  |
+| animadvertere | konj.praes.akt.3.pl | animadvertant | sie (Pl.) wahrnehmen |  |
+| animadvertere | konj.praes.pass.3.sg | animadvertātur | er/sie/es wahrgenommen wird |  |
+| animadvertere | konj.praes.pass.3.pl | animadvertantur | sie (Pl.) wahrgenommen werden |  |
+| animadvertere | konj.impf.akt.3.sg | animadverteret | er/sie/es wahrnehmen würde |  |
+| animadvertere | konj.impf.akt.3.pl | animadverterent | sie (Pl.) wahrnehmen würden |  |
+| animadvertere | konj.impf.pass.3.sg | animadverterētur | er/sie/es wahrgenommen würde |  |
+| animadvertere | konj.impf.pass.3.pl | animadverterentur | sie (Pl.) wahrgenommen würden |  |
+| animadvertere | konj.perf.akt.3.sg | animadverterit | er/sie/es wahrgenommen hat |  |
+| animadvertere | konj.perf.akt.3.pl | animadverterint | sie (Pl.) wahrgenommen haben |  |
+| animadvertere | konj.perf.pass.3.sg | animadversus sit | er/sie/es wahrgenommen worden ist |  |
+| animadvertere | konj.perf.pass.3.pl | animadversī sint | sie (Pl.) wahrgenommen worden sind |  |
+| animadvertere | konj.plusq.akt.3.sg | animadvertisset | er/sie/es wahrgenommen hätte |  |
+| animadvertere | konj.plusq.akt.3.pl | animadvertissent | sie (Pl.) wahrgenommen hätten |  |
+| animadvertere | konj.plusq.pass.3.sg | animadversus esset | er/sie/es wahrgenommen worden wäre |  |
+| animadvertere | konj.plusq.pass.3.pl | animadversī essent | sie (Pl.) wahrgenommen worden wären |  |
+| adhibēre | ind.praes.akt.3.sg | adhibet | er/sie/es zieht hinzu |  |
+| adhibēre | ind.praes.akt.3.pl | adhibent | sie (Pl.) ziehen hinzu |  |
+| adhibēre | ind.praes.pass.3.sg | adhibētur | er/sie/es wird hinzugezogen |  |
+| adhibēre | ind.praes.pass.3.pl | adhibentur | sie (Pl.) werden hinzugezogen |  |
+| adhibēre | ind.impf.akt.3.sg | adhibēbat | er/sie/es zog hinzu |  |
+| adhibēre | ind.impf.akt.3.pl | adhibēbant | sie (Pl.) zogen hinzu |  |
+| adhibēre | ind.impf.pass.3.sg | adhibēbātur | er/sie/es wurde hinzugezogen |  |
+| adhibēre | ind.impf.pass.3.pl | adhibēbantur | sie (Pl.) wurden hinzugezogen |  |
+| adhibēre | ind.fut.akt.3.sg | adhibēbit | er/sie/es wird hinzuziehen |  |
+| adhibēre | ind.fut.akt.3.pl | adhibēbunt | sie (Pl.) werden hinzuziehen |  |
+| adhibēre | ind.fut.pass.3.sg | adhibēbitur | er/sie/es wird hinzugezogen werden |  |
+| adhibēre | ind.fut.pass.3.pl | adhibēbuntur | sie (Pl.) werden hinzugezogen werden |  |
+| adhibēre | ind.perf.akt.3.sg | adhibuit | er/sie/es hat hinzugezogen | er/sie/es zog hinzu |
+| adhibēre | ind.perf.akt.3.pl | adhibuērunt | sie (Pl.) haben hinzugezogen | sie (Pl.) zogen hinzu |
+| adhibēre | ind.perf.pass.3.sg | adhibitus est | er/sie/es ist hinzugezogen worden |  |
+| adhibēre | ind.perf.pass.3.pl | adhibitī sunt | sie (Pl.) sind hinzugezogen worden |  |
+| adhibēre | ind.plusq.akt.3.sg | adhibuerat | er/sie/es hatte hinzugezogen |  |
+| adhibēre | ind.plusq.akt.3.pl | adhibuerant | sie (Pl.) hatten hinzugezogen |  |
+| adhibēre | ind.plusq.pass.3.sg | adhibitus erat | er/sie/es war hinzugezogen worden |  |
+| adhibēre | ind.plusq.pass.3.pl | adhibitī erant | sie (Pl.) waren hinzugezogen worden |  |
+| adhibēre | ind.fut2.akt.3.sg | adhibuerit | er/sie/es wird hinzugezogen haben |  |
+| adhibēre | ind.fut2.akt.3.pl | adhibuerint | sie (Pl.) werden hinzugezogen haben |  |
+| adhibēre | ind.fut2.pass.3.sg | adhibitus erit | er/sie/es wird hinzugezogen worden sein |  |
+| adhibēre | ind.fut2.pass.3.pl | adhibitī erunt | sie (Pl.) werden hinzugezogen worden sein |  |
+| adhibēre | konj.praes.akt.3.sg | adhibeat | er/sie/es hinzuzieht |  |
+| adhibēre | konj.praes.akt.3.pl | adhibeant | sie (Pl.) hinzuziehen |  |
+| adhibēre | konj.praes.pass.3.sg | adhibeātur | er/sie/es hinzugezogen wird |  |
+| adhibēre | konj.praes.pass.3.pl | adhibeantur | sie (Pl.) hinzugezogen werden |  |
+| adhibēre | konj.impf.akt.3.sg | adhibēret | er/sie/es hinzuziehen würde |  |
+| adhibēre | konj.impf.akt.3.pl | adhibērent | sie (Pl.) hinzuziehen würden |  |
+| adhibēre | konj.impf.pass.3.sg | adhibērētur | er/sie/es hinzugezogen würde |  |
+| adhibēre | konj.impf.pass.3.pl | adhibērentur | sie (Pl.) hinzugezogen würden |  |
+| adhibēre | konj.perf.akt.3.sg | adhibuerit | er/sie/es hinzugezogen hat |  |
+| adhibēre | konj.perf.akt.3.pl | adhibuerint | sie (Pl.) hinzugezogen haben |  |
+| adhibēre | konj.perf.pass.3.sg | adhibitus sit | er/sie/es hinzugezogen worden ist |  |
+| adhibēre | konj.perf.pass.3.pl | adhibitī sint | sie (Pl.) hinzugezogen worden sind |  |
+| adhibēre | konj.plusq.akt.3.sg | adhibuisset | er/sie/es hinzugezogen hätte |  |
+| adhibēre | konj.plusq.akt.3.pl | adhibuissent | sie (Pl.) hinzugezogen hätten |  |
+| adhibēre | konj.plusq.pass.3.sg | adhibitus esset | er/sie/es hinzugezogen worden wäre |  |
+| adhibēre | konj.plusq.pass.3.pl | adhibitī essent | sie (Pl.) hinzugezogen worden wären |  |
+| inīre | ind.praes.akt.3.sg | init | er/sie/es geht hinein |  |
+| inīre | ind.praes.akt.3.pl | ineunt | sie (Pl.) gehen hinein |  |
+| inīre | ind.impf.akt.3.sg | inībat | er/sie/es ging hinein |  |
+| inīre | ind.impf.akt.3.pl | inībant | sie (Pl.) gingen hinein |  |
+| inīre | ind.fut.akt.3.sg | inībit | er/sie/es wird hineingehen |  |
+| inīre | ind.fut.akt.3.pl | inībunt | sie (Pl.) werden hineingehen |  |
+| inīre | ind.perf.akt.3.sg | iniit | er/sie/es ist hineingegangen | er/sie/es ging hinein |
+| inīre | ind.perf.akt.3.pl | iniērunt | sie (Pl.) sind hineingegangen | sie (Pl.) gingen hinein |
+| inīre | ind.perf.pass.3.sg | initus est | — |  |
+| inīre | ind.perf.pass.3.pl | initī sunt | — |  |
+| inīre | ind.plusq.akt.3.sg | inierat | er/sie/es war hineingegangen |  |
+| inīre | ind.plusq.akt.3.pl | inierant | sie (Pl.) waren hineingegangen |  |
+| inīre | ind.plusq.pass.3.sg | initus erat | — |  |
+| inīre | ind.plusq.pass.3.pl | initī erant | — |  |
+| inīre | ind.fut2.akt.3.sg | inierit | er/sie/es wird hineingegangen sein |  |
+| inīre | ind.fut2.akt.3.pl | inierint | sie (Pl.) werden hineingegangen sein |  |
+| inīre | ind.fut2.pass.3.sg | initus erit | — |  |
+| inīre | ind.fut2.pass.3.pl | initī erunt | — |  |
+| inīre | konj.praes.akt.3.sg | ineat | er/sie/es hineingeht |  |
+| inīre | konj.praes.akt.3.pl | ineant | sie (Pl.) hineingehen |  |
+| inīre | konj.impf.akt.3.sg | inīret | er/sie/es hineingehen würde |  |
+| inīre | konj.impf.akt.3.pl | inīrent | sie (Pl.) hineingehen würden |  |
+| inīre | konj.perf.akt.3.sg | inierit | er/sie/es hineingegangen ist |  |
+| inīre | konj.perf.akt.3.pl | inierint | sie (Pl.) hineingegangen sind |  |
+| inīre | konj.perf.pass.3.sg | initus sit | — |  |
+| inīre | konj.perf.pass.3.pl | initī sint | — |  |
+| inīre | konj.plusq.akt.3.sg | inīsset | er/sie/es hineingegangen wäre |  |
+| inīre | konj.plusq.akt.3.pl | inīssent | sie (Pl.) hineingegangen wären |  |
+| inīre | konj.plusq.pass.3.sg | initus esset | — |  |
+| inīre | konj.plusq.pass.3.pl | initī essent | — |  |
 | cavēre | ind.praes.akt.3.sg | cavet | er/sie/es nimmt sich in Acht |  |
 | cavēre | ind.praes.akt.3.pl | cavent | sie (Pl.) nehmen sich in Acht |  |
 | cavēre | ind.praes.pass.3.sg | cavētur | — |  |
@@ -5250,6 +6080,941 @@
 | cavēre | konj.plusq.akt.3.pl | cāvissent | sie (Pl.) sich in Acht genommen hätten |  |
 | cavēre | konj.plusq.pass.3.sg | cautus esset | — |  |
 | cavēre | konj.plusq.pass.3.pl | cautī essent | — |  |
+| praeesse | ind.praes.akt.3.sg | praeest | er/sie/es steht an der Spitze |  |
+| praeesse | ind.praes.akt.3.pl | praesunt | sie (Pl.) stehen an der Spitze |  |
+| praeesse | ind.impf.akt.3.sg | praeerat | er/sie/es stand an der Spitze |  |
+| praeesse | ind.impf.akt.3.pl | praeerant | sie (Pl.) standen an der Spitze |  |
+| praeesse | ind.fut.akt.3.sg | praeerit | er/sie/es wird an der Spitze stehen |  |
+| praeesse | ind.fut.akt.3.pl | praeerunt | sie (Pl.) werden an der Spitze stehen |  |
+| praeesse | ind.perf.akt.3.sg | praefuit | er/sie/es hat an der Spitze gestanden | er/sie/es stand an der Spitze |
+| praeesse | ind.perf.akt.3.pl | praefuērunt | sie (Pl.) haben an der Spitze gestanden | sie (Pl.) standen an der Spitze |
+| praeesse | ind.plusq.akt.3.sg | praefuerat | er/sie/es hatte an der Spitze gestanden |  |
+| praeesse | ind.plusq.akt.3.pl | praefuerant | sie (Pl.) hatten an der Spitze gestanden |  |
+| praeesse | ind.fut2.akt.3.sg | praefuerit | er/sie/es wird an der Spitze gestanden haben |  |
+| praeesse | ind.fut2.akt.3.pl | praefuerint | sie (Pl.) werden an der Spitze gestanden haben |  |
+| praeesse | konj.praes.akt.3.sg | praesit | er/sie/es an der Spitze steht |  |
+| praeesse | konj.praes.akt.3.pl | praesint | sie (Pl.) an der Spitze stehen |  |
+| praeesse | konj.impf.akt.3.sg | praeesset | er/sie/es an der Spitze stehen würde |  |
+| praeesse | konj.impf.akt.3.pl | praeessent | sie (Pl.) an der Spitze stehen würden |  |
+| praeesse | konj.perf.akt.3.sg | praefuerit | er/sie/es an der Spitze gestanden hat |  |
+| praeesse | konj.perf.akt.3.pl | praefuerint | sie (Pl.) an der Spitze gestanden haben |  |
+| praeesse | konj.plusq.akt.3.sg | praefuisset | er/sie/es an der Spitze gestanden hätte |  |
+| praeesse | konj.plusq.akt.3.pl | praefuissent | sie (Pl.) an der Spitze gestanden hätten |  |
+| stāre | ind.praes.akt.3.sg | stat | er/sie/es steht |  |
+| stāre | ind.praes.akt.3.pl | stant | sie (Pl.) stehen |  |
+| stāre | ind.praes.pass.3.sg | stātur | — |  |
+| stāre | ind.impf.akt.3.sg | stābat | er/sie/es stand |  |
+| stāre | ind.impf.akt.3.pl | stābant | sie (Pl.) standen |  |
+| stāre | ind.impf.pass.3.sg | stābātur | — |  |
+| stāre | ind.fut.akt.3.sg | stābit | er/sie/es wird stehen |  |
+| stāre | ind.fut.akt.3.pl | stābunt | sie (Pl.) werden stehen |  |
+| stāre | ind.fut.pass.3.sg | stābitur | — |  |
+| stāre | ind.perf.akt.3.sg | stetit | er/sie/es hat gestanden | er/sie/es stand |
+| stāre | ind.perf.akt.3.pl | stetērunt | sie (Pl.) haben gestanden | sie (Pl.) standen |
+| stāre | ind.perf.pass.3.sg | statum est | — |  |
+| stāre | ind.plusq.akt.3.sg | steterat | er/sie/es hatte gestanden |  |
+| stāre | ind.plusq.akt.3.pl | steterant | sie (Pl.) hatten gestanden |  |
+| stāre | ind.plusq.pass.3.sg | statum erat | — |  |
+| stāre | ind.fut2.akt.3.sg | steterit | er/sie/es wird gestanden haben |  |
+| stāre | ind.fut2.akt.3.pl | steterint | sie (Pl.) werden gestanden haben |  |
+| stāre | ind.fut2.pass.3.sg | statum erit | — |  |
+| stāre | konj.praes.akt.3.sg | stet | er/sie/es steht |  |
+| stāre | konj.praes.akt.3.pl | stent | sie (Pl.) stehen |  |
+| stāre | konj.praes.pass.3.sg | stētur | — |  |
+| stāre | konj.impf.akt.3.sg | stāret | er/sie/es stehen würde |  |
+| stāre | konj.impf.akt.3.pl | stārent | sie (Pl.) stehen würden |  |
+| stāre | konj.impf.pass.3.sg | stārētur | — |  |
+| stāre | konj.perf.akt.3.sg | steterit | er/sie/es gestanden hat |  |
+| stāre | konj.perf.akt.3.pl | steterint | sie (Pl.) gestanden haben |  |
+| stāre | konj.perf.pass.3.sg | statum sit | — |  |
+| stāre | konj.plusq.akt.3.sg | stetisset | er/sie/es gestanden hätte |  |
+| stāre | konj.plusq.akt.3.pl | stetissent | sie (Pl.) gestanden hätten |  |
+| stāre | konj.plusq.pass.3.sg | statum esset | — |  |
+| studēre | ind.praes.akt.3.sg | studet | er/sie/es bemüht sich |  |
+| studēre | ind.praes.akt.3.pl | student | sie (Pl.) bemühen sich |  |
+| studēre | ind.praes.pass.3.sg | studētur | — |  |
+| studēre | ind.impf.akt.3.sg | studēbat | er/sie/es bemühte sich |  |
+| studēre | ind.impf.akt.3.pl | studēbant | sie (Pl.) bemühten sich |  |
+| studēre | ind.impf.pass.3.sg | studēbātur | — |  |
+| studēre | ind.fut.akt.3.sg | studēbit | er/sie/es wird sich bemühen |  |
+| studēre | ind.fut.akt.3.pl | studēbunt | sie (Pl.) werden sich bemühen |  |
+| studēre | ind.fut.pass.3.sg | studēbitur | — |  |
+| studēre | ind.perf.akt.3.sg | studuit | er/sie/es hat sich bemüht | er/sie/es bemühte sich |
+| studēre | ind.perf.akt.3.pl | studuērunt | sie (Pl.) haben sich bemüht | sie (Pl.) bemühten sich |
+| studēre | ind.plusq.akt.3.sg | studuerat | er/sie/es hatte sich bemüht |  |
+| studēre | ind.plusq.akt.3.pl | studuerant | sie (Pl.) hatten sich bemüht |  |
+| studēre | ind.fut2.akt.3.sg | studuerit | er/sie/es wird sich bemüht haben |  |
+| studēre | ind.fut2.akt.3.pl | studuerint | sie (Pl.) werden sich bemüht haben |  |
+| studēre | konj.praes.akt.3.sg | studeat | er/sie/es sich bemüht |  |
+| studēre | konj.praes.akt.3.pl | studeant | sie (Pl.) sich bemühen |  |
+| studēre | konj.praes.pass.3.sg | studeātur | — |  |
+| studēre | konj.impf.akt.3.sg | studēret | er/sie/es sich bemühen würde |  |
+| studēre | konj.impf.akt.3.pl | studērent | sie (Pl.) sich bemühen würden |  |
+| studēre | konj.impf.pass.3.sg | studērētur | — |  |
+| studēre | konj.perf.akt.3.sg | studuerit | er/sie/es sich bemüht hat |  |
+| studēre | konj.perf.akt.3.pl | studuerint | sie (Pl.) sich bemüht haben |  |
+| studēre | konj.plusq.akt.3.sg | studuisset | er/sie/es sich bemüht hätte |  |
+| studēre | konj.plusq.akt.3.pl | studuissent | sie (Pl.) sich bemüht hätten |  |
+| dēfendere | ind.praes.akt.3.sg | dēfendit | er/sie/es verteidigt |  |
+| dēfendere | ind.praes.akt.3.pl | dēfendunt | sie (Pl.) verteidigen |  |
+| dēfendere | ind.praes.pass.3.sg | dēfenditur | er/sie/es wird verteidigt |  |
+| dēfendere | ind.praes.pass.3.pl | dēfenduntur | sie (Pl.) werden verteidigt |  |
+| dēfendere | ind.impf.akt.3.sg | dēfendēbat | er/sie/es verteidigte |  |
+| dēfendere | ind.impf.akt.3.pl | dēfendēbant | sie (Pl.) verteidigten |  |
+| dēfendere | ind.impf.pass.3.sg | dēfendēbātur | er/sie/es wurde verteidigt |  |
+| dēfendere | ind.impf.pass.3.pl | dēfendēbantur | sie (Pl.) wurden verteidigt |  |
+| dēfendere | ind.fut.akt.3.sg | dēfendet | er/sie/es wird verteidigen |  |
+| dēfendere | ind.fut.akt.3.pl | dēfendent | sie (Pl.) werden verteidigen |  |
+| dēfendere | ind.fut.pass.3.sg | dēfendētur | er/sie/es wird verteidigt werden |  |
+| dēfendere | ind.fut.pass.3.pl | dēfendentur | sie (Pl.) werden verteidigt werden |  |
+| dēfendere | ind.perf.akt.3.sg | dēfendit | er/sie/es hat verteidigt | er/sie/es verteidigte |
+| dēfendere | ind.perf.akt.3.pl | dēfendērunt | sie (Pl.) haben verteidigt | sie (Pl.) verteidigten |
+| dēfendere | ind.perf.pass.3.sg | dēfēnsus est | er/sie/es ist verteidigt worden |  |
+| dēfendere | ind.perf.pass.3.pl | dēfēnsī sunt | sie (Pl.) sind verteidigt worden |  |
+| dēfendere | ind.plusq.akt.3.sg | dēfenderat | er/sie/es hatte verteidigt |  |
+| dēfendere | ind.plusq.akt.3.pl | dēfenderant | sie (Pl.) hatten verteidigt |  |
+| dēfendere | ind.plusq.pass.3.sg | dēfēnsus erat | er/sie/es war verteidigt worden |  |
+| dēfendere | ind.plusq.pass.3.pl | dēfēnsī erant | sie (Pl.) waren verteidigt worden |  |
+| dēfendere | ind.fut2.akt.3.sg | dēfenderit | er/sie/es wird verteidigt haben |  |
+| dēfendere | ind.fut2.akt.3.pl | dēfenderint | sie (Pl.) werden verteidigt haben |  |
+| dēfendere | ind.fut2.pass.3.sg | dēfēnsus erit | er/sie/es wird verteidigt worden sein |  |
+| dēfendere | ind.fut2.pass.3.pl | dēfēnsī erunt | sie (Pl.) werden verteidigt worden sein |  |
+| dēfendere | konj.praes.akt.3.sg | dēfendat | er/sie/es verteidigt |  |
+| dēfendere | konj.praes.akt.3.pl | dēfendant | sie (Pl.) verteidigen |  |
+| dēfendere | konj.praes.pass.3.sg | dēfendātur | er/sie/es verteidigt wird |  |
+| dēfendere | konj.praes.pass.3.pl | dēfendantur | sie (Pl.) verteidigt werden |  |
+| dēfendere | konj.impf.akt.3.sg | dēfenderet | er/sie/es verteidigen würde |  |
+| dēfendere | konj.impf.akt.3.pl | dēfenderent | sie (Pl.) verteidigen würden |  |
+| dēfendere | konj.impf.pass.3.sg | dēfenderētur | er/sie/es verteidigt würde |  |
+| dēfendere | konj.impf.pass.3.pl | dēfenderentur | sie (Pl.) verteidigt würden |  |
+| dēfendere | konj.perf.akt.3.sg | dēfenderit | er/sie/es verteidigt hat |  |
+| dēfendere | konj.perf.akt.3.pl | dēfenderint | sie (Pl.) verteidigt haben |  |
+| dēfendere | konj.perf.pass.3.sg | dēfēnsus sit | er/sie/es verteidigt worden ist |  |
+| dēfendere | konj.perf.pass.3.pl | dēfēnsī sint | sie (Pl.) verteidigt worden sind |  |
+| dēfendere | konj.plusq.akt.3.sg | dēfendisset | er/sie/es verteidigt hätte |  |
+| dēfendere | konj.plusq.akt.3.pl | dēfendissent | sie (Pl.) verteidigt hätten |  |
+| dēfendere | konj.plusq.pass.3.sg | dēfēnsus esset | er/sie/es verteidigt worden wäre |  |
+| dēfendere | konj.plusq.pass.3.pl | dēfēnsī essent | sie (Pl.) verteidigt worden wären |  |
+| perspicere | ind.praes.akt.3.sg | perspicit | er/sie/es betrachtet genau |  |
+| perspicere | ind.praes.akt.3.pl | perspiciunt | sie (Pl.) betrachten genau |  |
+| perspicere | ind.praes.pass.3.sg | perspicitur | er/sie/es wird genau betrachtet |  |
+| perspicere | ind.praes.pass.3.pl | perspiciuntur | sie (Pl.) werden genau betrachtet |  |
+| perspicere | ind.impf.akt.3.sg | perspiciēbat | er/sie/es betrachtete genau |  |
+| perspicere | ind.impf.akt.3.pl | perspiciēbant | sie (Pl.) betrachteten genau |  |
+| perspicere | ind.impf.pass.3.sg | perspiciēbātur | er/sie/es wurde genau betrachtet |  |
+| perspicere | ind.impf.pass.3.pl | perspiciēbantur | sie (Pl.) wurden genau betrachtet |  |
+| perspicere | ind.fut.akt.3.sg | perspiciet | er/sie/es wird genau betrachten |  |
+| perspicere | ind.fut.akt.3.pl | perspicient | sie (Pl.) werden genau betrachten |  |
+| perspicere | ind.fut.pass.3.sg | perspiciētur | er/sie/es wird genau betrachtet werden |  |
+| perspicere | ind.fut.pass.3.pl | perspicientur | sie (Pl.) werden genau betrachtet werden |  |
+| perspicere | ind.perf.akt.3.sg | perspexit | er/sie/es hat genau betrachtet | er/sie/es betrachtete genau |
+| perspicere | ind.perf.akt.3.pl | perspexērunt | sie (Pl.) haben genau betrachtet | sie (Pl.) betrachteten genau |
+| perspicere | ind.perf.pass.3.sg | perspectus est | er/sie/es ist genau betrachtet worden |  |
+| perspicere | ind.perf.pass.3.pl | perspectī sunt | sie (Pl.) sind genau betrachtet worden |  |
+| perspicere | ind.plusq.akt.3.sg | perspexerat | er/sie/es hatte genau betrachtet |  |
+| perspicere | ind.plusq.akt.3.pl | perspexerant | sie (Pl.) hatten genau betrachtet |  |
+| perspicere | ind.plusq.pass.3.sg | perspectus erat | er/sie/es war genau betrachtet worden |  |
+| perspicere | ind.plusq.pass.3.pl | perspectī erant | sie (Pl.) waren genau betrachtet worden |  |
+| perspicere | ind.fut2.akt.3.sg | perspexerit | er/sie/es wird genau betrachtet haben |  |
+| perspicere | ind.fut2.akt.3.pl | perspexerint | sie (Pl.) werden genau betrachtet haben |  |
+| perspicere | ind.fut2.pass.3.sg | perspectus erit | er/sie/es wird genau betrachtet worden sein |  |
+| perspicere | ind.fut2.pass.3.pl | perspectī erunt | sie (Pl.) werden genau betrachtet worden sein |  |
+| perspicere | konj.praes.akt.3.sg | perspiciat | er/sie/es genau betrachtet |  |
+| perspicere | konj.praes.akt.3.pl | perspiciant | sie (Pl.) genau betrachten |  |
+| perspicere | konj.praes.pass.3.sg | perspiciātur | er/sie/es genau betrachtet wird |  |
+| perspicere | konj.praes.pass.3.pl | perspiciantur | sie (Pl.) genau betrachtet werden |  |
+| perspicere | konj.impf.akt.3.sg | perspiceret | er/sie/es genau betrachten würde |  |
+| perspicere | konj.impf.akt.3.pl | perspicerent | sie (Pl.) genau betrachten würden |  |
+| perspicere | konj.impf.pass.3.sg | perspicerētur | er/sie/es genau betrachtet würde |  |
+| perspicere | konj.impf.pass.3.pl | perspicerentur | sie (Pl.) genau betrachtet würden |  |
+| perspicere | konj.perf.akt.3.sg | perspexerit | er/sie/es genau betrachtet hat |  |
+| perspicere | konj.perf.akt.3.pl | perspexerint | sie (Pl.) genau betrachtet haben |  |
+| perspicere | konj.perf.pass.3.sg | perspectus sit | er/sie/es genau betrachtet worden ist |  |
+| perspicere | konj.perf.pass.3.pl | perspectī sint | sie (Pl.) genau betrachtet worden sind |  |
+| perspicere | konj.plusq.akt.3.sg | perspexisset | er/sie/es genau betrachtet hätte |  |
+| perspicere | konj.plusq.akt.3.pl | perspexissent | sie (Pl.) genau betrachtet hätten |  |
+| perspicere | konj.plusq.pass.3.sg | perspectus esset | er/sie/es genau betrachtet worden wäre |  |
+| perspicere | konj.plusq.pass.3.pl | perspectī essent | sie (Pl.) genau betrachtet worden wären |  |
+| interrogāre | ind.praes.akt.3.sg | interrogat | er/sie/es fragt |  |
+| interrogāre | ind.praes.akt.3.pl | interrogant | sie (Pl.) fragen |  |
+| interrogāre | ind.praes.pass.3.sg | interrogātur | er/sie/es wird gefragt |  |
+| interrogāre | ind.praes.pass.3.pl | interrogantur | sie (Pl.) werden gefragt |  |
+| interrogāre | ind.impf.akt.3.sg | interrogābat | er/sie/es fragte |  |
+| interrogāre | ind.impf.akt.3.pl | interrogābant | sie (Pl.) fragten |  |
+| interrogāre | ind.impf.pass.3.sg | interrogābātur | er/sie/es wurde gefragt |  |
+| interrogāre | ind.impf.pass.3.pl | interrogābantur | sie (Pl.) wurden gefragt |  |
+| interrogāre | ind.fut.akt.3.sg | interrogābit | er/sie/es wird fragen |  |
+| interrogāre | ind.fut.akt.3.pl | interrogābunt | sie (Pl.) werden fragen |  |
+| interrogāre | ind.fut.pass.3.sg | interrogābitur | er/sie/es wird gefragt werden |  |
+| interrogāre | ind.fut.pass.3.pl | interrogābuntur | sie (Pl.) werden gefragt werden |  |
+| interrogāre | ind.perf.akt.3.sg | interrogāvit | er/sie/es hat gefragt | er/sie/es fragte |
+| interrogāre | ind.perf.akt.3.pl | interrogāvērunt | sie (Pl.) haben gefragt | sie (Pl.) fragten |
+| interrogāre | ind.perf.pass.3.sg | interrogātus est | er/sie/es ist gefragt worden |  |
+| interrogāre | ind.perf.pass.3.pl | interrogātī sunt | sie (Pl.) sind gefragt worden |  |
+| interrogāre | ind.plusq.akt.3.sg | interrogāverat | er/sie/es hatte gefragt |  |
+| interrogāre | ind.plusq.akt.3.pl | interrogāverant | sie (Pl.) hatten gefragt |  |
+| interrogāre | ind.plusq.pass.3.sg | interrogātus erat | er/sie/es war gefragt worden |  |
+| interrogāre | ind.plusq.pass.3.pl | interrogātī erant | sie (Pl.) waren gefragt worden |  |
+| interrogāre | ind.fut2.akt.3.sg | interrogāverit | er/sie/es wird gefragt haben |  |
+| interrogāre | ind.fut2.akt.3.pl | interrogāverint | sie (Pl.) werden gefragt haben |  |
+| interrogāre | ind.fut2.pass.3.sg | interrogātus erit | er/sie/es wird gefragt worden sein |  |
+| interrogāre | ind.fut2.pass.3.pl | interrogātī erunt | sie (Pl.) werden gefragt worden sein |  |
+| interrogāre | konj.praes.akt.3.sg | interroget | er/sie/es fragt |  |
+| interrogāre | konj.praes.akt.3.pl | interrogent | sie (Pl.) fragen |  |
+| interrogāre | konj.praes.pass.3.sg | interrogētur | er/sie/es gefragt wird |  |
+| interrogāre | konj.praes.pass.3.pl | interrogentur | sie (Pl.) gefragt werden |  |
+| interrogāre | konj.impf.akt.3.sg | interrogāret | er/sie/es fragen würde |  |
+| interrogāre | konj.impf.akt.3.pl | interrogārent | sie (Pl.) fragen würden |  |
+| interrogāre | konj.impf.pass.3.sg | interrogārētur | er/sie/es gefragt würde |  |
+| interrogāre | konj.impf.pass.3.pl | interrogārentur | sie (Pl.) gefragt würden |  |
+| interrogāre | konj.perf.akt.3.sg | interrogāverit | er/sie/es gefragt hat |  |
+| interrogāre | konj.perf.akt.3.pl | interrogāverint | sie (Pl.) gefragt haben |  |
+| interrogāre | konj.perf.pass.3.sg | interrogātus sit | er/sie/es gefragt worden ist |  |
+| interrogāre | konj.perf.pass.3.pl | interrogātī sint | sie (Pl.) gefragt worden sind |  |
+| interrogāre | konj.plusq.akt.3.sg | interrogāvisset | er/sie/es gefragt hätte |  |
+| interrogāre | konj.plusq.akt.3.pl | interrogāvissent | sie (Pl.) gefragt hätten |  |
+| interrogāre | konj.plusq.pass.3.sg | interrogātus esset | er/sie/es gefragt worden wäre |  |
+| interrogāre | konj.plusq.pass.3.pl | interrogātī essent | sie (Pl.) gefragt worden wären |  |
+| indicāre | ind.praes.akt.3.sg | indicat | er/sie/es zeigt an |  |
+| indicāre | ind.praes.akt.3.pl | indicant | sie (Pl.) zeigen an |  |
+| indicāre | ind.praes.pass.3.sg | indicātur | er/sie/es wird angezeigt |  |
+| indicāre | ind.praes.pass.3.pl | indicantur | sie (Pl.) werden angezeigt |  |
+| indicāre | ind.impf.akt.3.sg | indicābat | er/sie/es zeigte an |  |
+| indicāre | ind.impf.akt.3.pl | indicābant | sie (Pl.) zeigten an |  |
+| indicāre | ind.impf.pass.3.sg | indicābātur | er/sie/es wurde angezeigt |  |
+| indicāre | ind.impf.pass.3.pl | indicābantur | sie (Pl.) wurden angezeigt |  |
+| indicāre | ind.fut.akt.3.sg | indicābit | er/sie/es wird anzeigen |  |
+| indicāre | ind.fut.akt.3.pl | indicābunt | sie (Pl.) werden anzeigen |  |
+| indicāre | ind.fut.pass.3.sg | indicābitur | er/sie/es wird angezeigt werden |  |
+| indicāre | ind.fut.pass.3.pl | indicābuntur | sie (Pl.) werden angezeigt werden |  |
+| indicāre | ind.perf.akt.3.sg | indicāvit | er/sie/es hat angezeigt | er/sie/es zeigte an |
+| indicāre | ind.perf.akt.3.pl | indicāvērunt | sie (Pl.) haben angezeigt | sie (Pl.) zeigten an |
+| indicāre | ind.perf.pass.3.sg | indicātus est | er/sie/es ist angezeigt worden |  |
+| indicāre | ind.perf.pass.3.pl | indicātī sunt | sie (Pl.) sind angezeigt worden |  |
+| indicāre | ind.plusq.akt.3.sg | indicāverat | er/sie/es hatte angezeigt |  |
+| indicāre | ind.plusq.akt.3.pl | indicāverant | sie (Pl.) hatten angezeigt |  |
+| indicāre | ind.plusq.pass.3.sg | indicātus erat | er/sie/es war angezeigt worden |  |
+| indicāre | ind.plusq.pass.3.pl | indicātī erant | sie (Pl.) waren angezeigt worden |  |
+| indicāre | ind.fut2.akt.3.sg | indicāverit | er/sie/es wird angezeigt haben |  |
+| indicāre | ind.fut2.akt.3.pl | indicāverint | sie (Pl.) werden angezeigt haben |  |
+| indicāre | ind.fut2.pass.3.sg | indicātus erit | er/sie/es wird angezeigt worden sein |  |
+| indicāre | ind.fut2.pass.3.pl | indicātī erunt | sie (Pl.) werden angezeigt worden sein |  |
+| indicāre | konj.praes.akt.3.sg | indicet | er/sie/es anzeigt |  |
+| indicāre | konj.praes.akt.3.pl | indicent | sie (Pl.) anzeigen |  |
+| indicāre | konj.praes.pass.3.sg | indicētur | er/sie/es angezeigt wird |  |
+| indicāre | konj.praes.pass.3.pl | indicentur | sie (Pl.) angezeigt werden |  |
+| indicāre | konj.impf.akt.3.sg | indicāret | er/sie/es anzeigen würde |  |
+| indicāre | konj.impf.akt.3.pl | indicārent | sie (Pl.) anzeigen würden |  |
+| indicāre | konj.impf.pass.3.sg | indicārētur | er/sie/es angezeigt würde |  |
+| indicāre | konj.impf.pass.3.pl | indicārentur | sie (Pl.) angezeigt würden |  |
+| indicāre | konj.perf.akt.3.sg | indicāverit | er/sie/es angezeigt hat |  |
+| indicāre | konj.perf.akt.3.pl | indicāverint | sie (Pl.) angezeigt haben |  |
+| indicāre | konj.perf.pass.3.sg | indicātus sit | er/sie/es angezeigt worden ist |  |
+| indicāre | konj.perf.pass.3.pl | indicātī sint | sie (Pl.) angezeigt worden sind |  |
+| indicāre | konj.plusq.akt.3.sg | indicāvisset | er/sie/es angezeigt hätte |  |
+| indicāre | konj.plusq.akt.3.pl | indicāvissent | sie (Pl.) angezeigt hätten |  |
+| indicāre | konj.plusq.pass.3.sg | indicātus esset | er/sie/es angezeigt worden wäre |  |
+| indicāre | konj.plusq.pass.3.pl | indicātī essent | sie (Pl.) angezeigt worden wären |  |
+| occīdere | ind.praes.akt.3.sg | occīdit | er/sie/es schlägt nieder |  |
+| occīdere | ind.praes.akt.3.pl | occīdunt | sie (Pl.) schlagen nieder |  |
+| occīdere | ind.praes.pass.3.sg | occīditur | er/sie/es wird niedergeschlagen |  |
+| occīdere | ind.praes.pass.3.pl | occīduntur | sie (Pl.) werden niedergeschlagen |  |
+| occīdere | ind.impf.akt.3.sg | occīdēbat | er/sie/es schlug nieder |  |
+| occīdere | ind.impf.akt.3.pl | occīdēbant | sie (Pl.) schlugen nieder |  |
+| occīdere | ind.impf.pass.3.sg | occīdēbātur | er/sie/es wurde niedergeschlagen |  |
+| occīdere | ind.impf.pass.3.pl | occīdēbantur | sie (Pl.) wurden niedergeschlagen |  |
+| occīdere | ind.fut.akt.3.sg | occīdet | er/sie/es wird niederschlagen |  |
+| occīdere | ind.fut.akt.3.pl | occīdent | sie (Pl.) werden niederschlagen |  |
+| occīdere | ind.fut.pass.3.sg | occīdētur | er/sie/es wird niedergeschlagen werden |  |
+| occīdere | ind.fut.pass.3.pl | occīdentur | sie (Pl.) werden niedergeschlagen werden |  |
+| occīdere | ind.perf.akt.3.sg | occīdit | er/sie/es hat niedergeschlagen | er/sie/es schlug nieder |
+| occīdere | ind.perf.akt.3.pl | occīdērunt | sie (Pl.) haben niedergeschlagen | sie (Pl.) schlugen nieder |
+| occīdere | ind.perf.pass.3.sg | occīsus est | er/sie/es ist niedergeschlagen worden |  |
+| occīdere | ind.perf.pass.3.pl | occīsī sunt | sie (Pl.) sind niedergeschlagen worden |  |
+| occīdere | ind.plusq.akt.3.sg | occīderat | er/sie/es hatte niedergeschlagen |  |
+| occīdere | ind.plusq.akt.3.pl | occīderant | sie (Pl.) hatten niedergeschlagen |  |
+| occīdere | ind.plusq.pass.3.sg | occīsus erat | er/sie/es war niedergeschlagen worden |  |
+| occīdere | ind.plusq.pass.3.pl | occīsī erant | sie (Pl.) waren niedergeschlagen worden |  |
+| occīdere | ind.fut2.akt.3.sg | occīderit | er/sie/es wird niedergeschlagen haben |  |
+| occīdere | ind.fut2.akt.3.pl | occīderint | sie (Pl.) werden niedergeschlagen haben |  |
+| occīdere | ind.fut2.pass.3.sg | occīsus erit | er/sie/es wird niedergeschlagen worden sein |  |
+| occīdere | ind.fut2.pass.3.pl | occīsī erunt | sie (Pl.) werden niedergeschlagen worden sein |  |
+| occīdere | konj.praes.akt.3.sg | occīdat | er/sie/es niederschlägt |  |
+| occīdere | konj.praes.akt.3.pl | occīdant | sie (Pl.) niederschlagen |  |
+| occīdere | konj.praes.pass.3.sg | occīdātur | er/sie/es niedergeschlagen wird |  |
+| occīdere | konj.praes.pass.3.pl | occīdantur | sie (Pl.) niedergeschlagen werden |  |
+| occīdere | konj.impf.akt.3.sg | occīderet | er/sie/es niederschlagen würde |  |
+| occīdere | konj.impf.akt.3.pl | occīderent | sie (Pl.) niederschlagen würden |  |
+| occīdere | konj.impf.pass.3.sg | occīderētur | er/sie/es niedergeschlagen würde |  |
+| occīdere | konj.impf.pass.3.pl | occīderentur | sie (Pl.) niedergeschlagen würden |  |
+| occīdere | konj.perf.akt.3.sg | occīderit | er/sie/es niedergeschlagen hat |  |
+| occīdere | konj.perf.akt.3.pl | occīderint | sie (Pl.) niedergeschlagen haben |  |
+| occīdere | konj.perf.pass.3.sg | occīsus sit | er/sie/es niedergeschlagen worden ist |  |
+| occīdere | konj.perf.pass.3.pl | occīsī sint | sie (Pl.) niedergeschlagen worden sind |  |
+| occīdere | konj.plusq.akt.3.sg | occīdisset | er/sie/es niedergeschlagen hätte |  |
+| occīdere | konj.plusq.akt.3.pl | occīdissent | sie (Pl.) niedergeschlagen hätten |  |
+| occīdere | konj.plusq.pass.3.sg | occīsus esset | er/sie/es niedergeschlagen worden wäre |  |
+| occīdere | konj.plusq.pass.3.pl | occīsī essent | sie (Pl.) niedergeschlagen worden wären |  |
+| nūntiāre | ind.praes.akt.3.sg | nūntiat | er/sie/es meldet |  |
+| nūntiāre | ind.praes.akt.3.pl | nūntiant | sie (Pl.) melden |  |
+| nūntiāre | ind.praes.pass.3.sg | nūntiātur | er/sie/es wird gemeldet |  |
+| nūntiāre | ind.praes.pass.3.pl | nūntiantur | sie (Pl.) werden gemeldet |  |
+| nūntiāre | ind.impf.akt.3.sg | nūntiābat | er/sie/es meldete |  |
+| nūntiāre | ind.impf.akt.3.pl | nūntiābant | sie (Pl.) meldeten |  |
+| nūntiāre | ind.impf.pass.3.sg | nūntiābātur | er/sie/es wurde gemeldet |  |
+| nūntiāre | ind.impf.pass.3.pl | nūntiābantur | sie (Pl.) wurden gemeldet |  |
+| nūntiāre | ind.fut.akt.3.sg | nūntiābit | er/sie/es wird melden |  |
+| nūntiāre | ind.fut.akt.3.pl | nūntiābunt | sie (Pl.) werden melden |  |
+| nūntiāre | ind.fut.pass.3.sg | nūntiābitur | er/sie/es wird gemeldet werden |  |
+| nūntiāre | ind.fut.pass.3.pl | nūntiābuntur | sie (Pl.) werden gemeldet werden |  |
+| nūntiāre | ind.perf.akt.3.sg | nūntiāvit | er/sie/es hat gemeldet | er/sie/es meldete |
+| nūntiāre | ind.perf.akt.3.pl | nūntiāvērunt | sie (Pl.) haben gemeldet | sie (Pl.) meldeten |
+| nūntiāre | ind.perf.pass.3.sg | nūntiātus est | er/sie/es ist gemeldet worden |  |
+| nūntiāre | ind.perf.pass.3.pl | nūntiātī sunt | sie (Pl.) sind gemeldet worden |  |
+| nūntiāre | ind.plusq.akt.3.sg | nūntiāverat | er/sie/es hatte gemeldet |  |
+| nūntiāre | ind.plusq.akt.3.pl | nūntiāverant | sie (Pl.) hatten gemeldet |  |
+| nūntiāre | ind.plusq.pass.3.sg | nūntiātus erat | er/sie/es war gemeldet worden |  |
+| nūntiāre | ind.plusq.pass.3.pl | nūntiātī erant | sie (Pl.) waren gemeldet worden |  |
+| nūntiāre | ind.fut2.akt.3.sg | nūntiāverit | er/sie/es wird gemeldet haben |  |
+| nūntiāre | ind.fut2.akt.3.pl | nūntiāverint | sie (Pl.) werden gemeldet haben |  |
+| nūntiāre | ind.fut2.pass.3.sg | nūntiātus erit | er/sie/es wird gemeldet worden sein |  |
+| nūntiāre | ind.fut2.pass.3.pl | nūntiātī erunt | sie (Pl.) werden gemeldet worden sein |  |
+| nūntiāre | konj.praes.akt.3.sg | nūntiet | er/sie/es meldet |  |
+| nūntiāre | konj.praes.akt.3.pl | nūntient | sie (Pl.) melden |  |
+| nūntiāre | konj.praes.pass.3.sg | nūntiētur | er/sie/es gemeldet wird |  |
+| nūntiāre | konj.praes.pass.3.pl | nūntientur | sie (Pl.) gemeldet werden |  |
+| nūntiāre | konj.impf.akt.3.sg | nūntiāret | er/sie/es melden würde |  |
+| nūntiāre | konj.impf.akt.3.pl | nūntiārent | sie (Pl.) melden würden |  |
+| nūntiāre | konj.impf.pass.3.sg | nūntiārētur | er/sie/es gemeldet würde |  |
+| nūntiāre | konj.impf.pass.3.pl | nūntiārentur | sie (Pl.) gemeldet würden |  |
+| nūntiāre | konj.perf.akt.3.sg | nūntiāverit | er/sie/es gemeldet hat |  |
+| nūntiāre | konj.perf.akt.3.pl | nūntiāverint | sie (Pl.) gemeldet haben |  |
+| nūntiāre | konj.perf.pass.3.sg | nūntiātus sit | er/sie/es gemeldet worden ist |  |
+| nūntiāre | konj.perf.pass.3.pl | nūntiātī sint | sie (Pl.) gemeldet worden sind |  |
+| nūntiāre | konj.plusq.akt.3.sg | nūntiāvisset | er/sie/es gemeldet hätte |  |
+| nūntiāre | konj.plusq.akt.3.pl | nūntiāvissent | sie (Pl.) gemeldet hätten |  |
+| nūntiāre | konj.plusq.pass.3.sg | nūntiātus esset | er/sie/es gemeldet worden wäre |  |
+| nūntiāre | konj.plusq.pass.3.pl | nūntiātī essent | sie (Pl.) gemeldet worden wären |  |
+| afferre | ind.praes.akt.3.sg | affert | er/sie/es trägt herbei |  |
+| afferre | ind.praes.akt.3.pl | afferunt | sie (Pl.) tragen herbei |  |
+| afferre | ind.impf.akt.3.sg | afferēbat | er/sie/es trug herbei |  |
+| afferre | ind.impf.akt.3.pl | afferēbant | sie (Pl.) trugen herbei |  |
+| afferre | ind.fut.akt.3.sg | afferet | er/sie/es wird herbeitragen |  |
+| afferre | ind.fut.akt.3.pl | afferent | sie (Pl.) werden herbeitragen |  |
+| afferre | ind.perf.akt.3.sg | attulit | er/sie/es hat herbeigetragen | er/sie/es trug herbei |
+| afferre | ind.perf.akt.3.pl | attulērunt | sie (Pl.) haben herbeigetragen | sie (Pl.) trugen herbei |
+| afferre | ind.perf.pass.3.sg | allātus est | er/sie/es ist herbeigetragen worden |  |
+| afferre | ind.perf.pass.3.pl | allātī sunt | sie (Pl.) sind herbeigetragen worden |  |
+| afferre | ind.plusq.akt.3.sg | attulerat | er/sie/es hatte herbeigetragen |  |
+| afferre | ind.plusq.akt.3.pl | attulerant | sie (Pl.) hatten herbeigetragen |  |
+| afferre | ind.plusq.pass.3.sg | allātus erat | er/sie/es war herbeigetragen worden |  |
+| afferre | ind.plusq.pass.3.pl | allātī erant | sie (Pl.) waren herbeigetragen worden |  |
+| afferre | ind.fut2.akt.3.sg | attulerit | er/sie/es wird herbeigetragen haben |  |
+| afferre | ind.fut2.akt.3.pl | attulerint | sie (Pl.) werden herbeigetragen haben |  |
+| afferre | ind.fut2.pass.3.sg | allātus erit | er/sie/es wird herbeigetragen worden sein |  |
+| afferre | ind.fut2.pass.3.pl | allātī erunt | sie (Pl.) werden herbeigetragen worden sein |  |
+| afferre | konj.praes.akt.3.sg | afferat | er/sie/es herbeiträgt |  |
+| afferre | konj.praes.akt.3.pl | afferant | sie (Pl.) herbeitragen |  |
+| afferre | konj.impf.akt.3.sg | afferret | er/sie/es herbeitragen würde |  |
+| afferre | konj.impf.akt.3.pl | afferrent | sie (Pl.) herbeitragen würden |  |
+| afferre | konj.perf.akt.3.sg | attulerit | er/sie/es herbeigetragen hat |  |
+| afferre | konj.perf.akt.3.pl | attulerint | sie (Pl.) herbeigetragen haben |  |
+| afferre | konj.perf.pass.3.sg | allātus sit | er/sie/es herbeigetragen worden ist |  |
+| afferre | konj.perf.pass.3.pl | allātī sint | sie (Pl.) herbeigetragen worden sind |  |
+| afferre | konj.plusq.akt.3.sg | attulisset | er/sie/es herbeigetragen hätte |  |
+| afferre | konj.plusq.akt.3.pl | attulissent | sie (Pl.) herbeigetragen hätten |  |
+| afferre | konj.plusq.pass.3.sg | allātus esset | er/sie/es herbeigetragen worden wäre |  |
+| afferre | konj.plusq.pass.3.pl | allātī essent | sie (Pl.) herbeigetragen worden wären |  |
+| explōrāre | ind.praes.akt.3.sg | explōrat | er/sie/es erforscht |  |
+| explōrāre | ind.praes.akt.3.pl | explōrant | sie (Pl.) erforschen |  |
+| explōrāre | ind.praes.pass.3.sg | explōrātur | er/sie/es wird erforscht |  |
+| explōrāre | ind.praes.pass.3.pl | explōrantur | sie (Pl.) werden erforscht |  |
+| explōrāre | ind.impf.akt.3.sg | explōrābat | er/sie/es erforschte |  |
+| explōrāre | ind.impf.akt.3.pl | explōrābant | sie (Pl.) erforschten |  |
+| explōrāre | ind.impf.pass.3.sg | explōrābātur | er/sie/es wurde erforscht |  |
+| explōrāre | ind.impf.pass.3.pl | explōrābantur | sie (Pl.) wurden erforscht |  |
+| explōrāre | ind.fut.akt.3.sg | explōrābit | er/sie/es wird erforschen |  |
+| explōrāre | ind.fut.akt.3.pl | explōrābunt | sie (Pl.) werden erforschen |  |
+| explōrāre | ind.fut.pass.3.sg | explōrābitur | er/sie/es wird erforscht werden |  |
+| explōrāre | ind.fut.pass.3.pl | explōrābuntur | sie (Pl.) werden erforscht werden |  |
+| explōrāre | ind.perf.akt.3.sg | explōrāvit | er/sie/es hat erforscht | er/sie/es erforschte |
+| explōrāre | ind.perf.akt.3.pl | explōrāvērunt | sie (Pl.) haben erforscht | sie (Pl.) erforschten |
+| explōrāre | ind.perf.pass.3.sg | explōrātus est | er/sie/es ist erforscht worden |  |
+| explōrāre | ind.perf.pass.3.pl | explōrātī sunt | sie (Pl.) sind erforscht worden |  |
+| explōrāre | ind.plusq.akt.3.sg | explōrāverat | er/sie/es hatte erforscht |  |
+| explōrāre | ind.plusq.akt.3.pl | explōrāverant | sie (Pl.) hatten erforscht |  |
+| explōrāre | ind.plusq.pass.3.sg | explōrātus erat | er/sie/es war erforscht worden |  |
+| explōrāre | ind.plusq.pass.3.pl | explōrātī erant | sie (Pl.) waren erforscht worden |  |
+| explōrāre | ind.fut2.akt.3.sg | explōrāverit | er/sie/es wird erforscht haben |  |
+| explōrāre | ind.fut2.akt.3.pl | explōrāverint | sie (Pl.) werden erforscht haben |  |
+| explōrāre | ind.fut2.pass.3.sg | explōrātus erit | er/sie/es wird erforscht worden sein |  |
+| explōrāre | ind.fut2.pass.3.pl | explōrātī erunt | sie (Pl.) werden erforscht worden sein |  |
+| explōrāre | konj.praes.akt.3.sg | explōret | er/sie/es erforscht |  |
+| explōrāre | konj.praes.akt.3.pl | explōrent | sie (Pl.) erforschen |  |
+| explōrāre | konj.praes.pass.3.sg | explōrētur | er/sie/es erforscht wird |  |
+| explōrāre | konj.praes.pass.3.pl | explōrentur | sie (Pl.) erforscht werden |  |
+| explōrāre | konj.impf.akt.3.sg | explōrāret | er/sie/es erforschen würde |  |
+| explōrāre | konj.impf.akt.3.pl | explōrārent | sie (Pl.) erforschen würden |  |
+| explōrāre | konj.impf.pass.3.sg | explōrārētur | er/sie/es erforscht würde |  |
+| explōrāre | konj.impf.pass.3.pl | explōrārentur | sie (Pl.) erforscht würden |  |
+| explōrāre | konj.perf.akt.3.sg | explōrāverit | er/sie/es erforscht hat |  |
+| explōrāre | konj.perf.akt.3.pl | explōrāverint | sie (Pl.) erforscht haben |  |
+| explōrāre | konj.perf.pass.3.sg | explōrātus sit | er/sie/es erforscht worden ist |  |
+| explōrāre | konj.perf.pass.3.pl | explōrātī sint | sie (Pl.) erforscht worden sind |  |
+| explōrāre | konj.plusq.akt.3.sg | explōrāvisset | er/sie/es erforscht hätte |  |
+| explōrāre | konj.plusq.akt.3.pl | explōrāvissent | sie (Pl.) erforscht hätten |  |
+| explōrāre | konj.plusq.pass.3.sg | explōrātus esset | er/sie/es erforscht worden wäre |  |
+| explōrāre | konj.plusq.pass.3.pl | explōrātī essent | sie (Pl.) erforscht worden wären |  |
+| impedīre | ind.praes.akt.3.sg | impedit | er/sie/es hindert |  |
+| impedīre | ind.praes.akt.3.pl | impediunt | sie (Pl.) hindern |  |
+| impedīre | ind.praes.pass.3.sg | impedītur | er/sie/es wird gehindert |  |
+| impedīre | ind.praes.pass.3.pl | impediuntur | sie (Pl.) werden gehindert |  |
+| impedīre | ind.impf.akt.3.sg | impediēbat | er/sie/es hinderte |  |
+| impedīre | ind.impf.akt.3.pl | impediēbant | sie (Pl.) hinderten |  |
+| impedīre | ind.impf.pass.3.sg | impediēbātur | er/sie/es wurde gehindert |  |
+| impedīre | ind.impf.pass.3.pl | impediēbantur | sie (Pl.) wurden gehindert |  |
+| impedīre | ind.fut.akt.3.sg | impediet | er/sie/es wird hindern |  |
+| impedīre | ind.fut.akt.3.pl | impedient | sie (Pl.) werden hindern |  |
+| impedīre | ind.fut.pass.3.sg | impediētur | er/sie/es wird gehindert werden |  |
+| impedīre | ind.fut.pass.3.pl | impedientur | sie (Pl.) werden gehindert werden |  |
+| impedīre | ind.perf.akt.3.sg | impedīvit | er/sie/es hat gehindert | er/sie/es hinderte |
+| impedīre | ind.perf.akt.3.pl | impedīvērunt | sie (Pl.) haben gehindert | sie (Pl.) hinderten |
+| impedīre | ind.perf.pass.3.sg | impedītus est | er/sie/es ist gehindert worden |  |
+| impedīre | ind.perf.pass.3.pl | impedītī sunt | sie (Pl.) sind gehindert worden |  |
+| impedīre | ind.plusq.akt.3.sg | impedīverat | er/sie/es hatte gehindert |  |
+| impedīre | ind.plusq.akt.3.pl | impedīverant | sie (Pl.) hatten gehindert |  |
+| impedīre | ind.plusq.pass.3.sg | impedītus erat | er/sie/es war gehindert worden |  |
+| impedīre | ind.plusq.pass.3.pl | impedītī erant | sie (Pl.) waren gehindert worden |  |
+| impedīre | ind.fut2.akt.3.sg | impedīverit | er/sie/es wird gehindert haben |  |
+| impedīre | ind.fut2.akt.3.pl | impedīverint | sie (Pl.) werden gehindert haben |  |
+| impedīre | ind.fut2.pass.3.sg | impedītus erit | er/sie/es wird gehindert worden sein |  |
+| impedīre | ind.fut2.pass.3.pl | impedītī erunt | sie (Pl.) werden gehindert worden sein |  |
+| impedīre | konj.praes.akt.3.sg | impediat | er/sie/es hindert |  |
+| impedīre | konj.praes.akt.3.pl | impediant | sie (Pl.) hindern |  |
+| impedīre | konj.praes.pass.3.sg | impediātur | er/sie/es gehindert wird |  |
+| impedīre | konj.praes.pass.3.pl | impediantur | sie (Pl.) gehindert werden |  |
+| impedīre | konj.impf.akt.3.sg | impedīret | er/sie/es hindern würde |  |
+| impedīre | konj.impf.akt.3.pl | impedīrent | sie (Pl.) hindern würden |  |
+| impedīre | konj.impf.pass.3.sg | impedīrētur | er/sie/es gehindert würde |  |
+| impedīre | konj.impf.pass.3.pl | impedīrentur | sie (Pl.) gehindert würden |  |
+| impedīre | konj.perf.akt.3.sg | impedīverit | er/sie/es gehindert hat |  |
+| impedīre | konj.perf.akt.3.pl | impedīverint | sie (Pl.) gehindert haben |  |
+| impedīre | konj.perf.pass.3.sg | impedītus sit | er/sie/es gehindert worden ist |  |
+| impedīre | konj.perf.pass.3.pl | impedītī sint | sie (Pl.) gehindert worden sind |  |
+| impedīre | konj.plusq.akt.3.sg | impedīvisset | er/sie/es gehindert hätte |  |
+| impedīre | konj.plusq.akt.3.pl | impedīvissent | sie (Pl.) gehindert hätten |  |
+| impedīre | konj.plusq.pass.3.sg | impedītus esset | er/sie/es gehindert worden wäre |  |
+| impedīre | konj.plusq.pass.3.pl | impedītī essent | sie (Pl.) gehindert worden wären |  |
+| cōgere | ind.praes.akt.3.sg | cōgit | er/sie/es bringt zusammen |  |
+| cōgere | ind.praes.akt.3.pl | cōgunt | sie (Pl.) bringen zusammen |  |
+| cōgere | ind.praes.pass.3.sg | cōgitur | er/sie/es wird zusammengebracht |  |
+| cōgere | ind.praes.pass.3.pl | cōguntur | sie (Pl.) werden zusammengebracht |  |
+| cōgere | ind.impf.akt.3.sg | cōgēbat | er/sie/es brachte zusammen |  |
+| cōgere | ind.impf.akt.3.pl | cōgēbant | sie (Pl.) brachten zusammen |  |
+| cōgere | ind.impf.pass.3.sg | cōgēbātur | er/sie/es wurde zusammengebracht |  |
+| cōgere | ind.impf.pass.3.pl | cōgēbantur | sie (Pl.) wurden zusammengebracht |  |
+| cōgere | ind.fut.akt.3.sg | cōget | er/sie/es wird zusammenbringen |  |
+| cōgere | ind.fut.akt.3.pl | cōgent | sie (Pl.) werden zusammenbringen |  |
+| cōgere | ind.fut.pass.3.sg | cōgētur | er/sie/es wird zusammengebracht werden |  |
+| cōgere | ind.fut.pass.3.pl | cōgentur | sie (Pl.) werden zusammengebracht werden |  |
+| cōgere | ind.perf.akt.3.sg | coēgit | er/sie/es hat zusammengebracht | er/sie/es brachte zusammen |
+| cōgere | ind.perf.akt.3.pl | coēgērunt | sie (Pl.) haben zusammengebracht | sie (Pl.) brachten zusammen |
+| cōgere | ind.perf.pass.3.sg | coāctus est | er/sie/es ist zusammengebracht worden |  |
+| cōgere | ind.perf.pass.3.pl | coāctī sunt | sie (Pl.) sind zusammengebracht worden |  |
+| cōgere | ind.plusq.akt.3.sg | coēgerat | er/sie/es hatte zusammengebracht |  |
+| cōgere | ind.plusq.akt.3.pl | coēgerant | sie (Pl.) hatten zusammengebracht |  |
+| cōgere | ind.plusq.pass.3.sg | coāctus erat | er/sie/es war zusammengebracht worden |  |
+| cōgere | ind.plusq.pass.3.pl | coāctī erant | sie (Pl.) waren zusammengebracht worden |  |
+| cōgere | ind.fut2.akt.3.sg | coēgerit | er/sie/es wird zusammengebracht haben |  |
+| cōgere | ind.fut2.akt.3.pl | coēgerint | sie (Pl.) werden zusammengebracht haben |  |
+| cōgere | ind.fut2.pass.3.sg | coāctus erit | er/sie/es wird zusammengebracht worden sein |  |
+| cōgere | ind.fut2.pass.3.pl | coāctī erunt | sie (Pl.) werden zusammengebracht worden sein |  |
+| cōgere | konj.praes.akt.3.sg | cōgat | er/sie/es zusammenbringt |  |
+| cōgere | konj.praes.akt.3.pl | cōgant | sie (Pl.) zusammenbringen |  |
+| cōgere | konj.praes.pass.3.sg | cōgātur | er/sie/es zusammengebracht wird |  |
+| cōgere | konj.praes.pass.3.pl | cōgantur | sie (Pl.) zusammengebracht werden |  |
+| cōgere | konj.impf.akt.3.sg | cōgeret | er/sie/es zusammenbringen würde |  |
+| cōgere | konj.impf.akt.3.pl | cōgerent | sie (Pl.) zusammenbringen würden |  |
+| cōgere | konj.impf.pass.3.sg | cōgerētur | er/sie/es zusammengebracht würde |  |
+| cōgere | konj.impf.pass.3.pl | cōgerentur | sie (Pl.) zusammengebracht würden |  |
+| cōgere | konj.perf.akt.3.sg | coēgerit | er/sie/es zusammengebracht hat |  |
+| cōgere | konj.perf.akt.3.pl | coēgerint | sie (Pl.) zusammengebracht haben |  |
+| cōgere | konj.perf.pass.3.sg | coāctus sit | er/sie/es zusammengebracht worden ist |  |
+| cōgere | konj.perf.pass.3.pl | coāctī sint | sie (Pl.) zusammengebracht worden sind |  |
+| cōgere | konj.plusq.akt.3.sg | coēgisset | er/sie/es zusammengebracht hätte |  |
+| cōgere | konj.plusq.akt.3.pl | coēgissent | sie (Pl.) zusammengebracht hätten |  |
+| cōgere | konj.plusq.pass.3.sg | coāctus esset | er/sie/es zusammengebracht worden wäre |  |
+| cōgere | konj.plusq.pass.3.pl | coāctī essent | sie (Pl.) zusammengebracht worden wären |  |
+| repellere | ind.praes.akt.3.sg | repellit | er/sie/es stößt zurück |  |
+| repellere | ind.praes.akt.3.pl | repellunt | sie (Pl.) stoßen zurück |  |
+| repellere | ind.praes.pass.3.sg | repellitur | er/sie/es wird zurückgestoßen |  |
+| repellere | ind.praes.pass.3.pl | repelluntur | sie (Pl.) werden zurückgestoßen |  |
+| repellere | ind.impf.akt.3.sg | repellēbat | er/sie/es stieß zurück |  |
+| repellere | ind.impf.akt.3.pl | repellēbant | sie (Pl.) stießen zurück |  |
+| repellere | ind.impf.pass.3.sg | repellēbātur | er/sie/es wurde zurückgestoßen |  |
+| repellere | ind.impf.pass.3.pl | repellēbantur | sie (Pl.) wurden zurückgestoßen |  |
+| repellere | ind.fut.akt.3.sg | repellet | er/sie/es wird zurückstoßen |  |
+| repellere | ind.fut.akt.3.pl | repellent | sie (Pl.) werden zurückstoßen |  |
+| repellere | ind.fut.pass.3.sg | repellētur | er/sie/es wird zurückgestoßen werden |  |
+| repellere | ind.fut.pass.3.pl | repellentur | sie (Pl.) werden zurückgestoßen werden |  |
+| repellere | ind.perf.akt.3.sg | reppulit | er/sie/es hat zurückgestoßen | er/sie/es stieß zurück |
+| repellere | ind.perf.akt.3.pl | reppulērunt | sie (Pl.) haben zurückgestoßen | sie (Pl.) stießen zurück |
+| repellere | ind.perf.pass.3.sg | repulsus est | er/sie/es ist zurückgestoßen worden |  |
+| repellere | ind.perf.pass.3.pl | repulsī sunt | sie (Pl.) sind zurückgestoßen worden |  |
+| repellere | ind.plusq.akt.3.sg | reppulerat | er/sie/es hatte zurückgestoßen |  |
+| repellere | ind.plusq.akt.3.pl | reppulerant | sie (Pl.) hatten zurückgestoßen |  |
+| repellere | ind.plusq.pass.3.sg | repulsus erat | er/sie/es war zurückgestoßen worden |  |
+| repellere | ind.plusq.pass.3.pl | repulsī erant | sie (Pl.) waren zurückgestoßen worden |  |
+| repellere | ind.fut2.akt.3.sg | reppulerit | er/sie/es wird zurückgestoßen haben |  |
+| repellere | ind.fut2.akt.3.pl | reppulerint | sie (Pl.) werden zurückgestoßen haben |  |
+| repellere | ind.fut2.pass.3.sg | repulsus erit | er/sie/es wird zurückgestoßen worden sein |  |
+| repellere | ind.fut2.pass.3.pl | repulsī erunt | sie (Pl.) werden zurückgestoßen worden sein |  |
+| repellere | konj.praes.akt.3.sg | repellat | er/sie/es zurückstößt |  |
+| repellere | konj.praes.akt.3.pl | repellant | sie (Pl.) zurückstoßen |  |
+| repellere | konj.praes.pass.3.sg | repellātur | er/sie/es zurückgestoßen wird |  |
+| repellere | konj.praes.pass.3.pl | repellantur | sie (Pl.) zurückgestoßen werden |  |
+| repellere | konj.impf.akt.3.sg | repelleret | er/sie/es zurückstoßen würde |  |
+| repellere | konj.impf.akt.3.pl | repellerent | sie (Pl.) zurückstoßen würden |  |
+| repellere | konj.impf.pass.3.sg | repellerētur | er/sie/es zurückgestoßen würde |  |
+| repellere | konj.impf.pass.3.pl | repellerentur | sie (Pl.) zurückgestoßen würden |  |
+| repellere | konj.perf.akt.3.sg | reppulerit | er/sie/es zurückgestoßen hat |  |
+| repellere | konj.perf.akt.3.pl | reppulerint | sie (Pl.) zurückgestoßen haben |  |
+| repellere | konj.perf.pass.3.sg | repulsus sit | er/sie/es zurückgestoßen worden ist |  |
+| repellere | konj.perf.pass.3.pl | repulsī sint | sie (Pl.) zurückgestoßen worden sind |  |
+| repellere | konj.plusq.akt.3.sg | reppulisset | er/sie/es zurückgestoßen hätte |  |
+| repellere | konj.plusq.akt.3.pl | reppulissent | sie (Pl.) zurückgestoßen hätten |  |
+| repellere | konj.plusq.pass.3.sg | repulsus esset | er/sie/es zurückgestoßen worden wäre |  |
+| repellere | konj.plusq.pass.3.pl | repulsī essent | sie (Pl.) zurückgestoßen worden wären |  |
+| relinquere | ind.praes.akt.3.sg | relinquit | er/sie/es verlässt |  |
+| relinquere | ind.praes.akt.3.pl | relinquunt | sie (Pl.) verlassen |  |
+| relinquere | ind.praes.pass.3.sg | relinquitur | er/sie/es wird verlassen |  |
+| relinquere | ind.praes.pass.3.pl | relinquuntur | sie (Pl.) werden verlassen |  |
+| relinquere | ind.impf.akt.3.sg | relinquēbat | er/sie/es verließ |  |
+| relinquere | ind.impf.akt.3.pl | relinquēbant | sie (Pl.) verließen |  |
+| relinquere | ind.impf.pass.3.sg | relinquēbātur | er/sie/es wurde verlassen |  |
+| relinquere | ind.impf.pass.3.pl | relinquēbantur | sie (Pl.) wurden verlassen |  |
+| relinquere | ind.fut.akt.3.sg | relinquet | er/sie/es wird verlassen |  |
+| relinquere | ind.fut.akt.3.pl | relinquent | sie (Pl.) werden verlassen |  |
+| relinquere | ind.fut.pass.3.sg | relinquētur | er/sie/es wird verlassen werden |  |
+| relinquere | ind.fut.pass.3.pl | relinquentur | sie (Pl.) werden verlassen werden |  |
+| relinquere | ind.perf.akt.3.sg | relīquit | er/sie/es hat verlassen | er/sie/es verließ |
+| relinquere | ind.perf.akt.3.pl | relīquērunt | sie (Pl.) haben verlassen | sie (Pl.) verließen |
+| relinquere | ind.perf.pass.3.sg | relictus est | er/sie/es ist verlassen worden |  |
+| relinquere | ind.perf.pass.3.pl | relictī sunt | sie (Pl.) sind verlassen worden |  |
+| relinquere | ind.plusq.akt.3.sg | relīquerat | er/sie/es hatte verlassen |  |
+| relinquere | ind.plusq.akt.3.pl | relīquerant | sie (Pl.) hatten verlassen |  |
+| relinquere | ind.plusq.pass.3.sg | relictus erat | er/sie/es war verlassen worden |  |
+| relinquere | ind.plusq.pass.3.pl | relictī erant | sie (Pl.) waren verlassen worden |  |
+| relinquere | ind.fut2.akt.3.sg | relīquerit | er/sie/es wird verlassen haben |  |
+| relinquere | ind.fut2.akt.3.pl | relīquerint | sie (Pl.) werden verlassen haben |  |
+| relinquere | ind.fut2.pass.3.sg | relictus erit | er/sie/es wird verlassen worden sein |  |
+| relinquere | ind.fut2.pass.3.pl | relictī erunt | sie (Pl.) werden verlassen worden sein |  |
+| relinquere | konj.praes.akt.3.sg | relinquat | er/sie/es verlässt |  |
+| relinquere | konj.praes.akt.3.pl | relinquant | sie (Pl.) verlassen |  |
+| relinquere | konj.praes.pass.3.sg | relinquātur | er/sie/es verlassen wird |  |
+| relinquere | konj.praes.pass.3.pl | relinquantur | sie (Pl.) verlassen werden |  |
+| relinquere | konj.impf.akt.3.sg | relinqueret | er/sie/es verlassen würde |  |
+| relinquere | konj.impf.akt.3.pl | relinquerent | sie (Pl.) verlassen würden |  |
+| relinquere | konj.impf.pass.3.sg | relinquerētur | er/sie/es verlassen würde |  |
+| relinquere | konj.impf.pass.3.pl | relinquerentur | sie (Pl.) verlassen würden |  |
+| relinquere | konj.perf.akt.3.sg | relīquerit | er/sie/es verlassen hat |  |
+| relinquere | konj.perf.akt.3.pl | relīquerint | sie (Pl.) verlassen haben |  |
+| relinquere | konj.perf.pass.3.sg | relictus sit | er/sie/es verlassen worden ist |  |
+| relinquere | konj.perf.pass.3.pl | relictī sint | sie (Pl.) verlassen worden sind |  |
+| relinquere | konj.plusq.akt.3.sg | relīquisset | er/sie/es verlassen hätte |  |
+| relinquere | konj.plusq.akt.3.pl | relīquissent | sie (Pl.) verlassen hätten |  |
+| relinquere | konj.plusq.pass.3.sg | relictus esset | er/sie/es verlassen worden wäre |  |
+| relinquere | konj.plusq.pass.3.pl | relictī essent | sie (Pl.) verlassen worden wären |  |
+| pōstulāre | ind.praes.akt.3.sg | pōstulat | er/sie/es fordert |  |
+| pōstulāre | ind.praes.akt.3.pl | pōstulant | sie (Pl.) fordern |  |
+| pōstulāre | ind.praes.pass.3.sg | pōstulātur | er/sie/es wird gefordert |  |
+| pōstulāre | ind.praes.pass.3.pl | pōstulantur | sie (Pl.) werden gefordert |  |
+| pōstulāre | ind.impf.akt.3.sg | pōstulābat | er/sie/es forderte |  |
+| pōstulāre | ind.impf.akt.3.pl | pōstulābant | sie (Pl.) forderten |  |
+| pōstulāre | ind.impf.pass.3.sg | pōstulābātur | er/sie/es wurde gefordert |  |
+| pōstulāre | ind.impf.pass.3.pl | pōstulābantur | sie (Pl.) wurden gefordert |  |
+| pōstulāre | ind.fut.akt.3.sg | pōstulābit | er/sie/es wird fordern |  |
+| pōstulāre | ind.fut.akt.3.pl | pōstulābunt | sie (Pl.) werden fordern |  |
+| pōstulāre | ind.fut.pass.3.sg | pōstulābitur | er/sie/es wird gefordert werden |  |
+| pōstulāre | ind.fut.pass.3.pl | pōstulābuntur | sie (Pl.) werden gefordert werden |  |
+| pōstulāre | ind.perf.akt.3.sg | pōstulāvit | er/sie/es hat gefordert | er/sie/es forderte |
+| pōstulāre | ind.perf.akt.3.pl | pōstulāvērunt | sie (Pl.) haben gefordert | sie (Pl.) forderten |
+| pōstulāre | ind.perf.pass.3.sg | pōstulātus est | er/sie/es ist gefordert worden |  |
+| pōstulāre | ind.perf.pass.3.pl | pōstulātī sunt | sie (Pl.) sind gefordert worden |  |
+| pōstulāre | ind.plusq.akt.3.sg | pōstulāverat | er/sie/es hatte gefordert |  |
+| pōstulāre | ind.plusq.akt.3.pl | pōstulāverant | sie (Pl.) hatten gefordert |  |
+| pōstulāre | ind.plusq.pass.3.sg | pōstulātus erat | er/sie/es war gefordert worden |  |
+| pōstulāre | ind.plusq.pass.3.pl | pōstulātī erant | sie (Pl.) waren gefordert worden |  |
+| pōstulāre | ind.fut2.akt.3.sg | pōstulāverit | er/sie/es wird gefordert haben |  |
+| pōstulāre | ind.fut2.akt.3.pl | pōstulāverint | sie (Pl.) werden gefordert haben |  |
+| pōstulāre | ind.fut2.pass.3.sg | pōstulātus erit | er/sie/es wird gefordert worden sein |  |
+| pōstulāre | ind.fut2.pass.3.pl | pōstulātī erunt | sie (Pl.) werden gefordert worden sein |  |
+| pōstulāre | konj.praes.akt.3.sg | pōstulet | er/sie/es fordert |  |
+| pōstulāre | konj.praes.akt.3.pl | pōstulent | sie (Pl.) fordern |  |
+| pōstulāre | konj.praes.pass.3.sg | pōstulētur | er/sie/es gefordert wird |  |
+| pōstulāre | konj.praes.pass.3.pl | pōstulentur | sie (Pl.) gefordert werden |  |
+| pōstulāre | konj.impf.akt.3.sg | pōstulāret | er/sie/es fordern würde |  |
+| pōstulāre | konj.impf.akt.3.pl | pōstulārent | sie (Pl.) fordern würden |  |
+| pōstulāre | konj.impf.pass.3.sg | pōstulārētur | er/sie/es gefordert würde |  |
+| pōstulāre | konj.impf.pass.3.pl | pōstulārentur | sie (Pl.) gefordert würden |  |
+| pōstulāre | konj.perf.akt.3.sg | pōstulāverit | er/sie/es gefordert hat |  |
+| pōstulāre | konj.perf.akt.3.pl | pōstulāverint | sie (Pl.) gefordert haben |  |
+| pōstulāre | konj.perf.pass.3.sg | pōstulātus sit | er/sie/es gefordert worden ist |  |
+| pōstulāre | konj.perf.pass.3.pl | pōstulātī sint | sie (Pl.) gefordert worden sind |  |
+| pōstulāre | konj.plusq.akt.3.sg | pōstulāvisset | er/sie/es gefordert hätte |  |
+| pōstulāre | konj.plusq.akt.3.pl | pōstulāvissent | sie (Pl.) gefordert hätten |  |
+| pōstulāre | konj.plusq.pass.3.sg | pōstulātus esset | er/sie/es gefordert worden wäre |  |
+| pōstulāre | konj.plusq.pass.3.pl | pōstulātī essent | sie (Pl.) gefordert worden wären |  |
+| cōnferre | ind.praes.akt.3.sg | cōnfert | er/sie/es trägt zusammen |  |
+| cōnferre | ind.praes.akt.3.pl | cōnferunt | sie (Pl.) tragen zusammen |  |
+| cōnferre | ind.impf.akt.3.sg | cōnferēbat | er/sie/es trug zusammen |  |
+| cōnferre | ind.impf.akt.3.pl | cōnferēbant | sie (Pl.) trugen zusammen |  |
+| cōnferre | ind.fut.akt.3.sg | cōnferet | er/sie/es wird zusammentragen |  |
+| cōnferre | ind.fut.akt.3.pl | cōnferent | sie (Pl.) werden zusammentragen |  |
+| cōnferre | ind.perf.akt.3.sg | contulit | er/sie/es hat zusammengetragen | er/sie/es trug zusammen |
+| cōnferre | ind.perf.akt.3.pl | contulērunt | sie (Pl.) haben zusammengetragen | sie (Pl.) trugen zusammen |
+| cōnferre | ind.perf.pass.3.sg | collātus est | er/sie/es ist zusammengetragen worden |  |
+| cōnferre | ind.perf.pass.3.pl | collātī sunt | sie (Pl.) sind zusammengetragen worden |  |
+| cōnferre | ind.plusq.akt.3.sg | contulerat | er/sie/es hatte zusammengetragen |  |
+| cōnferre | ind.plusq.akt.3.pl | contulerant | sie (Pl.) hatten zusammengetragen |  |
+| cōnferre | ind.plusq.pass.3.sg | collātus erat | er/sie/es war zusammengetragen worden |  |
+| cōnferre | ind.plusq.pass.3.pl | collātī erant | sie (Pl.) waren zusammengetragen worden |  |
+| cōnferre | ind.fut2.akt.3.sg | contulerit | er/sie/es wird zusammengetragen haben |  |
+| cōnferre | ind.fut2.akt.3.pl | contulerint | sie (Pl.) werden zusammengetragen haben |  |
+| cōnferre | ind.fut2.pass.3.sg | collātus erit | er/sie/es wird zusammengetragen worden sein |  |
+| cōnferre | ind.fut2.pass.3.pl | collātī erunt | sie (Pl.) werden zusammengetragen worden sein |  |
+| cōnferre | konj.praes.akt.3.sg | cōnferat | er/sie/es zusammenträgt |  |
+| cōnferre | konj.praes.akt.3.pl | cōnferant | sie (Pl.) zusammentragen |  |
+| cōnferre | konj.impf.akt.3.sg | cōnferret | er/sie/es zusammentragen würde |  |
+| cōnferre | konj.impf.akt.3.pl | cōnferrent | sie (Pl.) zusammentragen würden |  |
+| cōnferre | konj.perf.akt.3.sg | contulerit | er/sie/es zusammengetragen hat |  |
+| cōnferre | konj.perf.akt.3.pl | contulerint | sie (Pl.) zusammengetragen haben |  |
+| cōnferre | konj.perf.pass.3.sg | collātus sit | er/sie/es zusammengetragen worden ist |  |
+| cōnferre | konj.perf.pass.3.pl | collātī sint | sie (Pl.) zusammengetragen worden sind |  |
+| cōnferre | konj.plusq.akt.3.sg | contulisset | er/sie/es zusammengetragen hätte |  |
+| cōnferre | konj.plusq.akt.3.pl | contulissent | sie (Pl.) zusammengetragen hätten |  |
+| cōnferre | konj.plusq.pass.3.sg | collātus esset | er/sie/es zusammengetragen worden wäre |  |
+| cōnferre | konj.plusq.pass.3.pl | collātī essent | sie (Pl.) zusammengetragen worden wären |  |
+| compōnere | ind.praes.akt.3.sg | compōnit | er/sie/es stellt zusammen |  |
+| compōnere | ind.praes.akt.3.pl | compōnunt | sie (Pl.) stellen zusammen |  |
+| compōnere | ind.praes.pass.3.sg | compōnitur | er/sie/es wird zusammengestellt |  |
+| compōnere | ind.praes.pass.3.pl | compōnuntur | sie (Pl.) werden zusammengestellt |  |
+| compōnere | ind.impf.akt.3.sg | compōnēbat | er/sie/es stellte zusammen |  |
+| compōnere | ind.impf.akt.3.pl | compōnēbant | sie (Pl.) stellten zusammen |  |
+| compōnere | ind.impf.pass.3.sg | compōnēbātur | er/sie/es wurde zusammengestellt |  |
+| compōnere | ind.impf.pass.3.pl | compōnēbantur | sie (Pl.) wurden zusammengestellt |  |
+| compōnere | ind.fut.akt.3.sg | compōnet | er/sie/es wird zusammenstellen |  |
+| compōnere | ind.fut.akt.3.pl | compōnent | sie (Pl.) werden zusammenstellen |  |
+| compōnere | ind.fut.pass.3.sg | compōnētur | er/sie/es wird zusammengestellt werden |  |
+| compōnere | ind.fut.pass.3.pl | compōnentur | sie (Pl.) werden zusammengestellt werden |  |
+| compōnere | ind.perf.akt.3.sg | composuit | er/sie/es hat zusammengestellt | er/sie/es stellte zusammen |
+| compōnere | ind.perf.akt.3.pl | composuērunt | sie (Pl.) haben zusammengestellt | sie (Pl.) stellten zusammen |
+| compōnere | ind.perf.pass.3.sg | compositus est | er/sie/es ist zusammengestellt worden |  |
+| compōnere | ind.perf.pass.3.pl | compositī sunt | sie (Pl.) sind zusammengestellt worden |  |
+| compōnere | ind.plusq.akt.3.sg | composuerat | er/sie/es hatte zusammengestellt |  |
+| compōnere | ind.plusq.akt.3.pl | composuerant | sie (Pl.) hatten zusammengestellt |  |
+| compōnere | ind.plusq.pass.3.sg | compositus erat | er/sie/es war zusammengestellt worden |  |
+| compōnere | ind.plusq.pass.3.pl | compositī erant | sie (Pl.) waren zusammengestellt worden |  |
+| compōnere | ind.fut2.akt.3.sg | composuerit | er/sie/es wird zusammengestellt haben |  |
+| compōnere | ind.fut2.akt.3.pl | composuerint | sie (Pl.) werden zusammengestellt haben |  |
+| compōnere | ind.fut2.pass.3.sg | compositus erit | er/sie/es wird zusammengestellt worden sein |  |
+| compōnere | ind.fut2.pass.3.pl | compositī erunt | sie (Pl.) werden zusammengestellt worden sein |  |
+| compōnere | konj.praes.akt.3.sg | compōnat | er/sie/es zusammenstellt |  |
+| compōnere | konj.praes.akt.3.pl | compōnant | sie (Pl.) zusammenstellen |  |
+| compōnere | konj.praes.pass.3.sg | compōnātur | er/sie/es zusammengestellt wird |  |
+| compōnere | konj.praes.pass.3.pl | compōnantur | sie (Pl.) zusammengestellt werden |  |
+| compōnere | konj.impf.akt.3.sg | compōneret | er/sie/es zusammenstellen würde |  |
+| compōnere | konj.impf.akt.3.pl | compōnerent | sie (Pl.) zusammenstellen würden |  |
+| compōnere | konj.impf.pass.3.sg | compōnerētur | er/sie/es zusammengestellt würde |  |
+| compōnere | konj.impf.pass.3.pl | compōnerentur | sie (Pl.) zusammengestellt würden |  |
+| compōnere | konj.perf.akt.3.sg | composuerit | er/sie/es zusammengestellt hat |  |
+| compōnere | konj.perf.akt.3.pl | composuerint | sie (Pl.) zusammengestellt haben |  |
+| compōnere | konj.perf.pass.3.sg | compositus sit | er/sie/es zusammengestellt worden ist |  |
+| compōnere | konj.perf.pass.3.pl | compositī sint | sie (Pl.) zusammengestellt worden sind |  |
+| compōnere | konj.plusq.akt.3.sg | composuisset | er/sie/es zusammengestellt hätte |  |
+| compōnere | konj.plusq.akt.3.pl | composuissent | sie (Pl.) zusammengestellt hätten |  |
+| compōnere | konj.plusq.pass.3.sg | compositus esset | er/sie/es zusammengestellt worden wäre |  |
+| compōnere | konj.plusq.pass.3.pl | compositī essent | sie (Pl.) zusammengestellt worden wären |  |
+| recitāre | ind.praes.akt.3.sg | recitat | er/sie/es trägt vor |  |
+| recitāre | ind.praes.akt.3.pl | recitant | sie (Pl.) tragen vor |  |
+| recitāre | ind.praes.pass.3.sg | recitātur | er/sie/es wird vorgetragen |  |
+| recitāre | ind.praes.pass.3.pl | recitantur | sie (Pl.) werden vorgetragen |  |
+| recitāre | ind.impf.akt.3.sg | recitābat | er/sie/es trug vor |  |
+| recitāre | ind.impf.akt.3.pl | recitābant | sie (Pl.) trugen vor |  |
+| recitāre | ind.impf.pass.3.sg | recitābātur | er/sie/es wurde vorgetragen |  |
+| recitāre | ind.impf.pass.3.pl | recitābantur | sie (Pl.) wurden vorgetragen |  |
+| recitāre | ind.fut.akt.3.sg | recitābit | er/sie/es wird vortragen |  |
+| recitāre | ind.fut.akt.3.pl | recitābunt | sie (Pl.) werden vortragen |  |
+| recitāre | ind.fut.pass.3.sg | recitābitur | er/sie/es wird vorgetragen werden |  |
+| recitāre | ind.fut.pass.3.pl | recitābuntur | sie (Pl.) werden vorgetragen werden |  |
+| recitāre | ind.perf.akt.3.sg | recitāvit | er/sie/es hat vorgetragen | er/sie/es trug vor |
+| recitāre | ind.perf.akt.3.pl | recitāvērunt | sie (Pl.) haben vorgetragen | sie (Pl.) trugen vor |
+| recitāre | ind.perf.pass.3.sg | recitātus est | er/sie/es ist vorgetragen worden |  |
+| recitāre | ind.perf.pass.3.pl | recitātī sunt | sie (Pl.) sind vorgetragen worden |  |
+| recitāre | ind.plusq.akt.3.sg | recitāverat | er/sie/es hatte vorgetragen |  |
+| recitāre | ind.plusq.akt.3.pl | recitāverant | sie (Pl.) hatten vorgetragen |  |
+| recitāre | ind.plusq.pass.3.sg | recitātus erat | er/sie/es war vorgetragen worden |  |
+| recitāre | ind.plusq.pass.3.pl | recitātī erant | sie (Pl.) waren vorgetragen worden |  |
+| recitāre | ind.fut2.akt.3.sg | recitāverit | er/sie/es wird vorgetragen haben |  |
+| recitāre | ind.fut2.akt.3.pl | recitāverint | sie (Pl.) werden vorgetragen haben |  |
+| recitāre | ind.fut2.pass.3.sg | recitātus erit | er/sie/es wird vorgetragen worden sein |  |
+| recitāre | ind.fut2.pass.3.pl | recitātī erunt | sie (Pl.) werden vorgetragen worden sein |  |
+| recitāre | konj.praes.akt.3.sg | recitet | er/sie/es vorträgt |  |
+| recitāre | konj.praes.akt.3.pl | recitent | sie (Pl.) vortragen |  |
+| recitāre | konj.praes.pass.3.sg | recitētur | er/sie/es vorgetragen wird |  |
+| recitāre | konj.praes.pass.3.pl | recitentur | sie (Pl.) vorgetragen werden |  |
+| recitāre | konj.impf.akt.3.sg | recitāret | er/sie/es vortragen würde |  |
+| recitāre | konj.impf.akt.3.pl | recitārent | sie (Pl.) vortragen würden |  |
+| recitāre | konj.impf.pass.3.sg | recitārētur | er/sie/es vorgetragen würde |  |
+| recitāre | konj.impf.pass.3.pl | recitārentur | sie (Pl.) vorgetragen würden |  |
+| recitāre | konj.perf.akt.3.sg | recitāverit | er/sie/es vorgetragen hat |  |
+| recitāre | konj.perf.akt.3.pl | recitāverint | sie (Pl.) vorgetragen haben |  |
+| recitāre | konj.perf.pass.3.sg | recitātus sit | er/sie/es vorgetragen worden ist |  |
+| recitāre | konj.perf.pass.3.pl | recitātī sint | sie (Pl.) vorgetragen worden sind |  |
+| recitāre | konj.plusq.akt.3.sg | recitāvisset | er/sie/es vorgetragen hätte |  |
+| recitāre | konj.plusq.akt.3.pl | recitāvissent | sie (Pl.) vorgetragen hätten |  |
+| recitāre | konj.plusq.pass.3.sg | recitātus esset | er/sie/es vorgetragen worden wäre |  |
+| recitāre | konj.plusq.pass.3.pl | recitātī essent | sie (Pl.) vorgetragen worden wären |  |
+| laudāre | ind.praes.akt.3.sg | laudat | er/sie/es lobt |  |
+| laudāre | ind.praes.akt.3.pl | laudant | sie (Pl.) loben |  |
+| laudāre | ind.praes.pass.3.sg | laudātur | er/sie/es wird gelobt |  |
+| laudāre | ind.praes.pass.3.pl | laudantur | sie (Pl.) werden gelobt |  |
+| laudāre | ind.impf.akt.3.sg | laudābat | er/sie/es lobte |  |
+| laudāre | ind.impf.akt.3.pl | laudābant | sie (Pl.) lobten |  |
+| laudāre | ind.impf.pass.3.sg | laudābātur | er/sie/es wurde gelobt |  |
+| laudāre | ind.impf.pass.3.pl | laudābantur | sie (Pl.) wurden gelobt |  |
+| laudāre | ind.fut.akt.3.sg | laudābit | er/sie/es wird loben |  |
+| laudāre | ind.fut.akt.3.pl | laudābunt | sie (Pl.) werden loben |  |
+| laudāre | ind.fut.pass.3.sg | laudābitur | er/sie/es wird gelobt werden |  |
+| laudāre | ind.fut.pass.3.pl | laudābuntur | sie (Pl.) werden gelobt werden |  |
+| laudāre | ind.perf.akt.3.sg | laudāvit | er/sie/es hat gelobt | er/sie/es lobte |
+| laudāre | ind.perf.akt.3.pl | laudāvērunt | sie (Pl.) haben gelobt | sie (Pl.) lobten |
+| laudāre | ind.perf.pass.3.sg | laudātus est | er/sie/es ist gelobt worden |  |
+| laudāre | ind.perf.pass.3.pl | laudātī sunt | sie (Pl.) sind gelobt worden |  |
+| laudāre | ind.plusq.akt.3.sg | laudāverat | er/sie/es hatte gelobt |  |
+| laudāre | ind.plusq.akt.3.pl | laudāverant | sie (Pl.) hatten gelobt |  |
+| laudāre | ind.plusq.pass.3.sg | laudātus erat | er/sie/es war gelobt worden |  |
+| laudāre | ind.plusq.pass.3.pl | laudātī erant | sie (Pl.) waren gelobt worden |  |
+| laudāre | ind.fut2.akt.3.sg | laudāverit | er/sie/es wird gelobt haben |  |
+| laudāre | ind.fut2.akt.3.pl | laudāverint | sie (Pl.) werden gelobt haben |  |
+| laudāre | ind.fut2.pass.3.sg | laudātus erit | er/sie/es wird gelobt worden sein |  |
+| laudāre | ind.fut2.pass.3.pl | laudātī erunt | sie (Pl.) werden gelobt worden sein |  |
+| laudāre | konj.praes.akt.3.sg | laudet | er/sie/es lobt |  |
+| laudāre | konj.praes.akt.3.pl | laudent | sie (Pl.) loben |  |
+| laudāre | konj.praes.pass.3.sg | laudētur | er/sie/es gelobt wird |  |
+| laudāre | konj.praes.pass.3.pl | laudentur | sie (Pl.) gelobt werden |  |
+| laudāre | konj.impf.akt.3.sg | laudāret | er/sie/es loben würde |  |
+| laudāre | konj.impf.akt.3.pl | laudārent | sie (Pl.) loben würden |  |
+| laudāre | konj.impf.pass.3.sg | laudārētur | er/sie/es gelobt würde |  |
+| laudāre | konj.impf.pass.3.pl | laudārentur | sie (Pl.) gelobt würden |  |
+| laudāre | konj.perf.akt.3.sg | laudāverit | er/sie/es gelobt hat |  |
+| laudāre | konj.perf.akt.3.pl | laudāverint | sie (Pl.) gelobt haben |  |
+| laudāre | konj.perf.pass.3.sg | laudātus sit | er/sie/es gelobt worden ist |  |
+| laudāre | konj.perf.pass.3.pl | laudātī sint | sie (Pl.) gelobt worden sind |  |
+| laudāre | konj.plusq.akt.3.sg | laudāvisset | er/sie/es gelobt hätte |  |
+| laudāre | konj.plusq.akt.3.pl | laudāvissent | sie (Pl.) gelobt hätten |  |
+| laudāre | konj.plusq.pass.3.sg | laudātus esset | er/sie/es gelobt worden wäre |  |
+| laudāre | konj.plusq.pass.3.pl | laudātī essent | sie (Pl.) gelobt worden wären |  |
+| comparāre | ind.praes.akt.3.sg | comparat | er/sie/es bereitet |  |
+| comparāre | ind.praes.akt.3.pl | comparant | sie (Pl.) bereiten |  |
+| comparāre | ind.praes.pass.3.sg | comparātur | er/sie/es wird bereitet |  |
+| comparāre | ind.praes.pass.3.pl | comparantur | sie (Pl.) werden bereitet |  |
+| comparāre | ind.impf.akt.3.sg | comparābat | er/sie/es bereitete |  |
+| comparāre | ind.impf.akt.3.pl | comparābant | sie (Pl.) bereiteten |  |
+| comparāre | ind.impf.pass.3.sg | comparābātur | er/sie/es wurde bereitet |  |
+| comparāre | ind.impf.pass.3.pl | comparābantur | sie (Pl.) wurden bereitet |  |
+| comparāre | ind.fut.akt.3.sg | comparābit | er/sie/es wird bereiten |  |
+| comparāre | ind.fut.akt.3.pl | comparābunt | sie (Pl.) werden bereiten |  |
+| comparāre | ind.fut.pass.3.sg | comparābitur | er/sie/es wird bereitet werden |  |
+| comparāre | ind.fut.pass.3.pl | comparābuntur | sie (Pl.) werden bereitet werden |  |
+| comparāre | ind.perf.akt.3.sg | comparāvit | er/sie/es hat bereitet | er/sie/es bereitete |
+| comparāre | ind.perf.akt.3.pl | comparāvērunt | sie (Pl.) haben bereitet | sie (Pl.) bereiteten |
+| comparāre | ind.perf.pass.3.sg | comparātus est | er/sie/es ist bereitet worden |  |
+| comparāre | ind.perf.pass.3.pl | comparātī sunt | sie (Pl.) sind bereitet worden |  |
+| comparāre | ind.plusq.akt.3.sg | comparāverat | er/sie/es hatte bereitet |  |
+| comparāre | ind.plusq.akt.3.pl | comparāverant | sie (Pl.) hatten bereitet |  |
+| comparāre | ind.plusq.pass.3.sg | comparātus erat | er/sie/es war bereitet worden |  |
+| comparāre | ind.plusq.pass.3.pl | comparātī erant | sie (Pl.) waren bereitet worden |  |
+| comparāre | ind.fut2.akt.3.sg | comparāverit | er/sie/es wird bereitet haben |  |
+| comparāre | ind.fut2.akt.3.pl | comparāverint | sie (Pl.) werden bereitet haben |  |
+| comparāre | ind.fut2.pass.3.sg | comparātus erit | er/sie/es wird bereitet worden sein |  |
+| comparāre | ind.fut2.pass.3.pl | comparātī erunt | sie (Pl.) werden bereitet worden sein |  |
+| comparāre | konj.praes.akt.3.sg | comparet | er/sie/es bereitet |  |
+| comparāre | konj.praes.akt.3.pl | comparent | sie (Pl.) bereiten |  |
+| comparāre | konj.praes.pass.3.sg | comparētur | er/sie/es bereitet wird |  |
+| comparāre | konj.praes.pass.3.pl | comparentur | sie (Pl.) bereitet werden |  |
+| comparāre | konj.impf.akt.3.sg | comparāret | er/sie/es bereiten würde |  |
+| comparāre | konj.impf.akt.3.pl | comparārent | sie (Pl.) bereiten würden |  |
+| comparāre | konj.impf.pass.3.sg | comparārētur | er/sie/es bereitet würde |  |
+| comparāre | konj.impf.pass.3.pl | comparārentur | sie (Pl.) bereitet würden |  |
+| comparāre | konj.perf.akt.3.sg | comparāverit | er/sie/es bereitet hat |  |
+| comparāre | konj.perf.akt.3.pl | comparāverint | sie (Pl.) bereitet haben |  |
+| comparāre | konj.perf.pass.3.sg | comparātus sit | er/sie/es bereitet worden ist |  |
+| comparāre | konj.perf.pass.3.pl | comparātī sint | sie (Pl.) bereitet worden sind |  |
+| comparāre | konj.plusq.akt.3.sg | comparāvisset | er/sie/es bereitet hätte |  |
+| comparāre | konj.plusq.akt.3.pl | comparāvissent | sie (Pl.) bereitet hätten |  |
+| comparāre | konj.plusq.pass.3.sg | comparātus esset | er/sie/es bereitet worden wäre |  |
+| comparāre | konj.plusq.pass.3.pl | comparātī essent | sie (Pl.) bereitet worden wären |  |
+| lūdere | ind.praes.akt.3.sg | lūdit | er/sie/es spielt |  |
+| lūdere | ind.praes.akt.3.pl | lūdunt | sie (Pl.) spielen |  |
+| lūdere | ind.praes.pass.3.sg | lūditur | er/sie/es wird gespielt |  |
+| lūdere | ind.praes.pass.3.pl | lūduntur | sie (Pl.) werden gespielt |  |
+| lūdere | ind.impf.akt.3.sg | lūdēbat | er/sie/es spielte |  |
+| lūdere | ind.impf.akt.3.pl | lūdēbant | sie (Pl.) spielten |  |
+| lūdere | ind.impf.pass.3.sg | lūdēbātur | er/sie/es wurde gespielt |  |
+| lūdere | ind.impf.pass.3.pl | lūdēbantur | sie (Pl.) wurden gespielt |  |
+| lūdere | ind.fut.akt.3.sg | lūdet | er/sie/es wird spielen |  |
+| lūdere | ind.fut.akt.3.pl | lūdent | sie (Pl.) werden spielen |  |
+| lūdere | ind.fut.pass.3.sg | lūdētur | er/sie/es wird gespielt werden |  |
+| lūdere | ind.fut.pass.3.pl | lūdentur | sie (Pl.) werden gespielt werden |  |
+| lūdere | ind.perf.akt.3.sg | lūsit | er/sie/es hat gespielt | er/sie/es spielte |
+| lūdere | ind.perf.akt.3.pl | lūsērunt | sie (Pl.) haben gespielt | sie (Pl.) spielten |
+| lūdere | ind.perf.pass.3.sg | lūsus est | er/sie/es ist gespielt worden |  |
+| lūdere | ind.perf.pass.3.pl | lūsī sunt | sie (Pl.) sind gespielt worden |  |
+| lūdere | ind.plusq.akt.3.sg | lūserat | er/sie/es hatte gespielt |  |
+| lūdere | ind.plusq.akt.3.pl | lūserant | sie (Pl.) hatten gespielt |  |
+| lūdere | ind.plusq.pass.3.sg | lūsus erat | er/sie/es war gespielt worden |  |
+| lūdere | ind.plusq.pass.3.pl | lūsī erant | sie (Pl.) waren gespielt worden |  |
+| lūdere | ind.fut2.akt.3.sg | lūserit | er/sie/es wird gespielt haben |  |
+| lūdere | ind.fut2.akt.3.pl | lūserint | sie (Pl.) werden gespielt haben |  |
+| lūdere | ind.fut2.pass.3.sg | lūsus erit | er/sie/es wird gespielt worden sein |  |
+| lūdere | ind.fut2.pass.3.pl | lūsī erunt | sie (Pl.) werden gespielt worden sein |  |
+| lūdere | konj.praes.akt.3.sg | lūdat | er/sie/es spielt |  |
+| lūdere | konj.praes.akt.3.pl | lūdant | sie (Pl.) spielen |  |
+| lūdere | konj.praes.pass.3.sg | lūdātur | er/sie/es gespielt wird |  |
+| lūdere | konj.praes.pass.3.pl | lūdantur | sie (Pl.) gespielt werden |  |
+| lūdere | konj.impf.akt.3.sg | lūderet | er/sie/es spielen würde |  |
+| lūdere | konj.impf.akt.3.pl | lūderent | sie (Pl.) spielen würden |  |
+| lūdere | konj.impf.pass.3.sg | lūderētur | er/sie/es gespielt würde |  |
+| lūdere | konj.impf.pass.3.pl | lūderentur | sie (Pl.) gespielt würden |  |
+| lūdere | konj.perf.akt.3.sg | lūserit | er/sie/es gespielt hat |  |
+| lūdere | konj.perf.akt.3.pl | lūserint | sie (Pl.) gespielt haben |  |
+| lūdere | konj.perf.pass.3.sg | lūsus sit | er/sie/es gespielt worden ist |  |
+| lūdere | konj.perf.pass.3.pl | lūsī sint | sie (Pl.) gespielt worden sind |  |
+| lūdere | konj.plusq.akt.3.sg | lūsisset | er/sie/es gespielt hätte |  |
+| lūdere | konj.plusq.akt.3.pl | lūsissent | sie (Pl.) gespielt hätten |  |
+| lūdere | konj.plusq.pass.3.sg | lūsus esset | er/sie/es gespielt worden wäre |  |
+| lūdere | konj.plusq.pass.3.pl | lūsī essent | sie (Pl.) gespielt worden wären |  |
+| solvere | ind.praes.akt.3.sg | solvit | er/sie/es löst |  |
+| solvere | ind.praes.akt.3.pl | solvunt | sie (Pl.) lösen |  |
+| solvere | ind.praes.pass.3.sg | solvitur | er/sie/es wird gelöst |  |
+| solvere | ind.praes.pass.3.pl | solvuntur | sie (Pl.) werden gelöst |  |
+| solvere | ind.impf.akt.3.sg | solvēbat | er/sie/es löste |  |
+| solvere | ind.impf.akt.3.pl | solvēbant | sie (Pl.) lösten |  |
+| solvere | ind.impf.pass.3.sg | solvēbātur | er/sie/es wurde gelöst |  |
+| solvere | ind.impf.pass.3.pl | solvēbantur | sie (Pl.) wurden gelöst |  |
+| solvere | ind.fut.akt.3.sg | solvet | er/sie/es wird lösen |  |
+| solvere | ind.fut.akt.3.pl | solvent | sie (Pl.) werden lösen |  |
+| solvere | ind.fut.pass.3.sg | solvētur | er/sie/es wird gelöst werden |  |
+| solvere | ind.fut.pass.3.pl | solventur | sie (Pl.) werden gelöst werden |  |
+| solvere | ind.perf.akt.3.sg | solvit | er/sie/es hat gelöst | er/sie/es löste |
+| solvere | ind.perf.akt.3.pl | solvērunt | sie (Pl.) haben gelöst | sie (Pl.) lösten |
+| solvere | ind.perf.pass.3.sg | solūtus est | er/sie/es ist gelöst worden |  |
+| solvere | ind.perf.pass.3.pl | solūtī sunt | sie (Pl.) sind gelöst worden |  |
+| solvere | ind.plusq.akt.3.sg | solverat | er/sie/es hatte gelöst |  |
+| solvere | ind.plusq.akt.3.pl | solverant | sie (Pl.) hatten gelöst |  |
+| solvere | ind.plusq.pass.3.sg | solūtus erat | er/sie/es war gelöst worden |  |
+| solvere | ind.plusq.pass.3.pl | solūtī erant | sie (Pl.) waren gelöst worden |  |
+| solvere | ind.fut2.akt.3.sg | solverit | er/sie/es wird gelöst haben |  |
+| solvere | ind.fut2.akt.3.pl | solverint | sie (Pl.) werden gelöst haben |  |
+| solvere | ind.fut2.pass.3.sg | solūtus erit | er/sie/es wird gelöst worden sein |  |
+| solvere | ind.fut2.pass.3.pl | solūtī erunt | sie (Pl.) werden gelöst worden sein |  |
+| solvere | konj.praes.akt.3.sg | solvat | er/sie/es löst |  |
+| solvere | konj.praes.akt.3.pl | solvant | sie (Pl.) lösen |  |
+| solvere | konj.praes.pass.3.sg | solvātur | er/sie/es gelöst wird |  |
+| solvere | konj.praes.pass.3.pl | solvantur | sie (Pl.) gelöst werden |  |
+| solvere | konj.impf.akt.3.sg | solveret | er/sie/es lösen würde |  |
+| solvere | konj.impf.akt.3.pl | solverent | sie (Pl.) lösen würden |  |
+| solvere | konj.impf.pass.3.sg | solverētur | er/sie/es gelöst würde |  |
+| solvere | konj.impf.pass.3.pl | solverentur | sie (Pl.) gelöst würden |  |
+| solvere | konj.perf.akt.3.sg | solverit | er/sie/es gelöst hat |  |
+| solvere | konj.perf.akt.3.pl | solverint | sie (Pl.) gelöst haben |  |
+| solvere | konj.perf.pass.3.sg | solūtus sit | er/sie/es gelöst worden ist |  |
+| solvere | konj.perf.pass.3.pl | solūtī sint | sie (Pl.) gelöst worden sind |  |
+| solvere | konj.plusq.akt.3.sg | solvisset | er/sie/es gelöst hätte |  |
+| solvere | konj.plusq.akt.3.pl | solvissent | sie (Pl.) gelöst hätten |  |
+| solvere | konj.plusq.pass.3.sg | solūtus esset | er/sie/es gelöst worden wäre |  |
+| solvere | konj.plusq.pass.3.pl | solūtī essent | sie (Pl.) gelöst worden wären |  |
+| impetrāre | ind.praes.akt.3.sg | impetrat | er/sie/es erreicht |  |
+| impetrāre | ind.praes.akt.3.pl | impetrant | sie (Pl.) erreichen |  |
+| impetrāre | ind.praes.pass.3.sg | impetrātur | er/sie/es wird erreicht |  |
+| impetrāre | ind.praes.pass.3.pl | impetrantur | sie (Pl.) werden erreicht |  |
+| impetrāre | ind.impf.akt.3.sg | impetrābat | er/sie/es erreichte |  |
+| impetrāre | ind.impf.akt.3.pl | impetrābant | sie (Pl.) erreichten |  |
+| impetrāre | ind.impf.pass.3.sg | impetrābātur | er/sie/es wurde erreicht |  |
+| impetrāre | ind.impf.pass.3.pl | impetrābantur | sie (Pl.) wurden erreicht |  |
+| impetrāre | ind.fut.akt.3.sg | impetrābit | er/sie/es wird erreichen |  |
+| impetrāre | ind.fut.akt.3.pl | impetrābunt | sie (Pl.) werden erreichen |  |
+| impetrāre | ind.fut.pass.3.sg | impetrābitur | er/sie/es wird erreicht werden |  |
+| impetrāre | ind.fut.pass.3.pl | impetrābuntur | sie (Pl.) werden erreicht werden |  |
+| impetrāre | ind.perf.akt.3.sg | impetrāvit | er/sie/es hat erreicht | er/sie/es erreichte |
+| impetrāre | ind.perf.akt.3.pl | impetrāvērunt | sie (Pl.) haben erreicht | sie (Pl.) erreichten |
+| impetrāre | ind.perf.pass.3.sg | impetrātus est | er/sie/es ist erreicht worden |  |
+| impetrāre | ind.perf.pass.3.pl | impetrātī sunt | sie (Pl.) sind erreicht worden |  |
+| impetrāre | ind.plusq.akt.3.sg | impetrāverat | er/sie/es hatte erreicht |  |
+| impetrāre | ind.plusq.akt.3.pl | impetrāverant | sie (Pl.) hatten erreicht |  |
+| impetrāre | ind.plusq.pass.3.sg | impetrātus erat | er/sie/es war erreicht worden |  |
+| impetrāre | ind.plusq.pass.3.pl | impetrātī erant | sie (Pl.) waren erreicht worden |  |
+| impetrāre | ind.fut2.akt.3.sg | impetrāverit | er/sie/es wird erreicht haben |  |
+| impetrāre | ind.fut2.akt.3.pl | impetrāverint | sie (Pl.) werden erreicht haben |  |
+| impetrāre | ind.fut2.pass.3.sg | impetrātus erit | er/sie/es wird erreicht worden sein |  |
+| impetrāre | ind.fut2.pass.3.pl | impetrātī erunt | sie (Pl.) werden erreicht worden sein |  |
+| impetrāre | konj.praes.akt.3.sg | impetret | er/sie/es erreicht |  |
+| impetrāre | konj.praes.akt.3.pl | impetrent | sie (Pl.) erreichen |  |
+| impetrāre | konj.praes.pass.3.sg | impetrētur | er/sie/es erreicht wird |  |
+| impetrāre | konj.praes.pass.3.pl | impetrentur | sie (Pl.) erreicht werden |  |
+| impetrāre | konj.impf.akt.3.sg | impetrāret | er/sie/es erreichen würde |  |
+| impetrāre | konj.impf.akt.3.pl | impetrārent | sie (Pl.) erreichen würden |  |
+| impetrāre | konj.impf.pass.3.sg | impetrārētur | er/sie/es erreicht würde |  |
+| impetrāre | konj.impf.pass.3.pl | impetrārentur | sie (Pl.) erreicht würden |  |
+| impetrāre | konj.perf.akt.3.sg | impetrāverit | er/sie/es erreicht hat |  |
+| impetrāre | konj.perf.akt.3.pl | impetrāverint | sie (Pl.) erreicht haben |  |
+| impetrāre | konj.perf.pass.3.sg | impetrātus sit | er/sie/es erreicht worden ist |  |
+| impetrāre | konj.perf.pass.3.pl | impetrātī sint | sie (Pl.) erreicht worden sind |  |
+| impetrāre | konj.plusq.akt.3.sg | impetrāvisset | er/sie/es erreicht hätte |  |
+| impetrāre | konj.plusq.akt.3.pl | impetrāvissent | sie (Pl.) erreicht hätten |  |
+| impetrāre | konj.plusq.pass.3.sg | impetrātus esset | er/sie/es erreicht worden wäre |  |
+| impetrāre | konj.plusq.pass.3.pl | impetrātī essent | sie (Pl.) erreicht worden wären |  |
+| efficere | ind.praes.akt.3.sg | efficit | er/sie/es bewirkt |  |
+| efficere | ind.praes.akt.3.pl | efficiunt | sie (Pl.) bewirken |  |
+| efficere | ind.praes.pass.3.sg | efficitur | er/sie/es wird bewirkt |  |
+| efficere | ind.praes.pass.3.pl | efficiuntur | sie (Pl.) werden bewirkt |  |
+| efficere | ind.impf.akt.3.sg | efficiēbat | er/sie/es bewirkte |  |
+| efficere | ind.impf.akt.3.pl | efficiēbant | sie (Pl.) bewirkten |  |
+| efficere | ind.impf.pass.3.sg | efficiēbātur | er/sie/es wurde bewirkt |  |
+| efficere | ind.impf.pass.3.pl | efficiēbantur | sie (Pl.) wurden bewirkt |  |
+| efficere | ind.fut.akt.3.sg | efficiet | er/sie/es wird bewirken |  |
+| efficere | ind.fut.akt.3.pl | efficient | sie (Pl.) werden bewirken |  |
+| efficere | ind.fut.pass.3.sg | efficiētur | er/sie/es wird bewirkt werden |  |
+| efficere | ind.fut.pass.3.pl | efficientur | sie (Pl.) werden bewirkt werden |  |
+| efficere | ind.perf.akt.3.sg | effēcit | er/sie/es hat bewirkt | er/sie/es bewirkte |
+| efficere | ind.perf.akt.3.pl | effēcērunt | sie (Pl.) haben bewirkt | sie (Pl.) bewirkten |
+| efficere | ind.perf.pass.3.sg | effectus est | er/sie/es ist bewirkt worden |  |
+| efficere | ind.perf.pass.3.pl | effectī sunt | sie (Pl.) sind bewirkt worden |  |
+| efficere | ind.plusq.akt.3.sg | effēcerat | er/sie/es hatte bewirkt |  |
+| efficere | ind.plusq.akt.3.pl | effēcerant | sie (Pl.) hatten bewirkt |  |
+| efficere | ind.plusq.pass.3.sg | effectus erat | er/sie/es war bewirkt worden |  |
+| efficere | ind.plusq.pass.3.pl | effectī erant | sie (Pl.) waren bewirkt worden |  |
+| efficere | ind.fut2.akt.3.sg | effēcerit | er/sie/es wird bewirkt haben |  |
+| efficere | ind.fut2.akt.3.pl | effēcerint | sie (Pl.) werden bewirkt haben |  |
+| efficere | ind.fut2.pass.3.sg | effectus erit | er/sie/es wird bewirkt worden sein |  |
+| efficere | ind.fut2.pass.3.pl | effectī erunt | sie (Pl.) werden bewirkt worden sein |  |
+| efficere | konj.praes.akt.3.sg | efficiat | er/sie/es bewirkt |  |
+| efficere | konj.praes.akt.3.pl | efficiant | sie (Pl.) bewirken |  |
+| efficere | konj.praes.pass.3.sg | efficiātur | er/sie/es bewirkt wird |  |
+| efficere | konj.praes.pass.3.pl | efficiantur | sie (Pl.) bewirkt werden |  |
+| efficere | konj.impf.akt.3.sg | efficeret | er/sie/es bewirken würde |  |
+| efficere | konj.impf.akt.3.pl | efficerent | sie (Pl.) bewirken würden |  |
+| efficere | konj.impf.pass.3.sg | efficerētur | er/sie/es bewirkt würde |  |
+| efficere | konj.impf.pass.3.pl | efficerentur | sie (Pl.) bewirkt würden |  |
+| efficere | konj.perf.akt.3.sg | effēcerit | er/sie/es bewirkt hat |  |
+| efficere | konj.perf.akt.3.pl | effēcerint | sie (Pl.) bewirkt haben |  |
+| efficere | konj.perf.pass.3.sg | effectus sit | er/sie/es bewirkt worden ist |  |
+| efficere | konj.perf.pass.3.pl | effectī sint | sie (Pl.) bewirkt worden sind |  |
+| efficere | konj.plusq.akt.3.sg | effēcisset | er/sie/es bewirkt hätte |  |
+| efficere | konj.plusq.akt.3.pl | effēcissent | sie (Pl.) bewirkt hätten |  |
+| efficere | konj.plusq.pass.3.sg | effectus esset | er/sie/es bewirkt worden wäre |  |
+| efficere | konj.plusq.pass.3.pl | effectī essent | sie (Pl.) bewirkt worden wären |  |
 | convocāre | ind.praes.akt.3.sg | convocat | er/sie/es ruft zusammen |  |
 | convocāre | ind.praes.akt.3.pl | convocant | sie (Pl.) rufen zusammen |  |
 | convocāre | ind.praes.pass.3.sg | convocātur | er/sie/es wird zusammengerufen |  |

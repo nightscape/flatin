@@ -863,6 +863,138 @@ items:
 
 
   # package 4
+  - type: schwach
+    translation: {de: begehren, en: desire}
+    parts: {infinitiv: begehren, partizip2: begehrt}
+  - type: schwach
+    translation: {de: mäßigen, en: moderate}
+    parts: {infinitiv: mäßigen, partizip2: gemäßigt}
+  - type: stark
+    translation: {de: niederschlagen, en: strike down}
+    parts: {infinitiv: niederschlagen, grundverb: schlagen, partikel: nieder, praesens_3sg: schlägt, praeteritum: schlug, partizip2: niedergeschlagen}
+  - type: schwach
+    translation: {de: beurteilen, en: judge}
+    parts: {infinitiv: beurteilen, partizip2: beurteilt}
+  - type: schwach
+    translation: {de: ernähren, en: feed}
+    parts: {infinitiv: ernähren, partizip2: ernährt}
+  - type: schwach
+    translation: {de: glauben, en: believe}
+    parts: {infinitiv: glauben, partizip2: geglaubt}
+  - type: schwach
+    translation: {de: auslöschen, en: extinguish}
+    parts: {infinitiv: auslöschen, grundverb: löschen, partikel: aus, partizip2: ausgelöscht}
+  - type: schwach
+    translation: {de: unterstützen, en: support}
+    parts: {infinitiv: unterstützen, praesens_2sg: unterstützt, partizip2: unterstützt}
+  - type: schwach
+    translation: {de: bebauen, en: cultivate}
+    parts: {infinitiv: bebauen, partizip2: bebaut}
+  - type: schwach
+    translation: {de: ablegen, en: put down}
+    parts: {infinitiv: ablegen, grundverb: legen, partikel: ab, partizip2: abgelegt}
+  - type: stark
+    translation: {de: werfen, en: throw}
+    parts: {infinitiv: werfen, praesens_3sg: wirft, praeteritum: warf, partizip2: geworfen}
+  - type: stark
+    translation: {de: besteigen, en: climb}
+    parts: {infinitiv: besteigen, praeteritum: bestieg, partizip2: bestiegen}
+  - type: stark
+    translation: {de: stoßen, en: push}
+    parts: {infinitiv: stoßen, praesens_2sg: stößt, praesens_3sg: stößt, praeteritum: stieß, partizip2: gestoßen}
+  - type: schwach
+    translation: {de: veranstalten, en: stage}
+    parts: {infinitiv: veranstalten, partizip2: veranstaltet}
+  - type: schwach
+    translation: {de: verkaufen, en: sell}
+    parts: {infinitiv: verkaufen, partizip2: verkauft}
+  - type: stark
+    translation: {de: verlassen, en: leave}
+    parts: {infinitiv: verlassen, praesens_2sg: verlässt, praesens_3sg: verlässt, praeteritum: verließ, partizip2: verlassen}
+  - type: schwach
+    translation: {de: öffnen, en: open}
+    parts: {infinitiv: öffnen, praesens_2sg: öffnest, praesens_3sg: öffnet, praesens_2pl: öffnet, praeteritum: öffnete, partizip2: geöffnet}
+  - type: stark
+    translation: {de: wahrnehmen, en: perceive}
+    parts: {infinitiv: wahrnehmen, grundverb: nehmen, partikel: wahr, praesens_3sg: nimmt, praeteritum: nahm, partizip2: wahrgenommen}
+  - type: stark
+    translation: {de: hinzuziehen, en: call in}
+    parts: {infinitiv: hinzuziehen, grundverb: ziehen, partikel: hinzu, praeteritum: zog, partizip2: hinzugezogen}
+  - type: stark
+    translation: {de: hineingehen, en: go in}
+    parts: {infinitiv: hineingehen, grundverb: gehen, partikel: hinein, praeteritum: ging, partizip2: hineingegangen}
+    slots: {hilfsverb: hv_sein}
+    absent: *ohne_passiv
+  - id: an der spitze stehen
+    type: stark
+    translation: {de: an der Spitze stehen, en: be at the head}
+    parts: {infinitiv: an der Spitze stehen, grundverb: stehen, wortgruppe: an der Spitze, praeteritum: stand, partizip2: an der Spitze gestanden}
+    absent: *ohne_passiv
+  - type: stark
+    translation: {de: stehen, en: stand}
+    parts: {infinitiv: stehen, praeteritum: stand, partizip2: gestanden}
+    absent: *ohne_passiv
+  - id: sich bemühen
+    type: schwach
+    translation: {de: sich bemühen, en: strive}
+    parts: {infinitiv: bemühen, partizip2: bemüht}
+    slots: {reflexiv: refl}
+    absent: *ohne_passiv
+  - type: schwach
+    translation: {de: verteidigen, en: defend}
+    parts: {infinitiv: verteidigen, partizip2: verteidigt}
+  - id: genau betrachten
+    type: schwach
+    translation: {de: genau betrachten, en: examine closely}
+    parts: {infinitiv: genau betrachten, grundverb: betrachten, wortgruppe: genau, partizip2: genau betrachtet}
+  - type: schwach
+    translation: {de: anzeigen, en: show}
+    parts: {infinitiv: anzeigen, grundverb: zeigen, partikel: an, partizip2: angezeigt}
+  - type: schwach
+    translation: {de: melden, en: report}
+    parts: {infinitiv: melden, partizip2: gemeldet}
+  - type: stark
+    translation: {de: herbeitragen, en: bring over}
+    parts: {infinitiv: herbeitragen, grundverb: tragen, partikel: herbei, praesens_3sg: trägt, praeteritum: trug, partizip2: herbeigetragen}
+  - type: schwach
+    translation: {de: erforschen, en: explore}
+    parts: {infinitiv: erforschen, partizip2: erforscht}
+  - type: schwach
+    translation: {de: hindern, en: hinder}
+    parts: {infinitiv: hindern, praesens_1pl: hindern, partizip2: gehindert}
+  - type: gemischt
+    translation: {de: zusammenbringen, en: bring together}
+    parts: {infinitiv: zusammenbringen, grundverb: bringen, partikel: zusammen, praeteritum: brachte, partizip2: zusammengebracht}
+  - type: stark
+    translation: {de: zurückstoßen, en: push back}
+    parts: {infinitiv: zurückstoßen, grundverb: stoßen, partikel: zurück, praesens_2sg: stößt, praesens_3sg: stößt, praeteritum: stieß, partizip2: zurückgestoßen}
+  - type: schwach
+    translation: {de: fordern, en: demand}
+    parts: {infinitiv: fordern, praesens_1pl: fordern, partizip2: gefordert}
+  - type: stark
+    translation: {de: zusammentragen, en: gather}
+    parts: {infinitiv: zusammentragen, grundverb: tragen, partikel: zusammen, praesens_3sg: trägt, praeteritum: trug, partizip2: zusammengetragen}
+  - type: schwach
+    translation: {de: zusammenstellen, en: put together}
+    parts: {infinitiv: zusammenstellen, grundverb: stellen, partikel: zusammen, partizip2: zusammengestellt}
+  - type: stark
+    translation: {de: vortragen, en: recite}
+    parts: {infinitiv: vortragen, grundverb: tragen, partikel: vor, praesens_3sg: trägt, praeteritum: trug, partizip2: vorgetragen}
+  - type: schwach
+    translation: {de: loben, en: praise}
+    parts: {infinitiv: loben, partizip2: gelobt}
+  - type: schwach
+    translation: {de: spielen, en: play}
+    parts: {infinitiv: spielen, partizip2: gespielt}
+  - type: schwach
+    translation: {de: lösen, en: loosen}
+    parts: {infinitiv: lösen, praesens_2sg: löst, partizip2: gelöst}
+  - type: schwach
+    translation: {de: erreichen, en: achieve}
+    parts: {infinitiv: erreichen, partizip2: erreicht}
+  - type: schwach
+    translation: {de: bewirken, en: bring about}
+    parts: {infinitiv: bewirken, partizip2: bewirkt}
 
 
 
