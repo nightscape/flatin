@@ -11,13 +11,10 @@ import 'package:latin_practice/models/practice_item.dart';
     ChosenOption(right),
     ChosenOption(options.firstWhere((o) => !identical(o, right))),
   ),
-  TypedAnswer(:final expected) => (
+  TypedAnswer(:final expected, :final accepted) => (
     TypedText(expected.text),
     TypedText(
-      word.forms.firstWhere(
-        (f) => !word.acceptedForms[word.formOrder.indexOf(expected.formKey)]
-            .any((a) => norm(a) == norm(f)),
-      ),
+      word.forms.firstWhere((f) => !accepted.any((a) => norm(a) == norm(f))),
     ),
   ),
   MatchingAnswer(:final pairs) => (

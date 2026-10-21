@@ -320,3 +320,187 @@ items:
   - type: Eigenname
     translation: {de: Rom, en: Rome}
     parts: {nominativ: Rom, genitiv: Roms}
+
+  - type: Maskulinum-schwach
+    translation: {de: Hausherr, en: master of the house}
+    parts: {nominativ: Hausherr, genitiv: Hausherrn, plural: Hausherren}
+  - type: Maskulinum
+    translation: {de: Tag, en: day}
+    parts: {nominativ: Tag, genitiv: Tages, plural: Tage}
+  - type: Femininum
+    translation: {de: Hand, en: hand}
+    parts: {nominativ: Hand, plural: Hände}
+  - type: Maskulinum
+    translation: {de: Gott, en: god}
+    parts: {nominativ: Gott, genitiv: Gottes, plural: Götter}
+  - type: Neutrum
+    translation: {de: Kapitol, en: Capitol}
+    parts: {nominativ: Kapitol, genitiv: Kapitols}
+  - type: Femininum
+    translation: {de: Unterwelt, en: underworld}
+    parts: {nominativ: Unterwelt}
+  - type: Maskulinum
+    translation: {de: Gegner, en: opponent}
+    parts: {nominativ: Gegner, genitiv: Gegners, plural: Gegner}
+  - type: Neutrum
+    translation: {de: Gebäude, en: building}
+    parts: {nominativ: Gebäude, genitiv: Gebäudes, plural: Gebäude}
+  - type: Neutrum
+    translation: {de: Amphitheater, en: amphitheater}
+    parts: {nominativ: Amphitheater, genitiv: Amphitheaters, plural: Amphitheater}
+  - type: Maskulinum
+    translation: {de: Freund, en: friend}
+    parts: {nominativ: Freund, genitiv: Freundes, plural: Freunde}
+  - type: Maskulinum
+    translation: {de: Sand, en: sand}
+    parts: {nominativ: Sand, genitiv: Sandes}
+  - type: Femininum
+    translation: {de: Gerichtshalle, en: court hall}
+    parts: {nominativ: Gerichtshalle, plural: Gerichtshallen}
+  - type: Neutrum
+    translation: {de: Tier, en: animal}
+    parts: {nominativ: Tier, genitiv: Tieres, plural: Tiere}
+  - type: Femininum
+    translation: {de: Nahrung, en: food}
+    parts: {nominativ: Nahrung}
+  - type: Maskulinum
+    translation: {de: Rat, en: advice}
+    parts: {nominativ: Rat, genitiv: Rates, plural: Räte}
+  - type: Femininum
+    translation: {de: Kurie, en: curia}
+    parts: {nominativ: Kurie, plural: Kurien}
+  - type: Femininum
+    translation: {de: Göttin, en: goddess}
+    parts: {nominativ: Göttin, plural: Göttinnen}
+  - type: Femininum
+    translation: {de: Herrin, en: mistress}
+    parts: {nominativ: Herrin, plural: Herrinnen}
+  - type: Neutrum
+    translation: {de: Pferd, en: horse}
+    parts: {nominativ: Pferd, genitiv: Pferdes, plural: Pferde}
+  - type: Femininum
+    translation: {de: Familie, en: family}
+    parts: {nominativ: Familie, plural: Familien}
+  - type: Maskulinum
+    translation: {de: Marktplatz, en: marketplace}
+    parts: {nominativ: Marktplatz, genitiv: Marktplatzes, plural: Marktplätze}
+  - type: Neutrum
+    translation: {de: Getreide, en: grain}
+    parts: {nominativ: Getreide, genitiv: Getreides}
+  - type: Femininum
+    translation: {de: Frau, en: woman}
+    parts: {nominativ: Frau, plural: Frauen}
+  - type: Maskulinum
+    translation: {de: Sohn, en: son}
+    parts: {nominativ: Sohn, genitiv: Sohnes, plural: Söhne}
+  - type: Maskulinum
+    translation: {de: Garten, en: garden}
+    parts: {nominativ: Garten, genitiv: Gartens, plural: Gärten}
+  - type: Neutrum
+    translation: {de: Opfer, en: sacrifice}
+    parts: {nominativ: Opfer, genitiv: Opfers, plural: Opfer}
+  - type: Maskulinum
+    translation: {de: Brand, en: fire}
+    parts: {nominativ: Brand, genitiv: Brandes, plural: Brände}
+  - type: Neutrum
+    translation: {de: Spiel, en: game}
+    parts: {nominativ: Spiel, genitiv: Spiels, plural: Spiele}
+  - type: Neutrum
+    translation: {de: Denkmal, en: monument}
+    parts: {nominativ: Denkmal, genitiv: Denkmals, plural: Denkmäler}
+  - type: Neutrum
+    translation: {de: Ungeheuer, en: monster}
+    parts: {nominativ: Ungeheuer, genitiv: Ungeheuers, plural: Ungeheuer}
+  - type: Femininum
+    translation: {de: Aufgabe, en: task}
+    parts: {nominativ: Aufgabe, plural: Aufgaben}
+  - type: Femininum
+    translation: {de: Gefahr, en: danger}
+    parts: {nominativ: Gefahr, plural: Gefahren}
+  - type: Neutrum
+    translation: {de: Volk, en: people}
+    parts: {nominativ: Volk, genitiv: Volkes, plural: Völker}
+  - type: Femininum
+    translation: {de: Tür, en: door}
+    parts: {nominativ: Tür, plural: Türen}
+  - type: Neutrum
+    translation: {de: Mädchen, en: girl}
+    parts: {nominativ: Mädchen, genitiv: Mädchens, plural: Mädchen}
+  - type: Femininum
+    translation: {de: Weisheit, en: wisdom}
+    parts: {nominativ: Weisheit}
+  - type: Femininum
+    translation: {de: Sklavin, en: female slave}
+    parts: {nominativ: Sklavin, plural: Sklavinnen}
+  - type: Neutrum
+    translation: {de: Bild, en: image}
+    parts: {nominativ: Bild, genitiv: Bildes, plural: Bilder}
+  - type: Neutrum
+    translation: {de: Schauspiel, en: spectacle}
+    parts: {nominativ: Schauspiel, genitiv: Schauspiels, plural: Schauspiele}
+  - type: Neutrum
+    translation: {de: Standbild, en: statue}
+    parts: {nominativ: Standbild, genitiv: Standbildes, plural: Standbilder}
+  - type: Maskulinum
+    translation: {de: Laden, en: shop}
+    parts: {nominativ: Laden, genitiv: Ladens, plural: Läden}
+  - type: Femininum
+    translation: {de: Tafel, en: tablet}
+    parts: {nominativ: Tafel, plural: Tafeln}
+  - type: Neutrum
+    translation: {de: Obergewand, en: outer garment}
+    parts: {nominativ: Obergewand, genitiv: Obergewandes, plural: Obergewänder}
+  - type: Femininum
+    translation: {de: Menschenmenge, en: crowd}
+    parts: {nominativ: Menschenmenge, plural: Menschenmengen}
+  - type: Maskulinum
+    translation: {de: Schatten, en: shadow}
+    parts: {nominativ: Schatten, genitiv: Schattens, plural: Schatten}
+  - type: Neutrum
+    translation: {de: Wort, en: word}
+    parts: {nominativ: Wort, genitiv: Wortes, plural: Wörter}
+  - type: Maskulinum
+    translation: {de: Wein, en: wine}
+    parts: {nominativ: Wein, genitiv: Weines, plural: Weine}
+  - type: Maskulinum
+    translation: {de: Altar, en: altar}
+    parts: {nominativ: Altar, genitiv: Altars, plural: Altäre}
+  - type: Maskulinum
+    translation: {de: König, en: king}
+    parts: {nominativ: König, genitiv: Königs, plural: Könige}
+  - type: Femininum
+    translation: {de: Ehefrau, en: wife}
+    parts: {nominativ: Ehefrau, plural: Ehefrauen}
+  - type: Maskulinum
+    translation: {de: Körper, en: body}
+    parts: {nominativ: Körper, genitiv: Körpers, plural: Körper}
+  - type: Femininum
+    translation: {de: Stadt, en: city}
+    parts: {nominativ: Stadt, plural: Städte}
+  - type: Maskulinum
+    translation: {de: Teil, en: part}
+    parts: {nominativ: Teil, genitiv: Teiles, plural: Teile}
+  - type: Neutrum
+    translation: {de: Meer, en: sea}
+    parts: {nominativ: Meer, genitiv: Meeres, plural: Meere}
+  - type: Femininum
+    translation: {de: Liebe, en: love}
+    parts: {nominativ: Liebe}
+  - type: Neutrum
+    translation: {de: Wohlergehen, en: well-being}
+    parts: {nominativ: Wohlergehen, genitiv: Wohlergehens}
+  - type: Femininum
+    translation: {de: Angst, en: fear}
+    parts: {nominativ: Angst, plural: Ängste}
+  - type: Maskulinum
+    translation: {de: Stier, en: bull}
+    parts: {nominativ: Stier, genitiv: Stieres, plural: Stiere}
+  - type: Femininum
+    translation: {de: Form, en: form}
+    parts: {nominativ: Form, plural: Formen}
+  - type: Femininum
+    translation: {de: Rechte, en: right hand}
+    parts: {nominativ: Rechte, genitiv: Rechten, dativ_singular: Rechten, plural: Rechten}
+  - type: Femininum
+    translation: {de: Blume, en: flower}
+    parts: {nominativ: Blume, plural: Blumen}

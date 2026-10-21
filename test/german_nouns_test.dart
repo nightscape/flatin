@@ -151,7 +151,30 @@ const _pinnedGermanOnly = {
 };
 
 /// The Latin items whose German noun has no plural.
-const _singularOnly = {'Rōma'};
+const _noPlural = {
+  'Rōma',
+  'Capitōlium',
+  'Tartarus',
+  'arēna',
+  'cibus',
+  'frūmentum',
+  'sapientia',
+  'amor',
+  'salūs',
+};
+
+const _spikeLemmas = {
+  'servus',
+  'nūntius',
+  'templum',
+  'Rōmānus',
+  'dōnum',
+  'vīlla',
+  'rosa',
+  'fīlia',
+  'cor',
+  'Rōma',
+};
 
 /// `<Latin lemma> <kind>` → what Random(207) builds over the whole case
 /// bundle: the shown text, then the right answer or the accepted set.
@@ -206,6 +229,7 @@ String _outcome(Exercise e) => switch (e.answer) {
 void main() {
   late GrammarGermanForms german;
   late List<PracticeItem> nouns;
+  late List<PracticeItem> spike;
 
   setUpAll(() async {
     TestWidgetsFlutterBinding.ensureInitialized();
@@ -218,27 +242,17 @@ void main() {
       for (final item in await loadPracticeItems('lib/data/latin_nouns.yaml'))
         if (german.germanNounOf.containsKey(item.id)) item,
     ];
+    spike = [
+      for (final item in nouns)
+        if (_spikeLemmas.contains(item.lemma)) item,
+    ];
   });
 
   PracticeItem latin(String lemma) =>
       nouns.singleWhere((i) => i.lemma == lemma);
 
-  test('ten Latin nouns have a German noun', () {
-    expect(
-      {for (final i in nouns) i.lemma},
-      {
-        'servus',
-        'nūntius',
-        'templum',
-        'Rōmānus',
-        'dōnum',
-        'vīlla',
-        'rosa',
-        'fīlia',
-        'cor',
-        'Rōma',
-      },
-    );
+  test('the ten spike nouns have a German noun', () {
+    expect({for (final i in spike) i.lemma}, _spikeLemmas);
   });
 
   group('case frames', () {
@@ -312,7 +326,7 @@ void main() {
           for (final key in _keys)
             if (german.covers(item, key)) key,
         ],
-        _singularOnly.contains(item.lemma)
+        _noPlural.contains(item.lemma)
             ? _keys.where((k) => k.endsWith('.sg')).toList()
             : _keys,
         reason: item.lemma,
@@ -337,7 +351,7 @@ void main() {
     test('the dative plural takes one n at the plural seam', () {
       expect(
         {
-          for (final item in nouns)
+          for (final item in spike)
             if (german.covers(item, 'dat.pl'))
               item.lemma: german.render(item, 'dat.pl'),
         },
@@ -383,10 +397,10 @@ $_yaml  - type: Neutrum
 
   test('A2, A3 and A7 build the pinned exercise with Random(207)', () {
     final built = <String, String>{};
-    for (final word in nouns) {
+    for (final word in spike) {
       final ctx = ExerciseContext(
         unlocked: {word.type},
-        pool: nouns,
+        pool: spike,
         german: german,
       );
       for (final kind in _kinds) {

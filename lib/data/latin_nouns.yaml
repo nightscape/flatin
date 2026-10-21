@@ -538,133 +538,185 @@ shared:
 items:
   - translation: {de: Der Hausherr/Herr, en: "master (of the house), lord"}
     parts: {nom: "dominus"}
+    de_noun: "hausherr"
   - translation: {de: Die Rose, en: rose}
     parts: {nom: "rosa"}
     de_noun: "rose"
   - translation: {de: Der Tag, en: day}
     parts: {nom: "diēs"}
+    de_noun: "tag"
   - type: U-Deklination
     translation: {de: "Die Hand; der Trupp („Handvoll Leute“)", en: hand}
     parts: {nom: "manus"}
+    de_noun: "hand"
   - translation: {de: Der Gott, en: god}
     parts: {nom: "deus"}
+    de_noun: "gott"
   - translation: {de: "das Kapitol (einer der sieben Hügel Roms)", en: "the Capitol (one of the seven hills of Rome)"}
     parts: {nom: "Capitōlium"}
+    de_noun: "kapitol"
   - translation: {de: der Römer, en: Roman}
     parts: {nom: "Rōmānus"}
     de_noun: "römer"
   - translation: {de: "die Unterwelt; der Tartarus", en: "the underworld; Tartarus"}
     parts: {nom: "Tartarus"}
+    de_noun: "unterwelt"
   - translation: {de: "der Gegner, Feind", en: "opponent, enemy"}
     parts: {nom: "adversārius"}
+    de_noun: "gegner"
   - translation: {de: "das Gebäude, Bauwerk", en: building}
     parts: {nom: "aedificium"}
+    de_noun: "gebäude"
   - translation: {de: das Amphitheater, en: amphitheatre}
     parts: {nom: "amphitheātrum"}
+    de_noun: "amphitheater"
   - translation: {de: der Freund, en: friend}
     parts: {nom: "amīcus"}
+    de_noun: "freund"
   - translation: {de: "der Sand; die Arena, der Kampfplatz", en: "sand; arena"}
     parts: {nom: "arēna"}
+    de_noun: "sand"
   - translation: {de: "die Gerichtshalle, Markthalle", en: "basilica (hall for courts and trade)"}
     parts: {nom: "basilica"}
+    de_noun: "gerichtshalle"
   - translation: {de: "das (wilde) Tier", en: "(wild) animal, beast"}
     parts: {nom: "bēstia"}
+    de_noun: "tier"
   - translation: {de: "die Nahrung, die Speise", en: food}
     parts: {nom: "cibus"}
+    de_noun: "nahrung"
   - translation: {de: "der Rat, Plan, Beschluss", en: "advice, plan, decision"}
     parts: {nom: "cōnsilium"}
+    de_noun: "rat"
   - translation: {de: "die Kurie (Versammlungsort des Senats)", en: "the Curia (meeting place of the Senate)"}
     parts: {nom: "cūria"}
+    de_noun: "kurie"
   - translation: {de: die Göttin, en: goddess}
     parts: {nom: "dea"}
+    de_noun: "göttin"
   - translation: {de: "die Herrin, Ehefrau", en: "mistress (of the house), lady; wife"}
     parts: {nom: "domina"}
+    de_noun: "herrin"
   - translation: {de: "das Geschenk, die Gabe", en: gift}
     parts: {nom: "dōnum"}
     de_noun: "geschenk"
   - translation: {de: das Pferd, en: horse}
     parts: {nom: "equus"}
+    de_noun: "pferd"
   - translation: {de: "die Familie; die Hausgemeinschaft", en: "family; household"}
     parts: {nom: "familia"}
+    de_noun: "familie"
   - translation: {de: "der Marktplatz (das Forum)", en: "forum, marketplace"}
     parts: {nom: "forum"}
+    de_noun: "marktplatz"
   - translation: {de: das Getreide, en: grain}
     parts: {nom: "frūmentum"}
+    de_noun: "getreide"
   - translation: {de: die Frau, en: woman}
     parts: {nom: "fēmina"}
+    de_noun: "frau"
   - translation: {de: die Tochter, en: daughter}
     parts: {nom: "fīlia"}
     de_noun: "tochter"
   - translation: {de: der Sohn, en: son}
     parts: {nom: "fīlius"}
+    de_noun: "sohn"
   - translation: {de: der Garten, en: garden}
     parts: {nom: "hortus"}
+    de_noun: "garten"
   - translation: {de: "das Opfer, Opfertier", en: "sacrificial animal, victim"}
     parts: {nom: "hostia"}
+    de_noun: "opfer"
   - translation: {de: der Brand, en: "fire, blaze"}
     parts: {nom: "incendium"}
+    de_noun: "brand"
   - translation: {de: "das Spiel, Schauspiel; die Schule", en: "game, show; school"}
     parts: {nom: "lūdus"}
+    de_noun: "spiel"
   - translation: {de: das Denkmal, en: monument}
     parts: {nom: "monumentum"}
+    de_noun: "denkmal"
   - translation: {de: das Ungeheuer, en: monster}
     parts: {nom: "mōnstrum"}
+    de_noun: "ungeheuer"
   - translation: {de: "die Aufgabe, Beschäftigung", en: "task, business"}
     parts: {nom: "negōtium"}
+    de_noun: "aufgabe"
   - translation: {de: "die Gefahr, das Abenteuer", en: "danger, risk"}
     parts: {nom: "perīculum"}
+    de_noun: "gefahr"
   - translation: {de: das Volk, en: "people, nation"}
     parts: {nom: "populus"}
+    de_noun: "volk"
   - translation: {de: "die Tür, das Tor, der Eingang", en: "door, gate, entrance"}
     parts: {nom: "porta"}
+    de_noun: "tür"
   - translation: {de: "das Mädchen, die junge Frau", en: "girl, young woman"}
     parts: {nom: "puella"}
+    de_noun: "mädchen"
   - translation: {de: das Opfer, en: sacrifice}
     parts: {nom: "sacrificium"}
+    de_noun: "opfer"
   - translation: {de: "die Weisheit, Klugheit", en: "wisdom, good sense"}
     parts: {nom: "sapientia"}
+    de_noun: "weisheit"
   - translation: {de: die Sklavin, en: "slave (woman)"}
     parts: {nom: "serva"}
+    de_noun: "sklavin"
   - translation: {de: der Sklave, en: slave}
     parts: {nom: "servus"}
     de_noun: "sklave"
   - translation: {de: "das Bild, Götterbild", en: "image, statue of a god"}
     parts: {nom: "simulācrum"}
+    de_noun: "bild"
   - translation: {de: das Schauspiel, en: "show, spectacle"}
     parts: {nom: "spectāculum"}
+    de_noun: "schauspiel"
   - translation: {de: "das Standbild, die Statue", en: statue}
     parts: {nom: "statua"}
+    de_noun: "standbild"
   - translation: {de: "der Laden, das Wirtshaus", en: "shop, inn"}
     parts: {nom: "taberna"}
+    de_noun: "laden"
   - translation: {de: "die Tafel, Schreibtafel", en: "tablet, writing tablet"}
     parts: {nom: "tabula"}
+    de_noun: "tafel"
   - translation: {de: der Tempel, en: temple}
     parts: {nom: "templum"}
     de_noun: "tempel"
   - translation: {de: "das Obergewand (die Toga)", en: toga}
     parts: {nom: "toga"}
+    de_noun: "obergewand"
   - translation: {de: "die Menschenmenge; die Unordnung; der Lärm", en: "crowd; confusion; noise"}
     parts: {nom: "turba"}
+    de_noun: "menschenmenge"
   - translation: {de: der Schatten, en: "shadow, shade"}
     parts: {nom: "umbra"}
+    de_noun: "schatten"
   - translation: {de: das Wort, en: word}
     parts: {nom: "verbum"}
+    de_noun: "wort"
   - translation: {de: "das Haus, Landhaus", en: "country house, villa"}
     parts: {nom: "vīlla"}
     de_noun: "haus"
   - translation: {de: der Wein, en: wine}
     parts: {nom: "vīnum"}
+    de_noun: "wein"
   - translation: {de: der Altar, en: altar}
     parts: {nom: "āra"}
+    de_noun: "altar"
   - type: Konsonantische-Deklination-mf
     translation: {de: der König, en: king}
     parts: {nom: "rēx", gen: "rēgis"}
+    de_noun: "könig"
   - type: Konsonantische-Deklination-mf
     translation: {de: die Ehefrau, en: wife}
     parts: {nom: "uxor", gen: "uxōris"}
+    de_noun: "ehefrau"
   - type: Konsonantische-Deklination-n
     translation: {de: der Körper, en: body}
     parts: {nom: "corpus", gen: "corporis"}
+    de_noun: "körper"
   - type: Pronomen-is
     translation: {de: "dieser, diese, dieses; er, sie, es", en: "this, that; he, she, it"}
     parts: {nom: "is"}
@@ -702,15 +754,19 @@ items:
   - type: Konsonantische-Deklination-i-mf
     translation: {de: die Stadt, en: city}
     parts: {nom: "urbs", gen: "urbis"}
+    de_noun: "stadt"
   - type: Konsonantische-Deklination-i-mf
     translation: {de: "der Teil; die Seite", en: part}
     parts: {nom: "pars", gen: "partis"}
+    de_noun: "teil"
   - type: Konsonantische-Deklination-i-n
     translation: {de: das Meer, en: sea}
     parts: {nom: "mare", gen: "maris"}
+    de_noun: "meer"
   - type: Konsonantische-Deklination-i-n
     translation: {de: "das Tier, Lebewesen", en: "animal, living being"}
     parts: {nom: "animal", gen: "animālis"}
+    de_noun: "tier"
   - type: Pronomen-personal
     translation: {de: ich, en: I}
     parts: {nom: "ego"}
@@ -1039,24 +1095,32 @@ items:
   - type: Konsonantische-Deklination-mf
     translation: {de: die Liebe, en: love}
     parts: {nom: "amor", gen: "amōris"}
+    de_noun: "liebe"
   - type: Konsonantische-Deklination-mf
     translation: {de: "das Wohlergehen, die Rettung; die Gesundheit", en: "well-being, safety, rescue"}
     parts: {nom: "salūs", gen: "salūtis"}
+    de_noun: "wohlergehen"
   - type: Konsonantische-Deklination-mf
     translation: {de: "die Angst, die Furcht", en: fear}
     parts: {nom: "timor", gen: "timōris"}
+    de_noun: "angst"
   - translation: {de: der Stier, en: bull}
     parts: {nom: "taurus", gen: "taurī"}
+    de_noun: "stier"
   - translation: {de: "die Form, die Gestalt, die Schönheit", en: "shape, form; beauty"}
     parts: {nom: "fōrma", gen: "fōrmae"}
+    de_noun: "form"
   - translation: {de: die rechte Hand, en: right hand}
     parts: {nom: "dextra", gen: "dextrae"}
+    de_noun: "rechte"
   - type: Konsonantische-Deklination-mf
     translation: {de: "die Blume, die Blüte", en: "flower, blossom"}
     parts: {nom: "flōs", gen: "flōris"}
+    de_noun: "blume"
   - type: Konsonantische-Deklination-mf
     translation: {de: das junge Mädchen, en: "girl, young woman"}
     parts: {nom: "virgō", gen: "virginis"}
+    de_noun: "mädchen"
   - translation: {de: "die Insel; der Wohnblock", en: island}
     parts: {nom: "īnsula", gen: "īnsulae"}
   - type: Konsonantische-Deklination-mf
