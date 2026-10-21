@@ -25,14 +25,17 @@ CourseFilter _filter(int upToLesson) => CourseFilter(
   _lessons,
 );
 
-/// Every card, due `daysAhead` after [_now] unless listed in [due].
+/// Every card, reviewed unless [reviewed] is false, due one day after [_now]
+/// unless listed in [due].
 Map<String, PracticeItemCard> _cards(
   Map<String, PracticeItemCard> all,
   Set<String> due, {
   Map<String, DateTime> dueAt = const {},
+  bool reviewed = true,
 }) => {
   for (final card in all.values)
     card.itemId: card.copyWith(
+      lastReview: reviewed ? _now.subtract(const Duration(days: 2)) : null,
       due:
           dueAt[card.itemId] ??
           (due.contains(card.itemId)
@@ -151,7 +154,7 @@ void main() {
     expect(_wordId(byId), a.compareTo(v) < 0 ? a : v);
   });
 
-  test('equal R among partners: the smaller card id', () {
+  test('equal R among partners: the earlier lesson, then the smaller id', () {
     final bundle = bundleOf(amare, 'ind.praes.akt.3.sg');
     final g = grammar(amare, bundle);
     final r = {g: 0.1};
@@ -162,9 +165,15 @@ void main() {
           w.formOrder.any((k) => grammar(w, bundleOf(w, k)) == g),
     );
 
+    final firstLesson = candidates
+        .map(_lessons.lessonNumberOf)
+        .reduce((a, b) => a < b ? a : b);
+    final first = candidates.where(
+      (w) => _lessons.lessonNumberOf(w) == firstLesson,
+    );
     expect(
       _wordId(pair.word),
-      candidates.map(_wordId).reduce((a, b) => a.compareTo(b) < 0 ? a : b),
+      first.map(_wordId).reduce((a, b) => a.compareTo(b) < 0 ? a : b),
     );
   });
 
@@ -197,40 +206,124 @@ void main() {
     );
   });
 
+  test('a reviewed due word is the anchor before new grammar cards', () {
+    final g = grammar(amare, 'ind.praes.akt');
+    final cards = _cards(all, {_wordId(amare), g}, reviewed: false);
+    cards[_wordId(amare)] = cards[_wordId(amare)]!.copyWith(
+      lastReview: _now.subtract(const Duration(days: 2)),
+    );
+    final pair = _select(cards, filter, {_wordId(amare): 0.9})!;
+
+    expect(pair.anchorIsGrammar, isFalse);
+    expect(pair.word, amare);
+  });
+
+  test('with only new cards due, the earliest lesson is the anchor', () {
+    final cards = _cards(all, all.keys.toSet(), reviewed: false);
+    final pair = _select(cards, filter, {})!;
+    final earliest = _items
+        .where(filter.reachesPractice)
+        .map(_lessons.lessonNumberOf)
+        .reduce((a, b) => a < b ? a : b);
+
+    expect(_lessons.lessonNumberOf(pair.word), earliest);
+  });
+
+  test('new cards alternate between nouns and verbs on equal lessons, and '
+      'follow course order with Good answers', () {
+    final scheduler = fsrs.Scheduler();
+    var cards = _cards(all, all.keys.toSet(), reviewed: false);
+    final picked = <SelectedPair>[];
+    for (var i = 0; i < 20; i++) {
+      final pair = _select(cards, filter, {})!;
+      picked.add(pair);
+      for (final id in [_wordId(pair.word), pair.grammarCardId as String]) {
+        final (:card, :reviewLog) = scheduler.reviewCard(
+          cards[id]!.card,
+          fsrs.Rating.good,
+          reviewDateTime: _now,
+        );
+        cards = {
+          ...cards,
+          id: cards[id]!.copyWith(
+            card: card,
+            lastReview: _now,
+            due: _now.add(const Duration(days: 1)),
+          ),
+        };
+      }
+    }
+    final lessons = [for (final p in picked) _lessons.lessonNumberOf(p.word)];
+
+    expect(picked.any((p) => p.word.dataFileId == 'verbs'), isTrue);
+    expect(picked.any((p) => p.word.dataFileId == 'nouns'), isTrue);
+    expect(lessons, [...lessons]..sort());
+  });
+
   test(
-    'new cards (R 0) anchor before reviewed ones and partner after them',
+    'the first two new anchors of equal lesson come from different files',
     () {
       final scheduler = fsrs.Scheduler();
-      PracticeItemCard reviewed(PracticeItemCard c) {
-        final (:card, :reviewLog) = scheduler.reviewCard(
-          c.card,
-          fsrs.Rating.good,
-          reviewDateTime: _now.subtract(const Duration(days: 2)),
-        );
-        return c.copyWith(
-          card: card,
-          lastReview: reviewLog.reviewDateTime,
-          due: _now,
+      var cards = _cards(all, all.keys.toSet(), reviewed: false);
+      final files = <String>[];
+      for (var i = 0; i < 2; i++) {
+        final pair = _select(cards, filter, {})!;
+        files.add(pair.word.dataFileId);
+        for (final id in [_wordId(pair.word), pair.grammarCardId as String]) {
+          final (:card, :reviewLog) = scheduler.reviewCard(
+            cards[id]!.card,
+            fsrs.Rating.good,
+            reviewDateTime: _now,
+          );
+          cards = {
+            ...cards,
+            id: cards[id]!.copyWith(
+              card: card,
+              lastReview: _now,
+              due: _now.add(const Duration(days: 1)),
+            ),
+          };
+        }
+      }
+      expect(files.toSet(), hasLength(2));
+    },
+  );
+
+  test(
+    'every noun word card reviewed does not skew the alternation of new grammar '
+    'cards',
+    () {
+      final scheduler = fsrs.Scheduler();
+      var cards = _cards(all, all.keys.toSet(), reviewed: false);
+      final nounWords = _items.where((w) => w.dataFileId == 'nouns');
+      for (final w in nounWords) {
+        final id = _wordId(w);
+        cards[id] = cards[id]!.copyWith(
+          lastReview: _now.subtract(const Duration(days: 2)),
+          due: _now.add(const Duration(days: 1)),
         );
       }
+      final files = <String>[];
+      for (var i = 0; i < 4; i++) {
+        final pair = _select(cards, filter, {})!;
+        files.add(pair.word.dataFileId);
+        final id = pair.grammarCardId as String;
+        final (:card, :reviewLog) = scheduler.reviewCard(
+          cards[id]!.card,
+          fsrs.Rating.good,
+          reviewDateTime: _now,
+        );
+        cards = {
+          ...cards,
+          id: cards[id]!.copyWith(
+            card: card,
+            lastReview: _now,
+            due: _now.add(const Duration(days: 1)),
+          ),
+        };
+      }
 
-      final g = grammar(amare, 'ind.praes.akt');
-      final cards = _cards(all, {_wordId(amare), g});
-      cards[_wordId(amare)] = reviewed(cards[_wordId(amare)]!);
-      double r(PracticeItemCard c) =>
-          scheduler.getCardRetrievability(c.card, currentDateTime: _now);
-
-      final pair = selectPair(
-        cards: cards,
-        items: _items,
-        filter: filter,
-        retrievability: r,
-        now: _now,
-      );
-
-      expect(pair!.anchorIsGrammar, isTrue);
-      expect(pair.grammarCardId, g);
-      expect(pair.word, amare);
+      expect(files.toSet(), hasLength(2));
     },
   );
 

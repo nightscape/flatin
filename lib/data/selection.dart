@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import '../models/course_filter.dart';
 import '../models/exercise.dart';
 import '../models/fsrs_card.dart';
@@ -23,12 +25,16 @@ final class SelectedPair {
 
 /// The next exercise's word and bundle, or null when no card is due.
 ///
-/// The anchor is the due card, word or grammar, with the lowest R. The partner
-/// is the card of the other kind with the highest R among those that match the
+/// The anchor is the due card, word or grammar, with the lowest R among those
+/// that have a review. Only when none is due, the anchor is a new card: the
+/// one whose lesson comes first in the course; on equal lessons the data file
+/// with fewer reviewed grammar cards, then the smaller card id. The partner is the
+/// card of the other kind with the highest R among those that match the
 /// anchor: the bundles the anchor word has, or the words that have the anchor
-/// bundle. Only words and bundles the course offers take part, so a new card
-/// is due once its lesson is in range. Ties go to the earlier due date, then
-/// to the smaller card id.
+/// bundle; on equal R the earlier lesson, then the smaller card id. Only words
+/// and bundles the course offers take part, so a new card is due once its
+/// lesson is in range. Ties among reviewed anchors go to the earlier due date,
+/// then to the smaller card id.
 ///
 /// [cards] holds a card for every word and bundle of [items].
 SelectedPair? selectPair({
@@ -41,7 +47,33 @@ SelectedPair? selectPair({
   final bundlesOfWord = <PracticeItem, Set<GrammarBundle>>{};
   final wordsOfBundle =
       <GrammarCardId, ({GrammarBundle bundle, List<PracticeItem> words})>{};
+  final lessonOf = <String, int>{};
+  final fileOf = <String, String>{};
+  void teach(String cardId, String dataFileId, int lesson) {
+    fileOf[cardId] = dataFileId;
+    final known = lessonOf[cardId];
+    if (known == null || lesson < known) lessonOf[cardId] = lesson;
+  }
+
   for (final word in items.where(filter.reachesPractice)) {
+    teach(
+      PracticeItemCard.generateItemId(word),
+      word.dataFileId,
+      filter.lessons.lessonNumberOf(word),
+    );
+    final typeLesson = filter.curriculum.typeLesson(word.dataFileId, word.type);
+    for (final label in word.formLabels) {
+      if (!filter.formPracticed(word.dataFileId, label)) continue;
+      final formLesson = filter.curriculum.formLesson(
+        word.dataFileId,
+        label.key,
+      );
+      teach(
+        GrammarCardId.of(word, label.key),
+        word.dataFileId,
+        max(typeLesson, formLesson),
+      );
+    }
     final bundles = {
       for (final label in word.formLabels)
         if (filter.formPracticed(word.dataFileId, label))
@@ -73,7 +105,9 @@ SelectedPair? selectPair({
 
   int byStrongest(PracticeItemCard a, PracticeItemCard b) {
     final byR = retrievability(b).compareTo(retrievability(a));
-    return byR != 0 ? byR : a.itemId.compareTo(b.itemId);
+    if (byR != 0) return byR;
+    final byLesson = lessonOf[a.itemId]!.compareTo(lessonOf[b.itemId]!);
+    return byLesson != 0 ? byLesson : a.itemId.compareTo(b.itemId);
   }
 
   final wordCardOf = {
@@ -88,7 +122,26 @@ SelectedPair? selectPair({
       if (isDue(card)) card,
   ];
   if (all.isEmpty) return null;
-  final anchor = all.reduce((a, b) => byWeakest(a, b) <= 0 ? a : b);
+
+  final reviewedIn = <String, int>{};
+  for (final id in fileOf.keys) {
+    if (id.startsWith('grammar:') && cardOf(id).lastReview != null) {
+      reviewedIn.update(fileOf[id]!, (n) => n + 1, ifAbsent: () => 1);
+    }
+  }
+  int inCourseOrder(PracticeItemCard a, PracticeItemCard b) {
+    final byLesson = lessonOf[a.itemId]!.compareTo(lessonOf[b.itemId]!);
+    if (byLesson != 0) return byLesson;
+    final byReviewed = (reviewedIn[fileOf[a.itemId]] ?? 0).compareTo(
+      reviewedIn[fileOf[b.itemId]] ?? 0,
+    );
+    return byReviewed != 0 ? byReviewed : a.itemId.compareTo(b.itemId);
+  }
+
+  final reviewedDue = all.where((c) => c.lastReview != null);
+  final anchor = reviewedDue.isNotEmpty
+      ? reviewedDue.reduce((a, b) => byWeakest(a, b) <= 0 ? a : b)
+      : all.reduce((a, b) => inCourseOrder(a, b) <= 0 ? a : b);
 
   T strongest<T>(
     Iterable<T> candidates,
