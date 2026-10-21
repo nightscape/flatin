@@ -7,7 +7,7 @@ import 'package:latin_practice/grammar/schema.dart';
 import 'package:latin_practice/models/practice_item.dart';
 
 /// German verbs without a personal passive; their passive keys are absent.
-const _withoutGermanPassive = {'herabsteigen'};
+const _withoutGermanPassive = {'herabsteigen', 'zurückblicken'};
 
 /// Latin items 95..141 of the verb file.
 const _first = 94;

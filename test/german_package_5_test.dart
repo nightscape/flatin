@@ -134,5 +134,21 @@ void main() {
       );
       expect(text('verbs:nescire', 'ind.praes.akt.1.sg'), 'ich weiß nicht');
     });
+    test('first gloss verb kept without a core-sense match', () {
+      expect(text('verbs:habere', 'ind.praes.akt.1.sg'), 'ich habe');
+      expect(text('verbs:manere', 'ind.praes.akt.3.sg'), 'er/sie/es bleibt');
+      expect(
+        text('verbs:respicere', 'ind.praes.akt.1.sg'),
+        'ich blicke zurück',
+      );
+    });
+    test('wiederherstellen is one separable verb', () {
+      expect(
+        text('verbs:restituere', 'ind.praes.akt.3.sg'),
+        'er/sie/es stellt wieder her',
+      );
+      expect(text('verbs:restituere', 'part.perf.pass'), 'wiederhergestellt');
+      expect(text('verbs:restituere', 'inf.praes.akt'), 'wiederherstellen');
+    });
   });
 }

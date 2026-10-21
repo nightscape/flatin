@@ -33,6 +33,8 @@ const _withoutGermanPassive = {
   'sitzen',
   'könig sein',
   'dienen',
+  'haben vollverb',
+  'bleiben',
 };
 
 void main() {

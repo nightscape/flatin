@@ -40,46 +40,46 @@
 | amāre | konj.plusq.akt.3.pl | amāvissent | sie (Pl.) geliebt hätten |  |
 | amāre | konj.plusq.pass.3.sg | amātus esset | er/sie/es geliebt worden wäre |  |
 | amāre | konj.plusq.pass.3.pl | amātī essent | sie (Pl.) geliebt worden wären |  |
-| habēre | ind.praes.akt.3.sg | habet | er/sie/es hält |  |
-| habēre | ind.praes.akt.3.pl | habent | sie (Pl.) halten |  |
-| habēre | ind.praes.pass.3.sg | habētur | er/sie/es wird gehalten |  |
-| habēre | ind.praes.pass.3.pl | habentur | sie (Pl.) werden gehalten |  |
-| habēre | ind.impf.akt.3.sg | habēbat | er/sie/es hielt |  |
-| habēre | ind.impf.akt.3.pl | habēbant | sie (Pl.) hielten |  |
-| habēre | ind.impf.pass.3.sg | habēbātur | er/sie/es wurde gehalten |  |
-| habēre | ind.impf.pass.3.pl | habēbantur | sie (Pl.) wurden gehalten |  |
-| habēre | ind.fut.akt.3.sg | habēbit | er/sie/es wird halten |  |
-| habēre | ind.fut.akt.3.pl | habēbunt | sie (Pl.) werden halten |  |
-| habēre | ind.fut.pass.3.sg | habēbitur | er/sie/es wird gehalten werden |  |
-| habēre | ind.fut.pass.3.pl | habēbuntur | sie (Pl.) werden gehalten werden |  |
-| habēre | ind.perf.akt.3.sg | habuit | er/sie/es hat gehalten | er/sie/es hielt |
-| habēre | ind.perf.akt.3.pl | habuērunt | sie (Pl.) haben gehalten | sie (Pl.) hielten |
-| habēre | ind.perf.pass.3.sg | habitus est | er/sie/es ist gehalten worden |  |
-| habēre | ind.perf.pass.3.pl | habitī sunt | sie (Pl.) sind gehalten worden |  |
-| habēre | ind.plusq.akt.3.sg | habuerat | er/sie/es hatte gehalten |  |
-| habēre | ind.plusq.akt.3.pl | habuerant | sie (Pl.) hatten gehalten |  |
-| habēre | ind.plusq.pass.3.sg | habitus erat | er/sie/es war gehalten worden |  |
-| habēre | ind.plusq.pass.3.pl | habitī erant | sie (Pl.) waren gehalten worden |  |
-| habēre | ind.fut2.akt.3.sg | habuerit | er/sie/es wird gehalten haben |  |
-| habēre | ind.fut2.akt.3.pl | habuerint | sie (Pl.) werden gehalten haben |  |
-| habēre | ind.fut2.pass.3.sg | habitus erit | er/sie/es wird gehalten worden sein |  |
-| habēre | ind.fut2.pass.3.pl | habitī erunt | sie (Pl.) werden gehalten worden sein |  |
-| habēre | konj.praes.akt.3.sg | habeat | er/sie/es hält |  |
-| habēre | konj.praes.akt.3.pl | habeant | sie (Pl.) halten |  |
-| habēre | konj.praes.pass.3.sg | habeātur | er/sie/es gehalten wird |  |
-| habēre | konj.praes.pass.3.pl | habeantur | sie (Pl.) gehalten werden |  |
-| habēre | konj.impf.akt.3.sg | habēret | er/sie/es halten würde |  |
-| habēre | konj.impf.akt.3.pl | habērent | sie (Pl.) halten würden |  |
-| habēre | konj.impf.pass.3.sg | habērētur | er/sie/es gehalten würde |  |
-| habēre | konj.impf.pass.3.pl | habērentur | sie (Pl.) gehalten würden |  |
-| habēre | konj.perf.akt.3.sg | habuerit | er/sie/es gehalten hat |  |
-| habēre | konj.perf.akt.3.pl | habuerint | sie (Pl.) gehalten haben |  |
-| habēre | konj.perf.pass.3.sg | habitus sit | er/sie/es gehalten worden ist |  |
-| habēre | konj.perf.pass.3.pl | habitī sint | sie (Pl.) gehalten worden sind |  |
-| habēre | konj.plusq.akt.3.sg | habuisset | er/sie/es gehalten hätte |  |
-| habēre | konj.plusq.akt.3.pl | habuissent | sie (Pl.) gehalten hätten |  |
-| habēre | konj.plusq.pass.3.sg | habitus esset | er/sie/es gehalten worden wäre |  |
-| habēre | konj.plusq.pass.3.pl | habitī essent | sie (Pl.) gehalten worden wären |  |
+| habēre | ind.praes.akt.3.sg | habet | er/sie/es hat |  |
+| habēre | ind.praes.akt.3.pl | habent | sie (Pl.) haben |  |
+| habēre | ind.praes.pass.3.sg | habētur | — |  |
+| habēre | ind.praes.pass.3.pl | habentur | — |  |
+| habēre | ind.impf.akt.3.sg | habēbat | er/sie/es hatte |  |
+| habēre | ind.impf.akt.3.pl | habēbant | sie (Pl.) hatten |  |
+| habēre | ind.impf.pass.3.sg | habēbātur | — |  |
+| habēre | ind.impf.pass.3.pl | habēbantur | — |  |
+| habēre | ind.fut.akt.3.sg | habēbit | er/sie/es wird haben |  |
+| habēre | ind.fut.akt.3.pl | habēbunt | sie (Pl.) werden haben |  |
+| habēre | ind.fut.pass.3.sg | habēbitur | — |  |
+| habēre | ind.fut.pass.3.pl | habēbuntur | — |  |
+| habēre | ind.perf.akt.3.sg | habuit | er/sie/es hat gehabt | er/sie/es hatte |
+| habēre | ind.perf.akt.3.pl | habuērunt | sie (Pl.) haben gehabt | sie (Pl.) hatten |
+| habēre | ind.perf.pass.3.sg | habitus est | — |  |
+| habēre | ind.perf.pass.3.pl | habitī sunt | — |  |
+| habēre | ind.plusq.akt.3.sg | habuerat | er/sie/es hatte gehabt |  |
+| habēre | ind.plusq.akt.3.pl | habuerant | sie (Pl.) hatten gehabt |  |
+| habēre | ind.plusq.pass.3.sg | habitus erat | — |  |
+| habēre | ind.plusq.pass.3.pl | habitī erant | — |  |
+| habēre | ind.fut2.akt.3.sg | habuerit | er/sie/es wird gehabt haben |  |
+| habēre | ind.fut2.akt.3.pl | habuerint | sie (Pl.) werden gehabt haben |  |
+| habēre | ind.fut2.pass.3.sg | habitus erit | — |  |
+| habēre | ind.fut2.pass.3.pl | habitī erunt | — |  |
+| habēre | konj.praes.akt.3.sg | habeat | er/sie/es hat |  |
+| habēre | konj.praes.akt.3.pl | habeant | sie (Pl.) haben |  |
+| habēre | konj.praes.pass.3.sg | habeātur | — |  |
+| habēre | konj.praes.pass.3.pl | habeantur | — |  |
+| habēre | konj.impf.akt.3.sg | habēret | er/sie/es hätte |  |
+| habēre | konj.impf.akt.3.pl | habērent | sie (Pl.) hätten |  |
+| habēre | konj.impf.pass.3.sg | habērētur | — |  |
+| habēre | konj.impf.pass.3.pl | habērentur | — |  |
+| habēre | konj.perf.akt.3.sg | habuerit | er/sie/es gehabt hat |  |
+| habēre | konj.perf.akt.3.pl | habuerint | sie (Pl.) gehabt haben |  |
+| habēre | konj.perf.pass.3.sg | habitus sit | — |  |
+| habēre | konj.perf.pass.3.pl | habitī sint | — |  |
+| habēre | konj.plusq.akt.3.sg | habuisset | er/sie/es gehabt hätte |  |
+| habēre | konj.plusq.akt.3.pl | habuissent | sie (Pl.) gehabt hätten |  |
+| habēre | konj.plusq.pass.3.sg | habitus esset | — |  |
+| habēre | konj.plusq.pass.3.pl | habitī essent | — |  |
 | audīre | ind.praes.akt.3.sg | audit | er/sie/es hört |  |
 | audīre | ind.praes.akt.3.pl | audiunt | sie (Pl.) hören |  |
 | audīre | ind.praes.pass.3.sg | audītur | er/sie/es wird gehört |  |
@@ -980,46 +980,46 @@
 | labōrāre | konj.plusq.akt.3.sg | labōrāvisset | er/sie/es gearbeitet hätte |  |
 | labōrāre | konj.plusq.akt.3.pl | labōrāvissent | sie (Pl.) gearbeitet hätten |  |
 | labōrāre | konj.plusq.pass.3.sg | labōrātum esset | — |  |
-| manēre | ind.praes.akt.3.sg | manet | er/sie/es erwartet |  |
-| manēre | ind.praes.akt.3.pl | manent | sie (Pl.) erwarten |  |
-| manēre | ind.praes.pass.3.sg | manētur | er/sie/es wird erwartet |  |
-| manēre | ind.praes.pass.3.pl | manentur | sie (Pl.) werden erwartet |  |
-| manēre | ind.impf.akt.3.sg | manēbat | er/sie/es erwartete |  |
-| manēre | ind.impf.akt.3.pl | manēbant | sie (Pl.) erwarteten |  |
-| manēre | ind.impf.pass.3.sg | manēbātur | er/sie/es wurde erwartet |  |
-| manēre | ind.impf.pass.3.pl | manēbantur | sie (Pl.) wurden erwartet |  |
-| manēre | ind.fut.akt.3.sg | manēbit | er/sie/es wird erwarten |  |
-| manēre | ind.fut.akt.3.pl | manēbunt | sie (Pl.) werden erwarten |  |
-| manēre | ind.fut.pass.3.sg | manēbitur | er/sie/es wird erwartet werden |  |
-| manēre | ind.fut.pass.3.pl | manēbuntur | sie (Pl.) werden erwartet werden |  |
-| manēre | ind.perf.akt.3.sg | mānsit | er/sie/es hat erwartet | er/sie/es erwartete |
-| manēre | ind.perf.akt.3.pl | mānsērunt | sie (Pl.) haben erwartet | sie (Pl.) erwarteten |
-| manēre | ind.perf.pass.3.sg | mānsus est | er/sie/es ist erwartet worden |  |
-| manēre | ind.perf.pass.3.pl | mānsī sunt | sie (Pl.) sind erwartet worden |  |
-| manēre | ind.plusq.akt.3.sg | mānserat | er/sie/es hatte erwartet |  |
-| manēre | ind.plusq.akt.3.pl | mānserant | sie (Pl.) hatten erwartet |  |
-| manēre | ind.plusq.pass.3.sg | mānsus erat | er/sie/es war erwartet worden |  |
-| manēre | ind.plusq.pass.3.pl | mānsī erant | sie (Pl.) waren erwartet worden |  |
-| manēre | ind.fut2.akt.3.sg | mānserit | er/sie/es wird erwartet haben |  |
-| manēre | ind.fut2.akt.3.pl | mānserint | sie (Pl.) werden erwartet haben |  |
-| manēre | ind.fut2.pass.3.sg | mānsus erit | er/sie/es wird erwartet worden sein |  |
-| manēre | ind.fut2.pass.3.pl | mānsī erunt | sie (Pl.) werden erwartet worden sein |  |
-| manēre | konj.praes.akt.3.sg | maneat | er/sie/es erwartet |  |
-| manēre | konj.praes.akt.3.pl | maneant | sie (Pl.) erwarten |  |
-| manēre | konj.praes.pass.3.sg | maneātur | er/sie/es erwartet wird |  |
-| manēre | konj.praes.pass.3.pl | maneantur | sie (Pl.) erwartet werden |  |
-| manēre | konj.impf.akt.3.sg | manēret | er/sie/es erwarten würde |  |
-| manēre | konj.impf.akt.3.pl | manērent | sie (Pl.) erwarten würden |  |
-| manēre | konj.impf.pass.3.sg | manērētur | er/sie/es erwartet würde |  |
-| manēre | konj.impf.pass.3.pl | manērentur | sie (Pl.) erwartet würden |  |
-| manēre | konj.perf.akt.3.sg | mānserit | er/sie/es erwartet hat |  |
-| manēre | konj.perf.akt.3.pl | mānserint | sie (Pl.) erwartet haben |  |
-| manēre | konj.perf.pass.3.sg | mānsus sit | er/sie/es erwartet worden ist |  |
-| manēre | konj.perf.pass.3.pl | mānsī sint | sie (Pl.) erwartet worden sind |  |
-| manēre | konj.plusq.akt.3.sg | mānsisset | er/sie/es erwartet hätte |  |
-| manēre | konj.plusq.akt.3.pl | mānsissent | sie (Pl.) erwartet hätten |  |
-| manēre | konj.plusq.pass.3.sg | mānsus esset | er/sie/es erwartet worden wäre |  |
-| manēre | konj.plusq.pass.3.pl | mānsī essent | sie (Pl.) erwartet worden wären |  |
+| manēre | ind.praes.akt.3.sg | manet | er/sie/es bleibt |  |
+| manēre | ind.praes.akt.3.pl | manent | sie (Pl.) bleiben |  |
+| manēre | ind.praes.pass.3.sg | manētur | — |  |
+| manēre | ind.praes.pass.3.pl | manentur | — |  |
+| manēre | ind.impf.akt.3.sg | manēbat | er/sie/es blieb |  |
+| manēre | ind.impf.akt.3.pl | manēbant | sie (Pl.) blieben |  |
+| manēre | ind.impf.pass.3.sg | manēbātur | — |  |
+| manēre | ind.impf.pass.3.pl | manēbantur | — |  |
+| manēre | ind.fut.akt.3.sg | manēbit | er/sie/es wird bleiben |  |
+| manēre | ind.fut.akt.3.pl | manēbunt | sie (Pl.) werden bleiben |  |
+| manēre | ind.fut.pass.3.sg | manēbitur | — |  |
+| manēre | ind.fut.pass.3.pl | manēbuntur | — |  |
+| manēre | ind.perf.akt.3.sg | mānsit | er/sie/es ist geblieben | er/sie/es blieb |
+| manēre | ind.perf.akt.3.pl | mānsērunt | sie (Pl.) sind geblieben | sie (Pl.) blieben |
+| manēre | ind.perf.pass.3.sg | mānsus est | — |  |
+| manēre | ind.perf.pass.3.pl | mānsī sunt | — |  |
+| manēre | ind.plusq.akt.3.sg | mānserat | er/sie/es war geblieben |  |
+| manēre | ind.plusq.akt.3.pl | mānserant | sie (Pl.) waren geblieben |  |
+| manēre | ind.plusq.pass.3.sg | mānsus erat | — |  |
+| manēre | ind.plusq.pass.3.pl | mānsī erant | — |  |
+| manēre | ind.fut2.akt.3.sg | mānserit | er/sie/es wird geblieben sein |  |
+| manēre | ind.fut2.akt.3.pl | mānserint | sie (Pl.) werden geblieben sein |  |
+| manēre | ind.fut2.pass.3.sg | mānsus erit | — |  |
+| manēre | ind.fut2.pass.3.pl | mānsī erunt | — |  |
+| manēre | konj.praes.akt.3.sg | maneat | er/sie/es bleibt |  |
+| manēre | konj.praes.akt.3.pl | maneant | sie (Pl.) bleiben |  |
+| manēre | konj.praes.pass.3.sg | maneātur | — |  |
+| manēre | konj.praes.pass.3.pl | maneantur | — |  |
+| manēre | konj.impf.akt.3.sg | manēret | er/sie/es bleiben würde |  |
+| manēre | konj.impf.akt.3.pl | manērent | sie (Pl.) bleiben würden |  |
+| manēre | konj.impf.pass.3.sg | manērētur | — |  |
+| manēre | konj.impf.pass.3.pl | manērentur | — |  |
+| manēre | konj.perf.akt.3.sg | mānserit | er/sie/es geblieben ist |  |
+| manēre | konj.perf.akt.3.pl | mānserint | sie (Pl.) geblieben sind |  |
+| manēre | konj.perf.pass.3.sg | mānsus sit | — |  |
+| manēre | konj.perf.pass.3.pl | mānsī sint | — |  |
+| manēre | konj.plusq.akt.3.sg | mānsisset | er/sie/es geblieben wäre |  |
+| manēre | konj.plusq.akt.3.pl | mānsissent | sie (Pl.) geblieben wären |  |
+| manēre | konj.plusq.pass.3.sg | mānsus esset | — |  |
+| manēre | konj.plusq.pass.3.pl | mānsī essent | — |  |
 | necāre | ind.praes.akt.3.sg | necat | er/sie/es tötet |  |
 | necāre | ind.praes.akt.3.pl | necant | sie (Pl.) töten |  |
 | necāre | ind.praes.pass.3.sg | necātur | er/sie/es wird getötet |  |
@@ -4180,46 +4180,46 @@
 | dīmittere | konj.plusq.akt.3.pl | dīmīsissent | sie (Pl.) entlassen hätten |  |
 | dīmittere | konj.plusq.pass.3.sg | dīmissus esset | er/sie/es entlassen worden wäre |  |
 | dīmittere | konj.plusq.pass.3.pl | dīmissī essent | sie (Pl.) entlassen worden wären |  |
-| respicere | ind.praes.akt.3.sg | respicit | er/sie/es schaut an |  |
-| respicere | ind.praes.akt.3.pl | respiciunt | sie (Pl.) schauen an |  |
-| respicere | ind.praes.pass.3.sg | respicitur | er/sie/es wird angeschaut |  |
-| respicere | ind.praes.pass.3.pl | respiciuntur | sie (Pl.) werden angeschaut |  |
-| respicere | ind.impf.akt.3.sg | respiciēbat | er/sie/es schaute an |  |
-| respicere | ind.impf.akt.3.pl | respiciēbant | sie (Pl.) schauten an |  |
-| respicere | ind.impf.pass.3.sg | respiciēbātur | er/sie/es wurde angeschaut |  |
-| respicere | ind.impf.pass.3.pl | respiciēbantur | sie (Pl.) wurden angeschaut |  |
-| respicere | ind.fut.akt.3.sg | respiciet | er/sie/es wird anschauen |  |
-| respicere | ind.fut.akt.3.pl | respicient | sie (Pl.) werden anschauen |  |
-| respicere | ind.fut.pass.3.sg | respiciētur | er/sie/es wird angeschaut werden |  |
-| respicere | ind.fut.pass.3.pl | respicientur | sie (Pl.) werden angeschaut werden |  |
-| respicere | ind.perf.akt.3.sg | respexit | er/sie/es hat angeschaut | er/sie/es schaute an |
-| respicere | ind.perf.akt.3.pl | respexērunt | sie (Pl.) haben angeschaut | sie (Pl.) schauten an |
-| respicere | ind.perf.pass.3.sg | respectus est | er/sie/es ist angeschaut worden |  |
-| respicere | ind.perf.pass.3.pl | respectī sunt | sie (Pl.) sind angeschaut worden |  |
-| respicere | ind.plusq.akt.3.sg | respexerat | er/sie/es hatte angeschaut |  |
-| respicere | ind.plusq.akt.3.pl | respexerant | sie (Pl.) hatten angeschaut |  |
-| respicere | ind.plusq.pass.3.sg | respectus erat | er/sie/es war angeschaut worden |  |
-| respicere | ind.plusq.pass.3.pl | respectī erant | sie (Pl.) waren angeschaut worden |  |
-| respicere | ind.fut2.akt.3.sg | respexerit | er/sie/es wird angeschaut haben |  |
-| respicere | ind.fut2.akt.3.pl | respexerint | sie (Pl.) werden angeschaut haben |  |
-| respicere | ind.fut2.pass.3.sg | respectus erit | er/sie/es wird angeschaut worden sein |  |
-| respicere | ind.fut2.pass.3.pl | respectī erunt | sie (Pl.) werden angeschaut worden sein |  |
-| respicere | konj.praes.akt.3.sg | respiciat | er/sie/es anschaut |  |
-| respicere | konj.praes.akt.3.pl | respiciant | sie (Pl.) anschauen |  |
-| respicere | konj.praes.pass.3.sg | respiciātur | er/sie/es angeschaut wird |  |
-| respicere | konj.praes.pass.3.pl | respiciantur | sie (Pl.) angeschaut werden |  |
-| respicere | konj.impf.akt.3.sg | respiceret | er/sie/es anschauen würde |  |
-| respicere | konj.impf.akt.3.pl | respicerent | sie (Pl.) anschauen würden |  |
-| respicere | konj.impf.pass.3.sg | respicerētur | er/sie/es angeschaut würde |  |
-| respicere | konj.impf.pass.3.pl | respicerentur | sie (Pl.) angeschaut würden |  |
-| respicere | konj.perf.akt.3.sg | respexerit | er/sie/es angeschaut hat |  |
-| respicere | konj.perf.akt.3.pl | respexerint | sie (Pl.) angeschaut haben |  |
-| respicere | konj.perf.pass.3.sg | respectus sit | er/sie/es angeschaut worden ist |  |
-| respicere | konj.perf.pass.3.pl | respectī sint | sie (Pl.) angeschaut worden sind |  |
-| respicere | konj.plusq.akt.3.sg | respexisset | er/sie/es angeschaut hätte |  |
-| respicere | konj.plusq.akt.3.pl | respexissent | sie (Pl.) angeschaut hätten |  |
-| respicere | konj.plusq.pass.3.sg | respectus esset | er/sie/es angeschaut worden wäre |  |
-| respicere | konj.plusq.pass.3.pl | respectī essent | sie (Pl.) angeschaut worden wären |  |
+| respicere | ind.praes.akt.3.sg | respicit | er/sie/es blickt zurück |  |
+| respicere | ind.praes.akt.3.pl | respiciunt | sie (Pl.) blicken zurück |  |
+| respicere | ind.praes.pass.3.sg | respicitur | — |  |
+| respicere | ind.praes.pass.3.pl | respiciuntur | — |  |
+| respicere | ind.impf.akt.3.sg | respiciēbat | er/sie/es blickte zurück |  |
+| respicere | ind.impf.akt.3.pl | respiciēbant | sie (Pl.) blickten zurück |  |
+| respicere | ind.impf.pass.3.sg | respiciēbātur | — |  |
+| respicere | ind.impf.pass.3.pl | respiciēbantur | — |  |
+| respicere | ind.fut.akt.3.sg | respiciet | er/sie/es wird zurückblicken |  |
+| respicere | ind.fut.akt.3.pl | respicient | sie (Pl.) werden zurückblicken |  |
+| respicere | ind.fut.pass.3.sg | respiciētur | — |  |
+| respicere | ind.fut.pass.3.pl | respicientur | — |  |
+| respicere | ind.perf.akt.3.sg | respexit | er/sie/es hat zurückgeblickt | er/sie/es blickte zurück |
+| respicere | ind.perf.akt.3.pl | respexērunt | sie (Pl.) haben zurückgeblickt | sie (Pl.) blickten zurück |
+| respicere | ind.perf.pass.3.sg | respectus est | — |  |
+| respicere | ind.perf.pass.3.pl | respectī sunt | — |  |
+| respicere | ind.plusq.akt.3.sg | respexerat | er/sie/es hatte zurückgeblickt |  |
+| respicere | ind.plusq.akt.3.pl | respexerant | sie (Pl.) hatten zurückgeblickt |  |
+| respicere | ind.plusq.pass.3.sg | respectus erat | — |  |
+| respicere | ind.plusq.pass.3.pl | respectī erant | — |  |
+| respicere | ind.fut2.akt.3.sg | respexerit | er/sie/es wird zurückgeblickt haben |  |
+| respicere | ind.fut2.akt.3.pl | respexerint | sie (Pl.) werden zurückgeblickt haben |  |
+| respicere | ind.fut2.pass.3.sg | respectus erit | — |  |
+| respicere | ind.fut2.pass.3.pl | respectī erunt | — |  |
+| respicere | konj.praes.akt.3.sg | respiciat | er/sie/es zurückblickt |  |
+| respicere | konj.praes.akt.3.pl | respiciant | sie (Pl.) zurückblicken |  |
+| respicere | konj.praes.pass.3.sg | respiciātur | — |  |
+| respicere | konj.praes.pass.3.pl | respiciantur | — |  |
+| respicere | konj.impf.akt.3.sg | respiceret | er/sie/es zurückblicken würde |  |
+| respicere | konj.impf.akt.3.pl | respicerent | sie (Pl.) zurückblicken würden |  |
+| respicere | konj.impf.pass.3.sg | respicerētur | — |  |
+| respicere | konj.impf.pass.3.pl | respicerentur | — |  |
+| respicere | konj.perf.akt.3.sg | respexerit | er/sie/es zurückgeblickt hat |  |
+| respicere | konj.perf.akt.3.pl | respexerint | sie (Pl.) zurückgeblickt haben |  |
+| respicere | konj.perf.pass.3.sg | respectus sit | — |  |
+| respicere | konj.perf.pass.3.pl | respectī sint | — |  |
+| respicere | konj.plusq.akt.3.sg | respexisset | er/sie/es zurückgeblickt hätte |  |
+| respicere | konj.plusq.akt.3.pl | respexissent | sie (Pl.) zurückgeblickt hätten |  |
+| respicere | konj.plusq.pass.3.sg | respectus esset | — |  |
+| respicere | konj.plusq.pass.3.pl | respectī essent | — |  |
 | cōgnōscere | ind.praes.akt.3.sg | cōgnōscit | er/sie/es lernt kennen |  |
 | cōgnōscere | ind.praes.akt.3.pl | cōgnōscunt | sie (Pl.) lernen kennen |  |
 | cōgnōscere | ind.praes.pass.3.sg | cōgnōscitur | er/sie/es wird kennengelernt |  |
@@ -7617,44 +7617,44 @@
 | expellere | konj.plusq.pass.3.pl | expulsī essent | sie (Pl.) hinausgetrieben worden wären |  |
 | restituere | ind.praes.akt.3.sg | restituit | er/sie/es stellt wieder her |  |
 | restituere | ind.praes.akt.3.pl | restituunt | sie (Pl.) stellen wieder her |  |
-| restituere | ind.praes.pass.3.sg | restituitur | er/sie/es wird wieder hergestellt |  |
-| restituere | ind.praes.pass.3.pl | restituuntur | sie (Pl.) werden wieder hergestellt |  |
+| restituere | ind.praes.pass.3.sg | restituitur | er/sie/es wird wiederhergestellt |  |
+| restituere | ind.praes.pass.3.pl | restituuntur | sie (Pl.) werden wiederhergestellt |  |
 | restituere | ind.impf.akt.3.sg | restituēbat | er/sie/es stellte wieder her |  |
 | restituere | ind.impf.akt.3.pl | restituēbant | sie (Pl.) stellten wieder her |  |
-| restituere | ind.impf.pass.3.sg | restituēbātur | er/sie/es wurde wieder hergestellt |  |
-| restituere | ind.impf.pass.3.pl | restituēbantur | sie (Pl.) wurden wieder hergestellt |  |
-| restituere | ind.fut.akt.3.sg | restituet | er/sie/es wird wieder herstellen |  |
-| restituere | ind.fut.akt.3.pl | restituent | sie (Pl.) werden wieder herstellen |  |
-| restituere | ind.fut.pass.3.sg | restituētur | er/sie/es wird wieder hergestellt werden |  |
-| restituere | ind.fut.pass.3.pl | restituentur | sie (Pl.) werden wieder hergestellt werden |  |
-| restituere | ind.perf.akt.3.sg | restituit | er/sie/es hat wieder hergestellt | er/sie/es stellte wieder her |
-| restituere | ind.perf.akt.3.pl | restituērunt | sie (Pl.) haben wieder hergestellt | sie (Pl.) stellten wieder her |
-| restituere | ind.perf.pass.3.sg | restitūtus est | er/sie/es ist wieder hergestellt worden |  |
-| restituere | ind.perf.pass.3.pl | restitūtī sunt | sie (Pl.) sind wieder hergestellt worden |  |
-| restituere | ind.plusq.akt.3.sg | restituerat | er/sie/es hatte wieder hergestellt |  |
-| restituere | ind.plusq.akt.3.pl | restituerant | sie (Pl.) hatten wieder hergestellt |  |
-| restituere | ind.plusq.pass.3.sg | restitūtus erat | er/sie/es war wieder hergestellt worden |  |
-| restituere | ind.plusq.pass.3.pl | restitūtī erant | sie (Pl.) waren wieder hergestellt worden |  |
-| restituere | ind.fut2.akt.3.sg | restituerit | er/sie/es wird wieder hergestellt haben |  |
-| restituere | ind.fut2.akt.3.pl | restituerint | sie (Pl.) werden wieder hergestellt haben |  |
-| restituere | ind.fut2.pass.3.sg | restitūtus erit | er/sie/es wird wieder hergestellt worden sein |  |
-| restituere | ind.fut2.pass.3.pl | restitūtī erunt | sie (Pl.) werden wieder hergestellt worden sein |  |
+| restituere | ind.impf.pass.3.sg | restituēbātur | er/sie/es wurde wiederhergestellt |  |
+| restituere | ind.impf.pass.3.pl | restituēbantur | sie (Pl.) wurden wiederhergestellt |  |
+| restituere | ind.fut.akt.3.sg | restituet | er/sie/es wird wiederherstellen |  |
+| restituere | ind.fut.akt.3.pl | restituent | sie (Pl.) werden wiederherstellen |  |
+| restituere | ind.fut.pass.3.sg | restituētur | er/sie/es wird wiederhergestellt werden |  |
+| restituere | ind.fut.pass.3.pl | restituentur | sie (Pl.) werden wiederhergestellt werden |  |
+| restituere | ind.perf.akt.3.sg | restituit | er/sie/es hat wiederhergestellt | er/sie/es stellte wieder her |
+| restituere | ind.perf.akt.3.pl | restituērunt | sie (Pl.) haben wiederhergestellt | sie (Pl.) stellten wieder her |
+| restituere | ind.perf.pass.3.sg | restitūtus est | er/sie/es ist wiederhergestellt worden |  |
+| restituere | ind.perf.pass.3.pl | restitūtī sunt | sie (Pl.) sind wiederhergestellt worden |  |
+| restituere | ind.plusq.akt.3.sg | restituerat | er/sie/es hatte wiederhergestellt |  |
+| restituere | ind.plusq.akt.3.pl | restituerant | sie (Pl.) hatten wiederhergestellt |  |
+| restituere | ind.plusq.pass.3.sg | restitūtus erat | er/sie/es war wiederhergestellt worden |  |
+| restituere | ind.plusq.pass.3.pl | restitūtī erant | sie (Pl.) waren wiederhergestellt worden |  |
+| restituere | ind.fut2.akt.3.sg | restituerit | er/sie/es wird wiederhergestellt haben |  |
+| restituere | ind.fut2.akt.3.pl | restituerint | sie (Pl.) werden wiederhergestellt haben |  |
+| restituere | ind.fut2.pass.3.sg | restitūtus erit | er/sie/es wird wiederhergestellt worden sein |  |
+| restituere | ind.fut2.pass.3.pl | restitūtī erunt | sie (Pl.) werden wiederhergestellt worden sein |  |
 | restituere | konj.praes.akt.3.sg | restituat | er/sie/es wieder herstellt |  |
 | restituere | konj.praes.akt.3.pl | restituant | sie (Pl.) wieder herstellen |  |
-| restituere | konj.praes.pass.3.sg | restituātur | er/sie/es wieder hergestellt wird |  |
-| restituere | konj.praes.pass.3.pl | restituantur | sie (Pl.) wieder hergestellt werden |  |
-| restituere | konj.impf.akt.3.sg | restitueret | er/sie/es wieder herstellen würde |  |
-| restituere | konj.impf.akt.3.pl | restituerent | sie (Pl.) wieder herstellen würden |  |
-| restituere | konj.impf.pass.3.sg | restituerētur | er/sie/es wieder hergestellt würde |  |
-| restituere | konj.impf.pass.3.pl | restituerentur | sie (Pl.) wieder hergestellt würden |  |
-| restituere | konj.perf.akt.3.sg | restituerit | er/sie/es wieder hergestellt hat |  |
-| restituere | konj.perf.akt.3.pl | restituerint | sie (Pl.) wieder hergestellt haben |  |
-| restituere | konj.perf.pass.3.sg | restitūtus sit | er/sie/es wieder hergestellt worden ist |  |
-| restituere | konj.perf.pass.3.pl | restitūtī sint | sie (Pl.) wieder hergestellt worden sind |  |
-| restituere | konj.plusq.akt.3.sg | restituisset | er/sie/es wieder hergestellt hätte |  |
-| restituere | konj.plusq.akt.3.pl | restituissent | sie (Pl.) wieder hergestellt hätten |  |
-| restituere | konj.plusq.pass.3.sg | restitūtus esset | er/sie/es wieder hergestellt worden wäre |  |
-| restituere | konj.plusq.pass.3.pl | restitūtī essent | sie (Pl.) wieder hergestellt worden wären |  |
+| restituere | konj.praes.pass.3.sg | restituātur | er/sie/es wiederhergestellt wird |  |
+| restituere | konj.praes.pass.3.pl | restituantur | sie (Pl.) wiederhergestellt werden |  |
+| restituere | konj.impf.akt.3.sg | restitueret | er/sie/es wiederherstellen würde |  |
+| restituere | konj.impf.akt.3.pl | restituerent | sie (Pl.) wiederherstellen würden |  |
+| restituere | konj.impf.pass.3.sg | restituerētur | er/sie/es wiederhergestellt würde |  |
+| restituere | konj.impf.pass.3.pl | restituerentur | sie (Pl.) wiederhergestellt würden |  |
+| restituere | konj.perf.akt.3.sg | restituerit | er/sie/es wiederhergestellt hat |  |
+| restituere | konj.perf.akt.3.pl | restituerint | sie (Pl.) wiederhergestellt haben |  |
+| restituere | konj.perf.pass.3.sg | restitūtus sit | er/sie/es wiederhergestellt worden ist |  |
+| restituere | konj.perf.pass.3.pl | restitūtī sint | sie (Pl.) wiederhergestellt worden sind |  |
+| restituere | konj.plusq.akt.3.sg | restituisset | er/sie/es wiederhergestellt hätte |  |
+| restituere | konj.plusq.akt.3.pl | restituissent | sie (Pl.) wiederhergestellt hätten |  |
+| restituere | konj.plusq.pass.3.sg | restitūtus esset | er/sie/es wiederhergestellt worden wäre |  |
+| restituere | konj.plusq.pass.3.pl | restitūtī essent | sie (Pl.) wiederhergestellt worden wären |  |
 | pācāre | ind.praes.akt.3.sg | pācat | er/sie/es macht friedlich |  |
 | pācāre | ind.praes.akt.3.pl | pācant | sie (Pl.) machen friedlich |  |
 | pācāre | ind.praes.pass.3.sg | pācātur | er/sie/es wird friedlich gemacht |  |

@@ -458,6 +458,16 @@ items:
     absent: *ohne_passiv
 
   # package 1
+  - id: haben vollverb
+    type: unregelmäßig
+    translation: {de: haben, en: have}
+    parts: {infinitiv: haben, praesens_2sg: hast, praesens_3sg: hat, praeteritum: hatte, konjunktiv2: hätte, partizip2: gehabt}
+    absent: *ohne_passiv
+  - type: stark
+    translation: {de: bleiben, en: stay}
+    parts: {infinitiv: bleiben, praeteritum: blieb, partizip2: geblieben}
+    slots: {hilfsverb: hv_sein}
+    absent: *ohne_passiv
   - type: schwach
     translation: {de: hören, en: hear}
     parts: {infinitiv: hören, partizip2: gehört}
@@ -1000,6 +1010,10 @@ items:
 
 
   # package 5
+  - type: schwach
+    translation: {de: zurückblicken, en: look back}
+    parts: {infinitiv: zurückblicken, grundverb: blicken, partikel: zurück, partizip2: zurückgeblickt}
+    absent: *ohne_passiv
   - id: sich ausdenken
     type: gemischt
     translation: {de: sich ausdenken, en: invent}
@@ -1057,10 +1071,10 @@ items:
   - type: stark
     translation: {de: hinaustreiben, en: drive out}
     parts: {infinitiv: hinaustreiben, grundverb: treiben, partikel: hinaus, praeteritum: trieb, partizip2: hinausgetrieben}
-  - id: wieder herstellen
+  - id: wiederherstellen
     type: schwach
-    translation: {de: wieder herstellen, en: restore}
-    parts: {infinitiv: wieder herstellen, grundverb: stellen, wortgruppe: wieder, partikel: her, partizip2: wieder hergestellt}
+    translation: {de: wiederherstellen, en: restore}
+    parts: {infinitiv: wiederherstellen, grundverb: stellen, wortgruppe: wieder, partikel: her, partizip2: wiederhergestellt}
   - id: friedlich machen
     type: schwach
     translation: {de: friedlich machen, en: pacify}

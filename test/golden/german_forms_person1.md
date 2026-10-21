@@ -40,46 +40,46 @@
 | amāre | konj.plusq.akt.1.pl | amāvissēmus | wir geliebt hätten |  |
 | amāre | konj.plusq.pass.1.sg | amātus essem | ich geliebt worden wäre |  |
 | amāre | konj.plusq.pass.1.pl | amātī essēmus | wir geliebt worden wären |  |
-| habēre | ind.praes.akt.1.sg | habeō | ich halte |  |
-| habēre | ind.praes.akt.1.pl | habēmus | wir halten |  |
-| habēre | ind.praes.pass.1.sg | habeor | ich werde gehalten |  |
-| habēre | ind.praes.pass.1.pl | habēmur | wir werden gehalten |  |
-| habēre | ind.impf.akt.1.sg | habēbam | ich hielt |  |
-| habēre | ind.impf.akt.1.pl | habēbāmus | wir hielten |  |
-| habēre | ind.impf.pass.1.sg | habēbar | ich wurde gehalten |  |
-| habēre | ind.impf.pass.1.pl | habēbāmur | wir wurden gehalten |  |
-| habēre | ind.fut.akt.1.sg | habēbō | ich werde halten |  |
-| habēre | ind.fut.akt.1.pl | habēbimus | wir werden halten |  |
-| habēre | ind.fut.pass.1.sg | habēbor | ich werde gehalten werden |  |
-| habēre | ind.fut.pass.1.pl | habēbimur | wir werden gehalten werden |  |
-| habēre | ind.perf.akt.1.sg | habuī | ich habe gehalten | ich hielt |
-| habēre | ind.perf.akt.1.pl | habuimus | wir haben gehalten | wir hielten |
-| habēre | ind.perf.pass.1.sg | habitus sum | ich bin gehalten worden |  |
-| habēre | ind.perf.pass.1.pl | habitī sumus | wir sind gehalten worden |  |
-| habēre | ind.plusq.akt.1.sg | habueram | ich hatte gehalten |  |
-| habēre | ind.plusq.akt.1.pl | habuerāmus | wir hatten gehalten |  |
-| habēre | ind.plusq.pass.1.sg | habitus eram | ich war gehalten worden |  |
-| habēre | ind.plusq.pass.1.pl | habitī erāmus | wir waren gehalten worden |  |
-| habēre | ind.fut2.akt.1.sg | habuerō | ich werde gehalten haben |  |
-| habēre | ind.fut2.akt.1.pl | habuerimus | wir werden gehalten haben |  |
-| habēre | ind.fut2.pass.1.sg | habitus erō | ich werde gehalten worden sein |  |
-| habēre | ind.fut2.pass.1.pl | habitī erimus | wir werden gehalten worden sein |  |
-| habēre | konj.praes.akt.1.sg | habeam | ich halte |  |
-| habēre | konj.praes.akt.1.pl | habeāmus | wir halten |  |
-| habēre | konj.praes.pass.1.sg | habear | ich gehalten werde |  |
-| habēre | konj.praes.pass.1.pl | habeāmur | wir gehalten werden |  |
-| habēre | konj.impf.akt.1.sg | habērem | ich halten würde |  |
-| habēre | konj.impf.akt.1.pl | habērēmus | wir halten würden |  |
-| habēre | konj.impf.pass.1.sg | habērer | ich gehalten würde |  |
-| habēre | konj.impf.pass.1.pl | habērēmur | wir gehalten würden |  |
-| habēre | konj.perf.akt.1.sg | habuerim | ich gehalten habe |  |
-| habēre | konj.perf.akt.1.pl | habuerimus | wir gehalten haben |  |
-| habēre | konj.perf.pass.1.sg | habitus sim | ich gehalten worden bin |  |
-| habēre | konj.perf.pass.1.pl | habitī sīmus | wir gehalten worden sind |  |
-| habēre | konj.plusq.akt.1.sg | habuissem | ich gehalten hätte |  |
-| habēre | konj.plusq.akt.1.pl | habuissēmus | wir gehalten hätten |  |
-| habēre | konj.plusq.pass.1.sg | habitus essem | ich gehalten worden wäre |  |
-| habēre | konj.plusq.pass.1.pl | habitī essēmus | wir gehalten worden wären |  |
+| habēre | ind.praes.akt.1.sg | habeō | ich habe |  |
+| habēre | ind.praes.akt.1.pl | habēmus | wir haben |  |
+| habēre | ind.praes.pass.1.sg | habeor | — |  |
+| habēre | ind.praes.pass.1.pl | habēmur | — |  |
+| habēre | ind.impf.akt.1.sg | habēbam | ich hatte |  |
+| habēre | ind.impf.akt.1.pl | habēbāmus | wir hatten |  |
+| habēre | ind.impf.pass.1.sg | habēbar | — |  |
+| habēre | ind.impf.pass.1.pl | habēbāmur | — |  |
+| habēre | ind.fut.akt.1.sg | habēbō | ich werde haben |  |
+| habēre | ind.fut.akt.1.pl | habēbimus | wir werden haben |  |
+| habēre | ind.fut.pass.1.sg | habēbor | — |  |
+| habēre | ind.fut.pass.1.pl | habēbimur | — |  |
+| habēre | ind.perf.akt.1.sg | habuī | ich habe gehabt | ich hatte |
+| habēre | ind.perf.akt.1.pl | habuimus | wir haben gehabt | wir hatten |
+| habēre | ind.perf.pass.1.sg | habitus sum | — |  |
+| habēre | ind.perf.pass.1.pl | habitī sumus | — |  |
+| habēre | ind.plusq.akt.1.sg | habueram | ich hatte gehabt |  |
+| habēre | ind.plusq.akt.1.pl | habuerāmus | wir hatten gehabt |  |
+| habēre | ind.plusq.pass.1.sg | habitus eram | — |  |
+| habēre | ind.plusq.pass.1.pl | habitī erāmus | — |  |
+| habēre | ind.fut2.akt.1.sg | habuerō | ich werde gehabt haben |  |
+| habēre | ind.fut2.akt.1.pl | habuerimus | wir werden gehabt haben |  |
+| habēre | ind.fut2.pass.1.sg | habitus erō | — |  |
+| habēre | ind.fut2.pass.1.pl | habitī erimus | — |  |
+| habēre | konj.praes.akt.1.sg | habeam | ich habe |  |
+| habēre | konj.praes.akt.1.pl | habeāmus | wir haben |  |
+| habēre | konj.praes.pass.1.sg | habear | — |  |
+| habēre | konj.praes.pass.1.pl | habeāmur | — |  |
+| habēre | konj.impf.akt.1.sg | habērem | ich hätte |  |
+| habēre | konj.impf.akt.1.pl | habērēmus | wir hätten |  |
+| habēre | konj.impf.pass.1.sg | habērer | — |  |
+| habēre | konj.impf.pass.1.pl | habērēmur | — |  |
+| habēre | konj.perf.akt.1.sg | habuerim | ich gehabt habe |  |
+| habēre | konj.perf.akt.1.pl | habuerimus | wir gehabt haben |  |
+| habēre | konj.perf.pass.1.sg | habitus sim | — |  |
+| habēre | konj.perf.pass.1.pl | habitī sīmus | — |  |
+| habēre | konj.plusq.akt.1.sg | habuissem | ich gehabt hätte |  |
+| habēre | konj.plusq.akt.1.pl | habuissēmus | wir gehabt hätten |  |
+| habēre | konj.plusq.pass.1.sg | habitus essem | — |  |
+| habēre | konj.plusq.pass.1.pl | habitī essēmus | — |  |
 | audīre | ind.praes.akt.1.sg | audiō | ich höre |  |
 | audīre | ind.praes.akt.1.pl | audīmus | wir hören |  |
 | audīre | ind.praes.pass.1.sg | audior | ich werde gehört |  |
@@ -900,46 +900,46 @@
 | labōrāre | konj.perf.akt.1.pl | labōrāverimus | wir gearbeitet haben |  |
 | labōrāre | konj.plusq.akt.1.sg | labōrāvissem | ich gearbeitet hätte |  |
 | labōrāre | konj.plusq.akt.1.pl | labōrāvissēmus | wir gearbeitet hätten |  |
-| manēre | ind.praes.akt.1.sg | maneō | ich erwarte |  |
-| manēre | ind.praes.akt.1.pl | manēmus | wir erwarten |  |
-| manēre | ind.praes.pass.1.sg | maneor | ich werde erwartet |  |
-| manēre | ind.praes.pass.1.pl | manēmur | wir werden erwartet |  |
-| manēre | ind.impf.akt.1.sg | manēbam | ich erwartete |  |
-| manēre | ind.impf.akt.1.pl | manēbāmus | wir erwarteten |  |
-| manēre | ind.impf.pass.1.sg | manēbar | ich wurde erwartet |  |
-| manēre | ind.impf.pass.1.pl | manēbāmur | wir wurden erwartet |  |
-| manēre | ind.fut.akt.1.sg | manēbō | ich werde erwarten |  |
-| manēre | ind.fut.akt.1.pl | manēbimus | wir werden erwarten |  |
-| manēre | ind.fut.pass.1.sg | manēbor | ich werde erwartet werden |  |
-| manēre | ind.fut.pass.1.pl | manēbimur | wir werden erwartet werden |  |
-| manēre | ind.perf.akt.1.sg | mānsī | ich habe erwartet | ich erwartete |
-| manēre | ind.perf.akt.1.pl | mānsimus | wir haben erwartet | wir erwarteten |
-| manēre | ind.perf.pass.1.sg | mānsus sum | ich bin erwartet worden |  |
-| manēre | ind.perf.pass.1.pl | mānsī sumus | wir sind erwartet worden |  |
-| manēre | ind.plusq.akt.1.sg | mānseram | ich hatte erwartet |  |
-| manēre | ind.plusq.akt.1.pl | mānserāmus | wir hatten erwartet |  |
-| manēre | ind.plusq.pass.1.sg | mānsus eram | ich war erwartet worden |  |
-| manēre | ind.plusq.pass.1.pl | mānsī erāmus | wir waren erwartet worden |  |
-| manēre | ind.fut2.akt.1.sg | mānserō | ich werde erwartet haben |  |
-| manēre | ind.fut2.akt.1.pl | mānserimus | wir werden erwartet haben |  |
-| manēre | ind.fut2.pass.1.sg | mānsus erō | ich werde erwartet worden sein |  |
-| manēre | ind.fut2.pass.1.pl | mānsī erimus | wir werden erwartet worden sein |  |
-| manēre | konj.praes.akt.1.sg | maneam | ich erwarte |  |
-| manēre | konj.praes.akt.1.pl | maneāmus | wir erwarten |  |
-| manēre | konj.praes.pass.1.sg | manear | ich erwartet werde |  |
-| manēre | konj.praes.pass.1.pl | maneāmur | wir erwartet werden |  |
-| manēre | konj.impf.akt.1.sg | manērem | ich erwarten würde |  |
-| manēre | konj.impf.akt.1.pl | manērēmus | wir erwarten würden |  |
-| manēre | konj.impf.pass.1.sg | manērer | ich erwartet würde |  |
-| manēre | konj.impf.pass.1.pl | manērēmur | wir erwartet würden |  |
-| manēre | konj.perf.akt.1.sg | mānserim | ich erwartet habe |  |
-| manēre | konj.perf.akt.1.pl | mānserimus | wir erwartet haben |  |
-| manēre | konj.perf.pass.1.sg | mānsus sim | ich erwartet worden bin |  |
-| manēre | konj.perf.pass.1.pl | mānsī sīmus | wir erwartet worden sind |  |
-| manēre | konj.plusq.akt.1.sg | mānsissem | ich erwartet hätte |  |
-| manēre | konj.plusq.akt.1.pl | mānsissēmus | wir erwartet hätten |  |
-| manēre | konj.plusq.pass.1.sg | mānsus essem | ich erwartet worden wäre |  |
-| manēre | konj.plusq.pass.1.pl | mānsī essēmus | wir erwartet worden wären |  |
+| manēre | ind.praes.akt.1.sg | maneō | ich bleibe |  |
+| manēre | ind.praes.akt.1.pl | manēmus | wir bleiben |  |
+| manēre | ind.praes.pass.1.sg | maneor | — |  |
+| manēre | ind.praes.pass.1.pl | manēmur | — |  |
+| manēre | ind.impf.akt.1.sg | manēbam | ich blieb |  |
+| manēre | ind.impf.akt.1.pl | manēbāmus | wir blieben |  |
+| manēre | ind.impf.pass.1.sg | manēbar | — |  |
+| manēre | ind.impf.pass.1.pl | manēbāmur | — |  |
+| manēre | ind.fut.akt.1.sg | manēbō | ich werde bleiben |  |
+| manēre | ind.fut.akt.1.pl | manēbimus | wir werden bleiben |  |
+| manēre | ind.fut.pass.1.sg | manēbor | — |  |
+| manēre | ind.fut.pass.1.pl | manēbimur | — |  |
+| manēre | ind.perf.akt.1.sg | mānsī | ich bin geblieben | ich blieb |
+| manēre | ind.perf.akt.1.pl | mānsimus | wir sind geblieben | wir blieben |
+| manēre | ind.perf.pass.1.sg | mānsus sum | — |  |
+| manēre | ind.perf.pass.1.pl | mānsī sumus | — |  |
+| manēre | ind.plusq.akt.1.sg | mānseram | ich war geblieben |  |
+| manēre | ind.plusq.akt.1.pl | mānserāmus | wir waren geblieben |  |
+| manēre | ind.plusq.pass.1.sg | mānsus eram | — |  |
+| manēre | ind.plusq.pass.1.pl | mānsī erāmus | — |  |
+| manēre | ind.fut2.akt.1.sg | mānserō | ich werde geblieben sein |  |
+| manēre | ind.fut2.akt.1.pl | mānserimus | wir werden geblieben sein |  |
+| manēre | ind.fut2.pass.1.sg | mānsus erō | — |  |
+| manēre | ind.fut2.pass.1.pl | mānsī erimus | — |  |
+| manēre | konj.praes.akt.1.sg | maneam | ich bleibe |  |
+| manēre | konj.praes.akt.1.pl | maneāmus | wir bleiben |  |
+| manēre | konj.praes.pass.1.sg | manear | — |  |
+| manēre | konj.praes.pass.1.pl | maneāmur | — |  |
+| manēre | konj.impf.akt.1.sg | manērem | ich bleiben würde |  |
+| manēre | konj.impf.akt.1.pl | manērēmus | wir bleiben würden |  |
+| manēre | konj.impf.pass.1.sg | manērer | — |  |
+| manēre | konj.impf.pass.1.pl | manērēmur | — |  |
+| manēre | konj.perf.akt.1.sg | mānserim | ich geblieben bin |  |
+| manēre | konj.perf.akt.1.pl | mānserimus | wir geblieben sind |  |
+| manēre | konj.perf.pass.1.sg | mānsus sim | — |  |
+| manēre | konj.perf.pass.1.pl | mānsī sīmus | — |  |
+| manēre | konj.plusq.akt.1.sg | mānsissem | ich geblieben wäre |  |
+| manēre | konj.plusq.akt.1.pl | mānsissēmus | wir geblieben wären |  |
+| manēre | konj.plusq.pass.1.sg | mānsus essem | — |  |
+| manēre | konj.plusq.pass.1.pl | mānsī essēmus | — |  |
 | necāre | ind.praes.akt.1.sg | necō | ich töte |  |
 | necāre | ind.praes.akt.1.pl | necāmus | wir töten |  |
 | necāre | ind.praes.pass.1.sg | necor | ich werde getötet |  |
@@ -3990,46 +3990,46 @@
 | dīmittere | konj.plusq.akt.1.pl | dīmīsissēmus | wir entlassen hätten |  |
 | dīmittere | konj.plusq.pass.1.sg | dīmissus essem | ich entlassen worden wäre |  |
 | dīmittere | konj.plusq.pass.1.pl | dīmissī essēmus | wir entlassen worden wären |  |
-| respicere | ind.praes.akt.1.sg | respiciō | ich schaue an |  |
-| respicere | ind.praes.akt.1.pl | respicimus | wir schauen an |  |
-| respicere | ind.praes.pass.1.sg | respicior | ich werde angeschaut |  |
-| respicere | ind.praes.pass.1.pl | respicimur | wir werden angeschaut |  |
-| respicere | ind.impf.akt.1.sg | respiciēbam | ich schaute an |  |
-| respicere | ind.impf.akt.1.pl | respiciēbāmus | wir schauten an |  |
-| respicere | ind.impf.pass.1.sg | respiciēbar | ich wurde angeschaut |  |
-| respicere | ind.impf.pass.1.pl | respiciēbāmur | wir wurden angeschaut |  |
-| respicere | ind.fut.akt.1.sg | respiciam | ich werde anschauen |  |
-| respicere | ind.fut.akt.1.pl | respiciēmus | wir werden anschauen |  |
-| respicere | ind.fut.pass.1.sg | respiciar | ich werde angeschaut werden |  |
-| respicere | ind.fut.pass.1.pl | respiciēmur | wir werden angeschaut werden |  |
-| respicere | ind.perf.akt.1.sg | respexī | ich habe angeschaut | ich schaute an |
-| respicere | ind.perf.akt.1.pl | respeximus | wir haben angeschaut | wir schauten an |
-| respicere | ind.perf.pass.1.sg | respectus sum | ich bin angeschaut worden |  |
-| respicere | ind.perf.pass.1.pl | respectī sumus | wir sind angeschaut worden |  |
-| respicere | ind.plusq.akt.1.sg | respexeram | ich hatte angeschaut |  |
-| respicere | ind.plusq.akt.1.pl | respexerāmus | wir hatten angeschaut |  |
-| respicere | ind.plusq.pass.1.sg | respectus eram | ich war angeschaut worden |  |
-| respicere | ind.plusq.pass.1.pl | respectī erāmus | wir waren angeschaut worden |  |
-| respicere | ind.fut2.akt.1.sg | respexerō | ich werde angeschaut haben |  |
-| respicere | ind.fut2.akt.1.pl | respexerimus | wir werden angeschaut haben |  |
-| respicere | ind.fut2.pass.1.sg | respectus erō | ich werde angeschaut worden sein |  |
-| respicere | ind.fut2.pass.1.pl | respectī erimus | wir werden angeschaut worden sein |  |
-| respicere | konj.praes.akt.1.sg | respiciam | ich anschaue |  |
-| respicere | konj.praes.akt.1.pl | respiciāmus | wir anschauen |  |
-| respicere | konj.praes.pass.1.sg | respiciar | ich angeschaut werde |  |
-| respicere | konj.praes.pass.1.pl | respiciāmur | wir angeschaut werden |  |
-| respicere | konj.impf.akt.1.sg | respicerem | ich anschauen würde |  |
-| respicere | konj.impf.akt.1.pl | respicerēmus | wir anschauen würden |  |
-| respicere | konj.impf.pass.1.sg | respicerer | ich angeschaut würde |  |
-| respicere | konj.impf.pass.1.pl | respicerēmur | wir angeschaut würden |  |
-| respicere | konj.perf.akt.1.sg | respexerim | ich angeschaut habe |  |
-| respicere | konj.perf.akt.1.pl | respexerimus | wir angeschaut haben |  |
-| respicere | konj.perf.pass.1.sg | respectus sim | ich angeschaut worden bin |  |
-| respicere | konj.perf.pass.1.pl | respectī sīmus | wir angeschaut worden sind |  |
-| respicere | konj.plusq.akt.1.sg | respexissem | ich angeschaut hätte |  |
-| respicere | konj.plusq.akt.1.pl | respexissēmus | wir angeschaut hätten |  |
-| respicere | konj.plusq.pass.1.sg | respectus essem | ich angeschaut worden wäre |  |
-| respicere | konj.plusq.pass.1.pl | respectī essēmus | wir angeschaut worden wären |  |
+| respicere | ind.praes.akt.1.sg | respiciō | ich blicke zurück |  |
+| respicere | ind.praes.akt.1.pl | respicimus | wir blicken zurück |  |
+| respicere | ind.praes.pass.1.sg | respicior | — |  |
+| respicere | ind.praes.pass.1.pl | respicimur | — |  |
+| respicere | ind.impf.akt.1.sg | respiciēbam | ich blickte zurück |  |
+| respicere | ind.impf.akt.1.pl | respiciēbāmus | wir blickten zurück |  |
+| respicere | ind.impf.pass.1.sg | respiciēbar | — |  |
+| respicere | ind.impf.pass.1.pl | respiciēbāmur | — |  |
+| respicere | ind.fut.akt.1.sg | respiciam | ich werde zurückblicken |  |
+| respicere | ind.fut.akt.1.pl | respiciēmus | wir werden zurückblicken |  |
+| respicere | ind.fut.pass.1.sg | respiciar | — |  |
+| respicere | ind.fut.pass.1.pl | respiciēmur | — |  |
+| respicere | ind.perf.akt.1.sg | respexī | ich habe zurückgeblickt | ich blickte zurück |
+| respicere | ind.perf.akt.1.pl | respeximus | wir haben zurückgeblickt | wir blickten zurück |
+| respicere | ind.perf.pass.1.sg | respectus sum | — |  |
+| respicere | ind.perf.pass.1.pl | respectī sumus | — |  |
+| respicere | ind.plusq.akt.1.sg | respexeram | ich hatte zurückgeblickt |  |
+| respicere | ind.plusq.akt.1.pl | respexerāmus | wir hatten zurückgeblickt |  |
+| respicere | ind.plusq.pass.1.sg | respectus eram | — |  |
+| respicere | ind.plusq.pass.1.pl | respectī erāmus | — |  |
+| respicere | ind.fut2.akt.1.sg | respexerō | ich werde zurückgeblickt haben |  |
+| respicere | ind.fut2.akt.1.pl | respexerimus | wir werden zurückgeblickt haben |  |
+| respicere | ind.fut2.pass.1.sg | respectus erō | — |  |
+| respicere | ind.fut2.pass.1.pl | respectī erimus | — |  |
+| respicere | konj.praes.akt.1.sg | respiciam | ich zurückblicke |  |
+| respicere | konj.praes.akt.1.pl | respiciāmus | wir zurückblicken |  |
+| respicere | konj.praes.pass.1.sg | respiciar | — |  |
+| respicere | konj.praes.pass.1.pl | respiciāmur | — |  |
+| respicere | konj.impf.akt.1.sg | respicerem | ich zurückblicken würde |  |
+| respicere | konj.impf.akt.1.pl | respicerēmus | wir zurückblicken würden |  |
+| respicere | konj.impf.pass.1.sg | respicerer | — |  |
+| respicere | konj.impf.pass.1.pl | respicerēmur | — |  |
+| respicere | konj.perf.akt.1.sg | respexerim | ich zurückgeblickt habe |  |
+| respicere | konj.perf.akt.1.pl | respexerimus | wir zurückgeblickt haben |  |
+| respicere | konj.perf.pass.1.sg | respectus sim | — |  |
+| respicere | konj.perf.pass.1.pl | respectī sīmus | — |  |
+| respicere | konj.plusq.akt.1.sg | respexissem | ich zurückgeblickt hätte |  |
+| respicere | konj.plusq.akt.1.pl | respexissēmus | wir zurückgeblickt hätten |  |
+| respicere | konj.plusq.pass.1.sg | respectus essem | — |  |
+| respicere | konj.plusq.pass.1.pl | respectī essēmus | — |  |
 | cōgnōscere | ind.praes.akt.1.sg | cōgnōscō | ich lerne kennen |  |
 | cōgnōscere | ind.praes.akt.1.pl | cōgnōscimus | wir lernen kennen |  |
 | cōgnōscere | ind.praes.pass.1.sg | cōgnōscor | ich werde kennengelernt |  |
@@ -7372,44 +7372,44 @@
 | expellere | konj.plusq.pass.1.pl | expulsī essēmus | wir hinausgetrieben worden wären |  |
 | restituere | ind.praes.akt.1.sg | restituō | ich stelle wieder her |  |
 | restituere | ind.praes.akt.1.pl | restituimus | wir stellen wieder her |  |
-| restituere | ind.praes.pass.1.sg | restituor | ich werde wieder hergestellt |  |
-| restituere | ind.praes.pass.1.pl | restituimur | wir werden wieder hergestellt |  |
+| restituere | ind.praes.pass.1.sg | restituor | ich werde wiederhergestellt |  |
+| restituere | ind.praes.pass.1.pl | restituimur | wir werden wiederhergestellt |  |
 | restituere | ind.impf.akt.1.sg | restituēbam | ich stellte wieder her |  |
 | restituere | ind.impf.akt.1.pl | restituēbāmus | wir stellten wieder her |  |
-| restituere | ind.impf.pass.1.sg | restituēbar | ich wurde wieder hergestellt |  |
-| restituere | ind.impf.pass.1.pl | restituēbāmur | wir wurden wieder hergestellt |  |
-| restituere | ind.fut.akt.1.sg | restituam | ich werde wieder herstellen |  |
-| restituere | ind.fut.akt.1.pl | restituēmus | wir werden wieder herstellen |  |
-| restituere | ind.fut.pass.1.sg | restituar | ich werde wieder hergestellt werden |  |
-| restituere | ind.fut.pass.1.pl | restituēmur | wir werden wieder hergestellt werden |  |
-| restituere | ind.perf.akt.1.sg | restituī | ich habe wieder hergestellt | ich stellte wieder her |
-| restituere | ind.perf.akt.1.pl | restituimus | wir haben wieder hergestellt | wir stellten wieder her |
-| restituere | ind.perf.pass.1.sg | restitūtus sum | ich bin wieder hergestellt worden |  |
-| restituere | ind.perf.pass.1.pl | restitūtī sumus | wir sind wieder hergestellt worden |  |
-| restituere | ind.plusq.akt.1.sg | restitueram | ich hatte wieder hergestellt |  |
-| restituere | ind.plusq.akt.1.pl | restituerāmus | wir hatten wieder hergestellt |  |
-| restituere | ind.plusq.pass.1.sg | restitūtus eram | ich war wieder hergestellt worden |  |
-| restituere | ind.plusq.pass.1.pl | restitūtī erāmus | wir waren wieder hergestellt worden |  |
-| restituere | ind.fut2.akt.1.sg | restituerō | ich werde wieder hergestellt haben |  |
-| restituere | ind.fut2.akt.1.pl | restituerimus | wir werden wieder hergestellt haben |  |
-| restituere | ind.fut2.pass.1.sg | restitūtus erō | ich werde wieder hergestellt worden sein |  |
-| restituere | ind.fut2.pass.1.pl | restitūtī erimus | wir werden wieder hergestellt worden sein |  |
+| restituere | ind.impf.pass.1.sg | restituēbar | ich wurde wiederhergestellt |  |
+| restituere | ind.impf.pass.1.pl | restituēbāmur | wir wurden wiederhergestellt |  |
+| restituere | ind.fut.akt.1.sg | restituam | ich werde wiederherstellen |  |
+| restituere | ind.fut.akt.1.pl | restituēmus | wir werden wiederherstellen |  |
+| restituere | ind.fut.pass.1.sg | restituar | ich werde wiederhergestellt werden |  |
+| restituere | ind.fut.pass.1.pl | restituēmur | wir werden wiederhergestellt werden |  |
+| restituere | ind.perf.akt.1.sg | restituī | ich habe wiederhergestellt | ich stellte wieder her |
+| restituere | ind.perf.akt.1.pl | restituimus | wir haben wiederhergestellt | wir stellten wieder her |
+| restituere | ind.perf.pass.1.sg | restitūtus sum | ich bin wiederhergestellt worden |  |
+| restituere | ind.perf.pass.1.pl | restitūtī sumus | wir sind wiederhergestellt worden |  |
+| restituere | ind.plusq.akt.1.sg | restitueram | ich hatte wiederhergestellt |  |
+| restituere | ind.plusq.akt.1.pl | restituerāmus | wir hatten wiederhergestellt |  |
+| restituere | ind.plusq.pass.1.sg | restitūtus eram | ich war wiederhergestellt worden |  |
+| restituere | ind.plusq.pass.1.pl | restitūtī erāmus | wir waren wiederhergestellt worden |  |
+| restituere | ind.fut2.akt.1.sg | restituerō | ich werde wiederhergestellt haben |  |
+| restituere | ind.fut2.akt.1.pl | restituerimus | wir werden wiederhergestellt haben |  |
+| restituere | ind.fut2.pass.1.sg | restitūtus erō | ich werde wiederhergestellt worden sein |  |
+| restituere | ind.fut2.pass.1.pl | restitūtī erimus | wir werden wiederhergestellt worden sein |  |
 | restituere | konj.praes.akt.1.sg | restituam | ich wieder herstelle |  |
 | restituere | konj.praes.akt.1.pl | restituāmus | wir wieder herstellen |  |
-| restituere | konj.praes.pass.1.sg | restituar | ich wieder hergestellt werde |  |
-| restituere | konj.praes.pass.1.pl | restituāmur | wir wieder hergestellt werden |  |
-| restituere | konj.impf.akt.1.sg | restituerem | ich wieder herstellen würde |  |
-| restituere | konj.impf.akt.1.pl | restituerēmus | wir wieder herstellen würden |  |
-| restituere | konj.impf.pass.1.sg | restituerer | ich wieder hergestellt würde |  |
-| restituere | konj.impf.pass.1.pl | restituerēmur | wir wieder hergestellt würden |  |
-| restituere | konj.perf.akt.1.sg | restituerim | ich wieder hergestellt habe |  |
-| restituere | konj.perf.akt.1.pl | restituerimus | wir wieder hergestellt haben |  |
-| restituere | konj.perf.pass.1.sg | restitūtus sim | ich wieder hergestellt worden bin |  |
-| restituere | konj.perf.pass.1.pl | restitūtī sīmus | wir wieder hergestellt worden sind |  |
-| restituere | konj.plusq.akt.1.sg | restituissem | ich wieder hergestellt hätte |  |
-| restituere | konj.plusq.akt.1.pl | restituissēmus | wir wieder hergestellt hätten |  |
-| restituere | konj.plusq.pass.1.sg | restitūtus essem | ich wieder hergestellt worden wäre |  |
-| restituere | konj.plusq.pass.1.pl | restitūtī essēmus | wir wieder hergestellt worden wären |  |
+| restituere | konj.praes.pass.1.sg | restituar | ich wiederhergestellt werde |  |
+| restituere | konj.praes.pass.1.pl | restituāmur | wir wiederhergestellt werden |  |
+| restituere | konj.impf.akt.1.sg | restituerem | ich wiederherstellen würde |  |
+| restituere | konj.impf.akt.1.pl | restituerēmus | wir wiederherstellen würden |  |
+| restituere | konj.impf.pass.1.sg | restituerer | ich wiederhergestellt würde |  |
+| restituere | konj.impf.pass.1.pl | restituerēmur | wir wiederhergestellt würden |  |
+| restituere | konj.perf.akt.1.sg | restituerim | ich wiederhergestellt habe |  |
+| restituere | konj.perf.akt.1.pl | restituerimus | wir wiederhergestellt haben |  |
+| restituere | konj.perf.pass.1.sg | restitūtus sim | ich wiederhergestellt worden bin |  |
+| restituere | konj.perf.pass.1.pl | restitūtī sīmus | wir wiederhergestellt worden sind |  |
+| restituere | konj.plusq.akt.1.sg | restituissem | ich wiederhergestellt hätte |  |
+| restituere | konj.plusq.akt.1.pl | restituissēmus | wir wiederhergestellt hätten |  |
+| restituere | konj.plusq.pass.1.sg | restitūtus essem | ich wiederhergestellt worden wäre |  |
+| restituere | konj.plusq.pass.1.pl | restitūtī essēmus | wir wiederhergestellt worden wären |  |
 | pācāre | ind.praes.akt.1.sg | pācō | ich mache friedlich |  |
 | pācāre | ind.praes.akt.1.pl | pācāmus | wir machen friedlich |  |
 | pācāre | ind.praes.pass.1.sg | pācor | ich werde friedlich gemacht |  |

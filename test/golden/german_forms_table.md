@@ -6,12 +6,12 @@
 | amāre | inf.perf.pass | amātum esse | geliebt worden sein |  |
 | amāre | part.praes.akt | amāns | liebend |  |
 | amāre | part.perf.pass | amātus | geliebt |  |
-| habēre | inf.praes.akt | habēre | halten |  |
-| habēre | inf.praes.pass | habērī | gehalten werden |  |
-| habēre | inf.perf.akt | habuisse | gehalten haben |  |
-| habēre | inf.perf.pass | habitum esse | gehalten worden sein |  |
-| habēre | part.praes.akt | habēns | haltend |  |
-| habēre | part.perf.pass | habitus | gehalten |  |
+| habēre | inf.praes.akt | habēre | haben |  |
+| habēre | inf.praes.pass | habērī | — |  |
+| habēre | inf.perf.akt | habuisse | gehabt haben |  |
+| habēre | inf.perf.pass | habitum esse | — |  |
+| habēre | part.praes.akt | habēns | habend |  |
+| habēre | part.perf.pass | habitus | — |  |
 | audīre | inf.praes.akt | audīre | hören |  |
 | audīre | inf.praes.pass | audīrī | gehört werden |  |
 | audīre | inf.perf.akt | audīvisse | gehört haben |  |
@@ -152,12 +152,12 @@
 | labōrāre | inf.perf.akt | labōrāvisse | gearbeitet haben |  |
 | labōrāre | inf.perf.pass | labōrātum esse | — |  |
 | labōrāre | part.praes.akt | labōrāns | arbeitend |  |
-| manēre | inf.praes.akt | manēre | erwarten |  |
-| manēre | inf.praes.pass | manērī | erwartet werden |  |
-| manēre | inf.perf.akt | mānsisse | erwartet haben |  |
-| manēre | inf.perf.pass | mānsum esse | erwartet worden sein |  |
-| manēre | part.praes.akt | manēns | erwartend |  |
-| manēre | part.perf.pass | mānsus | erwartet |  |
+| manēre | inf.praes.akt | manēre | bleiben |  |
+| manēre | inf.praes.pass | manērī | — |  |
+| manēre | inf.perf.akt | mānsisse | geblieben sein |  |
+| manēre | inf.perf.pass | mānsum esse | — |  |
+| manēre | part.praes.akt | manēns | bleibend |  |
+| manēre | part.perf.pass | mānsus | — |  |
 | necāre | inf.praes.akt | necāre | töten |  |
 | necāre | inf.praes.pass | necārī | getötet werden |  |
 | necāre | inf.perf.akt | necāvisse | getötet haben |  |
@@ -637,12 +637,12 @@
 | dīmittere | inf.perf.pass | dīmissum esse | entlassen worden sein |  |
 | dīmittere | part.praes.akt | dīmittēns | entlassend |  |
 | dīmittere | part.perf.pass | dīmissus | entlassen |  |
-| respicere | inf.praes.akt | respicere | anschauen |  |
-| respicere | inf.praes.pass | respicī | angeschaut werden |  |
-| respicere | inf.perf.akt | respexisse | angeschaut haben |  |
-| respicere | inf.perf.pass | respectum esse | angeschaut worden sein |  |
-| respicere | part.praes.akt | respiciēns | anschauend |  |
-| respicere | part.perf.pass | respectus | angeschaut |  |
+| respicere | inf.praes.akt | respicere | zurückblicken |  |
+| respicere | inf.praes.pass | respicī | — |  |
+| respicere | inf.perf.akt | respexisse | zurückgeblickt haben |  |
+| respicere | inf.perf.pass | respectum esse | — |  |
+| respicere | part.praes.akt | respiciēns | zurückblickend |  |
+| respicere | part.perf.pass | respectus | — |  |
 | cōgnōscere | inf.praes.akt | cōgnōscere | kennenlernen |  |
 | cōgnōscere | inf.praes.pass | cōgnōscī | kennengelernt werden |  |
 | cōgnōscere | inf.perf.akt | cōgnōvisse | kennengelernt haben |  |
@@ -1156,12 +1156,12 @@
 | expellere | inf.perf.pass | expulsum esse | hinausgetrieben worden sein |  |
 | expellere | part.praes.akt | expellēns | hinaustreibend |  |
 | expellere | part.perf.pass | expulsus | hinausgetrieben |  |
-| restituere | inf.praes.akt | restituere | wieder herstellen |  |
-| restituere | inf.praes.pass | restituī | wieder hergestellt werden |  |
-| restituere | inf.perf.akt | restituisse | wieder hergestellt haben |  |
-| restituere | inf.perf.pass | restitūtum esse | wieder hergestellt worden sein |  |
-| restituere | part.praes.akt | restituēns | wieder herstellend |  |
-| restituere | part.perf.pass | restitūtus | wieder hergestellt |  |
+| restituere | inf.praes.akt | restituere | wiederherstellen |  |
+| restituere | inf.praes.pass | restituī | wiederhergestellt werden |  |
+| restituere | inf.perf.akt | restituisse | wiederhergestellt haben |  |
+| restituere | inf.perf.pass | restitūtum esse | wiederhergestellt worden sein |  |
+| restituere | part.praes.akt | restituēns | wiederherstellend |  |
+| restituere | part.perf.pass | restitūtus | wiederhergestellt |  |
 | pācāre | inf.praes.akt | pācāre | friedlich machen |  |
 | pācāre | inf.praes.pass | pācārī | friedlich gemacht werden |  |
 | pācāre | inf.perf.akt | pācāvisse | friedlich gemacht haben |  |

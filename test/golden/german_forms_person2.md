@@ -40,46 +40,46 @@
 | amāre | konj.plusq.akt.2.pl | amāvissētis | ihr geliebt hättet |  |
 | amāre | konj.plusq.pass.2.sg | amātus essēs | du geliebt worden wärest |  |
 | amāre | konj.plusq.pass.2.pl | amātī essētis | ihr geliebt worden wäret |  |
-| habēre | ind.praes.akt.2.sg | habēs | du hältst |  |
-| habēre | ind.praes.akt.2.pl | habētis | ihr haltet |  |
-| habēre | ind.praes.pass.2.sg | habēris | du wirst gehalten |  |
-| habēre | ind.praes.pass.2.pl | habēminī | ihr werdet gehalten |  |
-| habēre | ind.impf.akt.2.sg | habēbās | du hieltest |  |
-| habēre | ind.impf.akt.2.pl | habēbātis | ihr hieltet |  |
-| habēre | ind.impf.pass.2.sg | habēbāris | du wurdest gehalten |  |
-| habēre | ind.impf.pass.2.pl | habēbāminī | ihr wurdet gehalten |  |
-| habēre | ind.fut.akt.2.sg | habēbis | du wirst halten |  |
-| habēre | ind.fut.akt.2.pl | habēbitis | ihr werdet halten |  |
-| habēre | ind.fut.pass.2.sg | habēberis | du wirst gehalten werden |  |
-| habēre | ind.fut.pass.2.pl | habēbiminī | ihr werdet gehalten werden |  |
-| habēre | ind.perf.akt.2.sg | habuistī | du hast gehalten | du hieltest |
-| habēre | ind.perf.akt.2.pl | habuistis | ihr habt gehalten | ihr hieltet |
-| habēre | ind.perf.pass.2.sg | habitus es | du bist gehalten worden |  |
-| habēre | ind.perf.pass.2.pl | habitī estis | ihr seid gehalten worden |  |
-| habēre | ind.plusq.akt.2.sg | habuerās | du hattest gehalten |  |
-| habēre | ind.plusq.akt.2.pl | habuerātis | ihr hattet gehalten |  |
-| habēre | ind.plusq.pass.2.sg | habitus erās | du warst gehalten worden |  |
-| habēre | ind.plusq.pass.2.pl | habitī erātis | ihr wart gehalten worden |  |
-| habēre | ind.fut2.akt.2.sg | habueris | du wirst gehalten haben |  |
-| habēre | ind.fut2.akt.2.pl | habueritis | ihr werdet gehalten haben |  |
-| habēre | ind.fut2.pass.2.sg | habitus eris | du wirst gehalten worden sein |  |
-| habēre | ind.fut2.pass.2.pl | habitī eritis | ihr werdet gehalten worden sein |  |
-| habēre | konj.praes.akt.2.sg | habeās | du hältst |  |
-| habēre | konj.praes.akt.2.pl | habeātis | ihr haltet |  |
-| habēre | konj.praes.pass.2.sg | habeāris | du gehalten wirst |  |
-| habēre | konj.praes.pass.2.pl | habeāminī | ihr gehalten werdet |  |
-| habēre | konj.impf.akt.2.sg | habērēs | du halten würdest |  |
-| habēre | konj.impf.akt.2.pl | habērētis | ihr halten würdet |  |
-| habēre | konj.impf.pass.2.sg | habērēris | du gehalten würdest |  |
-| habēre | konj.impf.pass.2.pl | habērēminī | ihr gehalten würdet |  |
-| habēre | konj.perf.akt.2.sg | habueris | du gehalten hast |  |
-| habēre | konj.perf.akt.2.pl | habueritis | ihr gehalten habt |  |
-| habēre | konj.perf.pass.2.sg | habitus sīs | du gehalten worden bist |  |
-| habēre | konj.perf.pass.2.pl | habitī sītis | ihr gehalten worden seid |  |
-| habēre | konj.plusq.akt.2.sg | habuissēs | du gehalten hättest |  |
-| habēre | konj.plusq.akt.2.pl | habuissētis | ihr gehalten hättet |  |
-| habēre | konj.plusq.pass.2.sg | habitus essēs | du gehalten worden wärest |  |
-| habēre | konj.plusq.pass.2.pl | habitī essētis | ihr gehalten worden wäret |  |
+| habēre | ind.praes.akt.2.sg | habēs | du hast |  |
+| habēre | ind.praes.akt.2.pl | habētis | ihr habt |  |
+| habēre | ind.praes.pass.2.sg | habēris | — |  |
+| habēre | ind.praes.pass.2.pl | habēminī | — |  |
+| habēre | ind.impf.akt.2.sg | habēbās | du hattest |  |
+| habēre | ind.impf.akt.2.pl | habēbātis | ihr hattet |  |
+| habēre | ind.impf.pass.2.sg | habēbāris | — |  |
+| habēre | ind.impf.pass.2.pl | habēbāminī | — |  |
+| habēre | ind.fut.akt.2.sg | habēbis | du wirst haben |  |
+| habēre | ind.fut.akt.2.pl | habēbitis | ihr werdet haben |  |
+| habēre | ind.fut.pass.2.sg | habēberis | — |  |
+| habēre | ind.fut.pass.2.pl | habēbiminī | — |  |
+| habēre | ind.perf.akt.2.sg | habuistī | du hast gehabt | du hattest |
+| habēre | ind.perf.akt.2.pl | habuistis | ihr habt gehabt | ihr hattet |
+| habēre | ind.perf.pass.2.sg | habitus es | — |  |
+| habēre | ind.perf.pass.2.pl | habitī estis | — |  |
+| habēre | ind.plusq.akt.2.sg | habuerās | du hattest gehabt |  |
+| habēre | ind.plusq.akt.2.pl | habuerātis | ihr hattet gehabt |  |
+| habēre | ind.plusq.pass.2.sg | habitus erās | — |  |
+| habēre | ind.plusq.pass.2.pl | habitī erātis | — |  |
+| habēre | ind.fut2.akt.2.sg | habueris | du wirst gehabt haben |  |
+| habēre | ind.fut2.akt.2.pl | habueritis | ihr werdet gehabt haben |  |
+| habēre | ind.fut2.pass.2.sg | habitus eris | — |  |
+| habēre | ind.fut2.pass.2.pl | habitī eritis | — |  |
+| habēre | konj.praes.akt.2.sg | habeās | du hast |  |
+| habēre | konj.praes.akt.2.pl | habeātis | ihr habt |  |
+| habēre | konj.praes.pass.2.sg | habeāris | — |  |
+| habēre | konj.praes.pass.2.pl | habeāminī | — |  |
+| habēre | konj.impf.akt.2.sg | habērēs | du hättest |  |
+| habēre | konj.impf.akt.2.pl | habērētis | ihr hättet |  |
+| habēre | konj.impf.pass.2.sg | habērēris | — |  |
+| habēre | konj.impf.pass.2.pl | habērēminī | — |  |
+| habēre | konj.perf.akt.2.sg | habueris | du gehabt hast |  |
+| habēre | konj.perf.akt.2.pl | habueritis | ihr gehabt habt |  |
+| habēre | konj.perf.pass.2.sg | habitus sīs | — |  |
+| habēre | konj.perf.pass.2.pl | habitī sītis | — |  |
+| habēre | konj.plusq.akt.2.sg | habuissēs | du gehabt hättest |  |
+| habēre | konj.plusq.akt.2.pl | habuissētis | ihr gehabt hättet |  |
+| habēre | konj.plusq.pass.2.sg | habitus essēs | — |  |
+| habēre | konj.plusq.pass.2.pl | habitī essētis | — |  |
 | audīre | ind.praes.akt.2.sg | audīs | du hörst |  |
 | audīre | ind.praes.akt.2.pl | audītis | ihr hört |  |
 | audīre | ind.praes.pass.2.sg | audīris | du wirst gehört |  |
@@ -900,46 +900,46 @@
 | labōrāre | konj.perf.akt.2.pl | labōrāveritis | ihr gearbeitet habt |  |
 | labōrāre | konj.plusq.akt.2.sg | labōrāvissēs | du gearbeitet hättest |  |
 | labōrāre | konj.plusq.akt.2.pl | labōrāvissētis | ihr gearbeitet hättet |  |
-| manēre | ind.praes.akt.2.sg | manēs | du erwartest |  |
-| manēre | ind.praes.akt.2.pl | manētis | ihr erwartet |  |
-| manēre | ind.praes.pass.2.sg | manēris | du wirst erwartet |  |
-| manēre | ind.praes.pass.2.pl | manēminī | ihr werdet erwartet |  |
-| manēre | ind.impf.akt.2.sg | manēbās | du erwartetest |  |
-| manēre | ind.impf.akt.2.pl | manēbātis | ihr erwartetet |  |
-| manēre | ind.impf.pass.2.sg | manēbāris | du wurdest erwartet |  |
-| manēre | ind.impf.pass.2.pl | manēbāminī | ihr wurdet erwartet |  |
-| manēre | ind.fut.akt.2.sg | manēbis | du wirst erwarten |  |
-| manēre | ind.fut.akt.2.pl | manēbitis | ihr werdet erwarten |  |
-| manēre | ind.fut.pass.2.sg | manēberis | du wirst erwartet werden |  |
-| manēre | ind.fut.pass.2.pl | manēbiminī | ihr werdet erwartet werden |  |
-| manēre | ind.perf.akt.2.sg | mānsistī | du hast erwartet | du erwartetest |
-| manēre | ind.perf.akt.2.pl | mānsistis | ihr habt erwartet | ihr erwartetet |
-| manēre | ind.perf.pass.2.sg | mānsus es | du bist erwartet worden |  |
-| manēre | ind.perf.pass.2.pl | mānsī estis | ihr seid erwartet worden |  |
-| manēre | ind.plusq.akt.2.sg | mānserās | du hattest erwartet |  |
-| manēre | ind.plusq.akt.2.pl | mānserātis | ihr hattet erwartet |  |
-| manēre | ind.plusq.pass.2.sg | mānsus erās | du warst erwartet worden |  |
-| manēre | ind.plusq.pass.2.pl | mānsī erātis | ihr wart erwartet worden |  |
-| manēre | ind.fut2.akt.2.sg | mānseris | du wirst erwartet haben |  |
-| manēre | ind.fut2.akt.2.pl | mānseritis | ihr werdet erwartet haben |  |
-| manēre | ind.fut2.pass.2.sg | mānsus eris | du wirst erwartet worden sein |  |
-| manēre | ind.fut2.pass.2.pl | mānsī eritis | ihr werdet erwartet worden sein |  |
-| manēre | konj.praes.akt.2.sg | maneās | du erwartest |  |
-| manēre | konj.praes.akt.2.pl | maneātis | ihr erwartet |  |
-| manēre | konj.praes.pass.2.sg | maneāris | du erwartet wirst |  |
-| manēre | konj.praes.pass.2.pl | maneāminī | ihr erwartet werdet |  |
-| manēre | konj.impf.akt.2.sg | manērēs | du erwarten würdest |  |
-| manēre | konj.impf.akt.2.pl | manērētis | ihr erwarten würdet |  |
-| manēre | konj.impf.pass.2.sg | manērēris | du erwartet würdest |  |
-| manēre | konj.impf.pass.2.pl | manērēminī | ihr erwartet würdet |  |
-| manēre | konj.perf.akt.2.sg | mānseris | du erwartet hast |  |
-| manēre | konj.perf.akt.2.pl | mānseritis | ihr erwartet habt |  |
-| manēre | konj.perf.pass.2.sg | mānsus sīs | du erwartet worden bist |  |
-| manēre | konj.perf.pass.2.pl | mānsī sītis | ihr erwartet worden seid |  |
-| manēre | konj.plusq.akt.2.sg | mānsissēs | du erwartet hättest |  |
-| manēre | konj.plusq.akt.2.pl | mānsissētis | ihr erwartet hättet |  |
-| manēre | konj.plusq.pass.2.sg | mānsus essēs | du erwartet worden wärest |  |
-| manēre | konj.plusq.pass.2.pl | mānsī essētis | ihr erwartet worden wäret |  |
+| manēre | ind.praes.akt.2.sg | manēs | du bleibst |  |
+| manēre | ind.praes.akt.2.pl | manētis | ihr bleibt |  |
+| manēre | ind.praes.pass.2.sg | manēris | — |  |
+| manēre | ind.praes.pass.2.pl | manēminī | — |  |
+| manēre | ind.impf.akt.2.sg | manēbās | du bliebst |  |
+| manēre | ind.impf.akt.2.pl | manēbātis | ihr bliebt |  |
+| manēre | ind.impf.pass.2.sg | manēbāris | — |  |
+| manēre | ind.impf.pass.2.pl | manēbāminī | — |  |
+| manēre | ind.fut.akt.2.sg | manēbis | du wirst bleiben |  |
+| manēre | ind.fut.akt.2.pl | manēbitis | ihr werdet bleiben |  |
+| manēre | ind.fut.pass.2.sg | manēberis | — |  |
+| manēre | ind.fut.pass.2.pl | manēbiminī | — |  |
+| manēre | ind.perf.akt.2.sg | mānsistī | du bist geblieben | du bliebst |
+| manēre | ind.perf.akt.2.pl | mānsistis | ihr seid geblieben | ihr bliebt |
+| manēre | ind.perf.pass.2.sg | mānsus es | — |  |
+| manēre | ind.perf.pass.2.pl | mānsī estis | — |  |
+| manēre | ind.plusq.akt.2.sg | mānserās | du warst geblieben |  |
+| manēre | ind.plusq.akt.2.pl | mānserātis | ihr wart geblieben |  |
+| manēre | ind.plusq.pass.2.sg | mānsus erās | — |  |
+| manēre | ind.plusq.pass.2.pl | mānsī erātis | — |  |
+| manēre | ind.fut2.akt.2.sg | mānseris | du wirst geblieben sein |  |
+| manēre | ind.fut2.akt.2.pl | mānseritis | ihr werdet geblieben sein |  |
+| manēre | ind.fut2.pass.2.sg | mānsus eris | — |  |
+| manēre | ind.fut2.pass.2.pl | mānsī eritis | — |  |
+| manēre | konj.praes.akt.2.sg | maneās | du bleibst |  |
+| manēre | konj.praes.akt.2.pl | maneātis | ihr bleibt |  |
+| manēre | konj.praes.pass.2.sg | maneāris | — |  |
+| manēre | konj.praes.pass.2.pl | maneāminī | — |  |
+| manēre | konj.impf.akt.2.sg | manērēs | du bleiben würdest |  |
+| manēre | konj.impf.akt.2.pl | manērētis | ihr bleiben würdet |  |
+| manēre | konj.impf.pass.2.sg | manērēris | — |  |
+| manēre | konj.impf.pass.2.pl | manērēminī | — |  |
+| manēre | konj.perf.akt.2.sg | mānseris | du geblieben bist |  |
+| manēre | konj.perf.akt.2.pl | mānseritis | ihr geblieben seid |  |
+| manēre | konj.perf.pass.2.sg | mānsus sīs | — |  |
+| manēre | konj.perf.pass.2.pl | mānsī sītis | — |  |
+| manēre | konj.plusq.akt.2.sg | mānsissēs | du geblieben wärest |  |
+| manēre | konj.plusq.akt.2.pl | mānsissētis | ihr geblieben wäret |  |
+| manēre | konj.plusq.pass.2.sg | mānsus essēs | — |  |
+| manēre | konj.plusq.pass.2.pl | mānsī essētis | — |  |
 | necāre | ind.praes.akt.2.sg | necās | du tötest |  |
 | necāre | ind.praes.akt.2.pl | necātis | ihr tötet |  |
 | necāre | ind.praes.pass.2.sg | necāris | du wirst getötet |  |
@@ -3990,46 +3990,46 @@
 | dīmittere | konj.plusq.akt.2.pl | dīmīsissētis | ihr entlassen hättet |  |
 | dīmittere | konj.plusq.pass.2.sg | dīmissus essēs | du entlassen worden wärest |  |
 | dīmittere | konj.plusq.pass.2.pl | dīmissī essētis | ihr entlassen worden wäret |  |
-| respicere | ind.praes.akt.2.sg | respicis | du schaust an |  |
-| respicere | ind.praes.akt.2.pl | respicitis | ihr schaut an |  |
-| respicere | ind.praes.pass.2.sg | respiceris | du wirst angeschaut |  |
-| respicere | ind.praes.pass.2.pl | respiciminī | ihr werdet angeschaut |  |
-| respicere | ind.impf.akt.2.sg | respiciēbās | du schautest an |  |
-| respicere | ind.impf.akt.2.pl | respiciēbātis | ihr schautet an |  |
-| respicere | ind.impf.pass.2.sg | respiciēbāris | du wurdest angeschaut |  |
-| respicere | ind.impf.pass.2.pl | respiciēbāminī | ihr wurdet angeschaut |  |
-| respicere | ind.fut.akt.2.sg | respiciēs | du wirst anschauen |  |
-| respicere | ind.fut.akt.2.pl | respiciētis | ihr werdet anschauen |  |
-| respicere | ind.fut.pass.2.sg | respiciēris | du wirst angeschaut werden |  |
-| respicere | ind.fut.pass.2.pl | respiciēminī | ihr werdet angeschaut werden |  |
-| respicere | ind.perf.akt.2.sg | respexistī | du hast angeschaut | du schautest an |
-| respicere | ind.perf.akt.2.pl | respexistis | ihr habt angeschaut | ihr schautet an |
-| respicere | ind.perf.pass.2.sg | respectus es | du bist angeschaut worden |  |
-| respicere | ind.perf.pass.2.pl | respectī estis | ihr seid angeschaut worden |  |
-| respicere | ind.plusq.akt.2.sg | respexerās | du hattest angeschaut |  |
-| respicere | ind.plusq.akt.2.pl | respexerātis | ihr hattet angeschaut |  |
-| respicere | ind.plusq.pass.2.sg | respectus erās | du warst angeschaut worden |  |
-| respicere | ind.plusq.pass.2.pl | respectī erātis | ihr wart angeschaut worden |  |
-| respicere | ind.fut2.akt.2.sg | respexeris | du wirst angeschaut haben |  |
-| respicere | ind.fut2.akt.2.pl | respexeritis | ihr werdet angeschaut haben |  |
-| respicere | ind.fut2.pass.2.sg | respectus eris | du wirst angeschaut worden sein |  |
-| respicere | ind.fut2.pass.2.pl | respectī eritis | ihr werdet angeschaut worden sein |  |
-| respicere | konj.praes.akt.2.sg | respiciās | du anschaust |  |
-| respicere | konj.praes.akt.2.pl | respiciātis | ihr anschaut |  |
-| respicere | konj.praes.pass.2.sg | respiciāris | du angeschaut wirst |  |
-| respicere | konj.praes.pass.2.pl | respiciāminī | ihr angeschaut werdet |  |
-| respicere | konj.impf.akt.2.sg | respicerēs | du anschauen würdest |  |
-| respicere | konj.impf.akt.2.pl | respicerētis | ihr anschauen würdet |  |
-| respicere | konj.impf.pass.2.sg | respicerēris | du angeschaut würdest |  |
-| respicere | konj.impf.pass.2.pl | respicerēminī | ihr angeschaut würdet |  |
-| respicere | konj.perf.akt.2.sg | respexeris | du angeschaut hast |  |
-| respicere | konj.perf.akt.2.pl | respexeritis | ihr angeschaut habt |  |
-| respicere | konj.perf.pass.2.sg | respectus sīs | du angeschaut worden bist |  |
-| respicere | konj.perf.pass.2.pl | respectī sītis | ihr angeschaut worden seid |  |
-| respicere | konj.plusq.akt.2.sg | respexissēs | du angeschaut hättest |  |
-| respicere | konj.plusq.akt.2.pl | respexissētis | ihr angeschaut hättet |  |
-| respicere | konj.plusq.pass.2.sg | respectus essēs | du angeschaut worden wärest |  |
-| respicere | konj.plusq.pass.2.pl | respectī essētis | ihr angeschaut worden wäret |  |
+| respicere | ind.praes.akt.2.sg | respicis | du blickst zurück |  |
+| respicere | ind.praes.akt.2.pl | respicitis | ihr blickt zurück |  |
+| respicere | ind.praes.pass.2.sg | respiceris | — |  |
+| respicere | ind.praes.pass.2.pl | respiciminī | — |  |
+| respicere | ind.impf.akt.2.sg | respiciēbās | du blicktest zurück |  |
+| respicere | ind.impf.akt.2.pl | respiciēbātis | ihr blicktet zurück |  |
+| respicere | ind.impf.pass.2.sg | respiciēbāris | — |  |
+| respicere | ind.impf.pass.2.pl | respiciēbāminī | — |  |
+| respicere | ind.fut.akt.2.sg | respiciēs | du wirst zurückblicken |  |
+| respicere | ind.fut.akt.2.pl | respiciētis | ihr werdet zurückblicken |  |
+| respicere | ind.fut.pass.2.sg | respiciēris | — |  |
+| respicere | ind.fut.pass.2.pl | respiciēminī | — |  |
+| respicere | ind.perf.akt.2.sg | respexistī | du hast zurückgeblickt | du blicktest zurück |
+| respicere | ind.perf.akt.2.pl | respexistis | ihr habt zurückgeblickt | ihr blicktet zurück |
+| respicere | ind.perf.pass.2.sg | respectus es | — |  |
+| respicere | ind.perf.pass.2.pl | respectī estis | — |  |
+| respicere | ind.plusq.akt.2.sg | respexerās | du hattest zurückgeblickt |  |
+| respicere | ind.plusq.akt.2.pl | respexerātis | ihr hattet zurückgeblickt |  |
+| respicere | ind.plusq.pass.2.sg | respectus erās | — |  |
+| respicere | ind.plusq.pass.2.pl | respectī erātis | — |  |
+| respicere | ind.fut2.akt.2.sg | respexeris | du wirst zurückgeblickt haben |  |
+| respicere | ind.fut2.akt.2.pl | respexeritis | ihr werdet zurückgeblickt haben |  |
+| respicere | ind.fut2.pass.2.sg | respectus eris | — |  |
+| respicere | ind.fut2.pass.2.pl | respectī eritis | — |  |
+| respicere | konj.praes.akt.2.sg | respiciās | du zurückblickst |  |
+| respicere | konj.praes.akt.2.pl | respiciātis | ihr zurückblickt |  |
+| respicere | konj.praes.pass.2.sg | respiciāris | — |  |
+| respicere | konj.praes.pass.2.pl | respiciāminī | — |  |
+| respicere | konj.impf.akt.2.sg | respicerēs | du zurückblicken würdest |  |
+| respicere | konj.impf.akt.2.pl | respicerētis | ihr zurückblicken würdet |  |
+| respicere | konj.impf.pass.2.sg | respicerēris | — |  |
+| respicere | konj.impf.pass.2.pl | respicerēminī | — |  |
+| respicere | konj.perf.akt.2.sg | respexeris | du zurückgeblickt hast |  |
+| respicere | konj.perf.akt.2.pl | respexeritis | ihr zurückgeblickt habt |  |
+| respicere | konj.perf.pass.2.sg | respectus sīs | — |  |
+| respicere | konj.perf.pass.2.pl | respectī sītis | — |  |
+| respicere | konj.plusq.akt.2.sg | respexissēs | du zurückgeblickt hättest |  |
+| respicere | konj.plusq.akt.2.pl | respexissētis | ihr zurückgeblickt hättet |  |
+| respicere | konj.plusq.pass.2.sg | respectus essēs | — |  |
+| respicere | konj.plusq.pass.2.pl | respectī essētis | — |  |
 | cōgnōscere | ind.praes.akt.2.sg | cōgnōscis | du lernst kennen |  |
 | cōgnōscere | ind.praes.akt.2.pl | cōgnōscitis | ihr lernt kennen |  |
 | cōgnōscere | ind.praes.pass.2.sg | cōgnōsceris | du wirst kennengelernt |  |
@@ -7372,44 +7372,44 @@
 | expellere | konj.plusq.pass.2.pl | expulsī essētis | ihr hinausgetrieben worden wäret |  |
 | restituere | ind.praes.akt.2.sg | restituis | du stellst wieder her |  |
 | restituere | ind.praes.akt.2.pl | restituitis | ihr stellt wieder her |  |
-| restituere | ind.praes.pass.2.sg | restitueris | du wirst wieder hergestellt |  |
-| restituere | ind.praes.pass.2.pl | restituiminī | ihr werdet wieder hergestellt |  |
+| restituere | ind.praes.pass.2.sg | restitueris | du wirst wiederhergestellt |  |
+| restituere | ind.praes.pass.2.pl | restituiminī | ihr werdet wiederhergestellt |  |
 | restituere | ind.impf.akt.2.sg | restituēbās | du stelltest wieder her |  |
 | restituere | ind.impf.akt.2.pl | restituēbātis | ihr stelltet wieder her |  |
-| restituere | ind.impf.pass.2.sg | restituēbāris | du wurdest wieder hergestellt |  |
-| restituere | ind.impf.pass.2.pl | restituēbāminī | ihr wurdet wieder hergestellt |  |
-| restituere | ind.fut.akt.2.sg | restituēs | du wirst wieder herstellen |  |
-| restituere | ind.fut.akt.2.pl | restituētis | ihr werdet wieder herstellen |  |
-| restituere | ind.fut.pass.2.sg | restituēris | du wirst wieder hergestellt werden |  |
-| restituere | ind.fut.pass.2.pl | restituēminī | ihr werdet wieder hergestellt werden |  |
-| restituere | ind.perf.akt.2.sg | restituistī | du hast wieder hergestellt | du stelltest wieder her |
-| restituere | ind.perf.akt.2.pl | restituistis | ihr habt wieder hergestellt | ihr stelltet wieder her |
-| restituere | ind.perf.pass.2.sg | restitūtus es | du bist wieder hergestellt worden |  |
-| restituere | ind.perf.pass.2.pl | restitūtī estis | ihr seid wieder hergestellt worden |  |
-| restituere | ind.plusq.akt.2.sg | restituerās | du hattest wieder hergestellt |  |
-| restituere | ind.plusq.akt.2.pl | restituerātis | ihr hattet wieder hergestellt |  |
-| restituere | ind.plusq.pass.2.sg | restitūtus erās | du warst wieder hergestellt worden |  |
-| restituere | ind.plusq.pass.2.pl | restitūtī erātis | ihr wart wieder hergestellt worden |  |
-| restituere | ind.fut2.akt.2.sg | restitueris | du wirst wieder hergestellt haben |  |
-| restituere | ind.fut2.akt.2.pl | restitueritis | ihr werdet wieder hergestellt haben |  |
-| restituere | ind.fut2.pass.2.sg | restitūtus eris | du wirst wieder hergestellt worden sein |  |
-| restituere | ind.fut2.pass.2.pl | restitūtī eritis | ihr werdet wieder hergestellt worden sein |  |
+| restituere | ind.impf.pass.2.sg | restituēbāris | du wurdest wiederhergestellt |  |
+| restituere | ind.impf.pass.2.pl | restituēbāminī | ihr wurdet wiederhergestellt |  |
+| restituere | ind.fut.akt.2.sg | restituēs | du wirst wiederherstellen |  |
+| restituere | ind.fut.akt.2.pl | restituētis | ihr werdet wiederherstellen |  |
+| restituere | ind.fut.pass.2.sg | restituēris | du wirst wiederhergestellt werden |  |
+| restituere | ind.fut.pass.2.pl | restituēminī | ihr werdet wiederhergestellt werden |  |
+| restituere | ind.perf.akt.2.sg | restituistī | du hast wiederhergestellt | du stelltest wieder her |
+| restituere | ind.perf.akt.2.pl | restituistis | ihr habt wiederhergestellt | ihr stelltet wieder her |
+| restituere | ind.perf.pass.2.sg | restitūtus es | du bist wiederhergestellt worden |  |
+| restituere | ind.perf.pass.2.pl | restitūtī estis | ihr seid wiederhergestellt worden |  |
+| restituere | ind.plusq.akt.2.sg | restituerās | du hattest wiederhergestellt |  |
+| restituere | ind.plusq.akt.2.pl | restituerātis | ihr hattet wiederhergestellt |  |
+| restituere | ind.plusq.pass.2.sg | restitūtus erās | du warst wiederhergestellt worden |  |
+| restituere | ind.plusq.pass.2.pl | restitūtī erātis | ihr wart wiederhergestellt worden |  |
+| restituere | ind.fut2.akt.2.sg | restitueris | du wirst wiederhergestellt haben |  |
+| restituere | ind.fut2.akt.2.pl | restitueritis | ihr werdet wiederhergestellt haben |  |
+| restituere | ind.fut2.pass.2.sg | restitūtus eris | du wirst wiederhergestellt worden sein |  |
+| restituere | ind.fut2.pass.2.pl | restitūtī eritis | ihr werdet wiederhergestellt worden sein |  |
 | restituere | konj.praes.akt.2.sg | restituās | du wieder herstellst |  |
 | restituere | konj.praes.akt.2.pl | restituātis | ihr wieder herstellt |  |
-| restituere | konj.praes.pass.2.sg | restituāris | du wieder hergestellt wirst |  |
-| restituere | konj.praes.pass.2.pl | restituāminī | ihr wieder hergestellt werdet |  |
-| restituere | konj.impf.akt.2.sg | restituerēs | du wieder herstellen würdest |  |
-| restituere | konj.impf.akt.2.pl | restituerētis | ihr wieder herstellen würdet |  |
-| restituere | konj.impf.pass.2.sg | restituerēris | du wieder hergestellt würdest |  |
-| restituere | konj.impf.pass.2.pl | restituerēminī | ihr wieder hergestellt würdet |  |
-| restituere | konj.perf.akt.2.sg | restitueris | du wieder hergestellt hast |  |
-| restituere | konj.perf.akt.2.pl | restitueritis | ihr wieder hergestellt habt |  |
-| restituere | konj.perf.pass.2.sg | restitūtus sīs | du wieder hergestellt worden bist |  |
-| restituere | konj.perf.pass.2.pl | restitūtī sītis | ihr wieder hergestellt worden seid |  |
-| restituere | konj.plusq.akt.2.sg | restituissēs | du wieder hergestellt hättest |  |
-| restituere | konj.plusq.akt.2.pl | restituissētis | ihr wieder hergestellt hättet |  |
-| restituere | konj.plusq.pass.2.sg | restitūtus essēs | du wieder hergestellt worden wärest |  |
-| restituere | konj.plusq.pass.2.pl | restitūtī essētis | ihr wieder hergestellt worden wäret |  |
+| restituere | konj.praes.pass.2.sg | restituāris | du wiederhergestellt wirst |  |
+| restituere | konj.praes.pass.2.pl | restituāminī | ihr wiederhergestellt werdet |  |
+| restituere | konj.impf.akt.2.sg | restituerēs | du wiederherstellen würdest |  |
+| restituere | konj.impf.akt.2.pl | restituerētis | ihr wiederherstellen würdet |  |
+| restituere | konj.impf.pass.2.sg | restituerēris | du wiederhergestellt würdest |  |
+| restituere | konj.impf.pass.2.pl | restituerēminī | ihr wiederhergestellt würdet |  |
+| restituere | konj.perf.akt.2.sg | restitueris | du wiederhergestellt hast |  |
+| restituere | konj.perf.akt.2.pl | restitueritis | ihr wiederhergestellt habt |  |
+| restituere | konj.perf.pass.2.sg | restitūtus sīs | du wiederhergestellt worden bist |  |
+| restituere | konj.perf.pass.2.pl | restitūtī sītis | ihr wiederhergestellt worden seid |  |
+| restituere | konj.plusq.akt.2.sg | restituissēs | du wiederhergestellt hättest |  |
+| restituere | konj.plusq.akt.2.pl | restituissētis | ihr wiederhergestellt hättet |  |
+| restituere | konj.plusq.pass.2.sg | restitūtus essēs | du wiederhergestellt worden wärest |  |
+| restituere | konj.plusq.pass.2.pl | restitūtī essētis | ihr wiederhergestellt worden wäret |  |
 | pācāre | ind.praes.akt.2.sg | pācās | du machst friedlich |  |
 | pācāre | ind.praes.akt.2.pl | pācātis | ihr macht friedlich |  |
 | pācāre | ind.praes.pass.2.sg | pācāris | du wirst friedlich gemacht |  |
