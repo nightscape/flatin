@@ -375,6 +375,17 @@ types:
       2.pl: euch
       3.pl: sich
 
+  ReflexivpronomenDativ:
+    class: pronomen
+    display: {de: Reflexivpronomen im Dativ, en: Dative reflexive pronoun}
+    forms:
+      1.sg: mir
+      2.sg: dir
+      3.sg: sich
+      1.pl: uns
+      2.pl: euch
+      3.pl: sich
+
 items:
   - id: pron
     type: Personalpronomen
@@ -383,6 +394,10 @@ items:
   - id: refl
     type: Reflexivpronomen
     translation: {de: Reflexivpronomen, en: reflexive pronoun}
+    parts: {infinitiv: sich}
+  - id: refl_dat
+    type: ReflexivpronomenDativ
+    translation: {de: Reflexivpronomen im Dativ, en: dative reflexive pronoun}
     parts: {infinitiv: sich}
 
   - id: hv_haben
@@ -985,6 +1000,150 @@ items:
 
 
   # package 5
+  - id: sich ausdenken
+    type: gemischt
+    translation: {de: sich ausdenken, en: invent}
+    parts: {infinitiv: ausdenken, grundverb: denken, partikel: aus, praeteritum: dachte, partizip2: ausgedacht}
+    slots: {reflexiv: refl_dat}
+    absent: *ohne_passiv
+  - type: schwach
+    translation: {de: rauben, en: rob}
+    parts: {infinitiv: rauben, partizip2: geraubt}
+  - type: schwach
+    translation: {de: vergrößern, en: enlarge}
+    parts: {infinitiv: vergrößern, praesens_1pl: vergrößern, partizip2: vergrößert}
+  - type: schwach
+    translation: {de: lenken, en: steer}
+    parts: {infinitiv: lenken, partizip2: gelenkt}
+  - id: sich erheben
+    type: stark
+    translation: {de: sich erheben, en: rise}
+    parts: {infinitiv: erheben, praeteritum: erhob, partizip2: erhoben}
+    slots: {reflexiv: refl}
+    absent: *ohne_passiv
+  - type: stark
+    translation: {de: entreißen, en: snatch away}
+    parts: {infinitiv: entreißen, praesens_2sg: entreißt, praeteritum: entriss, partizip2: entrissen}
+  - id: nicht wissen
+    type: gemischt
+    translation: {de: nicht wissen, en: not know}
+    parts: {infinitiv: nicht wissen, grundverb: wissen, wortgruppe: nicht, praesens_1sg: weiß, praesens_2sg: weißt, praesens_3sg: weiß, praeteritum: wusste, konjunktiv2: wüsste, partizip2: nicht gewusst}
+    absent: *ohne_passiv
+  - type: schwach
+    translation: {de: belagern, en: besiege}
+    parts: {infinitiv: belagern, praesens_1pl: belagern, partizip2: belagert}
+  - type: stark
+    translation: {de: hineinwerfen, en: throw in}
+    parts: {infinitiv: hineinwerfen, grundverb: werfen, partikel: hinein, praesens_3sg: wirft, praeteritum: warf, partizip2: hineingeworfen}
+  - type: schwach
+    translation: {de: verwüsten, en: devastate}
+    parts: {infinitiv: verwüsten, partizip2: verwüstet}
+  - type: schwach
+    translation: {de: hingelangen, en: arrive}
+    parts: {infinitiv: hingelangen, grundverb: gelangen, partikel: hin, partizip2: hingelangt}
+    slots: {hilfsverb: hv_sein}
+    absent: *ohne_passiv
+  - type: schwach
+    translation: {de: abwehren, en: ward off}
+    parts: {infinitiv: abwehren, grundverb: wehren, partikel: ab, partizip2: abgewehrt}
+  - type: stark
+    translation: {de: zusammenhalten, en: hold together}
+    parts: {infinitiv: zusammenhalten, grundverb: halten, partikel: zusammen, praesens_2sg: hältst, praesens_3sg: hält, praeteritum: hielt, partizip2: zusammengehalten}
+  - type: stark
+    translation: {de: hinausgehen, en: go out}
+    parts: {infinitiv: hinausgehen, grundverb: gehen, partikel: hinaus, praeteritum: ging, partizip2: hinausgegangen}
+    slots: {hilfsverb: hv_sein}
+    absent: *ohne_passiv
+  - type: stark
+    translation: {de: hinaustreiben, en: drive out}
+    parts: {infinitiv: hinaustreiben, grundverb: treiben, partikel: hinaus, praeteritum: trieb, partizip2: hinausgetrieben}
+  - id: wieder herstellen
+    type: schwach
+    translation: {de: wieder herstellen, en: restore}
+    parts: {infinitiv: wieder herstellen, grundverb: stellen, wortgruppe: wieder, partikel: her, partizip2: wieder hergestellt}
+  - id: friedlich machen
+    type: schwach
+    translation: {de: friedlich machen, en: pacify}
+    parts: {infinitiv: friedlich machen, grundverb: machen, wortgruppe: friedlich, partizip2: friedlich gemacht}
+  - type: stark
+    translation: {de: beraten, en: advise}
+    parts: {infinitiv: beraten, praesens_2sg: berätst, praesens_3sg: berät, praeteritum: beriet, partizip2: beraten}
+  - type: stark
+    translation: {de: unterwerfen, en: subjugate}
+    parts: {infinitiv: unterwerfen, praesens_3sg: unterwirft, praeteritum: unterwarf, partizip2: unterworfen}
+  - type: stark
+    translation: {de: entscheiden, en: decide}
+    parts: {infinitiv: entscheiden, praeteritum: entschied, partizip2: entschieden}
+  - type: schwach
+    translation: {de: befreien, en: free}
+    parts: {infinitiv: befreien, partizip2: befreit}
+  - type: stark
+    translation: {de: zerbrechen, en: break}
+    parts: {infinitiv: zerbrechen, praesens_3sg: zerbricht, praeteritum: zerbrach, partizip2: zerbrochen}
+  - type: stark
+    translation: {de: herankommen, en: come up}
+    parts: {infinitiv: herankommen, grundverb: kommen, partikel: heran, praeteritum: kam, partizip2: herangekommen}
+    slots: {hilfsverb: hv_sein}
+    absent: *ohne_passiv
+  - type: schwach
+    translation: {de: unterdrücken, en: oppress}
+    parts: {infinitiv: unterdrücken, partizip2: unterdrückt}
+  - type: schwach
+    translation: {de: hinabführen, en: lead down}
+    parts: {infinitiv: hinabführen, grundverb: führen, partikel: hinab, partizip2: hinabgeführt}
+  - type: stark
+    translation: {de: anhalten, en: stop}
+    parts: {infinitiv: anhalten, grundverb: halten, partikel: an, praesens_2sg: hältst, praesens_3sg: hält, praeteritum: hielt, partizip2: angehalten}
+    absent: *ohne_passiv
+  - type: stark
+    translation: {de: erbitten, en: request}
+    parts: {infinitiv: erbitten, praeteritum: erbat, partizip2: erbeten}
+  - type: stark
+    translation: {de: zurückgeben, en: give back}
+    parts: {infinitiv: zurückgeben, grundverb: geben, partikel: zurück, praesens_3sg: gibt, praeteritum: gab, partizip2: zurückgegeben}
+  - type: stark
+    translation: {de: trinken, en: drink}
+    parts: {infinitiv: trinken, praeteritum: trank, partizip2: getrunken}
+  - type: schwach
+    translation: {de: kaufen, en: buy}
+    parts: {infinitiv: kaufen, partizip2: gekauft}
+  - type: gemischt
+    translation: {de: nennen, en: name}
+    parts: {infinitiv: nennen, praeteritum: nannte, partizip2: genannt}
+  - type: schwach
+    translation: {de: verkünden, en: proclaim}
+    parts: {infinitiv: verkünden, partizip2: verkündet}
+  - type: schwach
+    translation: {de: veranlassen, en: induce}
+    parts: {infinitiv: veranlassen, praesens_2sg: veranlasst, partizip2: veranlasst}
+  - type: gemischt
+    translation: {de: wegbringen, en: take away}
+    parts: {infinitiv: wegbringen, grundverb: bringen, partikel: weg, praeteritum: brachte, partizip2: weggebracht}
+  - type: stark
+    translation: {de: wachsen, en: grow}
+    parts: {infinitiv: wachsen, praesens_2sg: wächst, praesens_3sg: wächst, praeteritum: wuchs, partizip2: gewachsen}
+    slots: {hilfsverb: hv_sein}
+    absent: *ohne_passiv
+  - type: schwach
+    translation: {de: täuschen, en: deceive}
+    parts: {infinitiv: täuschen, partizip2: getäuscht}
+  - type: stark
+    translation: {de: verbergen, en: hide}
+    parts: {infinitiv: verbergen, praesens_3sg: verbirgt, praeteritum: verbarg, partizip2: verborgen}
+  - type: schwach
+    translation: {de: benetzen, en: wet}
+    parts: {infinitiv: benetzen, praesens_2sg: benetzt, partizip2: benetzt}
+  - type: schwach
+    translation: {de: abstreifen, en: strip off}
+    parts: {infinitiv: abstreifen, grundverb: streifen, partikel: ab, partizip2: abgestreift}
+  - type: stark
+    translation: {de: ziehen, en: draw}
+    parts: {infinitiv: ziehen, praeteritum: zog, partizip2: gezogen}
+  - type: schwach
+    translation: {de: umherirren, en: wander}
+    parts: {infinitiv: umherirren, grundverb: irren, partikel: umher, partizip2: umhergeirrt}
+    slots: {hilfsverb: hv_sein}
+    absent: *ohne_passiv
 
 
 
