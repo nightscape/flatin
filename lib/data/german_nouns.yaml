@@ -222,13 +222,13 @@ types:
     display: {de: Kasusrahmen, en: Case frame}
     forms:
       nom.sg: "(ist da)"
-      gen.sg: "(das Haus)"
+      gen.sg: "(die Farbe)"
       dat.sg: "(ich helfe)"
       akk.sg: "(ich sehe)"
       abl.sg: [mit, von]
       vok.sg: "(o)"
       nom.pl: "(sind da)"
-      gen.pl: "(das Haus)"
+      gen.pl: "(die Farbe)"
       dat.pl: "(ich helfe)"
       akk.pl: "(ich sehe)"
       abl.pl: [mit, von]

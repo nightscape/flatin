@@ -26,7 +26,7 @@ final _keys = [
 const _pinned = {
   'servus': {
     'nom.sg': ['der Sklave (ist da)'],
-    'gen.sg': ['(das Haus) des Sklaven'],
+    'gen.sg': ['(die Farbe) des Sklaven'],
     'dat.sg': ['(ich helfe) dem Sklaven'],
     'akk.sg': ['(ich sehe) den Sklaven'],
     'abl.sg': [
@@ -37,21 +37,40 @@ const _pinned = {
     ],
     'vok.sg': ['(o) Sklave!'],
     'nom.pl': ['die Sklaven (sind da)'],
-    'gen.pl': ['(das Haus) der Sklaven'],
+    'gen.pl': ['(die Farbe) der Sklaven'],
     'dat.pl': ['(ich helfe) den Sklaven'],
     'akk.pl': ['(ich sehe) die Sklaven'],
     'abl.pl': ['mit den Sklaven', 'von den Sklaven', 'durch die Sklaven'],
     'vok.pl': ['(o) Sklaven!'],
   },
+  'Rōmānus': {
+    'nom.sg': ['der Römer (ist da)'],
+    'gen.sg': ['(die Farbe) des Römers'],
+    'dat.sg': ['(ich helfe) dem Römer'],
+    'akk.sg': ['(ich sehe) den Römer'],
+    'abl.sg': [
+      'mit dem Römer',
+      'von dem Römer',
+      'durch den Römer',
+      'vom Römer',
+    ],
+    'vok.sg': ['(o) Römer!'],
+    'nom.pl': ['die Römer (sind da)'],
+    'gen.pl': ['(die Farbe) der Römer'],
+    'dat.pl': ['(ich helfe) den Römern'],
+    'akk.pl': ['(ich sehe) die Römer'],
+    'abl.pl': ['mit den Römern', 'von den Römern', 'durch die Römer'],
+    'vok.pl': ['(o) Römer!'],
+  },
   'rosa': {
     'nom.sg': ['die Rose (ist da)'],
-    'gen.sg': ['(das Haus) der Rose'],
+    'gen.sg': ['(die Farbe) der Rose'],
     'dat.sg': ['(ich helfe) der Rose'],
     'akk.sg': ['(ich sehe) die Rose'],
     'abl.sg': ['mit der Rose', 'von der Rose', 'durch die Rose'],
     'vok.sg': ['(o) Rose!'],
     'nom.pl': ['die Rosen (sind da)'],
-    'gen.pl': ['(das Haus) der Rosen'],
+    'gen.pl': ['(die Farbe) der Rosen'],
     'dat.pl': ['(ich helfe) den Rosen'],
     'akk.pl': ['(ich sehe) die Rosen'],
     'abl.pl': ['mit den Rosen', 'von den Rosen', 'durch die Rosen'],
@@ -59,13 +78,13 @@ const _pinned = {
   },
   'vīlla': {
     'nom.sg': ['das Haus (ist da)'],
-    'gen.sg': ['(das Haus) des Hauses'],
+    'gen.sg': ['(die Farbe) des Hauses'],
     'dat.sg': ['(ich helfe) dem Haus'],
     'akk.sg': ['(ich sehe) das Haus'],
     'abl.sg': ['mit dem Haus', 'von dem Haus', 'durch das Haus', 'vom Haus'],
     'vok.sg': ['(o) Haus!'],
     'nom.pl': ['die Häuser (sind da)'],
-    'gen.pl': ['(das Haus) der Häuser'],
+    'gen.pl': ['(die Farbe) der Häuser'],
     'dat.pl': ['(ich helfe) den Häusern'],
     'akk.pl': ['(ich sehe) die Häuser'],
     'abl.pl': ['mit den Häusern', 'von den Häusern', 'durch die Häuser'],
@@ -73,7 +92,7 @@ const _pinned = {
   },
   'cor': {
     'nom.sg': ['das Herz (ist da)'],
-    'gen.sg': ['(das Haus) des Herzens'],
+    'gen.sg': ['(die Farbe) des Herzens'],
     'dat.sg': ['(ich helfe) dem Herzen'],
     'akk.sg': ['(ich sehe) das Herz'],
     'abl.sg': [
@@ -84,7 +103,7 @@ const _pinned = {
     ],
     'vok.sg': ['(o) Herz!'],
     'nom.pl': ['die Herzen (sind da)'],
-    'gen.pl': ['(das Haus) der Herzen'],
+    'gen.pl': ['(die Farbe) der Herzen'],
     'dat.pl': ['(ich helfe) den Herzen'],
     'akk.pl': ['(ich sehe) die Herzen'],
     'abl.pl': ['mit den Herzen', 'von den Herzen', 'durch die Herzen'],
@@ -92,7 +111,7 @@ const _pinned = {
   },
   'Rōma': {
     'nom.sg': ['Rom (ist da)'],
-    'gen.sg': ['(das Haus) Roms'],
+    'gen.sg': ['(die Farbe) Roms'],
     'dat.sg': ['(ich helfe) Rom'],
     'akk.sg': ['(ich sehe) Rom'],
     'abl.sg': ['mit Rom', 'von Rom', 'durch Rom'],
@@ -100,11 +119,30 @@ const _pinned = {
   },
 };
 
+/// The case frame of each key, the shown one first.
+const _frames = {
+  'nom.sg': ['(ist da)'],
+  'gen.sg': ['(die Farbe)'],
+  'dat.sg': ['(ich helfe)'],
+  'akk.sg': ['(ich sehe)'],
+  'abl.sg': ['mit', 'von'],
+  'vok.sg': ['(o)'],
+  'nom.pl': ['(sind da)'],
+  'gen.pl': ['(die Farbe)'],
+  'dat.pl': ['(ich helfe)'],
+  'akk.pl': ['(ich sehe)'],
+  'abl.pl': ['mit', 'von'],
+  'vok.pl': ['(o)'],
+};
+
+/// [text] without its bracketed frame before the article.
+String _unframed(String text) => text.replaceFirst(RegExp(r'^\(.*?\) '), '');
+
 /// German noun id → the texts of each key, for a noun without a Latin item.
 const _pinnedGermanOnly = {
   'eltern': {
     'nom.pl': ['die Eltern (sind da)'],
-    'gen.pl': ['(das Haus) der Eltern'],
+    'gen.pl': ['(die Farbe) der Eltern'],
     'dat.pl': ['(ich helfe) den Eltern'],
     'akk.pl': ['(ich sehe) die Eltern'],
     'abl.pl': ['mit den Eltern', 'von den Eltern', 'durch die Eltern'],
@@ -203,18 +241,53 @@ void main() {
     );
   });
 
-  test('every case of the pinned nouns shows and accepts its German text', () {
-    for (final MapEntry(key: lemma, value: texts) in _pinned.entries) {
-      final item = latin(lemma);
-      expect(
-        {
-          for (final key in _keys)
-            if (german.covers(item, key)) key: german.accepted(item, key),
-        },
-        texts,
-        reason: lemma,
-      );
+  group('case frames', () {
+    for (final key in _keys) {
+      test('$key shows its frame and accepts the pinned texts', () {
+        expect(
+          _engineOf(_yaml).of('german_nouns', 'rahmen').forms[key]!.variants,
+          _frames[key],
+        );
+        for (final MapEntry(key: lemma, value: texts) in _pinned.entries) {
+          if (!texts.containsKey(key)) continue;
+          final item = latin(lemma);
+          expect(german.render(item, key), contains(_frames[key]!.first));
+          expect(german.accepted(item, key), texts[key], reason: lemma);
+        }
+      });
     }
+
+    test('the ablative takes mit and von with the dative, durch with the '
+        'accusative, and vom for dem', () {
+      for (final item in nouns) {
+        for (final n in ['sg', 'pl']) {
+          if (!german.covers(item, 'abl.$n')) continue;
+          final dative = _unframed(german.render(item, 'dat.$n'));
+          final accusative = _unframed(german.render(item, 'akk.$n'));
+          expect(german.accepted(item, 'abl.$n'), [
+            'mit $dative',
+            'von $dative',
+            'durch $accusative',
+            if (dative.startsWith('dem ')) 'vom ${dative.substring(4)}',
+          ], reason: '${item.lemma} abl.$n');
+        }
+      }
+    });
+
+    test('the genitive frame noun is no German noun of the data', () {
+      final frames = _engineOf(_yaml).of('german_nouns', 'rahmen').forms;
+      final frameNouns = {
+        for (final key in ['gen.sg', 'gen.pl'])
+          RegExp(
+            r'^\((?:der|die|das) (\S+)\)$',
+          ).firstMatch(frames[key]!.variants.single)!.group(1)!,
+      };
+      final file = parseGrammarFile(_yaml, path: _path);
+      expect([
+        for (final item in file.items)
+          if (item.parts['nominativ']!.any(frameNouns.contains)) item.id,
+      ], isEmpty);
+    });
   });
 
   test('a plural-only noun has every plural case and no singular', () {
