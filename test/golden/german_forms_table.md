@@ -266,20 +266,251 @@
 | servīre | inf.perf.akt | servīvisse | gedient haben |  |
 | servīre | inf.perf.pass | servītum esse | — |  |
 | servīre | part.praes.akt | serviēns | dienend |  |
+| spectāre | inf.praes.akt | spectāre | anschauen |  |
+| spectāre | inf.praes.pass | spectārī | angeschaut werden |  |
+| spectāre | inf.perf.akt | spectāvisse | angeschaut haben |  |
+| spectāre | inf.perf.pass | spectātum esse | angeschaut worden sein |  |
+| spectāre | part.praes.akt | spectāns | anschauend |  |
+| spectāre | part.perf.pass | spectātus | angeschaut |  |
+| stupēre | inf.praes.akt | stupēre | staunen |  |
+| stupēre | inf.praes.pass | stupērī | — |  |
+| stupēre | inf.perf.akt | stupuisse | gestaunt haben |  |
+| stupēre | part.praes.akt | stupēns | staunend |  |
+| superāre | inf.praes.akt | superāre | übertreffen |  |
+| superāre | inf.praes.pass | superārī | übertroffen werden |  |
+| superāre | inf.perf.akt | superāvisse | übertroffen haben |  |
+| superāre | inf.perf.pass | superātum esse | übertroffen worden sein |  |
+| superāre | part.praes.akt | superāns | übertreffend |  |
+| superāre | part.perf.pass | superātus | übertroffen |  |
+| tacēre | inf.praes.akt | tacēre | schweigen |  |
+| tacēre | inf.praes.pass | tacērī | — |  |
+| tacēre | inf.perf.akt | tacuisse | geschwiegen haben |  |
+| tacēre | inf.perf.pass | tacitum esse | — |  |
+| tacēre | part.praes.akt | tacēns | schweigend |  |
+| temptāre | inf.praes.akt | temptāre | angreifen |  |
+| temptāre | inf.praes.pass | temptārī | angegriffen werden |  |
+| temptāre | inf.perf.akt | temptāvisse | angegriffen haben |  |
+| temptāre | inf.perf.pass | temptātum esse | angegriffen worden sein |  |
+| temptāre | part.praes.akt | temptāns | angreifend |  |
+| temptāre | part.perf.pass | temptātus | angegriffen |  |
+| timēre | inf.praes.akt | timēre | fürchten |  |
+| timēre | inf.praes.pass | timērī | gefürchtet werden |  |
+| timēre | inf.perf.akt | timuisse | gefürchtet haben |  |
+| timēre | part.praes.akt | timēns | fürchtend |  |
+| vidēre | inf.praes.akt | vidēre | sehen |  |
+| vidēre | inf.praes.pass | vidērī | gesehen werden |  |
+| vidēre | inf.perf.akt | vīdisse | gesehen haben |  |
+| vidēre | inf.perf.pass | vīsum esse | gesehen worden sein |  |
+| vidēre | part.praes.akt | vidēns | sehend |  |
+| vidēre | part.perf.pass | vīsus | gesehen |  |
 | vocāre | inf.praes.akt | vocāre | rufen |  |
 | vocāre | inf.praes.pass | vocārī | gerufen werden |  |
 | vocāre | inf.perf.akt | vocāvisse | gerufen haben |  |
 | vocāre | inf.perf.pass | vocātum esse | gerufen worden sein |  |
 | vocāre | part.praes.akt | vocāns | rufend |  |
 | vocāre | part.perf.pass | vocātus | gerufen |  |
+| vīsitāre | inf.praes.akt | vīsitāre | besuchen |  |
+| vīsitāre | inf.praes.pass | vīsitārī | besucht werden |  |
+| vīsitāre | inf.perf.akt | vīsitāvisse | besucht haben |  |
+| vīsitāre | inf.perf.pass | vīsitātum esse | besucht worden sein |  |
+| vīsitāre | part.praes.akt | vīsitāns | besuchend |  |
+| vīsitāre | part.perf.pass | vīsitātus | besucht |  |
+| agere | inf.praes.akt | agere | treiben |  |
+| agere | inf.praes.pass | agī | getrieben werden |  |
+| agere | inf.perf.akt | ēgisse | getrieben haben |  |
+| agere | inf.perf.pass | āctum esse | getrieben worden sein |  |
+| agere | part.praes.akt | agēns | treibend |  |
+| agere | part.perf.pass | āctus | getrieben |  |
+| dīcere | inf.praes.akt | dīcere | sagen |  |
+| dīcere | inf.praes.pass | dīcī | gesagt werden |  |
+| dīcere | inf.perf.akt | dīxisse | gesagt haben |  |
+| dīcere | inf.perf.pass | dictum esse | gesagt worden sein |  |
+| dīcere | part.praes.akt | dīcēns | sagend |  |
+| dīcere | part.perf.pass | dictus | gesagt |  |
+| dūcere | inf.praes.akt | dūcere | führen |  |
+| dūcere | inf.praes.pass | dūcī | geführt werden |  |
+| dūcere | inf.perf.akt | dūxisse | geführt haben |  |
+| dūcere | inf.perf.pass | ductum esse | geführt worden sein |  |
+| dūcere | part.praes.akt | dūcēns | führend |  |
+| dūcere | part.perf.pass | ductus | geführt |  |
+| scrībere | inf.praes.akt | scrībere | schreiben |  |
+| scrībere | inf.praes.pass | scrībī | geschrieben werden |  |
+| scrībere | inf.perf.akt | scrīpsisse | geschrieben haben |  |
+| scrībere | inf.perf.pass | scrīptum esse | geschrieben worden sein |  |
+| scrībere | part.praes.akt | scrībēns | schreibend |  |
+| scrībere | part.perf.pass | scrīptus | geschrieben |  |
+| legere | inf.praes.akt | legere | lesen |  |
+| legere | inf.praes.pass | legī | gelesen werden |  |
+| legere | inf.perf.akt | lēgisse | gelesen haben |  |
+| legere | inf.perf.pass | lēctum esse | gelesen worden sein |  |
+| legere | part.praes.akt | legēns | lesend |  |
+| legere | part.perf.pass | lēctus | gelesen |  |
+| mittere | inf.praes.akt | mittere | schicken |  |
+| mittere | inf.praes.pass | mittī | geschickt werden |  |
+| mittere | inf.perf.akt | mīsisse | geschickt haben |  |
+| mittere | inf.perf.pass | missum esse | geschickt worden sein |  |
+| mittere | part.praes.akt | mittēns | schickend |  |
+| mittere | part.perf.pass | missus | geschickt |  |
+| vincere | inf.praes.akt | vincere | siegen |  |
+| vincere | inf.praes.pass | vincī | — |  |
+| vincere | inf.perf.akt | vīcisse | gesiegt haben |  |
+| vincere | inf.perf.pass | victum esse | — |  |
+| vincere | part.praes.akt | vincēns | siegend |  |
+| vincere | part.perf.pass | victus | — |  |
+| pōnere | inf.praes.akt | pōnere | setzen |  |
+| pōnere | inf.praes.pass | pōnī | gesetzt werden |  |
+| pōnere | inf.perf.akt | posuisse | gesetzt haben |  |
+| pōnere | inf.perf.pass | positum esse | gesetzt worden sein |  |
+| pōnere | part.praes.akt | pōnēns | setzend |  |
+| pōnere | part.perf.pass | positus | gesetzt |  |
 | ferre | inf.praes.akt | ferre | tragen |  |
 | ferre | inf.praes.pass | ferrī | getragen werden |  |
 | ferre | inf.perf.akt | tulisse | getragen haben |  |
 | ferre | inf.perf.pass | lātum esse | getragen worden sein |  |
 | ferre | part.praes.akt | ferēns | tragend |  |
 | ferre | part.perf.pass | lātus | getragen |  |
+| posse | inf.praes.akt | posse | können |  |
+| posse | inf.perf.akt | potuisse | gekonnt haben |  |
+| īre | inf.praes.akt | īre | gehen |  |
+| īre | inf.praes.pass | īrī | — |  |
+| īre | inf.perf.akt | īsse | gegangen sein |  |
+| īre | inf.perf.pass | itum esse | — |  |
+| īre | part.praes.akt | iēns | gehend |  |
+| īre | part.perf.pass | itus | — |  |
+| velle | inf.praes.akt | velle | wollen |  |
+| velle | inf.perf.akt | voluisse | gewollt haben |  |
+| velle | part.praes.akt | volēns | wollend |  |
+| nōlle | inf.praes.akt | nōlle | nicht wollen |  |
+| nōlle | inf.perf.akt | nōluisse | nicht gewollt haben |  |
+| nōlle | part.praes.akt | nōlēns | nicht wollend |  |
+| mālle | inf.praes.akt | mālle | lieber wollen |  |
+| mālle | inf.perf.akt | māluisse | lieber gewollt haben |  |
 | esse | inf.praes.akt | esse | sein |  |
 | esse | inf.perf.akt | fuisse | gewesen sein |  |
+| prōvidēre | inf.praes.akt | prōvidēre | vorhersehen |  |
+| prōvidēre | inf.praes.pass | prōvidērī | vorhergesehen werden |  |
+| prōvidēre | inf.perf.akt | prōvīdisse | vorhergesehen haben |  |
+| prōvidēre | inf.perf.pass | prōvīsum esse | vorhergesehen worden sein |  |
+| prōvidēre | part.praes.akt | prōvidēns | vorhersehend |  |
+| prōvidēre | part.perf.pass | prōvīsus | vorhergesehen |  |
+| sollicitāre | inf.praes.akt | sollicitāre | erregen |  |
+| sollicitāre | inf.praes.pass | sollicitārī | erregt werden |  |
+| sollicitāre | inf.perf.akt | sollicitāvisse | erregt haben |  |
+| sollicitāre | inf.perf.pass | sollicitātum esse | erregt worden sein |  |
+| sollicitāre | part.praes.akt | sollicitāns | erregend |  |
+| sollicitāre | part.perf.pass | sollicitātus | erregt |  |
+| incēdere | inf.praes.akt | incēdere | heranrücken |  |
+| incēdere | inf.praes.pass | incēdī | — |  |
+| incēdere | inf.perf.akt | incessisse | herangerückt sein |  |
+| incēdere | part.praes.akt | incēdēns | heranrückend |  |
+| offerre | inf.praes.akt | offerre | entgegenbringen |  |
+| offerre | inf.perf.akt | obtulisse | entgegengebracht haben |  |
+| offerre | inf.perf.pass | oblātum esse | entgegengebracht worden sein |  |
+| offerre | part.praes.akt | offerēns | entgegenbringend |  |
+| offerre | part.perf.pass | oblātus | entgegengebracht |  |
+| tendere | inf.praes.akt | tendere | sich anstrengen |  |
+| tendere | inf.praes.pass | tendī | — |  |
+| tendere | inf.perf.akt | tetendisse | sich angestrengt haben |  |
+| tendere | part.praes.akt | tendēns | sich anstrengend |  |
+| tangere | inf.praes.akt | tangere | berühren |  |
+| tangere | inf.praes.pass | tangī | berührt werden |  |
+| tangere | inf.perf.akt | tetigisse | berührt haben |  |
+| tangere | inf.perf.pass | tāctum esse | berührt worden sein |  |
+| tangere | part.praes.akt | tangēns | berührend |  |
+| tangere | part.perf.pass | tāctus | berührt |  |
+| abīre | inf.praes.akt | abīre | weggehen |  |
+| abīre | inf.perf.akt | abīsse | weggegangen sein |  |
+| abīre | part.praes.akt | abiēns | weggehend |  |
+| īnferre | inf.praes.akt | īnferre | hineintragen |  |
+| īnferre | inf.perf.akt | intulisse | hineingetragen haben |  |
+| īnferre | inf.perf.pass | illātum esse | hineingetragen worden sein |  |
+| īnferre | part.praes.akt | īnferēns | hineintragend |  |
+| īnferre | part.perf.pass | illātus | hineingetragen |  |
+| referre | inf.praes.akt | referre | zurückbringen |  |
+| referre | inf.perf.akt | rettulisse | zurückgebracht haben |  |
+| referre | inf.perf.pass | relātum esse | zurückgebracht worden sein |  |
+| referre | part.praes.akt | referēns | zurückbringend |  |
+| referre | part.perf.pass | relātus | zurückgebracht |  |
+| auferre | inf.praes.akt | auferre | wegtragen |  |
+| auferre | inf.perf.akt | abstulisse | weggetragen haben |  |
+| auferre | inf.perf.pass | ablātum esse | weggetragen worden sein |  |
+| auferre | part.praes.akt | auferēns | wegtragend |  |
+| auferre | part.perf.pass | ablātus | weggetragen |  |
+| mūtāre | inf.praes.akt | mūtāre | verändern |  |
+| mūtāre | inf.praes.pass | mūtārī | verändert werden |  |
+| mūtāre | inf.perf.akt | mūtāvisse | verändert haben |  |
+| mūtāre | inf.perf.pass | mūtātum esse | verändert worden sein |  |
+| mūtāre | part.praes.akt | mūtāns | verändernd |  |
+| mūtāre | part.perf.pass | mūtātus | verändert |  |
+| perferre | inf.praes.akt | perferre | ertragen |  |
+| perferre | inf.perf.akt | pertulisse | ertragen haben |  |
+| perferre | inf.perf.pass | perlātum esse | ertragen worden sein |  |
+| perferre | part.praes.akt | perferēns | ertragend |  |
+| perferre | part.perf.pass | perlātus | ertragen |  |
+| docēre | inf.praes.akt | docēre | unterrichten |  |
+| docēre | inf.praes.pass | docērī | unterrichtet werden |  |
+| docēre | inf.perf.akt | docuisse | unterrichtet haben |  |
+| docēre | inf.perf.pass | doctum esse | unterrichtet worden sein |  |
+| docēre | part.praes.akt | docēns | unterrichtend |  |
+| docēre | part.perf.pass | doctus | unterrichtet |  |
+| tenēre | inf.praes.akt | tenēre | halten |  |
+| tenēre | inf.praes.pass | tenērī | gehalten werden |  |
+| tenēre | inf.perf.akt | tenuisse | gehalten haben |  |
+| tenēre | inf.perf.pass | tentum esse | gehalten worden sein |  |
+| tenēre | part.praes.akt | tenēns | haltend |  |
+| tenēre | part.perf.pass | tentus | gehalten |  |
+| retinēre | inf.praes.akt | retinēre | zurückhalten |  |
+| retinēre | inf.praes.pass | retinērī | zurückgehalten werden |  |
+| retinēre | inf.perf.akt | retinuisse | zurückgehalten haben |  |
+| retinēre | inf.perf.pass | retentum esse | zurückgehalten worden sein |  |
+| retinēre | part.praes.akt | retinēns | zurückhaltend |  |
+| retinēre | part.perf.pass | retentus | zurückgehalten |  |
+| sustinēre | inf.praes.akt | sustinēre | aushalten |  |
+| sustinēre | inf.praes.pass | sustinērī | ausgehalten werden |  |
+| sustinēre | inf.perf.akt | sustinuisse | ausgehalten haben |  |
+| sustinēre | inf.perf.pass | sustentum esse | ausgehalten worden sein |  |
+| sustinēre | part.praes.akt | sustinēns | aushaltend |  |
+| sustinēre | part.perf.pass | sustentus | ausgehalten |  |
+| ōrāre | inf.praes.akt | ōrāre | bitten |  |
+| ōrāre | inf.praes.pass | ōrārī | gebeten werden |  |
+| ōrāre | inf.perf.akt | ōrāvisse | gebeten haben |  |
+| ōrāre | inf.perf.pass | ōrātum esse | gebeten worden sein |  |
+| ōrāre | part.praes.akt | ōrāns | bittend |  |
+| ōrāre | part.perf.pass | ōrātus | gebeten |  |
+| munīre | inf.praes.akt | munīre | befestigen |  |
+| munīre | inf.praes.pass | munīrī | befestigt werden |  |
+| munīre | inf.perf.akt | munīvisse | befestigt haben |  |
+| munīre | inf.perf.pass | munītum esse | befestigt worden sein |  |
+| munīre | part.praes.akt | muniēns | befestigend |  |
+| munīre | part.perf.pass | munītus | befestigt |  |
+| habitāre | inf.praes.akt | habitāre | wohnen |  |
+| habitāre | inf.praes.pass | habitārī | — |  |
+| habitāre | inf.perf.akt | habitāvisse | gewohnt haben |  |
+| habitāre | inf.perf.pass | habitātum esse | — |  |
+| habitāre | part.praes.akt | habitāns | wohnend |  |
+| habitāre | part.perf.pass | habitātus | — |  |
+| dubitāre | inf.praes.akt | dubitāre | zögern |  |
+| dubitāre | inf.praes.pass | dubitārī | — |  |
+| dubitāre | inf.perf.akt | dubitāvisse | gezögert haben |  |
+| dubitāre | inf.perf.pass | dubitātum esse | — |  |
+| dubitāre | part.praes.akt | dubitāns | zögernd |  |
+| nāvigāre | inf.praes.akt | nāvigāre | segeln |  |
+| nāvigāre | inf.praes.pass | nāvigārī | — |  |
+| nāvigāre | inf.perf.akt | nāvigāvisse | gesegelt haben |  |
+| nāvigāre | inf.perf.pass | nāvigātum esse | — |  |
+| nāvigāre | part.praes.akt | nāvigāns | segelnd |  |
+| cōnfirmāre | inf.praes.akt | cōnfirmāre | befestigen |  |
+| cōnfirmāre | inf.praes.pass | cōnfirmārī | befestigt werden |  |
+| cōnfirmāre | inf.perf.akt | cōnfirmāvisse | befestigt haben |  |
+| cōnfirmāre | inf.perf.pass | cōnfirmātum esse | befestigt worden sein |  |
+| cōnfirmāre | part.praes.akt | cōnfirmāns | befestigend |  |
+| cōnfirmāre | part.perf.pass | cōnfirmātus | befestigt |  |
+| praebēre | inf.praes.akt | praebēre | hinhalten |  |
+| praebēre | inf.praes.pass | praebērī | hingehalten werden |  |
+| praebēre | inf.perf.akt | praebuisse | hingehalten haben |  |
+| praebēre | inf.perf.pass | praebitum esse | hingehalten worden sein |  |
+| praebēre | part.praes.akt | praebēns | hinhaltend |  |
+| praebēre | part.perf.pass | praebitus | hingehalten |  |
 | cavēre | inf.praes.akt | cavēre | sich in Acht nehmen |  |
 | cavēre | inf.praes.pass | cavērī | — |  |
 | cavēre | inf.perf.akt | cāvisse | sich in Acht genommen haben |  |

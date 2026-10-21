@@ -601,6 +601,145 @@ items:
 
 
   # package 2
+  - type: schwach
+    translation: {de: anschauen, en: look at}
+    parts: {infinitiv: anschauen, grundverb: schauen, partikel: an, partizip2: angeschaut}
+  - type: schwach
+    translation: {de: staunen, en: be amazed}
+    parts: {infinitiv: staunen, partizip2: gestaunt}
+    absent: *ohne_passiv
+  - type: stark
+    translation: {de: übertreffen, en: surpass}
+    parts: {infinitiv: übertreffen, praesens_3sg: übertrifft, praeteritum: übertraf, partizip2: übertroffen}
+  - type: stark
+    translation: {de: schweigen, en: be silent}
+    parts: {infinitiv: schweigen, praeteritum: schwieg, partizip2: geschwiegen}
+    absent: *ohne_passiv
+  - type: stark
+    translation: {de: angreifen, en: attack}
+    parts: {infinitiv: angreifen, grundverb: greifen, partikel: an, praeteritum: griff, partizip2: angegriffen}
+  - type: schwach
+    translation: {de: fürchten, en: fear}
+    parts: {infinitiv: fürchten, partizip2: gefürchtet}
+  - type: stark
+    translation: {de: sehen, en: see}
+    parts: {infinitiv: sehen, praesens_3sg: sieht, praeteritum: sah, partizip2: gesehen}
+  - type: schwach
+    translation: {de: besuchen, en: visit}
+    parts: {infinitiv: besuchen, partizip2: besucht}
+  - type: stark
+    translation: {de: treiben, en: drive}
+    parts: {infinitiv: treiben, praeteritum: trieb, partizip2: getrieben}
+  - type: schwach
+    translation: {de: sagen, en: say}
+    parts: {infinitiv: sagen, partizip2: gesagt}
+  - type: schwach
+    translation: {de: führen, en: lead}
+    parts: {infinitiv: führen, partizip2: geführt}
+  - type: stark
+    translation: {de: schreiben, en: write}
+    parts: {infinitiv: schreiben, praeteritum: schrieb, partizip2: geschrieben}
+  - type: stark
+    translation: {de: lesen, en: read}
+    parts: {infinitiv: lesen, praesens_2sg: liest, praesens_3sg: liest, praeteritum: las, partizip2: gelesen}
+  - type: schwach
+    translation: {de: schicken, en: send}
+    parts: {infinitiv: schicken, partizip2: geschickt}
+  - type: schwach
+    translation: {de: siegen, en: win}
+    parts: {infinitiv: siegen, partizip2: gesiegt}
+    absent: *ohne_passiv
+  - type: schwach
+    translation: {de: setzen, en: put}
+    parts: {infinitiv: setzen, praesens_2sg: setzt, partizip2: gesetzt}
+  - type: gemischt
+    translation: {de: können, en: be able}
+    parts: {infinitiv: können, praesens_1sg: kann, praesens_2sg: kannst, praesens_3sg: kann, praeteritum: konnte, konjunktiv2: könnte, partizip2: gekonnt}
+    absent: *ohne_passiv
+  - type: gemischt
+    translation: {de: wollen, en: want}
+    parts: {infinitiv: wollen, praesens_1sg: will, praesens_2sg: willst, praesens_3sg: will, praeteritum: wollte, konjunktiv2: wollte, partizip2: gewollt}
+    absent: *ohne_passiv
+  - type: gemischt
+    translation: {de: nicht wollen, en: not want}
+    parts: {infinitiv: nicht wollen, grundverb: wollen, wortgruppe: nicht, praesens_1sg: will, praesens_2sg: willst, praesens_3sg: will, praeteritum: wollte, konjunktiv2: wollte, partizip2: nicht gewollt}
+    absent: *ohne_passiv
+  - type: gemischt
+    translation: {de: lieber wollen, en: prefer}
+    parts: {infinitiv: lieber wollen, grundverb: wollen, wortgruppe: lieber, praesens_1sg: will, praesens_2sg: willst, praesens_3sg: will, praeteritum: wollte, konjunktiv2: wollte, partizip2: lieber gewollt}
+    absent: *ohne_passiv
+  - type: stark
+    translation: {de: vorhersehen, en: foresee}
+    parts: {infinitiv: vorhersehen, grundverb: sehen, partikel: vorher, praesens_3sg: sieht, praeteritum: sah, partizip2: vorhergesehen}
+  - type: schwach
+    translation: {de: erregen, en: stir up}
+    parts: {infinitiv: erregen, partizip2: erregt}
+  - type: schwach
+    translation: {de: heranrücken, en: advance}
+    parts: {infinitiv: heranrücken, grundverb: rücken, partikel: heran, partizip2: herangerückt}
+    slots: {hilfsverb: hv_sein}
+    absent: *ohne_passiv
+  - type: gemischt
+    translation: {de: entgegenbringen, en: offer}
+    parts: {infinitiv: entgegenbringen, grundverb: bringen, partikel: entgegen, praeteritum: brachte, konjunktiv2: brächte, partizip2: entgegengebracht}
+  - id: sich anstrengen
+    type: schwach
+    translation: {de: sich anstrengen, en: exert oneself}
+    parts: {infinitiv: anstrengen, grundverb: strengen, partikel: an, partizip2: angestrengt}
+    slots: {reflexiv: refl}
+    absent: *ohne_passiv
+  - type: schwach
+    translation: {de: berühren, en: touch}
+    parts: {infinitiv: berühren, partizip2: berührt}
+  - type: stark
+    translation: {de: weggehen, en: go away}
+    parts: {infinitiv: weggehen, grundverb: gehen, partikel: weg, praeteritum: ging, partizip2: weggegangen}
+    slots: {hilfsverb: hv_sein}
+    absent: *ohne_passiv
+  - type: stark
+    translation: {de: hineintragen, en: carry in}
+    parts: {infinitiv: hineintragen, grundverb: tragen, partikel: hinein, praesens_3sg: trägt, praeteritum: trug, partizip2: hineingetragen}
+  - type: gemischt
+    translation: {de: zurückbringen, en: bring back}
+    parts: {infinitiv: zurückbringen, grundverb: bringen, partikel: zurück, praeteritum: brachte, konjunktiv2: brächte, partizip2: zurückgebracht}
+  - type: stark
+    translation: {de: wegtragen, en: carry away}
+    parts: {infinitiv: wegtragen, grundverb: tragen, partikel: weg, praesens_3sg: trägt, praeteritum: trug, partizip2: weggetragen}
+  - type: schwach
+    translation: {de: verändern, en: change}
+    parts: {infinitiv: verändern, praesens_1pl: verändern, partizip2: verändert}
+  - type: stark
+    translation: {de: ertragen, en: endure}
+    parts: {infinitiv: ertragen, praesens_3sg: erträgt, praeteritum: ertrug, partizip2: ertragen}
+  - type: schwach
+    translation: {de: unterrichten, en: teach}
+    parts: {infinitiv: unterrichten, partizip2: unterrichtet}
+  - type: stark
+    translation: {de: halten, en: hold}
+    parts: {infinitiv: halten, praesens_2sg: hältst, praesens_3sg: hält, praeteritum: hielt, partizip2: gehalten}
+  - type: stark
+    translation: {de: zurückhalten, en: hold back}
+    parts: {infinitiv: zurückhalten, grundverb: halten, partikel: zurück, praesens_2sg: hältst, praesens_3sg: hält, praeteritum: hielt, partizip2: zurückgehalten}
+  - type: stark
+    translation: {de: aushalten, en: endure}
+    parts: {infinitiv: aushalten, grundverb: halten, partikel: aus, praesens_2sg: hältst, praesens_3sg: hält, praeteritum: hielt, partizip2: ausgehalten}
+  - type: stark
+    translation: {de: bitten, en: ask}
+    parts: {infinitiv: bitten, praeteritum: bat, partizip2: gebeten}
+  - type: schwach
+    translation: {de: befestigen, en: fortify}
+    parts: {infinitiv: befestigen, partizip2: befestigt}
+  - type: schwach
+    translation: {de: wohnen, en: live}
+    parts: {infinitiv: wohnen, partizip2: gewohnt}
+    absent: *ohne_passiv
+  - type: schwach
+    translation: {de: segeln, en: sail}
+    parts: {infinitiv: segeln, praesens_1sg: segle, praesens_1pl: segeln, partizip2: gesegelt}
+    absent: *ohne_passiv
+  - type: stark
+    translation: {de: hinhalten, en: hold out}
+    parts: {infinitiv: hinhalten, grundverb: halten, partikel: hin, praesens_2sg: hältst, praesens_3sg: hält, praeteritum: hielt, partizip2: hingehalten}
 
 
 
