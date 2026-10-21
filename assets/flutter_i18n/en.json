@@ -170,6 +170,30 @@
     "absentLabel": "not needed",
     "wrongPick": "wrong"
   },
+  "reward": {
+    "building": {
+      "domus": "House",
+      "hortus": "Garden",
+      "fons": "Fountain",
+      "taberna": "Shop",
+      "villa": "Country house",
+      "templum": "Temple",
+      "ager": "Field",
+      "vinea": "Vineyard",
+      "stabulum": "Stable",
+      "figlina": "Pottery",
+      "pistrinum": "Bakery",
+      "aquaeductus": "Aqueduct",
+      "thermae": "Baths",
+      "statua": "Statue",
+      "portus": "Harbour",
+      "navis": "Ship",
+      "murus": "City wall",
+      "castra": "Camp",
+      "bibliotheca": "Library",
+      "amphitheatrum": "Amphitheatre"
+    }
+  },
   "language": {
     "title": "Language",
     "search": "Search",

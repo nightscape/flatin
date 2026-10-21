@@ -170,6 +170,30 @@
     "absentLabel": "entfällt",
     "wrongPick": "falsch"
   },
+  "reward": {
+    "building": {
+      "domus": "Haus",
+      "hortus": "Garten",
+      "fons": "Brunnen",
+      "taberna": "Laden",
+      "villa": "Landhaus",
+      "templum": "Tempel",
+      "ager": "Feld",
+      "vinea": "Weinberg",
+      "stabulum": "Stall",
+      "figlina": "Töpferei",
+      "pistrinum": "Bäckerei",
+      "aquaeductus": "Aquädukt",
+      "thermae": "Thermen",
+      "statua": "Statue",
+      "portus": "Hafen",
+      "navis": "Schiff",
+      "murus": "Stadtmauer",
+      "castra": "Lager",
+      "bibliotheca": "Bibliothek",
+      "amphitheatrum": "Amphitheater"
+    }
+  },
   "language": {
     "title": "Sprache",
     "search": "Suchen",
