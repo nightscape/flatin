@@ -151,17 +151,20 @@ Random exerciseRandom(Ref ref) => Random();
 
 typedef GrammarExercise = ({PracticeItem word, Exercise exercise});
 
-/// The next grammar exercise: the pair [selectPair] picks, asked in a kind
-/// that fits the stability of its weaker card. Null when no card is due.
+/// The generators that build the grammar exercises; a test overrides it.
 @riverpod
-Future<GrammarExercise?> nextGrammarExercise(Ref ref) async {
+List<ExerciseGenerator> exerciseRegistry(Ref ref) => exerciseGenerators;
+
+/// The word and bundle [selectPair] picks; null when no card is due. Builds
+/// no exercise, so it is cheap enough to watch from the home screen.
+@riverpod
+Future<SelectedPair?> nextGrammarPair(Ref ref) async {
   final cards = await ref.watch(fsrsCardsProvider.future);
   final filter = await ref.watch(courseFilterProvider.future);
   final practicable = await ref.watch(practicableItemsByTypeProvider.future);
-  final german = await ref.watch(germanFormsProvider.future);
   final scheduler = ref.watch(fsrsSchedulerProvider);
   final now = DateTime.now().toUtc();
-  final pair = selectPair(
+  return selectPair(
     cards: cards,
     items: [for (final items in practicable.values) ...items],
     filter: filter,
@@ -169,7 +172,18 @@ Future<GrammarExercise?> nextGrammarExercise(Ref ref) async {
         scheduler.getCardRetrievability(c.card, currentDateTime: now),
     now: now,
   );
+}
+
+/// The next grammar exercise: the pair of [nextGrammarPair], asked in a kind
+/// that fits the stability of its weaker card. Null when no card is due.
+@riverpod
+Future<GrammarExercise?> nextGrammarExercise(Ref ref) async {
+  final pair = await ref.watch(nextGrammarPairProvider.future);
   if (pair == null) return null;
+  final cards = await ref.watch(fsrsCardsProvider.future);
+  final filter = await ref.watch(courseFilterProvider.future);
+  final practicable = await ref.watch(practicableItemsByTypeProvider.future);
+  final german = await ref.watch(germanFormsProvider.future);
   final pool = practicable[pair.word.dataFileId]!;
   final exercise = buildExercise(
     pair.word,
@@ -184,6 +198,7 @@ Future<GrammarExercise?> nextGrammarExercise(Ref ref) async {
       cards[pair.grammarCardId]!,
     ),
     ref.watch(exerciseRandomProvider),
+    registry: ref.watch(exerciseRegistryProvider),
   );
   return (word: pair.word, exercise: exercise);
 }

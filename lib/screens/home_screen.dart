@@ -198,7 +198,7 @@ class _GrammarExerciseButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isMobile = MediaQuery.of(context).size.width < 600;
-    final next = ref.watch(nextGrammarExerciseProvider);
+    final next = ref.watch(nextGrammarPairProvider);
     if (next.hasError) {
       return Text(
         FlutterI18n.translate(

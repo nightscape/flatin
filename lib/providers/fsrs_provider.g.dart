@@ -428,13 +428,112 @@ final class ExerciseRandomProvider
 
 String _$exerciseRandomHash() => r'258d487e43bad86c36fc9c10bd41f968162897ee';
 
-/// The next grammar exercise: the pair [selectPair] picks, asked in a kind
+/// The generators that build the grammar exercises; a test overrides it.
+
+@ProviderFor(exerciseRegistry)
+const exerciseRegistryProvider = ExerciseRegistryProvider._();
+
+/// The generators that build the grammar exercises; a test overrides it.
+
+final class ExerciseRegistryProvider
+    extends
+        $FunctionalProvider<
+          List<ExerciseGenerator>,
+          List<ExerciseGenerator>,
+          List<ExerciseGenerator>
+        >
+    with $Provider<List<ExerciseGenerator>> {
+  /// The generators that build the grammar exercises; a test overrides it.
+  const ExerciseRegistryProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'exerciseRegistryProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$exerciseRegistryHash();
+
+  @$internal
+  @override
+  $ProviderElement<List<ExerciseGenerator>> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  List<ExerciseGenerator> create(Ref ref) {
+    return exerciseRegistry(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(List<ExerciseGenerator> value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<List<ExerciseGenerator>>(value),
+    );
+  }
+}
+
+String _$exerciseRegistryHash() => r'e479eb1b79bd335ee4b0296bcde4cbb5a9f82a7f';
+
+/// The word and bundle [selectPair] picks; null when no card is due. Builds
+/// no exercise, so it is cheap enough to watch from the home screen.
+
+@ProviderFor(nextGrammarPair)
+const nextGrammarPairProvider = NextGrammarPairProvider._();
+
+/// The word and bundle [selectPair] picks; null when no card is due. Builds
+/// no exercise, so it is cheap enough to watch from the home screen.
+
+final class NextGrammarPairProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<SelectedPair?>,
+          SelectedPair?,
+          FutureOr<SelectedPair?>
+        >
+    with $FutureModifier<SelectedPair?>, $FutureProvider<SelectedPair?> {
+  /// The word and bundle [selectPair] picks; null when no card is due. Builds
+  /// no exercise, so it is cheap enough to watch from the home screen.
+  const NextGrammarPairProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'nextGrammarPairProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$nextGrammarPairHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<SelectedPair?> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<SelectedPair?> create(Ref ref) {
+    return nextGrammarPair(ref);
+  }
+}
+
+String _$nextGrammarPairHash() => r'650034d0d9bcb4fb6277587bee3ffe8a88c3d9a7';
+
+/// The next grammar exercise: the pair of [nextGrammarPair], asked in a kind
 /// that fits the stability of its weaker card. Null when no card is due.
 
 @ProviderFor(nextGrammarExercise)
 const nextGrammarExerciseProvider = NextGrammarExerciseProvider._();
 
-/// The next grammar exercise: the pair [selectPair] picks, asked in a kind
+/// The next grammar exercise: the pair of [nextGrammarPair], asked in a kind
 /// that fits the stability of its weaker card. Null when no card is due.
 
 final class NextGrammarExerciseProvider
@@ -445,7 +544,7 @@ final class NextGrammarExerciseProvider
           FutureOr<GrammarExercise?>
         >
     with $FutureModifier<GrammarExercise?>, $FutureProvider<GrammarExercise?> {
-  /// The next grammar exercise: the pair [selectPair] picks, asked in a kind
+  /// The next grammar exercise: the pair of [nextGrammarPair], asked in a kind
   /// that fits the stability of its weaker card. Null when no card is due.
   const NextGrammarExerciseProvider._()
     : super(
@@ -474,7 +573,7 @@ final class NextGrammarExerciseProvider
 }
 
 String _$nextGrammarExerciseHash() =>
-    r'3b01cd793e56c2d36a931f5e0b8d3ab65d2abfc3';
+    r'04a261d7a38d387295de9cb0f90d0b6cd68e49a4';
 
 /// Provides shuffled translation choices for a practice item:
 /// the correct translation plus 3 distractors from the chosen strategy.

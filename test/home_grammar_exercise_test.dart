@@ -1,16 +1,37 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:latin_practice/models/practice_item.dart';
 import 'package:latin_practice/models/exercise.dart';
 import 'package:latin_practice/providers/fsrs_provider.dart';
 import 'package:latin_practice/screens/exercise_match_widget.dart';
 import 'package:latin_practice/screens/exercise_screen.dart';
+import 'package:latin_practice/screens/grammar_exercise_page.dart';
 import 'package:latin_practice/screens/home_screen.dart';
 import 'package:latin_practice/services/fsrs_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'support/word_classification_harness.dart';
+
+class _Stub implements ExerciseGenerator {
+  int calls = 0;
+
+  @override
+  ExerciseKind get kind => ExerciseKind.formBilden;
+
+  @override
+  Exercise build(
+    PracticeItem word,
+    GrammarBundle bundle,
+    ExerciseContext ctx,
+    Random rng,
+  ) {
+    calls++;
+    throw const CannotBuild('stub');
+  }
+}
 
 Exercise _shown(WidgetTester tester) {
   final screen = find.byType(ExerciseScreen);
@@ -72,5 +93,37 @@ void main() {
       expect(stored![id]!.lastReview, isNotNull, reason: id);
     }
     expect(identical(_shown(tester), first), isFalse);
+  });
+
+  testWidgets('the home screen builds no exercise, and a pair no kind fits '
+      'shows its error on the exercise page only', (tester) async {
+    SharedPreferences.setMockInitialValues({});
+    final stub = _Stub();
+    await tester.pumpWidget(
+      wrapInApp(
+        const HomeScreen(),
+        overrides: [
+          exerciseRegistryProvider.overrideWithValue([stub]),
+        ],
+      ),
+    );
+    await letItLoad(tester);
+    ProviderScope.containerOf(
+      tester.element(find.byType(HomeScreen)),
+    ).invalidate(fsrsCardsProvider);
+    await letItLoad(tester);
+
+    expect(stub.calls, 0);
+    for (final key in ['nouns', 'verbs', 'grammar']) {
+      final button = find.byKey(Key('home.$key.button'));
+      expect(tester.widget<ElevatedButton>(button).onPressed, isNotNull);
+    }
+    expect(find.textContaining('Assertion failed'), findsNothing);
+
+    await tester.tap(find.byKey(const Key('home.grammar.button')));
+    await letItLoad(tester);
+    expect(find.byType(GrammarExercisePage), findsOneWidget);
+    expect(stub.calls, greaterThan(0));
+    expect(find.textContaining('no exercise kind fits'), findsOneWidget);
   });
 }
