@@ -43,43 +43,33 @@
 | venīre | ind.praes.akt.3.sg | venit | er/sie/es kommt |  |
 | venīre | ind.praes.akt.3.pl | veniunt | sie (Pl.) kommen |  |
 | venīre | ind.praes.pass.3.sg | venītur | — |  |
-| venīre | ind.praes.pass.3.pl | veniuntur | — |  |
 | venīre | ind.impf.akt.3.sg | veniēbat | er/sie/es kam |  |
 | venīre | ind.impf.akt.3.pl | veniēbant | sie (Pl.) kamen |  |
 | venīre | ind.impf.pass.3.sg | veniēbātur | — |  |
-| venīre | ind.impf.pass.3.pl | veniēbantur | — |  |
 | venīre | ind.fut.akt.3.sg | veniet | er/sie/es wird kommen |  |
 | venīre | ind.fut.akt.3.pl | venient | sie (Pl.) werden kommen |  |
 | venīre | ind.fut.pass.3.sg | veniētur | — |  |
-| venīre | ind.fut.pass.3.pl | venientur | — |  |
 | venīre | ind.perf.akt.3.sg | vēnit | er/sie/es ist gekommen | er/sie/es kam |
 | venīre | ind.perf.akt.3.pl | vēnērunt | sie (Pl.) sind gekommen | sie (Pl.) kamen |
 | venīre | ind.perf.pass.3.sg | ventus est | — |  |
-| venīre | ind.perf.pass.3.pl | ventī sunt | — |  |
 | venīre | ind.plusq.akt.3.sg | vēnerat | er/sie/es war gekommen |  |
 | venīre | ind.plusq.akt.3.pl | vēnerant | sie (Pl.) waren gekommen |  |
 | venīre | ind.plusq.pass.3.sg | ventus erat | — |  |
-| venīre | ind.plusq.pass.3.pl | ventī erant | — |  |
 | venīre | ind.fut2.akt.3.sg | vēnerit | er/sie/es wird gekommen sein |  |
 | venīre | ind.fut2.akt.3.pl | vēnerint | sie (Pl.) werden gekommen sein |  |
 | venīre | ind.fut2.pass.3.sg | ventus erit | — |  |
-| venīre | ind.fut2.pass.3.pl | ventī erunt | — |  |
 | venīre | konj.praes.akt.3.sg | veniat | er/sie/es kommt |  |
 | venīre | konj.praes.akt.3.pl | veniant | sie (Pl.) kommen |  |
 | venīre | konj.praes.pass.3.sg | veniātur | — |  |
-| venīre | konj.praes.pass.3.pl | veniantur | — |  |
 | venīre | konj.impf.akt.3.sg | venīret | er/sie/es kommen würde |  |
 | venīre | konj.impf.akt.3.pl | venīrent | sie (Pl.) kommen würden |  |
 | venīre | konj.impf.pass.3.sg | venīrētur | — |  |
-| venīre | konj.impf.pass.3.pl | venīrentur | — |  |
 | venīre | konj.perf.akt.3.sg | vēnerit | er/sie/es gekommen ist |  |
 | venīre | konj.perf.akt.3.pl | vēnerint | sie (Pl.) gekommen sind |  |
 | venīre | konj.perf.pass.3.sg | ventus sit | — |  |
-| venīre | konj.perf.pass.3.pl | ventī sint | — |  |
 | venīre | konj.plusq.akt.3.sg | vēnisset | er/sie/es gekommen wäre |  |
 | venīre | konj.plusq.akt.3.pl | vēnissent | sie (Pl.) gekommen wären |  |
 | venīre | konj.plusq.pass.3.sg | ventus esset | — |  |
-| venīre | konj.plusq.pass.3.pl | ventī essent | — |  |
 | gaudēre | ind.praes.akt.3.sg | gaudet | er/sie/es freut sich |  |
 | gaudēre | ind.praes.akt.3.pl | gaudent | sie (Pl.) freuen sich |  |
 | gaudēre | ind.impf.akt.3.sg | gaudēbat | er/sie/es freute sich |  |
@@ -103,43 +93,33 @@
 | labōrāre | ind.praes.akt.3.sg | labōrat | er/sie/es arbeitet |  |
 | labōrāre | ind.praes.akt.3.pl | labōrant | sie (Pl.) arbeiten |  |
 | labōrāre | ind.praes.pass.3.sg | labōrātur | — |  |
-| labōrāre | ind.praes.pass.3.pl | labōrantur | — |  |
 | labōrāre | ind.impf.akt.3.sg | labōrābat | er/sie/es arbeitete |  |
 | labōrāre | ind.impf.akt.3.pl | labōrābant | sie (Pl.) arbeiteten |  |
 | labōrāre | ind.impf.pass.3.sg | labōrābātur | — |  |
-| labōrāre | ind.impf.pass.3.pl | labōrābantur | — |  |
 | labōrāre | ind.fut.akt.3.sg | labōrābit | er/sie/es wird arbeiten |  |
 | labōrāre | ind.fut.akt.3.pl | labōrābunt | sie (Pl.) werden arbeiten |  |
 | labōrāre | ind.fut.pass.3.sg | labōrābitur | — |  |
-| labōrāre | ind.fut.pass.3.pl | labōrābuntur | — |  |
 | labōrāre | ind.perf.akt.3.sg | labōrāvit | er/sie/es hat gearbeitet | er/sie/es arbeitete |
 | labōrāre | ind.perf.akt.3.pl | labōrāvērunt | sie (Pl.) haben gearbeitet | sie (Pl.) arbeiteten |
 | labōrāre | ind.perf.pass.3.sg | labōrātus est | — |  |
-| labōrāre | ind.perf.pass.3.pl | labōrātī sunt | — |  |
 | labōrāre | ind.plusq.akt.3.sg | labōrāverat | er/sie/es hatte gearbeitet |  |
 | labōrāre | ind.plusq.akt.3.pl | labōrāverant | sie (Pl.) hatten gearbeitet |  |
 | labōrāre | ind.plusq.pass.3.sg | labōrātus erat | — |  |
-| labōrāre | ind.plusq.pass.3.pl | labōrātī erant | — |  |
 | labōrāre | ind.fut2.akt.3.sg | labōrāverit | er/sie/es wird gearbeitet haben |  |
 | labōrāre | ind.fut2.akt.3.pl | labōrāverint | sie (Pl.) werden gearbeitet haben |  |
 | labōrāre | ind.fut2.pass.3.sg | labōrātus erit | — |  |
-| labōrāre | ind.fut2.pass.3.pl | labōrātī erunt | — |  |
 | labōrāre | konj.praes.akt.3.sg | labōret | er/sie/es arbeitet |  |
 | labōrāre | konj.praes.akt.3.pl | labōrent | sie (Pl.) arbeiten |  |
 | labōrāre | konj.praes.pass.3.sg | labōrētur | — |  |
-| labōrāre | konj.praes.pass.3.pl | labōrentur | — |  |
 | labōrāre | konj.impf.akt.3.sg | labōrāret | er/sie/es arbeiten würde |  |
 | labōrāre | konj.impf.akt.3.pl | labōrārent | sie (Pl.) arbeiten würden |  |
 | labōrāre | konj.impf.pass.3.sg | labōrārētur | — |  |
-| labōrāre | konj.impf.pass.3.pl | labōrārentur | — |  |
 | labōrāre | konj.perf.akt.3.sg | labōrāverit | er/sie/es gearbeitet hat |  |
 | labōrāre | konj.perf.akt.3.pl | labōrāverint | sie (Pl.) gearbeitet haben |  |
 | labōrāre | konj.perf.pass.3.sg | labōrātus sit | — |  |
-| labōrāre | konj.perf.pass.3.pl | labōrātī sint | — |  |
 | labōrāre | konj.plusq.akt.3.sg | labōrāvisset | er/sie/es gearbeitet hätte |  |
 | labōrāre | konj.plusq.akt.3.pl | labōrāvissent | sie (Pl.) gearbeitet hätten |  |
 | labōrāre | konj.plusq.pass.3.sg | labōrātus esset | — |  |
-| labōrāre | konj.plusq.pass.3.pl | labōrātī essent | — |  |
 | scīre | ind.praes.akt.3.sg | scit | er/sie/es weiß |  |
 | scīre | ind.praes.akt.3.pl | sciunt | sie (Pl.) wissen |  |
 | scīre | ind.praes.pass.3.sg | scītur | — |  |
@@ -334,10 +314,16 @@
 | convocāre | ind.fut.pass.3.pl | convocābuntur | sie (Pl.) werden zusammengerufen werden |  |
 | convocāre | ind.perf.akt.3.sg | convocāvit | er/sie/es hat zusammengerufen | er/sie/es rief zusammen |
 | convocāre | ind.perf.akt.3.pl | convocāvērunt | sie (Pl.) haben zusammengerufen | sie (Pl.) riefen zusammen |
+| convocāre | ind.perf.pass.3.sg | convocātus est | er/sie/es ist zusammengerufen worden |  |
+| convocāre | ind.perf.pass.3.pl | convocātī sunt | sie (Pl.) sind zusammengerufen worden |  |
 | convocāre | ind.plusq.akt.3.sg | convocāverat | er/sie/es hatte zusammengerufen |  |
 | convocāre | ind.plusq.akt.3.pl | convocāverant | sie (Pl.) hatten zusammengerufen |  |
+| convocāre | ind.plusq.pass.3.sg | convocātus erat | er/sie/es war zusammengerufen worden |  |
+| convocāre | ind.plusq.pass.3.pl | convocātī erant | sie (Pl.) waren zusammengerufen worden |  |
 | convocāre | ind.fut2.akt.3.sg | convocāverit | er/sie/es wird zusammengerufen haben |  |
 | convocāre | ind.fut2.akt.3.pl | convocāverint | sie (Pl.) werden zusammengerufen haben |  |
+| convocāre | ind.fut2.pass.3.sg | convocātus erit | er/sie/es wird zusammengerufen worden sein |  |
+| convocāre | ind.fut2.pass.3.pl | convocātī erunt | sie (Pl.) werden zusammengerufen worden sein |  |
 | convocāre | konj.praes.akt.3.sg | convocet | er/sie/es zusammenruft |  |
 | convocāre | konj.praes.akt.3.pl | convocent | sie (Pl.) zusammenrufen |  |
 | convocāre | konj.praes.pass.3.sg | convocētur | er/sie/es zusammengerufen wird |  |
@@ -348,5 +334,9 @@
 | convocāre | konj.impf.pass.3.pl | convocārentur | sie (Pl.) zusammengerufen würden |  |
 | convocāre | konj.perf.akt.3.sg | convocāverit | er/sie/es zusammengerufen hat |  |
 | convocāre | konj.perf.akt.3.pl | convocāverint | sie (Pl.) zusammengerufen haben |  |
+| convocāre | konj.perf.pass.3.sg | convocātus sit | er/sie/es zusammengerufen worden ist |  |
+| convocāre | konj.perf.pass.3.pl | convocātī sint | sie (Pl.) zusammengerufen worden sind |  |
 | convocāre | konj.plusq.akt.3.sg | convocāvisset | er/sie/es zusammengerufen hätte |  |
 | convocāre | konj.plusq.akt.3.pl | convocāvissent | sie (Pl.) zusammengerufen hätten |  |
+| convocāre | konj.plusq.pass.3.sg | convocātus esset | er/sie/es zusammengerufen worden wäre |  |
+| convocāre | konj.plusq.pass.3.pl | convocātī essent | sie (Pl.) zusammengerufen worden wären |  |

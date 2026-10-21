@@ -42,44 +42,24 @@
 | amāre | konj.plusq.pass.1.pl | amātī essēmus | wir geliebt worden wären |  |
 | venīre | ind.praes.akt.1.sg | veniō | ich komme |  |
 | venīre | ind.praes.akt.1.pl | venīmus | wir kommen |  |
-| venīre | ind.praes.pass.1.sg | venior | — |  |
-| venīre | ind.praes.pass.1.pl | venīmur | — |  |
 | venīre | ind.impf.akt.1.sg | veniēbam | ich kam |  |
 | venīre | ind.impf.akt.1.pl | veniēbāmus | wir kamen |  |
-| venīre | ind.impf.pass.1.sg | veniēbar | — |  |
-| venīre | ind.impf.pass.1.pl | veniēbāmur | — |  |
 | venīre | ind.fut.akt.1.sg | veniam | ich werde kommen |  |
 | venīre | ind.fut.akt.1.pl | veniēmus | wir werden kommen |  |
-| venīre | ind.fut.pass.1.sg | veniar | — |  |
-| venīre | ind.fut.pass.1.pl | veniēmur | — |  |
 | venīre | ind.perf.akt.1.sg | vēnī | ich bin gekommen | ich kam |
 | venīre | ind.perf.akt.1.pl | vēnimus | wir sind gekommen | wir kamen |
-| venīre | ind.perf.pass.1.sg | ventus sum | — |  |
-| venīre | ind.perf.pass.1.pl | ventī sumus | — |  |
 | venīre | ind.plusq.akt.1.sg | vēneram | ich war gekommen |  |
 | venīre | ind.plusq.akt.1.pl | vēnerāmus | wir waren gekommen |  |
-| venīre | ind.plusq.pass.1.sg | ventus eram | — |  |
-| venīre | ind.plusq.pass.1.pl | ventī erāmus | — |  |
 | venīre | ind.fut2.akt.1.sg | vēnerō | ich werde gekommen sein |  |
 | venīre | ind.fut2.akt.1.pl | vēnerimus | wir werden gekommen sein |  |
-| venīre | ind.fut2.pass.1.sg | ventus erō | — |  |
-| venīre | ind.fut2.pass.1.pl | ventī erimus | — |  |
 | venīre | konj.praes.akt.1.sg | veniam | ich komme |  |
 | venīre | konj.praes.akt.1.pl | veniāmus | wir kommen |  |
-| venīre | konj.praes.pass.1.sg | veniar | — |  |
-| venīre | konj.praes.pass.1.pl | veniāmur | — |  |
 | venīre | konj.impf.akt.1.sg | venīrem | ich kommen würde |  |
 | venīre | konj.impf.akt.1.pl | venīrēmus | wir kommen würden |  |
-| venīre | konj.impf.pass.1.sg | venīrer | — |  |
-| venīre | konj.impf.pass.1.pl | venīrēmur | — |  |
 | venīre | konj.perf.akt.1.sg | vēnerim | ich gekommen bin |  |
 | venīre | konj.perf.akt.1.pl | vēnerimus | wir gekommen sind |  |
-| venīre | konj.perf.pass.1.sg | ventus sim | — |  |
-| venīre | konj.perf.pass.1.pl | ventī sīmus | — |  |
 | venīre | konj.plusq.akt.1.sg | vēnissem | ich gekommen wäre |  |
 | venīre | konj.plusq.akt.1.pl | vēnissēmus | wir gekommen wären |  |
-| venīre | konj.plusq.pass.1.sg | ventus essem | — |  |
-| venīre | konj.plusq.pass.1.pl | ventī essēmus | — |  |
 | gaudēre | ind.praes.akt.1.sg | gaudeō | ich freue mich |  |
 | gaudēre | ind.praes.akt.1.pl | gaudēmus | wir freuen uns |  |
 | gaudēre | ind.impf.akt.1.sg | gaudēbam | ich freute mich |  |
@@ -102,44 +82,24 @@
 | gaudēre | konj.plusq.akt.1.pl | gāvīsī essēmus | wir uns gefreut hätten |  |
 | labōrāre | ind.praes.akt.1.sg | labōrō | ich arbeite |  |
 | labōrāre | ind.praes.akt.1.pl | labōrāmus | wir arbeiten |  |
-| labōrāre | ind.praes.pass.1.sg | labōror | — |  |
-| labōrāre | ind.praes.pass.1.pl | labōrāmur | — |  |
 | labōrāre | ind.impf.akt.1.sg | labōrābam | ich arbeitete |  |
 | labōrāre | ind.impf.akt.1.pl | labōrābāmus | wir arbeiteten |  |
-| labōrāre | ind.impf.pass.1.sg | labōrābar | — |  |
-| labōrāre | ind.impf.pass.1.pl | labōrābāmur | — |  |
 | labōrāre | ind.fut.akt.1.sg | labōrābō | ich werde arbeiten |  |
 | labōrāre | ind.fut.akt.1.pl | labōrābimus | wir werden arbeiten |  |
-| labōrāre | ind.fut.pass.1.sg | labōrābor | — |  |
-| labōrāre | ind.fut.pass.1.pl | labōrābimur | — |  |
 | labōrāre | ind.perf.akt.1.sg | labōrāvī | ich habe gearbeitet | ich arbeitete |
 | labōrāre | ind.perf.akt.1.pl | labōrāvimus | wir haben gearbeitet | wir arbeiteten |
-| labōrāre | ind.perf.pass.1.sg | labōrātus sum | — |  |
-| labōrāre | ind.perf.pass.1.pl | labōrātī sumus | — |  |
 | labōrāre | ind.plusq.akt.1.sg | labōrāveram | ich hatte gearbeitet |  |
 | labōrāre | ind.plusq.akt.1.pl | labōrāverāmus | wir hatten gearbeitet |  |
-| labōrāre | ind.plusq.pass.1.sg | labōrātus eram | — |  |
-| labōrāre | ind.plusq.pass.1.pl | labōrātī erāmus | — |  |
 | labōrāre | ind.fut2.akt.1.sg | labōrāverō | ich werde gearbeitet haben |  |
 | labōrāre | ind.fut2.akt.1.pl | labōrāverimus | wir werden gearbeitet haben |  |
-| labōrāre | ind.fut2.pass.1.sg | labōrātus erō | — |  |
-| labōrāre | ind.fut2.pass.1.pl | labōrātī erimus | — |  |
 | labōrāre | konj.praes.akt.1.sg | labōrem | ich arbeite |  |
 | labōrāre | konj.praes.akt.1.pl | labōrēmus | wir arbeiten |  |
-| labōrāre | konj.praes.pass.1.sg | labōrer | — |  |
-| labōrāre | konj.praes.pass.1.pl | labōrēmur | — |  |
 | labōrāre | konj.impf.akt.1.sg | labōrārem | ich arbeiten würde |  |
 | labōrāre | konj.impf.akt.1.pl | labōrārēmus | wir arbeiten würden |  |
-| labōrāre | konj.impf.pass.1.sg | labōrārer | — |  |
-| labōrāre | konj.impf.pass.1.pl | labōrārēmur | — |  |
 | labōrāre | konj.perf.akt.1.sg | labōrāverim | ich gearbeitet habe |  |
 | labōrāre | konj.perf.akt.1.pl | labōrāverimus | wir gearbeitet haben |  |
-| labōrāre | konj.perf.pass.1.sg | labōrātus sim | — |  |
-| labōrāre | konj.perf.pass.1.pl | labōrātī sīmus | — |  |
 | labōrāre | konj.plusq.akt.1.sg | labōrāvissem | ich gearbeitet hätte |  |
 | labōrāre | konj.plusq.akt.1.pl | labōrāvissēmus | wir gearbeitet hätten |  |
-| labōrāre | konj.plusq.pass.1.sg | labōrātus essem | — |  |
-| labōrāre | konj.plusq.pass.1.pl | labōrātī essēmus | — |  |
 | scīre | ind.praes.akt.1.sg | sciō | ich weiß |  |
 | scīre | ind.praes.akt.1.pl | scīmus | wir wissen |  |
 | scīre | ind.praes.pass.1.sg | scior | — |  |
@@ -334,10 +294,16 @@
 | convocāre | ind.fut.pass.1.pl | convocābimur | wir werden zusammengerufen werden |  |
 | convocāre | ind.perf.akt.1.sg | convocāvī | ich habe zusammengerufen | ich rief zusammen |
 | convocāre | ind.perf.akt.1.pl | convocāvimus | wir haben zusammengerufen | wir riefen zusammen |
+| convocāre | ind.perf.pass.1.sg | convocātus sum | ich bin zusammengerufen worden |  |
+| convocāre | ind.perf.pass.1.pl | convocātī sumus | wir sind zusammengerufen worden |  |
 | convocāre | ind.plusq.akt.1.sg | convocāveram | ich hatte zusammengerufen |  |
 | convocāre | ind.plusq.akt.1.pl | convocāverāmus | wir hatten zusammengerufen |  |
+| convocāre | ind.plusq.pass.1.sg | convocātus eram | ich war zusammengerufen worden |  |
+| convocāre | ind.plusq.pass.1.pl | convocātī erāmus | wir waren zusammengerufen worden |  |
 | convocāre | ind.fut2.akt.1.sg | convocāverō | ich werde zusammengerufen haben |  |
 | convocāre | ind.fut2.akt.1.pl | convocāverimus | wir werden zusammengerufen haben |  |
+| convocāre | ind.fut2.pass.1.sg | convocātus erō | ich werde zusammengerufen worden sein |  |
+| convocāre | ind.fut2.pass.1.pl | convocātī erimus | wir werden zusammengerufen worden sein |  |
 | convocāre | konj.praes.akt.1.sg | convocem | ich zusammenrufe |  |
 | convocāre | konj.praes.akt.1.pl | convocēmus | wir zusammenrufen |  |
 | convocāre | konj.praes.pass.1.sg | convocer | ich zusammengerufen werde |  |
@@ -348,5 +314,9 @@
 | convocāre | konj.impf.pass.1.pl | convocārēmur | wir zusammengerufen würden |  |
 | convocāre | konj.perf.akt.1.sg | convocāverim | ich zusammengerufen habe |  |
 | convocāre | konj.perf.akt.1.pl | convocāverimus | wir zusammengerufen haben |  |
+| convocāre | konj.perf.pass.1.sg | convocātus sim | ich zusammengerufen worden bin |  |
+| convocāre | konj.perf.pass.1.pl | convocātī sīmus | wir zusammengerufen worden sind |  |
 | convocāre | konj.plusq.akt.1.sg | convocāvissem | ich zusammengerufen hätte |  |
 | convocāre | konj.plusq.akt.1.pl | convocāvissēmus | wir zusammengerufen hätten |  |
+| convocāre | konj.plusq.pass.1.sg | convocātus essem | ich zusammengerufen worden wäre |  |
+| convocāre | konj.plusq.pass.1.pl | convocātī essēmus | wir zusammengerufen worden wären |  |

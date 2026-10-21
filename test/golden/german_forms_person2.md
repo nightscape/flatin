@@ -42,44 +42,24 @@
 | amāre | konj.plusq.pass.2.pl | amātī essētis | ihr geliebt worden wäret |  |
 | venīre | ind.praes.akt.2.sg | venīs | du kommst |  |
 | venīre | ind.praes.akt.2.pl | venītis | ihr kommt |  |
-| venīre | ind.praes.pass.2.sg | venīris | — |  |
-| venīre | ind.praes.pass.2.pl | venīminī | — |  |
 | venīre | ind.impf.akt.2.sg | veniēbās | du kamst |  |
 | venīre | ind.impf.akt.2.pl | veniēbātis | ihr kamt |  |
-| venīre | ind.impf.pass.2.sg | veniēbāris | — |  |
-| venīre | ind.impf.pass.2.pl | veniēbāminī | — |  |
 | venīre | ind.fut.akt.2.sg | veniēs | du wirst kommen |  |
 | venīre | ind.fut.akt.2.pl | veniētis | ihr werdet kommen |  |
-| venīre | ind.fut.pass.2.sg | veniēris | — |  |
-| venīre | ind.fut.pass.2.pl | veniēminī | — |  |
 | venīre | ind.perf.akt.2.sg | vēnistī | du bist gekommen | du kamst |
 | venīre | ind.perf.akt.2.pl | vēnistis | ihr seid gekommen | ihr kamt |
-| venīre | ind.perf.pass.2.sg | ventus es | — |  |
-| venīre | ind.perf.pass.2.pl | ventī estis | — |  |
 | venīre | ind.plusq.akt.2.sg | vēnerās | du warst gekommen |  |
 | venīre | ind.plusq.akt.2.pl | vēnerātis | ihr wart gekommen |  |
-| venīre | ind.plusq.pass.2.sg | ventus erās | — |  |
-| venīre | ind.plusq.pass.2.pl | ventī erātis | — |  |
 | venīre | ind.fut2.akt.2.sg | vēneris | du wirst gekommen sein |  |
 | venīre | ind.fut2.akt.2.pl | vēneritis | ihr werdet gekommen sein |  |
-| venīre | ind.fut2.pass.2.sg | ventus eris | — |  |
-| venīre | ind.fut2.pass.2.pl | ventī eritis | — |  |
 | venīre | konj.praes.akt.2.sg | veniās | du kommst |  |
 | venīre | konj.praes.akt.2.pl | veniātis | ihr kommt |  |
-| venīre | konj.praes.pass.2.sg | veniāris | — |  |
-| venīre | konj.praes.pass.2.pl | veniāminī | — |  |
 | venīre | konj.impf.akt.2.sg | venīrēs | du kommen würdest |  |
 | venīre | konj.impf.akt.2.pl | venīrētis | ihr kommen würdet |  |
-| venīre | konj.impf.pass.2.sg | venīrēris | — |  |
-| venīre | konj.impf.pass.2.pl | venīrēminī | — |  |
 | venīre | konj.perf.akt.2.sg | vēneris | du gekommen bist |  |
 | venīre | konj.perf.akt.2.pl | vēneritis | ihr gekommen seid |  |
-| venīre | konj.perf.pass.2.sg | ventus sīs | — |  |
-| venīre | konj.perf.pass.2.pl | ventī sītis | — |  |
 | venīre | konj.plusq.akt.2.sg | vēnissēs | du gekommen wärest |  |
 | venīre | konj.plusq.akt.2.pl | vēnissētis | ihr gekommen wäret |  |
-| venīre | konj.plusq.pass.2.sg | ventus essēs | — |  |
-| venīre | konj.plusq.pass.2.pl | ventī essētis | — |  |
 | gaudēre | ind.praes.akt.2.sg | gaudēs | du freust dich |  |
 | gaudēre | ind.praes.akt.2.pl | gaudētis | ihr freut euch |  |
 | gaudēre | ind.impf.akt.2.sg | gaudēbās | du freutest dich |  |
@@ -102,44 +82,24 @@
 | gaudēre | konj.plusq.akt.2.pl | gāvīsī essētis | ihr euch gefreut hättet |  |
 | labōrāre | ind.praes.akt.2.sg | labōrās | du arbeitest |  |
 | labōrāre | ind.praes.akt.2.pl | labōrātis | ihr arbeitet |  |
-| labōrāre | ind.praes.pass.2.sg | labōrāris | — |  |
-| labōrāre | ind.praes.pass.2.pl | labōrāminī | — |  |
 | labōrāre | ind.impf.akt.2.sg | labōrābās | du arbeitetest |  |
 | labōrāre | ind.impf.akt.2.pl | labōrābātis | ihr arbeitetet |  |
-| labōrāre | ind.impf.pass.2.sg | labōrābāris | — |  |
-| labōrāre | ind.impf.pass.2.pl | labōrābāminī | — |  |
 | labōrāre | ind.fut.akt.2.sg | labōrābis | du wirst arbeiten |  |
 | labōrāre | ind.fut.akt.2.pl | labōrābitis | ihr werdet arbeiten |  |
-| labōrāre | ind.fut.pass.2.sg | labōrāberis | — |  |
-| labōrāre | ind.fut.pass.2.pl | labōrābiminī | — |  |
 | labōrāre | ind.perf.akt.2.sg | labōrāvistī | du hast gearbeitet | du arbeitetest |
 | labōrāre | ind.perf.akt.2.pl | labōrāvistis | ihr habt gearbeitet | ihr arbeitetet |
-| labōrāre | ind.perf.pass.2.sg | labōrātus es | — |  |
-| labōrāre | ind.perf.pass.2.pl | labōrātī estis | — |  |
 | labōrāre | ind.plusq.akt.2.sg | labōrāverās | du hattest gearbeitet |  |
 | labōrāre | ind.plusq.akt.2.pl | labōrāverātis | ihr hattet gearbeitet |  |
-| labōrāre | ind.plusq.pass.2.sg | labōrātus erās | — |  |
-| labōrāre | ind.plusq.pass.2.pl | labōrātī erātis | — |  |
 | labōrāre | ind.fut2.akt.2.sg | labōrāveris | du wirst gearbeitet haben |  |
 | labōrāre | ind.fut2.akt.2.pl | labōrāveritis | ihr werdet gearbeitet haben |  |
-| labōrāre | ind.fut2.pass.2.sg | labōrātus eris | — |  |
-| labōrāre | ind.fut2.pass.2.pl | labōrātī eritis | — |  |
 | labōrāre | konj.praes.akt.2.sg | labōrēs | du arbeitest |  |
 | labōrāre | konj.praes.akt.2.pl | labōrētis | ihr arbeitet |  |
-| labōrāre | konj.praes.pass.2.sg | labōrēris | — |  |
-| labōrāre | konj.praes.pass.2.pl | labōrēminī | — |  |
 | labōrāre | konj.impf.akt.2.sg | labōrārēs | du arbeiten würdest |  |
 | labōrāre | konj.impf.akt.2.pl | labōrārētis | ihr arbeiten würdet |  |
-| labōrāre | konj.impf.pass.2.sg | labōrārēris | — |  |
-| labōrāre | konj.impf.pass.2.pl | labōrārēminī | — |  |
 | labōrāre | konj.perf.akt.2.sg | labōrāveris | du gearbeitet hast |  |
 | labōrāre | konj.perf.akt.2.pl | labōrāveritis | ihr gearbeitet habt |  |
-| labōrāre | konj.perf.pass.2.sg | labōrātus sīs | — |  |
-| labōrāre | konj.perf.pass.2.pl | labōrātī sītis | — |  |
 | labōrāre | konj.plusq.akt.2.sg | labōrāvissēs | du gearbeitet hättest |  |
 | labōrāre | konj.plusq.akt.2.pl | labōrāvissētis | ihr gearbeitet hättet |  |
-| labōrāre | konj.plusq.pass.2.sg | labōrātus essēs | — |  |
-| labōrāre | konj.plusq.pass.2.pl | labōrātī essētis | — |  |
 | scīre | ind.praes.akt.2.sg | scīs | du weißt |  |
 | scīre | ind.praes.akt.2.pl | scītis | ihr wisst |  |
 | scīre | ind.praes.pass.2.sg | scīris | — |  |
@@ -334,10 +294,16 @@
 | convocāre | ind.fut.pass.2.pl | convocābiminī | ihr werdet zusammengerufen werden |  |
 | convocāre | ind.perf.akt.2.sg | convocāvistī | du hast zusammengerufen | du riefst zusammen |
 | convocāre | ind.perf.akt.2.pl | convocāvistis | ihr habt zusammengerufen | ihr rieft zusammen |
+| convocāre | ind.perf.pass.2.sg | convocātus es | du bist zusammengerufen worden |  |
+| convocāre | ind.perf.pass.2.pl | convocātī estis | ihr seid zusammengerufen worden |  |
 | convocāre | ind.plusq.akt.2.sg | convocāverās | du hattest zusammengerufen |  |
 | convocāre | ind.plusq.akt.2.pl | convocāverātis | ihr hattet zusammengerufen |  |
+| convocāre | ind.plusq.pass.2.sg | convocātus erās | du warst zusammengerufen worden |  |
+| convocāre | ind.plusq.pass.2.pl | convocātī erātis | ihr wart zusammengerufen worden |  |
 | convocāre | ind.fut2.akt.2.sg | convocāveris | du wirst zusammengerufen haben |  |
 | convocāre | ind.fut2.akt.2.pl | convocāveritis | ihr werdet zusammengerufen haben |  |
+| convocāre | ind.fut2.pass.2.sg | convocātus eris | du wirst zusammengerufen worden sein |  |
+| convocāre | ind.fut2.pass.2.pl | convocātī eritis | ihr werdet zusammengerufen worden sein |  |
 | convocāre | konj.praes.akt.2.sg | convocēs | du zusammenrufst |  |
 | convocāre | konj.praes.akt.2.pl | convocētis | ihr zusammenruft |  |
 | convocāre | konj.praes.pass.2.sg | convocēris | du zusammengerufen wirst |  |
@@ -348,5 +314,9 @@
 | convocāre | konj.impf.pass.2.pl | convocārēminī | ihr zusammengerufen würdet |  |
 | convocāre | konj.perf.akt.2.sg | convocāveris | du zusammengerufen hast |  |
 | convocāre | konj.perf.akt.2.pl | convocāveritis | ihr zusammengerufen habt |  |
+| convocāre | konj.perf.pass.2.sg | convocātus sīs | du zusammengerufen worden bist |  |
+| convocāre | konj.perf.pass.2.pl | convocātī sītis | ihr zusammengerufen worden seid |  |
 | convocāre | konj.plusq.akt.2.sg | convocāvissēs | du zusammengerufen hättest |  |
 | convocāre | konj.plusq.akt.2.pl | convocāvissētis | ihr zusammengerufen hättet |  |
+| convocāre | konj.plusq.pass.2.sg | convocātus essēs | du zusammengerufen worden wärest |  |
+| convocāre | konj.plusq.pass.2.pl | convocātī essētis | ihr zusammengerufen worden wäret |  |

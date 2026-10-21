@@ -237,7 +237,7 @@ void main() {
     // present (absēns, praesēns).
     expect(
       [generatedCount, generatedSeamCount, composedCount, regularCount],
-      [75357, 3867, 6887, 90],
+      [75888, 3583, 7030, 90],
     );
     expect(
       [regularPlainCount, regularSeamCount, regularComposedCount],
@@ -247,7 +247,7 @@ void main() {
       regularPlainCount + regularSeamCount + regularComposedCount,
       regularCount,
     );
-    expect([affixPartCount, lexemePartCount], [172, 13612]);
+    expect([affixPartCount, lexemePartCount], [172, 13898]);
   });
 
   group('T-trace-4 a shown type rule agrees with the type', () {

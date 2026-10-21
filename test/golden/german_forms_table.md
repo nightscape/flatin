@@ -51,4 +51,6 @@
 | convocāre | inf.praes.akt | convocāre | zusammenrufen |  |
 | convocāre | inf.praes.pass | convocārī | zusammengerufen werden |  |
 | convocāre | inf.perf.akt | convocāvisse | zusammengerufen haben |  |
+| convocāre | inf.perf.pass | convocātum esse | zusammengerufen worden sein |  |
 | convocāre | part.praes.akt | convocāns | zusammenrufend |  |
+| convocāre | part.perf.pass | convocātus | zusammengerufen |  |
