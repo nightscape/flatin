@@ -25,6 +25,12 @@
     }
   },
   "settings": {
+    "reward": {
+      "title": "Belohnung",
+      "points": "Punkte",
+      "town": "Römische Stadt",
+      "animation": "Animation"
+    },
     "title": "Einstellungen",
     "nouns": "Nomen (Deklination)",
     "verbs": "Verben (Konjugation)",

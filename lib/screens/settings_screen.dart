@@ -1,12 +1,52 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../data/rewards.dart';
+import '../providers/settings_provider.dart';
 import 'course_scope.dart';
 import 'kursstand_card.dart';
 import 'settings_grammar_page.dart';
 import 'settings_input_page.dart';
 import 'settings_widgets.dart';
 import 'settings_words_page.dart';
+
+class _RewardSection extends ConsumerWidget {
+  const _RewardSection();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final notifier = ref.read(settingsProvider.notifier);
+    String tr(String id) =>
+        FlutterI18n.translate(context, 'settings.reward.$id');
+    return ref
+        .watch(settingsProvider)
+        .when(
+          skipLoadingOnReload: true,
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (error, _) => loadErrorText(context, error),
+          data: (settings) => Column(
+            key: const Key('settings.section.reward'),
+            children: [
+              SectionTitle(tr('title')),
+              for (final id in switchableRewardIds)
+                SwitchListTile(
+                  key: Key('settings.reward.$id'),
+                  title: Text(tr(id)),
+                  value: settings.isRewardEnabled(id),
+                  onChanged: (_) => notifier.toggleReward(id),
+                ),
+              SwitchListTile(
+                key: const Key('settings.reward.animation'),
+                title: Text(tr('animation')),
+                value: settings.rewardAnimation,
+                onChanged: notifier.setRewardAnimation,
+              ),
+            ],
+          ),
+        );
+  }
+}
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -54,6 +94,7 @@ class SettingsScreen extends StatelessWidget {
             'settings.inputPage',
             const SettingsInputPage(),
           ),
+          const _RewardSection(),
         ],
       ),
     );

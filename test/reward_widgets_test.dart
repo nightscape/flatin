@@ -1,0 +1,184 @@
+import 'dart:convert';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:latin_practice/data/rewards.dart';
+import 'package:latin_practice/models/settings.dart';
+import 'package:latin_practice/providers/settings_provider.dart';
+import 'package:latin_practice/screens/settings_screen.dart';
+import 'package:latin_practice/widgets/reward_burst.dart';
+import 'package:latin_practice/widgets/town_view.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'support/word_classification_harness.dart';
+
+const _storeKey = 'practice_settings';
+
+void _store(Settings settings) => SharedPreferences.setMockInitialValues({
+  _storeKey: jsonEncode(settings.toJson()),
+});
+
+void main() {
+  group('reward settings', () {
+    test('the switches survive a JSON round trip', () {
+      final settings = Settings(
+        disabledRewards: {'town'},
+        rewardAnimation: false,
+      );
+
+      final back = Settings.fromJson(
+        jsonDecode(jsonEncode(settings.toJson())) as Map<String, dynamic>,
+      );
+
+      expect(back.disabledRewards, {'town'});
+      expect(back.rewardAnimation, isFalse);
+    });
+
+    test('stored settings without reward fields load with everything on', () {
+      final json = Settings().toJson()
+        ..remove('disabledRewards')
+        ..remove('rewardAnimation');
+
+      final loaded = Settings.fromJson(json);
+
+      expect(loaded.disabledRewards, isEmpty);
+      expect(loaded.rewardAnimation, isTrue);
+    });
+
+    test('only the strategies that can be switched off are listed', () {
+      expect(switchableRewardIds, ['points', 'town']);
+    });
+
+    test('toggles through the notifier persist across a reload', () async {
+      SharedPreferences.setMockInitialValues({});
+      final first = ProviderContainer();
+      await first.read(settingsProvider.future);
+      final notifier = first.read(settingsProvider.notifier);
+      await notifier.toggleReward('points');
+      await notifier.toggleReward('town');
+      await notifier.toggleReward('town');
+      await notifier.setRewardAnimation(false);
+      first.dispose();
+
+      final second = ProviderContainer();
+      final loaded = await second.read(settingsProvider.future);
+      expect(loaded.disabledRewards, {'points'});
+      expect(loaded.rewardAnimation, isFalse);
+      second.dispose();
+    });
+
+    test('a reward that cannot be switched off is refused', () {
+      expect(() => Settings().toggleReward('days'), throwsAssertionError);
+    });
+
+    testWidgets('the settings screen offers the three switches and stores a '
+        'flip', (tester) async {
+      SharedPreferences.setMockInitialValues({});
+      tester.view.physicalSize = const Size(800, 3000);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+      await tester.pumpWidget(wrapInApp(const SettingsScreen()));
+      await letItLoad(tester);
+
+      const labels = {
+        'points': 'Points',
+        'town': 'Roman town',
+        'animation': 'Animation',
+      };
+      for (final MapEntry(key: id, value: label) in labels.entries) {
+        final tile = find.byKey(
+          Key('settings.reward.$id'),
+          skipOffstage: false,
+        );
+        final switchTile = tester.widget<SwitchListTile>(tile);
+        expect(switchTile.value, isTrue);
+        expect((switchTile.title! as Text).data, label);
+      }
+
+      final town = find.byKey(const Key('settings.reward.town'));
+      await tester.tap(town);
+      await letItLoad(tester);
+
+      expect(tester.widget<SwitchListTile>(town).value, isFalse);
+      final stored = Settings.fromJson(
+        jsonDecode(
+              (await SharedPreferences.getInstance()).getString(_storeKey)!,
+            )
+            as Map<String, dynamic>,
+      );
+      expect(stored.disabledRewards, {'town'});
+    });
+  });
+
+  group('TownView', () {
+    testWidgets('shows exactly the given buildings in order, named in German', (
+      tester,
+    ) async {
+      final built = [romanTown[2], romanTown[0]];
+      await tester.pumpWidget(
+        wrapInApp(TownView(built), forcedLocale: const Locale('de')),
+      );
+      await letItLoad(tester);
+
+      final emoji = tester
+          .widgetList<Text>(find.byType(Text))
+          .map((t) => t.data)
+          .toList();
+      expect(emoji, [romanTown[2].emoji, romanTown[0].emoji]);
+      expect(
+        tester.widgetList<Tooltip>(find.byType(Tooltip)).map((t) => t.message),
+        ['Brunnen', 'Haus'],
+      );
+    });
+  });
+
+  group('RewardBurst', () {
+    Future<void> pumpBurst(
+      WidgetTester tester,
+      Settings settings, {
+      bool disableAnimations = false,
+    }) async {
+      _store(settings);
+      tester.platformDispatcher.accessibilityFeaturesTestValue =
+          FakeAccessibilityFeatures(disableAnimations: disableAnimations);
+      addTearDown(
+        tester.platformDispatcher.clearAccessibilityFeaturesTestValue,
+      );
+      final container = ProviderContainer();
+      addTearDown(container.dispose);
+      await tester.runAsync(() => container.read(settingsProvider.future));
+      await tester.pumpWidget(
+        UncontrolledProviderScope(
+          container: container,
+          child: const MaterialApp(home: Scaffold(body: RewardBurst(10))),
+        ),
+      );
+    }
+
+    testWidgets('is absent when the animation is switched off', (tester) async {
+      await pumpBurst(tester, Settings(rewardAnimation: false));
+      expect(find.text('🪙 +10'), findsNothing);
+    });
+
+    testWidgets('is absent when the device disables animations', (
+      tester,
+    ) async {
+      await pumpBurst(tester, Settings(), disableAnimations: true);
+      expect(find.text('🪙 +10'), findsNothing);
+    });
+
+    testWidgets('shows, moves up and is gone after 700 ms', (tester) async {
+      await pumpBurst(tester, Settings());
+      final start = tester.getTopLeft(find.text('🪙 +10')).dy;
+      expect(find.byType(IgnorePointer), findsWidgets);
+
+      await tester.pump(const Duration(milliseconds: 350));
+      expect(tester.getTopLeft(find.text('🪙 +10')).dy, closeTo(start - 16, 1));
+
+      await tester.pump(const Duration(milliseconds: 350));
+      await tester.pumpAndSettle();
+      expect(find.text('🪙 +10'), findsNothing);
+    });
+  });
+}

@@ -1,4 +1,5 @@
 import '../data/lesson_data.dart' show lastLesson;
+import '../data/rewards.dart' show switchableRewardIds;
 import '../data/settings_conversion.dart'
     show settingsVersion, settingsVersionField;
 import 'distractor_strategy.dart';
@@ -50,6 +51,12 @@ class Settings {
   /// Whether the grammar range trails the word range.
   final bool grammarFollowsWords;
 
+  /// Ids of the reward strategies the learner switched off.
+  final Set<String> disabledRewards;
+
+  /// Whether the "+N" burst shows after a right answer.
+  final bool rewardAnimation;
+
   /// Words the learner practises although the course has not reached them,
   /// in the exact spelling of their lemma.
   final Set<String> forcedOnWords;
@@ -73,6 +80,8 @@ class Settings {
     Set<String>? forcedOnWords,
     Map<String, Set<String>>? forcedOnTypes,
     Map<String, Set<String>>? forcedOnForms,
+    Set<String>? disabledRewards,
+    this.rewardAnimation = true,
   }) : disabledForms = disabledForms ?? {},
        disabledFeatures = disabledFeatures ?? {},
        disabledTypes = disabledTypes ?? {},
@@ -82,7 +91,8 @@ class Settings {
        courseGrammar = courseGrammar ?? LessonRange.fullGrammar,
        forcedOnWords = forcedOnWords ?? {},
        forcedOnTypes = forcedOnTypes ?? {},
-       forcedOnForms = forcedOnForms ?? {} {
+       forcedOnForms = forcedOnForms ?? {},
+       disabledRewards = disabledRewards ?? {} {
     assert(
       this.courseWords.to <= lastLesson,
       'the word range ends beyond the last lesson',
@@ -114,6 +124,8 @@ class Settings {
     Set<String>? forcedOnWords,
     Map<String, Set<String>>? forcedOnTypes,
     Map<String, Set<String>>? forcedOnForms,
+    Set<String>? disabledRewards,
+    bool? rewardAnimation,
   }) {
     return Settings(
       disabledForms: disabledForms ?? this.disabledForms,
@@ -128,6 +140,8 @@ class Settings {
       forcedOnWords: forcedOnWords ?? this.forcedOnWords,
       forcedOnTypes: forcedOnTypes ?? this.forcedOnTypes,
       forcedOnForms: forcedOnForms ?? this.forcedOnForms,
+      disabledRewards: disabledRewards ?? this.disabledRewards,
+      rewardAnimation: rewardAnimation ?? this.rewardAnimation,
     );
   }
 
@@ -266,6 +280,15 @@ class Settings {
     return copyWith(disabledFeatures: next);
   }
 
+  bool isRewardEnabled(String id) => !disabledRewards.contains(id);
+
+  Settings toggleReward(String id) {
+    assert(switchableRewardIds.contains(id), 'reward "$id" is not switchable');
+    return copyWith(
+      disabledRewards: _withEntry(disabledRewards, id, isRewardEnabled(id)),
+    );
+  }
+
   /// Whether the word of that exact lemma is selected.
   bool isWordSelected(String lemma) {
     return !deselectedWords.contains(lemma);
@@ -300,6 +323,8 @@ class Settings {
       'forcedOnForms': forcedOnForms.map(
         (key, value) => MapEntry(key, value.toList()),
       ),
+      'disabledRewards': disabledRewards.toList(),
+      'rewardAnimation': rewardAnimation,
     };
   }
 
@@ -381,6 +406,10 @@ class Settings {
       forcedOnWords: forcedOnWords,
       forcedOnTypes: forcedOnTypes,
       forcedOnForms: forcedOnForms,
+      disabledRewards: Set<String>.from(
+        json['disabledRewards'] as List<dynamic>? ?? const [],
+      ),
+      rewardAnimation: json['rewardAnimation'] as bool? ?? true,
     );
   }
 }

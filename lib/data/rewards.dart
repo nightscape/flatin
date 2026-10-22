@@ -89,3 +89,9 @@ const List<RewardStrategy> rewardStrategies = [
   TownStrategy(),
   PracticeDaysStrategy(),
 ];
+
+/// The strategies the learner can switch off; counting days is always on.
+final List<String> switchableRewardIds = [
+  for (final s in rewardStrategies)
+    if (s is! PracticeDaysStrategy) s.id,
+];

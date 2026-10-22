@@ -25,6 +25,12 @@
     }
   },
   "settings": {
+    "reward": {
+      "title": "Reward",
+      "points": "Points",
+      "town": "Roman town",
+      "animation": "Animation"
+    },
     "title": "Settings",
     "nouns": "Nouns (declension)",
     "verbs": "Verbs (conjugation)",

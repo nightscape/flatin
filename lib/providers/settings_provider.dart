@@ -154,6 +154,11 @@ class SettingsNotifier extends _$SettingsNotifier {
   Future<void> setGrammarFollowsWords(bool follows) =>
       _update((s) => s.withGrammarFollowsWords(follows));
 
+  Future<void> toggleReward(String id) => _update((s) => s.toggleReward(id));
+
+  Future<void> setRewardAnimation(bool on) =>
+      _update((s) => s.copyWith(rewardAnimation: on));
+
   /// Drops every manual choice; the course ranges stay.
   Future<void> clearOverrides() => _update((s) => s.clearOverrides());
 
