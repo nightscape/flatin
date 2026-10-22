@@ -398,8 +398,14 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(
-        find.textContaining('Falsch. Richtig ist: ${right[0].$1.text} = '),
+        find.textContaining('So heißt es: ${right[0].$1.text} = '),
         findsOneWidget,
+      );
+      final feedback = find.byKey(const Key('exercise.feedback'));
+      expect(
+        tester.widget<Text>(feedback).style!.color,
+        Theme.of(tester.element(feedback)).textTheme.titleMedium!.color,
+        reason: 'a wrong answer is named in the neutral text colour',
       );
       await tapNext(tester);
       expect(attribute(vocare, exercise, responses.single), (

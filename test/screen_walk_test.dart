@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/data/practice_data.dart';
+import 'package:latin_practice/screens/grammar_start_screen.dart';
 import 'package:latin_practice/screens/language_screen.dart';
 import 'package:latin_practice/screens/practice_screen.dart';
 import 'package:latin_practice/screens/settings_screen.dart';
@@ -86,6 +87,7 @@ void main() {
           item: noun,
           formKey: 'nom.sg',
         ),
+        'grammar': const GrammarStartScreen(),
         'settings': const SettingsScreen(),
         'language': const LanguageScreen(),
       };

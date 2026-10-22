@@ -100,12 +100,12 @@ final class FsrsCardsProvider
 
 String _$fsrsCardsHash() => r'c81f641b2179ac611a69a84f1373126f474d0bd7';
 
-/// The due word cards; grammar cards are due through [nextGrammarExercise].
+/// The due word cards; grammar cards are due through the rounds.
 
 @ProviderFor(dueCards)
 const dueCardsProvider = DueCardsProvider._();
 
-/// The due word cards; grammar cards are due through [nextGrammarExercise].
+/// The due word cards; grammar cards are due through the rounds.
 
 final class DueCardsProvider
     extends
@@ -117,7 +117,7 @@ final class DueCardsProvider
     with
         $FutureModifier<List<PracticeItemCard>>,
         $FutureProvider<List<PracticeItemCard>> {
-  /// The due word cards; grammar cards are due through [nextGrammarExercise].
+  /// The due word cards; grammar cards are due through the rounds.
   const DueCardsProvider._()
     : super(
         from: null,
@@ -479,101 +479,6 @@ final class ExerciseRegistryProvider
 }
 
 String _$exerciseRegistryHash() => r'e479eb1b79bd335ee4b0296bcde4cbb5a9f82a7f';
-
-/// The word and bundle [selectPair] picks; null when no card is due. Builds
-/// no exercise, so it is cheap enough to watch from the home screen.
-
-@ProviderFor(nextGrammarPair)
-const nextGrammarPairProvider = NextGrammarPairProvider._();
-
-/// The word and bundle [selectPair] picks; null when no card is due. Builds
-/// no exercise, so it is cheap enough to watch from the home screen.
-
-final class NextGrammarPairProvider
-    extends
-        $FunctionalProvider<
-          AsyncValue<SelectedPair?>,
-          SelectedPair?,
-          FutureOr<SelectedPair?>
-        >
-    with $FutureModifier<SelectedPair?>, $FutureProvider<SelectedPair?> {
-  /// The word and bundle [selectPair] picks; null when no card is due. Builds
-  /// no exercise, so it is cheap enough to watch from the home screen.
-  const NextGrammarPairProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'nextGrammarPairProvider',
-        isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
-
-  @override
-  String debugGetCreateSourceHash() => _$nextGrammarPairHash();
-
-  @$internal
-  @override
-  $FutureProviderElement<SelectedPair?> $createElement(
-    $ProviderPointer pointer,
-  ) => $FutureProviderElement(pointer);
-
-  @override
-  FutureOr<SelectedPair?> create(Ref ref) {
-    return nextGrammarPair(ref);
-  }
-}
-
-String _$nextGrammarPairHash() => r'650034d0d9bcb4fb6277587bee3ffe8a88c3d9a7';
-
-/// The next grammar exercise: the pair of [nextGrammarPair], asked in a kind
-/// that fits the stability of its weaker card. Null when no card is due.
-
-@ProviderFor(nextGrammarExercise)
-const nextGrammarExerciseProvider = NextGrammarExerciseProvider._();
-
-/// The next grammar exercise: the pair of [nextGrammarPair], asked in a kind
-/// that fits the stability of its weaker card. Null when no card is due.
-
-final class NextGrammarExerciseProvider
-    extends
-        $FunctionalProvider<
-          AsyncValue<GrammarExercise?>,
-          GrammarExercise?,
-          FutureOr<GrammarExercise?>
-        >
-    with $FutureModifier<GrammarExercise?>, $FutureProvider<GrammarExercise?> {
-  /// The next grammar exercise: the pair of [nextGrammarPair], asked in a kind
-  /// that fits the stability of its weaker card. Null when no card is due.
-  const NextGrammarExerciseProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'nextGrammarExerciseProvider',
-        isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
-
-  @override
-  String debugGetCreateSourceHash() => _$nextGrammarExerciseHash();
-
-  @$internal
-  @override
-  $FutureProviderElement<GrammarExercise?> $createElement(
-    $ProviderPointer pointer,
-  ) => $FutureProviderElement(pointer);
-
-  @override
-  FutureOr<GrammarExercise?> create(Ref ref) {
-    return nextGrammarExercise(ref);
-  }
-}
-
-String _$nextGrammarExerciseHash() =>
-    r'04a261d7a38d387295de9cb0f90d0b6cd68e49a4';
 
 /// Provides shuffled translation choices for a practice item:
 /// the correct translation plus 3 distractors from the chosen strategy.

@@ -32,6 +32,20 @@ final class Topic {
        assert(bundles.isNotEmpty);
 }
 
+/// The name the learner reads for a topic; the screens name topics only
+/// through it.
+abstract interface class TopicNamer {
+  String name(Topic topic);
+}
+
+/// Names a topic by its bundles, as [topicsOf] derives them from the data.
+final class DerivedTopicNamer implements TopicNamer {
+  const DerivedTopicNamer();
+
+  @override
+  String name(Topic topic) => topic.name;
+}
+
 /// Every topic of [items], in course order: lesson, then data file, then the
 /// first form of the topic. Every bundle of [items] is in exactly one topic.
 /// [nounTypeDisplays] maps each noun type to the name the learner reads.

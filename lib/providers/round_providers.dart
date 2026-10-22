@@ -147,6 +147,7 @@ class Round extends _$Round {
   late Random _rng;
   late List<ExerciseGenerator> _registry;
   final _reviewedWords = <String>{};
+  bool _responding = false;
 
   /// Plans and builds the first tasks once. Reads its inputs with ref.read,
   /// so the word reviews during the round do not re-plan it.
@@ -218,8 +219,18 @@ class Round extends _$Round {
 
   /// Reviews the word card on its first attempt in the round, feeds the
   /// rewards, advances. At the end: reviews the bundles (one save), sends
-  /// [RoundFinished].
+  /// [RoundFinished]. A response while one is in flight is ignored.
   Future<void> respond(ExerciseResponse response) async {
+    if (_responding) return;
+    _responding = true;
+    try {
+      await _respond(response);
+    } finally {
+      _responding = false;
+    }
+  }
+
+  Future<void> _respond(ExerciseResponse response) async {
     final current = state.requireValue;
     final task = current.queue.first;
     final (next, outcome) = answer(

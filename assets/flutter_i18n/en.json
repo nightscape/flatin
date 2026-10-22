@@ -6,6 +6,7 @@
     "nouns": "Nouns (declension)",
     "verbs": "Verbs (conjugation)",
     "wordClassification": "Word Classification",
+    "grammar": "Grammar",
     "due": "due",
     "error": "Error: {error}",
     "noData": "No data available"
@@ -73,8 +74,8 @@
     "addCombination": "Add Combination",
     "allCorrectCombinations": "All correct combinations:",
     "correct": "Correct!",
-    "partiallyCorrect": "Partially correct",
-    "incorrect": "Incorrect. Try again!",
+    "partiallyCorrect": "In part. The answer is above.",
+    "incorrect": "The answer is above.",
     "howWellDidYouKnow": "How well did you know this?",
     "check": "Check",
     "nextWord": "Next Word",
@@ -90,6 +91,7 @@
     "nouns": "Nouns (declension)",
     "verbs": "Verbs (conjugation)",
     "wordClassification": "Word Classification",
+    "grammar": "Grammar",
     "settings": "Settings",
     "errorLoadingData": "Error loading data",
     "language": "Language"
@@ -219,7 +221,7 @@
       "check": "check",
       "next": "next",
       "right": "Correct",
-      "wrong": "Wrong. The right answer is: {answer}",
+      "wrong": "Here it is: {answer}",
       "sampleQuestion": "What does {form} mean?"
     },
     "build": {
@@ -252,10 +254,29 @@
       "deLatType": {
         "question": "Type the Latin form of {word} that means: {german}"
       }
+    }
+  },
+  "round": {
+    "start": {
+      "today": "Up today",
+      "mixed": "Mixed round",
+      "newTopic": "New topic: {name}",
+      "go": "Let's go",
+      "nothingDue": "Everything is practised for today. You can pick a topic.",
+      "days": "Days practised: {n}",
+      "topics": "Topics",
+      "lesson": "Lesson {n}",
+      "later": "later"
     },
-    "home": {
-      "grammar": "Grammar",
-      "nothingDue": "Nothing is due right now."
+    "task": "Exercise {n} of {total}",
+    "retry": "One more time",
+    "end": {
+      "title": "Round done!",
+      "points": "+{points} points",
+      "total": "Total: {total} points",
+      "newBuilding": "New in your town: {emoji} {name}",
+      "again": "Another round",
+      "done": "Done"
     }
   }
 }

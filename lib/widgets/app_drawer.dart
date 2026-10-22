@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../screens/grammar_start_screen.dart';
 import '../screens/practice_screen.dart';
 import '../screens/word_classification_screen.dart';
 import '../screens/settings_screen.dart';
@@ -43,6 +44,22 @@ Widget buildAppDrawer(BuildContext context) {
           labelKey: 'drawer.verbs',
           icon: Icons.auto_stories,
           fontSize: itemFontSize,
+        ),
+        ListTile(
+          key: const Key('drawer.grammar'),
+          leading: const Icon(Icons.school, color: Colors.black),
+          title: Text(
+            FlutterI18n.translate(context, 'drawer.grammar'),
+            style: TextStyle(color: Colors.black, fontSize: itemFontSize),
+          ),
+          onTap: () {
+            Navigator.pop(context);
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => const GrammarStartScreen(),
+              ),
+            );
+          },
         ),
         ListTile(
           key: const Key('drawer.wordClassification'),

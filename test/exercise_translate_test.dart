@@ -422,7 +422,7 @@ void main() {
       );
       await tester.tap(find.text(wrong.text));
       await tester.pumpAndSettle();
-      expect(find.textContaining('Falsch'), findsOneWidget);
+      expect(find.textContaining('So heißt es:'), findsOneWidget);
     });
 
     testWidgets('A7 takes the typed Latin form', (tester) async {

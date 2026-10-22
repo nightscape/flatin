@@ -155,9 +155,12 @@ void main() {
         await tester.tap(find.byKey(Key('exercise.option.$wrong')));
         await tester.pumpAndSettle();
 
+        expect(find.text('So heißt es: ${answer.right.text}'), findsOneWidget);
+        final feedback = find.byKey(const Key('exercise.feedback'));
         expect(
-          find.text('Falsch. Richtig ist: ${answer.right.text}'),
-          findsOneWidget,
+          tester.widget<Text>(feedback).style!.color,
+          Theme.of(tester.element(feedback)).textTheme.titleMedium!.color,
+          reason: 'a wrong answer is named in the neutral text colour',
         );
         await tester.tap(find.byKey(Key('exercise.option.$wrong')));
         await tester.scrollUntilVisible(
@@ -207,7 +210,7 @@ void main() {
         await tester.tap(find.byKey(const Key('exercise.check.button')));
         await tester.pumpAndSettle();
 
-        expect(find.text('Falsch. Richtig ist: vocāre'), findsOneWidget);
+        expect(find.text('So heißt es: vocāre'), findsOneWidget);
       });
 
       for (final language in ['de', 'en']) {

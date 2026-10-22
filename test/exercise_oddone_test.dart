@@ -392,10 +392,7 @@ void main() {
       final wrong = answer.options.indexWhere((o) => o != answer.right);
       await tester.tap(find.byKey(Key('exercise.option.$wrong')));
       await tester.pumpAndSettle();
-      expect(
-        find.text('Falsch. Richtig ist: ${answer.right.text}'),
-        findsOneWidget,
-      );
+      expect(find.text('So heißt es: ${answer.right.text}'), findsOneWidget);
     });
   });
 

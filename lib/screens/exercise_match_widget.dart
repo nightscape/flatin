@@ -214,7 +214,7 @@ class _ExerciseMatchWidgetState extends State<ExerciseMatchWidget> {
             }),
       key: const Key('exercise.feedback'),
       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-        color: _isRight ? Colors.green.shade800 : Colors.red.shade800,
+        color: _isRight ? Colors.green.shade800 : null,
       ),
     ),
     const SizedBox(height: 8),

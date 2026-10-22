@@ -10,6 +10,7 @@ import 'package:latin_practice/main.dart' show noRetry;
 import 'package:latin_practice/models/exercise.dart';
 import 'package:latin_practice/models/fsrs_card.dart';
 import 'package:latin_practice/models/lesson_range.dart';
+import 'package:latin_practice/models/reward.dart';
 import 'package:latin_practice/models/settings.dart';
 import 'package:latin_practice/providers/fsrs_provider.dart';
 import 'package:latin_practice/providers/locale_provider.dart';
@@ -174,6 +175,50 @@ void main() {
     });
   }
 
+  test('a second response while one is in flight is ignored', () async {
+    seedSettings(Settings(courseWords: LessonRange(1, 1)));
+    final sent = <RewardEvent>[];
+    final c = ProviderContainer(
+      retry: noRetry,
+      overrides: [
+        dataLanguageProvider.overrideWith((ref) => 'de'),
+        exerciseRandomProvider.overrideWithValue(Random(17)),
+        rewardsProvider.overrideWith(() => _RecordingRewards(sent)),
+      ],
+    );
+    addTearDown(c.dispose);
+    final offer = await c.read(todayOfferProvider.future) as NewTopicOffer;
+    final provider = roundProvider(BlockedRound(offer.topic.id));
+    c.listen(provider, (_, _) {});
+    final task = (await c.read(provider.future)).queue.first;
+    final wordId = task.exercise.wordCardId;
+    final before = await FsrsStorage.loadCards();
+    final right = rightAndWrong(task.word, task.exercise).$1;
+
+    final first = c.read(provider.notifier).respond(right);
+    final second = c.read(provider.notifier).respond(right);
+    await Future.wait([first, second]);
+
+    expect(c.read(provider).requireValue.answeredFirst, 1);
+    expect(sent, [isA<Answered>()]);
+    final stored = await FsrsStorage.loadCards();
+    expect(
+      {
+        for (final id in stored.keys)
+          if (_fingerprint(stored[id]!) != _fingerprint(before[id]!)) id,
+      },
+      {wordId},
+    );
+    final once = c
+        .read(fsrsSchedulerProvider)
+        .reviewCard(
+          before[wordId]!.card,
+          attribute(task.word, task.exercise, right).word,
+        )
+        .card;
+    expect(stored[wordId]!.card.stability, once.stability);
+  });
+
   test(
     'an aborted round keeps its word reviews and reviews no bundle',
     () async {
@@ -206,4 +251,16 @@ void main() {
       expect(changed.where((id) => id.startsWith('grammar:')), isEmpty);
     },
   );
+}
+
+final class _RecordingRewards extends Rewards {
+  _RecordingRewards(this.sent);
+
+  final List<RewardEvent> sent;
+
+  @override
+  Future<List<RewardEffect>> send(RewardEvent event) {
+    sent.add(event);
+    return super.send(event);
+  }
 }

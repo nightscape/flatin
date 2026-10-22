@@ -6,6 +6,7 @@
     "nouns": "Nomen (Deklination)",
     "verbs": "Verben (Konjugation)",
     "wordClassification": "Wortklassifikation",
+    "grammar": "Grammatik",
     "due": "fällig",
     "error": "Fehler: {error}",
     "noData": "Keine Daten verfügbar"
@@ -73,8 +74,8 @@
     "addCombination": "Kombination hinzufügen",
     "allCorrectCombinations": "Alle richtigen Kombinationen:",
     "correct": "Richtig!",
-    "partiallyCorrect": "Teilweise richtig",
-    "incorrect": "Falsch. Versuche es erneut!",
+    "partiallyCorrect": "Zum Teil. Oben steht, wie es heißt.",
+    "incorrect": "Oben steht, wie es heißt.",
     "howWellDidYouKnow": "Wie gut kanntest du das?",
     "check": "Prüfen",
     "nextWord": "Nächstes Wort",
@@ -90,6 +91,7 @@
     "nouns": "Nomen (Deklination)",
     "verbs": "Verben (Konjugation)",
     "wordClassification": "Wortklassifikation",
+    "grammar": "Grammatik",
     "settings": "Einstellungen",
     "errorLoadingData": "Fehler beim Laden der Daten",
     "language": "Sprache"
@@ -219,7 +221,7 @@
       "check": "prüfen",
       "next": "weiter",
       "right": "Richtig",
-      "wrong": "Falsch. Richtig ist: {answer}",
+      "wrong": "So heißt es: {answer}",
       "sampleQuestion": "Was bedeutet {form}?"
     },
     "build": {
@@ -252,10 +254,29 @@
       "deLatType": {
         "question": "Schreibe die lateinische Form von {word}, die bedeutet: {german}"
       }
+    }
+  },
+  "round": {
+    "start": {
+      "today": "Heute dran",
+      "mixed": "Gemischte Runde",
+      "newTopic": "Neues Thema: {name}",
+      "go": "Los geht's",
+      "nothingDue": "Heute ist alles geübt. Du kannst ein Thema wählen.",
+      "days": "Geübte Tage: {n}",
+      "topics": "Themen",
+      "lesson": "Lektion {n}",
+      "later": "später"
     },
-    "home": {
-      "grammar": "Grammatik",
-      "nothingDue": "Gerade ist nichts fällig."
+    "task": "Aufgabe {n} von {total}",
+    "retry": "Noch einmal",
+    "end": {
+      "title": "Runde geschafft!",
+      "points": "+{points} Punkte",
+      "total": "Gesamt: {total} Punkte",
+      "newBuilding": "Neu in deiner Stadt: {emoji} {name}",
+      "again": "Noch eine Runde",
+      "done": "Fertig"
     }
   }
 }

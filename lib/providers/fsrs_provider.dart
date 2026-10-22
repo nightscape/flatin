@@ -6,10 +6,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fsrs/fsrs.dart';
 import '../data/asset_text.dart';
-import '../data/attribution.dart';
-import '../data/exercise_choice.dart';
 import '../data/german_forms.dart';
-import '../data/selection.dart';
 import '../models/distractor_strategy.dart';
 import '../models/exercise.dart';
 import '../models/practice_item.dart';
@@ -36,7 +33,7 @@ Future<Map<String, PracticeItemCard>> fsrsCards(Ref ref) async {
   return FsrsStorage.syncGrammarCards(items);
 }
 
-/// The due word cards; grammar cards are due through [nextGrammarExercise].
+/// The due word cards; grammar cards are due through the rounds.
 @riverpod
 Future<List<PracticeItemCard>> dueCards(Ref ref) async {
   final cards = await ref.watch(fsrsCardsProvider.future);
@@ -167,101 +164,9 @@ Future<GermanForms> germanForms(Ref ref) async =>
 @riverpod
 Random exerciseRandom(Ref ref) => Random();
 
-typedef GrammarExercise = ({PracticeItem word, Exercise exercise});
-
 /// The generators that build the grammar exercises; a test overrides it.
 @riverpod
 List<ExerciseGenerator> exerciseRegistry(Ref ref) => exerciseGenerators;
-
-/// The word and bundle [selectPair] picks; null when no card is due. Builds
-/// no exercise, so it is cheap enough to watch from the home screen.
-@riverpod
-Future<SelectedPair?> nextGrammarPair(Ref ref) async {
-  final cards = await ref.watch(fsrsCardsProvider.future);
-  final filter = await ref.watch(courseFilterProvider.future);
-  final practicable = await ref.watch(practicableItemsByTypeProvider.future);
-  final scheduler = ref.watch(fsrsSchedulerProvider);
-  final now = DateTime.now().toUtc();
-  return selectPair(
-    cards: cards,
-    items: [for (final items in practicable.values) ...items],
-    filter: filter,
-    retrievability: (c) =>
-        scheduler.getCardRetrievability(c.card, currentDateTime: now),
-    now: now,
-  );
-}
-
-/// The next grammar exercise: the pair of [nextGrammarPair], asked in a kind
-/// that fits the stability of its weaker card. Null when no card is due.
-@riverpod
-Future<GrammarExercise?> nextGrammarExercise(Ref ref) async {
-  final pair = await ref.watch(nextGrammarPairProvider.future);
-  if (pair == null) return null;
-  final cards = await ref.watch(fsrsCardsProvider.future);
-  final filter = await ref.watch(courseFilterProvider.future);
-  final practicable = await ref.watch(practicableItemsByTypeProvider.future);
-  final german = await ref.watch(germanFormsProvider.future);
-  final pool = practicable[pair.word.dataFileId]!;
-  final exercise = buildExercise(
-    pair.word,
-    pair.bundle,
-    ExerciseContext(
-      unlocked: unlockedBundles(filter, pool),
-      pool: pool,
-      german: german,
-    ),
-    weakerStability(
-      cards[PracticeItemCard.generateItemId(pair.word)]!,
-      cards[pair.grammarCardId]!,
-    ),
-    ref.watch(exerciseRandomProvider),
-    registry: ref.watch(exerciseRegistryProvider),
-  );
-  return (word: pair.word, exercise: exercise);
-}
-
-/// Reviews the word card and the grammar card of [exercise] with the ratings
-/// [attribute] gives [response], and stores both; a grammar card the response
-/// says nothing about stays as it is.
-Future<Map<String, PracticeItemCard>> reviewExerciseCards(
-  Scheduler scheduler,
-  Map<String, PracticeItemCard> stored,
-  GrammarExercise asked,
-  ExerciseResponse response,
-) async {
-  final (:word, :exercise) = asked;
-  final rating = attribute(word, exercise, response);
-  final cards = Map<String, PracticeItemCard>.from(stored);
-  final ratings = {
-    exercise.wordCardId: rating.word,
-    if (rating.grammar != null) exercise.grammarCardId: rating.grammar!,
-  };
-  for (final MapEntry(key: id, value: r) in ratings.entries) {
-    cards[id] = _reviewed(
-      scheduler,
-      cards[id] ?? (throw StateError('no card "$id"')),
-      r,
-    );
-  }
-  await FsrsStorage.saveCards(cards);
-  return cards;
-}
-
-/// [reviewExerciseCards], then the next exercise follows from the new cards.
-Future<void> reviewExercise(
-  WidgetRef ref,
-  GrammarExercise asked,
-  ExerciseResponse response,
-) async {
-  await reviewExerciseCards(
-    ref.read(fsrsSchedulerProvider),
-    await ref.read(fsrsCardsProvider.future),
-    asked,
-    response,
-  );
-  ref.invalidate(fsrsCardsProvider);
-}
 
 Future<Map<String, PracticeItemCard>> _reviewAndSave(
   Scheduler scheduler,
