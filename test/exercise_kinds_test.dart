@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:latin_practice/data/exercise_cube.dart';
 import 'package:latin_practice/data/exercise_interpreter.dart';
 import 'package:latin_practice/data/exercise_kinds.dart';
 import 'package:latin_practice/data/german_forms.dart';
@@ -24,6 +25,7 @@ void main() {
   late PracticeItem vocare;
   late PracticeItem puella;
   late PracticeItem rosa;
+  late PracticeItem tartarus;
   late PracticeItem manus;
   late GermanForms german;
   late GermanForms nounGerman;
@@ -33,6 +35,7 @@ void main() {
     final nouns = await loadPracticeItems('lib/data/latin_nouns.yaml');
     puella = nouns.singleWhere((i) => i.lemma.startsWith('puella'));
     rosa = nouns.singleWhere((i) => i.id == 'nouns:rosa');
+    tartarus = nouns.singleWhere((i) => i.id == 'nouns:tartarus');
     manus = nouns.singleWhere((i) => i.id == 'nouns:manus');
     final container = ProviderContainer(
       overrides: [dataLanguageProvider.overrideWith((ref) => 'de')],
@@ -174,6 +177,122 @@ void main() {
         shown(build(ExerciseKind.latDeWahl, vocare, 'ind.perf.akt', seed: 7)),
         shown(build(ExerciseKind.latDeWahl, vocare, 'ind.perf.akt', seed: 7)),
       );
+    });
+  });
+
+  group('A3 deLatWahl from its spec', () {
+    test('shows the German text and offers Latin forms and wrong endings', () {
+      final e = build(ExerciseKind.deLatWahl, vocare, 'ind.praes.akt');
+      final answer = e.answer as ChoiceAnswer;
+      expect(e.questionParams, {
+        'german': german.accepted(vocare, answer.right.formKey).first,
+        'word': vocare.lemma,
+      });
+      expect(answer.options, hasLength(4));
+      expectValid(ExerciseKind.deLatWahl, vocare, 'ind.praes.akt');
+    });
+
+    test('offers the ending of another declension as a wrong option', () {
+      final wrong = {
+        for (var seed = 0; seed < 100; seed++)
+          ...(build(
+                    ExerciseKind.deLatWahl,
+                    rosa,
+                    rosa.type,
+                    seed: seed,
+                    forms: nounGerman,
+                  ).answer
+                  as ChoiceAnswer)
+              .options
+              .where((o) => o.builtWrongBy != null),
+      };
+      expect(wrong, isNotEmpty);
+    });
+
+    test('a cell without German text clashes with nothing', () {
+      final cube = Cube(ctx(tartarus, {tartarus.type}, forms: nounGerman));
+      final cells = cube.cellsOf(tartarus).toList();
+      final uncovered = cells.where((c) => !cube.view(View.german).covers(c));
+      expect(uncovered, isNotEmpty);
+      for (final c in uncovered) {
+        expect(cube.clash(View.german, cells.first, c), isFalse);
+      }
+    });
+
+    test('takes wrong options from forms the German text does not cover', () {
+      final bundles = {
+        for (final key in tartarus.formOrder) bundleOf(tartarus, key),
+      };
+      for (final bundle in bundles) {
+        for (var seed = 0; seed < 5; seed++) {
+          _spec(ExerciseKind.deLatWahl).build(
+            tartarus,
+            bundle,
+            ctx(tartarus, bundles, forms: nounGerman),
+            Random(seed),
+          );
+        }
+      }
+    });
+
+    test('cannot build without German forms', () {
+      expect(
+        () => build(
+          ExerciseKind.deLatWahl,
+          vocare,
+          'ind.praes.akt',
+          forms: const NoForms(),
+        ),
+        throwsA(isA<CannotBuild>()),
+      );
+    });
+  });
+
+  group('A7 deLatTippen from its spec', () {
+    test('accepts the forms whose German reads the same, framed or not', () {
+      final e = build(ExerciseKind.deLatTippen, vocare, 'ind.praes.akt');
+      final answer = e.answer as TypedAnswer;
+      expect(e.questionParams['german'], 'du rufst');
+      expect(answer.expected.formKey, 'ind.praes.akt.2.sg');
+      // The subjunctive reads "Ich frage, ob du rufst", so vocēs is wrong.
+      expect(answer.accepted, ['vocās']);
+      expectValid(ExerciseKind.deLatTippen, vocare, 'ind.praes.akt');
+    });
+
+    test('reads a noun with German forms', () {
+      for (var seed = 0; seed < 10; seed++) {
+        final e = build(
+          ExerciseKind.deLatTippen,
+          rosa,
+          rosa.type,
+          seed: seed,
+          forms: nounGerman,
+        );
+        expect(
+          violations(
+            e,
+            _spec(ExerciseKind.deLatTippen).spec,
+            rosa,
+            rosa.type,
+            ctx(rosa, {rosa.type}, forms: nounGerman),
+          ),
+          isEmpty,
+        );
+      }
+    });
+  });
+
+  group('A6 formBilden from its spec', () {
+    test('names one form by its label and expects its Latin text', () {
+      final e = build(ExerciseKind.formBilden, vocare, 'ind.praes.akt');
+      final answer = e.answer as TypedAnswer;
+      final index = vocare.formOrder.indexOf(answer.expected.formKey);
+      expect(e.questionParams, {
+        'label': describeLabels([vocare.formLabels[index]]),
+        'word': vocare.lemma,
+      });
+      expect(answer.accepted, vocare.acceptedForms[index]);
+      expectValid(ExerciseKind.formBilden, vocare, 'ind.praes.akt');
     });
   });
 

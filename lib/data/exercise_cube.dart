@@ -55,7 +55,7 @@ final class BuiltWrong extends Cell {
   String toString() => '${word.id}@$key:$text';
 }
 
-enum View { latin, german, lemma }
+enum View { latin, german, lemma, label }
 
 /// Turns a cell into the texts a learner may read or give for it.
 abstract interface class ViewProvider {
@@ -130,6 +130,21 @@ final class _LemmaView implements ViewProvider {
   Object styleOf(Cell c) => ();
 }
 
+final class _LabelView implements ViewProvider {
+  const _LabelView();
+
+  @override
+  bool covers(Cell c) => c is FormCell;
+
+  @override
+  List<String> accepted(Cell c) => [
+    describeLabels([(c as FormCell).word.formLabels[c.index]]),
+  ];
+
+  @override
+  Object styleOf(Cell c) => ();
+}
+
 /// An index over the words of an [ExerciseContext]; built per call.
 final class Cube {
   Cube(this.ctx) : _german = _GermanView(ctx.german);
@@ -141,6 +156,7 @@ final class Cube {
     View.latin => const _LatinView(),
     View.german => _german,
     View.lemma => const _LemmaView(),
+    View.label => const _LabelView(),
   };
 
   FormCell cell(PracticeItem word, FormKey key) {
@@ -190,8 +206,10 @@ final class Cube {
   /// Whether the shown text of [a] or [b] in [v] is accepted for the other.
   bool clash(View v, Cell a, Cell b) => fits(v, a, b) || fits(v, b, a);
 
-  /// Whether the shown text of [target] in [v] is accepted for [c].
+  /// Whether the shown text of [target] in [v] is accepted for [c]; a cell
+  /// the view does not cover shows and accepts nothing.
   bool fits(View v, Cell target, Cell c) =>
+      view(v).covers(target) &&
       _acceptedSet(v, c).contains(_shownText(v, target));
 
   final _accepted = {for (final v in View.values) v: <Cell, Set<String>>{}};
@@ -199,7 +217,7 @@ final class Cube {
 
   Set<String> _acceptedSet(View v, Cell c) => _accepted[v]!.putIfAbsent(c, () {
     final provider = view(v);
-    return provider.accepted(c).toSet();
+    return provider.covers(c) ? provider.accepted(c).toSet() : {};
   });
 
   String _shownText(View v, Cell c) =>

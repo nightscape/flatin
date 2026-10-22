@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter/foundation.dart' show setEquals;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:latin_practice/data/exercise_build.dart';
 import 'package:latin_practice/data/exercise_kinds.dart';
 import 'package:latin_practice/data/exercise_spec.dart';
 import 'package:latin_practice/data/exercise_oddone.dart';
@@ -26,10 +27,16 @@ import 'support/exercise_invariants.dart';
 const _seeds = 20;
 const _shards = int.fromEnvironment('SHARDS', defaultValue: 1);
 const _shard = int.fromEnvironment('SHARD');
+
+/// Comma-separated kind names to compare; all when empty.
+const _only = String.fromEnvironment('KINDS');
 const _report = 'target/differential-raw-$_shard.md';
 
 const List<ExerciseGenerator> _old = [
   LatDeChoiceGenerator(),
+  DeLatChoiceGenerator(),
+  DeLatTypeGenerator(),
+  BuildFormGenerator(),
   OddOneOutGenerator(),
   TransformGenerator(),
 ];
@@ -105,6 +112,10 @@ void main() {
             german: forms,
           );
           for (final spec in specGenerators) {
+            if (_only.isNotEmpty &&
+                !_only.split(',').contains(spec.kind.name)) {
+              continue;
+            }
             final old = generatorFor(spec.kind, _old);
             final pair = '$locale ${spec.kind.name} ${word.id} / $bundle';
             final (oldBuilt, oldWhy) = _buildAll(old, word, bundle, ctx);

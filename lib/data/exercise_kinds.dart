@@ -22,6 +22,40 @@ const kindSpecs = [
     ),
   ),
   KindSpec(
+    kind: ExerciseKind.deLatWahl,
+    questionKey: 'exercise.translate.deLat.question',
+    select: OneCell(),
+    params: {
+      'german': Show(Ref.target, View.german),
+      'word': Show(Ref.target, View.lemma),
+    },
+    answer: Choose(
+      View.latin,
+      from: Neighbours(k: 1, withBuiltWrong: true),
+      count: 4,
+    ),
+  ),
+  KindSpec(
+    kind: ExerciseKind.deLatTippen,
+    questionKey: 'exercise.translate.deLatType.question',
+    select: OneCell(),
+    params: {
+      'german': Show(Ref.target, View.german),
+      'word': Show(Ref.target, View.lemma),
+    },
+    answer: Typed(View.latin),
+  ),
+  KindSpec(
+    kind: ExerciseKind.formBilden,
+    questionKey: 'exercise.build.question',
+    select: OneCell(),
+    params: {
+      'label': Show(Ref.target, View.label),
+      'word': Show(Ref.target, View.lemma),
+    },
+    answer: Typed(View.latin),
+  ),
+  KindSpec(
     kind: ExerciseKind.irrlaeufer,
     questionKey: 'exercise.oddone.question',
     select: OddOneOut(majority: 3, maxDraws: 200),
