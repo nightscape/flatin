@@ -365,7 +365,7 @@ items:
     parts: {nominativ: Nahrung}
   - type: Maskulinum
     translation: {de: Rat, en: advice}
-    parts: {nominativ: Rat, genitiv: Rates, plural: Räte}
+    parts: {nominativ: Rat, genitiv: Rates, plural: Ratschläge}
   - type: Femininum
     translation: {de: Kurie, en: curia}
     parts: {nominativ: Kurie, plural: Kurien}
@@ -504,3 +504,202 @@ items:
   - type: Femininum
     translation: {de: Blume, en: flower}
     parts: {nominativ: Blume, plural: Blumen}
+
+  - type: Femininum
+    translation: {de: Insel, en: island}
+    parts: {nominativ: Insel, plural: Inseln}
+  - type: Maskulinum
+    translation: {de: Schmerz, en: pain}
+    parts: {nominativ: Schmerz, genitiv: Schmerzes, plural: Schmerzen}
+  - type: Neutrum
+    translation: {de: Geschrei, en: shouting}
+    parts: {nominativ: Geschrei, genitiv: Geschreis}
+  - type: Maskulinum
+    translation: {de: Kampf, en: fight}
+    parts: {nominativ: Kampf, genitiv: Kampfes, plural: Kämpfe}
+  - type: Femininum
+    translation: {de: Sache, en: thing}
+    parts: {nominativ: Sache, plural: Sachen}
+  - type: Neutrum
+    translation: {de: Verderben, en: ruin}
+    parts: {nominativ: Verderben, genitiv: Verderbens}
+  - type: Femininum
+    translation: {de: Flucht, en: flight}
+    parts: {nominativ: Flucht, plural: Fluchten}
+  - type: Femininum
+    translation: {de: Hoffnung, en: hope}
+    parts: {nominativ: Hoffnung, plural: Hoffnungen}
+  - type: Maskulinum
+    translation: {de: Himmel, en: sky}
+    parts: {nominativ: Himmel, genitiv: Himmels, plural: Himmel}
+  - type: Femininum
+    translation: {de: Treue, en: loyalty}
+    parts: {nominativ: Treue}
+  - type: Neutrum
+    translation: {de: Lob, en: praise}
+    parts: {nominativ: Lob, genitiv: Lobes}
+  - type: Neutrum
+    translation: {de: Unrecht, en: injustice}
+    parts: {nominativ: Unrecht, genitiv: Unrechts}
+  - type: Maskulinum-schwach
+    translation: {de: Mensch, en: human being}
+    parts: {nominativ: Mensch, genitiv: Menschen, plural: Menschen}
+  - type: Maskulinum
+    translation: {de: Staub, en: dust}
+    parts: {nominativ: Staub, genitiv: Staubes}
+  - type: Maskulinum
+    translation: {de: Wächter, en: guard}
+    parts: {nominativ: Wächter, genitiv: Wächters, plural: Wächter}
+  - type: Neutrum
+    translation: {de: Gesetz, en: law}
+    parts: {nominativ: Gesetz, genitiv: Gesetzes, plural: Gesetze}
+  - type: Neutrum
+    translation: {de: Schicksal, en: fate}
+    parts: {nominativ: Schicksal, genitiv: Schicksals, plural: Schicksale}
+  - type: Maskulinum
+    translation: {de: Tod, en: death}
+    parts: {nominativ: Tod, genitiv: Todes}
+  - type: Femininum
+    translation: {de: Begierde, en: desire}
+    parts: {nominativ: Begierde, plural: Begierden}
+  - type: Maskulinum-schwach
+    translation: {de: Philosoph, en: philosopher}
+    parts: {nominativ: Philosoph, genitiv: Philosophen, plural: Philosophen}
+  - type: Maskulinum
+    translation: {de: Hund, en: dog}
+    parts: {nominativ: Hund, genitiv: Hundes, plural: Hunde}
+  - type: Femininum
+    translation: {de: Antwort, en: answer}
+    parts: {nominativ: Antwort, plural: Antworten}
+  - type: Maskulinum
+    translation: {de: Urheber, en: author}
+    parts: {nominativ: Urheber, genitiv: Urhebers, plural: Urheber}
+  - type: Neutrum
+    translation: {de: Gedächtnis, en: memory}
+    parts: {nominativ: Gedächtnis, genitiv: Gedächtnisses, plural: Gedächtnisse}
+  - type: Maskulinum
+    translation: {de: Hass, en: hatred}
+    parts: {nominativ: Hass, genitiv: Hasses}
+  - type: Femininum
+    translation: {de: Würde, en: dignity}
+    parts: {nominativ: Würde, plural: Würden}
+  - type: Femininum
+    translation: {de: Macht, en: power}
+    parts: {nominativ: Macht, plural: Mächte}
+  - type: Neutrum
+    translation: {de: Maß, en: measure}
+    parts: {nominativ: Maß, genitiv: Maßes, plural: Maße}
+  - type: Maskulinum
+    translation: {de: Sturm, en: storm}
+    parts: {nominativ: Sturm, genitiv: Sturmes, plural: Stürme}
+  - type: Maskulinum
+    translation: {de: Seemann, en: sailor}
+    parts: {nominativ: Seemann, genitiv: Seemanns, plural: Seeleute}
+  - type: Femininum
+    translation: {de: Gelegenheit, en: opportunity}
+    parts: {nominativ: Gelegenheit, plural: Gelegenheiten}
+  - type: Maskulinum
+    translation: {de: Ort, en: place}
+    parts: {nominativ: Ort, genitiv: Ortes, plural: Orte}
+  - type: Neutrum
+    translation: {de: Verbrechen, en: crime}
+    parts: {nominativ: Verbrechen, genitiv: Verbrechens, plural: Verbrechen}
+  - type: Maskulinum
+    translation: {de: Arzt, en: doctor}
+    parts: {nominativ: Arzt, genitiv: Arztes, plural: Ärzte}
+  - type: Maskulinum
+    translation: {de: Anfang, en: beginning}
+    parts: {nominativ: Anfang, genitiv: Anfangs, plural: Anfänge}
+  - type: Femininum
+    translation: {de: Krankheit, en: disease}
+    parts: {nominativ: Krankheit, plural: Krankheiten}
+  - type: Neutrum
+    translation: {de: Eisen, en: iron}
+    parts: {nominativ: Eisen, genitiv: Eisens}
+  - type: Femininum
+    translation: {de: Meinung, en: opinion}
+    parts: {nominativ: Meinung, plural: Meinungen}
+  - type: Maskulinum
+    translation: {de: Brauch, en: custom}
+    parts: {nominativ: Brauch, genitiv: Brauches, plural: Bräuche}
+  - type: Maskulinum
+    translation: {de: Kreis, en: circle}
+    parts: {nominativ: Kreis, genitiv: Kreises, plural: Kreise}
+  - type: Eigenname
+    translation: {de: Cicero, en: Cicero}
+    parts: {nominativ: Cicero, genitiv: Ciceros}
+  - type: Femininum
+    translation: {de: Provinz, en: province}
+    parts: {nominativ: Provinz, plural: Provinzen}
+  - type: Neutrum
+    translation: {de: Grab, en: tomb}
+    parts: {nominativ: Grab, genitiv: Grabes, plural: Gräber}
+  - type: Neutrum
+    translation: {de: Wissen, en: knowledge}
+    parts: {nominativ: Wissen, genitiv: Wissens}
+  - type: Maskulinum
+    translation: {de: Eifer, en: zeal}
+    parts: {nominativ: Eifer, genitiv: Eifers}
+  - type: Maskulinum-schwach
+    translation: {de: Feldherr, en: general}
+    parts: {nominativ: Feldherr, genitiv: Feldherrn, plural: Feldherren}
+  - type: Maskulinum
+    translation: {de: Greis, en: old man}
+    parts: {nominativ: Greis, genitiv: Greises, plural: Greise}
+  - type: Neutrum
+    translation: {de: Schwert, en: sword}
+    parts: {nominativ: Schwert, genitiv: Schwertes, plural: Schwerter}
+  - type: Maskulinum
+    translation: {de: Anführer, en: leader}
+    parts: {nominativ: Anführer, genitiv: Anführers, plural: Anführer}
+  - type: Femininum
+    translation: {de: Schlacht, en: battle}
+    parts: {nominativ: Schlacht, plural: Schlachten}
+  - type: Maskulinum
+    translation: {de: Sieg, en: victory}
+    parts: {nominativ: Sieg, genitiv: Sieges, plural: Siege}
+  - type: Femininum
+    translation: {de: Niederlage, en: defeat}
+    parts: {nominativ: Niederlage, plural: Niederlagen}
+  - type: Maskulinum
+    translation: {de: Unterschied, en: difference}
+    parts: {nominativ: Unterschied, genitiv: Unterschieds, plural: Unterschiede}
+  - type: Femininum
+    translation: {de: Legion, en: legion}
+    parts: {nominativ: Legion, plural: Legionen}
+  - type: Neutrum
+    translation: {de: Schweigen, en: silence}
+    parts: {nominativ: Schweigen, genitiv: Schweigens}
+  - type: Eigenname
+    translation: {de: Caesar, en: Caesar}
+    parts: {nominativ: Caesar, genitiv: Caesars}
+  - type: Femininum
+    translation: {de: Flut, en: flood}
+    parts: {nominativ: Flut, plural: Fluten}
+  - type: Femininum
+    translation: {de: Flotte, en: fleet}
+    parts: {nominativ: Flotte, plural: Flotten}
+  - type: Maskulinum
+    translation: {de: Anblick, en: sight}
+    parts: {nominativ: Anblick, genitiv: Anblicks}
+  - type: Neutrum
+    translation: {de: Seufzen, en: sighing}
+    parts: {nominativ: Seufzen, genitiv: Seufzens}
+  - type: Maskulinum
+    translation: {de: Lauf, en: course}
+    parts: {nominativ: Lauf, genitiv: Laufes, plural: Läufe}
+  - type: Maskulinum
+    translation: {de: Angriff, en: attack}
+    parts: {nominativ: Angriff, genitiv: Angriffs, plural: Angriffe}
+  - type: Maskulinum
+    translation: {de: Begleiter, en: companion}
+    parts: {nominativ: Begleiter, genitiv: Begleiters, plural: Begleiter}
+  - type: Neutrum
+    translation: {de: Geld, en: money}
+    parts: {nominativ: Geld, genitiv: Geldes}
+  - type: Maskulinum
+    translation: {de: Kopf, en: head}
+    parts: {nominativ: Kopf, genitiv: Kopfes, plural: Köpfe}
+  - type: Maskulinum
+    translation: {de: Vers, en: verse}
+    parts: {nominativ: Vers, genitiv: Verses, plural: Verse}

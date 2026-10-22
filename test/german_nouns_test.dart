@@ -161,6 +161,23 @@ const _noPlural = {
   'sapientia',
   'amor',
   'salūs',
+  'clāmor',
+  'perniciēs',
+  'fidēs',
+  'laus',
+  'iniūria',
+  'pulvis',
+  'mors',
+  'odium',
+  'ferrum',
+  'Cicerō',
+  'scientia',
+  'studium',
+  'Caesar',
+  'cōnspectus',
+  'gemitus',
+  'silentium',
+  'pecūnia',
 };
 
 const _spikeLemmas = {
@@ -385,6 +402,28 @@ $_yaml  - type: Neutrum
           'rose': ['(ich helfe) den Rosen'],
           'geschenk': ['(ich helfe) den Geschenken'],
         },
+      );
+    });
+
+    test('the plural of Rat is Ratschläge', () {
+      final consilium = latin('cōnsilium');
+      expect(german.accepted(consilium, 'nom.pl'), [
+        'die Ratschläge (sind da)',
+      ]);
+      expect(german.render(consilium, 'dat.pl'), '(ich helfe) den Ratschlägen');
+    });
+
+    test('the plural of Seemann is Seeleute', () {
+      expect(
+        german.render(latin('nauta'), 'dat.pl'),
+        '(ich helfe) den Seeleuten',
+      );
+    });
+
+    test('dux is an Anführer', () {
+      expect(
+        german.render(latin('dux'), 'gen.sg'),
+        '(die Farbe) des Anführers',
       );
     });
 
