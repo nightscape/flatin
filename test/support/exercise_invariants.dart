@@ -64,9 +64,7 @@ List<String> violations(
         ],
         _ => [
           for (final c in cells)
-            if (c is FormCell &&
-                promptViews.every((v) => cube.clash(v, target, c)))
-              c,
+            if (promptViews.every((v) => cube.clash(v, target, c))) c,
         ],
       };
       if (fitting.length != 1 || fitting.single != target) {
