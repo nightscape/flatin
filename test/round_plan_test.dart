@@ -133,7 +133,9 @@ void main() {
 
   test('a mixed plan has 10 distinct words, and neighbours share a topic only '
       'where no order avoids it', () {
+    final builds = BundleIndex.builds;
     final pairs = planMixed(input(due: (_) => true), topics);
+    expect(BundleIndex.builds - builds, 1);
     expect(pairs, hasLength(roundLength));
     expect(pairs.map((p) => p.word).toSet(), hasLength(roundLength));
 

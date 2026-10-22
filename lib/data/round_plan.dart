@@ -21,7 +21,12 @@ typedef SelectionInput = ({
   DateTime now,
 });
 
-SelectedPair? _select(SelectionInput input, Set<String> taken) => selectPair(
+SelectedPair? _select(
+  SelectionInput input,
+  BundleIndex index,
+  Set<String> taken,
+) => selectPair(
+  index: index,
   cards: input.cards,
   items: input.items,
   filter: input.filter,
@@ -102,9 +107,10 @@ List<RoundPair> planMixed(SelectionInput input, List<Topic> topics) {
       if (card.itemId.startsWith('grammar:') && card.lastReview == null)
         card.itemId,
   };
+  final index = BundleIndex(input.items, input.filter);
   final pairs = <RoundPair>[];
   while (pairs.length < roundLength) {
-    final pair = _select(input, taken);
+    final pair = _select(input, index, taken);
     if (pair == null) break;
     pairs.add((word: pair.word, bundle: pair.bundle));
     taken.add(PracticeItemCard.generateItemId(pair.word));

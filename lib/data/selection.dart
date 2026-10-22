@@ -50,7 +50,11 @@ final class BundleIndex {
   final lessonOf = <String, int>{};
   final fileOf = <String, String>{};
 
+  /// Number of indexes built so far; lets tests pin one build per plan.
+  static int builds = 0;
+
   BundleIndex(List<PracticeItem> items, CourseFilter filter) {
+    builds++;
     void teach(String cardId, String dataFileId, int lesson) {
       fileOf[cardId] = dataFileId;
       final known = lessonOf[cardId];
@@ -106,7 +110,8 @@ final class BundleIndex {
 /// A card in [taken] is never the anchor and is a partner only when no
 /// untaken card matches the anchor.
 ///
-/// [cards] holds a card for every word and bundle of [items].
+/// [cards] holds a card for every word and bundle of [items]. A given [index]
+/// must have been built from the same [items] and [filter].
 SelectedPair? selectPair({
   required Map<String, PracticeItemCard> cards,
   required List<PracticeItem> items,
@@ -114,9 +119,10 @@ SelectedPair? selectPair({
   required Retrievability retrievability,
   required DateTime now,
   Set<String> taken = const {},
+  BundleIndex? index,
 }) {
   final BundleIndex(:bundlesOfWord, :wordsOfBundle, :lessonOf, :fileOf) =
-      BundleIndex(items, filter);
+      index ?? BundleIndex(items, filter);
 
   PracticeItemCard cardOf(String id) =>
       cards[id] ?? (throw StateError('no card "$id"'));
