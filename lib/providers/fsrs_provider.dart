@@ -263,6 +263,41 @@ Future<void> reviewExercise(
   ref.invalidate(fsrsCardsProvider);
 }
 
+Future<Map<String, PracticeItemCard>> _reviewAndSave(
+  Scheduler scheduler,
+  Map<String, PracticeItemCard> stored,
+  Map<String, Rating> ratings,
+) async {
+  final cards = Map<String, PracticeItemCard>.from(stored);
+  for (final MapEntry(key: id, value: r) in ratings.entries) {
+    cards[id] = _reviewed(
+      scheduler,
+      cards[id] ?? (throw StateError('no card "$id"')),
+      r,
+    );
+  }
+  await FsrsStorage.saveCards(cards);
+  return cards;
+}
+
+/// Reviews the word card [wordCardId] with [rating] and stores the cards.
+Future<Map<String, PracticeItemCard>> reviewWordCard(
+  Scheduler scheduler,
+  Map<String, PracticeItemCard> stored,
+  String wordCardId,
+  Rating rating,
+) {
+  assert(!wordCardId.startsWith('grammar:'), wordCardId);
+  return _reviewAndSave(scheduler, stored, {wordCardId: rating});
+}
+
+/// Reviews every grammar card of [ratings] and stores the cards in one save.
+Future<Map<String, PracticeItemCard>> reviewGrammarCards(
+  Scheduler scheduler,
+  Map<String, PracticeItemCard> stored,
+  Map<GrammarCardId, Rating> ratings,
+) => _reviewAndSave(scheduler, stored, ratings);
+
 /// Reviews the card and tells the learner when the progress could not be
 /// stored. Returns false in that case, so the caller keeps the item open.
 Future<bool> reviewCardReportingErrors(
