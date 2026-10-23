@@ -27,6 +27,7 @@ void main() {
   late PracticeItem rosa;
   late PracticeItem tartarus;
   late PracticeItem manus;
+  late PracticeItem roma;
   late GermanForms german;
   late GermanForms nounGerman;
   setUpAll(() async {
@@ -37,6 +38,7 @@ void main() {
     rosa = nouns.singleWhere((i) => i.id == 'nouns:rosa');
     tartarus = nouns.singleWhere((i) => i.id == 'nouns:tartarus');
     manus = nouns.singleWhere((i) => i.id == 'nouns:manus');
+    roma = nouns.singleWhere((i) => i.id == 'nouns:roma');
     final container = ProviderContainer(
       overrides: [dataLanguageProvider.overrideWith((ref) => 'de')],
     );
@@ -158,6 +160,42 @@ void main() {
       expect(wrongKeys, contains('abl.sg'));
     });
 
+    test('frames the four options of roma dat.sg with distinct German', () {
+      final context = ctx(roma, {roma.type}, forms: nounGerman);
+      final e = build(
+        ExerciseKind.latDeWahl,
+        roma,
+        roma.type,
+        seed: Iterable<int>.generate(100).firstWhere(
+          (seed) =>
+              (build(
+                        ExerciseKind.latDeWahl,
+                        roma,
+                        roma.type,
+                        seed: seed,
+                        forms: nounGerman,
+                      ).answer
+                      as ChoiceAnswer)
+                  .right
+                  .formKey ==
+              'dat.sg',
+        ),
+        forms: nounGerman,
+      );
+      final options = (e.answer as ChoiceAnswer).options;
+      expect(options.map((o) => o.text).toSet(), hasLength(4));
+      expect(
+        violations(
+          e,
+          _spec(ExerciseKind.latDeWahl).spec,
+          roma,
+          roma.type,
+          context,
+        ),
+        isEmpty,
+      );
+    });
+
     test('cannot build without German forms', () {
       expect(
         () => build(
@@ -223,16 +261,35 @@ void main() {
       final bundles = {
         for (final key in tartarus.formOrder) bundleOf(tartarus, key),
       };
+      final context = ctx(tartarus, bundles, forms: nounGerman);
+      final cube = Cube(context);
+      final wrongCells = <Cell>{};
       for (final bundle in bundles) {
         for (var seed = 0; seed < 5; seed++) {
-          _spec(ExerciseKind.deLatWahl).build(
-            tartarus,
-            bundle,
-            ctx(tartarus, bundles, forms: nounGerman),
-            Random(seed),
+          final e = _spec(
+            ExerciseKind.deLatWahl,
+          ).build(tartarus, bundle, context, Random(seed));
+          expect(
+            violations(
+              e,
+              _spec(ExerciseKind.deLatWahl).spec,
+              tartarus,
+              bundle,
+              context,
+            ),
+            isEmpty,
           );
+          final answer = e.answer as ChoiceAnswer;
+          wrongCells.addAll([
+            for (final o in answer.options)
+              if (o != answer.right) cube.cell(tartarus, o.formKey),
+          ]);
         }
       }
+      expect(
+        wrongCells.where((c) => !cube.view(View.german).covers(c)),
+        isNotEmpty,
+      );
     });
 
     test('cannot build without German forms', () {
