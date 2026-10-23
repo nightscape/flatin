@@ -14,6 +14,7 @@ import 'package:latin_practice/models/practice_item.dart';
 import 'package:latin_practice/providers/fsrs_provider.dart';
 import 'package:latin_practice/providers/locale_provider.dart';
 
+import 'support/exercise_fakes.dart';
 import 'support/exercise_invariants.dart';
 
 SpecGenerator _spec(ExerciseKind kind) =>
@@ -431,6 +432,118 @@ void main() {
         answerFrom(manus, 'manūs', 'Plural').accepted,
         isNot(contains('manūs')),
       );
+    });
+  });
+
+  group('A9 fehlerFinden from its spec', () {
+    const perfPass = 'ind.perf.pass';
+
+    Iterable<Exercise> built(PracticeItem word, GrammarBundle bundle) =>
+        Iterable.generate(
+          60,
+          (seed) => build(ExerciseKind.fehlerFinden, word, bundle, seed: seed),
+        );
+
+    test('shows a two-word form with one wrong word and expects the form', () {
+      for (final e in built(vocare, perfPass)) {
+        final answer = e.answer as TypedAnswer;
+        final index = vocare.formOrder.indexOf(answer.expected.formKey);
+        final right = answer.expected.text.split(' ');
+        final wrong = e.questionParams['wrong']!.split(' ');
+        expect(
+          [for (var i = 0; i < 2; i++) right[i] != wrong[i]].where((d) => d),
+          hasLength(1),
+        );
+        expect(
+          e.questionParams['label'],
+          describeLabels([vocare.formLabels[index]]),
+        );
+        expect(e.questionParams['word'], vocare.lemma);
+        expect(answer.accepted, vocare.acceptedForms[index]);
+      }
+      expectValid(ExerciseKind.fehlerFinden, vocare, perfPass);
+    });
+
+    test('spoils both the participle and the auxiliary', () {
+      final spoiledFirst = {
+        for (final e in built(vocare, perfPass))
+          (e.answer as TypedAnswer).expected.text.split(' ').first ==
+              e.questionParams['wrong']!.split(' ').first,
+      };
+      expect(spoiledFirst, {true, false});
+    });
+
+    test('builds a wrong ending of another type for a one-word form', () {
+      final e = build(ExerciseKind.fehlerFinden, rosa, rosa.type);
+      final wrong = e.questionParams['wrong']!;
+      expect(
+        rosa.formOrder.any(
+          (k) => rosa.accepts(rosa.formOrder.indexOf(k), wrong),
+        ),
+        isFalse,
+      );
+      expect(wrong, startsWith('ros'));
+      expectValid(ExerciseKind.fehlerFinden, rosa, rosa.type);
+    });
+
+    test('never offers a swap that is a form of the word', () {
+      const bundle = 'ind.fut.pass';
+      final oneValid = syntheticVerb({
+        'ind.fut.pass.sg': ['amātus est', 'amātī est'],
+        'ind.fut.pass.pl': ['amātī sunt'],
+      });
+      for (var seed = 0; seed < 30; seed++) {
+        expect(
+          build(
+            ExerciseKind.fehlerFinden,
+            oneValid,
+            bundle,
+            seed: seed,
+          ).questionParams['wrong'],
+          'amātus sunt',
+        );
+      }
+      final allValid = syntheticVerb({
+        'ind.fut.pass.sg': ['amātus est', 'amātī est'],
+        'ind.fut.pass.pl': ['amātī sunt', 'amātus sunt'],
+      });
+      expect(
+        () => build(ExerciseKind.fehlerFinden, allValid, bundle),
+        throwsA(isA<CannotBuild>()),
+      );
+    });
+  });
+
+  group('bestimmen from its spec', () {
+    test('shows a form and offers four labels, the right one named alone', () {
+      final bundle = rosa.type;
+      for (var seed = 0; seed < 20; seed++) {
+        final e = build(ExerciseKind.bestimmen, rosa, bundle, seed: seed);
+        final answer = e.answer as ChoiceAnswer;
+        final index = rosa.formOrder.indexOf(answer.right.formKey);
+        expect(answer.options, hasLength(4));
+        expect(answer.right.text, describeLabels([rosa.formLabels[index]]));
+        expect(e.questionParams['form'], rosa.forms[index]);
+      }
+      expectValid(ExerciseKind.bestimmen, rosa, bundle);
+    });
+
+    test('never offers a label that the shown spelling also has', () {
+      final answers = [
+        for (var seed = 0; seed < 100; seed++)
+          build(ExerciseKind.bestimmen, puella, puella.type, seed: seed),
+      ].where((e) => e.questionParams['form'] == 'puellae');
+      expect(answers, isNotEmpty);
+      for (final e in answers) {
+        final keys = {
+          for (final o in (e.answer as ChoiceAnswer).options) o.formKey,
+        };
+        expect(
+          keys.intersection({'nom.pl', 'vok.pl', 'gen.sg', 'dat.sg'}),
+          hasLength(1),
+          reason: '$keys',
+        );
+      }
     });
   });
 }

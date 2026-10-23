@@ -4,7 +4,9 @@ import 'dart:math';
 import 'package:flutter/foundation.dart' show setEquals;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:latin_practice/data/exercise_bestimmen.dart';
 import 'package:latin_practice/data/exercise_build.dart';
+import 'package:latin_practice/data/exercise_finderror.dart';
 import 'package:latin_practice/data/exercise_kinds.dart';
 import 'package:latin_practice/data/exercise_spec.dart';
 import 'package:latin_practice/data/exercise_oddone.dart';
@@ -39,6 +41,8 @@ const List<ExerciseGenerator> _old = [
   BuildFormGenerator(),
   OddOneOutGenerator(),
   TransformGenerator(),
+  FindErrorGenerator(),
+  BestimmenGenerator(),
 ];
 
 /// Builds with [g] for every seed; the exercises and the distinct reasons of

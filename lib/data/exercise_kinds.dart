@@ -73,6 +73,31 @@ const kindSpecs = [
     },
     answer: Typed(View.latin),
   ),
+  KindSpec(
+    kind: ExerciseKind.fehlerFinden,
+    questionKey: 'exercise.finderror.question',
+    select: Spoil(ways: {SpoilWay.compoundSwap, SpoilWay.otherTypeEnding}),
+    params: {
+      'label': Show(Ref.target, View.label),
+      'word': Show(Ref.target, View.lemma),
+      'wrong': Show(Ref.spoiled, View.latin),
+    },
+    answer: Typed(View.latin),
+  ),
+  KindSpec(
+    kind: ExerciseKind.bestimmen,
+    questionKey: 'exercise.bestimmen.question',
+    select: OneCell(),
+    params: {
+      'form': Show(Ref.target, View.latin),
+      'word': Show(Ref.target, View.lemma),
+    },
+    answer: Choose(
+      View.label,
+      from: Neighbours(k: 1, withBuiltWrong: false),
+      count: 4,
+    ),
+  ),
 ];
 
 final List<SpecGenerator> specGenerators = [

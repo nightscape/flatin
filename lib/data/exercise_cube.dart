@@ -3,6 +3,7 @@
 /// two texts can be taken for each other and how a cell becomes an option.
 library;
 
+import '../models/derivation.dart' show norm;
 import '../models/exercise.dart';
 import '../models/practice_item.dart';
 import 'diagnosis.dart';
@@ -199,6 +200,36 @@ final class Cube {
       final diagnosis = diagnose(c.word, c.key, text);
       if (diagnosis is EndingOfOtherType) {
         yield BuiltWrong(c.word, c.key, text, diagnosis);
+      }
+    }
+  }
+
+  /// Whether [text], read without macrons, is a spelling of a form of [word].
+  bool isFormOf(PracticeItem word, String text) => word.acceptedForms.any(
+    (forms) => forms.any((f) => norm(f) == norm(text)),
+  );
+
+  /// The wrong texts that swap the participle or the auxiliary of [c] for the
+  /// one of the same form in the other number; none unless [c] has two words
+  /// and a partner in the other number.
+  Iterable<BuiltWrong> compoundSwaps(FormCell c) sync* {
+    final partners = cellsOf(c.word).where(
+      (n) =>
+          c.features.containsKey('numerus') &&
+          n.features.containsKey('numerus') &&
+          distance(c, n) == 1 &&
+          differingAxes(c, n).single == 'numerus',
+    );
+    final parts = c.word.forms[c.index].split(' ');
+    if (partners.isEmpty || parts.length != 2) return;
+    final partnerParts = c.word.forms[partners.single.index].split(' ');
+    if (partnerParts.length != 2) return;
+    for (final text in [
+      '${partnerParts[0]} ${parts[1]}',
+      '${parts[0]} ${partnerParts[1]}',
+    ]) {
+      if (!isFormOf(c.word, text)) {
+        yield BuiltWrong(c.word, c.key, text, diagnose(c.word, c.key, text));
       }
     }
   }

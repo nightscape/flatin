@@ -22,11 +22,19 @@ final class Slice {
   /// [OddOneOut]: the majority and the target.
   final List<FormCell> group;
 
-  Slice(this.target, {List<FormCell>? path, this.group = const []})
-    : path = path ?? [target];
+  /// [Spoil]: the wrong text built for the target's key.
+  final BuiltWrong? spoiled;
+
+  Slice(
+    this.target, {
+    List<FormCell>? path,
+    this.group = const [],
+    this.spoiled,
+  }) : path = path ?? [target];
 
   @override
-  String toString() => 'Slice(${path.join(' → ')}, group: $group)';
+  String toString() =>
+      'Slice(${path.join(' → ')}, group: $group, spoiled: $spoiled)';
 }
 
 /// The generator of one spec.
@@ -136,6 +144,11 @@ Iterable<Slice> _slices(
     Slice.new,
   ),
   OddOneOut() => _oddOneOut(select, cube, word, bundle, rng),
+  Spoil(:final ways) => [
+    for (final target in cube.cellsOf(word, bundle: bundle))
+      for (final spoiled in _spoilings(cube, target, ways))
+        Slice(target, spoiled: spoiled),
+  ]..shuffle(rng),
   AxisPath(:final axes, :final lengths) =>
     (cube.cellsOf(word, bundle: bundle).toList()..shuffle(rng)).expand(
       (target) => (lengths.toList()..shuffle(rng)).expand(
@@ -167,6 +180,12 @@ Iterable<Slice> _slicesInto(
             case final group
             when _isOddOneOut(select, cube, group, target, bundle))
           Slice(target, group: group),
+  ],
+  Spoil(:final ways) => [
+    if (target.bundle == bundle)
+      for (final spoiled in _spoilings(cube, target, ways))
+        if (spoiled.text == exercise.questionParams['wrong'])
+          Slice(target, spoiled: spoiled),
   ],
   AxisPath(:final axes, :final lengths) => [
     if (target.bundle == bundle)
@@ -208,6 +227,19 @@ Iterable<Slice> _oddOneOut(
     if (_aloneOnlyOdd(group, odd)) yield Slice(odd, group: group);
   }
 }
+
+/// The texts [ways] build for [target] that are no form of its word.
+Iterable<BuiltWrong> _spoilings(
+  Cube cube,
+  FormCell target,
+  Set<SpoilWay> ways,
+) => [
+  for (final way in ways)
+    ...switch (way) {
+      SpoilWay.compoundSwap => cube.compoundSwaps(target),
+      SpoilWay.otherTypeEnding => cube.builtWrong(target),
+    },
+].where((w) => !cube.isFormOf(w.word, w.text));
 
 bool _isOddOneOut(
   OddOneOut select,
@@ -299,9 +331,10 @@ String _axisOf(FormCell from, FormCell to) => differingAxes(from, to).single;
 String _changeLabel(FormCell from, FormCell to) =>
     to.word.formLabels.first.axes.displayOf(_axisOf(from, to), to.features);
 
-FormCell _ref(Slice slice, Ref ref) => switch (ref) {
+Cell _ref(Slice slice, Ref ref) => switch (ref) {
   Ref.target => slice.target,
   Ref.start => slice.path.first,
+  Ref.spoiled => slice.spoiled!,
 };
 
 String? _uncovered(KindSpec spec, Slice slice, Cube cube) {
@@ -408,7 +441,7 @@ List<String> _accepted(KindSpec spec, View view, Slice slice, Cube cube) {
 Set<FormCell> _readings(KindSpec spec, Slice slice, Cube cube) {
   final word = slice.target.word;
   switch (spec.select) {
-    case OneCell():
+    case OneCell() || Spoil():
       return {
         for (final c in cube.cellsOf(word))
           if (spec.params.values.every(

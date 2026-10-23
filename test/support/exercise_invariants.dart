@@ -81,6 +81,13 @@ List<String> violations(
       if (!cube.view(view).accepted(target).every(accepted.contains)) {
         found.add('$accepted lacks a spelling of $target');
       }
+      for (final MapEntry(:key, :value) in spec.params.entries) {
+        if (value case Show(of: Ref.spoiled)) {
+          final text = e.questionParams[key]!;
+          if (cube.isFormOf(word, text)) found.add('$text is a form of $word');
+          if (accepted.contains(text)) found.add('$accepted accept $text');
+        }
+      }
     default:
       found.add('answer ${e.answer.runtimeType} for ${spec.answer}');
   }

@@ -58,6 +58,24 @@ final class AxisPath extends Selection {
   const AxisPath({required this.axes, required this.lengths});
 }
 
+/// One target cell and a text that is no form of the word, built by one of
+/// [ways] for the target's key.
+final class Spoil extends Selection {
+  final Set<SpoilWay> ways;
+
+  const Spoil({required this.ways});
+}
+
+/// How a [Spoil] builds its wrong text.
+enum SpoilWay {
+  /// The participle or the auxiliary of a two-word form, taken from the same
+  /// form in the other number.
+  compoundSwap,
+
+  /// The word's stem with the ending another type uses for the key.
+  otherTypeEnding,
+}
+
 /// One question param.
 sealed class Param {
   const Param();
@@ -76,8 +94,9 @@ final class AxisChanges extends Param {
   const AxisChanges();
 }
 
-/// The cell of a selection that a [Show] param shows.
-enum Ref { target, start }
+/// What a [Show] param shows of a selection: its target cell, the start of
+/// its path or its spoiled text.
+enum Ref { target, start, spoiled }
 
 /// How the learner answers.
 sealed class AnswerSpec {

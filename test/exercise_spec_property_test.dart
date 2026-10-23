@@ -33,6 +33,7 @@ void main() {
   test('every spec exercise is valid and carries its rating fields', () {
     final invalid = <String>[];
     var built = 0;
+    final builtKinds = <ExerciseKind>{};
     for (final forms in [german, const NoForms()]) {
       for (var i = 0; i < items.length; i += _stride) {
         final word = items[i];
@@ -53,6 +54,7 @@ void main() {
                 continue;
               }
               built++;
+              builtKinds.add(g.kind);
               final why = violations(e, g.spec, word, bundle, ctx);
               if (why.isNotEmpty) {
                 invalid.add('${g.kind.name} ${word.id} $bundle: $why');
@@ -64,5 +66,6 @@ void main() {
     }
     expect(invalid, isEmpty);
     expect(built, greaterThan(1000));
+    expect(builtKinds, {for (final g in specGenerators) g.kind});
   });
 }
