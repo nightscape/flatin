@@ -138,6 +138,7 @@ void main() {
       WidgetTester tester,
       Settings settings, {
       bool disableAnimations = false,
+      VoidCallback? onTapBelow,
     }) async {
       _store(settings);
       tester.platformDispatcher.accessibilityFeaturesTestValue =
@@ -151,7 +152,21 @@ void main() {
       await tester.pumpWidget(
         UncontrolledProviderScope(
           container: container,
-          child: const MaterialApp(home: Scaffold(body: RewardBurst(10))),
+          child: MaterialApp(
+            home: Scaffold(
+              body: Stack(
+                children: [
+                  Positioned.fill(
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: onTapBelow,
+                    ),
+                  ),
+                  const RewardBurst(10),
+                ],
+              ),
+            ),
+          ),
         ),
       );
     }
@@ -169,9 +184,12 @@ void main() {
     });
 
     testWidgets('shows, moves up and is gone after 700 ms', (tester) async {
-      await pumpBurst(tester, Settings());
+      var taps = 0;
+      await pumpBurst(tester, Settings(), onTapBelow: () => taps++);
       final start = tester.getTopLeft(find.text('🪙 +10')).dy;
-      expect(find.byType(IgnorePointer), findsWidgets);
+
+      await tester.tap(find.text('🪙 +10'), warnIfMissed: false);
+      expect(taps, 1, reason: 'the burst must pass taps to the widget below');
 
       await tester.pump(const Duration(milliseconds: 350));
       expect(tester.getTopLeft(find.text('🪙 +10')).dy, closeTo(start - 16, 1));
