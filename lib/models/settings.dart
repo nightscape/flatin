@@ -57,6 +57,9 @@ class Settings {
   /// Whether the "+N" burst shows after a right answer.
   final bool rewardAnimation;
 
+  /// Whether exercises leave out forms that differ only in macrons.
+  final bool avoidMacronTwins;
+
   /// Words the learner practises although the course has not reached them,
   /// in the exact spelling of their lemma.
   final Set<String> forcedOnWords;
@@ -82,6 +85,7 @@ class Settings {
     Map<String, Set<String>>? forcedOnForms,
     Set<String>? disabledRewards,
     this.rewardAnimation = true,
+    this.avoidMacronTwins = true,
   }) : disabledForms = disabledForms ?? {},
        disabledFeatures = disabledFeatures ?? {},
        disabledTypes = disabledTypes ?? {},
@@ -126,6 +130,7 @@ class Settings {
     Map<String, Set<String>>? forcedOnForms,
     Set<String>? disabledRewards,
     bool? rewardAnimation,
+    bool? avoidMacronTwins,
   }) {
     return Settings(
       disabledForms: disabledForms ?? this.disabledForms,
@@ -142,6 +147,7 @@ class Settings {
       forcedOnForms: forcedOnForms ?? this.forcedOnForms,
       disabledRewards: disabledRewards ?? this.disabledRewards,
       rewardAnimation: rewardAnimation ?? this.rewardAnimation,
+      avoidMacronTwins: avoidMacronTwins ?? this.avoidMacronTwins,
     );
   }
 
@@ -325,6 +331,7 @@ class Settings {
       ),
       'disabledRewards': disabledRewards.toList(),
       'rewardAnimation': rewardAnimation,
+      'avoidMacronTwins': avoidMacronTwins,
     };
   }
 
@@ -410,6 +417,7 @@ class Settings {
         json['disabledRewards'] as List<dynamic>? ?? const [],
       ),
       rewardAnimation: json['rewardAnimation'] as bool? ?? true,
+      avoidMacronTwins: json['avoidMacronTwins'] as bool? ?? true,
     );
   }
 }

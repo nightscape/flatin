@@ -9,6 +9,7 @@ import 'package:latin_practice/data/exercise_kinds.dart';
 import 'package:latin_practice/data/german_forms.dart';
 import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/grammar/schema.dart';
+import 'package:latin_practice/models/derivation.dart' show norm;
 import 'package:latin_practice/models/exercise.dart';
 import 'package:latin_practice/models/practice_item.dart';
 import 'package:latin_practice/providers/fsrs_provider.dart';
@@ -17,6 +18,27 @@ import 'package:latin_practice/providers/locale_provider.dart';
 import 'support/exercise_fakes.dart';
 import 'support/exercise_invariants.dart';
 
+/// German texts `g@<key>`; [uncovered] keys have none, and every key accepts
+/// [alsoAccepts] besides its own text.
+class _ScriptedGerman implements GermanForms {
+  const _ScriptedGerman({this.uncovered = const {}, this.alsoAccepts});
+
+  final Set<FormKey> uncovered;
+  final FormKey? alsoAccepts;
+
+  @override
+  bool covers(PracticeItem item, FormKey key) => !uncovered.contains(key);
+
+  @override
+  String render(PracticeItem item, FormKey key) => 'g@$key';
+
+  @override
+  List<String> accepted(PracticeItem item, FormKey key) => [
+    render(item, key),
+    if (alsoAccepts != null) render(item, alsoAccepts!),
+  ];
+}
+
 SpecGenerator _spec(ExerciseKind kind) =>
     specGenerators.singleWhere((g) => g.kind == kind);
 
@@ -24,6 +46,8 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   late PracticeItem vocare;
+  late PracticeItem incendere;
+  late PracticeItem legere;
   late PracticeItem puella;
   late PracticeItem rosa;
   late PracticeItem tartarus;
@@ -34,6 +58,8 @@ void main() {
   setUpAll(() async {
     final verbs = await loadPracticeItems('lib/data/latin_verbs.yaml');
     vocare = verbs.singleWhere((i) => i.id == 'verbs:vocare');
+    incendere = verbs.singleWhere((i) => i.id == 'verbs:incendere');
+    legere = verbs.singleWhere((i) => i.id == 'verbs:legere');
     final nouns = await loadPracticeItems('lib/data/latin_nouns.yaml');
     puella = nouns.singleWhere((i) => i.lemma.startsWith('puella'));
     rosa = nouns.singleWhere((i) => i.id == 'nouns:rosa');
@@ -409,6 +435,26 @@ void main() {
       );
     });
 
+    test('never shows a start that is the answer but for macrons', () {
+      // Praes. akt. 3.sg legit and Perf. akt. 3.sg lēgit.
+      final everywhere = {
+        for (final k in legere.formOrder) bundleOf(legere, k),
+      };
+      for (var seed = 0; seed < 200; seed++) {
+        final e = _spec(ExerciseKind.umformen).build(
+          legere,
+          'ind.perf.akt',
+          ExerciseContext(unlocked: everywhere, pool: [legere], german: german),
+          Random(seed),
+        );
+        expect(
+          (e.answer as TypedAnswer).accepted.map(norm),
+          isNot(contains(norm(e.questionParams['start']!))),
+          reason: '${e.questionParams}',
+        );
+      }
+    });
+
     TypedAnswer answerFrom(PracticeItem word, String start, String changes) =>
         Iterable.generate(
                   400,
@@ -542,6 +588,236 @@ void main() {
           keys.intersection({'nom.pl', 'vok.pl', 'gen.sg', 'dat.sg'}),
           hasLength(1),
           reason: '$keys',
+        );
+      }
+    });
+  });
+
+  group('A5 zuordnen from its spec', () {
+    const bundle = 'ind.praes.akt';
+
+    test('pairs four Latin forms with the German text of the same cell', () {
+      final e = build(ExerciseKind.zuordnen, vocare, bundle);
+      expect(e.questionParams.keys, {'word'});
+      final pairs = (e.answer as MatchingAnswer).pairs;
+      expect(pairs, hasLength(4));
+      expect(pairs.every((p) => p.$1.formKey == p.$2.formKey), isTrue);
+      expectValid(ExerciseKind.zuordnen, vocare, bundle);
+    });
+
+    test('samples the covered cells of a bundle with uncovered keys', () {
+      final keys = vocare.formOrder
+          .where((k) => bundleOf(vocare, k) == bundle)
+          .toList();
+      final forms = _ScriptedGerman(uncovered: {keys.first, keys[1]});
+      final e = build(ExerciseKind.zuordnen, vocare, bundle, forms: forms);
+      final used = (e.answer as MatchingAnswer).pairs.map((p) => p.$1.formKey);
+      expect(used, unorderedEquals(keys.skip(2)));
+    });
+
+    test('never pairs a cell whose German text another cell accepts', () {
+      final shared = puella.formOrder.firstWhere(
+        (k) => bundleOf(puella, k) == puella.type,
+      );
+      final forms = _ScriptedGerman(alsoAccepts: shared);
+      final used = <FormKey>{};
+      for (var seed = 0; seed < 20; seed++) {
+        try {
+          final e = build(
+            ExerciseKind.zuordnen,
+            puella,
+            puella.type,
+            seed: seed,
+            forms: forms,
+          );
+          used.addAll(
+            (e.answer as MatchingAnswer).pairs.map((p) => p.$1.formKey),
+          );
+        } on CannotBuild {
+          continue;
+        }
+      }
+      expect(used, isNotEmpty);
+      expect(used, isNot(contains(shared)));
+    });
+
+    test('admits its own exercise and not one with swapped German texts', () {
+      final e = build(ExerciseKind.zuordnen, vocare, bundle);
+      final c = ctx(vocare, {bundle});
+      final generator = _spec(ExerciseKind.zuordnen);
+      expect(generator.objections(e, vocare, bundle, c), isEmpty);
+      final pairs = (e.answer as MatchingAnswer).pairs;
+      final swapped = Exercise(
+        wordCardId: e.wordCardId,
+        grammarCardId: e.grammarCardId,
+        kind: e.kind,
+        questionKey: e.questionKey,
+        questionParams: e.questionParams,
+        answer: MatchingAnswer([
+          (pairs[0].$1, pairs[1].$2),
+          (pairs[1].$1, pairs[0].$2),
+          ...pairs.skip(2),
+        ]),
+      );
+      expect(generator.objections(swapped, vocare, bundle, c), isNotEmpty);
+    });
+
+    test('objects to a pair whose German text another pair accepts', () {
+      final first = vocare.formOrder.firstWhere(
+        (k) => bundleOf(vocare, k) == bundle,
+      );
+      final e =
+          Iterable.generate(
+            50,
+            (seed) => build(
+              ExerciseKind.zuordnen,
+              vocare,
+              bundle,
+              seed: seed,
+              forms: const _ScriptedGerman(),
+            ),
+          ).firstWhere(
+            (e) => (e.answer as MatchingAnswer).pairs.any(
+              (p) => p.$1.formKey == first,
+            ),
+          );
+      final accepting = ctx(vocare, {
+        bundle,
+      }, forms: _ScriptedGerman(alsoAccepts: first));
+      expect(
+        _spec(ExerciseKind.zuordnen).objections(e, vocare, bundle, accepting),
+        contains(contains('clashes')),
+      );
+    });
+
+    test('may pair Latin forms that differ only by macrons when macron twins '
+        'are allowed', () {
+      final allowing = ExerciseContext(
+        unlocked: {puella.type},
+        pool: [puella],
+        german: nounGerman,
+        avoidMacronTwins: false,
+      );
+      final twins =
+          [
+            for (var seed = 0; seed < 20; seed++)
+              _spec(
+                ExerciseKind.zuordnen,
+              ).build(puella, puella.type, allowing, Random(seed)),
+          ].where(
+            (e) =>
+                (e.answer as MatchingAnswer).pairs
+                    .map((p) => norm(p.$1.text))
+                    .toSet()
+                    .length <
+                4,
+          );
+      expect(twins, isNotEmpty);
+      for (final e in twins) {
+        expect(
+          violations(
+            e,
+            _spec(ExerciseKind.zuordnen).spec,
+            puella,
+            puella.type,
+            allowing,
+          ),
+          isEmpty,
+        );
+      }
+    });
+
+    test('never pairs two Latin forms that differ only by macrons', () {
+      for (var seed = 0; seed < 20; seed++) {
+        final e = _spec(ExerciseKind.zuordnen).build(
+          puella,
+          puella.type,
+          ctx(puella, {puella.type}, forms: nounGerman),
+          Random(seed),
+        );
+        final latin = (e.answer as MatchingAnswer).pairs.map((p) => p.$1.text);
+        expect(latin.map(norm).toSet(), hasLength(4), reason: '$latin');
+      }
+    });
+
+    test('cannot build without German forms', () {
+      expect(
+        () => build(
+          ExerciseKind.zuordnen,
+          vocare,
+          bundle,
+          forms: const NoForms(),
+        ),
+        throwsA(isA<CannotBuild>()),
+      );
+    });
+  });
+
+  group('A10 formenKette from its spec', () {
+    Exercise chain(
+      PracticeItem word,
+      GrammarBundle bundle,
+      int seed, {
+      bool avoidMacronTwins = true,
+    }) {
+      final everywhere = {for (final k in word.formOrder) bundleOf(word, k)};
+      return _spec(ExerciseKind.formenKette).build(
+        word,
+        bundle,
+        ExerciseContext(
+          unlocked: everywhere,
+          pool: [word],
+          german: german,
+          avoidMacronTwins: avoidMacronTwins,
+        ),
+        Random(seed),
+      );
+    }
+
+    test('may show a start that is the answer but for macrons when macron '
+        'twins are allowed', () {
+      final twins =
+          [
+            for (var seed = 0; seed < 400; seed++)
+              chain(legere, 'ind.fut2.akt', seed, avoidMacronTwins: false),
+          ].where(
+            (e) => (e.answer as TypedAnswer).accepted
+                .map(norm)
+                .contains(norm(e.questionParams['start']!)),
+          );
+      expect(twins, isNotEmpty);
+    });
+
+    test('changes two or three axes of a shown form', () {
+      final lengths = <int>{};
+      for (var seed = 0; seed < 20; seed++) {
+        final e = chain(vocare, 'ind.praes.pass', seed);
+        expect(e.questionKey, 'exercise.transform.chainQuestion');
+        lengths.add('→'.allMatches(e.questionParams['changes']!).length + 1);
+      }
+      expect(lengths, {2, 3});
+    });
+
+    test('never shows a start that is the answer but for macrons', () {
+      // Pass. 2.sg legeris and Fut. II akt. 2.sg lēgeris.
+      for (var seed = 0; seed < 400; seed++) {
+        final e = chain(legere, 'ind.fut2.akt', seed);
+        expect(
+          (e.answer as TypedAnswer).accepted.map(norm),
+          isNot(contains(norm(e.questionParams['start']!))),
+          reason: '${e.questionParams}',
+        );
+      }
+    });
+
+    test('never shows the answer as the start', () {
+      // Pass. 2.sg and Fut. II akt. 2.sg are both incenderis.
+      for (var seed = 0; seed < 400; seed++) {
+        final e = chain(incendere, 'ind.fut2.akt', seed);
+        expect(
+          e.questionParams['start'],
+          isNot((e.answer as TypedAnswer).expected.text),
+          reason: '${e.questionParams}',
         );
       }
     });

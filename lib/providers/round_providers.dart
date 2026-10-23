@@ -19,6 +19,7 @@ import 'curriculum_provider.dart';
 import 'fsrs_provider.dart';
 import 'locale_provider.dart';
 import 'reward_provider.dart';
+import 'settings_provider.dart';
 
 part 'round_providers.g.dart';
 
@@ -158,6 +159,9 @@ class Round extends _$Round {
     final filter = await ref.read(courseFilterProvider.future);
     final german = await ref.read(germanFormsProvider.future);
     final topics = await ref.read(topicsProvider.future);
+    final avoidMacronTwins = (await ref.read(
+      settingsProvider.future,
+    )).avoidMacronTwins;
     final input = _selectionInput(
       cards,
       practicable,
@@ -172,6 +176,7 @@ class Round extends _$Round {
           unlocked: unlockedBundles(filter, pool),
           pool: pool,
           german: german,
+          avoidMacronTwins: avoidMacronTwins,
         ),
     };
 

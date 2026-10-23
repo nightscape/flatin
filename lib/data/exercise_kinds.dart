@@ -98,6 +98,27 @@ const kindSpecs = [
       count: 4,
     ),
   ),
+  KindSpec(
+    kind: ExerciseKind.zuordnen,
+    questionKey: 'exercise.match.question',
+    select: Sample(n: 4),
+    params: {'word': Show(Ref.target, View.lemma)},
+    answer: Match(View.latin, View.german),
+  ),
+  KindSpec(
+    kind: ExerciseKind.formenKette,
+    questionKey: 'exercise.transform.chainQuestion',
+    select: AxisPath(
+      axes: ['genus_verbi', 'tempus', 'numerus'],
+      lengths: {2, 3},
+    ),
+    params: {
+      'start': Show(Ref.start, View.latin),
+      'word': Show(Ref.target, View.lemma),
+      'changes': AxisChanges(),
+    },
+    answer: Typed(View.latin),
+  ),
 ];
 
 final List<SpecGenerator> specGenerators = [

@@ -159,6 +159,9 @@ class SettingsNotifier extends _$SettingsNotifier {
   Future<void> setRewardAnimation(bool on) =>
       _update((s) => s.copyWith(rewardAnimation: on));
 
+  Future<void> setAvoidMacronTwins(bool on) =>
+      _update((s) => s.copyWith(avoidMacronTwins: on));
+
   /// Drops every manual choice; the course ranges stay.
   Future<void> clearOverrides() => _update((s) => s.clearOverrides());
 

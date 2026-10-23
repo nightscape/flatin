@@ -11,6 +11,29 @@ import 'settings_input_page.dart';
 import 'settings_widgets.dart';
 import 'settings_words_page.dart';
 
+class _MacronSwitch extends ConsumerWidget {
+  const _MacronSwitch();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ref
+        .watch(settingsProvider)
+        .when(
+          skipLoadingOnReload: true,
+          loading: () => const SizedBox.shrink(),
+          error: (error, _) => loadErrorText(context, error),
+          data: (settings) => SwitchListTile(
+            key: const Key('settings.avoidMacronTwins'),
+            title: Text(
+              FlutterI18n.translate(context, 'settings.avoidMacronTwins'),
+            ),
+            value: settings.avoidMacronTwins,
+            onChanged: ref.read(settingsProvider.notifier).setAvoidMacronTwins,
+          ),
+        );
+  }
+}
+
 class _RewardSection extends ConsumerWidget {
   const _RewardSection();
 
@@ -94,6 +117,7 @@ class SettingsScreen extends StatelessWidget {
             'settings.inputPage',
             const SettingsInputPage(),
           ),
+          const _MacronSwitch(),
           const _RewardSection(),
         ],
       ),

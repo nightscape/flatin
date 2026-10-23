@@ -7,6 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/data/exercise_bestimmen.dart';
 import 'package:latin_practice/data/exercise_build.dart';
 import 'package:latin_practice/data/exercise_finderror.dart';
+import 'package:latin_practice/data/exercise_match.dart';
 import 'package:latin_practice/data/exercise_kinds.dart';
 import 'package:latin_practice/data/exercise_spec.dart';
 import 'package:latin_practice/data/exercise_oddone.dart';
@@ -43,6 +44,8 @@ const List<ExerciseGenerator> _old = [
   TransformGenerator(),
   FindErrorGenerator(),
   BestimmenGenerator(),
+  MatchGenerator(),
+  FormChainGenerator(),
 ];
 
 /// Builds with [g] for every seed; the exercises and the distinct reasons of
@@ -70,6 +73,14 @@ Map<String, Set<String>> _acceptedByPrompt(List<Exercise> built) => {
   for (final e in built)
     '${e.questionParams}': (e.answer as TypedAnswer).accepted.toSet(),
 };
+
+/// The German view frames a subjunctive text, which the old matching did not.
+bool _isSubjunctiveFraming(String objection) =>
+    objection.contains('does not show') && objection.contains('@konj.');
+
+/// Whether more than one form of [word] reads [start].
+bool _syncreticStart(PracticeItem word, String start) =>
+    word.acceptedForms.where((texts) => texts.contains(start)).length > 1;
 
 String _show(Exercise e) => switch (e.answer) {
   ChoiceAnswer(:final options, :final right) =>
@@ -102,6 +113,7 @@ void main() {
     final notAdmitted = <String>[];
     final invalid = <String>[];
     final widened = <String>[];
+    final unexplained = <String>[];
     var pairs = 0;
     for (final (locale, forms) in [('de', german), ('en', const NoForms())]) {
       for (final (i, word) in items.indexed) {
@@ -110,21 +122,28 @@ void main() {
           for (final key in word.formOrder) bundleOf(word, key),
         }) {
           pairs++;
-          final ctx = ExerciseContext(
-            unlocked: {bundle},
-            pool: pools[word.dataFileId]!,
-            german: forms,
-          );
           for (final spec in specGenerators) {
             if (_only.isNotEmpty &&
                 !_only.split(',').contains(spec.kind.name)) {
               continue;
             }
+            final ctx = ExerciseContext(
+              unlocked: unlockedFor(spec.spec, word, bundle),
+              pool: pools[word.dataFileId]!,
+              german: forms,
+            );
             final old = generatorFor(spec.kind, _old);
             final pair = '$locale ${spec.kind.name} ${word.id} / $bundle';
             final (oldBuilt, oldWhy) = _buildAll(old, word, bundle, ctx);
             final (newBuilt, newWhy) = _buildAll(spec, word, bundle, ctx);
             if (oldBuilt.isEmpty != newBuilt.isEmpty) {
+              final uncoveredGerman =
+                  oldBuilt.isEmpty &&
+                  oldWhy.every((r) => r.contains('no German form'));
+              if (spec.kind == ExerciseKind.formenKette ||
+                  spec.kind == ExerciseKind.zuordnen && !uncoveredGerman) {
+                unexplained.add('$pair: buildability differs');
+              }
               buildability.add(
                 '$pair: old ${oldBuilt.isEmpty ? 'never builds ($oldWhy)' : 'builds'}, '
                 'new ${newBuilt.isEmpty ? 'never builds ($newWhy)' : 'builds'}',
@@ -133,17 +152,27 @@ void main() {
             for (final e in oldBuilt) {
               final why = spec.objections(e, word, bundle, ctx);
               if (why.isNotEmpty) {
-                notAdmitted.add('$pair: ${_show(e)}: ${why.toSet()}');
+                final line = '$pair: ${_show(e)}: ${why.toSet()}';
+                notAdmitted.add(line);
+                if (spec.kind == ExerciseKind.zuordnen &&
+                    !why.every(_isSubjunctiveFraming)) {
+                  unexplained.add(line);
+                }
               }
             }
             if (spec.spec.answer is Typed) {
               final ours = _acceptedByPrompt(newBuilt);
-              for (final MapEntry(:key, :value) in _acceptedByPrompt(
-                oldBuilt,
-              ).entries) {
+              for (final e in oldBuilt) {
+                final key = '${e.questionParams}';
+                final value = (e.answer as TypedAnswer).accepted.toSet();
                 final new_ = ours[key];
                 if (new_ != null && !setEquals(new_, value)) {
-                  widened.add('$pair: $key: old $value, new $new_');
+                  final line = '$pair: $key: old $value, new $new_';
+                  widened.add(line);
+                  if (spec.spec.select is AxisPath &&
+                      !_syncreticStart(word, e.questionParams['start']!)) {
+                    unexplained.add(line);
+                  }
                 }
               }
             }
@@ -168,8 +197,11 @@ void main() {
           ...invalid,
           '## Typed prompts with other accepted answers (${widened.toSet().length})',
           ...widened.toSet(),
+          '## Unexplained (${unexplained.length})',
+          ...unexplained,
         ].join('\n'),
       );
     expect(invalid, isEmpty);
+    expect(unexplained, isEmpty);
   }, tags: 'differential');
 }

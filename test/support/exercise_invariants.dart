@@ -1,7 +1,21 @@
 import 'package:latin_practice/data/exercise_cube.dart';
 import 'package:latin_practice/data/exercise_spec.dart';
+import 'package:latin_practice/models/derivation.dart' show norm;
 import 'package:latin_practice/models/exercise.dart';
 import 'package:latin_practice/models/practice_item.dart';
+
+/// The bundles a context unlocks so that [spec] can build in [bundle]: a chain
+/// of several steps starts outside the asked bundle.
+Set<GrammarBundle> unlockedFor(
+  KindSpec spec,
+  PracticeItem word,
+  GrammarBundle bundle,
+) => switch (spec.select) {
+  AxisPath(:final lengths) when lengths.any((n) => n > 1) => {
+    for (final key in word.formOrder) bundleOf(word, key),
+  },
+  _ => {bundle},
+};
 
 /// What is wrong with [e], built by [spec] for [word] in [bundle]; empty when
 /// it is a valid exercise: every option is a covered cell of an unlocked
@@ -87,6 +101,43 @@ List<String> violations(
           if (cube.isFormOf(word, text)) found.add('$text is a form of $word');
           if (accepted.contains(text)) found.add('$accepted accept $text');
         }
+      }
+      if (spec.select is AxisPath &&
+          (ctx.avoidMacronTwins
+              ? norm(e.questionParams['start']!) == norm(expected.text)
+              : e.questionParams['start'] == expected.text)) {
+        found.add('the start ${expected.text} is the answer');
+      }
+    case (Match(:final left, :final right), MatchingAnswer(:final pairs)):
+      final n = (spec.select as Sample).n;
+      if (pairs.length != n) found.add('${pairs.length} pairs');
+      final cells = <Cell>[];
+      for (final (l, r) in pairs) {
+        if (l.builtWrongBy != null || r.builtWrongBy != null) {
+          found.add('${l.text} is a wrong text');
+        }
+        final c = cellOf(l);
+        if (r.formKey != l.formKey || r.lexemeId != l.lexemeId) {
+          found.add('${l.text} and ${r.text} are not one cell');
+        }
+        if (c is! FormCell || c.bundle != bundle) {
+          found.add('$c is not in $bundle');
+        }
+        for (final (v, o) in [(left, l), (right, r)]) {
+          if (!cube.view(v).covers(c)) found.add('$v does not cover $c');
+          if (o.text != cube.view(v).accepted(c).first) {
+            found.add('${o.text} is not the shown text of $c');
+          }
+        }
+        for (final other in cells) {
+          if ((left == View.latin && ctx.avoidMacronTwins
+                  ? cube.lookAlike(other, c)
+                  : cube.clash(left, other, c)) ||
+              cube.clash(right, other, c)) {
+            found.add('$other clashes with $c');
+          }
+        }
+        cells.add(c);
       }
     default:
       found.add('answer ${e.answer.runtimeType} for ${spec.answer}');

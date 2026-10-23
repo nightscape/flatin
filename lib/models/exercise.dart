@@ -199,10 +199,14 @@ final class ExerciseContext {
   final List<PracticeItem> pool;
   final GermanForms german;
 
+  /// Whether the spec kinds leave out forms that differ only in macrons.
+  final bool avoidMacronTwins;
+
   const ExerciseContext({
     required this.unlocked,
     required this.pool,
     required this.german,
+    this.avoidMacronTwins = true,
   });
 }
 

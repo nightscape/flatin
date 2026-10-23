@@ -243,6 +243,17 @@ final class Cube {
       view(v).covers(target) &&
       _acceptedSet(v, c).contains(_shownText(v, target));
 
+  /// Whether the Latin texts of [a] and [b] clash once macrons are ignored,
+  /// as a typed answer and a plain reading of the text do.
+  bool lookAlike(Cell a, Cell b) {
+    final latin = view(View.latin);
+    bool fitsPlain(Cell target, Cell c) => latin
+        .accepted(c)
+        .map(norm)
+        .contains(norm(latin.accepted(target).first));
+    return fitsPlain(a, b) || fitsPlain(b, a);
+  }
+
   final _accepted = {for (final v in View.values) v: <Cell, Set<String>>{}};
   final _shown = {for (final v in View.values) v: <Cell, String>{}};
 

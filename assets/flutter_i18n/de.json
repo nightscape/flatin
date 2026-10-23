@@ -33,6 +33,7 @@
       "animation": "Animation"
     },
     "title": "Einstellungen",
+    "avoidMacronTwins": "Ähnliche Formen mit Längenzeichen vermeiden",
     "nouns": "Nomen (Deklination)",
     "verbs": "Verben (Konjugation)",
     "error": "Fehler: {error}",

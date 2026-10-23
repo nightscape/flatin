@@ -101,7 +101,7 @@ final class SpecGenerator implements ExerciseGenerator {
     final target = cube.cell(word, switch (exercise.answer) {
       ChoiceAnswer(:final right) => right.formKey,
       TypedAnswer(:final expected) => expected.formKey,
-      MatchingAnswer() => throw ArgumentError('no spec makes a matching yet'),
+      MatchingAnswer(:final pairs) => pairs.first.$1.formKey,
     });
     final objections = <String>[];
     for (final slice in _slicesInto(
@@ -149,10 +149,13 @@ Iterable<Slice> _slices(
       for (final spoiled in _spoilings(cube, target, ways))
         Slice(target, spoiled: spoiled),
   ]..shuffle(rng),
+  Sample() => _sample(
+    cube.cellsOf(word, bundle: bundle).toList()..shuffle(rng),
+  ),
   AxisPath(:final axes, :final lengths) =>
     (cube.cellsOf(word, bundle: bundle).toList()..shuffle(rng)).expand(
       (target) => (lengths.toList()..shuffle(rng)).expand(
-        (n) => _paths(
+        (n) => _routes(
           cube,
           target,
           n,
@@ -162,6 +165,11 @@ Iterable<Slice> _slices(
       ),
     ),
 };
+
+/// One slice of all [cells]; the answer takes the cells it can use.
+Iterable<Slice> _sample(List<FormCell> cells) => [
+  if (cells.isNotEmpty) Slice(cells.first, group: cells),
+];
 
 /// Every slice of [select] whose target is [target], read from [exercise]
 /// where the selection is random.
@@ -187,10 +195,16 @@ Iterable<Slice> _slicesInto(
         if (spoiled.text == exercise.questionParams['wrong'])
           Slice(target, spoiled: spoiled),
   ],
+  Sample() => [
+    if (exercise.answer case MatchingAnswer(:final pairs))
+      if ([for (final (l, _) in pairs) cube.cell(target.word, l.formKey)]
+          case final group when group.every((c) => c.bundle == bundle))
+        Slice(target, group: group),
+  ],
   AxisPath(:final axes, :final lengths) => [
     if (target.bundle == bundle)
       for (final n in lengths)
-        for (final path in _paths(cube, target, n, axes, null))
+        for (final path in _routes(cube, target, n, axes, null))
           Slice(target, path: path),
   ],
 };
@@ -281,6 +295,21 @@ bool _aloneOnlyOdd(List<FormCell> group, FormCell odd) {
   return true;
 }
 
+/// The [_paths] whose start cannot be taken for [to].
+Iterable<List<FormCell>> _routes(
+  Cube cube,
+  FormCell to,
+  int steps,
+  List<String> axes,
+  Random? rng,
+) => _paths(
+  cube,
+  to,
+  steps,
+  axes,
+  rng,
+).where((path) => !_alike(cube, View.latin, path.first, to));
+
 /// The paths of [steps] axis changes into [to], start first; shuffled with
 /// [rng], in cell order without.
 Iterable<List<FormCell>> _paths(
@@ -346,8 +375,9 @@ String? _uncovered(KindSpec spec, Slice slice, Cube cube) {
   }
   final view = switch (spec.answer) {
     Choose(:final view) || Typed(:final view) => view,
+    Match() => null,
   };
-  return cube.view(view).covers(slice.target)
+  return view == null || cube.view(view).covers(slice.target)
       ? null
       : '$view does not cover ${slice.target}';
 }
@@ -395,7 +425,38 @@ ExerciseAnswer? _answerOf(KindSpec spec, Slice slice, Cube cube, Random rng) =>
         optionOf(slice.target, view, cube),
         _accepted(spec, view, slice, cube),
       ),
+      final Match match => _match(spec, match, slice, cube),
     };
+
+/// The first [Sample.n] covered cells of the group that nobody can take for
+/// another in either view.
+MatchingAnswer? _match(KindSpec spec, Match match, Slice slice, Cube cube) {
+  final n = (spec.select as Sample).n;
+  final picked = <FormCell>[];
+  for (final c in slice.group) {
+    if (picked.length == n) break;
+    if (!cube.view(match.left).covers(c) || !cube.view(match.right).covers(c)) {
+      continue;
+    }
+    if (picked.any((p) => _clashes(match, p, c, cube))) continue;
+    picked.add(c);
+  }
+  if (picked.length < n) return null;
+  return MatchingAnswer([
+    for (final c in picked)
+      (optionOf(c, match.left, cube), optionOf(c, match.right, cube)),
+  ]);
+}
+
+bool _clashes(Match match, Cell a, Cell b, Cube cube) =>
+    _alike(cube, match.left, a, b) || cube.clash(match.right, a, b);
+
+/// Whether [a] and [b] clash in [view]; Latin texts that differ only in
+/// macrons clash too while the context avoids macron twins.
+bool _alike(Cube cube, View view, Cell a, Cell b) =>
+    view == View.latin && cube.ctx.avoidMacronTwins
+    ? cube.lookAlike(a, b)
+    : cube.clash(view, a, b);
 
 ChoiceAnswer? _choose(
   KindSpec spec,
@@ -469,6 +530,8 @@ Set<FormCell> _readings(KindSpec spec, Slice slice, Cube cube) {
       return cells;
     case OddOneOut():
       throw ArgumentError('an odd one out has no typed answer');
+    case Sample():
+      throw ArgumentError('a sample has no typed answer');
   }
 }
 
@@ -527,6 +590,29 @@ String? _answerObjection(
         }
       }
       return null;
+    case (Match match, MatchingAnswer(:final pairs)):
+      final n = (spec.select as Sample).n;
+      if (pairs.length != n) return '${pairs.length} pairs';
+      final cells = <FormCell>[];
+      String? unshown;
+      for (final (l, r) in pairs) {
+        final c = cube.cell(slice.target.word, l.formKey);
+        if (r.formKey != l.formKey) return '${l.text} and ${r.text} differ';
+        if (!slice.group.contains(c)) return '$c is not in the sample';
+        if (!cube.view(match.left).covers(c) ||
+            !cube.view(match.right).covers(c)) {
+          return '$c is not covered';
+        }
+        if (cells.any((p) => _clashes(match, p, c, cube))) {
+          return '$c clashes with a pair';
+        }
+        if (l.text != optionOf(c, match.left, cube).text ||
+            r.text != optionOf(c, match.right, cube).text) {
+          unshown ??= '${l.text} or ${r.text} does not show $c';
+        }
+        cells.add(c);
+      }
+      return unshown;
     default:
       return 'answer is a ${answer.runtimeType}';
   }

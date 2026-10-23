@@ -33,6 +33,7 @@
       "animation": "Animation"
     },
     "title": "Settings",
+    "avoidMacronTwins": "Avoid forms that differ only in macrons",
     "nouns": "Nouns (declension)",
     "verbs": "Verbs (conjugation)",
     "error": "Error: {error}",

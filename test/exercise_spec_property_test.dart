@@ -40,12 +40,12 @@ void main() {
         for (final bundle in {
           for (final k in word.formOrder) bundleOf(word, k),
         }) {
-          final ctx = ExerciseContext(
-            unlocked: {bundle},
-            pool: [word],
-            german: forms,
-          );
           for (final g in specGenerators) {
+            final ctx = ExerciseContext(
+              unlocked: unlockedFor(g.spec, word, bundle),
+              pool: [word],
+              german: forms,
+            );
             for (var seed = 0; seed < _seeds; seed++) {
               final Exercise e;
               try {

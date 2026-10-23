@@ -47,6 +47,13 @@ final class OddOneOut extends Selection {
   const OddOneOut({required this.majority, required this.maxDraws});
 }
 
+/// [n] cells of the bundle that no two can be taken for each other.
+final class Sample extends Selection {
+  final int n;
+
+  const Sample({required this.n});
+}
+
 /// A start cell and the target, reached by changing one of [axes] per step,
 /// each axis at most once.
 final class AxisPath extends Selection {
@@ -118,6 +125,15 @@ final class Typed extends AnswerSpec {
   final View view;
 
   const Typed(this.view);
+}
+
+/// The learner pairs the [left] text of every sampled cell with its [right]
+/// text.
+final class Match extends AnswerSpec {
+  final View left;
+  final View right;
+
+  const Match(this.left, this.right);
 }
 
 /// Where the wrong options of a [Choose] come from.
