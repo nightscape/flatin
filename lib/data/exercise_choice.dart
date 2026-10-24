@@ -61,8 +61,8 @@ Set<GrammarBundle> unlockedBundles(
 
 /// Builds an exercise for [word] in [bundle]: the kinds of [registry] in the
 /// class [classFor] picks, in random order, then those of the other class;
-/// kinds in [avoid] come after all others. A
-/// kind that throws [CannotBuild] does not fit the word, so the next is tried.
+/// kinds in [avoid] come after all others. A kind that throws [CannotBuild]
+/// does not fit the word, so the next is tried.
 ///
 /// Throws an [AssertionError] naming the pair when no kind fits: a data or
 /// generator bug, as every pair the selection offers must be askable.

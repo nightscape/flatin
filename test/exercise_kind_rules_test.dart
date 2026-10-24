@@ -92,11 +92,12 @@ void main() {
   late PracticeItem audire;
   late PracticeItem amare;
   late PracticeItem puella;
+  late List<PracticeItem> verbs;
   late List<PracticeItem> nouns;
   late GermanForms german;
 
   setUpAll(() async {
-    final verbs = await loadPracticeItems('lib/data/latin_verbs.yaml');
+    verbs = await loadPracticeItems('lib/data/latin_verbs.yaml');
     vocare = verbs.singleWhere((i) => i.id == 'verbs:vocare');
     audire = verbs.singleWhere((i) => i.id == 'verbs:audire');
     amare = verbs.singleWhere((i) => i.id == 'verbs:amare');
@@ -812,6 +813,56 @@ void main() {
         }
       }
       expect(ambiguous, greaterThan(0));
+    });
+
+    Iterable<(PracticeItem, GrammarBundle, Exercise)> everyBestimmen(
+      Iterable<PracticeItem> words,
+    ) sync* {
+      for (final word in words) {
+        for (final bundle in _bundles(word)) {
+          for (var seed = 0; seed < 3; seed++) {
+            final Exercise e;
+            try {
+              e = build(ExerciseKind.bestimmen, word, bundle, seed: seed);
+            } on CannotBuild {
+              continue;
+            }
+            yield (word, bundle, e);
+          }
+        }
+      }
+    }
+
+    test('every option is of the bundle asked, for verbs', () {
+      var built = 0;
+      for (final (word, bundle, e) in everyBestimmen(verbs.take(6))) {
+        built++;
+        for (final o in (e.answer as ChoiceAnswer).options) {
+          expect(bundleOf(word, o.formKey), bundle, reason: word.id);
+        }
+      }
+      expect(built, greaterThan(0));
+    });
+
+    test('the right option is the target and a reading of the shown '
+        'spelling', () {
+      var built = 0;
+      for (final (word, bundle, e) in everyBestimmen([
+        ...nouns.take(15),
+        ...verbs.take(6),
+      ])) {
+        built++;
+        final right = (e.answer as ChoiceAnswer).right;
+        final shown = e.questionParams['form']!;
+        expect(readings(word, shown), contains(right.formKey), reason: word.id);
+        expect(bundleOf(word, right.formKey), bundle, reason: word.id);
+        expect(
+          word.forms[word.formOrder.indexOf(right.formKey)],
+          shown,
+          reason: word.id,
+        );
+      }
+      expect(built, greaterThan(0));
     });
 
     test('a unique spelling names exactly one label', () {
