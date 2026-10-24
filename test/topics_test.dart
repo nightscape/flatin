@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -69,10 +70,35 @@ void main() {
     }
   });
 
-  test('the later entry gives one topic per data file', () {
-    final later = topics.where((t) => t.lesson == laterLesson);
-    expect(later.map((t) => t.dataFileId).toSet().length, later.length);
-  });
+  test(
+    'the later topics hold the bundles that only the later entry teaches',
+    () {
+      final firstLesson = <(String, GrammarBundle), int>{};
+      for (final item in items) {
+        for (final key in item.formOrder) {
+          final lesson = max(
+            curriculum.typeLesson(item.dataFileId, item.type),
+            curriculum.formLesson(item.dataFileId, key),
+          );
+          firstLesson.update(
+            (item.dataFileId, bundleOf(item, key)),
+            (l) => min(l, lesson),
+            ifAbsent: () => lesson,
+          );
+        }
+      }
+      final expected = {
+        for (final e in firstLesson.entries)
+          if (e.value == laterLesson) e.key,
+      };
+      final listed = {
+        for (final t in topics.where((t) => t.lesson == laterLesson))
+          for (final b in t.bundles) (t.dataFileId, b),
+      };
+      expect(expected, isNotEmpty);
+      expect(listed, expected);
+    },
+  );
 
   test('volume 2 verb topics group the bundles a lesson introduces', () {
     expect(bundlesOf('verbs', 23), {'ind.plusq.pass', 'ind.fut2.pass'});
