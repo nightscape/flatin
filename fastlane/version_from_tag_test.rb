@@ -12,7 +12,7 @@ class VersionFromTagTest < Minitest::Test
   end
 
   def test_rejects_other_forms
-    ["v1.100.0", "v1.0.100", "1.5.0", "v1.5", "v1.5.0-rc1", "", nil].each do |tag|
+    ["v1.100.0", "v1.0.100", "1.5.0", "v1.5", "v1.5.0-rc1", "v01.5.0", "v1.05.007", "v0.0.0", "", nil].each do |tag|
       assert_raises(ArgumentError, tag.inspect) { VersionFromTag.parse(tag) }
     end
   end
