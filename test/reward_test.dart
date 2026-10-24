@@ -102,6 +102,25 @@ void main() {
     },
   );
 
+  test('storage load rejects a stored version it does not know', () async {
+    SharedPreferences.setMockInitialValues({
+      'rewards': '{"version": 2, "points": 5}',
+    });
+    await expectLater(RewardStorage.load(), throwsA(isA<AssertionError>()));
+  });
+
+  test('an earlier date after a later one counts its day again', () {
+    var ledger = const RewardLedger();
+    for (final day in [5, 4, 5]) {
+      ledger = _send(
+        ledger,
+        Answered(right: false, firstAttempt: true, at: DateTime(2026, 3, day)),
+      );
+    }
+    expect(ledger.practiceDays, 3);
+    expect(ledger.points, 0);
+  });
+
   test('every building has a unique id and a name in de and en', () {
     expect(romanTown, hasLength(20));
     expect(romanTown.map((b) => b.id).toSet(), hasLength(romanTown.length));
