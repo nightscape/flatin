@@ -536,20 +536,20 @@ shared:
   ohne_neutrum_plural: &ohne_neutrum_plural [{grad: komp}, {grad: sup}, {kasus: nom, numerus: pl, genus: n}, {kasus: akk, numerus: pl, genus: n}, {kasus: vok, numerus: pl, genus: n}]
 
 items:
-  - translation: {de: Der Hausherr/Herr, en: "master (of the house), lord"}
+  - translation: {de: der Hausherr/Herr, en: "master (of the house), lord"}
     parts: {nom: "dominus"}
     de_noun: "hausherr"
-  - translation: {de: Die Rose, en: rose}
+  - translation: {de: die Rose, en: rose}
     parts: {nom: "rosa"}
     de_noun: "rose"
-  - translation: {de: Der Tag, en: day}
+  - translation: {de: der Tag, en: day}
     parts: {nom: "diēs"}
     de_noun: "tag"
   - type: U-Deklination
-    translation: {de: "Die Hand; der Trupp („Handvoll Leute“)", en: hand}
+    translation: {de: "die Hand; der Trupp („Handvoll Leute“)", en: hand}
     parts: {nom: "manus"}
     de_noun: "hand"
-  - translation: {de: Der Gott, en: god}
+  - translation: {de: der Gott, en: god}
     parts: {nom: "deus"}
     de_noun: "gott"
   - translation: {de: "das Kapitol (einer der sieben Hügel Roms)", en: "the Capitol (one of the seven hills of Rome)"}
