@@ -7,6 +7,7 @@ import 'package:latin_practice/data/german_forms.dart';
 import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/grammar/engine.dart';
 import 'package:latin_practice/grammar/schema.dart';
+import 'package:latin_practice/models/derivation.dart';
 import 'package:latin_practice/models/exercise.dart';
 import 'package:latin_practice/models/practice_item.dart';
 
@@ -195,7 +196,7 @@ const _spikeLemmas = {
 
 /// `<Latin lemma> <kind>` → what Random(207) builds over the whole case
 /// bundle: the shown text, then the right answer or the accepted set.
-const _seed207 = {
+const _seededBuilds = {
   'rosa latDeWahl': 'rosae → (o) Rosen!',
   'rosa deLatWahl': '(o) Rosen! → rosae',
   'rosa deLatTippen': '(o) Rosen! → rosae',
@@ -408,6 +409,23 @@ $_yaml  - type: Neutrum
       );
     });
 
+    test('the dative plural names the rule of its own ending', () {
+      final engine = _engineOf('''
+$_yaml  - type: Neutrum
+    translation: {de: Kino, en: cinema}
+    parts: {nominativ: Kino, genitiv: Kinos, plural: Kinos}
+''');
+      expect(
+        {
+          for (final id in ['kino', 'rose', 'geschenk'])
+            id: (engine.of('german_nouns', id).stems['dpl']! as StemFromDefault)
+                .sandhiRule
+                ?.id,
+        },
+        {'kino': 's_dativ', 'rose': 'n_dativ', 'geschenk': null},
+      );
+    });
+
     test('the plural of Rat is Ratschläge', () {
       final consilium = latin('cōnsilium');
       expect(german.accepted(consilium, 'nom.pl'), [
@@ -454,7 +472,7 @@ $_yaml  - type: Neutrum
         }
       }
     }
-    expect(built, _seed207);
+    expect(built, _seededBuilds);
   });
 
   test('a German noun id used twice fails the parse', () {

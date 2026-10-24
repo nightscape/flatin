@@ -606,6 +606,33 @@ void main() {
     });
   });
 
+  group('drop_next', () {
+    test('a form seam drops only the matched before entry', () {
+      final engine = _patched({
+        'kurz_nt:     {end: vowel, before: [nt, nd], replace: short,':
+            'kurz_nt:     {end: vowel, before: [nt, nd], replace: drop_next,',
+      });
+      expect(
+        engine
+            .of(_fileOf('amare').dataFileId, 'amare')
+            .forms['ind.praes.pass.3.pl']!
+            .result,
+        'amāur',
+      );
+    });
+
+    test('the seam after a stem part throws', () {
+      final engine = _patched({
+        't_s:         {end: t, before: [s], replace: s,':
+            't_s:         {end: t, before: [s], replace: drop_next,',
+      });
+      expect(
+        () => engine.of(_fileOf('posse').dataFileId, 'posse'),
+        throwsA(isA<StateError>()),
+      );
+    });
+  });
+
   group('Ladezeit', () {
     test('the fixtures fifty times', () {
       final watch = Stopwatch()..start();
