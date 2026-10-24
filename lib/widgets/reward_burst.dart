@@ -3,11 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/settings_provider.dart';
 
-/// "🪙 +N" that drifts up and fades out; it never takes a tap.
+/// "🪙 +N", and "⭐ +M" next to it when M > 0, that drifts up and fades out; it never takes a tap.
 class RewardBurst extends ConsumerStatefulWidget {
-  const RewardBurst(this.points, {super.key});
+  const RewardBurst(this.points, {this.bonus = 0, super.key});
 
   final int points;
+  final int bonus;
 
   @override
   ConsumerState<RewardBurst> createState() => _RewardBurstState();
@@ -33,9 +34,16 @@ class _RewardBurstState extends ConsumerState<RewardBurst> {
           opacity: 1 - t,
           child: Transform.translate(offset: Offset(0, -32 * t), child: child),
         ),
-        child: Text(
-          '🪙 +${widget.points}',
+        child: DefaultTextStyle.merge(
           style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            spacing: 12,
+            children: [
+              Text('🪙 +${widget.points}'),
+              if (widget.bonus > 0) Text('⭐ +${widget.bonus}'),
+            ],
+          ),
         ),
       ),
     );

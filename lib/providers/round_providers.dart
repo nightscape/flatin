@@ -148,6 +148,7 @@ class Round extends _$Round {
   late Random _rng;
   late List<ExerciseGenerator> _registry;
   final _reviewedWords = <String>{};
+  final _difficultyBefore = <String, double?>{};
   bool _responding = false;
 
   /// Plans and builds the first tasks once. Reads its inputs with ref.read,
@@ -245,13 +246,14 @@ class Round extends _$Round {
     );
     final scheduler = ref.read(fsrsSchedulerProvider);
     final wordRating = outcome.wordRating;
-    if (wordRating != null && _reviewedWords.add(task.exercise.wordCardId)) {
-      await reviewWordCard(
-        scheduler,
-        await ref.read(fsrsCardsProvider.future),
-        task.exercise.wordCardId,
-        wordRating,
-      );
+    final wordCardId = task.exercise.wordCardId;
+    final cards = await ref.read(fsrsCardsProvider.future);
+    final wordDifficulty = _difficultyBefore.putIfAbsent(
+      wordCardId,
+      () => cards[wordCardId]?.card.difficulty,
+    );
+    if (wordRating != null && _reviewedWords.add(wordCardId)) {
+      await reviewWordCard(scheduler, cards, wordCardId, wordRating);
       ref.invalidate(fsrsCardsProvider);
     }
     final rewards = ref.read(rewardsProvider.notifier);
@@ -259,6 +261,7 @@ class Round extends _$Round {
       Answered(
         right: outcome.right,
         firstAttempt: outcome.firstAttempt,
+        wordDifficulty: wordDifficulty,
         at: DateTime.now(),
       ),
     );

@@ -137,7 +137,7 @@ final class RoundProvider extends $AsyncNotifierProvider<Round, RoundState> {
   }
 }
 
-String _$roundHash() => r'e1717fba8656361853c089919c87c9497e5da76d';
+String _$roundHash() => r'1618fdff177c44eb870abe422a238125fc071bcc';
 
 /// One round. Auto-dispose and never stored: leaving it aborts it, which
 /// keeps the word reviews already written and reviews no bundle.

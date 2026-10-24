@@ -274,6 +274,7 @@
     "end": {
       "title": "Round done!",
       "points": "+{points} points",
+      "bonus": "⭐ +{bonus} bonus",
       "total": "Total: {total} points",
       "newBuilding": "New in your town: {emoji} {name}",
       "again": "Another round",

@@ -7,6 +7,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/data/rewards.dart';
 import 'package:latin_practice/data/topics.dart';
+import 'package:latin_practice/models/reward.dart';
+import 'package:latin_practice/providers/reward_provider.dart';
+import 'package:latin_practice/services/reward_storage.dart';
 import 'package:latin_practice/models/exercise.dart';
 import 'package:latin_practice/models/lesson_range.dart';
 import 'package:latin_practice/models/practice_item.dart';
@@ -226,6 +229,7 @@ void main() {
     expect(find.text('Runde geschafft!'), findsOneWidget);
     expect(find.text('+95 Punkte'), findsOneWidget);
     expect(find.text('Gesamt: 95 Punkte'), findsOneWidget);
+    expect(find.textContaining('⭐'), findsNothing);
     expect(
       find.text('Neu in deiner Stadt: ${romanTown.first.emoji} Haus'),
       findsOneWidget,
@@ -237,6 +241,30 @@ void main() {
     await _tap(tester, 'round.end.done');
     await letItLoad(tester);
     expect(find.byType(GrammarStartScreen), findsOneWidget);
+  });
+
+  testWidgets('the end screen shows the bonus sum next to the points', (
+    tester,
+  ) async {
+    seedSettings(Settings(courseWords: LessonRange(1, 1)));
+    await tester.runAsync(
+      () => RewardStorage.save(const RewardLedger(points: 50, bonusPoints: 20)),
+    );
+    await tester.pumpWidget(
+      wrapInApp(
+        Consumer(
+          builder: (_, ref, _) => ref.watch(rewardsProvider).hasValue
+              ? const RoundEndScreen(start: RewardLedger())
+              : const SizedBox(),
+        ),
+        forcedLocale: const Locale('de'),
+      ),
+    );
+    await letItLoad(tester);
+
+    expect(find.text('+30 Punkte'), findsOneWidget);
+    expect(find.text('⭐ +20 Bonus'), findsOneWidget);
+    expect(find.text('Gesamt: 50 Punkte'), findsOneWidget);
   });
 
   testWidgets('with the animation off a right answer shows no burst', (

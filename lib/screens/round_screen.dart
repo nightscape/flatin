@@ -24,7 +24,7 @@ class RoundScreen extends ConsumerStatefulWidget {
 class _RoundScreenState extends ConsumerState<RoundScreen> {
   /// The ledger before the first answer; the end screen shows the growth.
   RewardLedger? _start;
-  ({int points, int serial})? _burst;
+  ({int points, int bonus, int serial})? _burst;
 
   String _t(String key, [Map<String, String>? params]) =>
       FlutterI18n.translate(context, key, translationParams: params);
@@ -34,10 +34,16 @@ class _RoundScreenState extends ConsumerState<RoundScreen> {
     final provider = roundProvider(widget.request);
     ref.listen(rewardsProvider, (previous, next) {
       if (previous?.value case final before?) {
-        final gained = next.requireValue.points - before.points;
+        final after = next.requireValue;
+        final bonus = after.bonusPoints - before.bonusPoints;
+        final gained = after.points - before.points - bonus;
         if (gained > 0) {
           setState(
-            () => _burst = (points: gained, serial: (_burst?.serial ?? 0) + 1),
+            () => _burst = (
+              points: gained,
+              bonus: bonus,
+              serial: (_burst?.serial ?? 0) + 1,
+            ),
           );
         }
       }
@@ -96,12 +102,14 @@ class _RoundScreenState extends ConsumerState<RoundScreen> {
             value: state.inRetries ? 1 : state.answeredFirst / state.total,
           ),
         ),
-        if (_burst case (:final points, :final serial))
+        if (_burst case (:final points, :final bonus, :final serial))
           Positioned(
             top: top + 16,
             left: 0,
             right: 0,
-            child: Center(child: RewardBurst(points, key: ValueKey(serial))),
+            child: Center(
+              child: RewardBurst(points, bonus: bonus, key: ValueKey(serial)),
+            ),
           ),
       ],
     );

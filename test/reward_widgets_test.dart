@@ -139,6 +139,7 @@ void main() {
       Settings settings, {
       bool disableAnimations = false,
       VoidCallback? onTapBelow,
+      int bonus = 0,
     }) async {
       _store(settings);
       tester.platformDispatcher.accessibilityFeaturesTestValue =
@@ -162,7 +163,7 @@ void main() {
                       onTap: onTapBelow,
                     ),
                   ),
-                  const RewardBurst(10),
+                  RewardBurst(10, bonus: bonus),
                 ],
               ),
             ),
@@ -170,6 +171,22 @@ void main() {
         ),
       );
     }
+
+    testWidgets('shows the bonus next to the points only when above 0', (
+      tester,
+    ) async {
+      await pumpBurst(tester, Settings(), bonus: 10);
+      expect(find.text('🪙 +10'), findsOneWidget);
+      expect(find.text('⭐ +10'), findsOneWidget);
+      await tester.pumpAndSettle();
+    });
+
+    testWidgets('shows no bonus text without a bonus', (tester) async {
+      await pumpBurst(tester, Settings());
+      expect(find.text('🪙 +10'), findsOneWidget);
+      expect(find.textContaining('⭐'), findsNothing);
+      await tester.pumpAndSettle();
+    });
 
     testWidgets('is absent when the animation is switched off', (tester) async {
       await pumpBurst(tester, Settings(rewardAnimation: false));

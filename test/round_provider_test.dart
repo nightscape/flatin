@@ -175,6 +175,37 @@ void main() {
     });
   }
 
+  test('the bonus reads the word difficulty from before the review', () async {
+    seedSettings(Settings(courseWords: LessonRange(1, 1)));
+    final c = _container();
+    addTearDown(c.dispose);
+    final offer = await c.read(todayOfferProvider.future) as NewTopicOffer;
+    final provider = roundProvider(BlockedRound(offer.topic.id));
+    c.listen(provider, (_, _) {});
+    final task = (await c.read(provider.future)).queue.first;
+    final wordId = task.exercise.wordCardId;
+    final right = rightAndWrong(task.word, task.exercise).$1;
+    final rating = attribute(task.word, task.exercise, right).word;
+
+    final cards = await FsrsStorage.loadCards();
+    final reviewed = c
+        .read(fsrsSchedulerProvider)
+        .reviewCard(cards[wordId]!.card, Rating.good)
+        .card;
+    final hard = reviewed.copyWith(difficulty: 7.01);
+    final after = c.read(fsrsSchedulerProvider).reviewCard(hard, rating).card;
+    expect(after.difficulty, lessThan(7), reason: 'the review crosses 7');
+    cards[wordId] = cards[wordId]!.copyWith(card: hard);
+    await FsrsStorage.saveCards(cards);
+    c.invalidate(fsrsCardsProvider);
+
+    await c.read(provider.notifier).respond(right);
+
+    final ledger = await c.read(rewardsProvider.future);
+    expect(ledger.bonusPoints, 10);
+    expect(ledger.points, 20);
+  });
+
   test('a second response while one is in flight is ignored', () async {
     seedSettings(Settings(courseWords: LessonRange(1, 1)));
     final sent = <RewardEvent>[];

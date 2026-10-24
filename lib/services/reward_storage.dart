@@ -6,7 +6,9 @@ import '../models/reward.dart';
 
 class RewardStorage {
   static const String _storageKey = 'rewards';
-  static const int _currentVersion = 1;
+  static const int _currentVersion = 2;
+
+  /// Version 1 has no bonus points; they load as 0.
 
   /// A missing key is an empty ledger. A parse error throws: a silent reset
   /// would erase what the learner earned.
@@ -17,7 +19,10 @@ class RewardStorage {
       return const RewardLedger();
     }
     final json = jsonDecode(raw) as Map<String, dynamic>;
-    assert(json['version'] == _currentVersion, 'rewards version: $json');
+    assert(
+      json['version'] == _currentVersion || json['version'] == 1,
+      'rewards version: $json',
+    );
     return RewardLedger.fromJson(json);
   }
 

@@ -41,6 +41,25 @@ class PointsStrategy implements RewardStrategy {
       };
 }
 
+/// The base points again for a word whose card was hard before this round.
+class HardWordBonusStrategy implements RewardStrategy {
+  const HardWordBonusStrategy();
+
+  static const double minDifficulty = 7;
+
+  @override
+  String get id => 'bonus';
+
+  @override
+  List<RewardEffect> onEvent(RewardEvent event, RewardLedger ledger) =>
+      switch (event) {
+        Answered(right: true, :final firstAttempt, :final wordDifficulty?)
+            when wordDifficulty >= minDifficulty =>
+          [BonusGained(firstAttempt ? 10 : 5)],
+        _ => const [],
+      };
+}
+
 /// After the last building the list starts again.
 class TownStrategy implements RewardStrategy {
   const TownStrategy();
@@ -86,6 +105,7 @@ class PracticeDaysStrategy implements RewardStrategy {
 
 const List<RewardStrategy> rewardStrategies = [
   PointsStrategy(),
+  HardWordBonusStrategy(),
   TownStrategy(),
   PracticeDaysStrategy(),
 ];
@@ -93,5 +113,5 @@ const List<RewardStrategy> rewardStrategies = [
 /// The strategies the learner can switch off; counting days is always on.
 final List<String> switchableRewardIds = [
   for (final s in rewardStrategies)
-    if (s is! PracticeDaysStrategy) s.id,
+    if (s is! PracticeDaysStrategy && s is! HardWordBonusStrategy) s.id,
 ];

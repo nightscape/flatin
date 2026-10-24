@@ -32,6 +32,7 @@ void main() {
           event = Answered(
             right: random.nextBool(),
             firstAttempt: random.nextBool(),
+            wordDifficulty: random.nextBool() ? null : random.nextDouble() * 10,
             at: at,
           );
           days.add('${at.year}-${at.month}-${at.day}');
@@ -43,10 +44,19 @@ void main() {
           ledger.buildings.length + (event is RoundFinished ? 1 : 0),
         );
         expect(next.practiceDays, greaterThanOrEqualTo(ledger.practiceDays));
-        if (event case Answered(:final right, :final firstAttempt)) {
+        if (event case Answered(
+          :final right,
+          :final firstAttempt,
+          :final wordDifficulty,
+        )) {
+          final hard = wordDifficulty != null && wordDifficulty >= 7;
           expect(
             next.points - ledger.points,
-            right ? (firstAttempt ? 10 : 5) : 0,
+            right ? (firstAttempt ? 10 : 5) * (hard ? 2 : 1) : 0,
+          );
+          expect(
+            next.bonusPoints - ledger.bonusPoints,
+            right && hard ? (firstAttempt ? 10 : 5) : 0,
           );
         }
         ledger = next;
@@ -77,7 +87,12 @@ void main() {
     var ledger = const RewardLedger();
     ledger = _send(
       ledger,
-      Answered(right: true, firstAttempt: true, at: DateTime(2026, 3, 4)),
+      Answered(
+        right: true,
+        firstAttempt: true,
+        wordDifficulty: null,
+        at: DateTime(2026, 3, 4),
+      ),
     );
     ledger = _send(ledger, const RoundFinished());
     final back = RewardLedger.fromJson(ledger.toJson());
@@ -102,9 +117,43 @@ void main() {
     },
   );
 
+  test('a version-1 ledger loads with no bonus points', () async {
+    SharedPreferences.setMockInitialValues({
+      'rewards':
+          '{"version": 1, "points": 15, "buildings": ["domus"], '
+          '"practiceDays": 2, "lastPracticeDay": "2026-03-04"}',
+    });
+    final ledger = await RewardStorage.load();
+    expect(ledger.points, 15);
+    expect(ledger.bonusPoints, 0);
+    expect(ledger.buildings, ['domus']);
+    expect(ledger.practiceDays, 2);
+  });
+
+  test('the bonus is the base points again from difficulty 7', () {
+    Set<int> bonusFor(bool right, bool first, double? difficulty) => {
+      for (final e in const HardWordBonusStrategy().onEvent(
+        Answered(
+          right: right,
+          firstAttempt: first,
+          wordDifficulty: difficulty,
+          at: DateTime(2026, 3, 4),
+        ),
+        const RewardLedger(),
+      ))
+        (e as BonusGained).points,
+    };
+    expect(bonusFor(true, true, 7), {10});
+    expect(bonusFor(true, true, 10), {10});
+    expect(bonusFor(true, true, 6.99), isEmpty);
+    expect(bonusFor(true, true, null), isEmpty);
+    expect(bonusFor(true, false, 8), {5});
+    expect(bonusFor(false, true, 9), isEmpty);
+  });
+
   test('storage load rejects a stored version it does not know', () async {
     SharedPreferences.setMockInitialValues({
-      'rewards': '{"version": 2, "points": 5}',
+      'rewards': '{"version": 3, "points": 5}',
     });
     await expectLater(RewardStorage.load(), throwsA(isA<AssertionError>()));
   });
@@ -114,7 +163,12 @@ void main() {
     for (final day in [5, 4, 5]) {
       ledger = _send(
         ledger,
-        Answered(right: false, firstAttempt: true, at: DateTime(2026, 3, day)),
+        Answered(
+          right: false,
+          firstAttempt: true,
+          wordDifficulty: 9,
+          at: DateTime(2026, 3, day),
+        ),
       );
     }
     expect(ledger.practiceDays, 3);
@@ -139,7 +193,12 @@ void main() {
     final effects = await container
         .read(rewardsProvider.notifier)
         .send(
-          Answered(right: true, firstAttempt: false, at: DateTime(2026, 5, 6)),
+          Answered(
+            right: true,
+            firstAttempt: false,
+            wordDifficulty: null,
+            at: DateTime(2026, 5, 6),
+          ),
         );
     expect(effects.map((e) => e.runtimeType), [PointsGained, DayCounted]);
     final stored = await RewardStorage.load();

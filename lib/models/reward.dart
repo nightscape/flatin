@@ -5,11 +5,16 @@ sealed class RewardEvent {
 final class Answered extends RewardEvent {
   final bool right;
   final bool firstAttempt;
+
+  /// The FSRS difficulty of the task's word card before this round reviewed
+  /// it; null when the card was never reviewed.
+  final double? wordDifficulty;
   final DateTime at;
 
   const Answered({
     required this.right,
     required this.firstAttempt,
+    required this.wordDifficulty,
     required this.at,
   });
 }
@@ -28,6 +33,12 @@ final class PointsGained extends RewardEffect {
   const PointsGained(this.points);
 }
 
+final class BonusGained extends RewardEffect {
+  final int points;
+
+  const BonusGained(this.points);
+}
+
 final class BuildingAdded extends RewardEffect {
   final String buildingId;
 
@@ -44,37 +55,45 @@ final class DayCounted extends RewardEffect {
 /// What the learner has earned. Only [apply] changes it, and every effect adds.
 final class RewardLedger {
   final int points;
+
+  /// The part of [points] that came from bonuses.
+  final int bonusPoints;
   final List<String> buildings;
   final int practiceDays;
   final String? lastPracticeDay;
 
   const RewardLedger({
     this.points = 0,
+    this.bonusPoints = 0,
     this.buildings = const [],
     this.practiceDays = 0,
     this.lastPracticeDay,
   });
 
   RewardLedger apply(RewardEffect effect) => switch (effect) {
-    PointsGained(:final points) => _gain(points),
+    PointsGained(:final points) => _gain(points, 0),
+    BonusGained(:final points) => _gain(points, points),
     BuildingAdded(:final buildingId) => RewardLedger(
       points: points,
+      bonusPoints: bonusPoints,
       buildings: [...buildings, buildingId],
       practiceDays: practiceDays,
       lastPracticeDay: lastPracticeDay,
     ),
     DayCounted(:final day) => RewardLedger(
       points: points,
+      bonusPoints: bonusPoints,
       buildings: buildings,
       practiceDays: practiceDays + 1,
       lastPracticeDay: day,
     ),
   };
 
-  RewardLedger _gain(int gained) {
-    assert(gained > 0, 'PointsGained must be positive: $gained');
+  RewardLedger _gain(int gained, int bonus) {
+    assert(gained > 0, 'a point gain must be positive: $gained');
     return RewardLedger(
       points: points + gained,
+      bonusPoints: bonusPoints + bonus,
       buildings: buildings,
       practiceDays: practiceDays,
       lastPracticeDay: lastPracticeDay,
@@ -83,6 +102,7 @@ final class RewardLedger {
 
   Map<String, Object?> toJson() => {
     'points': points,
+    'bonusPoints': bonusPoints,
     'buildings': buildings,
     'practiceDays': practiceDays,
     'lastPracticeDay': lastPracticeDay,
@@ -90,6 +110,7 @@ final class RewardLedger {
 
   factory RewardLedger.fromJson(Map<String, Object?> json) => RewardLedger(
     points: json['points'] as int,
+    bonusPoints: json['bonusPoints'] as int? ?? 0,
     buildings: List<String>.from(json['buildings'] as List),
     practiceDays: json['practiceDays'] as int,
     lastPracticeDay: json['lastPracticeDay'] as String?,
@@ -97,7 +118,7 @@ final class RewardLedger {
 }
 
 abstract interface class RewardStrategy {
-  /// The settings key: 'points', 'town' or 'days'.
+  /// The settings key: 'points', 'bonus', 'town' or 'days'.
   String get id;
 
   /// Pure: reads the ledger, never changes it.

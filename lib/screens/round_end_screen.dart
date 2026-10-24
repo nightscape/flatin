@@ -23,7 +23,8 @@ class RoundEndScreen extends ConsumerWidget {
     final offer = ref.watch(todayOfferProvider).value;
     final next = offer == null ? null : requestOf(offer);
     final town = townOf(ledger);
-    final gained = ledger.points - start.points;
+    final bonus = ledger.bonusPoints - start.bonusPoints;
+    final gained = ledger.points - start.points - bonus;
     final textTheme = Theme.of(context).textTheme;
     return Scaffold(
       appBar: AppBar(title: Text(t('home.grammar'))),
@@ -35,6 +36,11 @@ class RoundEndScreen extends ConsumerWidget {
           if (gained > 0)
             Text(
               t('round.end.points', {'points': '$gained'}),
+              style: textTheme.titleLarge,
+            ),
+          if (bonus > 0)
+            Text(
+              t('round.end.bonus', {'bonus': '$bonus'}),
               style: textTheme.titleLarge,
             ),
           Text(t('round.end.total', {'total': '${ledger.points}'})),
