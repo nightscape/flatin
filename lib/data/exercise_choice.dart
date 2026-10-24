@@ -72,7 +72,7 @@ Exercise buildExercise(
   ExerciseContext ctx,
   double stability,
   Random rng, {
-  List<ExerciseGenerator> registry = exerciseGenerators,
+  required List<ExerciseGenerator> registry,
   Set<ExerciseKind> avoid = const {},
 }) {
   final first = classFor(stability, rng);

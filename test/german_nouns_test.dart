@@ -2,7 +2,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:latin_practice/data/exercise_translate.dart';
+import 'package:latin_practice/data/exercise_kinds.dart';
 import 'package:latin_practice/data/german_forms.dart';
 import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/grammar/engine.dart';
@@ -196,42 +196,45 @@ const _spikeLemmas = {
 /// `<Latin lemma> <kind>` → what Random(207) builds over the whole case
 /// bundle: the shown text, then the right answer or the accepted set.
 const _seed207 = {
-  'servus latDeWahl': 'serve → (o) Sklave!',
-  'servus deLatWahl': '(o) Sklave! → serve',
-  'servus deLatTippen': '(o) Sklave! → serve',
-  'nūntius latDeWahl': 'nūntie → (o) Bote!',
-  'nūntius deLatWahl': '(o) Bote! → nūntie',
-  'nūntius deLatTippen': '(o) Bote! → nūntie',
-  'templum latDeWahl': 'CannotBuild',
-  'templum deLatWahl': '(o) Tempel! → templum',
-  'templum deLatTippen': '(o) Tempel! → templum | templa',
-  'Rōmānus latDeWahl': 'Rōmāne → (o) Römer!',
-  'Rōmānus deLatWahl': '(o) Römer! → Rōmāne',
-  'Rōmānus deLatTippen': '(o) Römer! → Rōmāne | Rōmānī',
-  'dōnum latDeWahl': 'dōnum → (o) Geschenk!',
-  'dōnum deLatWahl': '(o) Geschenk! → dōnum',
-  'dōnum deLatTippen': '(o) Geschenk! → dōnum',
-  'vīlla latDeWahl': 'CannotBuild',
-  'vīlla deLatWahl': '(o) Haus! → vīlla',
-  'vīlla deLatTippen': '(o) Haus! → vīlla',
-  'rosa latDeWahl': 'CannotBuild',
-  'rosa deLatWahl': '(o) Rose! → rosa',
-  'rosa deLatTippen': '(o) Rose! → rosa',
-  'fīlia latDeWahl': 'CannotBuild',
-  'fīlia deLatWahl': '(o) Tochter! → fīlia',
-  'fīlia deLatTippen': '(o) Tochter! → fīlia',
-  'cor latDeWahl': 'cor → (o) Herz!',
-  'cor deLatWahl': '(o) Herz! → cor',
-  'cor deLatTippen': '(o) Herz! → cor',
-  'Rōma latDeWahl': 'CannotBuild',
-  'Rōma deLatWahl': 'mit Rom → Rōmā',
-  'Rōma deLatTippen': 'mit Rom → Rōmā',
+  'rosa latDeWahl': 'rosae → (o) Rosen!',
+  'rosa deLatWahl': '(o) Rosen! → rosae',
+  'rosa deLatTippen': '(o) Rosen! → rosae',
+  'Rōmānus latDeWahl': 'Rōmānī → (o) Römer!',
+  'Rōmānus deLatWahl': '(o) Römer! → Rōmānī',
+  'Rōmānus deLatTippen': '(o) Römer! → Rōmānī | Rōmāne',
+  'dōnum latDeWahl': 'dōna → (o) Geschenke!',
+  'dōnum deLatWahl': '(o) Geschenke! → dōna',
+  'dōnum deLatTippen': '(o) Geschenke! → dōna',
+  'fīlia latDeWahl': 'fīliae → (o) Töchter!',
+  'fīlia deLatWahl': '(o) Töchter! → fīliae',
+  'fīlia deLatTippen': '(o) Töchter! → fīliae',
+  'servus latDeWahl': 'servī → (o) Sklaven!',
+  'servus deLatWahl': '(o) Sklaven! → servī',
+  'servus deLatTippen': '(o) Sklaven! → servī',
+  'templum latDeWahl': 'templa → (o) Tempel!',
+  'templum deLatWahl': '(o) Tempel! → templa',
+  'templum deLatTippen': '(o) Tempel! → templa | templum',
+  'vīlla latDeWahl': 'vīllae → (o) Häuser!',
+  'vīlla deLatWahl': '(o) Häuser! → vīllae',
+  'vīlla deLatTippen': '(o) Häuser! → vīllae',
+  'nūntius latDeWahl': 'nūntiī → (o) Boten!',
+  'nūntius deLatWahl': '(o) Boten! → nūntiī',
+  'nūntius deLatTippen': '(o) Boten! → nūntiī',
+  'cor latDeWahl': 'corda → (o) Herzen!',
+  'cor deLatWahl': '(o) Herzen! → corda',
+  'cor deLatTippen': '(o) Herzen! → corda',
+  'Rōma latDeWahl': 'Rōmae → (ich helfe) Rom',
+  'Rōma deLatWahl': '(ich helfe) Rom → Rōmae',
+  'Rōma deLatTippen': '(ich helfe) Rom → Rōmae',
 };
 
-const _kinds = [
-  LatDeChoiceGenerator(),
-  DeLatChoiceGenerator(),
-  DeLatTypeGenerator(),
+final _kinds = [
+  for (final kind in [
+    ExerciseKind.latDeWahl,
+    ExerciseKind.deLatWahl,
+    ExerciseKind.deLatTippen,
+  ])
+    generatorFor(kind, exerciseGenerators),
 ];
 
 String _outcome(Exercise e) => switch (e.answer) {

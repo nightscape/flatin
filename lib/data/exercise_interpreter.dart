@@ -104,13 +104,7 @@ final class SpecGenerator implements ExerciseGenerator {
       MatchingAnswer(:final pairs) => pairs.first.$1.formKey,
     });
     final objections = <String>[];
-    for (final slice in _slicesInto(
-      spec.select,
-      cube,
-      target,
-      bundle,
-      exercise,
-    )) {
+    for (final slice in _slicesInto(spec, cube, target, bundle, exercise)) {
       final missing = _uncovered(spec, slice, cube);
       if (missing != null) {
         objections.add(missing);
@@ -174,14 +168,14 @@ Iterable<Slice> _sample(List<FormCell> cells) => [
 /// Every slice of [select] whose target is [target], read from [exercise]
 /// where the selection is random.
 Iterable<Slice> _slicesInto(
-  Selection select,
+  KindSpec spec,
   Cube cube,
   FormCell target,
   GrammarBundle bundle,
   Exercise exercise,
-) => switch (select) {
+) => switch (spec.select) {
   OneCell() => [if (target.bundle == bundle) Slice(target)],
-  OddOneOut() => [
+  OddOneOut select => [
     if (exercise.answer case ChoiceAnswer(:final options))
       if (options.every((o) => o.builtWrongBy == null))
         if ([for (final o in options) cube.cell(target.word, o.formKey)]
@@ -192,7 +186,7 @@ Iterable<Slice> _slicesInto(
   Spoil(:final ways) => [
     if (target.bundle == bundle)
       for (final spoiled in _spoilings(cube, target, ways))
-        if (spoiled.text == exercise.questionParams['wrong'])
+        if (spoiled.text == exercise.questionParams[_spoiledParam(spec)])
           Slice(target, spoiled: spoiled),
   ],
   Sample() => [
@@ -242,7 +236,17 @@ Iterable<Slice> _oddOneOut(
   }
 }
 
-/// The texts [ways] build for [target] that are no form of its word.
+/// The param that shows the spoiled text.
+String _spoiledParam(KindSpec spec) => spec.params.entries
+    .singleWhere(
+      (e) => switch (e.value) {
+        Show(of: Ref.spoiled) => true,
+        _ => false,
+      },
+    )
+    .key;
+
+/// The texts [ways] build for [target]; none is a form of its word.
 Iterable<BuiltWrong> _spoilings(
   Cube cube,
   FormCell target,
@@ -253,7 +257,7 @@ Iterable<BuiltWrong> _spoilings(
       SpoilWay.compoundSwap => cube.compoundSwaps(target),
       SpoilWay.otherTypeEnding => cube.builtWrong(target),
     },
-].where((w) => !cube.isFormOf(w.word, w.text));
+];
 
 bool _isOddOneOut(
   OddOneOut select,

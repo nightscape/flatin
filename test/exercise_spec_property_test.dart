@@ -40,7 +40,7 @@ void main() {
         for (final bundle in {
           for (final k in word.formOrder) bundleOf(word, k),
         }) {
-          for (final g in specGenerators) {
+          for (final g in exerciseGenerators) {
             final ctx = ExerciseContext(
               unlocked: unlockedFor(g.spec, word, bundle),
               pool: [word],
@@ -66,6 +66,6 @@ void main() {
     }
     expect(invalid, isEmpty);
     expect(built, greaterThan(1000));
-    expect(builtKinds, {for (final g in specGenerators) g.kind});
+    expect(builtKinds, {for (final g in exerciseGenerators) g.kind});
   });
 }

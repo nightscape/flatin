@@ -6,6 +6,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fsrs/fsrs.dart';
 import '../data/asset_text.dart';
+import '../data/exercise_kinds.dart';
 import '../data/german_forms.dart';
 import '../models/distractor_strategy.dart';
 import '../models/exercise.dart';

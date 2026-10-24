@@ -6,6 +6,7 @@ import 'package:fsrs/fsrs.dart' show Rating;
 import 'package:latin_practice/data/attribution.dart';
 import 'package:latin_practice/data/curriculum.dart';
 import 'package:latin_practice/data/exercise_choice.dart';
+import 'package:latin_practice/data/exercise_kinds.dart';
 import 'package:latin_practice/data/german_forms.dart';
 import 'package:latin_practice/data/lesson_data.dart';
 import 'package:latin_practice/data/practice_data.dart';
@@ -93,7 +94,17 @@ void main() {
           ];
           for (final word in sample) {
             for (final stability in [0.0, 10.0]) {
-              _answer(word, buildExercise(word, bundle, ctx, stability, rng));
+              _answer(
+                word,
+                buildExercise(
+                  word,
+                  bundle,
+                  ctx,
+                  stability,
+                  rng,
+                  registry: exerciseGenerators,
+                ),
+              );
             }
             for (final generator in exerciseGenerators) {
               final Exercise exercise;

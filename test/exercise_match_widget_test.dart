@@ -6,11 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fsrs/fsrs.dart';
 import 'package:latin_practice/data/attribution.dart';
-import 'package:latin_practice/data/exercise_match.dart';
-import 'package:latin_practice/data/german_forms.dart';
+import 'package:latin_practice/data/exercise_kinds.dart';
 import 'package:latin_practice/data/practice_data.dart';
-import 'package:latin_practice/grammar/schema.dart';
-import 'package:latin_practice/models/derivation.dart' show norm;
 import 'package:latin_practice/models/exercise.dart';
 import 'package:latin_practice/models/practice_item.dart';
 import 'package:latin_practice/screens/exercise_match_widget.dart';
@@ -21,221 +18,24 @@ import 'support/word_classification_harness.dart';
 
 const _bundle = 'ind.praes.akt';
 
-class _SameGerman implements GermanForms {
-  const _SameGerman();
-
-  @override
-  bool covers(PracticeItem item, FormKey key) => true;
-
-  @override
-  String render(PracticeItem item, FormKey key) => 'immer gleich';
-
-  @override
-  List<String> accepted(PracticeItem item, FormKey key) => [render(item, key)];
-}
-
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   late PracticeItem vocare;
-  late PracticeItem nominal;
   setUpAll(() async {
     final verbs = await loadPracticeItems('lib/data/latin_verbs.yaml');
     vocare = verbs.singleWhere((i) => i.id == 'verbs:vocare');
-    final nouns = await loadPracticeItems('lib/data/latin_nouns.yaml');
-    nominal = nouns.first;
   });
 
-  const generator = MatchGenerator();
-  Exercise build(
-    PracticeItem word,
-    GrammarBundle bundle, {
-    ExerciseContext? ctx,
-  }) => generator.build(
+  final generator = generatorFor(ExerciseKind.zuordnen, exerciseGenerators);
+  Exercise build(PracticeItem word, GrammarBundle bundle) => generator.build(
     word,
     bundle,
-    ctx ?? fakeExerciseContext(unlocked: {bundle}, pool: [word]),
+    fakeExerciseContext(unlocked: {bundle}, pool: [word]),
     Random(3),
   );
 
   MatchingAnswer answerOf(Exercise e) => e.answer as MatchingAnswer;
-
-  group('build', () {
-    test('four Latin forms to four German texts of a real verb', () {
-      final exercise = build(vocare, _bundle);
-      final pairs = answerOf(exercise).pairs;
-
-      expect(exercise.kind, ExerciseKind.zuordnen);
-      expect(exercise.questionKey, 'exercise.match.question');
-      expect(exercise.wordCardId, vocare.id);
-      expect(exercise.grammarCardId, GrammarCardId('verbs', _bundle));
-      expect(pairs, hasLength(4));
-      for (final (latin, german) in pairs) {
-        final index = vocare.formOrder.indexOf(latin.formKey);
-        expect(bundleOf(vocare, latin.formKey), _bundle);
-        expect(latin.text, vocare.forms[index]);
-        expect(german.formKey, latin.formKey);
-        expect(german.text, '${vocare.lemma}@${latin.formKey}');
-        expect(latin.builtWrongBy, isNull);
-        expect(german.builtWrongBy, isNull);
-      }
-      expect(pairs.map((p) => norm(p.$1.text)).toSet(), hasLength(4));
-      expect(pairs.map((p) => p.$2.text).toSet(), hasLength(4));
-    });
-
-    test('a real verb gets the German texts of the German verb data', () {
-      final latinVerbs = parseGrammarFiles({
-        for (final path in [
-          'lib/data/latin_nouns.yaml',
-          'lib/data/latin_verbs.yaml',
-        ])
-          path: File(path).readAsStringSync(),
-      }).singleWhere((f) => f.dataFileId == 'verbs');
-      final german = GrammarGermanForms(
-        File('lib/data/german_verbs.yaml').readAsStringSync(),
-        latinVerbs,
-      );
-      final exercise = build(
-        vocare,
-        _bundle,
-        ctx: ExerciseContext(
-          unlocked: {_bundle},
-          pool: [vocare],
-          german: german,
-        ),
-      );
-      const expected = {
-        'ind.praes.akt.1.sg': 'ich rufe',
-        'ind.praes.akt.1.pl': 'wir rufen',
-        'ind.praes.akt.2.sg': 'du rufst',
-        'ind.praes.akt.2.pl': 'ihr ruft',
-        'ind.praes.akt.3.sg': 'er/sie/es ruft',
-        'ind.praes.akt.3.pl': 'sie (Pl.) rufen',
-      };
-      final pairs = answerOf(exercise).pairs;
-      expect(pairs, hasLength(4));
-      for (final (latin, germanOption) in pairs) {
-        expect(germanOption.text, expected[latin.formKey]);
-      }
-    });
-
-    test('a noun bundle builds as well', () {
-      final bundle = bundleOf(nominal, nominal.formOrder.first);
-      expect(answerOf(build(nominal, bundle)).pairs, hasLength(4));
-    });
-
-    test('a word without German forms cannot be built', () {
-      expect(
-        () => build(
-          vocare,
-          _bundle,
-          ctx: const ExerciseContext(
-            unlocked: {_bundle},
-            pool: [],
-            german: FakeGermanForms(coversAll: false),
-          ),
-        ),
-        throwsA(
-          isA<CannotBuild>().having(
-            (e) => e.reason,
-            'reason',
-            contains('no German form'),
-          ),
-        ),
-      );
-    });
-
-    test('a bundle with a form without German text cannot be built', () async {
-      final latinVerbs = parseGrammarFiles({
-        for (final path in [
-          'lib/data/latin_nouns.yaml',
-          'lib/data/latin_verbs.yaml',
-        ])
-          path: File(path).readAsStringSync(),
-      }).singleWhere((f) => f.dataFileId == 'verbs');
-      final german = GrammarGermanForms(
-        File('lib/data/german_verbs.yaml').readAsStringSync(),
-        latinVerbs,
-      );
-      final verbs = await loadPracticeItems('lib/data/latin_verbs.yaml');
-      final venire = verbs.singleWhere((i) => i.id == 'verbs:venire');
-      for (final bundle in ['ind.praes.pass', 'imp.praes.akt']) {
-        expect(
-          () => build(
-            venire,
-            bundle,
-            ctx: ExerciseContext(
-              unlocked: {bundle},
-              pool: [venire],
-              german: german,
-            ),
-          ),
-          throwsA(isA<CannotBuild>()),
-          reason: bundle,
-        );
-      }
-    });
-
-    test('a locked bundle cannot be built', () {
-      expect(
-        () => build(
-          vocare,
-          _bundle,
-          ctx: fakeExerciseContext(unlocked: {'ind.praes.pass'}),
-        ),
-        throwsA(
-          isA<CannotBuild>().having(
-            (e) => e.reason,
-            'reason',
-            contains('locked'),
-          ),
-        ),
-      );
-    });
-
-    test('a bundle with fewer than four forms cannot be built', () {
-      final small = vocare.formOrder
-          .map((k) => bundleOf(vocare, k))
-          .toSet()
-          .firstWhere(
-            (b) =>
-                vocare.formOrder.where((k) => bundleOf(vocare, k) == b).length <
-                4,
-          );
-      expect(
-        () => build(vocare, small),
-        throwsA(
-          isA<CannotBuild>().having(
-            (e) => e.reason,
-            'reason',
-            contains('distinguishable'),
-          ),
-        ),
-      );
-    });
-
-    test('forms with the same German text cannot be told apart', () {
-      expect(
-        () => build(
-          vocare,
-          _bundle,
-          ctx: const ExerciseContext(
-            unlocked: {_bundle},
-            pool: [],
-            german: _SameGerman(),
-          ),
-        ),
-        throwsA(isA<CannotBuild>()),
-      );
-    });
-
-    test('the generator is registered', () {
-      expect(
-        generatorFor(ExerciseKind.zuordnen, exerciseGenerators),
-        isA<MatchGenerator>(),
-      );
-    });
-  });
 
   group('attribution', () {
     late Exercise exercise;

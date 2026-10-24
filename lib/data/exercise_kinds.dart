@@ -121,6 +121,8 @@ const kindSpecs = [
   ),
 ];
 
-final List<SpecGenerator> specGenerators = [
+/// The generators the app ships, one per kind. They are stateless: everything
+/// that varies per call comes from [ExerciseContext].
+final List<SpecGenerator> exerciseGenerators = [
   for (final spec in kindSpecs) SpecGenerator(spec),
 ];

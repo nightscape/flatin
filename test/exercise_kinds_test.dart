@@ -6,6 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/data/exercise_cube.dart';
 import 'package:latin_practice/data/exercise_interpreter.dart';
 import 'package:latin_practice/data/exercise_kinds.dart';
+import 'package:latin_practice/data/exercise_spec.dart';
 import 'package:latin_practice/data/german_forms.dart';
 import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/grammar/schema.dart';
@@ -40,7 +41,7 @@ class _ScriptedGerman implements GermanForms {
 }
 
 SpecGenerator _spec(ExerciseKind kind) =>
-    specGenerators.singleWhere((g) => g.kind == kind);
+    exerciseGenerators.singleWhere((g) => g.kind == kind);
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -407,6 +408,56 @@ void main() {
         throwsA(isA<AssertionError>()),
       );
     });
+
+    group('deLatWahl objects to a wrong option that', () {
+      const bundle = 'ind.praes.akt';
+      Set<String> objectionsToSwap(
+        bool Function(Cube, FormCell, FormCell) pick,
+      ) {
+        final c = ctx(vocare, {bundle});
+        final cube = Cube(c);
+        final e = build(ExerciseKind.deLatWahl, vocare, bundle);
+        final answer = e.answer as ChoiceAnswer;
+        final target = cube.cell(vocare, answer.right.formKey);
+        final stray = cube
+            .cellsOf(vocare)
+            .firstWhere((x) => pick(cube, target, x));
+        final swapped = answer.options.indexWhere(
+          (o) => o != answer.right && o.builtWrongBy == null,
+        );
+        final options = [...answer.options];
+        options[swapped] = optionOf(stray, View.latin, cube);
+        final changed = Exercise(
+          wordCardId: e.wordCardId,
+          grammarCardId: e.grammarCardId,
+          kind: e.kind,
+          questionKey: e.questionKey,
+          questionParams: e.questionParams,
+          answer: ChoiceAnswer(options, answer.right),
+        );
+        return _spec(
+          ExerciseKind.deLatWahl,
+        ).objections(changed, vocare, bundle, c).toSet();
+      }
+
+      test('is two axes away', () {
+        expect(
+          objectionsToSwap(
+            (cube, t, x) => distance(t, x) == 2 && cube.unlocked(x),
+          ),
+          contains(contains('no option source cell')),
+        );
+      });
+
+      test('belongs to a locked bundle', () {
+        expect(
+          objectionsToSwap(
+            (cube, t, x) => distance(t, x) == 1 && !cube.unlocked(x),
+          ),
+          contains(contains('no option source cell')),
+        );
+      });
+    });
   });
 
   group('A8 umformen from its spec', () {
@@ -557,6 +608,26 @@ void main() {
         () => build(ExerciseKind.fehlerFinden, allValid, bundle),
         throwsA(isA<CannotBuild>()),
       );
+    });
+
+    test('admits its exercise whatever the spoiled param is called', () {
+      final spec = _spec(ExerciseKind.fehlerFinden).spec;
+      final renamed = SpecGenerator(
+        KindSpec(
+          kind: spec.kind,
+          questionKey: spec.questionKey,
+          select: spec.select,
+          params: {
+            for (final MapEntry(:key, :value) in spec.params.entries)
+              key == 'wrong' ? 'spoiled' : key: value,
+          },
+          answer: spec.answer,
+        ),
+      );
+      final c = ctx(vocare, {perfPass});
+      final e = renamed.build(vocare, perfPass, c, Random(0));
+      expect(e.questionParams, contains('spoiled'));
+      expect(renamed.objections(e, vocare, perfPass, c), isEmpty);
     });
   });
 
@@ -727,6 +798,44 @@ void main() {
       }
     });
 
+    test('objects to a twin pairing only while macron twins are avoided', () {
+      ExerciseContext context({required bool avoid}) => ExerciseContext(
+        unlocked: {puella.type},
+        pool: [puella],
+        german: nounGerman,
+        avoidMacronTwins: avoid,
+      );
+      final generator = _spec(ExerciseKind.zuordnen);
+      final twins =
+          [
+            for (var seed = 0; seed < 20; seed++)
+              generator.build(
+                puella,
+                puella.type,
+                context(avoid: false),
+                Random(seed),
+              ),
+          ].where(
+            (e) =>
+                (e.answer as MatchingAnswer).pairs
+                    .map((p) => norm(p.$1.text))
+                    .toSet()
+                    .length <
+                4,
+          );
+      expect(twins, isNotEmpty);
+      for (final e in twins) {
+        expect(
+          generator.objections(e, puella, puella.type, context(avoid: false)),
+          isEmpty,
+        );
+        expect(
+          generator.objections(e, puella, puella.type, context(avoid: true)),
+          isNotEmpty,
+        );
+      }
+    });
+
     test('never pairs two Latin forms that differ only by macrons', () {
       for (var seed = 0; seed < 20; seed++) {
         final e = _spec(ExerciseKind.zuordnen).build(
@@ -786,6 +895,44 @@ void main() {
                 .contains(norm(e.questionParams['start']!)),
           );
       expect(twins, isNotEmpty);
+    });
+
+    test('objects to a twin start only while macron twins are avoided', () {
+      final everywhere = {
+        for (final k in legere.formOrder) bundleOf(legere, k),
+      };
+      ExerciseContext context({required bool avoid}) => ExerciseContext(
+        unlocked: everywhere,
+        pool: [legere],
+        german: german,
+        avoidMacronTwins: avoid,
+      );
+      final generator = _spec(ExerciseKind.formenKette);
+      final twins =
+          [
+            for (var seed = 0; seed < 400; seed++)
+              chain(legere, 'ind.fut2.akt', seed, avoidMacronTwins: false),
+          ].where(
+            (e) => (e.answer as TypedAnswer).accepted
+                .map(norm)
+                .contains(norm(e.questionParams['start']!)),
+          );
+      expect(twins, isNotEmpty);
+      for (final e in twins) {
+        expect(
+          generator.objections(
+            e,
+            legere,
+            'ind.fut2.akt',
+            context(avoid: false),
+          ),
+          isEmpty,
+        );
+        expect(
+          generator.objections(e, legere, 'ind.fut2.akt', context(avoid: true)),
+          isNotEmpty,
+        );
+      }
     });
 
     test('changes two or three axes of a shown form', () {

@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/data/exercise_choice.dart';
+import 'package:latin_practice/data/exercise_kinds.dart';
 import 'package:latin_practice/data/german_forms.dart';
 import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/models/exercise.dart';
@@ -19,7 +20,7 @@ int sweep(
   List<PracticeItem> items,
   GermanForms german,
   String locale, {
-  List<ExerciseGenerator> registry = exerciseGenerators,
+  required List<ExerciseGenerator> registry,
 }) {
   final pools = {
     for (final id in {for (final i in items) i.dataFileId})
@@ -82,7 +83,10 @@ void main() {
     'every word x bundle pair builds an exercise in the German UI',
     () async {
       await expectEveryWordLoaded(items);
-      expect(sweep(items, german, 'de'), expectedPairs(items));
+      expect(
+        sweep(items, german, 'de', registry: exerciseGenerators),
+        expectedPairs(items),
+      );
     },
     tags: 'sweep',
   );
@@ -91,7 +95,10 @@ void main() {
     'every word x bundle pair builds an exercise in the English UI',
     () async {
       await expectEveryWordLoaded(items);
-      expect(sweep(items, const NoForms(), 'en'), expectedPairs(items));
+      expect(
+        sweep(items, const NoForms(), 'en', registry: exerciseGenerators),
+        expectedPairs(items),
+      );
     },
     tags: 'sweep',
   );
