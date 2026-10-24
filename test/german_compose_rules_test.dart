@@ -420,11 +420,18 @@ void main() {
     test('a variant rule for a key no other rule makes throws', () {
       final yaml = _replaceOnce(
         _course,
-        '      # The simple past is also accepted for the perfect.\n'
-            '      - match: {modus: ind, tempus: perf, genus_verbi: akt}\n'
-            '        variant: true\n',
+        '      - match: {modus: ind, tempus: perf, genus_verbi: akt}\n'
+            '        variant: true\n'
+            '        join: " "\n'
+            '        parts:\n'
+            '          - {lexeme: pron, pass: [person, numerus]}\n'
+            '          - {self: roh, set: {modus: ind, tempus: impf}',
         '      - match: {modus: konj, tempus: fut, genus_verbi: akt}\n'
-            '        variant: true\n',
+            '        variant: true\n'
+            '        join: " "\n'
+            '        parts:\n'
+            '          - {lexeme: pron, pass: [person, numerus]}\n'
+            '          - {self: roh, set: {modus: ind, tempus: impf}',
       );
       expect(() => parseGrammarFiles({_path: yaml}), _schemaError('S24'));
     });

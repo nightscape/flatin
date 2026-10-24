@@ -4,7 +4,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/grammar/engine.dart';
 import 'package:latin_practice/grammar/schema.dart';
 
-const _path = 'lib/data/german_verbs.yaml';
+final _path =
+    Platform.environment['GERMAN_VERBS_YAML'] ?? 'lib/data/german_verbs.yaml';
 
 void main() {
   final engine = GrammarEngine(
