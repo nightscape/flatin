@@ -1,33 +1,144 @@
 import '../models/reward.dart';
 
-typedef Building = ({String id, String emoji});
+const double townWidth = 1024;
+const double townHeight = 765;
 
+/// Position in fractions of the town background: horizontal centre, bottom edge, width.
+typedef Building = ({String id, double x, double bottom, double width});
+
+/// The build steps of stage 1, in the order they are earned.
 const List<Building> romanTown = [
-  (id: 'domus', emoji: '🏠'),
-  (id: 'hortus', emoji: '🌳'),
-  (id: 'fons', emoji: '⛲'),
-  (id: 'taberna', emoji: '🏪'),
-  (id: 'villa', emoji: '🏡'),
-  (id: 'templum', emoji: '🏛️'),
-  (id: 'ager', emoji: '🌾'),
-  (id: 'vinea', emoji: '🍇'),
-  (id: 'stabulum', emoji: '🐎'),
-  (id: 'figlina', emoji: '🏺'),
-  (id: 'pistrinum', emoji: '🍞'),
-  (id: 'aquaeductus', emoji: '🌉'),
-  (id: 'thermae', emoji: '🛁'),
-  (id: 'statua', emoji: '🗿'),
-  (id: 'portus', emoji: '⚓'),
-  (id: 'navis', emoji: '⛵'),
-  (id: 'murus', emoji: '🧱'),
-  (id: 'castra', emoji: '⛺'),
-  (id: 'bibliotheca', emoji: '📜'),
-  (id: 'amphitheatrum', emoji: '🏟️'),
+  (
+    id: 'domus',
+    x: 300 / townWidth,
+    bottom: 400 / townHeight,
+    width: 110 / townWidth,
+  ),
+  (
+    id: 'hortus',
+    x: 410 / townWidth,
+    bottom: 370 / townHeight,
+    width: 110 / townWidth,
+  ),
+  (
+    id: 'fons',
+    x: 420 / townWidth,
+    bottom: 470 / townHeight,
+    width: 80 / townWidth,
+  ),
+  (
+    id: 'taberna',
+    x: 520 / townWidth,
+    bottom: 450 / townHeight,
+    width: 80 / townWidth,
+  ),
+  (
+    id: 'villa',
+    x: 640 / townWidth,
+    bottom: 330 / townHeight,
+    width: 140 / townWidth,
+  ),
+  (
+    id: 'templum',
+    x: 520 / townWidth,
+    bottom: 330 / townHeight,
+    width: 140 / townWidth,
+  ),
+  (
+    id: 'ager',
+    x: 840 / townWidth,
+    bottom: 260 / townHeight,
+    width: 110 / townWidth,
+  ),
+  (
+    id: 'vinea',
+    x: 960 / townWidth,
+    bottom: 280 / townHeight,
+    width: 110 / townWidth,
+  ),
+  (
+    id: 'stabulum',
+    x: 760 / townWidth,
+    bottom: 420 / townHeight,
+    width: 110 / townWidth,
+  ),
+  (
+    id: 'figlina',
+    x: 880 / townWidth,
+    bottom: 520 / townHeight,
+    width: 110 / townWidth,
+  ),
+  (
+    id: 'pistrinum',
+    x: 640 / townWidth,
+    bottom: 520 / townHeight,
+    width: 110 / townWidth,
+  ),
+  (
+    id: 'aquaeductus',
+    x: 560 / townWidth,
+    bottom: 230 / townHeight,
+    width: 110 / townWidth,
+  ),
+  (
+    id: 'thermae',
+    x: 330 / townWidth,
+    bottom: 540 / townHeight,
+    width: 140 / townWidth,
+  ),
+  (
+    id: 'statua',
+    x: 470 / townWidth,
+    bottom: 560 / townHeight,
+    width: 80 / townWidth,
+  ),
+  (
+    id: 'portus',
+    x: 150 / townWidth,
+    bottom: 460 / townHeight,
+    width: 110 / townWidth,
+  ),
+  (
+    id: 'navis',
+    x: 70 / townWidth,
+    bottom: 560 / townHeight,
+    width: 110 / townWidth,
+  ),
+  (
+    id: 'murus',
+    x: 210 / townWidth,
+    bottom: 330 / townHeight,
+    width: 140 / townWidth,
+  ),
+  (
+    id: 'castra',
+    x: 720 / townWidth,
+    bottom: 650 / townHeight,
+    width: 140 / townWidth,
+  ),
+  (
+    id: 'bibliotheca',
+    x: 560 / townWidth,
+    bottom: 640 / townHeight,
+    width: 140 / townWidth,
+  ),
+  (
+    id: 'amphitheatrum',
+    x: 360 / townWidth,
+    bottom: 700 / townHeight,
+    width: 190 / townWidth,
+  ),
 ];
 
+/// Distinct built buildings in step order; ledgers may hold repeated ids.
 List<Building> townOf(RewardLedger ledger) => [
-  for (final id in ledger.buildings) romanTown.singleWhere((b) => b.id == id),
+  for (final b in romanTown)
+    if (ledger.buildings.contains(b.id)) b,
 ];
+
+/// The first step not built yet, null when the town is complete.
+Building? nextBuilding(RewardLedger ledger) =>
+    romanTown.where((b) => !ledger.buildings.contains(b.id)).firstOrNull;
 
 class PointsStrategy implements RewardStrategy {
   const PointsStrategy();
@@ -64,7 +175,7 @@ class HardWordBonusStrategy implements RewardStrategy {
       };
 }
 
-/// After the last building the list starts again.
+/// One building per round until the town is complete.
 class TownStrategy implements RewardStrategy {
   const TownStrategy();
 
@@ -75,9 +186,7 @@ class TownStrategy implements RewardStrategy {
   List<RewardEffect> onEvent(RewardEvent event, RewardLedger ledger) =>
       switch (event) {
         RoundFinished() => [
-          BuildingAdded(
-            romanTown[ledger.buildings.length % romanTown.length].id,
-          ),
+          if (nextBuilding(ledger) case final next?) BuildingAdded(next.id),
         ],
         _ => const [],
       };

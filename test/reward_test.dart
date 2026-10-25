@@ -41,7 +41,11 @@ void main() {
         expect(next.points, greaterThanOrEqualTo(ledger.points));
         expect(
           next.buildings.length,
-          ledger.buildings.length + (event is RoundFinished ? 1 : 0),
+          ledger.buildings.length +
+              (event is RoundFinished &&
+                      ledger.buildings.length < romanTown.length
+                  ? 1
+                  : 0),
         );
         expect(next.practiceDays, greaterThanOrEqualTo(ledger.practiceDays));
         if (event case Answered(
@@ -61,19 +65,29 @@ void main() {
         }
         ledger = next;
       }
-      expect(ledger.buildings.length, rounds);
+      expect(ledger.buildings.length, min(rounds, romanTown.length));
       expect(ledger.practiceDays, days.length);
       expect(ledger.buildings.first, romanTown.first.id);
     }
   });
 
-  test('the town starts again after the last building', () {
-    var ledger = const RewardLedger();
-    for (var i = 0; i <= romanTown.length; i++) {
-      ledger = _send(ledger, const RoundFinished());
-    }
-    expect(ledger.buildings.take(romanTown.length), romanTown.map((b) => b.id));
-    expect(ledger.buildings.last, romanTown.first.id);
+  test(
+    'the town is complete after the last building and adds nothing more',
+    () {
+      var ledger = const RewardLedger();
+      for (var i = 0; i < romanTown.length; i++) {
+        ledger = _send(ledger, const RoundFinished());
+      }
+      expect(ledger.buildings, romanTown.map((b) => b.id));
+      expect(nextBuilding(ledger), isNull);
+      expect(_send(ledger, const RoundFinished()).buildings, ledger.buildings);
+    },
+  );
+
+  test('a ledger with repeated ids builds the first step not built yet', () {
+    const ledger = RewardLedger(buildings: ['domus', 'hortus', 'domus']);
+    expect(townOf(ledger).map((b) => b.id), ['domus', 'hortus']);
+    expect(nextBuilding(ledger)!.id, 'fons');
   });
 
   test('a non-positive point gain is rejected', () {
