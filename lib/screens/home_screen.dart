@@ -1,6 +1,9 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
+import '../data/rewards.dart';
 import '../widgets/app_drawer.dart';
 import '../models/practice_item.dart';
 import '../providers/fsrs_provider.dart';
@@ -39,51 +42,65 @@ class HomeScreen extends ConsumerWidget {
         child: Center(
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 560),
-            child: Column(
-              children: [
-                if (showTown) ...[
-                  const _TownPanel(),
-                  const SizedBox(height: 20),
-                ],
-                const _PracticeTypeButton(
-                  dataFileId: 'nouns',
-                  labelKey: 'home.nouns',
-                  icon: Icons.account_balance,
-                  buttonKey: Key('home.nouns.button'),
-                ),
-                const SizedBox(height: 14),
-                const _PracticeTypeButton(
-                  dataFileId: 'verbs',
-                  labelKey: 'home.verbs',
-                  icon: Icons.directions_run,
-                  buttonKey: Key('home.verbs.button'),
-                ),
-                const SizedBox(height: 14),
-                _MenuButton(
-                  buttonKey: const Key('home.grammar.button'),
-                  icon: Icons.menu_book,
-                  label: FlutterI18n.translate(context, 'home.grammar'),
-                  onPressed: () => Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const GrammarStartScreen(),
+            child: LayoutBuilder(
+              builder: (context, box) {
+                final menu = Column(
+                  children: [
+                    const _PracticeTypeButton(
+                      dataFileId: 'nouns',
+                      labelKey: 'home.nouns',
+                      icon: Icons.account_balance,
+                      buttonKey: Key('home.nouns.button'),
                     ),
-                  ),
-                ),
-                const SizedBox(height: 14),
-                _MenuButton(
-                  buttonKey: const Key('home.wordClassification.button'),
-                  icon: Icons.psychology,
-                  label: FlutterI18n.translate(
-                    context,
-                    'home.wordClassification',
-                  ),
-                  onPressed: () => Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const WordClassificationScreen(),
+                    const SizedBox(height: 14),
+                    const _PracticeTypeButton(
+                      dataFileId: 'verbs',
+                      labelKey: 'home.verbs',
+                      icon: Icons.directions_run,
+                      buttonKey: Key('home.verbs.button'),
                     ),
-                  ),
-                ),
-              ],
+                    const SizedBox(height: 14),
+                    _MenuButton(
+                      buttonKey: const Key('home.grammar.button'),
+                      icon: Icons.menu_book,
+                      label: FlutterI18n.translate(context, 'home.grammar'),
+                      onPressed: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const GrammarStartScreen(),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 14),
+                    _MenuButton(
+                      buttonKey: const Key('home.wordClassification.button'),
+                      icon: Icons.psychology,
+                      label: FlutterI18n.translate(
+                        context,
+                        'home.wordClassification',
+                      ),
+                      onPressed: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              const WordClassificationScreen(),
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+                if (!showTown) return menu;
+                final sceneHeight = box.maxWidth * townHeight / townWidth;
+                return Stack(
+                  children: [
+                    const _TownPanel(),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: sceneHeight * _townBase + 8,
+                      ),
+                      child: menu,
+                    ),
+                  ],
+                );
+              },
             ),
           ),
         ),
@@ -92,7 +109,10 @@ class HomeScreen extends ConsumerWidget {
   }
 }
 
-/// The learner's buildings and practice days, on a sky-to-sand backdrop.
+/// The menu may cover the scene below the front-most building.
+final _townBase = townSprites.map((s) => s.bottom).reduce(max);
+
+/// The learner's town scene, captioned with the practice days or an invitation.
 class _TownPanel extends ConsumerWidget {
   const _TownPanel();
 
@@ -101,62 +121,67 @@ class _TownPanel extends ConsumerWidget {
     final rewards = ref.watch(rewardsProvider);
     final Widget content;
     if (rewards.hasError) {
-      content = Text(
-        FlutterI18n.translate(
-          context,
-          'home.error',
-          translationParams: {'error': '${rewards.error}'},
+      content = Center(
+        child: Text(
+          FlutterI18n.translate(
+            context,
+            'home.error',
+            translationParams: {'error': '${rewards.error}'},
+          ),
         ),
       );
     } else if (!rewards.hasValue) {
       content = const Center(child: CircularProgressIndicator());
     } else {
       final ledger = rewards.requireValue;
-      content = Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (ledger.practiceDays > 0)
-            Text(
-              FlutterI18n.translate(
-                context,
-                'round.start.days',
-                translationParams: {'n': '${ledger.practiceDays}'},
-              ),
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-          const SizedBox(height: 8),
-          if (ledger.buildings.isEmpty)
-            Text(
-              FlutterI18n.translate(context, 'home.townEmpty'),
-              style: const TextStyle(color: mutedText),
+      final caption = ledger.buildings.isEmpty
+          ? FlutterI18n.translate(context, 'home.townEmpty')
+          : ledger.practiceDays > 0
+          ? FlutterI18n.translate(
+              context,
+              'round.start.days',
+              translationParams: {'n': '${ledger.practiceDays}'},
             )
-          else
-            TownView(ledger),
+          : null;
+      content = Stack(
+        children: [
+          TownView(ledger),
+          if (caption != null)
+            Positioned(
+              top: 10,
+              left: 10,
+              right: 10,
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    color: parchment.withAlpha(220),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Text(
+                    caption,
+                    style: Theme.of(context).textTheme.titleSmall,
+                  ),
+                ),
+              ),
+            ),
         ],
       );
     }
-    return Container(
+    return ShaderMask(
       key: const Key('home.town'),
-      width: double.infinity,
-      constraints: const BoxConstraints(minHeight: 140),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [Color(0xFFDCEAF2), Color(0xFFF6EBD3), sand],
-        ),
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: gold, width: 3),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x33000000),
-            blurRadius: 8,
-            offset: Offset(0, 3),
-          ),
-        ],
-      ),
-      child: content,
+      blendMode: BlendMode.dstIn,
+      shaderCallback: (rect) => LinearGradient(
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+        colors: const [Colors.black, Colors.transparent],
+        stops: [_townBase, _townBase + 0.1],
+      ).createShader(rect),
+      child: AspectRatio(aspectRatio: townWidth / townHeight, child: content),
     );
   }
 }
