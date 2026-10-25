@@ -101,6 +101,56 @@ runFeatures() {
       await steps.iTakeScreenshot(widgetTester, 'settings_screen');
     });
   });
+  group('Rewards', () {
+    testWidgets('A right answer earns 10 coins', (
+      WidgetTester widgetTester,
+    ) async {
+      await steps.iHaveCoins(widgetTester, 20);
+      await steps.theAppIsRunning(widgetTester);
+      await steps.iStartARound(widgetTester);
+      await steps.iAnswerCorrectly(widgetTester);
+      await steps.iLeaveTheRound(widgetTester);
+      await steps.iShouldHaveCoins(widgetTester, 30);
+    });
+    testWidgets('A task answered right on the second try earns 5 coins', (
+      WidgetTester widgetTester,
+    ) async {
+      await steps.iHaveCoins(widgetTester, 0);
+      await steps.theAppIsRunning(widgetTester);
+      await steps.iStartARound(widgetTester);
+      await steps.iAnswerWrongly(widgetTester);
+      await steps.iFinishTheRound(widgetTester);
+      await steps.iLeaveTheRound(widgetTester);
+      await steps.iShouldHaveCoins(widgetTester, 95);
+    });
+    testWidgets('Finishing a round adds a building and names the next one', (
+      WidgetTester widgetTester,
+    ) async {
+      await steps.iHaveBuilt(widgetTester, 2);
+      await steps.theAppIsRunning(widgetTester);
+      await steps.iStartARound(widgetTester);
+      await steps.iFinishTheRound(widgetTester);
+      await steps.iLeaveTheRound(widgetTester);
+      await steps.myTownHasBuildings(widgetTester, 3);
+      await steps.theNextBuildingIs(widgetTester, 'taberna');
+    });
+    testWidgets('A reward I switched off is not shown', (
+      WidgetTester widgetTester,
+    ) async {
+      await steps.iSwitchedRewardOff(widgetTester, 'points');
+      await steps.iHaveCoins(widgetTester, 20);
+      await steps.theAppIsRunning(widgetTester);
+      await steps.iShouldSeeNoCoins(widgetTester);
+    });
+    testWidgets('A town I switched off is not shown', (
+      WidgetTester widgetTester,
+    ) async {
+      await steps.iSwitchedRewardOff(widgetTester, 'town');
+      await steps.iHaveBuilt(widgetTester, 2);
+      await steps.theAppIsRunning(widgetTester);
+      await steps.iShouldSeeNoTown(widgetTester);
+    });
+  });
   group('Word Classification', () {
     testWidgets('User opens word classification screen', (
       WidgetTester widgetTester,

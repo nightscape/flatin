@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 // IMPORTANT: ⚠️ only import annotations ⚠️
@@ -6,6 +7,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/material.dart';
 import 'package:latin_practice/main.dart' as app;
 import 'package:integration_test/integration_test.dart';
+import 'package:latin_practice/data/rewards.dart';
+import 'package:latin_practice/models/reward.dart';
+import 'package:latin_practice/models/settings.dart';
+import 'package:latin_practice/services/reward_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../support/round_driver.dart';
+import '../support/word_classification_harness.dart' show letItLoad;
 
 /// A widget that can be found again by key after a rebuild.
 bool _isKeyed(Widget widget) => widget.key is ValueKey<String>;
@@ -23,6 +32,7 @@ class AppSteps {
 
   // Navigation steps
   @Given('the app is running')
+  @And('the app is running')
   Future<void> theAppIsRunning(WidgetTester tester) async {
     app.main();
     await tester.pumpAndSettle();
@@ -547,6 +557,133 @@ class AppSteps {
     expect(checkButton, findsOneWidget);
     await tester.tap(checkButton);
     await tester.pumpAndSettle(const Duration(seconds: 2));
+  }
+
+  // Reward steps: the state steps run before `the app is running`.
+  @Given('I have {int} coins')
+  @And('I have {int} coins')
+  Future<void> iHaveCoins(WidgetTester tester, int coins) async {
+    final ledger = await RewardStorage.load();
+    await RewardStorage.save(
+      RewardLedger(points: coins, buildings: ledger.buildings),
+    );
+  }
+
+  @Given('I have built {int} buildings')
+  @And('I have built {int} buildings')
+  Future<void> iHaveBuilt(WidgetTester tester, int count) async {
+    final ledger = await RewardStorage.load();
+    await RewardStorage.save(
+      RewardLedger(
+        points: ledger.points,
+        buildings: [for (final b in romanTown.take(count)) b.id],
+      ),
+    );
+  }
+
+  @Given('I switched the {string} reward off')
+  @And('I switched the {string} reward off')
+  Future<void> iSwitchedRewardOff(WidgetTester tester, String reward) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(
+      'practice_settings',
+      jsonEncode(Settings(disabledRewards: {reward}).toJson()),
+    );
+  }
+
+  @When('I start a round')
+  @And('I start a round')
+  Future<void> iStartARound(WidgetTester tester) async {
+    // The round-end screen builds its buttons lazily; a tall view shows them.
+    tester.view.physicalSize = const Size(1200, 2400);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+    await tap(tester, 'home.grammar.button');
+    await letItLoad(tester);
+    await tap(tester, 'round.start.go');
+    await letItLoad(tester);
+  }
+
+  @When('I answer the task correctly')
+  @And('I answer the task correctly')
+  Future<void> iAnswerCorrectly(WidgetTester tester) async {
+    await answer(tester, shown(tester), right: true);
+    await letItLoad(tester);
+  }
+
+  @When('I answer the task wrongly')
+  @And('I answer the task wrongly')
+  Future<void> iAnswerWrongly(WidgetTester tester) async {
+    await answer(tester, shown(tester), right: false);
+    await letItLoad(tester);
+  }
+
+  @When('I finish the round')
+  @And('I finish the round')
+  Future<void> iFinishTheRound(WidgetTester tester) async {
+    // A task answered wrongly comes back later, so the count of tasks varies.
+    for (var i = 0; i < 12; i++) {
+      if (find.byKey(const Key('round.end.done')).evaluate().isNotEmpty) break;
+      await iAnswerCorrectly(tester);
+    }
+    await tap(tester, 'round.end.done');
+    await letItLoad(tester);
+  }
+
+  @When('I leave the round')
+  @And('I leave the round')
+  Future<void> iLeaveTheRound(WidgetTester tester) async {
+    while (find.byKey(const Key('home.grammar.button')).evaluate().isEmpty) {
+      await tester.pageBack();
+      await letItLoad(tester);
+    }
+  }
+
+  @Then('I should have {int} coins')
+  @And('I should have {int} coins')
+  Future<void> iShouldHaveCoins(WidgetTester tester, int coins) async {
+    expect(
+      find.descendant(
+        of: find.byKey(const Key('home.coins')),
+        matching: find.text('$coins'),
+      ),
+      findsOneWidget,
+    );
+  }
+
+  @Then('I should see no coins')
+  @And('I should see no coins')
+  Future<void> iShouldSeeNoCoins(WidgetTester tester) async {
+    expect(find.byKey(const Key('home.coins')), findsNothing);
+  }
+
+  @Then('I should see no town')
+  @And('I should see no town')
+  Future<void> iShouldSeeNoTown(WidgetTester tester) async {
+    expect(find.byKey(const Key('home.town')), findsNothing);
+  }
+
+  @Then('my town should have {int} buildings')
+  @And('my town should have {int} buildings')
+  Future<void> myTownHasBuildings(WidgetTester tester, int count) async {
+    // A building can show as several sprites, e.g. `aquaeductus-0`.
+    final buildings = find
+        .byWidgetPredicate((w) => _hasKeyPrefix(w, 'town.building.'))
+        .evaluate()
+        .map(
+          (e) => (e.widget.key as ValueKey<String>).value
+              .substring('town.building.'.length)
+              .split('-')
+              .first,
+        )
+        .toSet();
+    expect(buildings, hasLength(count));
+  }
+
+  @Then('the next building should be {string}')
+  @And('the next building should be {string}')
+  Future<void> theNextBuildingIs(WidgetTester tester, String id) async {
+    expect(find.byKey(Key('town.next.$id')), findsOneWidget);
   }
 
   // Screenshot steps

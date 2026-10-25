@@ -137,40 +137,5 @@ void main() {
       expect(find.byKey(const Key('town.building.hortus')), findsOneWidget);
       expect(find.byKey(const Key('town.next.fons')), findsOneWidget);
     });
-
-    testWidgets('shows the earned points as coins', (tester) async {
-      await pumpHome(tester, ledger: const RewardLedger(points: 42));
-      expect(
-        find.descendant(
-          of: find.byKey(const Key('home.coins')),
-          matching: find.text('42'),
-        ),
-        findsOneWidget,
-      );
-    });
-
-    testWidgets('hides the coins when the learner switched points off', (
-      tester,
-    ) async {
-      await pumpHome(
-        tester,
-        ledger: const RewardLedger(points: 42),
-        settings: Settings(disabledRewards: {'points'}),
-      );
-      expect(find.byKey(const Key('home.coins')), findsNothing);
-    });
-
-    testWidgets('is hidden when the learner switched the town off', (
-      tester,
-    ) async {
-      await pumpHome(
-        tester,
-        ledger: const RewardLedger(practiceDays: 3),
-        settings: Settings(disabledRewards: {'town'}),
-      );
-
-      expect(find.byKey(const Key('home.town')), findsNothing);
-      expect(find.byKey(const Key('home.nouns.button')), findsOneWidget);
-    });
   });
 }

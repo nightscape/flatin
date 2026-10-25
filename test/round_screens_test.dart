@@ -15,8 +15,6 @@ import 'package:latin_practice/models/practice_item.dart';
 import 'package:latin_practice/models/settings.dart';
 import 'package:latin_practice/providers/fsrs_provider.dart';
 import 'package:latin_practice/providers/round_providers.dart';
-import 'package:latin_practice/screens/exercise_match_widget.dart';
-import 'package:latin_practice/screens/exercise_screen.dart';
 import 'package:latin_practice/screens/grammar_start_screen.dart';
 import 'package:latin_practice/screens/home_screen.dart';
 import 'package:latin_practice/screens/round_end_screen.dart';
@@ -24,6 +22,7 @@ import 'package:latin_practice/screens/round_screen.dart';
 import 'package:latin_practice/services/fsrs_storage.dart';
 
 import 'support/course_providers.dart';
+import 'support/round_driver.dart';
 import 'support/word_classification_harness.dart';
 
 class _Stub implements ExerciseGenerator {
@@ -42,53 +41,6 @@ class _Stub implements ExerciseGenerator {
     calls++;
     throw const CannotBuild('stub');
   }
-}
-
-Exercise _shown(WidgetTester tester) {
-  final screen = find.byType(ExerciseScreen);
-  return screen.evaluate().isEmpty
-      ? tester
-            .widget<ExerciseMatchWidget>(find.byType(ExerciseMatchWidget))
-            .exercise
-      : tester.widget<ExerciseScreen>(screen).exercise;
-}
-
-Future<void> _tap(WidgetTester tester, String key) async {
-  final button = find.byKey(Key(key));
-  await tester.ensureVisible(button);
-  await tester.pump();
-  await tester.tap(button);
-  await tester.pump();
-}
-
-Future<void> _answer(
-  WidgetTester tester,
-  Exercise exercise, {
-  required bool right,
-}) async {
-  switch (exercise.answer) {
-    case ChoiceAnswer(:final options, right: final rightOption):
-      final index = right
-          ? options.indexOf(rightOption)
-          : options.indexWhere((o) => !identical(o, rightOption));
-      await _tap(tester, 'exercise.option.$index');
-    case TypedAnswer(:final expected):
-      await tester.enterText(
-        find.byKey(const Key('exercise.input')),
-        right ? expected.text : 'xyz',
-      );
-      await _tap(tester, 'exercise.check.button');
-    case MatchingAnswer(:final pairs):
-      for (var i = 0; i < pairs.length; i++) {
-        await _tap(tester, 'exercise.match.left.$i');
-        await _tap(
-          tester,
-          'exercise.match.right.${right ? i : (i + 1) % pairs.length}',
-        );
-      }
-      await _tap(tester, 'exercise.check.button');
-  }
-  await _tap(tester, 'exercise.next.button');
 }
 
 /// No share of right answers and no error count anywhere on the screen.
@@ -193,24 +145,24 @@ void main() {
       'task again as "Noch einmal" and ends on the points and the new '
       'building', (tester) async {
     await _pumpStart(tester);
-    await _tap(tester, 'round.start.go');
+    await tap(tester, 'round.start.go');
     await letItLoad(tester);
 
     expect(find.text('Aufgabe 1 von 10'), findsOneWidget);
     _expectNoScore();
-    final first = _shown(tester);
-    await _answer(tester, first, right: false);
+    final first = shown(tester);
+    await answer(tester, first, right: false);
     await letItLoad(tester);
     final stored = await tester.runAsync(FsrsStorage.loadCards);
     expect(stored![first.wordCardId]!.lastReview, isNotNull);
     expect(stored[first.grammarCardId]!.lastReview, isNull);
-    expect(identical(_shown(tester), first), isFalse);
+    expect(identical(shown(tester), first), isFalse);
 
     for (var n = 2; n <= 10; n++) {
       expect(find.text('Aufgabe $n von 10'), findsOneWidget);
       expect(find.textContaining('11'), findsNothing);
       _expectNoScore();
-      await _answer(tester, _shown(tester), right: true);
+      await answer(tester, shown(tester), right: true);
       await tester.pump(const Duration(milliseconds: 100));
       expect(find.text('🪙 +10'), findsOneWidget, reason: 'task $n');
       expect(find.textContaining('Punkte'), findsNothing);
@@ -221,7 +173,7 @@ void main() {
     expect(find.textContaining('11'), findsNothing);
     expect(find.byType(LinearProgressIndicator), findsOneWidget);
     _expectNoScore();
-    await _answer(tester, _shown(tester), right: true);
+    await answer(tester, shown(tester), right: true);
     await letItLoad(tester);
 
     expect(find.byType(RoundEndScreen), findsOneWidget);
@@ -236,7 +188,7 @@ void main() {
     final after = await tester.runAsync(FsrsStorage.loadCards);
     expect(after![first.grammarCardId]!.lastReview, isNotNull);
 
-    await _tap(tester, 'round.end.done');
+    await tap(tester, 'round.end.done');
     await letItLoad(tester);
     expect(find.byType(GrammarStartScreen), findsOneWidget);
   });
@@ -269,10 +221,10 @@ void main() {
     tester,
   ) async {
     await _pumpStart(tester, animation: false);
-    await _tap(tester, 'round.start.go');
+    await tap(tester, 'round.start.go');
     await letItLoad(tester);
 
-    await _answer(tester, _shown(tester), right: true);
+    await answer(tester, shown(tester), right: true);
     await tester.pump(const Duration(milliseconds: 100));
     expect(find.text('Aufgabe 2 von 10'), findsOneWidget);
     expect(find.textContaining('🪙'), findsNothing);
@@ -307,13 +259,13 @@ void main() {
     Navigator.of(tester.element(find.byType(GrammarStartScreen))).pop();
     await letItLoad(tester);
 
-    await _tap(tester, 'home.grammar.button');
+    await tap(tester, 'home.grammar.button');
     await letItLoad(tester);
     expect(find.byType(GrammarStartScreen), findsOneWidget);
     expect(stub.calls, 0);
     expect(find.textContaining('no exercise kind fits'), findsNothing);
 
-    await _tap(tester, 'round.start.go');
+    await tap(tester, 'round.start.go');
     await letItLoad(tester);
     expect(find.byType(RoundScreen), findsOneWidget);
     expect(stub.calls, greaterThan(0));
