@@ -4,7 +4,7 @@ import 'package:flutter_i18n/flutter_i18n.dart';
 import '../data/rewards.dart';
 import '../models/reward.dart';
 
-/// The town scene: built buildings back to front, a construction site for the next one.
+/// The town scene: built buildings back to front.
 class TownView extends StatelessWidget {
   const TownView(this.ledger, {super.key});
 
@@ -13,14 +13,6 @@ class TownView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final built = townOf(ledger).map((b) => b.id).toSet();
-    final next = nextBuilding(ledger);
-    // The aqueduct has no plate: its site stands at the castellum, which carries its tooltip.
-    final site = next == null
-        ? null
-        : townSprites.singleWhere(
-            (s) =>
-                s.sprite == (next.id == 'aquaeductus' ? 'castellum' : next.id),
-          );
     return ClipRRect(
       borderRadius: BorderRadius.circular(12),
       child: AspectRatio(
@@ -60,12 +52,6 @@ class TownView extends StatelessWidget {
                               child: Image.asset('assets/town/${s.sprite}.png'),
                             ),
                     ),
-                if (site != null)
-                  at(
-                    site,
-                    Key('town.next.${next!.id}'),
-                    Image.asset('assets/town/construction.png'),
-                  ),
               ],
             );
           },

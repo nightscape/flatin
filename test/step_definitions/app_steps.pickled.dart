@@ -123,7 +123,7 @@ runFeatures() {
       await steps.iLeaveTheRound(widgetTester);
       await steps.iShouldHaveCoins(widgetTester, 95);
     });
-    testWidgets('Finishing a round adds a building and names the next one', (
+    testWidgets('Finishing a round adds no building', (
       WidgetTester widgetTester,
     ) async {
       await steps.iHaveBuilt(widgetTester, 2);
@@ -131,8 +131,23 @@ runFeatures() {
       await steps.iStartARound(widgetTester);
       await steps.iFinishTheRound(widgetTester);
       await steps.iLeaveTheRound(widgetTester);
-      await steps.myTownHasBuildings(widgetTester, 3);
-      await steps.theNextBuildingIs(widgetTester, 'taberna');
+      await steps.myTownHasBuildings(widgetTester, 2);
+    });
+    testWidgets('A building bought with enough coins appears in the town', (
+      WidgetTester widgetTester,
+    ) async {
+      await steps.iHaveCoins(widgetTester, 900);
+      await steps.theAppIsRunning(widgetTester);
+      await steps.iBuy(widgetTester, 'templum');
+      await steps.iShouldHaveCoins(widgetTester, 300);
+      await steps.theTownShows(widgetTester, 'templum');
+    });
+    testWidgets('A building that costs more than my coins cannot be bought', (
+      WidgetTester widgetTester,
+    ) async {
+      await steps.iHaveCoins(widgetTester, 500);
+      await steps.theAppIsRunning(widgetTester);
+      await steps.iCannotBuy(widgetTester, 'templum');
     });
     testWidgets('A reward I switched off is not shown', (
       WidgetTester widgetTester,

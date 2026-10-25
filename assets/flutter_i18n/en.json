@@ -7,7 +7,7 @@
     "verbs": "Verbs (conjugation)",
     "wordClassification": "Word Classification",
     "grammar": "Grammar",
-    "townEmpty": "Finish a round to build your first building.",
+    "townEmpty": "Tap the town to buy your first building.",
     "due": "due",
     "error": "Error: {error}",
     "noData": "No data available"
@@ -183,6 +183,18 @@
     "absentLabel": "not needed",
     "wrongPick": "wrong"
   },
+  "town": {
+    "build": "Build",
+    "close": "Close"
+  },
+  "shop": {
+    "title": "Buy buildings",
+    "price": "{price} coins",
+    "missing": "{price} coins – you need {missing} more",
+    "confirm": "Buy {name} for {price} coins?",
+    "cancel": "Cancel",
+    "buy": "Buy"
+  },
   "reward": {
     "building": {
       "domus": "House",
@@ -277,10 +289,10 @@
     "retry": "One more time",
     "end": {
       "title": "Round done!",
-      "points": "+{points} points",
+      "points": "+{points} coins",
       "bonus": "⭐ +{bonus} bonus",
-      "total": "Total: {total} points",
-      "newBuilding": "New in your town: {name}",
+      "total": "Balance: {total} coins",
+      "canBuy": "You can buy a building now",
       "again": "Another round",
       "done": "Done"
     }

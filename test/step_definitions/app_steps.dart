@@ -680,10 +680,58 @@ class AppSteps {
     expect(buildings, hasLength(count));
   }
 
-  @Then('the next building should be {string}')
-  @And('the next building should be {string}')
-  Future<void> theNextBuildingIs(WidgetTester tester, String id) async {
-    expect(find.byKey(Key('town.next.$id')), findsOneWidget);
+  Future<void> _showShopItem(WidgetTester tester, String id) =>
+      tester.scrollUntilVisible(
+        find.byKey(Key('shop.item.$id')),
+        100,
+        scrollable: find.byType(Scrollable).last,
+      );
+
+  @When('I open the shop')
+  @And('I open the shop')
+  Future<void> iOpenTheShop(WidgetTester tester) async {
+    await tester.tap(find.byKey(const Key('home.town')));
+    await letItLoad(tester);
+    await tester.tap(find.byKey(const Key('town.build')));
+    await letItLoad(tester);
+  }
+
+  @When('I buy {string}')
+  @And('I buy {string}')
+  Future<void> iBuy(WidgetTester tester, String id) async {
+    await iOpenTheShop(tester);
+    await _showShopItem(tester, id);
+    await tester.tap(find.byKey(Key('shop.item.$id')));
+    await letItLoad(tester);
+    await tester.tap(find.byKey(const Key('shop.confirm')));
+    await letItLoad(tester);
+    await tester.tap(find.byKey(const Key('town.close')));
+    await letItLoad(tester);
+  }
+
+  @Then('I cannot buy {string}')
+  @And('I cannot buy {string}')
+  Future<void> iCannotBuy(WidgetTester tester, String id) async {
+    await iOpenTheShop(tester);
+    await _showShopItem(tester, id);
+    final tile = find.byKey(Key('shop.item.$id'));
+    expect(tester.widget<ListTile>(tile).enabled, isFalse);
+  }
+
+  @Then('the town shows {string}')
+  @And('the town shows {string}')
+  Future<void> theTownShows(WidgetTester tester, String id) async {
+    expect(
+      find.byWidgetPredicate(
+        (w) =>
+            _isKeyed(w) &&
+            ((w.key as ValueKey<String>).value == 'town.building.$id' ||
+                (w.key as ValueKey<String>).value.startsWith(
+                  'town.building.$id-',
+                )),
+      ),
+      findsWidgets,
+    );
   }
 
   // Screenshot steps

@@ -7,7 +7,7 @@
     "verbs": "Verben (Konjugation)",
     "wordClassification": "Wortklassifikation",
     "grammar": "Grammatik",
-    "townEmpty": "Beende eine Runde, um dein erstes Gebäude zu bauen.",
+    "townEmpty": "Tippe auf die Stadt, um dein erstes Gebäude zu kaufen.",
     "due": "fällig",
     "error": "Fehler: {error}",
     "noData": "Keine Daten verfügbar"
@@ -183,6 +183,18 @@
     "absentLabel": "entfällt",
     "wrongPick": "falsch"
   },
+  "town": {
+    "build": "Bauen",
+    "close": "Schließen"
+  },
+  "shop": {
+    "title": "Gebäude kaufen",
+    "price": "{price} Münzen",
+    "missing": "{price} Münzen – dir fehlen {missing}",
+    "confirm": "{name} für {price} Münzen kaufen?",
+    "cancel": "Abbrechen",
+    "buy": "Kaufen"
+  },
   "reward": {
     "building": {
       "domus": "Haus",
@@ -277,10 +289,10 @@
     "retry": "Noch einmal",
     "end": {
       "title": "Runde geschafft!",
-      "points": "+{points} Punkte",
+      "points": "+{points} Münzen",
       "bonus": "⭐ +{bonus} Bonus",
-      "total": "Gesamt: {total} Punkte",
-      "newBuilding": "Neu in deiner Stadt: {name}",
+      "total": "Kontostand: {total} Münzen",
+      "canBuy": "Du kannst dir jetzt ein Gebäude kaufen",
       "again": "Noch eine Runde",
       "done": "Fertig"
     }

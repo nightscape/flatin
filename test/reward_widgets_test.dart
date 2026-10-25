@@ -123,8 +123,9 @@ void main() {
       await letItLoad(tester);
     }
 
-    testWidgets('shows the built buildings back to front, named in German, '
-        'and one construction site for the next', (tester) async {
+    testWidgets('shows the built buildings back to front, named in German', (
+      tester,
+    ) async {
       await pumpTown(tester, ['fons', 'domus']);
 
       expect(
@@ -133,27 +134,12 @@ void main() {
       );
       expect(find.byKey(const Key('town.building.domus')), findsOneWidget);
       expect(find.byKey(const Key('town.building.fons')), findsOneWidget);
-      expect(find.byKey(const Key('town.next.hortus')), findsOneWidget);
-      expect(find.byKey(const Key('town.next.taberna')), findsNothing);
-    });
-
-    testWidgets('shows no construction site when all are built', (
-      tester,
-    ) async {
-      await pumpTown(tester, [for (final b in romanTown) b.id]);
-
-      expect(find.byType(Tooltip), findsNWidgets(romanTown.length));
-      expect(
-        find.byWidgetPredicate((w) => w.key.toString().contains('town.next')),
-        findsNothing,
-      );
     });
 
     testWidgets('renders repeated ids from old ledgers once', (tester) async {
       await pumpTown(tester, ['domus', 'hortus', 'domus']);
 
       expect(find.byType(Tooltip), findsNWidgets(2));
-      expect(find.byKey(const Key('town.next.fons')), findsOneWidget);
     });
   });
 

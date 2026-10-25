@@ -3,30 +3,35 @@ import '../models/reward.dart';
 const double townWidth = 1024;
 const double townHeight = 875;
 
-typedef Building = ({String id});
+typedef Building = ({String id, int price});
 
-/// The build steps of stage 1, in the order they are earned.
+const int _small = 250;
+const int _middle = 400;
+const int _large = 600;
+
+/// The buildings of stage 1 with their prices in coins: about 30 minutes of
+/// practice for a middle one.
 const List<Building> romanTown = [
-  (id: 'domus'),
-  (id: 'hortus'),
-  (id: 'fons'),
-  (id: 'taberna'),
-  (id: 'villa'),
-  (id: 'templum'),
-  (id: 'ager'),
-  (id: 'vinea'),
-  (id: 'stabulum'),
-  (id: 'figlina'),
-  (id: 'pistrinum'),
-  (id: 'aquaeductus'),
-  (id: 'thermae'),
-  (id: 'statua'),
-  (id: 'portus'),
-  (id: 'navis'),
-  (id: 'murus'),
-  (id: 'castra'),
-  (id: 'bibliotheca'),
-  (id: 'amphitheatrum'),
+  (id: 'domus', price: _middle),
+  (id: 'hortus', price: _small),
+  (id: 'fons', price: _small),
+  (id: 'taberna', price: _middle),
+  (id: 'villa', price: _middle),
+  (id: 'templum', price: _large),
+  (id: 'ager', price: _small),
+  (id: 'vinea', price: _small),
+  (id: 'stabulum', price: _middle),
+  (id: 'figlina', price: _middle),
+  (id: 'pistrinum', price: _middle),
+  (id: 'aquaeductus', price: _large),
+  (id: 'thermae', price: _large),
+  (id: 'statua', price: _small),
+  (id: 'portus', price: _large),
+  (id: 'navis', price: _middle),
+  (id: 'murus', price: _middle),
+  (id: 'castra', price: _large),
+  (id: 'bibliotheca', price: _middle),
+  (id: 'amphitheatrum', price: _large),
 ];
 
 /// An image of a building placed on the town background, in fractions of its size:
@@ -238,9 +243,11 @@ List<Building> townOf(RewardLedger ledger) => [
     if (ledger.buildings.contains(b.id)) b,
 ];
 
-/// The first step not built yet, null when the town is complete.
-Building? nextBuilding(RewardLedger ledger) =>
-    romanTown.where((b) => !ledger.buildings.contains(b.id)).firstOrNull;
+/// The buildings the shop offers, in step order.
+List<Building> unbuiltOf(RewardLedger ledger) => [
+  for (final b in romanTown)
+    if (!ledger.buildings.contains(b.id)) b,
+];
 
 class PointsStrategy implements RewardStrategy {
   const PointsStrategy();
@@ -277,7 +284,8 @@ class HardWordBonusStrategy implements RewardStrategy {
       };
 }
 
-/// One building per round until the town is complete.
+/// Buildings are bought in the shop, so no event adds one; this id only
+/// switches the town on and off.
 class TownStrategy implements RewardStrategy {
   const TownStrategy();
 
@@ -286,12 +294,7 @@ class TownStrategy implements RewardStrategy {
 
   @override
   List<RewardEffect> onEvent(RewardEvent event, RewardLedger ledger) =>
-      switch (event) {
-        RoundFinished() => [
-          if (nextBuilding(ledger) case final next?) BuildingAdded(next.id),
-        ],
-        _ => const [],
-      };
+      const [];
 }
 
 /// Counts days, never a streak.

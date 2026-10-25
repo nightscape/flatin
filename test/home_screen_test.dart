@@ -115,7 +115,7 @@ void main() {
 
       expect(find.byKey(const Key('home.town')), findsOneWidget);
       expect(
-        find.text('Beende eine Runde, um dein erstes Gebäude zu bauen.'),
+        find.text('Tippe auf die Stadt, um dein erstes Gebäude zu kaufen.'),
         findsOneWidget,
       );
       expect(find.textContaining('Geübte Tage'), findsNothing);
@@ -135,7 +135,6 @@ void main() {
       expect(find.text('Geübte Tage: 3'), findsOneWidget);
       expect(find.byKey(const Key('town.building.domus')), findsOneWidget);
       expect(find.byKey(const Key('town.building.hortus')), findsOneWidget);
-      expect(find.byKey(const Key('town.next.fons')), findsOneWidget);
     });
   });
 }

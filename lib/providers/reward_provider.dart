@@ -23,4 +23,14 @@ class Rewards extends _$Rewards {
     state = AsyncData(updated);
     return effects;
   }
+
+  Future<void> buy(Building building) async {
+    final ledger = await future;
+    assert(!ledger.buildings.contains(building.id), '${building.id} is built');
+    final updated = ledger
+        .apply(CoinsSpent(building.price))
+        .apply(BuildingAdded(building.id));
+    await RewardStorage.save(updated);
+    state = AsyncData(updated);
+  }
 }

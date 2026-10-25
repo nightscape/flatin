@@ -22,12 +22,10 @@ void main() {
       var ledger = const RewardLedger();
       var at = DateTime(2026, 1, 1, 8);
       final days = <String>{};
-      var rounds = 0;
       for (var i = 0; i < 100; i++) {
         final RewardEvent event;
         if (random.nextInt(8) == 0) {
           event = const RoundFinished();
-          rounds++;
         } else {
           at = at.add(Duration(hours: random.nextInt(30)));
           event = Answered(
@@ -40,14 +38,8 @@ void main() {
         }
         final next = _send(ledger, event);
         expect(next.points, greaterThanOrEqualTo(ledger.points));
-        expect(
-          next.buildings.length,
-          ledger.buildings.length +
-              (event is RoundFinished &&
-                      ledger.buildings.length < romanTown.length
-                  ? 1
-                  : 0),
-        );
+        expect(next.buildings, ledger.buildings);
+        expect(next.spent, 0);
         expect(next.practiceDays, greaterThanOrEqualTo(ledger.practiceDays));
         if (event case Answered(
           :final right,
@@ -66,29 +58,38 @@ void main() {
         }
         ledger = next;
       }
-      expect(ledger.buildings.length, min(rounds, romanTown.length));
       expect(ledger.practiceDays, days.length);
-      expect(ledger.buildings.first, romanTown.first.id);
     }
   });
 
-  test(
-    'the town is complete after the last building and adds nothing more',
-    () {
-      var ledger = const RewardLedger();
-      for (var i = 0; i < romanTown.length; i++) {
-        ledger = _send(ledger, const RoundFinished());
-      }
-      expect(ledger.buildings, romanTown.map((b) => b.id));
-      expect(nextBuilding(ledger), isNull);
-      expect(_send(ledger, const RoundFinished()).buildings, ledger.buildings);
-    },
-  );
+  test('buying spends the price, adds the building and cannot overdraw', () {
+    const price = 250;
+    const ledger = RewardLedger(points: 900);
+    final bought = ledger
+        .apply(const CoinsSpent(price))
+        .apply(const BuildingAdded('hortus'));
+    expect(bought.balance, 650);
+    expect(bought.points, 900);
+    expect(bought.buildings, ['hortus']);
+    expect(
+      () => bought.apply(const CoinsSpent(651)),
+      throwsA(isA<AssertionError>()),
+    );
+  });
 
-  test('a ledger with repeated ids builds the first step not built yet', () {
+  test('the shop offers the unbuilt buildings, each with a price', () {
+    expect(unbuiltOf(const RewardLedger()), romanTown);
+    expect(
+      unbuiltOf(const RewardLedger(buildings: ['domus'])).first.id,
+      'hortus',
+    );
+    expect(romanTown.map((b) => b.price).toSet(), {250, 400, 600});
+  });
+
+  test('a ledger with repeated ids offers the first step not built yet', () {
     const ledger = RewardLedger(buildings: ['domus', 'hortus', 'domus']);
     expect(townOf(ledger).map((b) => b.id), ['domus', 'hortus']);
-    expect(nextBuilding(ledger)!.id, 'fons');
+    expect(unbuiltOf(ledger).first.id, 'fons');
   });
 
   test('a non-positive point gain is rejected', () {
@@ -109,10 +110,13 @@ void main() {
         at: DateTime(2026, 3, 4),
       ),
     );
-    ledger = _send(ledger, const RoundFinished());
+    ledger = ledger
+        .apply(const CoinsSpent(5))
+        .apply(const BuildingAdded('domus'));
     final back = RewardLedger.fromJson(ledger.toJson());
     expect(back.toJson(), ledger.toJson());
     expect(back.points, 10);
+    expect(back.spent, 5);
     expect(back.buildings, ['domus']);
     expect(back.lastPracticeDay, '2026-03-04');
   });
@@ -141,8 +145,40 @@ void main() {
     final ledger = await RewardStorage.load();
     expect(ledger.points, 15);
     expect(ledger.bonusPoints, 0);
-    expect(ledger.buildings, ['domus']);
+    expect(ledger.buildings, isEmpty);
     expect(ledger.practiceDays, 2);
+  });
+
+  test(
+    'a version-2 ledger loads with no buildings, the same points and 0 spent',
+    () async {
+      SharedPreferences.setMockInitialValues({
+        'rewards':
+            '{"version": 2, "points": 240, "bonusPoints": 20, '
+            '"buildings": ["domus", "hortus"], "practiceDays": 4, '
+            '"lastPracticeDay": "2026-03-04"}',
+      });
+      final ledger = await RewardStorage.load();
+      expect(ledger.points, 240);
+      expect(ledger.bonusPoints, 20);
+      expect(ledger.spent, 0);
+      expect(ledger.balance, 240);
+      expect(ledger.buildings, isEmpty);
+      expect(ledger.practiceDays, 4);
+    },
+  );
+
+  test('a version-3 ledger keeps its buildings and spent coins', () async {
+    SharedPreferences.setMockInitialValues({
+      'rewards':
+          '{"version": 3, "points": 900, "bonusPoints": 0, "spent": 250, '
+          '"buildings": ["hortus"], "practiceDays": 1, '
+          '"lastPracticeDay": "2026-03-04"}',
+    });
+    final ledger = await RewardStorage.load();
+    expect(ledger.buildings, ['hortus']);
+    expect(ledger.spent, 250);
+    expect(ledger.balance, 650);
   });
 
   test('the bonus is the base points again from difficulty 7', () {
@@ -168,7 +204,7 @@ void main() {
 
   test('storage load rejects a stored version it does not know', () async {
     SharedPreferences.setMockInitialValues({
-      'rewards': '{"version": 3, "points": 5}',
+      'rewards': '{"version": 4, "points": 5}',
     });
     await expectLater(RewardStorage.load(), throwsA(isA<AssertionError>()));
   });

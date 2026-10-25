@@ -11,6 +11,7 @@ import '../providers/reward_provider.dart';
 import '../providers/settings_provider.dart';
 import '../theme.dart';
 import '../widgets/town_view.dart';
+import 'town_screen.dart';
 import 'grammar_start_screen.dart';
 import 'word_classification_screen.dart';
 import 'practice_screen.dart';
@@ -113,14 +114,14 @@ class HomeScreen extends ConsumerWidget {
   }
 }
 
-/// The learner's points, shown as coins.
+/// The learner's coin balance.
 class _Coins extends ConsumerWidget {
   const _Coins();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final points = switch (ref.watch(rewardsProvider)) {
-      AsyncData(:final value) => value.points,
+      AsyncData(:final value) => value.balance,
       AsyncError(:final error) => throw error,
       _ => null,
     };
@@ -219,16 +220,23 @@ class _TownPanel extends ConsumerWidget {
         ],
       );
     }
-    return ShaderMask(
-      key: const Key('home.town'),
-      blendMode: BlendMode.dstIn,
-      shaderCallback: (rect) => LinearGradient(
-        begin: Alignment.topCenter,
-        end: Alignment.bottomCenter,
-        colors: const [Colors.black, Colors.transparent],
-        stops: [_townBase, _townBase + 0.1],
-      ).createShader(rect),
-      child: AspectRatio(aspectRatio: townWidth / townHeight, child: content),
+    return GestureDetector(
+      onTap: rewards.hasValue
+          ? () => Navigator.of(
+              context,
+            ).push(MaterialPageRoute(builder: (_) => const TownScreen()))
+          : null,
+      child: ShaderMask(
+        key: const Key('home.town'),
+        blendMode: BlendMode.dstIn,
+        shaderCallback: (rect) => LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: const [Colors.black, Colors.transparent],
+          stops: [_townBase, _townBase + 0.1],
+        ).createShader(rect),
+        child: AspectRatio(aspectRatio: townWidth / townHeight, child: content),
+      ),
     );
   }
 }

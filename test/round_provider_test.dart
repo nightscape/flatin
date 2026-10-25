@@ -171,7 +171,7 @@ void main() {
         expect(run.after[id]!.card.state, once.state, reason: id);
       }
       expect(run.points, 10 * (roundLength - wrong.length) + 5 * wrong.length);
-      expect(run.buildings, 1);
+      expect(run.buildings, 0);
     });
   }
 

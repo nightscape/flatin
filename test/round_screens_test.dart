@@ -142,8 +142,8 @@ void main() {
   });
 
   testWidgets('a round counts "Aufgabe n von 10", never 11, asks a wrong '
-      'task again as "Noch einmal" and ends on the points and the new '
-      'building', (tester) async {
+      'task again as "Noch einmal" and ends on the coins without '
+      'a new building', (tester) async {
     await _pumpStart(tester);
     await tap(tester, 'round.start.go');
     await letItLoad(tester);
@@ -178,12 +178,12 @@ void main() {
 
     expect(find.byType(RoundEndScreen), findsOneWidget);
     expect(find.text('Runde geschafft!'), findsOneWidget);
-    expect(find.text('+95 Punkte'), findsOneWidget);
-    expect(find.text('Gesamt: 95 Punkte'), findsOneWidget);
+    expect(find.text('+95 Münzen'), findsOneWidget);
+    expect(find.text('Kontostand: 95 Münzen'), findsOneWidget);
+    expect(find.byKey(const Key('round.end.canBuy')), findsNothing);
     expect(find.textContaining('⭐'), findsNothing);
-    expect(find.text('Neu in deiner Stadt: Haus'), findsOneWidget);
-    expect(find.byKey(const Key('town.building.domus')), findsOneWidget);
-    expect(find.byKey(const Key('town.next.hortus')), findsOneWidget);
+    expect(find.textContaining('Neu in deiner Stadt'), findsNothing);
+    expect(find.byKey(const Key('town.building.domus')), findsNothing);
     _expectNoScore();
     final after = await tester.runAsync(FsrsStorage.loadCards);
     expect(after![first.grammarCardId]!.lastReview, isNotNull);
@@ -212,9 +212,9 @@ void main() {
     );
     await letItLoad(tester);
 
-    expect(find.text('+30 Punkte'), findsOneWidget);
+    expect(find.text('+30 Münzen'), findsOneWidget);
     expect(find.text('⭐ +20 Bonus'), findsOneWidget);
-    expect(find.text('Gesamt: 50 Punkte'), findsOneWidget);
+    expect(find.text('Kontostand: 50 Münzen'), findsOneWidget);
   });
 
   testWidgets('with the animation off a right answer shows no burst', (
