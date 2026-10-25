@@ -3,9 +3,6 @@ import 'package:flutter_i18n/flutter_i18n.dart';
 
 import '../models/course_filter.dart';
 
-const settingsBackground = Color(0xFFE5E5E5);
-const settingsCheckboxColor = Color(0xFFD0D0D0);
-
 /// The page frame every settings page shares.
 class SettingsPage extends StatelessWidget {
   const SettingsPage({
@@ -24,19 +21,13 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: settingsBackground,
       appBar: AppBar(
-        backgroundColor: settingsBackground,
         elevation: 0,
         leading: leading,
         title: Text(
           title,
           key: titleKey,
-          style: const TextStyle(
-            color: Colors.black,
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
-          ),
+          style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
         ),
       ),
       body: body,

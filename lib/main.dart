@@ -5,6 +5,7 @@ import 'package:flutter_i18n/flutter_i18n_delegate.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'providers/locale_provider.dart';
 import 'screens/home_screen.dart';
+import 'theme.dart';
 
 /// Nothing here is loaded over a network: a read that fails fails again, and
 /// Riverpod's default retries would keep the screens in their loading state
@@ -26,10 +27,7 @@ class LatinPracticeApp extends ConsumerWidget {
       supportedLocales: [for (final offered in offeredLocales) offered.locale],
       localeListResolutionCallback: (locales, supported) =>
           resolveLocale(locales),
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.grey),
-        useMaterial3: true,
-      ),
+      theme: romanTheme,
       localizationsDelegates: [
         FlutterI18nDelegate(
           translationLoader: FileTranslationLoader(

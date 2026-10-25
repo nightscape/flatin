@@ -23,9 +23,7 @@ class _LanguageScreenState extends ConsumerState<LanguageScreen> {
     final selected = ref.watch(localeOverrideProvider).value;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFE5E5E5),
       appBar: AppBar(
-        backgroundColor: const Color(0xFFE5E5E5),
         elevation: 0,
         title: Text(FlutterI18n.translate(context, 'language.title')),
       ),

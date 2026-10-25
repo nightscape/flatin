@@ -1,8 +1,16 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/data/practice_data.dart';
+import 'package:latin_practice/data/rewards.dart';
+import 'package:latin_practice/models/reward.dart';
+import 'package:latin_practice/models/settings.dart';
+import 'package:latin_practice/services/reward_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:latin_practice/screens/home_screen.dart';
 import 'package:latin_practice/screens/practice_screen.dart';
+import 'package:latin_practice/widgets/town_view.dart';
 
 import 'support/word_classification_harness.dart';
 
@@ -79,5 +87,70 @@ void main() {
 
     final opened = tester.widget<PracticeScreen>(find.byType(PracticeScreen));
     expect(opened.item.type, enabledType);
+  });
+
+  group('town panel', () {
+    Future<void> pumpHome(
+      WidgetTester tester, {
+      RewardLedger ledger = const RewardLedger(),
+      Settings? settings,
+    }) async {
+      await seedNothingDue({'nouns': <String>{}, 'verbs': <String>{}});
+      if (settings != null) {
+        await (await SharedPreferences.getInstance()).setString(
+          'practice_settings',
+          jsonEncode(settings.toJson()),
+        );
+      }
+      await RewardStorage.save(ledger);
+      await tester.pumpWidget(
+        wrapInApp(const HomeScreen(), forcedLocale: const Locale('de')),
+      );
+      await letItLoad(tester);
+    }
+
+    testWidgets('invites the learner to build the first building', (
+      tester,
+    ) async {
+      await pumpHome(tester);
+
+      expect(find.byKey(const Key('home.town')), findsOneWidget);
+      expect(
+        find.text('Beende eine Runde, um dein erstes Gebäude zu bauen.'),
+        findsOneWidget,
+      );
+      expect(find.textContaining('Geübte Tage'), findsNothing);
+    });
+
+    testWidgets('shows the earned buildings and the practice days', (
+      tester,
+    ) async {
+      await pumpHome(
+        tester,
+        ledger: RewardLedger(
+          buildings: [romanTown[1].id, romanTown[0].id],
+          practiceDays: 3,
+        ),
+      );
+
+      expect(find.text('Geübte Tage: 3'), findsOneWidget);
+      expect(tester.widget<TownView>(find.byType(TownView)).buildings, [
+        romanTown[1],
+        romanTown[0],
+      ]);
+    });
+
+    testWidgets('is hidden when the learner switched the town off', (
+      tester,
+    ) async {
+      await pumpHome(
+        tester,
+        ledger: const RewardLedger(practiceDays: 3),
+        settings: Settings(disabledRewards: {'town'}),
+      );
+
+      expect(find.byKey(const Key('home.town')), findsNothing);
+      expect(find.byKey(const Key('home.nouns.button')), findsOneWidget);
+    });
   });
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../data/rewards.dart';
 import '../models/reward.dart';
 import '../providers/reward_provider.dart';
 import '../providers/round_providers.dart';

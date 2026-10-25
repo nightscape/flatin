@@ -7,6 +7,7 @@
     "verbs": "Verbs (conjugation)",
     "wordClassification": "Word Classification",
     "grammar": "Grammar",
+    "townEmpty": "Finish a round to build your first building.",
     "due": "due",
     "error": "Error: {error}",
     "noData": "No data available"

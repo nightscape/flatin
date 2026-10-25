@@ -3,7 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import '../widgets/app_drawer.dart';
 import '../models/practice_item.dart';
+import '../data/rewards.dart';
 import '../providers/fsrs_provider.dart';
+import '../providers/reward_provider.dart';
+import '../providers/settings_provider.dart';
+import '../theme.dart';
+import '../widgets/town_view.dart';
 import 'grammar_start_screen.dart';
 import 'word_classification_screen.dart';
 import 'practice_screen.dart';
@@ -13,119 +18,144 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isMobile = screenWidth < 600;
-    final horizontalPadding = isMobile ? 16.0 : 24.0;
-    final verticalPadding = isMobile ? 8.0 : 12.0;
+    final isMobile = MediaQuery.of(context).size.width < 600;
     final titleFontSize = isMobile ? 20.0 : 24.0;
-    final buttonFontSize = isMobile ? 18.0 : 20.0;
-    final buttonHeight = isMobile ? 70.0 : 80.0;
-    final buttonPadding = EdgeInsets.symmetric(
-      horizontal: horizontalPadding,
-      vertical: verticalPadding,
-    );
+    final showTown =
+        ref.watch(settingsProvider).value?.isRewardEnabled('town') ?? false;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFE5E5E5),
       drawer: buildAppDrawer(context),
       appBar: AppBar(
-        backgroundColor: const Color(0xFFE5E5E5),
-        elevation: 0,
         title: Text(
           key: const Key('app.title'),
           FlutterI18n.translate(context, 'app.title'),
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: titleFontSize,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(fontSize: titleFontSize),
         ),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Padding(
-              padding: buttonPadding,
-              child: const _PracticeTypeButton(
-                dataFileId: 'nouns',
-                labelKey: 'home.nouns',
-                buttonKey: Key('home.nouns.button'),
-              ),
-            ),
-            Padding(
-              padding: buttonPadding,
-              child: const _PracticeTypeButton(
-                dataFileId: 'verbs',
-                labelKey: 'home.verbs',
-                buttonKey: Key('home.verbs.button'),
-              ),
-            ),
-            Padding(
-              padding: buttonPadding,
-              child: SizedBox(
-                width: double.infinity,
-                height: buttonHeight,
-                child: ElevatedButton(
-                  key: const Key('home.grammar.button'),
+      body: SingleChildScrollView(
+        padding: EdgeInsets.all(isMobile ? 16 : 24),
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 560),
+            child: Column(
+              children: [
+                if (showTown) ...[
+                  const _TownPanel(),
+                  const SizedBox(height: 20),
+                ],
+                const _PracticeTypeButton(
+                  dataFileId: 'nouns',
+                  labelKey: 'home.nouns',
+                  icon: Icons.account_balance,
+                  buttonKey: Key('home.nouns.button'),
+                ),
+                const SizedBox(height: 14),
+                const _PracticeTypeButton(
+                  dataFileId: 'verbs',
+                  labelKey: 'home.verbs',
+                  icon: Icons.directions_run,
+                  buttonKey: Key('home.verbs.button'),
+                ),
+                const SizedBox(height: 14),
+                _MenuButton(
+                  buttonKey: const Key('home.grammar.button'),
+                  icon: Icons.menu_book,
+                  label: FlutterI18n.translate(context, 'home.grammar'),
                   onPressed: () => Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) => const GrammarStartScreen(),
                     ),
                   ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFD0D0D0),
-                    foregroundColor: Colors.black,
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
+                ),
+                const SizedBox(height: 14),
+                _MenuButton(
+                  buttonKey: const Key('home.wordClassification.button'),
+                  icon: Icons.psychology,
+                  label: FlutterI18n.translate(
+                    context,
+                    'home.wordClassification',
                   ),
-                  child: Text(
-                    FlutterI18n.translate(context, 'home.grammar'),
-                    style: TextStyle(
-                      fontSize: buttonFontSize,
-                      fontWeight: FontWeight.bold,
+                  onPressed: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const WordClassificationScreen(),
                     ),
                   ),
                 ),
-              ),
+              ],
             ),
-            Padding(
-              padding: buttonPadding,
-              child: SizedBox(
-                width: double.infinity,
-                height: buttonHeight,
-                child: ElevatedButton(
-                  key: const Key('home.wordClassification.button'),
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const WordClassificationScreen(),
-                      ),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFD0D0D0),
-                    foregroundColor: Colors.black,
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  child: Text(
-                    FlutterI18n.translate(context, 'home.wordClassification'),
-                    style: TextStyle(
-                      fontSize: buttonFontSize,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
+          ),
         ),
       ),
+    );
+  }
+}
+
+/// The learner's buildings and practice days, on a sky-to-sand backdrop.
+class _TownPanel extends ConsumerWidget {
+  const _TownPanel();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final rewards = ref.watch(rewardsProvider);
+    final Widget content;
+    if (rewards.hasError) {
+      content = Text(
+        FlutterI18n.translate(
+          context,
+          'home.error',
+          translationParams: {'error': '${rewards.error}'},
+        ),
+      );
+    } else if (!rewards.hasValue) {
+      content = const Center(child: CircularProgressIndicator());
+    } else {
+      final ledger = rewards.requireValue;
+      final buildings = townOf(ledger);
+      content = Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (ledger.practiceDays > 0)
+            Text(
+              FlutterI18n.translate(
+                context,
+                'round.start.days',
+                translationParams: {'n': '${ledger.practiceDays}'},
+              ),
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+          const SizedBox(height: 8),
+          if (buildings.isEmpty)
+            Text(
+              FlutterI18n.translate(context, 'home.townEmpty'),
+              style: const TextStyle(color: mutedText),
+            )
+          else
+            TownView(buildings),
+        ],
+      );
+    }
+    return Container(
+      key: const Key('home.town'),
+      width: double.infinity,
+      constraints: const BoxConstraints(minHeight: 140),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [Color(0xFFDCEAF2), Color(0xFFF6EBD3), sand],
+        ),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: gold, width: 3),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x33000000),
+            blurRadius: 8,
+            offset: Offset(0, 3),
+          ),
+        ],
+      ),
+      child: content,
     );
   }
 }
@@ -136,19 +166,17 @@ class _PracticeTypeButton extends ConsumerWidget {
   const _PracticeTypeButton({
     required this.dataFileId,
     required this.labelKey,
+    required this.icon,
     required this.buttonKey,
   });
 
   final String dataFileId;
   final String labelKey;
+  final IconData icon;
   final Key buttonKey;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isMobile = MediaQuery.of(context).size.width < 600;
-    final buttonFontSize = isMobile ? 18.0 : 20.0;
-    final buttonHeight = isMobile ? 70.0 : 80.0;
-
     final practicableAsync = ref.watch(practicableItemsByTypeProvider);
     final dueAsync = ref.watch(dueItemsByTypeProvider);
     final error = practicableAsync.error ?? dueAsync.error;
@@ -159,7 +187,6 @@ class _PracticeTypeButton extends ConsumerWidget {
           'home.error',
           translationParams: {'error': error.toString()},
         ),
-        style: TextStyle(fontSize: isMobile ? 14.0 : 16.0),
       );
     }
 
@@ -172,42 +199,112 @@ class _PracticeTypeButton extends ConsumerWidget {
         ? due.first
         : (practicable.isEmpty ? null : practicable.first);
 
-    return SizedBox(
-      width: double.infinity,
-      height: buttonHeight,
-      child: ElevatedButton(
-        key: buttonKey,
-        onPressed: itemToShow == null
-            ? null
-            : () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => PracticeScreen(item: itemToShow),
-                  ),
-                );
-              },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFFD0D0D0),
-          foregroundColor: Colors.black,
-          elevation: 0,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              FlutterI18n.translate(context, labelKey),
-              style: TextStyle(
-                fontSize: buttonFontSize,
-                fontWeight: FontWeight.bold,
+    return _MenuButton(
+      buttonKey: buttonKey,
+      icon: icon,
+      label: FlutterI18n.translate(context, labelKey),
+      badge: due.isEmpty
+          ? null
+          : '${due.length} ${FlutterI18n.translate(context, 'home.due')}',
+      onPressed: itemToShow == null
+          ? null
+          : () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => PracticeScreen(item: itemToShow),
               ),
             ),
-            if (due.isNotEmpty)
-              Text(
-                '${due.length} ${FlutterI18n.translate(context, 'home.due')}',
+    );
+  }
+}
+
+/// A full-width game-menu button; muted while [onPressed] is null.
+class _MenuButton extends StatelessWidget {
+  const _MenuButton({
+    required this.buttonKey,
+    required this.icon,
+    required this.label,
+    required this.onPressed,
+    this.badge,
+  });
+
+  final Key buttonKey;
+  final IconData icon;
+  final String label;
+  final String? badge;
+  final VoidCallback? onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    final enabled = onPressed != null;
+    final isMobile = MediaQuery.of(context).size.width < 600;
+    final foreground = enabled ? parchment : mutedText;
+    return Container(
+      height: isMobile ? 70 : 80,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: enabled
+              ? const [terracotta, terracottaDark]
+              : const [sand, sand],
+        ),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: enabled ? gold : outlineColor, width: 2.5),
+        boxShadow: enabled
+            ? const [
+                BoxShadow(
+                  color: Color(0x55000000),
+                  blurRadius: 6,
+                  offset: Offset(0, 4),
+                ),
+              ]
+            : null,
+      ),
+      child: ElevatedButton(
+        key: buttonKey,
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.transparent,
+          disabledBackgroundColor: Colors.transparent,
+          foregroundColor: foreground,
+          disabledForegroundColor: foreground,
+          shadowColor: Colors.transparent,
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(14),
+          ),
+        ),
+        child: Row(
+          children: [
+            Icon(icon, size: 28, color: enabled ? gold : mutedText),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Text(
+                label,
                 style: TextStyle(
-                  fontSize: isMobile ? 10.0 : 12.0,
-                  fontWeight: FontWeight.normal,
+                  fontFamily: headingFont,
+                  fontSize: isMobile ? 17 : 20,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+            if (badge != null)
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 4,
+                ),
+                decoration: BoxDecoration(
+                  color: gold,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Text(
+                  badge!,
+                  style: const TextStyle(
+                    color: ink,
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
           ],
