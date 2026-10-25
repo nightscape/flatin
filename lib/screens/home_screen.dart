@@ -19,8 +19,11 @@ class HomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final isMobile = MediaQuery.of(context).size.width < 600;
     final titleFontSize = isMobile ? 20.0 : 24.0;
-    final showTown =
-        ref.watch(settingsProvider).value?.isRewardEnabled('town') ?? false;
+    final showTown = switch (ref.watch(settingsProvider)) {
+      AsyncData(:final value) => value.isRewardEnabled('town'),
+      AsyncError(:final error) => throw error,
+      _ => false,
+    };
 
     return Scaffold(
       drawer: buildAppDrawer(context),
