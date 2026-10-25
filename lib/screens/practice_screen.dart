@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../theme.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:fsrs/fsrs.dart';
@@ -155,14 +156,14 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
 
   Color _getBorderColor(int index, PracticeState state) {
     if (!state.isChecked || state.validationResults[index] == null) {
-      return Colors.grey;
+      return outlineColor;
     }
     return state.validationResults[index]! ? Colors.green : Colors.red;
   }
 
   Color _getTranslationBorderColor(PracticeState state) {
     if (!state.isChecked || state.translationCorrect == null) {
-      return Colors.grey;
+      return outlineColor;
     }
     return state.translationCorrect! ? Colors.green : Colors.red;
   }
@@ -189,7 +190,7 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
           initialValue: _selectedTranslation,
           hint: Text(
             FlutterI18n.translate(context, 'practice.chooseTranslation'),
-            style: TextStyle(fontSize: labelFontSize, color: Colors.grey),
+            style: TextStyle(fontSize: labelFontSize, color: mutedText),
           ),
           items: choices
               .map(
@@ -277,13 +278,11 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
     final buttonPadding = isMobile ? 16.0 : 24.0;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFE5E5E5),
       drawer: buildAppDrawer(context),
       appBar: AppBar(
-        backgroundColor: const Color(0xFFE5E5E5),
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_drop_down, color: Colors.black),
+          icon: const Icon(Icons.arrow_drop_down),
           onPressed: () {
             Navigator.of(context).pop();
           },
@@ -660,7 +659,6 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
                             ? _hideAnswers
                             : _checkAnswers,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFFD0D0D0),
                           foregroundColor: Colors.black,
                           elevation: 0,
                           padding: EdgeInsets.symmetric(
@@ -705,7 +703,7 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
       key: key,
       onPressed: () => _rateCard(rating),
       style: ElevatedButton.styleFrom(
-        backgroundColor: isSuggested ? color : const Color(0xFFD0D0D0),
+        backgroundColor: isSuggested ? color : null,
         foregroundColor: isSuggested ? Colors.white : Colors.black,
         elevation: isSuggested ? 4 : 0,
         padding: EdgeInsets.symmetric(
@@ -716,7 +714,7 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
           side: BorderSide(
-            color: isSuggested ? color : Colors.grey,
+            color: isSuggested ? color : mutedText,
             width: isSuggested ? 2 : 1,
           ),
         ),

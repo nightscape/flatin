@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../theme.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../screens/grammar_start_screen.dart';
@@ -16,16 +17,17 @@ Widget buildAppDrawer(BuildContext context) {
   final itemFontSize = isMobile ? 16.0 : 18.0;
 
   return Drawer(
-    backgroundColor: const Color(0xFFE5E5E5),
     child: ListView(
       padding: EdgeInsets.zero,
       children: [
         DrawerHeader(
-          decoration: const BoxDecoration(color: Color(0xFFD0D0D0)),
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.primary,
+          ),
           child: Text(
             FlutterI18n.translate(context, 'drawer.title'),
             style: TextStyle(
-              color: Colors.black,
+              color: parchment,
               fontSize: headerFontSize,
               fontWeight: FontWeight.bold,
             ),

@@ -86,7 +86,6 @@ class _SettingsGrammarPageState extends ConsumerState<SettingsGrammarPage> {
               title: Text(value.$2),
               value: settings.isFeatureEnabled(id, axis.id, value.$1),
               onChanged: (_) => notifier.toggleFeature(id, axis.id, value.$1),
-              activeColor: settingsCheckboxColor,
               checkColor: Colors.black,
             ),
         ],
@@ -118,7 +117,6 @@ class _SettingsGrammarPageState extends ConsumerState<SettingsGrammarPage> {
       onChanged: (_) => ref
           .read(settingsProvider.notifier)
           .toggleType(id, typeName, inRange: filter.typeInRange(id, typeName)),
-      activeColor: settingsCheckboxColor,
       checkColor: Colors.black,
     );
   }
@@ -165,7 +163,6 @@ class _SettingsGrammarPageState extends ConsumerState<SettingsGrammarPage> {
                 .read(settingsProvider.notifier)
                 .toggleForm(id, formKey, inRange: filter.formInRange(id, label))
           : null,
-      activeColor: settingsCheckboxColor,
       checkColor: Colors.black,
     );
   }

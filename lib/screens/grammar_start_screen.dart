@@ -2,13 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../data/rewards.dart';
 import '../data/topics.dart';
 import '../models/lesson_range.dart';
-import '../models/reward.dart';
 import '../providers/reward_provider.dart';
 import '../providers/round_providers.dart';
-import '../widgets/town_view.dart';
 import 'round_screen.dart';
 
 /// The round [offer] starts; null when nothing is due.
@@ -18,11 +15,7 @@ RoundRequest? requestOf(TodayOffer offer) => switch (offer) {
   NothingDue() => null,
 };
 
-List<Building> townOf(RewardLedger ledger) => [
-  for (final id in ledger.buildings) romanTown.singleWhere((b) => b.id == id),
-];
-
-/// "Heute dran" on top, the town, then every topic the course offers.
+/// "Heute dran" on top, then every topic the course offers.
 class GrammarStartScreen extends ConsumerWidget {
   const GrammarStartScreen({super.key, this.namer = const DerivedTopicNamer()});
 
@@ -46,7 +39,6 @@ class GrammarStartScreen extends ConsumerWidget {
     } else if (!offer.hasValue || !topics.hasValue || !rewards.hasValue) {
       body = const Center(child: CircularProgressIndicator());
     } else {
-      final ledger = rewards.requireValue;
       final request = requestOf(offer.requireValue);
       body = ListView(
         padding: const EdgeInsets.all(16),
@@ -81,10 +73,6 @@ class GrammarStartScreen extends ConsumerWidget {
               ),
             ),
           ),
-          const SizedBox(height: 16),
-          if (ledger.practiceDays > 0)
-            Text(t('round.start.days', {'n': '${ledger.practiceDays}'})),
-          TownView(townOf(ledger)),
           const SizedBox(height: 16),
           Text(
             t('round.start.topics'),

@@ -25,6 +25,10 @@ const List<Building> romanTown = [
   (id: 'amphitheatrum', emoji: '🏟️'),
 ];
 
+List<Building> townOf(RewardLedger ledger) => [
+  for (final id in ledger.buildings) romanTown.singleWhere((b) => b.id == id),
+];
+
 class PointsStrategy implements RewardStrategy {
   const PointsStrategy();
 

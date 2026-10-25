@@ -119,7 +119,6 @@ class _WordList extends ConsumerWidget {
       onChanged: (_) => ref
           .read(settingsProvider.notifier)
           .toggleWord(item.lemma, inRange: filter.wordInRange(item)),
-      activeColor: settingsCheckboxColor,
       checkColor: Colors.black,
     );
   }

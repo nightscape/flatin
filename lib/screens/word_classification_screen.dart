@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../theme.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:fsrs/fsrs.dart';
@@ -411,7 +412,7 @@ class _WordClassificationScreenState
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: Colors.grey, width: 1),
+          border: Border.all(color: outlineColor, width: 1),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -463,8 +464,8 @@ class _WordClassificationScreenState
           color: _isChecked
               ? (isCorrect
                     ? Colors.green
-                    : (isIncorrect ? Colors.red : Colors.grey))
-              : Colors.grey,
+                    : (isIncorrect ? Colors.red : mutedText))
+              : mutedText,
           width: _isChecked ? 2 : 1,
         ),
       ),
@@ -575,13 +576,11 @@ class _WordClassificationScreenState
     final buttonPadding = isMobile ? 16.0 : 24.0;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFE5E5E5),
       drawer: buildAppDrawer(context),
       appBar: AppBar(
-        backgroundColor: const Color(0xFFE5E5E5),
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_drop_down, color: Colors.black),
+          icon: const Icon(Icons.arrow_drop_down),
           onPressed: () {
             Navigator.of(context).pop();
           },
@@ -642,7 +641,7 @@ class _WordClassificationScreenState
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: Colors.grey, width: 2),
+                      border: Border.all(color: outlineColor, width: 2),
                     ),
                     child: Column(
                       children: [
@@ -662,7 +661,7 @@ class _WordClassificationScreenState
                               _currentItem!.translation,
                               style: TextStyle(
                                 fontSize: translationFontSize,
-                                color: Colors.grey,
+                                color: mutedText,
                               ),
                             ),
                           ),
@@ -702,7 +701,6 @@ class _WordClassificationScreenState
                                 ),
                               ),
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFFD0D0D0),
                                 foregroundColor: Colors.black,
                                 elevation: 0,
                                 padding: EdgeInsets.symmetric(
@@ -775,12 +773,12 @@ class _WordClassificationScreenState
                                       decoration: BoxDecoration(
                                         color: wasSelected
                                             ? Colors.green.withOpacity(0.2)
-                                            : Colors.grey.withOpacity(0.1),
+                                            : outlineColor.withOpacity(0.1),
                                         borderRadius: BorderRadius.circular(8),
                                         border: Border.all(
                                           color: wasSelected
                                               ? Colors.green
-                                              : Colors.grey,
+                                              : mutedText,
                                           width: wasSelected ? 2 : 1,
                                         ),
                                       ),
@@ -796,7 +794,7 @@ class _WordClassificationScreenState
                                           else
                                             Icon(
                                               Icons.radio_button_unchecked,
-                                              color: Colors.grey,
+                                              color: mutedText,
                                               size: isMobile ? 14 : 16,
                                             ),
                                           SizedBox(width: isMobile ? 4 : 6),
@@ -972,7 +970,6 @@ class _WordClassificationScreenState
                                     ? _checkAnswers
                                     : null,
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFFD0D0D0),
                                   foregroundColor: Colors.black,
                                   elevation: 0,
                                   padding: EdgeInsets.symmetric(
@@ -1002,7 +999,6 @@ class _WordClassificationScreenState
                                 ),
                                 onPressed: _nextWord,
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFFD0D0D0),
                                   foregroundColor: Colors.black,
                                   elevation: 0,
                                   padding: EdgeInsets.symmetric(
@@ -1045,7 +1041,7 @@ class _WordClassificationScreenState
       key: key,
       onPressed: () => _rateCard(rating),
       style: ElevatedButton.styleFrom(
-        backgroundColor: isSuggested ? color : const Color(0xFFD0D0D0),
+        backgroundColor: isSuggested ? color : null,
         foregroundColor: isSuggested ? Colors.white : Colors.black,
         elevation: isSuggested ? 4 : 0,
         padding: EdgeInsets.symmetric(
@@ -1056,7 +1052,7 @@ class _WordClassificationScreenState
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
           side: BorderSide(
-            color: isSuggested ? color : Colors.grey,
+            color: isSuggested ? color : mutedText,
             width: isSuggested ? 2 : 1,
           ),
         ),

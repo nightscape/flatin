@@ -95,9 +95,16 @@ class AppSteps {
     await _waitUntilEnabled(tester, finder);
 
     // Try to scroll if scrollable exists, otherwise just tap
-    final scrollable = find.byType(Scrollable);
+    final scrollable = find.ancestor(
+      of: finder,
+      matching: find.byType(Scrollable),
+    );
     if (scrollable.evaluate().isNotEmpty) {
-      await tester.scrollUntilVisible(finder, 500.0, scrollable: scrollable);
+      await tester.scrollUntilVisible(
+        finder,
+        500.0,
+        scrollable: scrollable.first,
+      );
     }
     await tester.tap(finder);
     await tester.pumpAndSettle();
@@ -138,9 +145,16 @@ class AppSteps {
     }
 
     // Try to scroll if scrollable exists, otherwise just tap
-    final scrollable = find.byType(Scrollable);
+    final scrollable = find.ancestor(
+      of: finder,
+      matching: find.byType(Scrollable),
+    );
     if (scrollable.evaluate().isNotEmpty) {
-      await tester.scrollUntilVisible(finder, 500.0, scrollable: scrollable);
+      await tester.scrollUntilVisible(
+        finder,
+        500.0,
+        scrollable: scrollable.first,
+      );
     }
     await tester.tap(finder);
     await tester.pumpAndSettle();

@@ -1,6 +1,7 @@
 import 'dart:ui' show PathMetric;
 
 import 'package:flutter/material.dart';
+import '../theme.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 
 import '../data/esel_steps.dart';
@@ -139,7 +140,7 @@ class EselStepRow extends StatelessWidget {
     return CustomPaint(
       key: Key(stepKey),
       painter: _StepBorder(
-        color: status == EselStepStatus.pending ? Colors.grey : color,
+        color: status == EselStepStatus.pending ? outlineColor : color,
         dashed: step.absent,
       ),
       child: Padding(
@@ -267,7 +268,7 @@ class EselStepRow extends StatelessWidget {
       style: OutlinedButton.styleFrom(
         minimumSize: const Size(0, _optionHeight),
         foregroundColor: wrong ? Colors.red : null,
-        side: BorderSide(color: wrong ? Colors.red : Colors.grey),
+        side: BorderSide(color: wrong ? Colors.red : outlineColor),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -343,7 +344,7 @@ class EselPanel extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.grey),
+        border: Border.all(color: outlineColor),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
