@@ -7,7 +7,18 @@ import 'form_label.dart';
 import 'lesson_range.dart';
 
 /// What the learner said about one entry, against what the course says.
-enum Override { forcedOn, forcedOff, none }
+enum Override {
+  forcedOn,
+  forcedOff,
+  none;
+
+  /// The verdict after the override; [inRange] is what the course says.
+  bool verdict({required bool inRange}) => switch (this) {
+    forcedOff => false,
+    forcedOn => true,
+    none => inRange,
+  };
+}
 
 /// Settings model holding the user's practice selection.
 ///
@@ -64,6 +75,13 @@ class Settings {
   /// in the exact spelling of their lemma.
   final Set<String> forcedOnWords;
 
+  /// Grammar topics ([CourseTopic.key]) the learner switched off.
+  final Set<String> deselectedTopics;
+
+  /// Grammar topics the learner practises although the grammar range has not
+  /// reached them.
+  final Set<String> forcedOnTopics;
+
   /// Data file id -> type names practised ahead of the course.
   final Map<String, Set<String>> forcedOnTypes;
 
@@ -83,6 +101,8 @@ class Settings {
     Set<String>? forcedOnWords,
     Map<String, Set<String>>? forcedOnTypes,
     Map<String, Set<String>>? forcedOnForms,
+    Set<String>? deselectedTopics,
+    Set<String>? forcedOnTopics,
     Set<String>? disabledRewards,
     this.rewardAnimation = true,
     this.avoidMacronTwins = true,
@@ -96,6 +116,8 @@ class Settings {
        forcedOnWords = forcedOnWords ?? {},
        forcedOnTypes = forcedOnTypes ?? {},
        forcedOnForms = forcedOnForms ?? {},
+       deselectedTopics = deselectedTopics ?? {},
+       forcedOnTopics = forcedOnTopics ?? {},
        disabledRewards = disabledRewards ?? {} {
     assert(
       this.courseWords.to <= lastLesson,
@@ -104,6 +126,10 @@ class Settings {
     assert(
       this.forcedOnWords.intersection(this.deselectedWords).isEmpty,
       'a word is both forced on and forced off',
+    );
+    assert(
+      this.forcedOnTopics.intersection(this.deselectedTopics).isEmpty,
+      'a topic is both forced on and forced off',
     );
     assert(
       _disjoint(this.forcedOnTypes, this.disabledTypes),
@@ -128,6 +154,8 @@ class Settings {
     Set<String>? forcedOnWords,
     Map<String, Set<String>>? forcedOnTypes,
     Map<String, Set<String>>? forcedOnForms,
+    Set<String>? deselectedTopics,
+    Set<String>? forcedOnTopics,
     Set<String>? disabledRewards,
     bool? rewardAnimation,
     bool? avoidMacronTwins,
@@ -145,6 +173,8 @@ class Settings {
       forcedOnWords: forcedOnWords ?? this.forcedOnWords,
       forcedOnTypes: forcedOnTypes ?? this.forcedOnTypes,
       forcedOnForms: forcedOnForms ?? this.forcedOnForms,
+      deselectedTopics: deselectedTopics ?? this.deselectedTopics,
+      forcedOnTopics: forcedOnTopics ?? this.forcedOnTopics,
       disabledRewards: disabledRewards ?? this.disabledRewards,
       rewardAnimation: rewardAnimation ?? this.rewardAnimation,
       avoidMacronTwins: avoidMacronTwins ?? this.avoidMacronTwins,
@@ -184,11 +214,19 @@ class Settings {
     forcedOnWords: {},
     forcedOnTypes: {},
     forcedOnForms: {},
+    deselectedTopics: {},
+    forcedOnTopics: {},
   );
 
   Override overrideOfWord(String lemma) {
     if (deselectedWords.contains(lemma)) return Override.forcedOff;
     if (forcedOnWords.contains(lemma)) return Override.forcedOn;
+    return Override.none;
+  }
+
+  Override overrideOfTopic(String topicKey) {
+    if (deselectedTopics.contains(topicKey)) return Override.forcedOff;
+    if (forcedOnTopics.contains(topicKey)) return Override.forcedOn;
     return Override.none;
   }
 
@@ -205,6 +243,14 @@ class Settings {
     return copyWith(
       deselectedWords: _withEntry(deselectedWords, lemma, off),
       forcedOnWords: _withEntry(forcedOnWords, lemma, on),
+    );
+  }
+
+  Settings toggleTopic(String topicKey, {required bool inRange}) {
+    final (off, on) = _flip(overrideOfTopic(topicKey), inRange);
+    return copyWith(
+      deselectedTopics: _withEntry(deselectedTopics, topicKey, off),
+      forcedOnTopics: _withEntry(forcedOnTopics, topicKey, on),
     );
   }
 
@@ -329,6 +375,8 @@ class Settings {
       'forcedOnForms': forcedOnForms.map(
         (key, value) => MapEntry(key, value.toList()),
       ),
+      'deselectedTopics': deselectedTopics.toList(),
+      'forcedOnTopics': forcedOnTopics.toList(),
       'disabledRewards': disabledRewards.toList(),
       'rewardAnimation': rewardAnimation,
       'avoidMacronTwins': avoidMacronTwins,
@@ -382,7 +430,15 @@ class Settings {
         ) ??
         <String, Set<String>>{};
 
+    final deselectedTopics = Set<String>.from(
+      json['deselectedTopics'] as List<dynamic>? ?? const [],
+    );
+    final forcedOnTopics = Set<String>.from(
+      json['forcedOnTopics'] as List<dynamic>? ?? const [],
+    );
+
     _rejectContradictions(forcedOnWords, deselectedWords, 'word');
+    _rejectContradictions(forcedOnTopics, deselectedTopics, 'topic');
     _rejectContradictionsByFile(forcedOnTypes, disabledTypes, 'type');
     _rejectContradictionsByFile(forcedOnForms, disabledForms, 'form');
 
@@ -413,6 +469,8 @@ class Settings {
       forcedOnWords: forcedOnWords,
       forcedOnTypes: forcedOnTypes,
       forcedOnForms: forcedOnForms,
+      deselectedTopics: deselectedTopics,
+      forcedOnTopics: forcedOnTopics,
       disabledRewards: Set<String>.from(
         json['disabledRewards'] as List<dynamic>? ?? const [],
       ),

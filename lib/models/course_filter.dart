@@ -40,11 +40,20 @@ final class CourseFilter {
   bool wordInRange(PracticeItem item) =>
       settings.courseWords.contains(lessons.lessonNumberOf(item));
 
+  /// The grammar range's verdict on a topic, after the learner's own choice
+  /// about the topic.
+  bool topicInRange(CourseTopic topic) => settings
+      .overrideOfTopic(topic.key)
+      .verdict(inRange: settings.effectiveGrammar.contains(topic.lesson));
+
   bool typeInRange(String dataFileId, String typeName) =>
-      curriculum.taughtType(dataFileId, typeName, settings.effectiveGrammar);
+      topicInRange(curriculum.typeTopic(dataFileId, typeName));
 
   bool formInRange(String dataFileId, FormLabel label) =>
-      curriculum.taughtForm(dataFileId, label.key, settings.effectiveGrammar);
+      topicInRange(curriculum.formTopic(dataFileId, label.key));
+
+  bool _topicSwitchedOff(CourseTopic topic) =>
+      settings.overrideOfTopic(topic.key) == Override.forcedOff;
 
   bool wordPracticed(PracticeItem item) =>
       switch (settings.overrideOfWord(item.lemma)) {
@@ -105,6 +114,7 @@ final class CourseFilter {
       for (final label in item.formLabels)
         if (settings.offFeaturesOf(id, label).isEmpty &&
             settings.overrideOfForm(id, label.key) != Override.forcedOff &&
+            !_topicSwitchedOff(curriculum.formTopic(id, label.key)) &&
             !formInRange(id, label))
           curriculum.formLesson(id, label.key),
     ];
@@ -115,6 +125,7 @@ final class CourseFilter {
   /// [wordLesson] lifts the lesson a type is first practised with its words.
   CourseGap? typeGap(String dataFileId, String typeName, [int wordLesson = 1]) {
     if (settings.overrideOfType(dataFileId, typeName) == Override.forcedOn ||
+        _topicSwitchedOff(curriculum.typeTopic(dataFileId, typeName)) ||
         typeInRange(dataFileId, typeName)) {
       return null;
     }
@@ -123,6 +134,7 @@ final class CourseFilter {
 
   CourseGap? formGap(String dataFileId, FormLabel label) {
     if (settings.overrideOfForm(dataFileId, label.key) == Override.forcedOn ||
+        _topicSwitchedOff(curriculum.formTopic(dataFileId, label.key)) ||
         formInRange(dataFileId, label)) {
       return null;
     }

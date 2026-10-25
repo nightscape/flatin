@@ -145,6 +145,9 @@ class SettingsNotifier extends _$SettingsNotifier {
     await _saveSettings(newSettings);
   }
 
+  Future<void> toggleTopic(String topicKey, {required bool inRange}) =>
+      _update((s) => s.toggleTopic(topicKey, inRange: inRange));
+
   Future<void> setWordRange(LessonRange range) =>
       _update((s) => s.withWordRange(range));
 

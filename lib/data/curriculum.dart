@@ -18,27 +18,79 @@ typedef DataFileShape = ({List<FormLabel> labels, List<String> types});
 
 /// One `forms:` entry: axis id -> the codes it accepts. A form matches when
 /// every named axis carries one of them; `{}` matches every form of the file.
-typedef _Selector = ({Map<String, Set<String>> axes, int lesson});
+typedef _Selector = ({Map<String, Set<String>> axes, CourseTopic topic});
+
+/// One entry of a volume's grammar progression: a type or a bundle of forms
+/// a lesson introduces. The learner switches it as a whole.
+final class CourseTopic {
+  final int lesson;
+  final String dataFileId;
+
+  /// Set for a type topic.
+  final String? typeName;
+
+  /// For a bundle of forms: axis id -> the codes it takes; empty for the
+  /// base forms.
+  final Map<String, Set<String>> selector;
+
+  const CourseTopic.type(this.lesson, this.dataFileId, String this.typeName)
+    : selector = const {};
+
+  const CourseTopic.forms(this.lesson, this.dataFileId, this.selector)
+    : typeName = null;
+
+  /// Stored in the settings, so it names no language.
+  String get key =>
+      '$lesson/$dataFileId/${typeName ?? selector.entries.map((e) => '${e.key}=${e.value.join('|')}').join(',')}';
+
+  bool get isBaseForms => typeName == null && selector.isEmpty;
+
+  /// shortcut: named from the axis display names; real topic names belong in
+  /// the grammar YAML.
+  String name(FormMetadata metadata) {
+    if (typeName != null) return metadata.displayByType[typeName]!;
+    final axes = metadata.axes;
+    return [
+      for (final MapEntry(key: id, value: codes) in selector.entries)
+        if (codes.length < axes.byId(id).values.length)
+          codes.map(axes.byId(id).display).join('/'),
+    ].join(' · ');
+  }
+}
 
 /// Which lesson introduces which form and which type.
 ///
 /// Built once from the volume files and the shape of the practice data, so
 /// every lookup is a map read and every inconsistency is a load error.
 final class Curriculum {
-  /// data file id -> form key -> lesson.
-  final Map<String, Map<FormKey, int>> _formLessons;
+  /// data file id -> form key -> the topic that teaches it.
+  final Map<String, Map<FormKey, CourseTopic>> _formTopics;
 
-  /// data file id -> type name -> lesson.
-  final Map<String, Map<String, int>> _typeLessons;
+  /// data file id -> type name -> the topic that teaches it.
+  final Map<String, Map<String, CourseTopic>> _typeTopics;
 
-  const Curriculum._(this._formLessons, this._typeLessons);
+  /// Every topic in the order of the volume files.
+  final List<CourseTopic> courseTopics;
+
+  const Curriculum._(this._formTopics, this._typeTopics, this.courseTopics);
 
   static Curriculum parse(
     List<String> yamlSources,
     Map<String, DataFileShape> shapes,
   ) {
     final selectors = {for (final id in shapes.keys) id: <_Selector>[]};
-    final typeLessons = {for (final id in shapes.keys) id: <String, int>{}};
+    final typeTopics = {
+      for (final id in shapes.keys) id: <String, CourseTopic>{},
+    };
+    final topics = <CourseTopic>[];
+
+    // Equal selectors of one lesson are one topic.
+    CourseTopic addTopic(CourseTopic topic) {
+      final known = topics.where((t) => t.key == topic.key).firstOrNull;
+      if (known != null) return known;
+      topics.add(topic);
+      return topic;
+    }
 
     for (var i = 0; i < yamlSources.length; i++) {
       final where = 'curriculum file ${i + 1}';
@@ -57,9 +109,10 @@ final class Curriculum {
           }
           final section = map[fileId] as YamlMap;
           for (final form in (section['forms'] as YamlList? ?? const [])) {
+            final axes = _parseSelector(form as YamlMap, shape, where, lesson);
             selectors[fileId]!.add((
-              axes: _parseSelector(form as YamlMap, shape, where, lesson),
-              lesson: lesson,
+              axes: axes,
+              topic: addTopic(CourseTopic.forms(lesson, fileId, axes)),
             ));
           }
           for (final type in (section['types'] as YamlList? ?? const [])) {
@@ -69,53 +122,60 @@ final class Curriculum {
                 '$where, lesson $lesson: "$fileId" has no type "$name"',
               );
             }
-            if (typeLessons[fileId]!.containsKey(name)) {
+            if (typeTopics[fileId]!.containsKey(name)) {
               throw StateError(
                 '$where, lesson $lesson: type "$name" of "$fileId" is listed '
                 'twice',
               );
             }
-            typeLessons[fileId]![name] = lesson;
+            typeTopics[fileId]![name] = addTopic(
+              CourseTopic.type(lesson, fileId, name),
+            );
           }
         }
       }
     }
 
-    final formLessons = <String, Map<FormKey, int>>{};
+    final formTopics = <String, Map<FormKey, CourseTopic>>{};
     for (final file in shapes.entries) {
       for (final type in file.value.types) {
-        if (!typeLessons[file.key]!.containsKey(type)) {
+        if (!typeTopics[file.key]!.containsKey(type)) {
           throw StateError('no lesson teaches type "$type" of "${file.key}"');
         }
       }
-      formLessons[file.key] = _resolveForms(
+      formTopics[file.key] = _resolveForms(
         file.key,
         file.value.labels,
         selectors[file.key]!,
       );
     }
 
-    return Curriculum._(formLessons, typeLessons);
+    return Curriculum._(formTopics, typeTopics, topics);
   }
 
-  int formLesson(String dataFileId, FormKey key) {
-    final lesson = _formLessons[dataFileId]![key];
-    if (lesson == null) {
+  CourseTopic formTopic(String dataFileId, FormKey key) {
+    final topic = _formTopics[dataFileId]![key];
+    if (topic == null) {
       throw StateError('no curriculum entry for "$dataFileId" form "$key"');
     }
-    return lesson;
+    return topic;
   }
 
-  int typeLesson(String dataFileId, String typeName) {
-    final lesson = _typeLessons[dataFileId]![typeName];
-    if (lesson == null) {
+  CourseTopic typeTopic(String dataFileId, String typeName) {
+    final topic = _typeTopics[dataFileId]![typeName];
+    if (topic == null) {
       throw StateError(
-        'no curriculum entry for "$dataFileId" type '
-        '"$typeName"',
+        'no curriculum entry for "$dataFileId" type "$typeName"',
       );
     }
-    return lesson;
+    return topic;
   }
+
+  int formLesson(String dataFileId, FormKey key) =>
+      formTopic(dataFileId, key).lesson;
+
+  int typeLesson(String dataFileId, String typeName) =>
+      typeTopic(dataFileId, typeName).lesson;
 
   bool taughtForm(String dataFileId, FormKey key, LessonRange range) =>
       range.contains(formLesson(dataFileId, key));
@@ -167,32 +227,32 @@ bool _knownCode(
 ///
 /// Every specificity is checked, not only the winning one, so the verdict
 /// never depends on the order the selectors are listed in.
-Map<FormKey, int> _resolveForms(
+Map<FormKey, CourseTopic> _resolveForms(
   String dataFileId,
   List<FormLabel> labels,
   List<_Selector> selectors,
 ) {
-  final lessons = <FormKey, int>{};
+  final topics = <FormKey, CourseTopic>{};
   for (final label in labels) {
-    final claims = <int, int>{};
+    final claims = <int, CourseTopic>{};
     for (final selector in selectors) {
       if (!_matches(selector, label)) continue;
       final claimed = claims[selector.axes.length];
-      if (claimed != null && claimed != selector.lesson) {
+      if (claimed != null && claimed.lesson != selector.topic.lesson) {
         throw StateError(
-          '"$dataFileId" form "${label.key}": lesson $claimed and '
-          'lesson ${selector.lesson} claim it equally specifically',
+          '"$dataFileId" form "${label.key}": lesson ${claimed.lesson} and '
+          'lesson ${selector.topic.lesson} claim it equally specifically',
         );
       }
-      claims[selector.axes.length] = selector.lesson;
+      claims[selector.axes.length] = selector.topic;
     }
     if (claims.isEmpty) {
       throw StateError('no lesson teaches "$dataFileId" form "${label.key}"');
     }
     final mostSpecific = claims.keys.reduce((a, b) => a > b ? a : b);
-    lessons[label.key] = claims[mostSpecific]!;
+    topics[label.key] = claims[mostSpecific]!;
   }
-  return lessons;
+  return topics;
 }
 
 bool _matches(_Selector selector, FormLabel label) => selector.axes.entries

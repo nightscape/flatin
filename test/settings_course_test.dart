@@ -106,6 +106,8 @@ void main() {
           .toggleWord('amare', inRange: true)
           .toggleType('nouns', 'A-Deklination', inRange: false)
           .toggleForm('nouns', 'gen.sg', inRange: true)
+          .toggleTopic('1/nouns/*', inRange: true)
+          .toggleTopic('41/verbs/ger', inRange: false)
           .toggleFeature('verbs', 'genus_verbi', 'pass')
           .setInputStrategy('nouns', 'dropdown_all_forms')
           .clearOverrides();
@@ -116,6 +118,8 @@ void main() {
       expect(settings.forcedOnTypes, isEmpty);
       expect(settings.disabledForms, isEmpty);
       expect(settings.forcedOnForms, isEmpty);
+      expect(settings.deselectedTopics, isEmpty);
+      expect(settings.forcedOnTopics, isEmpty);
       expect(settings.disabledFeatures, isEmpty);
       expect(settings.courseWords, LessonRange(3, 9));
       expect(settings.getInputStrategyId('nouns'), 'dropdown_all_forms');
@@ -171,6 +175,8 @@ void main() {
         forcedOnForms: {
           'verbs': {'konj.impf.akt.3.sg'},
         },
+        deselectedTopics: {'1/nouns/*'},
+        forcedOnTopics: {'41/verbs/ger'},
       );
 
       final restored = Settings.fromJson(
@@ -188,6 +194,8 @@ void main() {
         'verbs': {'konj.impf.akt.3.sg'},
       });
       expect(restored.deselectedWords, {'amare'});
+      expect(restored.deselectedTopics, {'1/nouns/*'});
+      expect(restored.forcedOnTopics, {'41/verbs/ger'});
       expect(restored.effectiveGrammar, LessonRange(1, 9));
     });
 
@@ -216,6 +224,8 @@ void main() {
       expect(settings.courseWords, LessonRange.fullWords);
       expect(settings.courseGrammar, LessonRange.fullGrammar);
       expect(settings.grammarFollowsWords, isTrue);
+      expect(settings.deselectedTopics, isEmpty);
+      expect(settings.forcedOnTopics, isEmpty);
       expect(settings.overrideOfWord('amare'), Override.forcedOff);
       expect(
         settings.overrideOfType('nouns', 'U-Deklination'),

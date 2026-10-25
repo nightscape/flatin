@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:latin_practice/data/lesson_data.dart';
 import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/screens/grammar_start_screen.dart';
 import 'package:latin_practice/screens/language_screen.dart';
@@ -63,6 +64,13 @@ void main() {
       final germanOnly = language == 'de'
           ? const <String>{}
           : _words('de').difference(_words(language));
+      final latin = {
+        for (final words in (await loadLessonData(
+          lessonDataAssets,
+        )).lessonWords.values)
+          for (final word in words)
+            ..._word.allMatches(word).map((m) => m[0]!.toLowerCase()),
+      };
       final nouns = await loadPracticeItems(
         'lib/data/latin_nouns.yaml',
         language: language,
@@ -108,7 +116,11 @@ void main() {
           final german = _word
               .allMatches(text)
               .map((m) => m[0]!)
-              .where((word) => germanOnly.contains(word.toLowerCase()));
+              .where(
+                (word) =>
+                    germanOnly.contains(word.toLowerCase()) &&
+                    !latin.contains(word.toLowerCase()),
+              );
           expect(german, isEmpty, reason: '${entry.key} shows German "$text"');
         }
         if (entry.key != 'home') navigator.pop();

@@ -83,43 +83,45 @@ class SettingsScreen extends StatelessWidget {
         icon: const Icon(Icons.arrow_drop_down, color: Colors.black),
         onPressed: () => Navigator.of(context).pop(),
       ),
-      body: ListView(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
-        children: [
-          CourseScope(
-            builder: (context, filter, items) => Column(
-              key: const Key('settings.section.kursstand'),
-              children: [KursstandCard(filter: filter, items: items)],
+        child: Column(
+          children: [
+            CourseScope(
+              builder: (context, filter, items) => Column(
+                key: const Key('settings.section.kursstand'),
+                children: [KursstandCard(filter: filter, items: items)],
+              ),
             ),
-          ),
-          const SizedBox(height: 16),
-          _tile(
-            context,
-            'words',
-            'settings.wordsPage',
-            const SettingsWordsPage(),
-          ),
-          _tile(
-            context,
-            'nouns',
-            'settings.nouns',
-            const SettingsGrammarPage(dataFileId: 'nouns'),
-          ),
-          _tile(
-            context,
-            'verbs',
-            'settings.verbs',
-            const SettingsGrammarPage(dataFileId: 'verbs'),
-          ),
-          _tile(
-            context,
-            'input',
-            'settings.inputPage',
-            const SettingsInputPage(),
-          ),
-          const _MacronSwitch(),
-          const _RewardSection(),
-        ],
+            const SizedBox(height: 16),
+            _tile(
+              context,
+              'words',
+              'settings.wordsPage',
+              const SettingsWordsPage(),
+            ),
+            _tile(
+              context,
+              'nouns',
+              'settings.nouns',
+              const SettingsGrammarPage(dataFileId: 'nouns'),
+            ),
+            _tile(
+              context,
+              'verbs',
+              'settings.verbs',
+              const SettingsGrammarPage(dataFileId: 'verbs'),
+            ),
+            _tile(
+              context,
+              'input',
+              'settings.inputPage',
+              const SettingsInputPage(),
+            ),
+            const _MacronSwitch(),
+            const _RewardSection(),
+          ],
+        ),
       ),
     );
   }

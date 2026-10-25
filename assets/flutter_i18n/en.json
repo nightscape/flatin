@@ -62,10 +62,13 @@
       "title": "Course position",
       "words": "Words",
       "grammar": "Grammar",
-      "follow": "Grammar follows the words",
-      "later": "later",
-      "volume": "volume {book}",
-      "summary": "{words} words, {nounForms} noun forms, {verbForms} verb forms",
+      "baseForms": "Base forms",
+      "later": "Later",
+      "wordCount": "{count} words",
+      "topicCount": "{count} topics",
+      "lesson": "Lesson {lesson}",
+      "chainClosed": "Linked: grammar follows the words",
+      "chainOpen": "Unlinked: set grammar separately",
       "reset": "Reset to course position"
     }
   },

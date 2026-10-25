@@ -148,4 +148,68 @@ void main() {
       verbForms: 0,
     ));
   });
+
+  group('grammar topics', () {
+    const lateForms = '''
+- lesson: 21
+  nouns:
+    forms:
+      - {}
+    types: [A-Deklination, O-Deklination]
+- lesson: 32
+  nouns:
+    forms:
+      - {numerus: pl}
+''';
+    final inRange = Settings().withWordRange(LessonRange(21, 23));
+
+    test('a deselected topic\'s forms are not practised', () {
+      final filter = _filter(inRange, lateForms);
+      final topic = filter.curriculum.formTopic('nouns', 'nom.sg');
+      final switchedOff = _filter(
+        inRange.toggleTopic(topic.key, inRange: true),
+        lateForms,
+      );
+
+      expect(filter.practicedForms('nouns', _nauta.formLabels), {
+        'nom.sg',
+        'gen.sg',
+      });
+      expect(switchedOff.practicedForms('nouns', _nauta.formLabels), isEmpty);
+      expect(switchedOff.reachesPractice(_nauta), isFalse);
+    });
+
+    test('a forced-on later topic\'s forms are practised', () {
+      final topic = _filter(
+        inRange,
+        lateForms,
+      ).curriculum.formTopic('nouns', 'dat.pl');
+      final filter = _filter(
+        inRange.toggleTopic(topic.key, inRange: false),
+        lateForms,
+      );
+
+      expect(filter.practicedForms('nouns', _nauta.formLabels), {
+        'nom.sg',
+        'gen.sg',
+        'dat.pl',
+        'abl.pl',
+      });
+      expect(filter.formGap('nouns', _nauta.formLabels[2]), isNull);
+    });
+
+    test('a deselected type topic keeps its words from practice', () {
+      final topic = _filter(
+        inRange,
+        lateForms,
+      ).curriculum.typeTopic('nouns', 'A-Deklination');
+      final filter = _filter(
+        inRange.toggleTopic(topic.key, inRange: true),
+        lateForms,
+      );
+
+      expect(filter.itemPracticed(_nauta), isFalse);
+      expect(filter.typeGap('nouns', 'A-Deklination'), isNull);
+    });
+  });
 }

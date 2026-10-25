@@ -13,8 +13,16 @@ import 'support/word_classification_harness.dart' show letItLoad;
 
 Finder _text(String key) => find.byKey(Key(key));
 
-String _shown(WidgetTester tester, String key) =>
-    tester.widget<Text>(_text(key)).data!;
+String _plain(WidgetTester tester, String key) =>
+    tester.widget<Text>(_text(key)).textSpan!.toPlainText();
+
+Future<void> _tapChip(WidgetTester tester, String key) async {
+  await tester.ensureVisible(_text(key));
+  await tester.pumpAndSettle();
+  await tester.tap(_text(key));
+  await tester.pumpAndSettle();
+  await letItLoad(tester);
+}
 
 Future<void> _move(WidgetTester tester, String slider, int from, int to) async {
   tester.widget<RangeSlider>(_text(slider)).onChanged!(
@@ -58,40 +66,88 @@ Future<void> _open(
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  testWidgets('the card shows two sliders, the toggle, the summary and reset', (
+  testWidgets('the card shows histograms, sliders, chain, summary and reset', (
     tester,
   ) async {
     await _open(tester, Settings());
 
     expect(_text('kursstand.words.slider'), findsOneWidget);
     expect(_text('kursstand.grammar.slider'), findsOneWidget);
-    expect(_text('kursstand.follow'), findsOneWidget);
+    expect(_text('kursstand.words.bar.1'), findsOneWidget);
+    expect(_text('kursstand.words.bar.$lastLesson'), findsOneWidget);
+    expect(_text('kursstand.grammar.bar.$laterLesson'), findsOneWidget);
+    expect(find.byIcon(Icons.link), findsOneWidget);
     expect(
-      tester.widget<SwitchListTile>(_text('kursstand.follow')).value,
-      isTrue,
-    );
-    expect(
-      _shown(tester, 'kursstand.summary'),
-      matches(r'^\d+ Wörter, \d+ Nomenformen, \d+ Verbformen$'),
+      _plain(tester, 'kursstand.summary'),
+      matches(r'^L1 – L40:  \d+ Wörter  ·  \d+ Themen$'),
     );
     expect(find.text('Auf Kursstand zurücksetzen'), findsOneWidget);
+  });
+
+  testWidgets('both sliders and both histograms share one scale', (
+    tester,
+  ) async {
+    await _open(tester, Settings());
+
+    final words = tester.widget<RangeSlider>(_text('kursstand.words.slider'));
+    final grammar = tester.widget<RangeSlider>(
+      _text('kursstand.grammar.slider'),
+    );
+    expect((words.min, words.max), (grammar.min, grammar.max));
+    expect(words.divisions, grammar.divisions);
+    expect(grammar.max, laterLesson);
+    for (final lesson in [1, 20, lastLesson, laterLesson]) {
+      expect(
+        tester.getCenter(_text('kursstand.words.bar.$lesson')).dx,
+        tester.getCenter(_text('kursstand.grammar.bar.$lesson')).dx,
+        reason: 'lesson $lesson',
+      );
+    }
+  });
+
+  testWidgets('a word value of Später is clamped to L40', (tester) async {
+    await _open(tester, Settings(courseWords: LessonRange(10, 20)));
+
+    await _move(tester, 'kursstand.words.slider', 12, laterLesson);
     expect(
-      _shown(tester, 'kursstand.words.label'),
-      'L1 (Band 1) - L40 (Band 2)',
+      (await storedSettings())['courseWords'],
+      LessonRange(12, lastLesson).toJson(),
+    );
+
+    await tester.tap(_text('kursstand.words.bar.$laterLesson'));
+    await tester.pumpAndSettle();
+    await letItLoad(tester);
+    expect(
+      (await storedSettings())['courseWords'],
+      LessonRange(12, lastLesson).toJson(),
     );
   });
 
-  testWidgets('the grammar slider follows the word slider while linked', (
+  testWidgets('the chain toggles grammarFollowsWords', (tester) async {
+    await _open(tester, Settings());
+
+    await tester.tap(_text('kursstand.chain'));
+    await tester.pumpAndSettle();
+    await letItLoad(tester);
+    expect((await storedSettings())['grammarFollowsWords'], isFalse);
+    expect(find.byIcon(Icons.link_off), findsOneWidget);
+
+    await tester.tap(_text('kursstand.chain'));
+    await tester.pumpAndSettle();
+    await letItLoad(tester);
+    expect((await storedSettings())['grammarFollowsWords'], isTrue);
+  });
+
+  testWidgets('the grammar range follows the word range while linked', (
     tester,
   ) async {
     await _open(tester, Settings());
 
     await _move(tester, 'kursstand.words.slider', 21, 23);
-    expect(_shown(tester, 'kursstand.words.label'), 'L21 (Band 2) - L23');
-    expect(
-      _shown(tester, 'kursstand.grammar.label'),
-      'L1 (Band 1) - L23 (Band 2)',
-    );
+
+    final stored = await storedSettings();
+    expect(stored['courseWords'], LessonRange(21, 23).toJson());
+    expect(stored['courseGrammar'], LessonRange(1, 23).toJson());
     expect(
       tester.widget<RangeSlider>(_text('kursstand.grammar.slider')).onChanged,
       isNull,
@@ -105,59 +161,117 @@ void main() {
 
     await _dragThumb(tester, 'kursstand.words.slider', 0.49, 1000);
     expect(
-      _shown(tester, 'kursstand.words.label'),
-      'L10 (Band 1) - L40 (Band 2)',
+      (await storedSettings())['courseWords'],
+      LessonRange(10, lastLesson).toJson(),
     );
 
     await _dragThumb(tester, 'kursstand.words.slider', 0.23, -1000);
-    expect(
-      _shown(tester, 'kursstand.words.label'),
-      'L1 (Band 1) - L40 (Band 2)',
-    );
     expect(
       (await storedSettings())['courseWords'],
       LessonRange(1, lastLesson).toJson(),
     );
   });
 
-  testWidgets('dragging the grammar slider does nothing while linked', (
+  testWidgets('the grammar slider moves on its own when unlinked', (
     tester,
   ) async {
-    await _open(tester, Settings(courseWords: LessonRange(10, 20)));
+    await _open(tester, Settings(grammarFollowsWords: false));
 
-    final before = _shown(tester, 'kursstand.grammar.label');
-    await _dragThumb(tester, 'kursstand.grammar.slider', 0.49, 1000);
-
-    expect(_shown(tester, 'kursstand.grammar.label'), before);
-    expect(
-      (await storedSettings())['courseWords'],
-      LessonRange(10, 20).toJson(),
-    );
-  });
-
-  testWidgets('the grammar slider stays when unlinked', (tester) async {
-    await _open(tester, Settings());
-
-    await tester.tap(_text('kursstand.follow'));
-    await tester.pumpAndSettle();
     await _move(tester, 'kursstand.words.slider', 1, 5);
-    expect(_shown(tester, 'kursstand.words.label'), 'L1 (Band 1) - L5');
-    expect(_shown(tester, 'kursstand.grammar.label'), 'L1 (Band 1) - später');
-
     await _move(tester, 'kursstand.grammar.slider', 3, 12);
-    expect(_shown(tester, 'kursstand.grammar.label'), 'L3 (Band 1) - L12');
+
+    final stored = await storedSettings();
+    expect(stored['courseWords'], LessonRange(1, 5).toJson());
+    expect(stored['courseGrammar'], LessonRange(3, 12).toJson());
   });
 
-  testWidgets('the top stop of the grammar slider reads später', (
+  group('a tap on a bar moves the nearer handle', () {
+    Future<void> tapBar(WidgetTester tester, String bar, int lesson) async {
+      await tester.tap(_text('kursstand.$bar.bar.$lesson'));
+      await tester.pumpAndSettle();
+      await letItLoad(tester);
+    }
+
+    for (final (lesson, expected, why) in [
+      (5, LessonRange(5, 20), 'left of the range moves the start'),
+      (30, LessonRange(10, 30), 'right of the range moves the end'),
+      (12, LessonRange(12, 20), 'inside, nearer the start'),
+      (18, LessonRange(10, 18), 'inside, nearer the end'),
+    ]) {
+      testWidgets('words: $lesson, $why', (tester) async {
+        await _open(tester, Settings(courseWords: LessonRange(10, 20)));
+
+        await tapBar(tester, 'words', lesson);
+
+        expect((await storedSettings())['courseWords'], expected.toJson());
+      });
+    }
+
+    testWidgets('grammar bar, chain open: moves only the grammar', (
+      tester,
+    ) async {
+      await _open(
+        tester,
+        Settings(
+          grammarFollowsWords: false,
+          courseWords: LessonRange(10, 20),
+          courseGrammar: LessonRange(5, 20),
+        ),
+      );
+
+      await tapBar(tester, 'grammar', laterLesson);
+
+      final stored = await storedSettings();
+      expect(stored['courseGrammar'], LessonRange(5, laterLesson).toJson());
+      expect(stored['courseWords'], LessonRange(10, 20).toJson());
+    });
+
+    testWidgets('grammar bar, chain closed: moves the words and the grammar', (
+      tester,
+    ) async {
+      await _open(tester, Settings(courseWords: LessonRange(10, 20)));
+
+      await tapBar(tester, 'grammar', 30);
+
+      final stored = await storedSettings();
+      expect(stored['courseWords'], LessonRange(10, 30).toJson());
+      expect(stored['courseGrammar'], LessonRange(1, 30).toJson());
+    });
+  });
+
+  testWidgets('a word chip flips the word against the range', (tester) async {
+    await _open(tester, Settings(courseWords: LessonRange(21, 23)));
+
+    await _tapChip(tester, 'kursstand.word.rosa');
+    expect((await storedSettings())['forcedOnWords'], ['rosa']);
+
+    final lessons = await loadLessonData(lessonDataAssets);
+    final inside = lessons
+        .lessonWords[lessons.lessonNames.firstWhere(
+          (n) => lessonNumber(n) == 21,
+        )]!
+        .first;
+    await _tapChip(tester, 'kursstand.word.$inside');
+    expect((await storedSettings())['deselectedWords'], [inside]);
+
+    await _tapChip(tester, 'kursstand.word.rosa');
+    expect((await storedSettings())['forcedOnWords'], isEmpty);
+  });
+
+  testWidgets('a topic chip flips the topic against the grammar range', (
     tester,
   ) async {
-    await _open(tester, Settings());
+    final topics = (await loadCurriculum(curriculumAssets)).courseTopics;
+    final earlier = topics.firstWhere((t) => t.lesson <= 3);
+    final later = topics.firstWhere((t) => t.lesson > 3 && t.lesson < 40);
+    await _open(tester, Settings(courseWords: LessonRange(1, 3)));
 
-    expect(_shown(tester, 'kursstand.grammar.label'), endsWith('später'));
-    expect(
-      tester.widget<RangeSlider>(_text('kursstand.grammar.slider')).labels!.end,
-      'später',
-    );
+    await _tapChip(tester, 'kursstand.topic.${earlier.key}');
+    await _tapChip(tester, 'kursstand.topic.${later.key}');
+
+    final stored = await storedSettings();
+    expect(stored['deselectedTopics'], [earlier.key]);
+    expect(stored['forcedOnTopics'], [later.key]);
   });
 
   testWidgets(
@@ -349,6 +463,8 @@ void main() {
         courseWords: LessonRange(1, 5),
         forcedOnWords: {'rosa'},
         deselectedWords: {'servus'},
+        forcedOnTopics: {'41/verbs/ger'},
+        deselectedTopics: {'1/nouns/*'},
       ),
     );
 
@@ -359,6 +475,8 @@ void main() {
     final stored = await storedSettings();
     expect(stored['forcedOnWords'], isEmpty);
     expect(stored['deselectedWords'], isEmpty);
+    expect(stored['forcedOnTopics'], isEmpty);
+    expect(stored['deselectedTopics'], isEmpty);
     expect(stored['courseWords'], LessonRange(1, 5).toJson());
   });
 

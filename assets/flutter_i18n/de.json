@@ -62,10 +62,13 @@
       "title": "Kursstand",
       "words": "Wörter",
       "grammar": "Grammatik",
-      "follow": "Grammatik folgt den Wörtern",
-      "later": "später",
-      "volume": "Band {book}",
-      "summary": "{words} Wörter, {nounForms} Nomenformen, {verbForms} Verbformen",
+      "baseForms": "Grundformen",
+      "later": "Später",
+      "wordCount": "{count} Wörter",
+      "topicCount": "{count} Themen",
+      "lesson": "Lektion {lesson}",
+      "chainClosed": "Gekoppelt: Grammatik folgt den Wörtern",
+      "chainOpen": "Getrennt: Grammatik eigens einstellen",
       "reset": "Auf Kursstand zurücksetzen"
     }
   },
