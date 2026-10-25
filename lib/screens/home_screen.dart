@@ -22,10 +22,13 @@ class HomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final isMobile = MediaQuery.of(context).size.width < 600;
     final titleFontSize = isMobile ? 20.0 : 24.0;
-    final showTown = switch (ref.watch(settingsProvider)) {
-      AsyncData(:final value) => value.isRewardEnabled('town'),
+    final (showTown, showCoins) = switch (ref.watch(settingsProvider)) {
+      AsyncData(:final value) => (
+        value.isRewardEnabled('town'),
+        value.isRewardEnabled('points'),
+      ),
       AsyncError(:final error) => throw error,
-      _ => false,
+      _ => (false, false),
     };
 
     return Scaffold(
@@ -36,6 +39,7 @@ class HomeScreen extends ConsumerWidget {
           FlutterI18n.translate(context, 'app.title'),
           style: TextStyle(fontSize: titleFontSize),
         ),
+        actions: [if (showCoins) const _Coins()],
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(isMobile ? 16 : 24),
@@ -103,6 +107,49 @@ class HomeScreen extends ConsumerWidget {
               },
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+/// The learner's points, shown as coins.
+class _Coins extends ConsumerWidget {
+  const _Coins();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final points = switch (ref.watch(rewardsProvider)) {
+      AsyncData(:final value) => value.points,
+      AsyncError(:final error) => throw error,
+      _ => null,
+    };
+    if (points == null) return const SizedBox.shrink();
+    return Tooltip(
+      message: FlutterI18n.translate(context, 'settings.reward.points'),
+      child: Container(
+        key: const Key('home.coins'),
+        margin: const EdgeInsets.only(right: 12),
+        padding: const EdgeInsets.fromLTRB(6, 4, 12, 4),
+        decoration: BoxDecoration(
+          color: terracottaDark,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: gold, width: 1.5),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.toll, color: gold, size: 22),
+            const SizedBox(width: 6),
+            Text(
+              '$points',
+              style: const TextStyle(
+                color: parchment,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
         ),
       ),
     );
