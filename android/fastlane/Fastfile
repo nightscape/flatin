@@ -127,6 +127,7 @@ platform :android do
       api_bearer: ENV["GITHUB_TOKEN"],
       tag_name: tag_name,
       name: tag_name,
+      is_prerelease: tag_name.include?("-"),
       description: "Automated release for #{tag_name}",
       upload_assets: [versioned_apk]
     )
