@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -189,9 +190,16 @@ void main() {
     expect(ledger.points, 0);
   });
 
-  test('every building has a unique id and a name in de and en', () {
+  test('every building has a unique id, an image and a name in de and en', () {
     expect(romanTown, hasLength(20));
     expect(romanTown.map((b) => b.id).toSet(), hasLength(romanTown.length));
+    for (final b in romanTown) {
+      expect(
+        File('assets/town/${b.id}.png').existsSync(),
+        isTrue,
+        reason: b.id,
+      );
+    }
     for (final code in ['de', 'en']) {
       final keys = translationKeys(code);
       for (final b in romanTown) {
