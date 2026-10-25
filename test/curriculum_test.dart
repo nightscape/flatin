@@ -10,12 +10,12 @@ void main() {
 - lesson: 1
   nouns:
     forms:
-      - {}
+      - {name: T}
     types: [A-Deklination, O-Deklination]
 - lesson: 5
   nouns:
     forms:
-      - {kasus: dat}
+      - {name: T, kasus: dat}
 ''');
 
     expect(curriculum.formLesson('nouns', nounLabel('dat', 'pl').key), 5);
@@ -28,12 +28,12 @@ void main() {
 - lesson: 1
   nouns:
     forms:
-      - {}
+      - {name: T}
     types: [A-Deklination, O-Deklination]
 - lesson: 7
   nouns:
     forms:
-      - {kasus: [dat, abl]}
+      - {name: T, kasus: [dat, abl]}
 ''');
 
     expect(curriculum.formLesson('nouns', nounLabel('dat', 'pl').key), 7);
@@ -47,7 +47,7 @@ void main() {
 - lesson: 1
   nouns:
     forms:
-      - {kasus: nom}
+      - {name: T, kasus: nom}
     types: [A-Deklination, O-Deklination]
 '''),
       throwsA(
@@ -62,7 +62,7 @@ void main() {
 - lesson: 1
   nouns:
     forms:
-      - {}
+      - {name: T}
     types: [A-Deklination]
 '''),
       throwsA(
@@ -81,7 +81,7 @@ void main() {
 - lesson: 1
   nouns:
     forms:
-      - {}
+      - {name: T}
     types: [A-Deklination, O-Deklination]
 - lesson: 4
   nouns:
@@ -99,16 +99,16 @@ void main() {
 - lesson: 1
   nouns:
     forms:
-      - {}
+      - {name: T}
     types: [A-Deklination, O-Deklination]
 - lesson: 4
   nouns:
     forms:
-      - {kasus: dat}
+      - {name: T, kasus: dat}
 - lesson: 9
   nouns:
     forms:
-      - {numerus: pl}
+      - {name: T, numerus: pl}
 '''),
       throwsA(
         isStateError.having(
@@ -126,26 +126,26 @@ void main() {
 - lesson: 1
   nouns:
     forms:
-      - {}
+      - {name: T}
     types: [A-Deklination, O-Deklination]
 ''',
       '''
 - lesson: 4
   nouns:
     forms:
-      - {kasus: dat}
+      - {name: T, kasus: dat}
 ''',
       '''
 - lesson: 7
   nouns:
     forms:
-      - {kasus: dat, numerus: pl}
+      - {name: T, kasus: dat, numerus: pl}
 ''',
       '''
 - lesson: 9
   nouns:
     forms:
-      - {numerus: pl}
+      - {name: T, numerus: pl}
 ''',
     ];
     final conflict = throwsA(
@@ -174,13 +174,13 @@ void main() {
 - lesson: 1
   nouns:
     forms:
-      - {}
+      - {name: T}
     types: [A-Deklination, O-Deklination]
 - lesson: 4
   nouns:
     forms:
-      - {kasus: dat}
-      - {numerus: pl}
+      - {name: T, kasus: dat}
+      - {name: T, numerus: pl}
 ''');
 
     expect(curriculum.formLesson('nouns', nounLabel('dat', 'pl').key), 4);
@@ -192,7 +192,7 @@ void main() {
 - lesson: 1
   nouns:
     forms:
-      - {tempus: praes}
+      - {name: T, tempus: praes}
     types: [A-Deklination, O-Deklination]
 '''),
       throwsA(
@@ -207,7 +207,7 @@ void main() {
 - lesson: 1
   nouns:
     forms:
-      - {kasus: lok}
+      - {name: T, kasus: lok}
     types: [A-Deklination, O-Deklination]
 '''),
       throwsA(
@@ -222,7 +222,7 @@ void main() {
 - lesson: 1
   nouns:
     forms:
-      - {}
+      - {name: T}
     types: [A-Deklination, O-Deklination, U-Deklination]
 '''),
       throwsA(
@@ -242,7 +242,7 @@ void main() {
 - lesson: $lesson
   nouns:
     forms:
-      - {}
+      - {name: T}
     types: [A-Deklination, O-Deklination]
 '''),
         throwsA(
@@ -258,7 +258,7 @@ void main() {
 - lesson: 3
   nouns:
     forms:
-      - {}
+      - {name: T}
     types: [A-Deklination]
 - lesson: 12
   nouns:
@@ -288,6 +288,44 @@ void main() {
     expect(
       curriculum.taughtType('nouns', 'O-Deklination', LessonRange(1, 12)),
       isTrue,
+    );
+  });
+
+  for (final entry in ['{kasus: dat}', '{name: "", kasus: dat}']) {
+    test('a forms entry $entry without a name is a load error', () {
+      expect(
+        () => parseNouns('''
+- lesson: 1
+  nouns:
+    forms:
+      - $entry
+    types: [A-Deklination, O-Deklination]
+'''),
+        throwsA(isA<StateError>()),
+      );
+    });
+  }
+
+  test('the name is not part of the stored key', () {
+    final named = parseNouns('''
+- lesson: 1
+  nouns:
+    forms:
+      - {name: T}
+      - {name: Dativ, kasus: dat}
+    types: [A-Deklination, O-Deklination]
+''');
+    final other = parseNouns('''
+- lesson: 1
+  nouns:
+    forms:
+      - {name: T}
+      - {name: Anders, kasus: dat}
+    types: [A-Deklination, O-Deklination]
+''');
+    expect(
+      [for (final t in named.courseTopics) t.key],
+      [for (final t in other.courseTopics) t.key],
     );
   });
 }

@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:latin_practice/data/curriculum.dart';
 import 'package:latin_practice/data/lesson_data.dart';
 import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/screens/grammar_start_screen.dart';
@@ -71,6 +72,16 @@ void main() {
           for (final word in words)
             ..._word.allMatches(word).map((m) => m[0]!.toLowerCase()),
       };
+      // Grammar topic names are German course data, not UI text.
+      final topicWords = {
+        for (final topic in (await loadCurriculum(
+          curriculumAssets,
+        )).courseTopics)
+          if (topic.typeName == null)
+            ..._word
+                .allMatches(topic.formsName!)
+                .map((m) => m[0]!.toLowerCase()),
+      };
       final nouns = await loadPracticeItems(
         'lib/data/latin_nouns.yaml',
         language: language,
@@ -119,7 +130,8 @@ void main() {
               .where(
                 (word) =>
                     germanOnly.contains(word.toLowerCase()) &&
-                    !latin.contains(word.toLowerCase()),
+                    !latin.contains(word.toLowerCase()) &&
+                    !topicWords.contains(word.toLowerCase()),
               );
           expect(german, isEmpty, reason: '${entry.key} shows German "$text"');
         }

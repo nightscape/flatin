@@ -45,7 +45,7 @@ const everythingInLessonOne = '''
 - lesson: 1
   nouns:
     forms:
-      - {}
+      - {name: T}
     types: [A-Deklination, O-Deklination]
 ''';
 
@@ -59,7 +59,7 @@ CourseFilter filterTeachingAll(Settings settings, PracticeItem item) =>
           '- lesson: 1\n'
               '  ${item.dataFileId}:\n'
               '    forms:\n'
-              '      - {}\n'
+              '      - {name: T}\n'
               '    types: [${item.type}]\n',
         ],
         {

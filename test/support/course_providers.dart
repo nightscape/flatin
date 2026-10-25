@@ -49,10 +49,12 @@ Future<Curriculum> lateGenitiveCurriculum() async {
   for (final file in shapes.entries) {
     yaml.writeln('  ${file.key}:');
     yaml.writeln('    forms:');
-    yaml.writeln('      - {}');
+    yaml.writeln('      - {name: T}');
     yaml.writeln('    types: [${file.value.types.join(', ')}]');
   }
-  yaml.write('- lesson: 30\n  nouns:\n    forms:\n      - {kasus: gen}\n');
+  yaml.write(
+    '- lesson: 30\n  nouns:\n    forms:\n      - {name: T, kasus: gen}\n',
+  );
   return Curriculum.parse([yaml.toString()], shapes);
 }
 
@@ -72,7 +74,7 @@ Future<Curriculum> lateTypeCurriculum(
     ];
     yaml.writeln('  ${file.key}:');
     yaml.writeln('    forms:');
-    yaml.writeln('      - {}');
+    yaml.writeln('      - {name: T}');
     yaml.writeln('    types: [${types.join(', ')}]');
   }
   yaml.write('- lesson: $lesson\n  $dataFileId:\n    types: [$typeName]\n');
@@ -88,10 +90,12 @@ Future<Curriculum> lateFormsCurriculum(String dataFileId, int lesson) async {
     yaml.writeln('  ${file.key}:');
     if (file.key != dataFileId) {
       yaml.writeln('    forms:');
-      yaml.writeln('      - {}');
+      yaml.writeln('      - {name: T}');
     }
     yaml.writeln('    types: [${file.value.types.join(', ')}]');
   }
-  yaml.write('- lesson: $lesson\n  $dataFileId:\n    forms:\n      - {}\n');
+  yaml.write(
+    '- lesson: $lesson\n  $dataFileId:\n    forms:\n      - {name: T}\n',
+  );
   return Curriculum.parse([yaml.toString()], shapes);
 }

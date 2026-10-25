@@ -33,29 +33,28 @@ final class CourseTopic {
   /// base forms.
   final Map<String, Set<String>> selector;
 
-  const CourseTopic.type(this.lesson, this.dataFileId, String this.typeName)
-    : selector = const {};
+  /// Set for a bundle of forms; not part of [key].
+  final String? formsName;
 
-  const CourseTopic.forms(this.lesson, this.dataFileId, this.selector)
-    : typeName = null;
+  const CourseTopic.type(this.lesson, this.dataFileId, String this.typeName)
+    : selector = const {},
+      formsName = null;
+
+  const CourseTopic.forms(
+    this.lesson,
+    this.dataFileId,
+    this.selector,
+    String this.formsName,
+  ) : typeName = null;
 
   /// Stored in the settings, so it names no language.
   String get key =>
       '$lesson/$dataFileId/${typeName ?? selector.entries.map((e) => '${e.key}=${e.value.join('|')}').join(',')}';
 
-  bool get isBaseForms => typeName == null && selector.isEmpty;
-
-  /// shortcut: named from the axis display names; real topic names belong in
-  /// the grammar YAML.
-  String name(FormMetadata metadata) {
-    if (typeName != null) return metadata.displayByType[typeName]!;
-    final axes = metadata.axes;
-    return [
-      for (final MapEntry(key: id, value: codes) in selector.entries)
-        if (codes.length < axes.byId(id).values.length)
-          codes.map(axes.byId(id).display).join('/'),
-    ].join(' · ');
-  }
+  /// The name the learner reads: the YAML `name:` of a bundle of forms, the
+  /// display name of a type.
+  String name(FormMetadata metadata) =>
+      typeName != null ? metadata.displayByType[typeName]! : formsName!;
 }
 
 /// Which lesson introduces which form and which type.
@@ -109,10 +108,18 @@ final class Curriculum {
           }
           final section = map[fileId] as YamlMap;
           for (final form in (section['forms'] as YamlList? ?? const [])) {
-            final axes = _parseSelector(form as YamlMap, shape, where, lesson);
+            final entry = form as YamlMap;
+            final name = entry['name'];
+            if (name is! String || name.trim().isEmpty) {
+              throw StateError(
+                '$where, lesson $lesson: a forms entry of '
+                '"$fileId" has no name',
+              );
+            }
+            final axes = _parseSelector(entry, shape, where, lesson);
             selectors[fileId]!.add((
               axes: axes,
-              topic: addTopic(CourseTopic.forms(lesson, fileId, axes)),
+              topic: addTopic(CourseTopic.forms(lesson, fileId, axes, name)),
             ));
           }
           for (final type in (section['types'] as YamlList? ?? const [])) {
@@ -193,10 +200,11 @@ Map<String, Set<String>> _parseSelector(
   final axes = shape.labels.first.axes;
   return {
     for (final axisId in selector.keys.cast<String>())
-      axisId: {
-        for (final code in _codesOf(selector[axisId]))
-          if (_knownCode(axes, axisId, code, where, lesson)) code,
-      },
+      if (axisId != 'name')
+        axisId: {
+          for (final code in _codesOf(selector[axisId]))
+            if (_knownCode(axes, axisId, code, where, lesson)) code,
+        },
   };
 }
 

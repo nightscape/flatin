@@ -353,9 +353,7 @@ class _KursstandCardState extends ConsumerState<KursstandCard> {
         size: 16,
         color: inRange || on ? terracottaDark : mutedText,
       ),
-      label: Text(
-        t.isBaseForms ? _tr('baseForms') : t.name(metadata[t.dataFileId]!),
-      ),
+      label: Text(t.name(metadata[t.dataFileId]!)),
       selected: on,
       showCheckmark: false,
       visualDensity: VisualDensity.compact,

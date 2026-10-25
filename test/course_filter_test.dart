@@ -38,7 +38,7 @@ const _lateType = '''
 - lesson: 21
   nouns:
     forms:
-      - {}
+      - {name: T}
     types: [O-Deklination]
 - lesson: 32
   nouns:
@@ -68,7 +68,7 @@ void main() {
 - lesson: 21
   nouns:
     forms:
-      - {}
+      - {name: T}
     types: [A-Deklination, O-Deklination]
 ''');
 
@@ -130,12 +130,12 @@ void main() {
 - lesson: 21
   nouns:
     forms:
-      - {}
+      - {name: T}
     types: [A-Deklination, O-Deklination]
 - lesson: 32
   nouns:
     forms:
-      - {numerus: pl}
+      - {name: T, numerus: pl}
 ''');
 
     expect(filter.practicedForms('nouns', _nauta.formLabels), {
@@ -154,12 +154,12 @@ void main() {
 - lesson: 21
   nouns:
     forms:
-      - {}
+      - {name: T}
     types: [A-Deklination, O-Deklination]
 - lesson: 32
   nouns:
     forms:
-      - {numerus: pl}
+      - {name: T, numerus: pl}
 ''';
     final inRange = Settings().withWordRange(LessonRange(21, 23));
 

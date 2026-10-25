@@ -34,7 +34,7 @@ const _lateType = '''
 - lesson: 1
   nouns:
     forms:
-      - {}
+      - {name: T}
     types: [O-Deklination]
 - lesson: 32
   nouns:
@@ -45,12 +45,12 @@ const _lateGenitive = '''
 - lesson: 1
   nouns:
     forms:
-      - {}
+      - {name: T}
     types: [A-Deklination, O-Deklination]
 - lesson: 30
   nouns:
     forms:
-      - {kasus: gen}
+      - {name: T, kasus: gen}
 ''';
 
 const _lateForms = '''
@@ -60,7 +60,7 @@ const _lateForms = '''
 - lesson: 30
   nouns:
     forms:
-      - {}
+      - {name: T}
 ''';
 
 CourseFilter _filter(Settings settings, String curriculum) => CourseFilter(
@@ -162,7 +162,7 @@ void main() {
 - lesson: 2
   nouns:
     forms:
-      - {}
+      - {name: T}
     types: [A-Deklination, O-Deklination]
 ''';
 
