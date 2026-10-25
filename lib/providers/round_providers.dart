@@ -178,6 +178,8 @@ class Round extends _$Round {
           pool: pool,
           german: german,
           avoidMacronTwins: avoidMacronTwins,
+          formPracticed: (word, label) =>
+              filter.formPracticed(word.dataFileId, label),
         ),
     };
 

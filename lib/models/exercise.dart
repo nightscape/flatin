@@ -195,12 +195,19 @@ final class ExerciseContext {
   /// Whether the spec kinds leave out forms that differ only in macrons.
   final bool avoidMacronTwins;
 
+  /// Whether the learner practises a form; targets, distractors and chain
+  /// steps come only from practised forms.
+  final bool Function(PracticeItem word, FormLabel label) formPracticed;
+
   const ExerciseContext({
     required this.unlocked,
     required this.pool,
     required this.german,
     this.avoidMacronTwins = true,
+    this.formPracticed = _everyForm,
   });
+
+  static bool _everyForm(PracticeItem word, FormLabel label) => true;
 }
 
 /// Builds the exercises of one kind.

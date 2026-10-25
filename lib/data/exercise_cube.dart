@@ -168,14 +168,21 @@ final class Cube {
 
   final _cells = <String, List<FormCell>>{};
 
-  /// The cells of [word], of [bundle] only when given.
-  Iterable<FormCell> cellsOf(PracticeItem word, {GrammarBundle? bundle}) {
-    final cells = _cells.putIfAbsent(
-      word.id,
-      () => [for (var i = 0; i < word.formOrder.length; i++) FormCell(word, i)],
-    );
-    return bundle == null ? cells : cells.where((c) => c.bundle == bundle);
-  }
+  /// Every cell of [word], practised or not: what a prompt can name.
+  List<FormCell> allCellsOf(PracticeItem word) => _cells.putIfAbsent(
+    word.id,
+    () => [for (var i = 0; i < word.formOrder.length; i++) FormCell(word, i)],
+  );
+
+  bool practised(FormCell c) =>
+      ctx.formPracticed(c.word, c.word.formLabels[c.index]);
+
+  /// The practised cells of [word], of [bundle] only when given: what an
+  /// exercise may ask or offer.
+  Iterable<FormCell> cellsOf(PracticeItem word, {GrammarBundle? bundle}) =>
+      allCellsOf(
+        word,
+      ).where((c) => practised(c) && (bundle == null || c.bundle == bundle));
 
   bool unlocked(FormCell c) => ctx.unlocked.contains(c.bundle);
 

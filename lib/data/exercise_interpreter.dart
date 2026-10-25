@@ -334,7 +334,10 @@ Iterable<List<FormCell>> _paths(
     if (used.contains(axis) || !to.features.containsKey(axis)) continue;
     final froms = [
       for (final from in _changedOn(cube, to, axis))
-        if (cube.unlocked(from) && !cube.clash(View.latin, from, to)) from,
+        if (cube.practised(from) &&
+            cube.unlocked(from) &&
+            !cube.clash(View.latin, from, to))
+          from,
     ];
     if (rng != null) froms.shuffle(rng);
     for (final from in froms) {
@@ -350,7 +353,7 @@ Iterable<List<FormCell>> _paths(
 
 /// The cells of [c]'s word that differ from it on [axis] only.
 Iterable<FormCell> _changedOn(Cube cube, FormCell c, String axis) => cube
-    .cellsOf(c.word)
+    .allCellsOf(c.word)
     .where(
       (n) =>
           c.features.containsKey(axis) &&
@@ -508,7 +511,7 @@ Set<FormCell> _readings(KindSpec spec, Slice slice, Cube cube) {
   switch (spec.select) {
     case OneCell() || Spoil():
       return {
-        for (final c in cube.cellsOf(word))
+        for (final c in cube.allCellsOf(word))
           if (spec.params.values.every(
             (p) =>
                 p is! Show ||
@@ -519,7 +522,7 @@ Set<FormCell> _readings(KindSpec spec, Slice slice, Cube cube) {
       };
     case AxisPath():
       var cells = {
-        for (final c in cube.cellsOf(word))
+        for (final c in cube.allCellsOf(word))
           if (cube.fits(View.latin, slice.path.first, c)) c,
       };
       for (var i = 1; i < slice.path.length; i++) {
