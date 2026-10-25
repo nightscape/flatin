@@ -12,26 +12,28 @@ class TownView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final built = townOf(ledger)..sort((a, b) => a.bottom.compareTo(b.bottom));
+    final built = townOf(ledger).map((b) => b.id).toSet();
     final next = nextBuilding(ledger);
+    // The aqueduct has no plate: its site stands at the castellum, which carries its tooltip.
+    final site = next == null
+        ? null
+        : townSprites.singleWhere(
+            (s) =>
+                s.sprite == (next.id == 'aquaeductus' ? 'castellum' : next.id),
+          );
     return ClipRRect(
       borderRadius: BorderRadius.circular(12),
       child: AspectRatio(
         aspectRatio: townWidth / townHeight,
         child: LayoutBuilder(
           builder: (context, box) {
-            Widget at(
-              Building b,
-              Key key,
-              Widget Function(double width) child,
-            ) {
-              final width = b.width * box.maxWidth;
+            Widget at(TownSprite s, Key key, Widget child) {
               return Positioned(
                 key: key,
-                left: b.x * box.maxWidth - width / 2,
-                bottom: (1 - b.bottom) * box.maxHeight,
-                width: width,
-                child: child(width),
+                left: s.left * box.maxWidth,
+                bottom: (1 - s.bottom) * box.maxHeight,
+                width: s.width * box.maxWidth,
+                child: child,
               );
             }
 
@@ -39,27 +41,30 @@ class TownView extends StatelessWidget {
               children: [
                 Positioned.fill(
                   child: Image.asset(
-                    'assets/town/background.jpg',
+                    'assets/town/background.webp',
                     fit: BoxFit.cover,
                   ),
                 ),
-                for (final b in built)
-                  at(
-                    b,
-                    Key('town.building.${b.id}'),
-                    (_) => Tooltip(
-                      message: FlutterI18n.translate(
-                        context,
-                        'reward.building.${b.id}',
-                      ),
-                      child: Image.asset('assets/town/${b.id}.png'),
+                for (final s in townSprites)
+                  if (built.contains(s.building))
+                    at(
+                      s,
+                      Key('town.building.${s.sprite}'),
+                      s.sprite.startsWith('aquaeductus-')
+                          ? Image.asset('assets/town/${s.sprite}.png')
+                          : Tooltip(
+                              message: FlutterI18n.translate(
+                                context,
+                                'reward.building.${s.building}',
+                              ),
+                              child: Image.asset('assets/town/${s.sprite}.png'),
+                            ),
                     ),
-                  ),
-                if (next != null)
+                if (site != null)
                   at(
-                    next,
-                    Key('town.next.${next.id}'),
-                    (_) => Image.asset('assets/town/construction.png'),
+                    site,
+                    Key('town.next.${next!.id}'),
+                    Image.asset('assets/town/construction.png'),
                   ),
               ],
             );

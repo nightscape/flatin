@@ -129,7 +129,7 @@ void main() {
 
       expect(
         tester.widgetList<Tooltip>(find.byType(Tooltip)).map((t) => t.message),
-        ['Haus', 'Brunnen'],
+        ['Brunnen', 'Haus'],
       );
       expect(find.byKey(const Key('town.building.domus')), findsOneWidget);
       expect(find.byKey(const Key('town.building.fons')), findsOneWidget);
