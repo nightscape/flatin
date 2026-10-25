@@ -277,7 +277,7 @@
       "points": "+{points} points",
       "bonus": "⭐ +{bonus} bonus",
       "total": "Total: {total} points",
-      "newBuilding": "New in your town: {emoji} {name}",
+      "newBuilding": "New in your town: {name}",
       "again": "Another round",
       "done": "Done"
     }

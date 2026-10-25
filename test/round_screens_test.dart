@@ -5,7 +5,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:latin_practice/data/rewards.dart';
 import 'package:latin_practice/data/topics.dart';
 import 'package:latin_practice/models/reward.dart';
 import 'package:latin_practice/providers/reward_provider.dart';
@@ -230,10 +229,9 @@ void main() {
     expect(find.text('+95 Punkte'), findsOneWidget);
     expect(find.text('Gesamt: 95 Punkte'), findsOneWidget);
     expect(find.textContaining('⭐'), findsNothing);
-    expect(
-      find.text('Neu in deiner Stadt: ${romanTown.first.emoji} Haus'),
-      findsOneWidget,
-    );
+    expect(find.text('Neu in deiner Stadt: Haus'), findsOneWidget);
+    expect(find.byKey(const Key('town.building.domus')), findsOneWidget);
+    expect(find.byKey(const Key('town.next.hortus')), findsOneWidget);
     _expectNoScore();
     final after = await tester.runAsync(FsrsStorage.loadCards);
     expect(after![first.grammarCardId]!.lastReview, isNotNull);

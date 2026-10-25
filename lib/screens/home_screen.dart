@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import '../widgets/app_drawer.dart';
 import '../models/practice_item.dart';
-import '../data/rewards.dart';
 import '../providers/fsrs_provider.dart';
 import '../providers/reward_provider.dart';
 import '../providers/settings_provider.dart';
@@ -110,7 +109,6 @@ class _TownPanel extends ConsumerWidget {
       content = const Center(child: CircularProgressIndicator());
     } else {
       final ledger = rewards.requireValue;
-      final buildings = townOf(ledger);
       content = Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -124,13 +122,13 @@ class _TownPanel extends ConsumerWidget {
               style: Theme.of(context).textTheme.titleMedium,
             ),
           const SizedBox(height: 8),
-          if (buildings.isEmpty)
+          if (ledger.buildings.isEmpty)
             Text(
               FlutterI18n.translate(context, 'home.townEmpty'),
               style: const TextStyle(color: mutedText),
             )
           else
-            TownView(buildings),
+            TownView(ledger),
         ],
       );
     }

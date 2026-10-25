@@ -10,7 +10,6 @@ import 'package:latin_practice/services/reward_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:latin_practice/screens/home_screen.dart';
 import 'package:latin_practice/screens/practice_screen.dart';
-import 'package:latin_practice/widgets/town_view.dart';
 
 import 'support/word_classification_harness.dart';
 
@@ -134,10 +133,9 @@ void main() {
       );
 
       expect(find.text('Geübte Tage: 3'), findsOneWidget);
-      expect(tester.widget<TownView>(find.byType(TownView)).buildings, [
-        romanTown[1],
-        romanTown[0],
-      ]);
+      expect(find.byKey(const Key('town.building.domus')), findsOneWidget);
+      expect(find.byKey(const Key('town.building.hortus')), findsOneWidget);
+      expect(find.byKey(const Key('town.next.fons')), findsOneWidget);
     });
 
     testWidgets('is hidden when the learner switched the town off', (

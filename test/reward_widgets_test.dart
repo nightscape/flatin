@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/data/rewards.dart';
+import 'package:latin_practice/models/reward.dart';
 import 'package:latin_practice/models/settings.dart';
 import 'package:latin_practice/providers/settings_provider.dart';
 import 'package:latin_practice/screens/settings_screen.dart';
@@ -112,24 +113,47 @@ void main() {
   });
 
   group('TownView', () {
-    testWidgets('shows exactly the given buildings in order, named in German', (
-      tester,
-    ) async {
-      final built = [romanTown[2], romanTown[0]];
+    Future<void> pumpTown(WidgetTester tester, List<String> ids) async {
       await tester.pumpWidget(
-        wrapInApp(TownView(built), forcedLocale: const Locale('de')),
+        wrapInApp(
+          TownView(RewardLedger(buildings: ids)),
+          forcedLocale: const Locale('de'),
+        ),
       );
       await letItLoad(tester);
+    }
 
-      final emoji = tester
-          .widgetList<Text>(find.byType(Text))
-          .map((t) => t.data)
-          .toList();
-      expect(emoji, [romanTown[2].emoji, romanTown[0].emoji]);
+    testWidgets('shows the built buildings back to front, named in German, '
+        'and one construction site for the next', (tester) async {
+      await pumpTown(tester, ['fons', 'domus']);
+
       expect(
         tester.widgetList<Tooltip>(find.byType(Tooltip)).map((t) => t.message),
-        ['Brunnen', 'Haus'],
+        ['Haus', 'Brunnen'],
       );
+      expect(find.byKey(const Key('town.building.domus')), findsOneWidget);
+      expect(find.byKey(const Key('town.building.fons')), findsOneWidget);
+      expect(find.byKey(const Key('town.next.hortus')), findsOneWidget);
+      expect(find.byKey(const Key('town.next.taberna')), findsNothing);
+    });
+
+    testWidgets('shows no construction site when all are built', (
+      tester,
+    ) async {
+      await pumpTown(tester, [for (final b in romanTown) b.id]);
+
+      expect(find.byType(Tooltip), findsNWidgets(romanTown.length));
+      expect(
+        find.byWidgetPredicate((w) => w.key.toString().contains('town.next')),
+        findsNothing,
+      );
+    });
+
+    testWidgets('renders repeated ids from old ledgers once', (tester) async {
+      await pumpTown(tester, ['domus', 'hortus', 'domus']);
+
+      expect(find.byType(Tooltip), findsNWidgets(2));
+      expect(find.byKey(const Key('town.next.fons')), findsOneWidget);
     });
   });
 

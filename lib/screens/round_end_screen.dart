@@ -23,7 +23,7 @@ class RoundEndScreen extends ConsumerWidget {
     final ledger = ref.watch(rewardsProvider).requireValue;
     final offer = ref.watch(todayOfferProvider).value;
     final next = offer == null ? null : requestOf(offer);
-    final town = townOf(ledger);
+    final built = townOf(ledger);
     final bonus = ledger.bonusPoints - start.bonusPoints;
     final gained = ledger.points - start.points - bonus;
     final textTheme = Theme.of(context).textTheme;
@@ -46,15 +46,22 @@ class RoundEndScreen extends ConsumerWidget {
             ),
           Text(t('round.end.total', {'total': '${ledger.points}'})),
           const SizedBox(height: 16),
-          for (final b in town.skip(start.buildings.length))
-            Text(
-              t('round.end.newBuilding', {
-                'emoji': b.emoji,
-                'name': t('reward.building.${b.id}'),
-              }),
-              style: textTheme.titleMedium,
+          for (final b in built.where((b) => !start.buildings.contains(b.id)))
+            Row(
+              children: [
+                Image.asset('assets/town/${b.id}.png', height: 64),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    t('round.end.newBuilding', {
+                      'name': t('reward.building.${b.id}'),
+                    }),
+                    style: textTheme.titleMedium,
+                  ),
+                ),
+              ],
             ),
-          TownView(town),
+          TownView(ledger),
           if (ledger.practiceDays > 0) ...[
             const SizedBox(height: 16),
             Text(t('round.start.days', {'n': '${ledger.practiceDays}'})),
