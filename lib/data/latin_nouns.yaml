@@ -1438,61 +1438,78 @@ items:
   - type: Konsonantische-Deklination-n
     translation: {de: "die Tat, Untat, das Verbrechen", en: "deed; crime"}
     parts: {nom: "facinus", gen: "facinoris"}
+    de_noun: "tat"
   - type: Adjektiv-a-o
     translation: {de: "(einer Sache) unwürdig; abscheulich", en: "unworthy (of something)"}
     parts: {nom: "indignus", nom_f: "indigna", nom_n: "indignum"}
   - type: Konsonantische-Deklination-mf
     translation: {de: das Bild, en: "image, picture"}
     parts: {nom: "imāgō", gen: "imāginis"}
+    de_noun: "bild"
   - type: Adjektiv-a-o
     translation: {de: "golden, aus Gold", en: "golden, made of gold"}
     parts: {nom: "aureus", nom_f: "aurea", nom_n: "aureum"}
   - translation: {de: die Königin, en: queen}
     parts: {nom: "rēgīna", gen: "rēgīnae"}
+    de_noun: "königin"
   - type: U-Deklination
     translation: {de: "der Sinn; die Wahrnehmung, das Gefühl, der Gedanke", en: "sense, feeling"}
     parts: {nom: "sēnsus", gen: "sēnsūs"}
+    de_noun: "sinn"
   - type: Adjektiv-a-o
     translation: {de: "wie viel, wie groß", en: "how much, how great"}
     parts: {nom: "quantus", nom_f: "quanta", nom_n: "quantum"}
   - translation: {de: "der Stolz, Hochmut", en: "pride, arrogance"}
     parts: {nom: "superbia", gen: "superbiae"}
+    de_noun: "stolz"
   - type: U-Deklination
     translation: {de: "das Gesicht, der Gesichtsausdruck", en: "face, expression"}
     parts: {nom: "vultus", gen: "vultūs"}
+    de_noun: "gesicht"
   - translation: {de: "die Kraft, Macht, Herrschaft", en: "power, might"}
     parts: {nom: "potentia", gen: "potentiae"}
+    de_noun: "kraft"
   - type: Adjektiv-a-o
     translation: {de: öffentlich, en: public}
     parts: {nom: "pūblicus", nom_f: "pūblica", nom_n: "pūblicum"}
   - type: Konsonantische-Deklination-mf
     translation: {de: die Freiheit, en: "freedom, liberty"}
     parts: {nom: "lībertās", gen: "lībertātis"}
+    de_noun: "freiheit"
   - type: Konsonantische-Deklination-mf
     translation: {de: "das Ansehen, der Einfluss, die Macht", en: "authority, influence, prestige"}
     parts: {nom: "auctōritās", gen: "auctōritātis"}
+    de_noun: "ansehen"
   - type: U-Deklination
     translation: {de: der Senat, en: Senate}
     parts: {nom: "senātus", gen: "senātūs"}
+    de_noun: "senat"
   - type: Konsonantische-Deklination-mf
     translation: {de: der Konsul, en: consul}
     parts: {nom: "cōnsul", gen: "cōnsulis"}
+    de_noun: "konsul"
   - translation: {de: "der Gesandte; der Legat (Offizier)", en: "envoy, ambassador"}
     parts: {nom: "lēgātus", gen: "lēgātī"}
+    de_noun: "gesandte"
   - type: Konsonantische-Deklination-n
     translation: {de: "die Reise, der Weg, Marsch", en: "journey, way, march"}
     parts: {nom: "iter", gen: "itineris"}
+    de_noun: "reise"
   - translation: {de: "(die römische Provinz) Gallien", en: "Gaul (the Roman province)"}
     parts: {nom: "Gallia", gen: "Galliae"}
+    de_noun: "gallien"
   - type: U-Deklination
     translation: {de: das Heer, en: army}
     parts: {nom: "exercitus", gen: "exercitūs"}
+    de_noun: "heer"
   - type: Konsonantische-Deklination-mf
     translation: {de: der Schrecken, en: "terror, fright"}
     parts: {nom: "terror", gen: "terrōris"}
+    de_noun: "schrecken"
   - type: U-Deklination
     translation: {de: die Ankunft, en: arrival}
     parts: {nom: "adventus", gen: "adventūs"}
+    de_noun: "ankunft"
   - type: Adjektiv-dreiendig
     translation: {de: schnell, en: "quick, fast"}
     parts: {nom: "celer", nom_f: "celeris", nom_n: "celere"}
@@ -1507,6 +1524,7 @@ items:
     parts: {nom: "nefārius", nom_f: "nefāria", nom_n: "nefārium"}
   - translation: {de: "die Schärfe; das (zur Schlacht bereite) Heer; die Schlacht", en: "sharp edge; battle line"}
     parts: {nom: "aciēs", gen: "aciēī"}
+    de_noun: "schärfe"
   - type: Adjektiv-a-o-er
     translation: {de: "grob; unangenehm; wild", en: "rough, harsh"}
     parts: {nom: "asper", nom_f: "aspera", nom_n: "asperum"}
@@ -1515,58 +1533,78 @@ items:
     parts: {nom: "armātus", nom_f: "armāta", nom_n: "armātum"}
   - translation: {de: "die Verbannung, das Exil", en: exile}
     parts: {nom: "exilium", gen: "exiliī"}
+    de_noun: "verbannung"
   - translation: {de: "die Gnade; die Verzeihung; die Erlaubnis", en: "pardon, mercy"}
     parts: {nom: "venia", gen: "veniae"}
+    de_noun: "gnade"
   - type: U-Deklination
     translation: {de: die Rückkehr, en: return}
     parts: {nom: "reditus", gen: "reditūs"}
+    de_noun: "rückkehr"
   - type: Konsonantische-Deklination-mf
     translation: {de: "die Erhabenheit, das Ansehen; die Pracht", en: "majesty, greatness, prestige"}
     parts: {nom: "māiestās", gen: "māiestātis"}
+    de_noun: "erhabenheit"
   - type: U-Deklination
     translation: {de: "die Wasserleitung, der Aquädukt", en: aqueduct}
     parts: {nom: "aquaeductus", gen: "aquaeductūs"}
+    de_noun: "wasserleitung"
   - type: Konsonantische-Deklination-i-mf
     translation: {de: die Brücke, en: bridge}
     parts: {nom: "pōns", gen: "pontis"}
+    de_noun: "brücke"
   - type: Konsonantische-Deklination-mf
     translation: {de: "der Ranghöchste, Anführer; der Kaiser", en: "first man, leader"}
     parts: {nom: "prīnceps", gen: "prīncipis"}
+    de_noun: "ranghöchste"
   - type: Konsonantische-Deklination-n
     translation: {de: "die Aufgabe; das Amt; das Geschenk; das Gladiatorenspiel", en: "task, duty; gift"}
     parts: {nom: "mūnus", gen: "mūneris"}
+    de_noun: "aufgabe"
   - type: Konsonantische-Deklination-i-mf
     translation: {de: "die Grenze; das Ende; Pl.: das Gebiet", en: "end, boundary"}
     parts: {nom: "fīnis", gen: "fīnis"}
+    de_noun: "grenze"
   - translation: {de: "die Milde; die Schonung, Gnade", en: "mercy, mildness"}
     parts: {nom: "clēmentia", gen: "clēmentiae"}
+    de_noun: "milde"
   - translation: {de: die Gerechtigkeit, en: justice}
     parts: {nom: "iūstitia", gen: "iūstitiae"}
+    de_noun: "gerechtigkeit"
   - type: Konsonantische-Deklination-mf
     translation: {de: "das Pflichtbewusstsein; die Liebe; die Frömmigkeit", en: "sense of duty, devotion"}
     parts: {nom: "pietās", gen: "pietātis"}
+    de_noun: "pflichtbewusstsein"
   - translation: {de: "der Grund; die Angelegenheit; der Prozess", en: "cause, reason"}
     parts: {nom: "causa", gen: "causae"}
+    de_noun: "grund"
   - type: U-Deklination
     translation: {de: "das Amt des Konsuls, Konsulat", en: consulship}
     parts: {nom: "cōnsulātus", gen: "cōnsulātūs"}
+    de_noun: "konsulat"
   - translation: {de: "der (gute/schlechte) Ruf; das Gerede, Gerücht", en: "reputation (good or bad); rumour"}
     parts: {nom: "fāma", gen: "fāmae"}
+    de_noun: "ruf"
   - translation: {de: "der Jähzorn, Wutanfall", en: "hot temper, rage"}
     parts: {nom: "īrācundia", gen: "īrācundiae"}
+    de_noun: "jähzorn"
   - type: Adjektiv-a-o
     translation: {de: schlau, en: "clever, cunning"}
     parts: {nom: "callidus", nom_f: "callida", nom_n: "callidum"}
   - type: Konsonantische-Deklination-n
     translation: {de: "das Bündnis, der Vertrag", en: "treaty, alliance"}
     parts: {nom: "foedus", gen: "foederis"}
+    de_noun: "bündnis"
   - translation: {de: die Freundschaft, en: friendship}
     parts: {nom: "amīcitia", gen: "amīcitiae"}
+    de_noun: "freundschaft"
   - translation: {de: der Wald, en: "forest, wood"}
     parts: {nom: "silva", gen: "silvae"}
+    de_noun: "wald"
   - type: Konsonantische-Deklination-mf
     translation: {de: "das Unglück, die Niederlage", en: "misfortune, disaster, defeat"}
     parts: {nom: "calamitās", gen: "calamitātis"}
+    de_noun: "unglück"
   - type: Adjektiv-a-o
     translation: {de: "lieb, teuer", en: "dear, beloved; expensive"}
     parts: {nom: "cārus", nom_f: "cāra", nom_n: "cārum"}
@@ -1581,49 +1619,64 @@ items:
       gen.pl: "cordium"
   - translation: {de: "der Spott; das Spiel", en: mockery}
     parts: {nom: "lūdibrium", gen: "lūdibriī"}
+    de_noun: "spott"
   - type: Konsonantische-Deklination-mf
     translation: {de: "die Lust, das Vergnügen", en: "pleasure, delight"}
     parts: {nom: "voluptās", gen: "voluptātis"}
+    de_noun: "lust"
   - type: Konsonantische-Deklination-mf
     translation: {de: die Schönheit, en: beauty}
     parts: {nom: "pulchritūdō", gen: "pulchritūdinis"}
+    de_noun: "schönheit"
   - type: Konsonantische-Deklination-n
     translation: {de: "der Mund; das Gesicht", en: "mouth; face"}
     parts: {nom: "ōs", gen: "ōris"}
+    de_noun: "mund"
   - translation: {de: der Finger, en: finger}
     parts: {nom: "digitus", gen: "digitī"}
+    de_noun: "finger"
   - type: Konsonantische-Deklination-mf
     translation: {de: der Fuß, en: foot}
     parts: {nom: "pēs", gen: "pedis"}
+    de_noun: "fuß"
   - type: Konsonantische-Deklination-i-mf
     translation: {de: das Ohr, en: ear}
     parts: {nom: "auris", gen: "auris"}
+    de_noun: "ohr"
   - type: Adjektiv-zweiendig
     translation: {de: "weich, empfindsam", en: "soft, sensitive"}
     parts: {nom: "mollis", nom_n: "molle"}
   - translation: {de: das Gold, en: gold}
     parts: {nom: "aurum", gen: "aurī"}
+    de_noun: "gold"
   - translation: {de: "der Schmuck, das Schmuckstück", en: "ornament, jewel"}
     parts: {nom: "ōrnāmentum", gen: "ōrnāmentī"}
+    de_noun: "schmuck"
   - type: Adjektiv-a-o
     translation: {de: zornig, en: angry}
     parts: {nom: "īrātus", nom_f: "īrāta", nom_n: "īrātum"}
   - type: Konsonantische-Deklination-mf
     translation: {de: "das Lebensalter, das Zeitalter, die Zeit", en: "age, lifetime, era"}
     parts: {nom: "aetās", gen: "aetātis"}
+    de_noun: "lebensalter"
   - translation: {de: die Ehe, en: marriage}
     parts: {nom: "mātrimōnium", gen: "mātrimōniī"}
+    de_noun: "ehe"
   - type: Konsonantische-Deklination-mf
     translation: {de: "das Gespräch, die Unterhaltung", en: "conversation, talk"}
     parts: {nom: "sermō", gen: "sermōnis"}
+    de_noun: "gespräch"
   - translation: {de: der Kuss, en: kiss}
     parts: {nom: "ōsculum", gen: "ōsculī"}
+    de_noun: "kuss"
   - type: Konsonantische-Deklination-mf
     translation: {de: der Baum, en: tree}
     parts: {nom: "arbor", gen: "arboris"}
+    de_noun: "baum"
   - type: U-Deklination
     translation: {de: "die Frucht, der Ertrag; der Nutzen", en: "fruit, profit"}
     parts: {nom: "frūctus", gen: "frūctūs"}
+    de_noun: "frucht"
   - type: Adjektiv-a-o
     translation: {de: "weiß, hell", en: "white, bright"}
     parts: {nom: "albus", nom_f: "alba", nom_n: "album"}
@@ -1633,40 +1686,57 @@ items:
   - type: Konsonantische-Deklination-mf
     translation: {de: das Blut, en: blood}
     parts: {nom: "sanguis", gen: "sanguinis"}
+    de_noun: "blut"
   - type: Konsonantische-Deklination-n
     translation: {de: "die Wunde, Verletzung", en: "wound, injury"}
     parts: {nom: "vulnus", gen: "vulneris"}
+    de_noun: "wunde"
   - type: Konsonantische-Deklination-i-mf
     translation: {de: "der Mord, das Blutbad", en: "murder, slaughter"}
     parts: {nom: "caedēs", gen: "caedis"}
+    de_noun: "mord"
   - translation: {de: der Trojaner, en: Trojan}
     parts: {nom: "Trōiānus"}
+    de_noun: "trojaner"
   - translation: {de: der Feind, en: "(personal) enemy"}
     parts: {nom: "inimīcus"}
+    de_noun: "feind"
   - translation: {de: die List, en: "trick, deceit"}
     parts: {nom: "dolus"}
+    de_noun: "list"
   - translation: {de: "der Gefährte, Bundesgenosse", en: "companion, ally"}
     parts: {nom: "socius"}
+    de_noun: "gefährte"
   - translation: {de: der Gefangene, en: "prisoner, captive"}
     parts: {nom: "captīvus"}
+    de_noun: "gefangene"
   - translation: {de: der Schlaf, en: sleep}
     parts: {nom: "somnus"}
+    de_noun: "schlaf"
   - translation: {de: das Auge, en: eye}
     parts: {nom: "oculus"}
+    de_noun: "auge"
   - translation: {de: "das Herz, der Sinn, der Mut", en: "heart, mind, courage"}
     parts: {nom: "animus"}
+    de_noun: "herz"
   - translation: {de: die Mauer, en: "(city) wall"}
     parts: {nom: "mūrus"}
+    de_noun: "mauer"
   - translation: {de: das Jahr, en: year}
     parts: {nom: "annus"}
+    de_noun: "jahr"
   - translation: {de: der Plebejer, en: plebeian}
     parts: {nom: "plēbēius"}
+    de_noun: "plebejer"
   - translation: {de: die Schulter, en: shoulder}
     parts: {nom: "umerus"}
+    de_noun: "schulter"
   - translation: {de: der Großvater, en: grandfather}
     parts: {nom: "avus"}
+    de_noun: "großvater"
   - translation: {de: das Schicksal, en: "fate, destiny"}
     parts: {nom: "fātum"}
+    de_noun: "schicksal"
   - translation: {de: das Übel, en: "evil, misfortune"}
     parts: {nom: "malum"}
   - translation: {de: die Stadt, en: town}

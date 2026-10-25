@@ -703,3 +703,202 @@ items:
   - type: Maskulinum
     translation: {de: Vers, en: verse}
     parts: {nominativ: Vers, genitiv: Verses, plural: Verse}
+
+  - type: Femininum
+    translation: {de: Tat, en: deed}
+    parts: {nominativ: Tat, plural: Taten}
+  - type: Femininum
+    translation: {de: Königin, en: queen}
+    parts: {nominativ: Königin, plural: Königinnen}
+  - type: Maskulinum
+    translation: {de: Sinn, en: sense}
+    parts: {nominativ: Sinn, genitiv: Sinnes, plural: Sinne}
+  - type: Maskulinum
+    translation: {de: Stolz, en: pride}
+    parts: {nominativ: Stolz, genitiv: Stolzes}
+  - type: Neutrum
+    translation: {de: Gesicht, en: face}
+    parts: {nominativ: Gesicht, genitiv: Gesichts, plural: Gesichter}
+  - type: Femininum
+    translation: {de: Kraft, en: strength}
+    parts: {nominativ: Kraft, plural: Kräfte}
+  - type: Femininum
+    translation: {de: Freiheit, en: freedom}
+    parts: {nominativ: Freiheit, plural: Freiheiten}
+  - type: Neutrum
+    translation: {de: Ansehen, en: prestige}
+    parts: {nominativ: Ansehen, genitiv: Ansehens}
+  - type: Maskulinum
+    translation: {de: Senat, en: senate}
+    parts: {nominativ: Senat, genitiv: Senats, plural: Senate}
+  - type: Maskulinum
+    translation: {de: Konsul, en: consul}
+    parts: {nominativ: Konsul, genitiv: Konsuls, plural: Konsuln}
+  - type: Maskulinum-schwach
+    translation: {de: Gesandte, en: envoy}
+    parts: {nominativ: Gesandte, genitiv: Gesandten, plural: Gesandten}
+  - type: Femininum
+    translation: {de: Reise, en: journey}
+    parts: {nominativ: Reise, plural: Reisen}
+  - type: Eigenname
+    translation: {de: Gallien, en: Gaul}
+    parts: {nominativ: Gallien, genitiv: Galliens}
+  - type: Neutrum
+    translation: {de: Heer, en: army}
+    parts: {nominativ: Heer, genitiv: Heeres, plural: Heere}
+  - type: Maskulinum
+    translation: {de: Schrecken, en: terror}
+    parts: {nominativ: Schrecken, genitiv: Schreckens, plural: Schrecken}
+  - type: Femininum
+    translation: {de: Ankunft, en: arrival}
+    parts: {nominativ: Ankunft, plural: Ankünfte}
+  - type: Femininum
+    translation: {de: Schärfe, en: sharpness}
+    parts: {nominativ: Schärfe}
+  - type: Femininum
+    translation: {de: Verbannung, en: exile}
+    parts: {nominativ: Verbannung, plural: Verbannungen}
+  - type: Femininum
+    translation: {de: Gnade, en: grace}
+    parts: {nominativ: Gnade}
+  - type: Femininum
+    translation: {de: Rückkehr, en: return}
+    parts: {nominativ: Rückkehr}
+  - type: Femininum
+    translation: {de: Erhabenheit, en: majesty}
+    parts: {nominativ: Erhabenheit}
+  - type: Femininum
+    translation: {de: Wasserleitung, en: aqueduct}
+    parts: {nominativ: Wasserleitung, plural: Wasserleitungen}
+  - type: Femininum
+    translation: {de: Brücke, en: bridge}
+    parts: {nominativ: Brücke, plural: Brücken}
+  - type: Maskulinum-schwach
+    translation: {de: Ranghöchste, en: highest in rank}
+    parts: {nominativ: Ranghöchste, genitiv: Ranghöchsten, plural: Ranghöchsten}
+  - type: Femininum
+    translation: {de: Grenze, en: boundary}
+    parts: {nominativ: Grenze, plural: Grenzen}
+  - type: Femininum
+    translation: {de: Milde, en: mildness}
+    parts: {nominativ: Milde}
+  - type: Femininum
+    translation: {de: Gerechtigkeit, en: justice}
+    parts: {nominativ: Gerechtigkeit}
+  - type: Neutrum
+    translation: {de: Pflichtbewusstsein, en: sense of duty}
+    parts: {nominativ: Pflichtbewusstsein, genitiv: Pflichtbewusstseins}
+  - type: Maskulinum
+    translation: {de: Grund, en: reason}
+    parts: {nominativ: Grund, genitiv: Grundes, plural: Gründe}
+  - type: Neutrum
+    translation: {de: Konsulat, en: consulship}
+    parts: {nominativ: Konsulat, genitiv: Konsulats, plural: Konsulate}
+  - type: Maskulinum
+    translation: {de: Ruf, en: reputation}
+    parts: {nominativ: Ruf, genitiv: Rufes}
+  - type: Maskulinum
+    translation: {de: Jähzorn, en: hot temper}
+    parts: {nominativ: Jähzorn, genitiv: Jähzorns}
+  - type: Neutrum
+    translation: {de: Bündnis, en: alliance}
+    parts: {nominativ: Bündnis, genitiv: Bündnisses, plural: Bündnisse}
+  - type: Femininum
+    translation: {de: Freundschaft, en: friendship}
+    parts: {nominativ: Freundschaft, plural: Freundschaften}
+  - type: Maskulinum
+    translation: {de: Wald, en: forest}
+    parts: {nominativ: Wald, genitiv: Waldes, plural: Wälder}
+  - type: Neutrum
+    translation: {de: Unglück, en: misfortune}
+    parts: {nominativ: Unglück, genitiv: Unglücks, plural: Unglücke}
+  - type: Maskulinum
+    translation: {de: Spott, en: mockery}
+    parts: {nominativ: Spott, genitiv: Spottes}
+  - type: Femininum
+    translation: {de: Lust, en: pleasure}
+    parts: {nominativ: Lust, plural: Lüste}
+  - type: Femininum
+    translation: {de: Schönheit, en: beauty}
+    parts: {nominativ: Schönheit}
+  - type: Maskulinum
+    translation: {de: Mund, en: mouth}
+    parts: {nominativ: Mund, genitiv: Mundes, plural: Münder}
+  - type: Maskulinum
+    translation: {de: Finger, en: finger}
+    parts: {nominativ: Finger, genitiv: Fingers, plural: Finger}
+  - type: Maskulinum
+    translation: {de: Fuß, en: foot}
+    parts: {nominativ: Fuß, genitiv: Fußes, plural: Füße}
+  - type: Neutrum
+    translation: {de: Ohr, en: ear}
+    parts: {nominativ: Ohr, genitiv: Ohres, plural: Ohren}
+  - type: Neutrum
+    translation: {de: Gold, en: gold}
+    parts: {nominativ: Gold, genitiv: Goldes}
+  - type: Maskulinum
+    translation: {de: Schmuck, en: jewellery}
+    parts: {nominativ: Schmuck, genitiv: Schmucks}
+  - type: Neutrum
+    translation: {de: Lebensalter, en: age}
+    parts: {nominativ: Lebensalter, genitiv: Lebensalters, plural: Lebensalter}
+  - type: Femininum
+    translation: {de: Ehe, en: marriage}
+    parts: {nominativ: Ehe, plural: Ehen}
+  - type: Neutrum
+    translation: {de: Gespräch, en: conversation}
+    parts: {nominativ: Gespräch, genitiv: Gesprächs, plural: Gespräche}
+  - type: Maskulinum
+    translation: {de: Kuss, en: kiss}
+    parts: {nominativ: Kuss, genitiv: Kusses, plural: Küsse}
+  - type: Maskulinum
+    translation: {de: Baum, en: tree}
+    parts: {nominativ: Baum, genitiv: Baumes, plural: Bäume}
+  - type: Femininum
+    translation: {de: Frucht, en: fruit}
+    parts: {nominativ: Frucht, plural: Früchte}
+  - type: Neutrum
+    translation: {de: Blut, en: blood}
+    parts: {nominativ: Blut, genitiv: Blutes}
+  - type: Femininum
+    translation: {de: Wunde, en: wound}
+    parts: {nominativ: Wunde, plural: Wunden}
+  - type: Maskulinum
+    translation: {de: Mord, en: murder}
+    parts: {nominativ: Mord, genitiv: Mordes, plural: Morde}
+  - type: Maskulinum
+    translation: {de: Trojaner, en: Trojan}
+    parts: {nominativ: Trojaner, genitiv: Trojaners, plural: Trojaner}
+  - type: Maskulinum
+    translation: {de: Feind, en: enemy}
+    parts: {nominativ: Feind, genitiv: Feindes, plural: Feinde}
+  - type: Femininum
+    translation: {de: List, en: trick}
+    parts: {nominativ: List, plural: Listen}
+  - type: Maskulinum-schwach
+    translation: {de: Gefährte, en: companion}
+    parts: {nominativ: Gefährte, genitiv: Gefährten, plural: Gefährten}
+  - type: Maskulinum-schwach
+    translation: {de: Gefangene, en: prisoner}
+    parts: {nominativ: Gefangene, genitiv: Gefangenen, plural: Gefangenen}
+  - type: Maskulinum
+    translation: {de: Schlaf, en: sleep}
+    parts: {nominativ: Schlaf, genitiv: Schlafes}
+  - type: Neutrum
+    translation: {de: Auge, en: eye}
+    parts: {nominativ: Auge, genitiv: Auges, plural: Augen}
+  - type: Femininum
+    translation: {de: Mauer, en: wall}
+    parts: {nominativ: Mauer, plural: Mauern}
+  - type: Neutrum
+    translation: {de: Jahr, en: year}
+    parts: {nominativ: Jahr, genitiv: Jahres, plural: Jahre}
+  - type: Maskulinum
+    translation: {de: Plebejer, en: plebeian}
+    parts: {nominativ: Plebejer, genitiv: Plebejers, plural: Plebejer}
+  - type: Femininum
+    translation: {de: Schulter, en: shoulder}
+    parts: {nominativ: Schulter, plural: Schultern}
+  - type: Maskulinum
+    translation: {de: Großvater, en: grandfather}
+    parts: {nominativ: Großvater, genitiv: Großvaters, plural: Großväter}
