@@ -902,3 +902,199 @@ items:
   - type: Maskulinum
     translation: {de: Großvater, en: grandfather}
     parts: {nominativ: Großvater, genitiv: Großvaters, plural: Großväter}
+
+  - type: Neutrum
+    translation: {de: Übel, en: evil}
+    parts: {nominativ: Übel, genitiv: Übels, plural: Übel}
+  - type: Maskulinum-schwach
+    translation: {de: Fels, en: rock}
+    parts: {nominativ: Fels, genitiv: Felsen, plural: Felsen}
+  - type: Femininum
+    translation: {de: Hilfe, en: help}
+    parts: {nominativ: Hilfe, plural: Hilfen}
+  - type: Femininum
+    translation: {de: Herrschaft, en: rule}
+    parts: {nominativ: Herrschaft}
+  - type: Neutrum
+    translation: {de: Zeichen, en: sign}
+    parts: {nominativ: Zeichen, genitiv: Zeichens, plural: Zeichen}
+  - type: Femininum
+    translation: {de: Ruhe, en: calm}
+    parts: {nominativ: Ruhe}
+  - type: Maskulinum
+    translation: {de: Krieg, en: war}
+    parts: {nominativ: Krieg, genitiv: Krieges, plural: Kriege}
+  - type: Femininum
+    translation: {de: Heimat, en: homeland}
+    parts: {nominativ: Heimat}
+  - type: Neutrum
+    translation: {de: Wasser, en: water}
+    parts: {nominativ: Wasser, genitiv: Wassers}
+  - type: Femininum
+    translation: {de: Beute, en: booty}
+    parts: {nominativ: Beute}
+  - type: Femininum
+    translation: {de: Geschichte, en: story}
+    parts: {nominativ: Geschichte, plural: Geschichten}
+  - type: Maskulinum
+    translation: {de: Weg, en: way}
+    parts: {nominativ: Weg, genitiv: Weges, plural: Wege}
+  - type: Eigenname
+    translation: {de: Italien, en: Italy}
+    parts: {nominativ: Italien, genitiv: Italiens}
+  - type: Femininum
+    translation: {de: Erde, en: earth}
+    parts: {nominativ: Erde}
+  - type: Maskulinum
+    translation: {de: Dank, en: thanks}
+    parts: {nominativ: Dank, genitiv: Dankes}
+  - type: Femininum
+    translation: {de: Menge, en: abundance}
+    parts: {nominativ: Menge, plural: Mengen}
+  - type: Neutrum
+    translation: {de: Leben, en: life}
+    parts: {nominativ: Leben, genitiv: Lebens, plural: Leben}
+  - type: Femininum
+    translation: {de: Träne, en: tear}
+    parts: {nominativ: Träne, plural: Tränen}
+  - type: Maskulinum
+    translation: {de: Zorn, en: anger}
+    parts: {nominativ: Zorn, genitiv: Zornes}
+  - type: Femininum
+    translation: {de: Stunde, en: hour}
+    parts: {nominativ: Stunde, plural: Stunden}
+  - type: Femininum
+    translation: {de: Natur, en: nature}
+    parts: {nominativ: Natur}
+  - type: Maskulinum
+    translation: {de: Buchstabe, en: letter}
+    parts: {nominativ: Buchstabe, genitiv: Buchstabens, plural: Buchstaben, dativ_singular: Buchstaben, akkusativ_singular: Buchstaben}
+  - type: Femininum
+    translation: {de: Freundin, en: friend}
+    parts: {nominativ: Freundin, plural: Freundinnen}
+  - type: Femininum
+    translation: {de: Flamme, en: flame}
+    parts: {nominativ: Flamme, plural: Flammen}
+  - type: Femininum
+    translation: {de: Mahlzeit, en: meal}
+    parts: {nominativ: Mahlzeit, plural: Mahlzeiten}
+  - type: Femininum
+    translation: {de: Zunge, en: tongue}
+    parts: {nominativ: Zunge, plural: Zungen}
+  - type: Femininum
+    translation: {de: Kammer, en: room}
+    parts: {nominativ: Kammer, plural: Kammern}
+  - type: Maskulinum
+    translation: {de: Dichter, en: poet}
+    parts: {nominativ: Dichter, genitiv: Dichters, plural: Dichter}
+  - type: Maskulinum
+    translation: {de: Ehemann, en: husband}
+    parts: {nominativ: Ehemann, genitiv: Ehemannes, plural: Ehemänner}
+  - type: Maskulinum-schwach
+    translation: {de: Soldat, en: soldier}
+    parts: {nominativ: Soldat, genitiv: Soldaten, plural: Soldaten}
+  - type: Maskulinum
+    translation: {de: Vater, en: father}
+    parts: {nominativ: Vater, genitiv: Vaters, plural: Väter}
+  - type: Maskulinum
+    translation: {de: Bruder, en: brother}
+    parts: {nominativ: Bruder, genitiv: Bruders, plural: Brüder}
+  - type: Maskulinum
+    translation: {de: Frieden, en: peace}
+    parts: {nominativ: Frieden, genitiv: Friedens}
+  - type: Maskulinum
+    translation: {de: Dieb, en: thief}
+    parts: {nominativ: Dieb, genitiv: Diebes, plural: Diebe}
+  - type: Maskulinum
+    translation: {de: Gast, en: guest}
+    parts: {nominativ: Gast, genitiv: Gastes, plural: Gäste}
+  - type: Femininum
+    translation: {de: Grausamkeit, en: cruelty}
+    parts: {nominativ: Grausamkeit, plural: Grausamkeiten}
+  - type: Femininum
+    translation: {de: Schwester, en: sister}
+    parts: {nominativ: Schwester, plural: Schwestern}
+  - type: Femininum
+    translation: {de: Stimme, en: voice}
+    parts: {nominativ: Stimme, plural: Stimmen}
+  - type: Femininum
+    translation: {de: Rede, en: speech}
+    parts: {nominativ: Rede, plural: Reden}
+  - type: Femininum
+    translation: {de: Tüchtigkeit, en: excellence}
+    parts: {nominativ: Tüchtigkeit}
+  - type: Femininum
+    translation: {de: Sklaverei, en: slavery}
+    parts: {nominativ: Sklaverei}
+  - type: Femininum
+    translation: {de: Mutter, en: mother}
+    parts: {nominativ: Mutter, plural: Mütter}
+  - type: Maskulinum
+    translation: {de: Senator, en: senator}
+    parts: {nominativ: Senator, genitiv: Senators, plural: Senatoren}
+  - type: Neutrum
+    translation: {de: Licht, en: light}
+    parts: {nominativ: Licht, genitiv: Lichtes, plural: Lichter}
+  - type: Femininum
+    translation: {de: Ehre, en: honour}
+    parts: {nominativ: Ehre, plural: Ehren}
+  - type: Femininum
+    translation: {de: Gegend, en: region}
+    parts: {nominativ: Gegend, plural: Gegenden}
+  - type: Maskulinum
+    translation: {de: Jüngling, en: young man}
+    parts: {nominativ: Jüngling, genitiv: Jünglings, plural: Jünglinge}
+  - type: Femininum
+    translation: {de: Sonne, en: sun}
+    parts: {nominativ: Sonne, plural: Sonnen}
+  - type: Femininum
+    translation: {de: Arbeit, en: work}
+    parts: {nominativ: Arbeit, plural: Arbeiten}
+  - type: Femininum
+    translation: {de: Asche, en: ashes}
+    parts: {nominativ: Asche}
+  - type: Maskulinum
+    translation: {de: Händler, en: merchant}
+    parts: {nominativ: Händler, genitiv: Händlers, plural: Händler}
+  - type: Maskulinum
+    translation: {de: Bürger, en: citizen}
+    parts: {nominativ: Bürger, genitiv: Bürgers, plural: Bürger}
+  - type: Femininum
+    translation: {de: Wolke, en: cloud}
+    parts: {nominativ: Wolke, plural: Wolken}
+  - type: Maskulinum
+    translation: {de: Berg, en: mountain}
+    parts: {nominativ: Berg, genitiv: Berges, plural: Berge}
+  - type: Neutrum
+    translation: {de: Schiff, en: ship}
+    parts: {nominativ: Schiff, genitiv: Schiffes, plural: Schiffe}
+  - type: Femininum
+    translation: {de: Nacht, en: night}
+    parts: {nominativ: Nacht, plural: Nächte}
+  - type: Maskulinum
+    translation: {de: Zahn, en: tooth}
+    parts: {nominativ: Zahn, genitiv: Zahnes, plural: Zähne}
+  - type: Femininum
+    translation: {de: Kunst, en: art}
+    parts: {nominativ: Kunst, plural: Künste}
+  - type: Femininum
+    translation: {de: Kleidung, en: clothing}
+    parts: {nominativ: Kleidung}
+  - type: Femininum
+    translation: {de: Zeit, en: time}
+    parts: {nominativ: Zeit, plural: Zeiten}
+  - type: Femininum
+    translation: {de: Küste, en: coast}
+    parts: {nominativ: Küste, plural: Küsten}
+  - type: Neutrum
+    translation: {de: Vieh, en: cattle}
+    parts: {nominativ: Vieh, genitiv: Viehs}
+  - type: Maskulinum
+    translation: {de: Name, en: name}
+    parts: {nominativ: Name, genitiv: Namens, plural: Namen, dativ_singular: Namen, akkusativ_singular: Namen}
+  - type: Neutrum
+    translation: {de: Gedicht, en: poem}
+    parts: {nominativ: Gedicht, genitiv: Gedichtes, plural: Gedichte}
+  - type: Femininum
+    translation: {de: Sorge, en: care}
+    parts: {nominativ: Sorge, plural: Sorgen}

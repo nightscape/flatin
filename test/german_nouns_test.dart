@@ -197,6 +197,22 @@ const _noPlural = {
   'ōrnāmentum',
   'sanguis',
   'somnus',
+  'imperium',
+  'ōtium',
+  'patria',
+  'aqua',
+  'praeda',
+  'terra',
+  'grātia',
+  'īra',
+  'nātūra',
+  'Ītalia',
+  'pāx',
+  'virtūs',
+  'servitūs',
+  'cinis',
+  'vestis',
+  'pecus',
 };
 
 const _spikeLemmas = {
