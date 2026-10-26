@@ -149,6 +149,38 @@ void main() {
     ));
   });
 
+  test('a word without a basic form is a data error', () {
+    final noNominative = handItem(
+      dataFileId: 'nouns',
+      lemma: 'nautae',
+      axes: nounAxes,
+      type: 'A-Deklination',
+      forms: {
+        'gen.sg': ['nautae'],
+      },
+    );
+    final filter = _filter(Settings().withWordRange(LessonRange(21, 23)), '''
+- lesson: 21
+  nouns:
+    types: [A-Deklination, O-Deklination]
+- lesson: 32
+  nouns:
+    forms:
+      - {name: T}
+''');
+
+    expect(
+      () => filter.practicedForms('nouns', noNominative.formLabels),
+      throwsA(
+        isA<StateError>().having(
+          (e) => e.message,
+          'message',
+          contains('gen.sg'),
+        ),
+      ),
+    );
+  });
+
   group('grammar topics', () {
     const lateForms = '''
 - lesson: 21

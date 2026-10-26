@@ -166,7 +166,7 @@ void main() {
     types: [A-Deklination, O-Deklination]
 ''';
 
-    final gap = _filter(settings, early).typeGap('nouns', 'A-Deklination');
+    final gap = _filter(settings, early).formGap('nouns', _gen);
     expect(gap, isNotNull);
     expect(gap, isNot(isA<OutsideRange>()));
   });

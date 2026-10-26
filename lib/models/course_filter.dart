@@ -30,6 +30,10 @@ final class FromLesson extends CourseGap {
   const FromLesson(this.lesson);
 }
 
+/// Per data file, the feature of a word's basic form: its first form with
+/// it spells the lemma.
+const basicFormFeature = {'nouns': ('kasus', 'nom'), 'verbs': ('modus', 'inf')};
+
 final class CourseFilter {
   final Settings settings;
   final Curriculum curriculum;
@@ -40,11 +44,17 @@ final class CourseFilter {
   bool wordInRange(PracticeItem item) =>
       settings.courseWords.contains(lessons.lessonNumberOf(item));
 
+  /// What the course alone says about a topic: a type stays known below the
+  /// grammar range, only forms are narrowed by its lower bound.
+  bool courseReaches(CourseTopic topic) => topic.typeName != null
+      ? topic.lesson <= settings.effectiveGrammar.to
+      : settings.effectiveGrammar.contains(topic.lesson);
+
   /// The grammar range's verdict on a topic, after the learner's own choice
   /// about the topic.
   bool topicInRange(CourseTopic topic) => settings
       .overrideOfTopic(topic.key)
-      .verdict(inRange: settings.effectiveGrammar.contains(topic.lesson));
+      .verdict(inRange: courseReaches(topic));
 
   bool typeInRange(String dataFileId, String typeName) =>
       topicInRange(curriculum.typeTopic(dataFileId, typeName));
@@ -84,10 +94,31 @@ final class CourseFilter {
       settings.offFeaturesOf(dataFileId, label).isEmpty &&
       formSelected(dataFileId, label);
 
-  Set<FormKey> practicedForms(String dataFileId, List<FormLabel> labels) => {
-    for (final label in labels)
-      if (formPracticed(dataFileId, label)) label.key,
-  };
+  /// The forms asked of a word; a word with none in the grammar range is
+  /// asked its basic form once taught, unless the learner switched it off.
+  Set<FormKey> practicedForms(String dataFileId, List<FormLabel> labels) {
+    final practiced = {
+      for (final label in labels)
+        if (formPracticed(dataFileId, label)) label.key,
+    };
+    if (practiced.isNotEmpty) return practiced;
+    final (axis, value) = basicFormFeature[dataFileId]!;
+    final basic = labels.firstWhere(
+      (l) => l.features[axis] == value,
+      orElse: () => throw StateError(
+        'no basic form ($axis: $value) among the $dataFileId forms '
+        '${labels.map((l) => l.key)}',
+      ),
+    );
+    return {if (_basicFormTaught(dataFileId, basic)) basic.key};
+  }
+
+  bool _basicFormTaught(String dataFileId, FormLabel label) =>
+      curriculum.formLesson(dataFileId, label.key) <=
+          settings.effectiveGrammar.to &&
+      settings.offFeaturesOf(dataFileId, label).isEmpty &&
+      settings.overrideOfForm(dataFileId, label.key) != Override.forcedOff &&
+      !_topicSwitchedOff(curriculum.formTopic(dataFileId, label.key));
 
   bool itemPracticed(PracticeItem item) =>
       wordPracticed(item) && typePracticed(item.dataFileId, item.type);

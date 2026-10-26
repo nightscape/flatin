@@ -349,7 +349,7 @@ class _KursstandCardState extends ConsumerState<KursstandCard> {
   }
 
   Widget _topicChip(CourseTopic t, Map<String, FormMetadata> metadata) {
-    final inRange = _filter.settings.effectiveGrammar.contains(t.lesson);
+    final inRange = _filter.courseReaches(t);
     final on = _filter.topicInRange(t);
     return FilterChip(
       key: Key('kursstand.topic.${t.key}'),
