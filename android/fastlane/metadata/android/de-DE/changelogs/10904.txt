@@ -1,0 +1,3 @@
+* Die App hat auf Android und iPhone jetzt ihr eigenes Symbol
+* Ein möglicher Absturz mit Bildschirmlesern auf der Kursstand-Seite ist behoben
+* Bibliotheken aktualisiert
