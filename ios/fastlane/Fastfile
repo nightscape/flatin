@@ -46,8 +46,8 @@ platform :ios do
       export_team_id: team_id,
       export_options: { signingStyle: "automatic" },
       skip_profile_detection: true,
+      # gym appends xcargs to the archive and the export command, so the key goes here once.
       xcargs: "DEVELOPMENT_TEAM=#{team_id} #{key_args}",
-      export_xcargs: key_args,
       output_directory: "#{project_root}/build/ios/ipa"
     )
   end
