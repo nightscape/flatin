@@ -34,7 +34,10 @@ platform :ios do
       "-authenticationKeyIssuerID", ENV.fetch("ASC_ISSUER_ID")
     ].shelljoin
 
-    sh("cd #{project_root} && flutter build ios --config-only --no-codesign --release #{options[:build_flags] || release_build_flags}")
+    # Flutter runs the runner's system CocoaPods, which breaks under the bundle's RUBYOPT and Ruby 3.2.
+    Bundler.with_unbundled_env do
+      sh("cd #{project_root} && flutter build ios --config-only --no-codesign --release #{options[:build_flags] || release_build_flags}")
+    end
     build_app(
       workspace: "#{project_root}/ios/Runner.xcworkspace",
       scheme: "Runner",
