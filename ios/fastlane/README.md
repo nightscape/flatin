@@ -7,6 +7,10 @@ Pushing a tag `vX.Y.Z` starts the job `testflight` in `.github/workflows/deploy.
 3. `build_app` archives and exports the app with automatic signing: `-allowProvisioningUpdates` plus the App Store Connect API key lets Xcode create the certificate and the App Store profile in Apple's cloud. No certificate or profile is stored in the repository or in a secret. The key goes to `xcodebuild` once, through `xcargs`: gym adds `xcargs` to the archive and to the export command (gym 2.228.0 has no `api_key` option of its own), so `export_xcargs` must not repeat it.
 4. `upload_to_testflight` uploads the build, waits for Apple's processing (limit 40 minutes), sends the build to beta review and adds it to the external group "Tester". The public link serves the build once Apple accepts the review. The wait is needed because a build can only join an external group after processing.
 
+## Xcode version
+
+The job runs on `macos-15` and selects `/Applications/Xcode_26.3.app` with `xcode-select` (iOS 26.2 SDK) before anything else uses Xcode. The image default is Xcode 16.4 (iOS 18.5 SDK), which Apple rejects at upload: "All iOS and iPadOS apps must be built with the iOS 26 SDK or later". The step "Print Xcode and iOS SDK version" writes `xcodebuild -version` and the `iphoneos` SDK version to the log. If GitHub removes that Xcode from the image, the select step fails; pick a newer `Xcode_26.x.app` from the [macos-15-arm64 image list](https://github.com/actions/runner-images/blob/main/images/macos/macos-15-arm64-Readme.md) (the `macos-26` image has 26.6 as default).
+
 ## Check the signing before a tag
 
 Start the workflow by hand (Actions, "Deploy to Stores", Run workflow) and tick `ios_signing_check`. The job `testflight` then runs `fastlane signing_check`: the same configuration and `build_app` steps as `beta`, with the fixed version `0.0.1 (1)`, and no upload and no changelog. A manual start never runs `beta`, never uploads and never runs the Play and GitHub release jobs, also on a final tag. Only a tag push does that.
