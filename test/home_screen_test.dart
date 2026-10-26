@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/data/practice_data.dart';
-import 'package:latin_practice/data/rewards.dart';
 import 'package:latin_practice/models/reward.dart';
 import 'package:latin_practice/models/settings.dart';
 import 'package:latin_practice/services/reward_storage.dart';
@@ -126,10 +125,7 @@ void main() {
     ) async {
       await pumpHome(
         tester,
-        ledger: RewardLedger(
-          buildings: [romanTown[1].id, romanTown[0].id],
-          practiceDays: 3,
-        ),
+        ledger: RewardLedger(buildings: ['hortus', 'domus'], practiceDays: 3),
       );
 
       expect(find.text('Geübte Tage: 3'), findsOneWidget);

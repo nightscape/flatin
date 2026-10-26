@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import '../data/rewards.dart';
+import '../models/reward.dart';
 import '../widgets/app_drawer.dart';
 import '../models/practice_item.dart';
 import '../providers/fsrs_provider.dart';
@@ -121,7 +122,7 @@ class _Coins extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final points = switch (ref.watch(rewardsProvider)) {
-      AsyncData(:final value) => value.balance,
+      AsyncData(:final value) => value.balance(coins),
       AsyncError(:final error) => throw error,
       _ => null,
     };

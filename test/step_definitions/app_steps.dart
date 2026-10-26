@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:latin_practice/main.dart' as app;
 import 'package:integration_test/integration_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:latin_practice/data/rewards.dart';
+import 'package:latin_practice/data/game_rules.dart';
 import 'package:latin_practice/models/derivation.dart' show norm;
 import 'package:latin_practice/models/reward.dart';
 import 'package:latin_practice/models/settings.dart';
@@ -635,10 +635,10 @@ class AppSteps {
   // Reward steps: the state steps run before `the app is running`.
   @Given('I have {int} coins')
   @And('I have {int} coins')
-  Future<void> iHaveCoins(WidgetTester tester, int coins) async {
+  Future<void> iHaveCoins(WidgetTester tester, int amount) async {
     final ledger = await RewardStorage.load();
     await RewardStorage.save(
-      RewardLedger(points: coins, buildings: ledger.buildings),
+      RewardLedger(earned: {coins: amount}, buildings: ledger.buildings),
     );
   }
 
@@ -648,8 +648,10 @@ class AppSteps {
     final ledger = await RewardStorage.load();
     await RewardStorage.save(
       RewardLedger(
-        points: ledger.points,
-        buildings: [for (final b in romanTown.take(count)) b.id],
+        earned: ledger.earned,
+        buildings: [
+          for (final b in (await loadGameRules()).buildings.take(count)) b.id,
+        ],
       ),
     );
   }

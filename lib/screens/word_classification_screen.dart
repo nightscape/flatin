@@ -359,12 +359,12 @@ class _WordClassificationScreenState
     final effects = await ref
         .read(rewardsProvider.notifier)
         .send(ChoicesChecked(right));
-    final coins = effects.whereType<PointsGained>().fold(
-      0,
-      (sum, e) => sum + e.points,
-    );
+    final gained = effects
+        .whereType<ResourceGained>()
+        .where((e) => e.resource == coins)
+        .fold(0, (sum, e) => sum + e.amount);
     if (!mounted) return;
-    setState(() => _burst = (coins: coins, serial: (_burst?.serial ?? 0) + 1));
+    setState(() => _burst = (coins: gained, serial: (_burst?.serial ?? 0) + 1));
   }
 
   Future<void> _rateCard(Rating rating) async {

@@ -1,0 +1,54 @@
+# The game rules: what an event earns and what the buildings cost.
+# lib/data/game_rules.dart reads this file strictly and documents the order
+# in which the rules apply.
+#
+# earn: `on` an event, `when` all its facts match (a value, a list of values,
+# or `<field>AtLeast`), `gain` per resource, times the event field `per`.
+# `tag` marks the share for the statistics.
+# buildings: in shop order; `modifies` changes later gains of a resource
+# while the building stands (`add` or `multiply`).
+
+resources: [coins]
+
+earn:
+  - on: answered
+    when: {right: true, firstAttempt: true}
+    gain: {coins: 10}
+  - on: answered
+    when: {right: true, firstAttempt: false}
+    gain: {coins: 5}
+  # The base coins again for a word whose card was hard before this round.
+  - on: answered
+    when: {right: true, firstAttempt: true, wordDifficultyAtLeast: 7}
+    gain: {coins: 10}
+    tag: bonus
+  - on: answered
+    when: {right: true, firstAttempt: false, wordDifficultyAtLeast: 7}
+    gain: {coins: 5}
+    tag: bonus
+  - on: choicesChecked
+    gain: {coins: 3}
+    per: right
+
+# About 30 minutes of practice buy a building for 400 coins.
+buildings:
+  - {id: domus, price: {coins: 400}}
+  - {id: hortus, price: {coins: 250}}
+  - {id: fons, price: {coins: 250}}
+  - {id: taberna, price: {coins: 400}}
+  - {id: villa, price: {coins: 400}}
+  - {id: templum, price: {coins: 600}}
+  - {id: ager, price: {coins: 250}}
+  - {id: vinea, price: {coins: 250}}
+  - {id: stabulum, price: {coins: 400}}
+  - {id: figlina, price: {coins: 400}}
+  - {id: pistrinum, price: {coins: 400}}
+  - {id: aquaeductus, price: {coins: 600}}
+  - {id: thermae, price: {coins: 600}}
+  - {id: statua, price: {coins: 250}}
+  - {id: portus, price: {coins: 600}}
+  - {id: navis, price: {coins: 400}}
+  - {id: murus, price: {coins: 400}}
+  - {id: castra, price: {coins: 600}}
+  - {id: bibliotheca, price: {coins: 400}}
+  - {id: amphitheatrum, price: {coins: 600}}

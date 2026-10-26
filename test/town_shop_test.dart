@@ -14,7 +14,7 @@ void main() {
     addTearDown(tester.view.reset);
     await seedNothingDue({'nouns': <String>{}, 'verbs': <String>{}});
     await RewardStorage.save(
-      const RewardLedger(points: 300, buildings: ['domus']),
+      const RewardLedger(earned: {coins: 300}, buildings: ['domus']),
     );
     await tester.pumpWidget(
       wrapInApp(const HomeScreen(), forcedLocale: const Locale('de')),
@@ -45,7 +45,7 @@ void main() {
     'buying asks for confirmation, then spends the price and builds',
     (tester) async {
       await seedNothingDue({'nouns': <String>{}, 'verbs': <String>{}});
-      await RewardStorage.save(const RewardLedger(points: 900));
+      await RewardStorage.save(const RewardLedger(earned: {coins: 900}));
       await tester.pumpWidget(
         wrapInApp(const HomeScreen(), forcedLocale: const Locale('de')),
       );
@@ -61,7 +61,7 @@ void main() {
       await letItLoad(tester);
 
       final ledger = await RewardStorage.load();
-      expect(ledger.balance, 500);
+      expect(ledger.balance(coins), 500);
       expect(ledger.buildings, ['taberna']);
     },
   );

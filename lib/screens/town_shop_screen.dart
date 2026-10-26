@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../data/rewards.dart';
+import '../data/game_rules.dart';
+import '../models/reward.dart';
 import '../providers/reward_provider.dart';
 
 /// The buildings not built yet, bought with the coin balance.
@@ -14,22 +15,23 @@ class TownShopScreen extends ConsumerWidget {
     String t(String key, [Map<String, String>? params]) =>
         FlutterI18n.translate(context, key, translationParams: params);
     final ledger = ref.watch(rewardsProvider).requireValue;
+    final rules = ref.watch(gameRulesProvider).requireValue;
     return Scaffold(
       appBar: AppBar(title: Text(t('shop.title'))),
       body: ListView(
         children: [
-          for (final b in unbuiltOf(ledger))
+          for (final b in rules.unbuilt(ledger))
             ListTile(
               key: Key('shop.item.${b.id}'),
-              enabled: b.price <= ledger.balance,
+              enabled: ledger.canAfford(b.price),
               leading: Image.asset('assets/town/${b.id}.png', width: 56),
               title: Text(t('reward.building.${b.id}')),
               subtitle: Text(
-                b.price <= ledger.balance
-                    ? t('shop.price', {'price': '${b.price}'})
+                ledger.canAfford(b.price)
+                    ? t('shop.price', {'price': '${b.price[coins]}'})
                     : t('shop.missing', {
-                        'price': '${b.price}',
-                        'missing': '${b.price - ledger.balance}',
+                        'price': '${b.price[coins]}',
+                        'missing': '${b.price[coins]! - ledger.balance(coins)}',
                       }),
               ),
               onTap: () => _confirm(context, ref, b),
@@ -48,7 +50,7 @@ class TownShopScreen extends ConsumerWidget {
           FlutterI18n.translate(
             context,
             'shop.confirm',
-            translationParams: {'name': name, 'price': '${b.price}'},
+            translationParams: {'name': name, 'price': '${b.price[coins]}'},
           ),
         ),
         actions: [

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../data/rewards.dart';
 import '../models/reward.dart';
 import '../providers/reward_provider.dart';
 import '../providers/round_providers.dart';
@@ -21,10 +20,12 @@ class RoundEndScreen extends ConsumerWidget {
     String t(String key, [Map<String, String>? params]) =>
         FlutterI18n.translate(context, key, translationParams: params);
     final ledger = ref.watch(rewardsProvider).requireValue;
+    final rules = ref.watch(gameRulesProvider).requireValue;
     final offer = ref.watch(todayOfferProvider).value;
     final next = offer == null ? null : requestOf(offer);
-    final bonus = ledger.bonusPoints - start.bonusPoints;
-    final gained = ledger.points - start.points - bonus;
+    final bonus =
+        ledger.taggedOf(coins, 'bonus') - start.taggedOf(coins, 'bonus');
+    final gained = ledger.earnedOf(coins) - start.earnedOf(coins) - bonus;
     final textTheme = Theme.of(context).textTheme;
     return Scaffold(
       appBar: AppBar(title: Text(t('home.grammar'))),
@@ -43,9 +44,9 @@ class RoundEndScreen extends ConsumerWidget {
               t('round.end.bonus', {'bonus': '$bonus'}),
               style: textTheme.titleLarge,
             ),
-          Text(t('round.end.total', {'total': '${ledger.balance}'})),
+          Text(t('round.end.total', {'total': '${ledger.balance(coins)}'})),
           const SizedBox(height: 16),
-          if (unbuiltOf(ledger).any((b) => b.price <= ledger.balance))
+          if (rules.unbuilt(ledger).any((b) => ledger.canAfford(b.price)))
             Text(
               t('round.end.canBuy'),
               key: const Key('round.end.canBuy'),

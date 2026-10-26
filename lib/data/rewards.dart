@@ -3,37 +3,6 @@ import '../models/reward.dart';
 const double townWidth = 1024;
 const double townHeight = 875;
 
-typedef Building = ({String id, int price});
-
-const int _small = 250;
-const int _middle = 400;
-const int _large = 600;
-
-/// The buildings of stage 1 with their prices in coins: about 30 minutes of
-/// practice for a middle one.
-const List<Building> romanTown = [
-  (id: 'domus', price: _middle),
-  (id: 'hortus', price: _small),
-  (id: 'fons', price: _small),
-  (id: 'taberna', price: _middle),
-  (id: 'villa', price: _middle),
-  (id: 'templum', price: _large),
-  (id: 'ager', price: _small),
-  (id: 'vinea', price: _small),
-  (id: 'stabulum', price: _middle),
-  (id: 'figlina', price: _middle),
-  (id: 'pistrinum', price: _middle),
-  (id: 'aquaeductus', price: _large),
-  (id: 'thermae', price: _large),
-  (id: 'statua', price: _small),
-  (id: 'portus', price: _large),
-  (id: 'navis', price: _middle),
-  (id: 'murus', price: _middle),
-  (id: 'castra', price: _large),
-  (id: 'bibliotheca', price: _middle),
-  (id: 'amphitheatrum', price: _large),
-];
-
 /// An image of a building placed on the town background, in fractions of its size:
 /// left edge, width and bottom edge (the height follows from the image).
 typedef TownSprite = ({
@@ -237,102 +206,22 @@ const List<TownSprite> townSprites = [
   ),
 ];
 
-/// Distinct built buildings in step order; ledgers may hold repeated ids.
-List<Building> townOf(RewardLedger ledger) => [
-  for (final b in romanTown)
-    if (ledger.buildings.contains(b.id)) b,
-];
+/// Counting practice days is calendar logic, not a game rule, so it is code.
+/// It counts days, never a streak.
+List<DayCounted> countDay(RewardLedger ledger, RewardEvent event) =>
+    switch (event) {
+      Answered(:final at) when _day(at) != ledger.lastPracticeDay => [
+        DayCounted(_day(at)),
+      ],
+      _ => const [],
+    };
 
-/// The buildings the shop offers, in step order.
-List<Building> unbuiltOf(RewardLedger ledger) => [
-  for (final b in romanTown)
-    if (!ledger.buildings.contains(b.id)) b,
-];
-
-class PointsStrategy implements RewardStrategy {
-  const PointsStrategy();
-
-  static const int coinsPerChoice = 3;
-
-  @override
-  String get id => 'points';
-
-  @override
-  List<RewardEffect> onEvent(RewardEvent event, RewardLedger ledger) =>
-      switch (event) {
-        Answered(right: true, :final firstAttempt) => [
-          PointsGained(firstAttempt ? 10 : 5),
-        ],
-        ChoicesChecked(:final right) => [PointsGained(coinsPerChoice * right)],
-        _ => const [],
-      };
+String _day(DateTime at) {
+  assert(!at.isUtc, 'practice days are local');
+  return '${at.year.toString().padLeft(4, '0')}-'
+      '${at.month.toString().padLeft(2, '0')}-'
+      '${at.day.toString().padLeft(2, '0')}';
 }
 
-/// The base points again for a word whose card was hard before this round.
-class HardWordBonusStrategy implements RewardStrategy {
-  const HardWordBonusStrategy();
-
-  static const double minDifficulty = 7;
-
-  @override
-  String get id => 'bonus';
-
-  @override
-  List<RewardEffect> onEvent(RewardEvent event, RewardLedger ledger) =>
-      switch (event) {
-        Answered(right: true, :final firstAttempt, :final wordDifficulty?)
-            when wordDifficulty >= minDifficulty =>
-          [BonusGained(firstAttempt ? 10 : 5)],
-        _ => const [],
-      };
-}
-
-/// Buildings are bought in the shop, so no event adds one; this id only
-/// switches the town on and off.
-class TownStrategy implements RewardStrategy {
-  const TownStrategy();
-
-  @override
-  String get id => 'town';
-
-  @override
-  List<RewardEffect> onEvent(RewardEvent event, RewardLedger ledger) =>
-      const [];
-}
-
-/// Counts days, never a streak.
-class PracticeDaysStrategy implements RewardStrategy {
-  const PracticeDaysStrategy();
-
-  @override
-  String get id => 'days';
-
-  @override
-  List<RewardEffect> onEvent(RewardEvent event, RewardLedger ledger) =>
-      switch (event) {
-        Answered(:final at) when _day(at) != ledger.lastPracticeDay => [
-          DayCounted(_day(at)),
-        ],
-        _ => const [],
-      };
-
-  static String _day(DateTime at) {
-    assert(!at.isUtc, 'practice days are local');
-    return '${at.year.toString().padLeft(4, '0')}-'
-        '${at.month.toString().padLeft(2, '0')}-'
-        '${at.day.toString().padLeft(2, '0')}';
-  }
-}
-
-const List<RewardStrategy> rewardStrategies = [
-  PointsStrategy(),
-  HardWordBonusStrategy(),
-  TownStrategy(),
-  PracticeDaysStrategy(),
-];
-
-/// The strategies the learner can switch off; counting days is always on.
-final List<String> switchableRewardIds = [
-  for (final s in rewardStrategies)
-    if (s is! PracticeDaysStrategy && s is! HardWordBonusStrategy) s.id,
-];
+/// The settings keys of the rewards the learner can switch off.
+const List<String> switchableRewardIds = ['points', 'town'];

@@ -264,6 +264,8 @@ class Round extends _$Round {
         right: outcome.right,
         firstAttempt: outcome.firstAttempt,
         wordDifficulty: wordDifficulty,
+        kind: task.exercise.kind.name,
+        dataFile: task.word.dataFileId,
         at: DateTime.now(),
       ),
     );

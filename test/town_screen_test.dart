@@ -11,7 +11,7 @@ import 'support/word_classification_harness.dart';
 
 Future<void> _openTown(WidgetTester tester) async {
   await seedNothingDue({'nouns': <String>{}, 'verbs': <String>{}});
-  await RewardStorage.save(const RewardLedger(points: 900));
+  await RewardStorage.save(const RewardLedger(earned: {coins: 900}));
   await tester.pumpWidget(
     wrapInApp(const HomeScreen(), forcedLocale: const Locale('de')),
   );

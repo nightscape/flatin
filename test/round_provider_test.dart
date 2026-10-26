@@ -78,7 +78,7 @@ _run(ProviderContainer c, RoundRequest request, Set<int> wrong) async {
     before: before,
     after: last,
     firsts: firsts,
-    points: ledger.points,
+    points: ledger.earnedOf(coins),
     buildings: ledger.buildings.length,
   );
 }
@@ -202,8 +202,8 @@ void main() {
     await c.read(provider.notifier).respond(right);
 
     final ledger = await c.read(rewardsProvider.future);
-    expect(ledger.bonusPoints, 10);
-    expect(ledger.points, 20);
+    expect(ledger.taggedOf(coins, 'bonus'), 10);
+    expect(ledger.earnedOf(coins), 20);
   });
 
   test('a second response while one is in flight is ignored', () async {

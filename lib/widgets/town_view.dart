@@ -12,7 +12,7 @@ class TownView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final built = townOf(ledger).map((b) => b.id).toSet();
+    final built = ledger.buildings.toSet();
     return ClipRRect(
       borderRadius: BorderRadius.circular(12),
       child: AspectRatio(

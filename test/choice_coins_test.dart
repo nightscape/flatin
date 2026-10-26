@@ -4,14 +4,15 @@ import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/models/practice_item.dart';
 import 'package:latin_practice/screens/practice_screen.dart';
 import 'package:latin_practice/screens/word_classification_screen.dart';
+import 'package:latin_practice/models/reward.dart';
 import 'package:latin_practice/services/reward_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'support/explanation_harness.dart' show pickOption;
 import 'support/word_classification_harness.dart';
 
-Future<int> coins(WidgetTester tester) async =>
-    (await tester.runAsync(RewardStorage.load))!.points;
+Future<int> earnedCoins(WidgetTester tester) async =>
+    (await tester.runAsync(RewardStorage.load))!.earnedOf(coins);
 
 /// Lets the reward save and stops while the coin burst is still on screen.
 Future<void> _midBurst(WidgetTester tester) async {
@@ -65,7 +66,7 @@ void main() {
         'dat.sg': 'dominō',
         'dat.pl': 'dominīs',
       });
-      expect(await coins(tester), 9);
+      expect(await earnedCoins(tester), 9);
       expect(find.text('🪙 +9'), findsOneWidget);
     });
 
@@ -73,7 +74,7 @@ void main() {
       tester,
     ) async {
       await checkPractice(tester, {'nom.sg': 'dominus', 'gen.sg': 'dominī'});
-      expect(await coins(tester), 3);
+      expect(await earnedCoins(tester), 3);
     });
 
     testWidgets('the verb field that the heading shows pays nothing', (
@@ -83,7 +84,7 @@ void main() {
         'inf.praes.akt': 'amare',
         'ind.praes.akt.3.sg': 'amat',
       }, item: amare);
-      expect(await coins(tester), 3);
+      expect(await earnedCoins(tester), 3);
     });
 
     testWidgets(
@@ -93,7 +94,7 @@ void main() {
           'sup.akk': 'amātum',
           'ind.praes.akt.3.sg': 'amat',
         }, item: amare);
-        expect(await coins(tester), 3);
+        expect(await earnedCoins(tester), 3);
       },
     );
 
@@ -105,7 +106,7 @@ void main() {
         'part.perf.pass.sg.nom.m': 'amātus',
         'inf.perf.pass': 'amātum esse',
       }, item: amare);
-      expect(await coins(tester), 6);
+      expect(await earnedCoins(tester), 6);
     });
 
     test('a field with one answer not shown pays', () async {
@@ -123,12 +124,12 @@ void main() {
 
     testWidgets('wrong and empty fields earn nothing', (tester) async {
       await checkPractice(tester, {'gen.sg': 'dominī', 'dat.sg': 'dominī'});
-      expect(await coins(tester), 3);
+      expect(await earnedCoins(tester), 3);
     });
 
     testWidgets('a checked answer cannot be checked again', (tester) async {
       await checkPractice(tester, {'gen.sg': 'zzz'});
-      expect(await coins(tester), 0);
+      expect(await earnedCoins(tester), 0);
       expect(find.byKey(const Key('practice.check.button')), findsNothing);
     });
   });
@@ -169,7 +170,7 @@ void main() {
         ('Genitiv', 'Singular'),
         ('Nominativ', 'Plural'),
       ]);
-      expect(await coins(tester), 12);
+      expect(await earnedCoins(tester), 12);
       expect(find.text('🪙 +12'), findsOneWidget);
     });
 
@@ -177,7 +178,7 @@ void main() {
       tester,
     ) async {
       await classify(tester, 'gen.sg', [('Genitiv', 'Plural')]);
-      expect(await coins(tester), 3);
+      expect(await earnedCoins(tester), 3);
     });
 
     testWidgets('the best matching analysis decides for an ambiguous form', (
@@ -185,7 +186,7 @@ void main() {
     ) async {
       // dominīs is Dativ and Ablativ Plural; Ablativ agrees only with the second.
       await classify(tester, 'dat.pl', [('Ablativ', 'Singular')]);
-      expect(await coins(tester), 3);
+      expect(await earnedCoins(tester), 3);
     });
 
     testWidgets('an analysis pays only its best matching combination', (
@@ -196,7 +197,7 @@ void main() {
         ('Dativ', 'Singular'),
         ('Dativ', 'Plural'),
       ]);
-      expect(await coins(tester), 6);
+      expect(await earnedCoins(tester), 6);
     });
 
     testWidgets('a repeated combination pays once', (tester) async {
@@ -204,14 +205,14 @@ void main() {
         ('Genitiv', 'Singular'),
         ('Genitiv', 'Singular'),
       ]);
-      expect(await coins(tester), 6);
+      expect(await earnedCoins(tester), 6);
     });
 
     testWidgets('a wrong answer earns nothing and cannot be checked again', (
       tester,
     ) async {
       await classify(tester, 'dat.sg', [('Akkusativ', 'Plural')]);
-      expect(await coins(tester), 0);
+      expect(await earnedCoins(tester), 0);
       expect(
         find.byKey(const Key('wordClassification.check.button')),
         findsNothing,

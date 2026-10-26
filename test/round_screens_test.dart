@@ -200,7 +200,14 @@ void main() {
   ) async {
     seedSettings(Settings(courseWords: LessonRange(1, 1)));
     await tester.runAsync(
-      () => RewardStorage.save(const RewardLedger(points: 50, bonusPoints: 20)),
+      () => RewardStorage.save(
+        const RewardLedger(
+          earned: {coins: 50},
+          tagged: {
+            coins: {'bonus': 20},
+          },
+        ),
+      ),
     );
     await tester.pumpWidget(
       wrapInApp(

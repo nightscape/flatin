@@ -89,6 +89,7 @@ flutter:
     - lib/data/agite_plus_bayern_2.yaml
     - lib/data/agite_plus_bayern_1_grammatik.yaml
     - lib/data/agite_plus_bayern_2_grammatik.yaml
+    - lib/data/game_rules.yaml
     - assets/flutter_i18n/
     - assets/town/
 

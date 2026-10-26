@@ -1,5 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../data/game_rules.dart';
 import '../data/rewards.dart';
 import '../models/reward.dart';
 import '../services/reward_storage.dart';
@@ -7,30 +8,42 @@ import '../services/reward_storage.dart';
 part 'reward_provider.g.dart';
 
 @riverpod
+Future<GameRules> gameRules(Ref ref) => loadGameRules();
+
+/// Loads after [gameRulesProvider], so a screen that has the ledger also has
+/// the rules.
+@riverpod
 class Rewards extends _$Rewards {
   @override
-  Future<RewardLedger> build() => RewardStorage.load();
+  Future<RewardLedger> build() async {
+    await ref.watch(gameRulesProvider.future);
+    return RewardStorage.load();
+  }
 
-  /// Runs every strategy on the same ledger, applies all effects, saves once.
+  /// Applies the rules' gains and the day count, saves once.
   Future<List<RewardEffect>> send(RewardEvent event) async {
     final ledger = await future;
-    final effects = [
-      for (final strategy in rewardStrategies)
-        ...strategy.onEvent(event, ledger),
-    ];
-    final updated = effects.fold(ledger, (l, e) => l.apply(e));
-    await RewardStorage.save(updated);
-    state = AsyncData(updated);
-    return effects;
+    final rules = await ref.read(gameRulesProvider.future);
+    return _apply(ledger, [
+      ...rules.gainsOf(ledger, event),
+      ...countDay(ledger, event),
+    ]);
   }
 
   Future<void> buy(Building building) async {
     final ledger = await future;
     assert(!ledger.buildings.contains(building.id), '${building.id} is built');
-    final updated = ledger
-        .apply(CoinsSpent(building.price))
-        .apply(BuildingAdded(building.id));
+    final rules = await ref.read(gameRulesProvider.future);
+    await _apply(ledger, rules.buy(building));
+  }
+
+  Future<List<RewardEffect>> _apply(
+    RewardLedger ledger,
+    List<RewardEffect> effects,
+  ) async {
+    final updated = effects.fold(ledger, (l, e) => l.apply(e));
     await RewardStorage.save(updated);
     state = AsyncData(updated);
+    return effects;
   }
 }

@@ -38,8 +38,9 @@ class _RoundScreenState extends ConsumerState<RoundScreen> {
     ref.listen(rewardsProvider, (previous, next) {
       if (previous?.value case final before?) {
         final after = next.requireValue;
-        final bonus = after.bonusPoints - before.bonusPoints;
-        final gained = after.points - before.points - bonus;
+        final bonus =
+            after.taggedOf(coins, 'bonus') - before.taggedOf(coins, 'bonus');
+        final gained = after.earnedOf(coins) - before.earnedOf(coins) - bonus;
         if (gained > 0) {
           setState(
             () => _burst = (
