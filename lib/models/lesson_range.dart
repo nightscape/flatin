@@ -14,16 +14,8 @@ final class LessonRange {
     );
   }
 
-  /// Every lesson of the word lists.
-  static final fullWords = LessonRange(1, lastLesson);
-
   /// Every lesson plus the "later" stop for what no lesson teaches.
-  static final fullGrammar = LessonRange(1, laterLesson);
-
-  /// The grammar range that trails [words]: everything taught up to its end,
-  /// and with the words at their top also what no lesson teaches.
-  static LessonRange grammarFollowing(LessonRange words) =>
-      words.to == lastLesson ? fullGrammar : LessonRange(1, words.to);
+  static final full = LessonRange(1, laterLesson);
 
   bool contains(int lesson) => from <= lesson && lesson <= to;
 

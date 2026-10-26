@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import '../data/lesson_data.dart' show lastLesson;
 import '../data/rewards.dart' show switchableRewardIds;
 import '../data/settings_conversion.dart'
@@ -55,12 +57,15 @@ class Settings {
   /// The lessons whose words the learner practises.
   final LessonRange courseWords;
 
-  /// The lessons whose grammar the learner practises. While
-  /// [grammarFollowsWords] it is kept at 1..[courseWords].to.
+  /// The lessons whose grammar the learner practises. A linked bound equals
+  /// the word bound.
   final LessonRange courseGrammar;
 
-  /// Whether the grammar range trails the word range.
-  final bool grammarFollowsWords;
+  /// Whether the grammar range starts where the word range starts.
+  final bool grammarFromLinked;
+
+  /// Whether the grammar range ends where the word range ends.
+  final bool grammarToLinked;
 
   /// Ids of the reward strategies the learner switched off.
   final Set<String> disabledRewards;
@@ -97,7 +102,8 @@ class Settings {
     Set<String>? deselectedWords,
     LessonRange? courseWords,
     LessonRange? courseGrammar,
-    this.grammarFollowsWords = true,
+    this.grammarFromLinked = false,
+    this.grammarToLinked = true,
     Set<String>? forcedOnWords,
     Map<String, Set<String>>? forcedOnTypes,
     Map<String, Set<String>>? forcedOnForms,
@@ -111,18 +117,19 @@ class Settings {
        disabledTypes = disabledTypes ?? {},
        inputStrategyIds = inputStrategyIds ?? {},
        deselectedWords = deselectedWords ?? {},
-       courseWords = courseWords ?? LessonRange.fullWords,
-       courseGrammar = courseGrammar ?? LessonRange.fullGrammar,
+       courseWords = courseWords ?? LessonRange.full,
+       courseGrammar = _linkedGrammar(
+         courseWords ?? LessonRange.full,
+         courseGrammar ?? LessonRange.full,
+         from: grammarFromLinked,
+         to: grammarToLinked,
+       ),
        forcedOnWords = forcedOnWords ?? {},
        forcedOnTypes = forcedOnTypes ?? {},
        forcedOnForms = forcedOnForms ?? {},
        deselectedTopics = deselectedTopics ?? {},
        forcedOnTopics = forcedOnTopics ?? {},
        disabledRewards = disabledRewards ?? {} {
-    assert(
-      this.courseWords.to <= lastLesson,
-      'the word range ends beyond the last lesson',
-    );
     assert(
       this.forcedOnWords.intersection(this.deselectedWords).isEmpty,
       'a word is both forced on and forced off',
@@ -150,7 +157,8 @@ class Settings {
     Set<String>? deselectedWords,
     LessonRange? courseWords,
     LessonRange? courseGrammar,
-    bool? grammarFollowsWords,
+    bool? grammarFromLinked,
+    bool? grammarToLinked,
     Set<String>? forcedOnWords,
     Map<String, Set<String>>? forcedOnTypes,
     Map<String, Set<String>>? forcedOnForms,
@@ -169,7 +177,8 @@ class Settings {
       deselectedWords: deselectedWords ?? this.deselectedWords,
       courseWords: courseWords ?? this.courseWords,
       courseGrammar: courseGrammar ?? this.courseGrammar,
-      grammarFollowsWords: grammarFollowsWords ?? this.grammarFollowsWords,
+      grammarFromLinked: grammarFromLinked ?? this.grammarFromLinked,
+      grammarToLinked: grammarToLinked ?? this.grammarToLinked,
       forcedOnWords: forcedOnWords ?? this.forcedOnWords,
       forcedOnTypes: forcedOnTypes ?? this.forcedOnTypes,
       forcedOnForms: forcedOnForms ?? this.forcedOnForms,
@@ -181,29 +190,33 @@ class Settings {
     );
   }
 
-  /// The lessons whose grammar is practised right now.
-  LessonRange get effectiveGrammar => grammarFollowsWords
-      ? LessonRange.grammarFollowing(courseWords)
-      : courseGrammar;
-
-  Settings withWordRange(LessonRange range) => copyWith(
-    courseWords: range,
-    courseGrammar: grammarFollowsWords
-        ? LessonRange.grammarFollowing(range)
-        : courseGrammar,
-  );
-
-  Settings withGrammarRange(LessonRange range) {
-    assert(!grammarFollowsWords, 'the grammar range follows the word range');
-    return copyWith(courseGrammar: range);
+  /// [grammar] with its linked bounds on the word bounds; an open bound
+  /// stays, pushed only as far as the range needs to stay non-empty.
+  static LessonRange _linkedGrammar(
+    LessonRange words,
+    LessonRange grammar, {
+    required bool from,
+    required bool to,
+  }) {
+    final start = from ? words.from : grammar.from;
+    final end = to ? words.to : grammar.to;
+    return from
+        ? LessonRange(start, max(start, end))
+        : LessonRange(min(start, end), end);
   }
 
-  Settings withGrammarFollowsWords(bool follows) => copyWith(
-    grammarFollowsWords: follows,
-    courseGrammar: follows
-        ? LessonRange.grammarFollowing(courseWords)
-        : courseGrammar,
+  Settings withWordRange(LessonRange range) => copyWith(courseWords: range);
+
+  /// Moving a linked grammar bound away from the word bound unlinks it.
+  Settings withGrammarRange(LessonRange range) => copyWith(
+    courseGrammar: range,
+    grammarFromLinked: grammarFromLinked && range.from == courseGrammar.from,
+    grammarToLinked: grammarToLinked && range.to == courseGrammar.to,
   );
+
+  /// Linking a bound puts it on the word bound.
+  Settings withGrammarLinked({bool? from, bool? to}) =>
+      copyWith(grammarFromLinked: from, grammarToLinked: to);
 
   /// Drops every override the learner made; the course ranges stay.
   Settings clearOverrides() => copyWith(
@@ -367,7 +380,8 @@ class Settings {
       'deselectedWords': deselectedWords.toList(),
       'courseWords': courseWords.toJson(),
       'courseGrammar': courseGrammar.toJson(),
-      'grammarFollowsWords': grammarFollowsWords,
+      'grammarFromLinked': grammarFromLinked,
+      'grammarToLinked': grammarToLinked,
       'forcedOnWords': forcedOnWords.toList(),
       'forcedOnTypes': forcedOnTypes.map(
         (key, value) => MapEntry(key, value.toList()),
@@ -402,6 +416,10 @@ class Settings {
     final forcedWordList = json['forcedOnWords'] as List<dynamic>?;
     final forcedTypeMap = json['forcedOnTypes'] as Map<String, dynamic>?;
     final forcedFormMap = json['forcedOnForms'] as Map<String, dynamic>?;
+    final linked = _storedLinks(json);
+    final storedWords = wordRange == null
+        ? null
+        : LessonRange.fromJson(wordRange);
 
     final disabledForms =
         disabledFormsMap?.map(
@@ -461,11 +479,14 @@ class Settings {
           {},
       distractorStrategyId: distractorId,
       deselectedWords: deselectedWords,
-      courseWords: wordRange == null ? null : LessonRange.fromJson(wordRange),
+      courseWords: linked.liftWords && storedWords?.to == lastLesson
+          ? LessonRange(storedWords!.from, laterLesson)
+          : storedWords,
       courseGrammar: grammarRange == null
           ? null
           : LessonRange.fromJson(grammarRange),
-      grammarFollowsWords: json['grammarFollowsWords'] as bool? ?? true,
+      grammarFromLinked: linked.from,
+      grammarToLinked: linked.to,
       forcedOnWords: forcedOnWords,
       forcedOnTypes: forcedOnTypes,
       forcedOnForms: forcedOnForms,
@@ -478,6 +499,24 @@ class Settings {
       avoidMacronTwins: json['avoidMacronTwins'] as bool? ?? true,
     );
   }
+}
+
+/// The grammar links of stored settings. The single link of the older
+/// format tied the grammar end to the word end, and to "Später" while the
+/// words ended at the last lesson; [liftWords] says the word end must move to
+/// "Später" to keep that.
+({bool from, bool to, bool liftWords}) _storedLinks(Map<String, dynamic> json) {
+  final follows = json['grammarFollowsWords'] as bool?;
+  if (json.containsKey('grammarToLinked')) {
+    assert(follows == null, 'stored settings hold both link formats');
+    return (
+      from: json['grammarFromLinked'] as bool,
+      to: json['grammarToLinked'] as bool,
+      liftWords: false,
+    );
+  }
+  final to = follows ?? true;
+  return (from: false, to: to, liftWords: to);
 }
 
 /// Stored settings that put one entry in both its on and its off set say two

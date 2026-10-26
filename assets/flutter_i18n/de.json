@@ -47,7 +47,9 @@
     },
     "lesson": "Lektion {n}",
     "distractorMode": "Auswahl falscher Übersetzungen:",
-    "distractors": { "random": "Zufällig" },
+    "distractors": {
+      "random": "Zufällig"
+    },
     "types": "Typen",
     "forms": "Formen",
     "features": "Merkmale",
@@ -66,8 +68,16 @@
       "wordCount": "{count} Wörter",
       "topicCount": "{count} Themen",
       "lesson": "Lektion {lesson}",
-      "chainClosed": "Gekoppelt: Grammatik folgt den Wörtern",
-      "chainOpen": "Getrennt: Grammatik eigens einstellen",
+      "book": "Band {book}",
+      "bookShort": "B{book}",
+      "boundFrom": "Anfang",
+      "boundTo": "Ende",
+      "chainFromLinked": "Untere Grenzen verbunden",
+      "chainFromOpen": "Untere Grenzen getrennt",
+      "chainToLinked": "Obere Grenzen verbunden",
+      "chainToOpen": "Obere Grenzen getrennt",
+      "chainLink": "Grenzen verbinden",
+      "chainUnlink": "Grenzen trennen",
       "reset": "Auf Kursstand zurücksetzen"
     }
   },

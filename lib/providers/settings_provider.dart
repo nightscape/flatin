@@ -154,8 +154,8 @@ class SettingsNotifier extends _$SettingsNotifier {
   Future<void> setGrammarRange(LessonRange range) =>
       _update((s) => s.withGrammarRange(range));
 
-  Future<void> setGrammarFollowsWords(bool follows) =>
-      _update((s) => s.withGrammarFollowsWords(follows));
+  Future<void> setGrammarLinked({bool? from, bool? to}) =>
+      _update((s) => s.withGrammarLinked(from: from, to: to));
 
   Future<void> toggleReward(String id) => _update((s) => s.toggleReward(id));
 

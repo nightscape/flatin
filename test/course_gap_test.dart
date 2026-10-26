@@ -155,7 +155,7 @@ void main() {
 
   test('a gap below the grammar range is not the word-axis gap', () {
     final settings = Settings(
-      grammarFollowsWords: false,
+      grammarToLinked: false,
       courseGrammar: LessonRange(5, 40),
     );
     const early = '''

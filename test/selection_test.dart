@@ -73,7 +73,7 @@ void main() {
     _lessons = await loadLessonData(lessonDataAssets);
     await FsrsStorage.syncCards(_items);
     all = await FsrsStorage.syncGrammarCards(_items);
-    filter = _filter(lastLesson);
+    filter = _filter(laterLesson);
     final verbs = _items.where((i) => i.dataFileId == 'verbs');
     amare = verbs.firstWhere((i) => i.id == 'verbs:laudare');
     vocare = verbs.firstWhere((i) => i.id == 'verbs:vocare');

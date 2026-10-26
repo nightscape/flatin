@@ -76,8 +76,8 @@ ProviderContainer _container(List<ExerciseGenerator> registry) {
   seedSettings(
     Settings(
       courseWords: LessonRange(5, 5),
-      courseGrammar: LessonRange.fullGrammar,
-      grammarFollowsWords: false,
+      courseGrammar: LessonRange.full,
+      grammarToLinked: false,
     ),
   );
   final container = ProviderContainer(

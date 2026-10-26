@@ -11,7 +11,7 @@ import 'support/course_providers.dart';
 Future<CourseFilter> _unlinked(LessonRange words, LessonRange grammar) async {
   seedSettings(
     Settings()
-        .withGrammarFollowsWords(false)
+        .withGrammarLinked(to: false)
         .withWordRange(words)
         .withGrammarRange(grammar),
   );

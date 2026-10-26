@@ -48,8 +48,8 @@ void main() {
     seedSettings(
       Settings(
         courseWords: LessonRange(5, 5),
-        courseGrammar: LessonRange.fullGrammar,
-        grammarFollowsWords: false,
+        courseGrammar: LessonRange.full,
+        grammarToLinked: false,
         disabledFeatures: {
           'nouns': {
             'grad': {'komp', 'sup'},

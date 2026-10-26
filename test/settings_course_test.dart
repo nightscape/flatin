@@ -10,47 +10,20 @@ void main() {
     test('a fresh setting practises the whole course', () {
       final settings = Settings();
 
-      expect(settings.courseWords, LessonRange.fullWords);
-      expect(settings.courseGrammar, LessonRange.fullGrammar);
-      expect(settings.grammarFollowsWords, isTrue);
-      expect(settings.effectiveGrammar, LessonRange(1, laterLesson));
-    });
-
-    test('while linked, the grammar range trails the word range', () {
-      final settings = Settings().withWordRange(LessonRange(5, 12));
-
-      expect(settings.courseGrammar, LessonRange(1, 12));
-      expect(settings.effectiveGrammar, LessonRange(1, 12));
+      expect(settings.courseWords, LessonRange.full);
+      expect(settings.courseGrammar, LessonRange(1, laterLesson));
     });
 
     test('unlinked, the grammar range stands on its own', () {
       final settings = Settings()
           .withWordRange(LessonRange(5, 12))
-          .withGrammarFollowsWords(false)
+          .withGrammarLinked(to: false)
           .withGrammarRange(LessonRange(1, 8));
 
-      expect(settings.effectiveGrammar, LessonRange(1, 8));
+      expect(settings.courseGrammar, LessonRange(1, 8));
       expect(
-        settings.withWordRange(LessonRange(5, 20)).effectiveGrammar,
+        settings.withWordRange(LessonRange(5, 20)).courseGrammar,
         LessonRange(1, 8),
-      );
-    });
-
-    test('linking again pulls the grammar range back to the words', () {
-      final settings = Settings()
-          .withWordRange(LessonRange(5, 12))
-          .withGrammarFollowsWords(false)
-          .withGrammarRange(LessonRange(1, 3))
-          .withGrammarFollowsWords(true);
-
-      expect(settings.courseGrammar, LessonRange(1, 12));
-      expect(settings.effectiveGrammar, LessonRange(1, 12));
-    });
-
-    test('setting the grammar range while linked is a programming error', () {
-      expect(
-        () => Settings().withGrammarRange(LessonRange(1, 3)),
-        throwsA(isA<AssertionError>()),
       );
     });
   });
@@ -167,7 +140,7 @@ void main() {
         deselectedWords: {'amare'},
         courseWords: LessonRange(4, 17),
         courseGrammar: LessonRange(1, 9),
-        grammarFollowsWords: false,
+        grammarToLinked: false,
         forcedOnWords: {'rosa'},
         forcedOnTypes: {
           'nouns': {'U-Deklination'},
@@ -185,7 +158,7 @@ void main() {
 
       expect(restored.courseWords, LessonRange(4, 17));
       expect(restored.courseGrammar, LessonRange(1, 9));
-      expect(restored.grammarFollowsWords, isFalse);
+      expect(restored.grammarToLinked, isFalse);
       expect(restored.forcedOnWords, {'rosa'});
       expect(restored.forcedOnTypes, {
         'nouns': {'U-Deklination'},
@@ -196,7 +169,6 @@ void main() {
       expect(restored.deselectedWords, {'amare'});
       expect(restored.deselectedTopics, {'1/nouns/*'});
       expect(restored.forcedOnTopics, {'41/verbs/ger'});
-      expect(restored.effectiveGrammar, LessonRange(1, 9));
     });
 
     test('settings stored before the course ranges read as forced-off', () {
@@ -221,9 +193,9 @@ void main() {
         jsonDecode(jsonEncode(stored)) as Map<String, dynamic>,
       );
 
-      expect(settings.courseWords, LessonRange.fullWords);
-      expect(settings.courseGrammar, LessonRange.fullGrammar);
-      expect(settings.grammarFollowsWords, isTrue);
+      expect(settings.courseWords, LessonRange.full);
+      expect(settings.courseGrammar, LessonRange.full);
+      expect(settings.grammarToLinked, isTrue);
       expect(settings.deselectedTopics, isEmpty);
       expect(settings.forcedOnTopics, isEmpty);
       expect(settings.overrideOfWord('amare'), Override.forcedOff);

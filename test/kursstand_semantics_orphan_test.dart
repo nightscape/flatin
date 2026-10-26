@@ -69,8 +69,10 @@ Future<void> _dragSlider(WidgetTester tester, String key) async {
 void main() {
   _RecordingBinding();
 
-  testWidgets('scrolling the Kursstand card away and back, and dragging both '
-      'sliders, sends no orphan semantics node', (tester) async {
+  testWidgets('scrolling the Kursstand card away and back, dragging both '
+      'sliders and toggling both chains sends no orphan semantics node', (
+    tester,
+  ) async {
     final semantics = tester.ensureSemantics();
     SharedPreferences.setMockInitialValues({
       'practice_settings': jsonEncode(Settings().toJson()),
@@ -97,6 +99,11 @@ void main() {
         );
         await tester.pump(const Duration(milliseconds: 16));
       }
+      await tester.pumpAndSettle();
+    }
+    for (final side in ['left', 'right']) {
+      _phase = 'toggle the $side chain';
+      await tester.tap(find.byKey(Key('kursstand.chain.$side')));
       await tester.pumpAndSettle();
     }
     await tester.pump(const Duration(seconds: 4));

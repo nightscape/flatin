@@ -47,7 +47,9 @@
     },
     "lesson": "Lesson {n}",
     "distractorMode": "Wrong translation choices:",
-    "distractors": { "random": "Random" },
+    "distractors": {
+      "random": "Random"
+    },
     "types": "Types",
     "forms": "Forms",
     "features": "Features",
@@ -66,8 +68,16 @@
       "wordCount": "{count} words",
       "topicCount": "{count} topics",
       "lesson": "Lesson {lesson}",
-      "chainClosed": "Linked: grammar follows the words",
-      "chainOpen": "Unlinked: set grammar separately",
+      "book": "Volume {book}",
+      "bookShort": "V{book}",
+      "boundFrom": "start",
+      "boundTo": "end",
+      "chainFromLinked": "Lower bounds linked",
+      "chainFromOpen": "Lower bounds unlinked",
+      "chainToLinked": "Upper bounds linked",
+      "chainToOpen": "Upper bounds unlinked",
+      "chainLink": "Link the bounds",
+      "chainUnlink": "Unlink the bounds",
       "reset": "Reset to course position"
     }
   },

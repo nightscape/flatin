@@ -61,6 +61,12 @@ class LessonData {
   /// The lesson numbers of the loaded data, ascending: the course scale.
   List<int> get lessonNumbers => bookByLesson.keys.toList()..sort();
 
+  /// The first lesson of each volume, ascending.
+  List<int> get bookStarts => [
+    for (final l in lessonNumbers)
+      if (l == lessonNumbers.first || bookOf(l) != bookOf(l - 1)) l,
+  ];
+
   /// The volume that introduces [lesson].
   int bookOf(int lesson) {
     final book = bookByLesson[lesson];

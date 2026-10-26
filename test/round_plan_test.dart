@@ -33,7 +33,7 @@ void main() {
     final curriculum = await loadCurriculum(curriculumAssets);
     final lessons = await loadLessonData(lessonDataAssets);
     filter = CourseFilter(
-      Settings(courseWords: LessonRange(1, lastLesson)),
+      Settings(courseWords: LessonRange.full),
       curriculum,
       lessons,
     );

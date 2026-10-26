@@ -5,6 +5,7 @@ import 'package:latin_practice/data/curriculum.dart';
 import 'package:latin_practice/data/lesson_data.dart';
 import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/main.dart';
+import 'package:latin_practice/models/lesson_range.dart';
 import 'package:latin_practice/models/practice_item.dart';
 import 'package:latin_practice/providers/curriculum_provider.dart';
 import 'package:latin_practice/providers/fsrs_provider.dart';
@@ -13,8 +14,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'support/stored_settings.dart';
 import 'support/word_classification_harness.dart' show letItLoad;
-
-const _trackInset = 24.0;
 
 Finder _key(String key) => find.byKey(Key(key));
 
@@ -25,15 +24,8 @@ Future<void> _dragThumb(
   int from,
   int to,
 ) async {
-  final widget = tester.widget<RangeSlider>(_key(slider));
-  final rect = tester.getRect(_key(slider));
-  double x(int stop) =>
-      rect.left +
-      _trackInset +
-      (stop - widget.min) /
-          (widget.max - widget.min) *
-          (rect.width - 2 * _trackInset);
-  final y = rect.center.dy;
+  double x(int stop) => tester.getCenter(_key('kursstand.words.bar.$stop')).dx;
+  final y = tester.getCenter(_key(slider)).dy;
   final gesture = await tester.startGesture(Offset(x(from), y));
   // The drag claims the thumb nearest to where it is recognised, so first
   // move past the touch slop, then to the target.
@@ -173,12 +165,12 @@ void main() {
       await startApp(tester);
       await _openSettings(tester);
 
-      await _dragThumb(tester, 'kursstand.words.slider', 40, 23);
+      await _dragThumb(tester, 'kursstand.words.slider', laterLesson, 23);
       await _dragThumb(tester, 'kursstand.words.slider', 1, 21);
 
       final stored = await _stored();
       expect(stored['courseWords'], {'from': 21, 'to': 23});
-      expect(stored['grammarFollowsWords'], isTrue);
+      expect(stored['grammarToLinked'], isTrue);
       expect(stored['courseGrammar'], {'from': 1, 'to': 23});
 
       final wanted = expected.ids(21, 23);
@@ -208,7 +200,7 @@ void main() {
     final expected = await _expected();
     await startApp(tester);
     await _openSettings(tester);
-    await _dragThumb(tester, 'kursstand.words.slider', 40, 23);
+    await _dragThumb(tester, 'kursstand.words.slider', laterLesson, 23);
     await _dragThumb(tester, 'kursstand.words.slider', 1, 21);
 
     final inside = expected.firstWhere(

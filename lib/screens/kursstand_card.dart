@@ -14,6 +14,7 @@ import '../providers/locale_provider.dart';
 import '../providers/settings_provider.dart';
 import '../theme.dart';
 import 'course_scope.dart';
+import 'kursstand_sliders.dart';
 
 const _wordsLabel = TextStyle(
   color: Color(0xFF8A6D1A),
@@ -97,27 +98,12 @@ class _KursstandCardState extends ConsumerState<KursstandCard> {
     _reveal(movedStart ? next.from : next.to, start: movedStart);
   }
 
-  /// The words never reach "Später", though their slider and histogram share
-  /// the grammar scale.
-  void _moveWords(LessonRange next) => _move(
-    _filter.settings.courseWords,
-    LessonRange(min(next.from, lastLesson), min(next.to, lastLesson)),
-    _notifier.setWordRange,
-  );
+  void _moveWords(LessonRange next) =>
+      _move(_filter.settings.courseWords, next, _notifier.setWordRange);
 
+  /// Moving a linked grammar bound opens its chain.
   void _moveGrammar(LessonRange next) =>
       _move(_filter.settings.courseGrammar, next, _notifier.setGrammarRange);
-
-  /// A tap on a grammar bar while linked moves the words, which the grammar
-  /// follows.
-  void _tapGrammarBar(int lesson) {
-    final settings = _filter.settings;
-    if (settings.grammarFollowsWords) {
-      _moveWords(_nearest(settings.courseWords, lesson));
-    } else {
-      _moveGrammar(_nearest(settings.courseGrammar, lesson));
-    }
-  }
 
   /// The range with the handle nearer to [lesson] moved onto it.
   LessonRange _nearest(LessonRange r, int lesson) {
@@ -137,12 +123,11 @@ class _KursstandCardState extends ConsumerState<KursstandCard> {
       .overrideOfWord(lemma)
       .verdict(inRange: _filter.settings.courseWords.contains(lesson));
 
-  Widget _histogram({
+  Widget Function(int) _histogram({
     required Key Function(int) keyOf,
     required Map<int, int> total,
     required Map<int, int> off,
     required bool Function(int) inRange,
-    required int lessons,
     required String tooltipUnit,
     required void Function(int) onTap,
     required Color color,
@@ -150,47 +135,30 @@ class _KursstandCardState extends ConsumerState<KursstandCard> {
   }) {
     final peak = total.values.reduce(max);
     const radius = Radius.circular(2);
-    return SizedBox(
-      height: 48,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24),
-        child: Row(
-          crossAxisAlignment: down
-              ? CrossAxisAlignment.start
-              : CrossAxisAlignment.end,
-          children: [
-            for (var l = 1; l <= lessons; l++)
-              Expanded(
-                child: GestureDetector(
-                  key: keyOf(l),
-                  onTap: () => onTap(l),
-                  child: Tooltip(
-                    message: '${_stop(l)}: ${total[l] ?? 0} $tooltipUnit',
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 1),
-                      height: 3 + 44 * (total[l] ?? 0) / peak,
-                      decoration: BoxDecoration(
-                        color: !inRange(l)
-                            ? outlineColor
-                            : (off[l] ?? 0) > 0
-                            ? color.withAlpha(110)
-                            : color,
-                        borderRadius: BorderRadius.vertical(
-                          top: down ? Radius.zero : radius,
-                          bottom: down ? radius : Radius.zero,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-          ],
+    return (l) => GestureDetector(
+      key: keyOf(l),
+      onTap: () => onTap(l),
+      child: Tooltip(
+        message: '${_stop(l)}: ${total[l] ?? 0} $tooltipUnit',
+        child: Container(
+          height: 3 + 44 * (total[l] ?? 0) / peak,
+          decoration: BoxDecoration(
+            color: !inRange(l)
+                ? outlineColor
+                : (off[l] ?? 0) > 0
+                ? color.withAlpha(110)
+                : color,
+            borderRadius: BorderRadius.vertical(
+              top: down ? Radius.zero : radius,
+              bottom: down ? radius : Radius.zero,
+            ),
+          ),
         ),
       ),
     );
   }
 
-  Widget _wordsHistogram() {
+  Widget Function(int) _wordsHistogram() {
     final lessons = _filter.lessons;
     final total = <int, int>{}, off = <int, int>{};
     for (final name in lessons.lessonNames) {
@@ -209,14 +177,13 @@ class _KursstandCardState extends ConsumerState<KursstandCard> {
       total: total,
       off: off,
       inRange: _filter.settings.courseWords.contains,
-      lessons: laterLesson,
       tooltipUnit: _tr('words'),
       onTap: (l) => _moveWords(_nearest(_filter.settings.courseWords, l)),
       color: gold,
     );
   }
 
-  Widget _grammarHistogram(List<CourseTopic> topics) {
+  Widget Function(int) _grammarHistogram(List<CourseTopic> topics) {
     final total = <int, int>{}, off = <int, int>{};
     for (final t in topics) {
       total.update(t.lesson, (n) => n + 1, ifAbsent: () => 1);
@@ -228,10 +195,9 @@ class _KursstandCardState extends ConsumerState<KursstandCard> {
       keyOf: (l) => Key('kursstand.grammar.bar.$l'),
       total: total,
       off: off,
-      inRange: _filter.settings.effectiveGrammar.contains,
-      lessons: laterLesson,
+      inRange: _filter.settings.courseGrammar.contains,
       tooltipUnit: _tr('grammar'),
-      onTap: _tapGrammarBar,
+      onTap: (l) => _moveGrammar(_nearest(_filter.settings.courseGrammar, l)),
       color: terracotta,
       down: true,
     );
@@ -246,55 +212,6 @@ class _KursstandCardState extends ConsumerState<KursstandCard> {
     child: Text(text, style: style),
   );
 
-  // A slider's value bubble lives in the nearest Overlay; in the app's it leaves
-  // a parentless semantics node, which crashes macOS accessibility.
-  Widget _slider(
-    String key,
-    LessonRange range,
-    int max,
-    Color color,
-    void Function(LessonRange)? onChanged,
-  ) => SliderTheme(
-    data: SliderTheme.of(context).copyWith(
-      disabledActiveTrackColor: color,
-      disabledInactiveTrackColor: color.withAlpha(60),
-      disabledThumbColor: color,
-    ),
-    child: Overlay.wrap(
-      clipBehavior: Clip.none,
-      child: RangeSlider(
-        key: Key(key),
-        activeColor: color,
-        inactiveColor: color.withAlpha(60),
-        min: 1,
-        max: max.toDouble(),
-        divisions: max - 1,
-        values: RangeValues(range.from.toDouble(), range.to.toDouble()),
-        labels: RangeLabels(_stop(range.from), _stop(range.to)),
-        onChanged: onChanged == null
-            ? null
-            : (v) => onChanged(LessonRange(v.start.round(), v.end.round())),
-      ),
-    ),
-  );
-
-  Widget _chain(bool linked) => Positioned.fill(
-    child: Align(
-      alignment: Alignment.centerLeft,
-      child: IconButton(
-        key: const Key('kursstand.chain'),
-        iconSize: 18,
-        visualDensity: VisualDensity.compact,
-        padding: EdgeInsets.zero,
-        constraints: const BoxConstraints(minWidth: 22, minHeight: 22),
-        icon: Icon(linked ? Icons.link : Icons.link_off),
-        color: linked ? ink : mutedText,
-        tooltip: _tr(linked ? 'chainClosed' : 'chainOpen'),
-        onPressed: () => _notifier.setGrammarFollowsWords(!linked),
-      ),
-    ),
-  );
-
   Widget _summary(List<CourseTopic> topics) {
     final settings = _filter.settings;
     final words = _tr('wordCount', {
@@ -304,7 +221,7 @@ class _KursstandCardState extends ConsumerState<KursstandCard> {
       'count': '${topics.where(_filter.topicInRange).length}',
     });
     String range(LessonRange r) => '${_stop(r.from)} – ${_stop(r.to)}';
-    final linked = settings.grammarFollowsWords;
+    final linked = settings.courseWords == settings.courseGrammar;
     return Text.rich(
       key: const Key('kursstand.summary'),
       TextSpan(
@@ -319,7 +236,7 @@ class _KursstandCardState extends ConsumerState<KursstandCard> {
           TextSpan(
             text: linked
                 ? themes
-                : '$themes (${range(settings.effectiveGrammar)})',
+                : '$themes (${range(settings.courseGrammar)})',
             style: _grammarLabel.copyWith(fontSize: 14),
           ),
         ],
@@ -387,7 +304,7 @@ class _KursstandCardState extends ConsumerState<KursstandCard> {
     final settings = _filter.settings;
     final lit =
         settings.courseWords.contains(lesson) ||
-        settings.effectiveGrammar.contains(lesson);
+        settings.courseGrammar.contains(lesson);
     final ownTopics = topics.where((t) => t.lesson == lesson).toList();
     return Column(
       key: _blocks[lesson],
@@ -444,40 +361,20 @@ class _KursstandCardState extends ConsumerState<KursstandCard> {
             const SizedBox(height: 8),
             Stack(
               children: [
-                _wordsHistogram(),
+                KursstandSliders(
+                  settings: settings,
+                  bookStarts: _filter.lessons.bookStarts,
+                  wordBar: _wordsHistogram(),
+                  grammarBar: _grammarHistogram(topics),
+                  onWords: _moveWords,
+                  onGrammar: _moveGrammar,
+                  onLinked: _notifier.setGrammarLinked,
+                ),
                 Positioned(
-                  top: 0,
+                  top: 14,
                   left: 24,
                   child: _tag(_tr('words'), _wordsLabel),
                 ),
-              ],
-            ),
-            Stack(
-              children: [
-                Column(
-                  children: [
-                    _slider(
-                      'kursstand.words.slider',
-                      settings.courseWords,
-                      laterLesson,
-                      gold,
-                      _moveWords,
-                    ),
-                    _slider(
-                      'kursstand.grammar.slider',
-                      settings.effectiveGrammar,
-                      laterLesson,
-                      terracotta,
-                      settings.grammarFollowsWords ? null : _moveGrammar,
-                    ),
-                  ],
-                ),
-                _chain(settings.grammarFollowsWords),
-              ],
-            ),
-            Stack(
-              children: [
-                _grammarHistogram(topics),
                 Positioned(
                   bottom: 0,
                   left: 24,

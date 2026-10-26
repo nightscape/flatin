@@ -47,8 +47,8 @@ final class CourseFilter {
   /// What the course alone says about a topic: a type stays known below the
   /// grammar range, only forms are narrowed by its lower bound.
   bool courseReaches(CourseTopic topic) => topic.typeName != null
-      ? topic.lesson <= settings.effectiveGrammar.to
-      : settings.effectiveGrammar.contains(topic.lesson);
+      ? topic.lesson <= settings.courseGrammar.to
+      : settings.courseGrammar.contains(topic.lesson);
 
   /// The grammar range's verdict on a topic, after the learner's own choice
   /// about the topic.
@@ -115,7 +115,7 @@ final class CourseFilter {
 
   bool _basicFormTaught(String dataFileId, FormLabel label) =>
       curriculum.formLesson(dataFileId, label.key) <=
-          settings.effectiveGrammar.to &&
+          settings.courseGrammar.to &&
       settings.offFeaturesOf(dataFileId, label).isEmpty &&
       settings.overrideOfForm(dataFileId, label.key) != Override.forcedOff &&
       !_topicSwitchedOff(curriculum.formTopic(dataFileId, label.key));
@@ -173,7 +173,7 @@ final class CourseFilter {
   }
 
   CourseGap _grammarGap(int grammarLesson, int wordLesson) =>
-      grammarLesson > settings.effectiveGrammar.to
+      grammarLesson > settings.courseGrammar.to
       ? FromLesson(grammarLesson > wordLesson ? grammarLesson : wordLesson)
       : const GrammarOutsideRange();
 

@@ -81,8 +81,7 @@ void main() {
     expect(range.contains(2), isFalse);
     expect(range.contains(8), isFalse);
     expect(LessonRange.fromJson(range.toJson()), range);
-    expect(LessonRange.fullWords, LessonRange(1, lastLesson));
-    expect(LessonRange.fullGrammar, LessonRange(1, laterLesson));
+    expect(LessonRange.full, LessonRange(1, laterLesson));
   });
 
   test('a lesson range outside the scale is a programming error', () {

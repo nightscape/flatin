@@ -111,7 +111,7 @@ void main() {
 
   test('topic order equals the selection order of the grammar cards', () async {
     final filter = CourseFilter(
-      Settings(courseWords: LessonRange(1, lastLesson)),
+      Settings(courseWords: LessonRange.full),
       curriculum,
       lessons,
     );
