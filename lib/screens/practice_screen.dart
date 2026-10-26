@@ -252,7 +252,7 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
       ),
       loading: () =>
           widget.item.filterForms(Set<String>.from(widget.item.formOrder)),
-      error: (_, __) =>
+      error: (_, _) =>
           widget.item.filterForms(Set<String>.from(widget.item.formOrder)),
     );
 
@@ -265,7 +265,7 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
     final strategyId = settingsAsync.when(
       data: (s) => s.getInputStrategyId(widget.item.dataFileId),
       loading: () => 'text_field',
-      error: (_, __) => 'text_field',
+      error: (_, _) => 'text_field',
     );
     final strategy = InputStrategy.byId(strategyId);
 
@@ -357,7 +357,7 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
                                 ),
                               ),
                             ),
-                            error: (_, __) => Text(
+                            error: (_, _) => Text(
                               widget.item.translation,
                               style: TextStyle(
                                 fontSize: headerFontSize,

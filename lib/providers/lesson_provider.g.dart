@@ -11,7 +11,7 @@ part of 'lesson_provider.dart';
 /// The lesson → word mapping of the configured volumes.
 
 @ProviderFor(lessonData)
-const lessonDataProvider = LessonDataProvider._();
+final lessonDataProvider = LessonDataProvider._();
 
 /// The lesson → word mapping of the configured volumes.
 
@@ -24,7 +24,7 @@ final class LessonDataProvider
         >
     with $FutureModifier<LessonData>, $FutureProvider<LessonData> {
   /// The lesson → word mapping of the configured volumes.
-  const LessonDataProvider._()
+  LessonDataProvider._()
     : super(
         from: null,
         argument: null,
@@ -54,7 +54,7 @@ String _$lessonDataHash() => r'a80bdf846f73c3cbd7507c890b86edcf9273b7be';
 /// Every practice item of the loaded data files, nouns first.
 
 @ProviderFor(practiceItems)
-const practiceItemsProvider = PracticeItemsProvider._();
+final practiceItemsProvider = PracticeItemsProvider._();
 
 /// Every practice item of the loaded data files, nouns first.
 
@@ -69,7 +69,7 @@ final class PracticeItemsProvider
         $FutureModifier<List<PracticeItem>>,
         $FutureProvider<List<PracticeItem>> {
   /// Every practice item of the loaded data files, nouns first.
-  const PracticeItemsProvider._()
+  PracticeItemsProvider._()
     : super(
         from: null,
         argument: null,

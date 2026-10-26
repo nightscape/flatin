@@ -11,7 +11,7 @@ part of 'fsrs_provider.dart';
 /// FSRS Scheduler instance provider
 
 @ProviderFor(fsrsScheduler)
-const fsrsSchedulerProvider = FsrsSchedulerProvider._();
+final fsrsSchedulerProvider = FsrsSchedulerProvider._();
 
 /// FSRS Scheduler instance provider
 
@@ -19,7 +19,7 @@ final class FsrsSchedulerProvider
     extends $FunctionalProvider<Scheduler, Scheduler, Scheduler>
     with $Provider<Scheduler> {
   /// FSRS Scheduler instance provider
-  const FsrsSchedulerProvider._()
+  FsrsSchedulerProvider._()
     : super(
         from: null,
         argument: null,
@@ -57,7 +57,7 @@ String _$fsrsSchedulerHash() => r'0d0b3a951dcad9e3faed4e21fd6e20e0439cc4c5';
 /// Every word card and grammar card, synced with the YAML items.
 
 @ProviderFor(fsrsCards)
-const fsrsCardsProvider = FsrsCardsProvider._();
+final fsrsCardsProvider = FsrsCardsProvider._();
 
 /// Every word card and grammar card, synced with the YAML items.
 
@@ -72,7 +72,7 @@ final class FsrsCardsProvider
         $FutureModifier<Map<String, PracticeItemCard>>,
         $FutureProvider<Map<String, PracticeItemCard>> {
   /// Every word card and grammar card, synced with the YAML items.
-  const FsrsCardsProvider._()
+  FsrsCardsProvider._()
     : super(
         from: null,
         argument: null,
@@ -103,7 +103,7 @@ String _$fsrsCardsHash() => r'c81f641b2179ac611a69a84f1373126f474d0bd7';
 /// The due word cards; grammar cards are due through the rounds.
 
 @ProviderFor(dueCards)
-const dueCardsProvider = DueCardsProvider._();
+final dueCardsProvider = DueCardsProvider._();
 
 /// The due word cards; grammar cards are due through the rounds.
 
@@ -118,7 +118,7 @@ final class DueCardsProvider
         $FutureModifier<List<PracticeItemCard>>,
         $FutureProvider<List<PracticeItemCard>> {
   /// The due word cards; grammar cards are due through the rounds.
-  const DueCardsProvider._()
+  DueCardsProvider._()
     : super(
         from: null,
         argument: null,
@@ -153,7 +153,7 @@ String _$dueCardsHash() => r'bcb4f761c4f67e8b6321013e4226a3c93ac73f1c';
 /// nothing to ask and is left out.
 
 @ProviderFor(practicableItemsByType)
-const practicableItemsByTypeProvider = PracticableItemsByTypeProvider._();
+final practicableItemsByTypeProvider = PracticableItemsByTypeProvider._();
 
 /// Every item the user can practise, by exercise type.
 ///
@@ -176,7 +176,7 @@ final class PracticableItemsByTypeProvider
   /// The one place the course filter is applied, so that no consumer can route
   /// around it. An item whose forms are all untaught or switched off has
   /// nothing to ask and is left out.
-  const PracticableItemsByTypeProvider._()
+  PracticableItemsByTypeProvider._()
     : super(
         from: null,
         argument: null,
@@ -208,7 +208,7 @@ String _$practicableItemsByTypeHash() =>
 /// Provider for due items by exercise type
 
 @ProviderFor(dueItemsByType)
-const dueItemsByTypeProvider = DueItemsByTypeProvider._();
+final dueItemsByTypeProvider = DueItemsByTypeProvider._();
 
 /// Provider for due items by exercise type
 
@@ -223,7 +223,7 @@ final class DueItemsByTypeProvider
         $FutureModifier<Map<String, List<PracticeItem>>>,
         $FutureProvider<Map<String, List<PracticeItem>>> {
   /// Provider for due items by exercise type
-  const DueItemsByTypeProvider._()
+  DueItemsByTypeProvider._()
     : super(
         from: null,
         argument: null,
@@ -254,7 +254,7 @@ String _$dueItemsByTypeHash() => r'949517a59cf37a3b731235668277fa34a6333df3';
 /// Get next due item for a specific exercise type
 
 @ProviderFor(nextDueItem)
-const nextDueItemProvider = NextDueItemFamily._();
+final nextDueItemProvider = NextDueItemFamily._();
 
 /// Get next due item for a specific exercise type
 
@@ -267,7 +267,7 @@ final class NextDueItemProvider
         >
     with $FutureModifier<PracticeItem?>, $FutureProvider<PracticeItem?> {
   /// Get next due item for a specific exercise type
-  const NextDueItemProvider._({
+  NextDueItemProvider._({
     required NextDueItemFamily super.from,
     required String super.argument,
   }) : super(
@@ -317,7 +317,7 @@ String _$nextDueItemHash() => r'dad7b8776eee2406d6d0c580044ff80c0b40d24c';
 
 final class NextDueItemFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<PracticeItem?>, String> {
-  const NextDueItemFamily._()
+  NextDueItemFamily._()
     : super(
         retry: null,
         name: r'nextDueItemProvider',
@@ -339,7 +339,7 @@ final class NextDueItemFamily extends $Family
 /// other than German, so the kinds that show them are not built.
 
 @ProviderFor(germanForms)
-const germanFormsProvider = GermanFormsProvider._();
+final germanFormsProvider = GermanFormsProvider._();
 
 /// The German texts of the Latin verbs and nouns; none for a UI language
 /// other than German, so the kinds that show them are not built.
@@ -354,7 +354,7 @@ final class GermanFormsProvider
     with $FutureModifier<GermanForms>, $FutureProvider<GermanForms> {
   /// The German texts of the Latin verbs and nouns; none for a UI language
   /// other than German, so the kinds that show them are not built.
-  const GermanFormsProvider._()
+  GermanFormsProvider._()
     : super(
         from: null,
         argument: null,
@@ -385,7 +385,7 @@ String _$germanFormsHash() => r'719a6fc60883319f2863106ad8808352398b3ea9';
 /// The randomness of the grammar exercises; a test overrides it with a seed.
 
 @ProviderFor(exerciseRandom)
-const exerciseRandomProvider = ExerciseRandomProvider._();
+final exerciseRandomProvider = ExerciseRandomProvider._();
 
 /// The randomness of the grammar exercises; a test overrides it with a seed.
 
@@ -393,7 +393,7 @@ final class ExerciseRandomProvider
     extends $FunctionalProvider<Random, Random, Random>
     with $Provider<Random> {
   /// The randomness of the grammar exercises; a test overrides it with a seed.
-  const ExerciseRandomProvider._()
+  ExerciseRandomProvider._()
     : super(
         from: null,
         argument: null,
@@ -431,7 +431,7 @@ String _$exerciseRandomHash() => r'258d487e43bad86c36fc9c10bd41f968162897ee';
 /// The generators that build the grammar exercises; a test overrides it.
 
 @ProviderFor(exerciseRegistry)
-const exerciseRegistryProvider = ExerciseRegistryProvider._();
+final exerciseRegistryProvider = ExerciseRegistryProvider._();
 
 /// The generators that build the grammar exercises; a test overrides it.
 
@@ -444,7 +444,7 @@ final class ExerciseRegistryProvider
         >
     with $Provider<List<ExerciseGenerator>> {
   /// The generators that build the grammar exercises; a test overrides it.
-  const ExerciseRegistryProvider._()
+  ExerciseRegistryProvider._()
     : super(
         from: null,
         argument: null,
@@ -484,7 +484,7 @@ String _$exerciseRegistryHash() => r'e479eb1b79bd335ee4b0296bcde4cbb5a9f82a7f';
 /// the correct translation plus 3 distractors from the chosen strategy.
 
 @ProviderFor(translationChoices)
-const translationChoicesProvider = TranslationChoicesFamily._();
+final translationChoicesProvider = TranslationChoicesFamily._();
 
 /// Provides shuffled translation choices for a practice item:
 /// the correct translation plus 3 distractors from the chosen strategy.
@@ -499,7 +499,7 @@ final class TranslationChoicesProvider
     with $FutureModifier<List<String>>, $FutureProvider<List<String>> {
   /// Provides shuffled translation choices for a practice item:
   /// the correct translation plus 3 distractors from the chosen strategy.
-  const TranslationChoicesProvider._({
+  TranslationChoicesProvider._({
     required TranslationChoicesFamily super.from,
     required PracticeItem super.argument,
   }) : super(
@@ -551,7 +551,7 @@ String _$translationChoicesHash() =>
 
 final class TranslationChoicesFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<List<String>>, PracticeItem> {
-  const TranslationChoicesFamily._()
+  TranslationChoicesFamily._()
     : super(
         retry: null,
         name: r'translationChoicesProvider',

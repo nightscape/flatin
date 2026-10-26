@@ -11,13 +11,13 @@ part of 'locale_provider.dart';
 /// The language the learner picked, or null while they follow the device.
 
 @ProviderFor(LocaleOverride)
-const localeOverrideProvider = LocaleOverrideProvider._();
+final localeOverrideProvider = LocaleOverrideProvider._();
 
 /// The language the learner picked, or null while they follow the device.
 final class LocaleOverrideProvider
     extends $AsyncNotifierProvider<LocaleOverride, Locale?> {
   /// The language the learner picked, or null while they follow the device.
-  const LocaleOverrideProvider._()
+  LocaleOverrideProvider._()
     : super(
         from: null,
         argument: null,
@@ -45,7 +45,6 @@ abstract class _$LocaleOverride extends $AsyncNotifier<Locale?> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<AsyncValue<Locale?>, Locale?>;
     final element =
         ref.element
@@ -55,7 +54,7 @@ abstract class _$LocaleOverride extends $AsyncNotifier<Locale?> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }
 
@@ -64,7 +63,7 @@ abstract class _$LocaleOverride extends $AsyncNotifier<Locale?> {
 // app runs shows in the data texts after a restart; upgrade when that matters.
 
 @ProviderFor(dataLanguage)
-const dataLanguageProvider = DataLanguageProvider._();
+final dataLanguageProvider = DataLanguageProvider._();
 
 /// The language of the data texts: the language the app shows.
 // shortcut: reads the device languages once, so a change of them while the
@@ -76,7 +75,7 @@ final class DataLanguageProvider
   /// The language of the data texts: the language the app shows.
   // shortcut: reads the device languages once, so a change of them while the
   // app runs shows in the data texts after a restart; upgrade when that matters.
-  const DataLanguageProvider._()
+  DataLanguageProvider._()
     : super(
         from: null,
         argument: null,

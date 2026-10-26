@@ -11,7 +11,7 @@ part of 'curriculum_provider.dart';
 /// The grammar progression of the configured volumes.
 
 @ProviderFor(curriculum)
-const curriculumProvider = CurriculumProvider._();
+final curriculumProvider = CurriculumProvider._();
 
 /// The grammar progression of the configured volumes.
 
@@ -24,7 +24,7 @@ final class CurriculumProvider
         >
     with $FutureModifier<Curriculum>, $FutureProvider<Curriculum> {
   /// The grammar progression of the configured volumes.
-  const CurriculumProvider._()
+  CurriculumProvider._()
     : super(
         from: null,
         argument: null,
@@ -54,7 +54,7 @@ String _$curriculumHash() => r'e53e1462113b6de463af72880b91c82fb983f7c3';
 /// What the learner practises at the current course position.
 
 @ProviderFor(courseFilter)
-const courseFilterProvider = CourseFilterProvider._();
+final courseFilterProvider = CourseFilterProvider._();
 
 /// What the learner practises at the current course position.
 
@@ -67,7 +67,7 @@ final class CourseFilterProvider
         >
     with $FutureModifier<CourseFilter>, $FutureProvider<CourseFilter> {
   /// What the learner practises at the current course position.
-  const CourseFilterProvider._()
+  CourseFilterProvider._()
     : super(
         from: null,
         argument: null,

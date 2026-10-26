@@ -180,12 +180,12 @@ final class GrammarEngine {
       {
         for (final file in files)
           for (final type in file.declaredTypes.entries)
-            if (type.value.wordClass case final wordClass?) type.key: wordClass,
+            type.key: ?type.value.wordClass,
       },
       {
         for (final file in files)
           for (final type in file.declaredTypes.entries)
-            if (type.value.display case final display?) type.key: display,
+            type.key: ?type.value.display,
       },
       files.first.language,
     );

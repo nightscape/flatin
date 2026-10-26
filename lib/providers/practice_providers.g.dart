@@ -11,13 +11,13 @@ part of 'practice_providers.dart';
 /// Generic notifier for managing practice screen state
 
 @ProviderFor(PracticeNotifier)
-const practiceProvider = PracticeNotifierFamily._();
+final practiceProvider = PracticeNotifierFamily._();
 
 /// Generic notifier for managing practice screen state
 final class PracticeNotifierProvider
     extends $NotifierProvider<PracticeNotifier, PracticeState> {
   /// Generic notifier for managing practice screen state
-  const PracticeNotifierProvider._({
+  PracticeNotifierProvider._({
     required PracticeNotifierFamily super.from,
     required PracticeItem super.argument,
   }) : super(
@@ -74,7 +74,7 @@ final class PracticeNotifierFamily extends $Family
           PracticeState,
           PracticeItem
         > {
-  const PracticeNotifierFamily._()
+  PracticeNotifierFamily._()
     : super(
         retry: null,
         name: r'practiceProvider',
@@ -102,7 +102,6 @@ abstract class _$PracticeNotifier extends $Notifier<PracticeState> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(_$args);
     final ref = this.ref as $Ref<PracticeState, PracticeState>;
     final element =
         ref.element
@@ -112,21 +111,21 @@ abstract class _$PracticeNotifier extends $Notifier<PracticeState> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, () => build(_$args));
   }
 }
 
 /// Provider for word classification state
 
 @ProviderFor(WordClassificationNotifier)
-const wordClassificationProvider = WordClassificationNotifierProvider._();
+final wordClassificationProvider = WordClassificationNotifierProvider._();
 
 /// Provider for word classification state
 final class WordClassificationNotifierProvider
     extends
         $NotifierProvider<WordClassificationNotifier, WordClassificationState> {
   /// Provider for word classification state
-  const WordClassificationNotifierProvider._()
+  WordClassificationNotifierProvider._()
     : super(
         from: null,
         argument: null,
@@ -164,7 +163,6 @@ abstract class _$WordClassificationNotifier
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref =
         this.ref as $Ref<WordClassificationState, WordClassificationState>;
     final element =
@@ -175,6 +173,6 @@ abstract class _$WordClassificationNotifier
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }

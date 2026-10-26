@@ -10,11 +10,11 @@ part of 'reward_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(Rewards)
-const rewardsProvider = RewardsProvider._();
+final rewardsProvider = RewardsProvider._();
 
 final class RewardsProvider
     extends $AsyncNotifierProvider<Rewards, RewardLedger> {
-  const RewardsProvider._()
+  RewardsProvider._()
     : super(
         from: null,
         argument: null,
@@ -40,7 +40,6 @@ abstract class _$Rewards extends $AsyncNotifier<RewardLedger> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<AsyncValue<RewardLedger>, RewardLedger>;
     final element =
         ref.element
@@ -50,6 +49,6 @@ abstract class _$Rewards extends $AsyncNotifier<RewardLedger> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }

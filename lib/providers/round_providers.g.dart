@@ -11,7 +11,7 @@ part of 'round_providers.dart';
 /// The topics the course offers now, in course order.
 
 @ProviderFor(topics)
-const topicsProvider = TopicsProvider._();
+final topicsProvider = TopicsProvider._();
 
 /// The topics the course offers now, in course order.
 
@@ -24,7 +24,7 @@ final class TopicsProvider
         >
     with $FutureModifier<List<Topic>>, $FutureProvider<List<Topic>> {
   /// The topics the course offers now, in course order.
-  const TopicsProvider._()
+  TopicsProvider._()
     : super(
         from: null,
         argument: null,
@@ -53,7 +53,7 @@ final class TopicsProvider
 String _$topicsHash() => r'a6e4800b4c166e691a0ad6a13d56951d2173837e';
 
 @ProviderFor(todayOffer)
-const todayOfferProvider = TodayOfferProvider._();
+final todayOfferProvider = TodayOfferProvider._();
 
 final class TodayOfferProvider
     extends
@@ -63,7 +63,7 @@ final class TodayOfferProvider
           FutureOr<TodayOffer>
         >
     with $FutureModifier<TodayOffer>, $FutureProvider<TodayOffer> {
-  const TodayOfferProvider._()
+  TodayOfferProvider._()
     : super(
         from: null,
         argument: null,
@@ -94,14 +94,14 @@ String _$todayOfferHash() => r'8acb5080c7ebe00e292c4887f7a326596ffd51f0';
 /// keeps the word reviews already written and reviews no bundle.
 
 @ProviderFor(Round)
-const roundProvider = RoundFamily._();
+final roundProvider = RoundFamily._();
 
 /// One round. Auto-dispose and never stored: leaving it aborts it, which
 /// keeps the word reviews already written and reviews no bundle.
 final class RoundProvider extends $AsyncNotifierProvider<Round, RoundState> {
   /// One round. Auto-dispose and never stored: leaving it aborts it, which
   /// keeps the word reviews already written and reviews no bundle.
-  const RoundProvider._({
+  RoundProvider._({
     required RoundFamily super.from,
     required RoundRequest super.argument,
   }) : super(
@@ -151,7 +151,7 @@ final class RoundFamily extends $Family
           FutureOr<RoundState>,
           RoundRequest
         > {
-  const RoundFamily._()
+  RoundFamily._()
     : super(
         retry: null,
         name: r'roundProvider',
@@ -181,7 +181,6 @@ abstract class _$Round extends $AsyncNotifier<RoundState> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(_$args);
     final ref = this.ref as $Ref<AsyncValue<RoundState>, RoundState>;
     final element =
         ref.element
@@ -191,6 +190,6 @@ abstract class _$Round extends $AsyncNotifier<RoundState> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, () => build(_$args));
   }
 }

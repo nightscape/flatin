@@ -55,9 +55,9 @@ class _Pinned implements ExerciseGenerator {
   @override
   Exercise build(
     PracticeItem _,
-    GrammarBundle __,
+    GrammarBundle _,
     ExerciseContext ctx,
-    Random ___,
+    Random _,
   ) => inner.build(word, bundle, ctx, Random(seed));
 }
 
