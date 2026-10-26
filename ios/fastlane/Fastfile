@@ -3,7 +3,10 @@
 
 default_platform(:ios)
 
-require File.expand_path(File.join(File.dirname(__FILE__), "..", "..", "fastlane", "version_from_tag"))
+require "shellwords"
+
+project_root = File.expand_path(File.join(File.dirname(__FILE__), "..", ".."))
+require File.join(project_root, "fastlane", "version_from_tag")
 
 def release_build_flags
   VersionFromTag.build_flags
@@ -12,25 +15,68 @@ rescue ArgumentError => e
 end
 
 platform :ios do
-  desc "Build the iOS app"
-  lane :build do
-    sh("cd #{lane_context[:repository_root]} && flutter build ipa --release #{release_build_flags}")
+  private_lane :asc_key do
+    app_store_connect_api_key(
+      key_id: ENV.fetch("ASC_KEY_ID"),
+      issuer_id: ENV.fetch("ASC_ISSUER_ID"),
+      key_filepath: ENV.fetch("ASC_KEY_PATH")
+    )
   end
 
-  desc "Upload to TestFlight (Beta Testing)"
+  desc "Build the signed iOS app (App Store Connect API key, automatic signing)"
+  lane :build do
+    team_id = CredentialsManager::AppfileConfig.try_fetch_value(:team_id)
+    UI.user_error!("team_id is missing in ios/fastlane/Appfile") if team_id.to_s.empty?
+    key_args = [
+      "-allowProvisioningUpdates",
+      "-authenticationKeyPath", ENV.fetch("ASC_KEY_PATH"),
+      "-authenticationKeyID", ENV.fetch("ASC_KEY_ID"),
+      "-authenticationKeyIssuerID", ENV.fetch("ASC_ISSUER_ID")
+    ].shelljoin
+
+    sh("cd #{project_root} && flutter build ios --config-only --release #{release_build_flags}")
+    build_app(
+      workspace: "#{project_root}/ios/Runner.xcworkspace",
+      scheme: "Runner",
+      configuration: "Release",
+      export_method: "app-store",
+      export_team_id: team_id,
+      export_options: { signingStyle: "automatic" },
+      skip_profile_detection: true,
+      xcargs: "DEVELOPMENT_TEAM=#{team_id} #{key_args}",
+      export_xcargs: key_args,
+      output_directory: "#{project_root}/build/ios/ipa"
+    )
+  end
+
+  desc "Upload to TestFlight and offer the build to the external group Tester after Apple's beta review"
   lane :beta do
+    name, code = VersionFromTag.parse(VersionFromTag.tag_name)
+    UI.user_error!("TestFlight takes final tags only, got #{VersionFromTag.tag_name}") if name.include?("-")
+    changelogs = %w[de-DE en-US].to_h do |locale|
+      [locale, { whats_new: File.read("#{project_root}/android/fastlane/metadata/android/#{locale}/changelogs/#{code}.txt") }]
+    end
+
+    api_key = asc_key
     build
+    # Distributing to an external group needs the processed build, so the lane waits for processing.
     upload_to_testflight(
-      skip_waiting_for_build_processing: true,
-      skip_submission: true,
-      distribute_external: false
+      api_key: api_key,
+      localized_build_info: changelogs,
+      groups: ["Tester"],
+      distribute_external: true,
+      submit_beta_review: true,
+      skip_waiting_for_build_processing: false,
+      wait_processing_timeout_duration: 2400
     )
   end
 
   desc "Upload to App Store (Production)"
   lane :release do
+    api_key = asc_key
     build
     upload_to_app_store(
+      api_key: api_key,
       skip_metadata: true,
       skip_screenshots: true,
       submit_for_review: false,
@@ -38,4 +84,3 @@ platform :ios do
     )
   end
 end
-

@@ -13,12 +13,13 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 # What runs on a release tag
 
-Pushing a tag `vX.Y.Z` (or `vX.Y.Z-label.N`) starts `.github/workflows/deploy.yml` with two independent jobs:
+Pushing a tag `vX.Y.Z` (or `vX.Y.Z-label.N`) starts `.github/workflows/deploy.yml` with three independent jobs:
 
 - `github-release` builds the signed APK and attaches it to the GitHub Release.
-- `play-alpha` runs only for tags without a pre-release part (`v1.9.0`, not `v1.9.0-alpha.3`), because a pre-release shares the version code of its release and Play rejects a repeated code. It runs `fastlane alpha`: it builds the signed app bundle and uploads it to the Google Play closed-testing track "Alpha", together with the listing text and images from `metadata/`.
+- `play-alpha` runs only for tags without a pre-release part (`v1.9.0`, not `v1.9.0-alpha.3`), because a pre-release shares the version code of its release and Play rejects a repeated code. It runs `fastlane alpha`: it builds the signed app bundle and uploads it to the Google Play closed-testing track "Alpha", together with the listing text and images from `metadata/`. Before the upload it runs `fastlane store_pictures`, which makes the phone pictures headless and copies them into `metadata/android/<locale>/images/phoneScreenshots`. The job fails before the upload if `de-DE` or `en-US` has fewer than 2 `store-*.png` pictures.
+- `testflight` runs for the same final tags and uploads the iOS build; see `ios/fastlane/README.md`.
 
-Both jobs take version name and code from the tag (`fastlane/version_from_tag.rb`), so the bundle and the APK carry the same values. Version code is `major*10000 + minor*100 + patch`.
+The jobs take version name and code from the tag (`fastlane/version_from_tag.rb`), so the bundle and the APK carry the same values. Version code is `major*10000 + minor*100 + patch`.
 
 An open Play review does not fail the upload: fastlane retries the commit with `changesNotSentForReview` (`rescue_changes_not_sent_for_review`, on by default). The job fails only on a real upload error. After such a retry the new release waits in the Play Console under "Publishing overview" until someone sends the changes for review.
 
