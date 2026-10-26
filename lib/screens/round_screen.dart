@@ -3,9 +3,12 @@ import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/exercise.dart';
+import '../models/input_strategy.dart';
 import '../models/reward.dart';
+import '../providers/curriculum_provider.dart';
 import '../providers/reward_provider.dart';
 import '../providers/round_providers.dart';
+import '../providers/settings_provider.dart';
 import '../widgets/reward_burst.dart';
 import 'exercise_match_widget.dart';
 import 'exercise_screen.dart';
@@ -58,12 +61,19 @@ class _RoundScreenState extends ConsumerState<RoundScreen> {
 
     final round = ref.watch(provider);
     final rewards = ref.watch(rewardsProvider);
+    final settings = ref.watch(settingsProvider);
+    final filter = ref.watch(courseFilterProvider);
     _start ??= rewards.value;
-    final error = round.error ?? rewards.error;
+    final error =
+        round.error ?? rewards.error ?? settings.error ?? filter.error;
     if (error != null) {
       return _message(Text(_t('home.error', {'error': '$error'})));
     }
-    if (!round.hasValue || !rewards.hasValue || round.requireValue.isOver) {
+    if (!round.hasValue ||
+        !rewards.hasValue ||
+        !settings.hasValue ||
+        !filter.hasValue ||
+        round.requireValue.isOver) {
       return _message(const CircularProgressIndicator());
     }
 
@@ -91,6 +101,13 @@ class _RoundScreenState extends ConsumerState<RoundScreen> {
             word: task.word,
             exercise: task.exercise,
             title: title,
+            inputStrategy: InputStrategy.byId(
+              settings.requireValue.getInputStrategyId(task.word.dataFileId),
+            ),
+            practicedForms: filter.requireValue.practicedForms(
+              task.word.dataFileId,
+              task.word.formLabels,
+            ),
             onResponse: respond,
           ),
         },

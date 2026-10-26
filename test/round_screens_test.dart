@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:latin_practice/data/exercise_kinds.dart';
 import 'package:latin_practice/data/topics.dart';
 import 'package:latin_practice/models/reward.dart';
 import 'package:latin_practice/providers/reward_provider.dart';
@@ -16,6 +17,7 @@ import 'package:latin_practice/models/settings.dart';
 import 'package:latin_practice/providers/fsrs_provider.dart';
 import 'package:latin_practice/providers/round_providers.dart';
 import 'package:latin_practice/screens/grammar_start_screen.dart';
+import 'package:latin_practice/screens/exercise_screen.dart';
 import 'package:latin_practice/screens/home_screen.dart';
 import 'package:latin_practice/screens/round_end_screen.dart';
 import 'package:latin_practice/screens/round_screen.dart';
@@ -271,7 +273,97 @@ void main() {
     expect(stub.calls, greaterThan(0));
     expect(find.textContaining('no exercise kind fits'), findsOneWidget);
   });
+
+  _macronTwinTest();
+
+  for (final dropdownFile in ['nouns', 'verbs']) {
+    testWidgets('a noun round\'s formBilden and umformen take the nouns\' '
+        'input setting: dropdown for $dropdownFile', (tester) async {
+      tester.view.physicalSize = const Size(1200, 2400);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.reset);
+      seedSettings(
+        Settings(
+          courseWords: LessonRange(1, 20),
+          inputStrategyIds: {dropdownFile: 'dropdown_all_forms'},
+        ),
+      );
+      await tester.pumpWidget(
+        wrapInApp(
+          const GrammarStartScreen(),
+          forcedLocale: const Locale('de'),
+          overrides: [
+            exerciseRandomProvider.overrideWithValue(Random(17)),
+            exerciseRegistryProvider.overrideWithValue([
+              for (final g in exerciseGenerators)
+                if (ExerciseScreen.inputKinds.contains(g.kind)) g,
+            ]),
+          ],
+        ),
+      );
+      await letItLoad(tester);
+      await tap(tester, 'round.start.go');
+      await letItLoad(tester);
+
+      final seen = <(String, ExerciseKind)>{};
+      while (find.byType(ExerciseScreen).evaluate().isNotEmpty) {
+        final screen = tester.widget<ExerciseScreen>(
+          find.byType(ExerciseScreen),
+        );
+        final file = screen.word.dataFileId;
+        seen.add((file, screen.exercise.kind));
+        expect(
+          tester.widget(find.byKey(const Key('exercise.input'))) is TextField,
+          file != dropdownFile,
+          reason: '$file ${screen.exercise.kind.name}',
+        );
+        await answer(tester, screen.exercise, right: true);
+        await letItLoad(tester);
+      }
+      expect(seen, {
+        ('nouns', ExerciseKind.formBilden),
+        ('nouns', ExerciseKind.umformen),
+      });
+    });
+  }
 }
+
+void _macronTwinTest() => testWidgets(
+  'the round driver answers right when the asked form has a '
+  'macron twin in the all-forms dropdown',
+  (tester) async {
+    tester.view.physicalSize = const Size(1200, 2400);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+    seedSettings(
+      Settings(
+        courseWords: LessonRange(1, 20),
+        inputStrategyIds: {'nouns': 'dropdown_all_forms'},
+      ),
+    );
+    await tester.pumpWidget(
+      wrapInApp(
+        const GrammarStartScreen(),
+        forcedLocale: const Locale('de'),
+        overrides: [
+          exerciseRandomProvider.overrideWithValue(Random(99)),
+          exerciseRegistryProvider.overrideWithValue([
+            for (final g in exerciseGenerators)
+              if (ExerciseScreen.inputKinds.contains(g.kind)) g,
+          ]),
+        ],
+      ),
+    );
+    await letItLoad(tester);
+    await tap(tester, 'round.start.go');
+    await letItLoad(tester);
+    while (find.byType(ExerciseScreen).evaluate().isNotEmpty) {
+      final screen = tester.widget<ExerciseScreen>(find.byType(ExerciseScreen));
+      await answer(tester, screen.exercise, right: true);
+      await letItLoad(tester);
+    }
+  },
+);
 
 final class _FixedNamer implements TopicNamer {
   const _FixedNamer();

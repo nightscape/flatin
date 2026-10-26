@@ -4,6 +4,7 @@ import 'package:flutter_i18n/flutter_i18n.dart';
 import '../models/derivation.dart' show norm;
 import '../data/exercise_feedback.dart';
 import '../models/exercise.dart';
+import '../models/input_strategy.dart';
 import '../models/practice_item.dart';
 import '../widgets/explanation_lines.dart';
 
@@ -16,13 +17,24 @@ class ExerciseScreen extends StatefulWidget {
 
   /// The app bar title; null shows the standard exercise title.
   final String? title;
+
+  /// How [inputKinds] take the answer: the input setting of [word]'s data file.
+  final InputStrategy inputStrategy;
+
+  /// The forms of [word] the learner practises; the dropdowns offer only these.
+  final Set<FormKey> practicedForms;
   final void Function(ExerciseResponse response) onResponse;
+
+  /// The typed kinds that follow [inputStrategy]; the others always take text.
+  static const inputKinds = {ExerciseKind.formBilden, ExerciseKind.umformen};
 
   const ExerciseScreen({
     super.key,
     required this.word,
     required this.exercise,
     this.title,
+    required this.inputStrategy,
+    required this.practicedForms,
     required this.onResponse,
   });
 
@@ -138,17 +150,24 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
   Widget _typed() => Column(
     crossAxisAlignment: CrossAxisAlignment.stretch,
     children: [
-      TextField(
-        key: const Key('exercise.input'),
-        controller: _input,
-        enabled: _response == null,
-        autofocus: true,
-        decoration: InputDecoration(
-          hintText: _t('exercise.screen.inputHint'),
-          border: const OutlineInputBorder(),
+      if (widget.inputStrategy is! TextFieldStrategy &&
+          ExerciseScreen.inputKinds.contains(widget.exercise.kind))
+        KeyedSubtree(
+          key: const Key('exercise.input'),
+          child: widget.inputStrategy.buildInput(_inputContext()),
+        )
+      else
+        TextField(
+          key: const Key('exercise.input'),
+          controller: _input,
+          enabled: _response == null,
+          autofocus: true,
+          decoration: InputDecoration(
+            hintText: _t('exercise.screen.inputHint'),
+            border: const OutlineInputBorder(),
+          ),
+          onSubmitted: (_) => _check(),
         ),
-        onSubmitted: (_) => _check(),
-      ),
       if (_response == null) ...[
         const SizedBox(height: 8),
         ElevatedButton(
@@ -159,6 +178,26 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
       ],
     ],
   );
+
+  InputContext _inputContext() {
+    final expected = (widget.exercise.answer as TypedAnswer).expected;
+    assert(expected.lexemeId == widget.word.id, 'the target is another word');
+    final practiced = widget.word.filterForms(widget.practicedForms);
+    final index = practiced.keys.indexOf(expected.formKey);
+    assert(index >= 0, '${expected.formKey} is not practised');
+    return InputContext(
+      index: index,
+      correctAnswer: expected.text,
+      allForms: practiced.forms,
+      inferredForms: practiced.inferredForms,
+      isChecked: _response != null,
+      borderColor: Theme.of(context).colorScheme.outline,
+      labelFontSize: 16,
+      isMobile: MediaQuery.sizeOf(context).width < 600,
+      currentValue: _input.text,
+      onChanged: (value) => setState(() => _input.text = value),
+    );
+  }
 
   void _check() => _respond(TypedText(_input.text));
 

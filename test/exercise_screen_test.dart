@@ -5,12 +5,15 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/data/practice_data.dart';
+import 'package:latin_practice/models/derivation.dart' show norm;
 import 'package:latin_practice/models/exercise.dart';
+import 'package:latin_practice/models/input_strategy.dart';
 import 'package:latin_practice/models/practice_item.dart';
 import 'package:latin_practice/screens/exercise_screen.dart';
 
 import 'support/exercise_fakes.dart';
 import 'support/i18n_keys.dart';
+import 'support/round_driver.dart';
 import 'support/word_classification_harness.dart';
 
 const _sizes = {'phone': Size(390, 800), 'wide': Size(1400, 800)};
@@ -59,21 +62,46 @@ Exercise _typed(Exercise choice) {
   );
 }
 
+/// A typed [kind] exercise asking the real form of vocare at the choice's key.
+Future<Exercise> _typedForm(ExerciseKind kind) async {
+  final choice = await _choice();
+  final vocare = await _vocare();
+  final right = (choice.answer as ChoiceAnswer).right;
+  final i = vocare.formOrder.indexOf(right.formKey);
+  final expected = FormOption(
+    text: vocare.forms[i],
+    formKey: right.formKey,
+    lexemeId: right.lexemeId,
+  );
+  return Exercise(
+    wordCardId: choice.wordCardId,
+    grammarCardId: choice.grammarCardId,
+    kind: kind,
+    questionKey: choice.questionKey,
+    questionParams: choice.questionParams,
+    answer: TypedAnswer(expected, vocare.acceptedForms[i]),
+  );
+}
+
 Future<List<ExerciseResponse>> _pump(
   WidgetTester tester,
   Exercise exercise,
   String size, {
   String language = 'de',
+  String strategyId = 'text_field',
 }) async {
   tester.view.physicalSize = size == 'narrow' ? _narrow : _sizes[size]!;
   tester.view.devicePixelRatio = 1.0;
   addTearDown(tester.view.reset);
   final responses = <ExerciseResponse>[];
+  final vocare = await _vocare(language: language);
   await tester.pumpWidget(
     wrapInApp(
       ExerciseScreen(
-        word: await _vocare(language: language),
+        word: vocare,
         exercise: exercise,
+        inputStrategy: InputStrategy.byId(strategyId),
+        practicedForms: vocare.formOrder.toSet(),
         onResponse: responses.add,
       ),
       forcedLocale: Locale(language),
@@ -293,6 +321,8 @@ void main() {
           word: await _vocare(),
           exercise: exercise,
           title: 'Aufgabe 3 von 10',
+          inputStrategy: TextFieldStrategy(),
+          practicedForms: const {},
           onResponse: (_) {},
         ),
         forcedLocale: const Locale('de'),
@@ -319,6 +349,8 @@ void main() {
         ExerciseScreen(
           word: await _vocare(),
           exercise: exercise,
+          inputStrategy: TextFieldStrategy(),
+          practicedForms: const {},
           onResponse: (_) {},
         ),
         forcedLocale: const Locale('de'),
@@ -330,5 +362,69 @@ void main() {
       find.descendant(of: find.byType(AppBar), matching: find.text('Aufgabe')),
       findsOneWidget,
     );
+  });
+
+  group('the input setting', () {
+    for (final strategy in InputStrategy.all) {
+      for (final kind in ExerciseScreen.inputKinds) {
+        for (final right in [true, false]) {
+          testWidgets('${strategy.id} takes a ${right ? 'right' : 'wrong'} '
+              '${kind.name} answer', (tester) async {
+            final exercise = await _typedForm(kind);
+            final typed = exercise.answer as TypedAnswer;
+            final responses = await _pump(
+              tester,
+              exercise,
+              'phone',
+              strategyId: strategy.id,
+            );
+            final input = find.byKey(const Key('exercise.input'));
+            final isText = strategy is TextFieldStrategy;
+            expect(
+              find.descendant(
+                of: input,
+                matching: find.byType(DropdownButtonFormField<String>),
+              ),
+              isText ? findsNothing : findsOneWidget,
+            );
+            expect(tester.widget(input) is TextField, isText);
+            if (!isText) {
+              expect(
+                dropdownOptions(tester).map(norm),
+                contains(norm(typed.expected.text)),
+              );
+            }
+
+            await answer(tester, exercise, right: right);
+
+            expect(
+              find.text(
+                right
+                    ? 'Richtig'
+                    : 'So heißt es: ${typed.accepted.join(' / ')}',
+              ),
+              findsOneWidget,
+            );
+            final text = (responses.single as TypedText).text;
+            expect(typed.accepted.contains(text), right);
+          });
+        }
+      }
+    }
+
+    testWidgets('deLatTippen keeps the text field under a dropdown setting', (
+      tester,
+    ) async {
+      await _pump(
+        tester,
+        await _typedForm(ExerciseKind.deLatTippen),
+        'phone',
+        strategyId: 'dropdown_all_forms',
+      );
+      expect(
+        tester.widget(find.byKey(const Key('exercise.input'))),
+        isA<TextField>(),
+      );
+    });
   });
 }
