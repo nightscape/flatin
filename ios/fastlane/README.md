@@ -1,11 +1,15 @@
 # What runs on a release tag
 
-Pushing a tag `vX.Y.Z` starts the job `testflight` in `.github/workflows/deploy.yml`. It runs only for tags without a pre-release part (`v1.9.0`, not `v1.9.0-alpha.3`), like the Play job, and never for a manual start from a branch. It runs `fastlane beta` on a macOS runner:
+Pushing a tag `vX.Y.Z` starts the job `testflight` in `.github/workflows/deploy.yml`. It runs only for tags without a pre-release part (`v1.9.0`, not `v1.9.0-alpha.3`), like the Play job. A manual start does this: from a branch without the tick `ios_signing_check`, the job does not run; from a branch with the tick, it runs `signing_check` (no upload, see below); from a final tag, it runs `beta` like a tag push and uploads. It runs `fastlane beta` on a macOS runner:
 
 1. Reads the "What to test" text from `android/fastlane/metadata/android/{de-DE,en-US}/changelogs/<buildNumber>.txt`. A missing file fails the lane before the build.
-2. `flutter build ios --config-only` with `--build-name` and `--build-number` from the tag (`fastlane/version_from_tag.rb`). The build number is `major*10000 + minor*100 + patch`, the same as the Android version code. There is no `increment_build_number`.
+2. `flutter build ios --config-only --no-codesign` (the step writes the Xcode configuration and needs no certificate) with `--build-name` and `--build-number` from the tag (`fastlane/version_from_tag.rb`). The build number is `major*10000 + minor*100 + patch`, the same as the Android version code. There is no `increment_build_number`.
 3. `build_app` archives and exports the app with automatic signing: `-allowProvisioningUpdates` plus the App Store Connect API key lets Xcode create the certificate and the App Store profile in Apple's cloud. No certificate or profile is stored in the repository or in a secret.
 4. `upload_to_testflight` uploads the build, waits for Apple's processing (limit 40 minutes), sends the build to beta review and adds it to the external group "Tester". The public link serves the build once Apple accepts the review. The wait is needed because a build can only join an external group after processing.
+
+## Check the signing before a tag
+
+Start the workflow by hand (Actions, "Deploy to Stores", Run workflow) and tick `ios_signing_check`. The job `testflight` then runs `fastlane signing_check`: the same configuration and `build_app` steps as `beta`, with the fixed version `0.0.1 (1)`, and no upload and no changelog. Start the check from a branch, not from a final tag: a manual start on a final tag without the tick runs `beta` and uploads, as a tag push does. A tag push does what it did before.
 
 ## Secrets
 

@@ -24,7 +24,7 @@ platform :ios do
   end
 
   desc "Build the signed iOS app (App Store Connect API key, automatic signing)"
-  lane :build do
+  lane :build do |options|
     team_id = CredentialsManager::AppfileConfig.try_fetch_value(:team_id)
     UI.user_error!("team_id is missing in ios/fastlane/Appfile") if team_id.to_s.empty?
     key_args = [
@@ -34,7 +34,7 @@ platform :ios do
       "-authenticationKeyIssuerID", ENV.fetch("ASC_ISSUER_ID")
     ].shelljoin
 
-    sh("cd #{project_root} && flutter build ios --config-only --release #{release_build_flags}")
+    sh("cd #{project_root} && flutter build ios --config-only --no-codesign --release #{options[:build_flags] || release_build_flags}")
     build_app(
       workspace: "#{project_root}/ios/Runner.xcworkspace",
       scheme: "Runner",
@@ -47,6 +47,11 @@ platform :ios do
       export_xcargs: key_args,
       output_directory: "#{project_root}/build/ios/ipa"
     )
+  end
+
+  desc "Build and sign the IPA like beta, with a fixed version, and upload nothing"
+  lane :signing_check do
+    build(build_flags: VersionFromTag.build_flags("v0.0.1"))
   end
 
   desc "Upload to TestFlight and offer the build to the external group Tester after Apple's beta review"
