@@ -246,6 +246,8 @@ class _KursstandCardState extends ConsumerState<KursstandCard> {
     child: Text(text, style: style),
   );
 
+  // A slider's value bubble lives in the nearest Overlay; in the app's it leaves
+  // a parentless semantics node, which crashes macOS accessibility.
   Widget _slider(
     String key,
     LessonRange range,
@@ -258,18 +260,21 @@ class _KursstandCardState extends ConsumerState<KursstandCard> {
       disabledInactiveTrackColor: color.withAlpha(60),
       disabledThumbColor: color,
     ),
-    child: RangeSlider(
-      key: Key(key),
-      activeColor: color,
-      inactiveColor: color.withAlpha(60),
-      min: 1,
-      max: max.toDouble(),
-      divisions: max - 1,
-      values: RangeValues(range.from.toDouble(), range.to.toDouble()),
-      labels: RangeLabels(_stop(range.from), _stop(range.to)),
-      onChanged: onChanged == null
-          ? null
-          : (v) => onChanged(LessonRange(v.start.round(), v.end.round())),
+    child: Overlay.wrap(
+      clipBehavior: Clip.none,
+      child: RangeSlider(
+        key: Key(key),
+        activeColor: color,
+        inactiveColor: color.withAlpha(60),
+        min: 1,
+        max: max.toDouble(),
+        divisions: max - 1,
+        values: RangeValues(range.from.toDouble(), range.to.toDouble()),
+        labels: RangeLabels(_stop(range.from), _stop(range.to)),
+        onChanged: onChanged == null
+            ? null
+            : (v) => onChanged(LessonRange(v.start.round(), v.end.round())),
+      ),
     ),
   );
 
