@@ -6,32 +6,32 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'support/locale_harness.dart';
 
 void main() {
-  testWidgets('a German device shows the German home title', (tester) async {
+  testWidgets('a German device shows the German home screen', (tester) async {
     SharedPreferences.setMockInitialValues({});
     await pumpAppOnDevice(tester, const Locale('de', 'DE'));
 
-    expect(titleOf(tester), 'Latein Übung');
+    expect(nounsLabelOf(tester), 'Nomen (Deklination)');
   });
 
-  testWidgets('an en_US device shows the English home title', (tester) async {
+  testWidgets('an en_US device shows the English home screen', (tester) async {
     SharedPreferences.setMockInitialValues({});
     await pumpAppOnDevice(tester, const Locale('en', 'US'));
 
-    expect(titleOf(tester), 'Latin Practice');
+    expect(nounsLabelOf(tester), 'Nouns (declension)');
   });
 
-  testWidgets('a fr_FR device shows the German home title', (tester) async {
+  testWidgets('a fr_FR device shows the German home screen', (tester) async {
     SharedPreferences.setMockInitialValues({});
     await pumpAppOnDevice(tester, const Locale('fr', 'FR'));
 
-    expect(titleOf(tester), 'Latein Übung');
+    expect(nounsLabelOf(tester), 'Nomen (Deklination)');
   });
 
   testWidgets('a stored English choice survives the load', (tester) async {
     SharedPreferences.setMockInitialValues({'app_locale': 'en'});
     await pumpAppOnDevice(tester, const Locale('de', 'DE'));
 
-    expect(titleOf(tester), 'Latin Practice');
+    expect(nounsLabelOf(tester), 'Nouns (declension)');
     expect(
       (await SharedPreferences.getInstance()).getString('app_locale'),
       'en',
@@ -44,7 +44,7 @@ void main() {
     SharedPreferences.setMockInitialValues({'app_locale': 'fr'});
     await pumpAppOnDevice(tester, const Locale('fr', 'FR'));
 
-    expect(titleOf(tester), 'Latein Übung');
+    expect(nounsLabelOf(tester), 'Nomen (Deklination)');
     expect(
       (await SharedPreferences.getInstance()).containsKey('app_locale'),
       isFalse,

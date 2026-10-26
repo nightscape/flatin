@@ -87,7 +87,7 @@ void main() {
     await tester.tap(find.byKey(const Key('language.system')));
     await settle(tester);
 
-    expect(titleOf(tester), 'Latin Practice');
+    expect(nounsLabelOf(tester), 'Nouns (declension)');
     expect(
       (await SharedPreferences.getInstance()).containsKey('app_locale'),
       isFalse,

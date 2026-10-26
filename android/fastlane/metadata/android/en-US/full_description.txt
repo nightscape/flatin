@@ -1,11 +1,17 @@
-FLatin is a learning app for practicing Latin vocabulary, declensions and conjugations.
+Learn Latin helps you practise the vocabulary and grammar of lessons 1 to 40 of a Latin school course.
 
-With this app you can:
-* Practice declining Latin nouns
-* Practice conjugating Latin verbs
-* Train word classification
-* Track your learning progress with the FSRS algorithm (Free Spaced Repetition Scheduler)
+What the app does:
+• Build forms: decline nouns, conjugate verbs
+• Tasks to identify, match and translate word forms
+• Find and correct mistakes in forms
+• After a wrong answer, the app shows step by step how the form is built
+• Practise words and grammar in separate rounds; words you do not know well yet come back more often
+• On the "Course position" page you set the lesson you have reached in your course. Then only matching words and topics come up.
 
-The app uses intelligent spaced repetition to help you learn and retain Latin grammar effectively. All data is stored locally on your device - no internet connection required.
+A Roman town grows with you:
+You earn coins for tasks you solve correctly. Spend them on buildings such as a house, a fountain, a temple or baths, and build your own town.
 
-Perfect for students and anyone looking to improve their Latin skills.
+Privacy:
+All data stays on the device. The app needs no account and no internet connection, shows no ads and sends nothing anywhere.
+
+The app is available in German and English.

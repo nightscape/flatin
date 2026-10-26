@@ -17,20 +17,19 @@
   <rect x="32" y="32" width="448" height="448" rx="80" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="2"/>
   <rect x="48" y="48" width="416" height="416" rx="72" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
 
-  <!-- Main text: FLatin -->
-  <text x="256" y="320"
+  <!-- Main letter -->
+  <text x="256" y="350"
         font-family="Georgia, 'Times New Roman', serif"
-        font-size="140"
+        font-size="300"
         font-weight="bold"
         text-anchor="middle"
         fill="url(#textGradient)"
-        letter-spacing="-4">
-    <tspan x="256" dy="0">F</tspan>
-    <tspan fill="#ffffff" font-size="120">Latin</tspan>
+        letter-spacing="0">
+    L
   </text>
 
   <!-- Decorative accent line under text -->
-  <line x1="180" y1="360" x2="332" y2="360"
+  <line x1="180" y1="390" x2="332" y2="390"
         stroke="url(#textGradient)"
         stroke-width="4"
         stroke-linecap="round"/>

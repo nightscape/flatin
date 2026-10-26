@@ -1,6 +1,6 @@
 {
   "app": {
-    "title": "Latin Practice"
+    "title": "Learn Latin"
   },
   "home": {
     "nouns": "Nouns (declension)",
@@ -91,7 +91,7 @@
     }
   },
   "drawer": {
-    "title": "Latin Practice",
+    "title": "Learn Latin",
     "nouns": "Nouns (declension)",
     "verbs": "Verbs (conjugation)",
     "wordClassification": "Word Classification",

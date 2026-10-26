@@ -1,6 +1,6 @@
 {
   "app": {
-    "title": "Latein Übung"
+    "title": "Latein Lernen"
   },
   "home": {
     "nouns": "Nomen (Deklination)",
@@ -91,7 +91,7 @@
     }
   },
   "drawer": {
-    "title": "Latein Übung",
+    "title": "Latein Lernen",
     "nouns": "Nomen (Deklination)",
     "verbs": "Verben (Konjugation)",
     "wordClassification": "Wortklassifikation",

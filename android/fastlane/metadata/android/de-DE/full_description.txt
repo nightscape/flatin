@@ -1,12 +1,17 @@
-Latein Practice ist eine Lern-App zum Üben lateinischer Vokabeln, Deklinationen und Konjugationen.
+Latein Lernen hilft beim Üben von Vokabeln und Grammatik der Lektionen 1 bis 40 eines Lateinlehrgangs für die Schule.
 
-Mit dieser App kannst du:
-• Lateinische Nomen deklinieren üben
-• Lateinische Verben konjugieren üben
-• Wortklassifikation trainieren
-• Deinen Lernfortschritt mit dem FSRS-Algorithmus (Free Spaced Repetition Scheduler) verfolgen
+Was die App kann:
+• Formen bilden: Nomen deklinieren, Verben konjugieren
+• Aufgaben zum Bestimmen, Zuordnen und Übersetzen von Wortformen
+• Fehler in Formen finden und verbessern
+• Nach einer falschen Antwort zeigt die App Schritt für Schritt, wie die Form entsteht
+• Wörter und Grammatik in eigenen Runden üben; die App wiederholt Wörter, die du noch nicht sicher kannst, öfter
+• Auf der Seite „Kursstand“ stellst du ein, bis zu welcher Lektion ihr im Unterricht seid. Dann kommen nur passende Wörter und Themen dran.
 
-Die App verwendet intelligente Wiederholungsplanung, um dir zu helfen, lateinische Grammatik effektiv zu lernen und zu behalten. Alle Daten werden lokal auf deinem Gerät gespeichert - keine Internetverbindung erforderlich.
+Eine Römerstadt wächst mit:
+Für richtig gelöste Aufgaben bekommst du Münzen. Davon kaufst du Gebäude wie Haus, Brunnen, Tempel oder Thermen und baust so deine eigene Stadt.
 
-Perfekt für Schüler, Studenten und alle, die ihre Lateinkenntnisse verbessern möchten.
+Datenschutz:
+Alle Daten bleiben auf dem Gerät. Die App braucht kein Konto und keine Internetverbindung, zeigt keine Werbung und sendet nichts weiter.
 
+Die App gibt es auf Deutsch und auf Englisch.

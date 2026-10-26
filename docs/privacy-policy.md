@@ -1,10 +1,10 @@
-# Privacy Policy for Latin Practice
+# Privacy Policy for Learn Latin (Latein Lernen)
 
 **Last updated:** November 19, 2024
 
 ## Introduction
 
-Latin Practice ("we", "our", or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard information when you use our mobile application ("App").
+Learn Latin ("we", "our", or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard information when you use our mobile application ("App").
 
 ## Information We Collect
 

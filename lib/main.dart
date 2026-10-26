@@ -22,6 +22,7 @@ class LatinPracticeApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       onGenerateTitle: (context) => FlutterI18n.translate(context, 'app.title'),
       locale: ref.watch(localeOverrideProvider).value,
       supportedLocales: [for (final offered in offeredLocales) offered.locale],

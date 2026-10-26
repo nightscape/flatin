@@ -66,6 +66,45 @@ runFeatures() {
       await steps.iTakeScreenshot(widgetTester, 'practice_verb_initial');
     });
   });
+  group('Store pictures', () {
+    testWidgets('Home screen with town and coins', (
+      WidgetTester widgetTester,
+    ) async {
+      await steps.theDeviceLanguageIsTheStoreLocale(widgetTester);
+      await steps.iHaveCoins(widgetTester, 1250);
+      await steps.iHaveBuilt(widgetTester, 5);
+      await steps.theAppIsRunning(widgetTester);
+      await steps.theScreenLooksLike(widgetTester, 'store-1100-startseite.png');
+    });
+    testWidgets('A practice task', (WidgetTester widgetTester) async {
+      await steps.theDeviceLanguageIsTheStoreLocale(widgetTester);
+      await steps.iHaveCoins(widgetTester, 1250);
+      await steps.iHaveBuilt(widgetTester, 5);
+      await steps.theAppIsRunning(widgetTester);
+      await steps.iStartARound(widgetTester);
+      await steps.theScreenLooksLike(widgetTester, 'store-1200-aufgabe.png');
+    });
+    testWidgets('The course position settings', (
+      WidgetTester widgetTester,
+    ) async {
+      await steps.theDeviceLanguageIsTheStoreLocale(widgetTester);
+      await steps.iHaveCoins(widgetTester, 1250);
+      await steps.iHaveBuilt(widgetTester, 5);
+      await steps.theAppIsRunning(widgetTester);
+      await steps.iOpenTheDrawer(widgetTester);
+      await steps.iTapOn(widgetTester, 'drawer.settings');
+      await steps.theScreenLooksLike(widgetTester, 'store-1300-kursstand.png');
+    });
+    testWidgets('The town shop', (WidgetTester widgetTester) async {
+      await steps.theDeviceLanguageIsTheStoreLocale(widgetTester);
+      await steps.iHaveCoins(widgetTester, 1250);
+      await steps.iHaveBuilt(widgetTester, 5);
+      await steps.theAppIsRunning(widgetTester);
+      await steps.iTapOn(widgetTester, 'home.town');
+      await steps.iTapOn(widgetTester, 'town.build');
+      await steps.theScreenLooksLike(widgetTester, 'store-1400-laden.png');
+    });
+  });
   group('Home Screen', () {
     testWidgets('User sees home screen with practice options', (
       WidgetTester widgetTester,

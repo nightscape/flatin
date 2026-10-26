@@ -14,6 +14,7 @@ import 'package:latin_practice/services/reward_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../support/round_driver.dart';
+import '../support/store_picture.dart';
 import '../support/word_classification_harness.dart' show letItLoad;
 
 /// A widget that can be found again by key after a rebuild.
@@ -752,4 +753,17 @@ class AppSteps {
       throw Exception('Failed to take screenshot: $e');
     }
   }
+
+  // Store picture steps
+  @Given('the device language is the store locale')
+  @And('the device language is the store locale')
+  Future<void> theDeviceLanguageIsTheStoreLocale(WidgetTester tester) async {
+    tester.platformDispatcher.localesTestValue = [storeDeviceLocale];
+    addTearDown(tester.platformDispatcher.clearLocalesTestValue);
+  }
+
+  @Then('the screen looks like {string}')
+  @And('the screen looks like {string}')
+  Future<void> theScreenLooksLike(WidgetTester tester, String name) =>
+      saveStorePicture(tester, name);
 }

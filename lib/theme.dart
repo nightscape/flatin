@@ -78,9 +78,9 @@ ThemeData _build() {
         shape: roundedShape,
       ),
     ),
-    listTileTheme: const ListTileThemeData(
+    listTileTheme: ListTileThemeData(
       iconColor: terracotta,
-      titleTextStyle: TextStyle(color: ink, fontSize: 16),
+      titleTextStyle: text.bodyLarge?.copyWith(color: ink, fontSize: 16),
     ),
     switchTheme: SwitchThemeData(
       thumbColor: WidgetStateProperty.resolveWith(

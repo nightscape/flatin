@@ -1,0 +1,5 @@
+* Neuer Name: Latein Lernen
+* Vokabeln und Grammatik der Lektionen 1 bis 40
+* Römerstadt: Münzen verdienen und Gebäude kaufen
+* Kursstand einstellen: Es kommen nur Wörter und Themen bis zur gewählten Lektion
+* Neue Aufgabenarten und Erklärung Schritt für Schritt

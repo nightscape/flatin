@@ -335,7 +335,7 @@ class _KursstandCardState extends ConsumerState<KursstandCard> {
       shape: StadiumBorder(
         side: BorderSide(color: inRange ? gold : outlineColor),
       ),
-      labelStyle: TextStyle(
+      labelStyle: Theme.of(context).textTheme.labelLarge?.copyWith(
         color: inRange || on ? ink : mutedText,
         decoration: inRange && !on ? TextDecoration.lineThrough : null,
       ),
@@ -361,7 +361,7 @@ class _KursstandCardState extends ConsumerState<KursstandCard> {
         side: BorderSide(color: inRange ? terracotta : outlineColor),
       ),
       selectedColor: terracotta.withAlpha(inRange ? 70 : 40),
-      labelStyle: TextStyle(
+      labelStyle: Theme.of(context).textTheme.labelLarge?.copyWith(
         color: inRange || on ? ink : mutedText,
         decoration: inRange && !on ? TextDecoration.lineThrough : null,
       ),

@@ -25,31 +25,30 @@
   <!-- Accent line at top -->
   <rect x="0" y="0" width="1024" height="8" fill="url(#accentGradient)"/>
 
-  <!-- Main text: FLatin -->
-  <text x="512" y="280"
+  <!-- Main text -->
+  <text x="512" y="295"
         font-family="Georgia, 'Times New Roman', serif"
-        font-size="180"
+        font-size="96"
         font-weight="bold"
         text-anchor="middle"
         fill="url(#textGradient)"
-        letter-spacing="-6">
-    <tspan x="512" dy="0">F</tspan>
-    <tspan fill="#ffffff" font-size="160">Latin</tspan>
+        letter-spacing="-1">
+    Latein Lernen
   </text>
 
   <!-- Tagline -->
-  <text x="512" y="360"
+  <text x="512" y="385"
         font-family="Georgia, 'Times New Roman', serif"
         font-size="42"
         text-anchor="middle"
         fill="rgba(255,255,255,0.9)"
         font-style="italic"
         letter-spacing="2">
-    Latein lernen und üben
+    Vokabeln und Grammatik, Lektion 1–40
   </text>
 
   <!-- Decorative accent line under main text -->
-  <line x1="360" y1="310" x2="664" y2="310"
+  <line x1="360" y1="325" x2="664" y2="325"
         stroke="url(#textGradient)"
         stroke-width="5"
         stroke-linecap="round"/>

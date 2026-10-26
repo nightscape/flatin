@@ -24,6 +24,18 @@ platform :android do
     sh("cd #{project_root} && flutter build appbundle --release #{release_build_flags}")
   end
 
+  desc "Make the store phone pictures from the store_bilder scenarios and copy them into the metadata folders"
+  lane :store_pictures do
+    %w[de-DE en-US].each do |locale|
+      sh("cd #{project_root} && flutter test test/features_test.dart --plain-name 'Store pictures' --dart-define=STORE_LOCALE=#{locale}")
+      target = "#{project_root}/android/fastlane/metadata/android/#{locale}/images/phoneScreenshots"
+      sh("mkdir -p #{target} && rm -f #{target}/*.png")
+      Dir.glob("#{project_root}/build/store_shots/#{locale}/store-*.png").sort.each_with_index do |file, index|
+        sh("cp #{file} #{target}/#{format('%02d', index + 1)}_#{File.basename(file)}")
+      end
+    end
+  end
+
   desc "Run integration tests and collect screenshots"
   lane :screenshots do
     # Clean previous screenshots

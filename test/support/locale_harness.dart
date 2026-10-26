@@ -31,5 +31,15 @@ Future<void> settle(WidgetTester tester) async {
   }
 }
 
-String titleOf(WidgetTester tester) =>
-    tester.widget<Text>(find.byKey(const Key('app.title'))).data!;
+/// The label of the nouns button: the home screen text that differs per
+/// language.
+String nounsLabelOf(WidgetTester tester) => tester
+    .widget<Text>(
+      find
+          .descendant(
+            of: find.byKey(const Key('home.nouns.button')),
+            matching: find.byType(Text),
+          )
+          .first,
+    )
+    .data!;
