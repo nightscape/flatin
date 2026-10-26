@@ -91,7 +91,7 @@ See `FASTLANE_SETUP.md` for complete setup instructions.
 
 ### App Icons
 
-The iOS and macOS icons are generated from `android/fastlane/metadata/android/de-DE/images/icon.svg`. After changing the SVG, run `tool/make_app_icons.sh` (needs `rsvg-convert` and `magick`, e.g. `brew install librsvg imagemagick`).
+The iOS, macOS and Android (`mipmap-*/ic_launcher.png`, 48 to 192 px) icons are generated from `android/fastlane/metadata/android/de-DE/images/icon.svg`. After changing the SVG, run `tool/make_app_icons.sh [android|ios|macos|all]` (default `all`; needs `rsvg-convert` and `magick`, e.g. `brew install librsvg imagemagick`). Android gets plain rounded `ic_launcher.png` icons for older devices plus an adaptive icon (`mipmap-anydpi-v26/ic_launcher.xml`): the navy background is a colour resource and the foreground is the SVG without background shape, scaled so the glyph stays inside the 66 of 108 dp safe zone.
 
 ## Project Structure
 
