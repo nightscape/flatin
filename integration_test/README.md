@@ -49,3 +49,28 @@ picture enters the history. Nothing is compared yet.
   Run it in the release CI job before `upload_to_play_store`; do not commit
   the copies. `deploy.yml` does not call it yet.
 - Comparing pictures between macOS and Linux fonts is a later card.
+
+## Step pictures
+
+`--dart-define=STEP_SHOTS=true` saves one picture after every Cucumber step,
+so a run reads as a visual flow through the app. Off by default.
+
+```
+flutter test test/features_test.dart --dart-define=STEP_SHOTS=true
+```
+
+- Folder: `build/step_shots/<run timestamp>/`, flat files
+  `<counter>-<feature>-<scenario>-<step>.png`. The counter has 4 digits and
+  runs over the whole run, so `ls` lists the steps in execution order. Slugs
+  are lowercase, umlauts become `ae oe ue ss`, other characters become `-`,
+  each slug has at most 40 characters. A failed step has the suffix `-FAILED`.
+  `test/step_shots_names_test.dart` tests the rule.
+- The picture has the size of the test window. A step that runs before the
+  app exists (for example `Given I have 1250 coins`) gets a blank picture.
+- pickled_cucumber has no step hook. `tool/step_shots_builder.dart` replaces
+  its generator in `build.yaml` and wraps every generated step call in
+  `step(...)` from `test/support/step_shots.dart`. After a change to this
+  builder, run `dart run build_runner build --delete-conflicting-outputs`.
+- Both runners use the generated `runFeatures()`, so `integration_test/app_test.dart`
+  has the same hook. On a device the files go to the device file system; this
+  is not checked.

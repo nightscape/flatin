@@ -1,0 +1,19 @@
+targets:
+  $default:
+    builders:
+      pickled_cucumber:step_definition_builder:
+        enabled: false
+      latin_practice:step_shots_builder:
+        enabled: true
+
+builders:
+  step_shots_builder:
+    import: 'tool/step_shots_builder.dart'
+    builder_factories: ['stepShotsBuilder']
+    build_extensions: { '.dart': ['.dart.pickled.dart'] }
+    auto_apply: root_package
+    build_to: source
+    defaults:
+      generate_for:
+        include:
+          - test/**
