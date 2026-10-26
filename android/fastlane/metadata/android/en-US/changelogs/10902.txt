@@ -1,0 +1,2 @@
+* Small fixes
+* Tasks now show only forms that are switched on in the settings as answers
