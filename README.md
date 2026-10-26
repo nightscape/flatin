@@ -89,6 +89,10 @@ This project uses [Fastlane](https://fastlane.tools/) for automated deployment t
 
 See `FASTLANE_SETUP.md` for complete setup instructions.
 
+### App Icons
+
+The iOS and macOS icons are generated from `android/fastlane/metadata/android/de-DE/images/icon.svg`. After changing the SVG, run `tool/make_app_icons.sh` (needs `rsvg-convert` and `magick`, e.g. `brew install librsvg imagemagick`).
+
 ## Project Structure
 
 ```
