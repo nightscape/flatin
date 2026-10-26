@@ -11,6 +11,21 @@ xcode-select --install
 
 For _fastlane_ installation instructions, see [Installing _fastlane_](https://docs.fastlane.tools/#installing-fastlane)
 
+# What runs on a release tag
+
+Pushing a tag `vX.Y.Z` (or `vX.Y.Z-label.N`) starts `.github/workflows/deploy.yml` with two independent jobs:
+
+- `github-release` builds the signed APK and attaches it to the GitHub Release.
+- `play-alpha` runs only for tags without a pre-release part (`v1.9.0`, not `v1.9.0-alpha.3`), because a pre-release shares the version code of its release and Play rejects a repeated code. It runs `fastlane alpha`: it builds the signed app bundle and uploads it to the Google Play closed-testing track "Alpha", together with the listing text and images from `metadata/`.
+
+Both jobs take version name and code from the tag (`fastlane/version_from_tag.rb`), so the bundle and the APK carry the same values. Version code is `major*10000 + minor*100 + patch`.
+
+An open Play review does not fail the upload: fastlane retries the commit with `changesNotSentForReview` (`rescue_changes_not_sent_for_review`, on by default). The job fails only on a real upload error. After such a retry the new release waits in the Play Console under "Publishing overview" until someone sends the changes for review.
+
+Add `metadata/android/<locale>/changelogs/<versionCode>.txt` before you create the tag.
+
+The workflow needs the secrets `GOOGLE_PLAY_SERVICE_ACCOUNT_JSON`, `ANDROID_KEYSTORE_BASE64`, `ANDROID_KEYSTORE_PASSWORD`, `ANDROID_KEY_ALIAS` and `ANDROID_KEY_PASSWORD`. Locally, point `GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_PATH` to the service-account file and run `bundle exec fastlane android alpha validate_only:true` to check an upload without publishing it.
+
 # Available Actions
 
 ## Android
@@ -61,7 +76,7 @@ Upload to Google Play Store Internal Testing
 [bundle exec] fastlane android alpha
 ```
 
-Upload to Google Play Store Alpha
+Upload to Google Play Store Alpha (validate_only:true checks the upload without publishing)
 
 ### android beta
 

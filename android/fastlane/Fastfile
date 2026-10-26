@@ -88,12 +88,13 @@ platform :android do
     )
   end
 
-  desc "Upload to Google Play Store Alpha"
-  lane :alpha do
+  desc "Upload to Google Play Store Alpha (validate_only:true checks the upload without publishing)"
+  lane :alpha do |options|
     build_bundle
     upload_to_play_store(
       track: "alpha",
       aab: "#{project_root}/build/app/outputs/bundle/release/app-release.aab",
+      validate_only: options[:validate_only].to_s == "true",
       skip_upload_metadata: false,  # Upload metadata (title, descriptions)
       skip_upload_images: false,     # Upload images (icon, feature graphic)
       skip_upload_screenshots: false # Upload screenshots
