@@ -7,9 +7,15 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/material.dart';
 import 'package:latin_practice/main.dart' as app;
 import 'package:integration_test/integration_test.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:latin_practice/data/rewards.dart';
+import 'package:latin_practice/models/derivation.dart' show norm;
 import 'package:latin_practice/models/reward.dart';
 import 'package:latin_practice/models/settings.dart';
+import 'package:latin_practice/providers/curriculum_provider.dart';
+import 'package:latin_practice/providers/fsrs_provider.dart';
+import 'package:latin_practice/screens/practice_screen.dart';
+import 'package:latin_practice/screens/word_classification_screen.dart';
 import 'package:latin_practice/services/reward_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -30,6 +36,9 @@ class AppSteps {
   /// tap, so that `the checkbox state should change` can see the flip.
   Key? _toggledCheckbox;
   bool? _valueBeforeToggle;
+
+  /// The right choices the last answer step made that pay coins.
+  int? _payingChoices;
 
   // Navigation steps
   @Given('the app is running')
@@ -414,6 +423,69 @@ class AppSteps {
     }
   }
 
+  /// Types the right form into each of the first [count] fields and counts
+  /// those that pay.
+  @When('I enter the right answers in {int} input fields')
+  @And('I enter the right answers in {int} input fields')
+  Future<void> iEnterRightAnswers(WidgetTester tester, int count) async {
+    final screen = find.byType(PracticeScreen);
+    final item = tester.widget<PracticeScreen>(screen).item;
+    final filter = ProviderScope.containerOf(
+      tester.element(screen),
+    ).read(courseFilterProvider).requireValue;
+    final filtered = item.filterForms(
+      filter.practicedForms(item.dataFileId, item.formLabels),
+    );
+    final forms = filtered.forms;
+    _payingChoices = filtered.keys
+        .take(count)
+        .where((key) => paysCoins(item, key))
+        .length;
+    for (var i = 0; i < count; i++) {
+      await tester.enterText(find.byType(TextField).at(i), forms[i]);
+      await tester.pumpAndSettle();
+    }
+  }
+
+  /// Picks one form the shown word stands for, found from the word and its
+  /// translation on screen.
+  @When('I classify the word correctly')
+  @And('I classify the word correctly')
+  Future<void> iClassifyCorrectly(WidgetTester tester) async {
+    final container = ProviderScope.containerOf(
+      tester.element(find.byType(WordClassificationScreen)),
+    );
+    final byType = await container.read(practicableItemsByTypeProvider.future);
+    final filter = await container.read(courseFilterProvider.future);
+    final word = tester
+        .widget<Text>(find.byKey(const Key('wordClassification.word')))
+        .data!;
+    final item = [...byType['nouns']!, ...byType['verbs']!].firstWhere(
+      (i) =>
+          find.text(i.translation).evaluate().isNotEmpty &&
+          i.acceptedForms.any((fs) => fs.any((f) => norm(f) == norm(word))),
+    );
+    final enabled = filter.practicedForms(item.dataFileId, item.formLabels);
+    final label =
+        item.formLabels[[
+          for (var i = 0; i < item.forms.length; i++)
+            enabled.contains(item.formOrder[i]) &&
+                item.acceptedForms[i].any((f) => norm(f) == norm(word)),
+        ].indexOf(true)];
+    final selectors = selectorsFor(item.filterForms(enabled).labels);
+    _payingChoices = selectors.sections.length;
+    for (final section in selectors.sections) {
+      await tester.tap(find.byKey(Key('classification.0.$section')));
+      await tester.pumpAndSettle();
+      final text = selectors.optionText(
+        section,
+        label.features[section] ?? absentValue,
+      );
+      await tester.tap(find.text(text).last);
+      await tester.pumpAndSettle();
+    }
+  }
+
   @When('I wait for the practice screen to load')
   @And('I wait for the practice screen to load')
   Future<void> iWaitForPracticeScreen(WidgetTester tester) async {
@@ -631,11 +703,23 @@ class AppSteps {
     await letItLoad(tester);
   }
 
+  /// The practice screens close with a drop-down arrow, not a back button.
   @When('I leave the round')
   @And('I leave the round')
+  @When('I go back home')
+  @And('I go back home')
   Future<void> iLeaveTheRound(WidgetTester tester) async {
     while (find.byKey(const Key('home.grammar.button')).evaluate().isEmpty) {
-      await tester.pageBack();
+      if (find.byType(BackButton).evaluate().isEmpty) {
+        await tester.tap(
+          find.descendant(
+            of: find.byType(AppBar),
+            matching: find.byIcon(Icons.arrow_drop_down),
+          ),
+        );
+      } else {
+        await tester.pageBack();
+      }
       await letItLoad(tester);
     }
   }
@@ -651,6 +735,15 @@ class AppSteps {
       findsOneWidget,
     );
   }
+
+  /// A field that the heading shows pays nothing, so the steps count the rest.
+  @Then('I should have {int} coins plus {int} per paying choice')
+  @And('I should have {int} coins plus {int} per paying choice')
+  Future<void> iShouldHaveCoinsPerChoice(
+    WidgetTester tester,
+    int coins,
+    int perChoice,
+  ) => iShouldHaveCoins(tester, coins + perChoice * _payingChoices!);
 
   @Then('I should see no coins')
   @And('I should see no coins')

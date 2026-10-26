@@ -13,6 +13,9 @@ import '../models/course_filter.dart';
 import '../providers/curriculum_provider.dart';
 import '../providers/fsrs_provider.dart';
 import '../widgets/app_drawer.dart';
+import '../models/reward.dart';
+import '../providers/reward_provider.dart';
+import '../widgets/reward_burst.dart';
 import '../widgets/esel_panel.dart';
 import '../widgets/explanation_lines.dart';
 import 'dart:math';
@@ -65,6 +68,42 @@ class Selectors {
       if (label.key == key) return label;
     }
     return null;
+  }
+
+  /// The right dropdowns of [combinations]: each label of [correct] goes to
+  /// at most one distinct combination, best match first, and counts the
+  /// dropdowns that agree with it. Ties go to the earlier combination, then
+  /// the earlier label.
+  int rightPicks(
+    List<Map<String, String?>> combinations,
+    List<FormLabel> correct,
+  ) {
+    final distinct = {for (final c in combinations) textOf(c): c}.values;
+    final pairs = [
+      for (final (i, c) in distinct.indexed)
+        for (final (j, label) in correct.indexed)
+          (
+            combination: i,
+            label: j,
+            agree: sections
+                .where((s) => c[s] == (label.features[s] ?? absentValue))
+                .length,
+          ),
+    ]..sort((a, b) => b.agree.compareTo(a.agree));
+    final usedCombinations = <int>{};
+    final usedLabels = <int>{};
+    var right = 0;
+    for (final p in pairs) {
+      if (p.agree == 0) break;
+      if (usedCombinations.contains(p.combination) ||
+          usedLabels.contains(p.label)) {
+        continue;
+      }
+      usedCombinations.add(p.combination);
+      usedLabels.add(p.label);
+      right += p.agree;
+    }
+    return right;
   }
 
   /// A pick in the words of the dropdowns, e.g. "Futur I 3. Person Singular".
@@ -146,6 +185,7 @@ class _WordClassificationScreenState
   bool _isPartiallyCorrect = false;
   Rating? _suggestedRating;
   bool _showRatingButtons = false;
+  ({int coins, int serial})? _burst;
 
   @override
   void initState() {
@@ -304,6 +344,27 @@ class _WordClassificationScreenState
       _isPartiallyCorrect = partiallyCorrect;
       _showRatingButtons = true;
     });
+    _payChoices(
+      selectors.rightPicks(
+        _selectedAnswers.where(selectors.isComplete).toList(),
+        _correctAnswers,
+      ),
+    );
+  }
+
+  /// Sends one [ChoicesChecked] per check; a check locks the answer, so the
+  /// same answer is never paid twice.
+  Future<void> _payChoices(int right) async {
+    if (right == 0) return;
+    final effects = await ref
+        .read(rewardsProvider.notifier)
+        .send(ChoicesChecked(right));
+    final coins = effects.whereType<PointsGained>().fold(
+      0,
+      (sum, e) => sum + e.points,
+    );
+    if (!mounted) return;
+    setState(() => _burst = (coins: coins, serial: (_burst?.serial ?? 0) + 1));
   }
 
   Future<void> _rateCard(Rating rating) async {
@@ -577,6 +638,15 @@ class _WordClassificationScreenState
 
     return Scaffold(
       drawer: buildAppDrawer(context),
+      // The burst rides in the button slot so it floats above the page.
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerTop,
+      floatingActionButton: switch (_burst) {
+        (:final coins, :final serial) => RewardBurst(
+          coins,
+          key: ValueKey(serial),
+        ),
+        null => null,
+      },
       appBar: AppBar(
         elevation: 0,
         leading: IconButton(

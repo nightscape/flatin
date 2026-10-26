@@ -252,6 +252,8 @@ List<Building> unbuiltOf(RewardLedger ledger) => [
 class PointsStrategy implements RewardStrategy {
   const PointsStrategy();
 
+  static const int coinsPerChoice = 3;
+
   @override
   String get id => 'points';
 
@@ -261,6 +263,7 @@ class PointsStrategy implements RewardStrategy {
         Answered(right: true, :final firstAttempt) => [
           PointsGained(firstAttempt ? 10 : 5),
         ],
+        ChoicesChecked(:final right) => [PointsGained(coinsPerChoice * right)],
         _ => const [],
       };
 }

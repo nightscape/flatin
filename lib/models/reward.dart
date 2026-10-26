@@ -23,6 +23,14 @@ final class RoundFinished extends RewardEvent {
   const RoundFinished();
 }
 
+/// One check in the noun, verb or word classification practice with [right]
+/// correct choices.
+final class ChoicesChecked extends RewardEvent {
+  final int right;
+
+  const ChoicesChecked(this.right) : assert(right > 0);
+}
+
 sealed class RewardEffect {
   const RewardEffect();
 }

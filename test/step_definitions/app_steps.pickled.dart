@@ -288,6 +288,73 @@ runFeatures() {
         steps.iTakeScreenshot(widgetTester, 'practice_verb_initial'),
       );
     });
+    testWidgets('Each right form not shown in the heading earns 3 coins', (
+      WidgetTester widgetTester,
+    ) async {
+      await step(
+        widgetTester,
+        'Practice Screen',
+        'Each right form not shown in the heading earns 3 coins',
+        'Given I have 20 coins',
+        steps.iHaveCoins(widgetTester, 20),
+      );
+      await step(
+        widgetTester,
+        'Practice Screen',
+        'Each right form not shown in the heading earns 3 coins',
+        'And the app is running',
+        steps.theAppIsRunning(widgetTester),
+      );
+      await step(
+        widgetTester,
+        'Practice Screen',
+        'Each right form not shown in the heading earns 3 coins',
+        'When I am on the "home" screen',
+        steps.iAmOnScreen(widgetTester, 'home'),
+      );
+      await step(
+        widgetTester,
+        'Practice Screen',
+        'Each right form not shown in the heading earns 3 coins',
+        'And I tap on "home.nouns.button"',
+        steps.iTapOn(widgetTester, 'home.nouns.button'),
+      );
+      await step(
+        widgetTester,
+        'Practice Screen',
+        'Each right form not shown in the heading earns 3 coins',
+        'And I wait for the practice screen to load',
+        steps.iWaitForPracticeScreen(widgetTester),
+      );
+      await step(
+        widgetTester,
+        'Practice Screen',
+        'Each right form not shown in the heading earns 3 coins',
+        'And I enter the right answers in 2 input fields',
+        steps.iEnterRightAnswers(widgetTester, 2),
+      );
+      await step(
+        widgetTester,
+        'Practice Screen',
+        'Each right form not shown in the heading earns 3 coins',
+        'And I tap on check',
+        steps.iTapOnCheck(widgetTester),
+      );
+      await step(
+        widgetTester,
+        'Practice Screen',
+        'Each right form not shown in the heading earns 3 coins',
+        'And I go back home',
+        steps.iLeaveTheRound(widgetTester),
+      );
+      await step(
+        widgetTester,
+        'Practice Screen',
+        'Each right form not shown in the heading earns 3 coins',
+        'Then I should have 20 coins plus 3 per paying choice',
+        steps.iShouldHaveCoinsPerChoice(widgetTester, 20, 3),
+      );
+    });
   });
   group('Store pictures', () {
     testWidgets('Home screen with town and coins', (
@@ -1012,6 +1079,73 @@ runFeatures() {
         'User classifies a word correctly',
         'And I take a screenshot named "word_classification_checked"',
         steps.iTakeScreenshot(widgetTester, 'word_classification_checked'),
+      );
+    });
+    testWidgets('A right classification earns 3 coins per dropdown', (
+      WidgetTester widgetTester,
+    ) async {
+      await step(
+        widgetTester,
+        'Word Classification',
+        'A right classification earns 3 coins per dropdown',
+        'Given I have 20 coins',
+        steps.iHaveCoins(widgetTester, 20),
+      );
+      await step(
+        widgetTester,
+        'Word Classification',
+        'A right classification earns 3 coins per dropdown',
+        'And the app is running',
+        steps.theAppIsRunning(widgetTester),
+      );
+      await step(
+        widgetTester,
+        'Word Classification',
+        'A right classification earns 3 coins per dropdown',
+        'When I am on the "home" screen',
+        steps.iAmOnScreen(widgetTester, 'home'),
+      );
+      await step(
+        widgetTester,
+        'Word Classification',
+        'A right classification earns 3 coins per dropdown',
+        'And I tap on "home.wordClassification.button"',
+        steps.iTapOn(widgetTester, 'home.wordClassification.button'),
+      );
+      await step(
+        widgetTester,
+        'Word Classification',
+        'A right classification earns 3 coins per dropdown',
+        'And I wait for "the word" to load',
+        steps.iWaitForToLoad(widgetTester, 'the word'),
+      );
+      await step(
+        widgetTester,
+        'Word Classification',
+        'A right classification earns 3 coins per dropdown',
+        'And I classify the word correctly',
+        steps.iClassifyCorrectly(widgetTester),
+      );
+      await step(
+        widgetTester,
+        'Word Classification',
+        'A right classification earns 3 coins per dropdown',
+        'And I tap on "wordClassification.check.button"',
+        steps.iTapOn(widgetTester, 'wordClassification.check.button'),
+      );
+      await step(
+        widgetTester,
+        'Word Classification',
+        'A right classification earns 3 coins per dropdown',
+        'And I go back home',
+        steps.iLeaveTheRound(widgetTester),
+      );
+      await step(
+        widgetTester,
+        'Word Classification',
+        'A right classification earns 3 coins per dropdown',
+        'Then I should have 20 coins plus 3 per paying choice',
+        steps.iShouldHaveCoinsPerChoice(widgetTester, 20, 3),
       );
     });
   });

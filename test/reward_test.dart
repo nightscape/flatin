@@ -77,6 +77,15 @@ void main() {
     );
   });
 
+  test('a check with k right choices adds 3k plain coins and nothing else', () {
+    const ledger = RewardLedger(points: 20, lastPracticeDay: '2026-01-01');
+    final next = _send(ledger, const ChoicesChecked(4));
+    expect(next.points, 32);
+    expect(next.bonusPoints, 0);
+    expect(next.practiceDays, 0);
+    expect(() => ChoicesChecked(0), throwsA(isA<AssertionError>()));
+  });
+
   test('the shop offers the unbuilt buildings, each with a price', () {
     expect(unbuiltOf(const RewardLedger()), romanTown);
     expect(

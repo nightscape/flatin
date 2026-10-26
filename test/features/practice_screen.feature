@@ -49,3 +49,14 @@ Feature: Practice Screen
     Then I should see a practice screen with a word type
     And I should see input fields for forms
     And I take a screenshot named "practice_verb_initial"
+
+  Scenario: Each right form not shown in the heading earns 3 coins
+    Given I have 20 coins
+    And the app is running
+    When I am on the "home" screen
+    And I tap on "home.nouns.button"
+    And I wait for the practice screen to load
+    And I enter the right answers in 2 input fields
+    And I tap on check
+    And I go back home
+    Then I should have 20 coins plus 3 per paying choice

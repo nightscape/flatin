@@ -21,3 +21,14 @@ Feature: Word Classification
     And I tap on "wordClassification.check.button"
     Then I should see validation feedback
     And I take a screenshot named "word_classification_checked"
+
+  Scenario: A right classification earns 3 coins per dropdown
+    Given I have 20 coins
+    And the app is running
+    When I am on the "home" screen
+    And I tap on "home.wordClassification.button"
+    And I wait for "the word" to load
+    And I classify the word correctly
+    And I tap on "wordClassification.check.button"
+    And I go back home
+    Then I should have 20 coins plus 3 per paying choice

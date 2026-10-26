@@ -7,6 +7,7 @@ import '../data/attribution.dart';
 import '../data/diagnosis.dart' show diagnose;
 import '../data/esel_steps.dart';
 import '../data/explanation.dart' show ExplanationLine;
+import '../models/derivation.dart' show norm;
 import '../models/exercise.dart' show bundleOf;
 import '../models/practice_item.dart';
 import '../models/input_strategy.dart';
@@ -15,6 +16,9 @@ import '../providers/practice_providers.dart';
 import '../providers/settings_provider.dart';
 import '../providers/fsrs_provider.dart';
 import '../widgets/app_drawer.dart';
+import '../models/reward.dart';
+import '../providers/reward_provider.dart';
+import '../widgets/reward_burst.dart';
 import '../widgets/esel_panel.dart';
 import '../widgets/explanation_lines.dart';
 
@@ -28,6 +32,22 @@ Rating suggestRating(List<bool?> formResults, bool translationCorrect) {
   if (correct == total) return Rating.good;
   if (correct > 0) return Rating.hard;
   return Rating.again;
+}
+
+/// The principal parts the screen shows under the heading.
+Iterable<(String, String)> shownPrincipalParts(PracticeItem item) =>
+    item.principalParts.where((part) => part.$1.isNotEmpty);
+
+/// A field whose accepted answers are all shown on the screen, in the heading
+/// or a principal part, pays no coins.
+bool paysCoins(PracticeItem item, String formKey) {
+  final shown = {
+    norm(item.lemma),
+    for (final part in shownPrincipalParts(item)) norm(part.$2),
+  };
+  return !item.acceptedForms[item.formOrder.indexOf(formKey)].every(
+    (f) => shown.contains(norm(f)),
+  );
 }
 
 class PracticeScreen extends ConsumerStatefulWidget {
@@ -50,6 +70,7 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
   String? _selectedTranslation;
   Map<String, EselProgress> _panels = {};
   Set<String> _expandedPanels = {};
+  ({int coins, int serial})? _burst;
 
   void _ensureAnswerSlots(int count) {
     if (_userAnswers.length != count) {
@@ -96,6 +117,29 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
         if (wrongIndexes.isNotEmpty) _filteredKeys[wrongIndexes.first],
       };
     });
+    _payChoices(
+      [
+        for (var i = 0; i < _filteredKeys.length; i++)
+          if (state.validationResults[i] == true &&
+              paysCoins(widget.item, _filteredKeys[i]))
+            i,
+      ].length,
+    );
+  }
+
+  /// Sends one [ChoicesChecked] per check; a check locks the answer, so the
+  /// same answer is never paid twice.
+  Future<void> _payChoices(int right) async {
+    if (right == 0) return;
+    final effects = await ref
+        .read(rewardsProvider.notifier)
+        .send(ChoicesChecked(right));
+    final coins = effects.whereType<PointsGained>().fold(
+      0,
+      (sum, e) => sum + e.points,
+    );
+    if (!mounted) return;
+    setState(() => _burst = (coins: coins, serial: (_burst?.serial ?? 0) + 1));
   }
 
   void _hideAnswers() {
@@ -279,6 +323,15 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
 
     return Scaffold(
       drawer: buildAppDrawer(context),
+      // The burst rides in the button slot so it floats above the page.
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerTop,
+      floatingActionButton: switch (_burst) {
+        (:final coins, :final serial) => RewardBurst(
+          coins,
+          key: ValueKey(serial),
+        ),
+        null => null,
+      },
       appBar: AppBar(
         elevation: 0,
         leading: IconButton(
@@ -371,9 +424,7 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
                     ),
                   ),
                   // One row per principal part the data names
-                  for (final part in widget.item.principalParts.where(
-                    (part) => part.$1.isNotEmpty,
-                  ))
+                  for (final part in shownPrincipalParts(widget.item))
                     Padding(
                       padding: EdgeInsets.only(bottom: verticalPadding),
                       child: Row(
