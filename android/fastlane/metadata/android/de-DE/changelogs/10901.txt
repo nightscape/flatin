@@ -1,0 +1,2 @@
+* Aufgaben zeigen als Antworten nur noch Formen, die in den Einstellungen eingeschaltet sind
+* Ausgeschaltete Formen tauchen auch beim Zuordnen und beim Suchen der falschen Form nicht mehr auf

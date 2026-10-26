@@ -23,7 +23,7 @@ The jobs take version name and code from the tag (`fastlane/version_from_tag.rb`
 
 An open Play review does not fail the upload: fastlane retries the commit with `changesNotSentForReview` (`rescue_changes_not_sent_for_review`, on by default). The job fails only on a real upload error. After such a retry the new release waits in the Play Console under "Publishing overview" until someone sends the changes for review.
 
-Add `metadata/android/<locale>/changelogs/<versionCode>.txt` before you create the tag.
+Each release needs `metadata/android/<locale>/changelogs/<versionCode>.txt` for `de-DE` and `en-US` (at most 500 characters). Add both files before you create the tag. The job `play-alpha` checks them in the step "Check changelogs", right after the Ruby setup, and fails there when one is missing or empty (`supply` would skip a missing file silently). The iOS lane reads the same files.
 
 The workflow needs the secrets `GOOGLE_PLAY_SERVICE_ACCOUNT_JSON`, `ANDROID_KEYSTORE_BASE64`, `ANDROID_KEYSTORE_PASSWORD`, `ANDROID_KEY_ALIAS` and `ANDROID_KEY_PASSWORD`. Locally, point `GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_PATH` to the service-account file and run `bundle exec fastlane android alpha validate_only:true` to check an upload without publishing it.
 

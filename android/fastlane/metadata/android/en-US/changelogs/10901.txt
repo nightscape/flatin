@@ -1,0 +1,2 @@
+* Tasks now show only forms that are switched on in the settings as answers
+* Switched-off forms no longer appear when matching or when picking the odd one out

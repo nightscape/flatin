@@ -108,6 +108,18 @@ jobs:
           ruby-version: '3.2'
           bundler-cache: true
 
+      - name: Check changelogs
+        shell: bash
+        run: |
+          code=$(ruby fastlane/version_from_tag.rb | tail -n 1)
+          for locale in de-DE en-US; do
+            file="android/fastlane/metadata/android/$locale/changelogs/$code.txt"
+            if [ ! -s "$file" ]; then
+              echo "::error::Changelog for version code $code is missing or empty: $file"
+              exit 1
+            fi
+          done
+
       - name: Install dependencies
         run: |
           flutter pub get

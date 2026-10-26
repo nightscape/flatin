@@ -62,7 +62,9 @@ platform :ios do
     name, code = VersionFromTag.parse(VersionFromTag.tag_name)
     UI.user_error!("TestFlight takes final tags only, got #{VersionFromTag.tag_name}") if name.include?("-")
     changelogs = %w[de-DE en-US].to_h do |locale|
-      [locale, { whats_new: File.read("#{project_root}/android/fastlane/metadata/android/#{locale}/changelogs/#{code}.txt") }]
+      path = "#{project_root}/android/fastlane/metadata/android/#{locale}/changelogs/#{code}.txt"
+      UI.user_error!("Changelog for version code #{code} is missing: #{path}") unless File.file?(path)
+      [locale, { whats_new: File.read(path) }]
     end
 
     api_key = asc_key
