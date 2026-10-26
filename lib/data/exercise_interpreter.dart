@@ -180,7 +180,8 @@ Iterable<Slice> _slicesInto(
       if (options.every((o) => o.builtWrongBy == null))
         if ([for (final o in options) cube.cell(target.word, o.formKey)]
             case final group
-            when _isOddOneOut(select, cube, group, target, bundle))
+            when group.every(cube.practised) &&
+                _isOddOneOut(select, cube, group, target, bundle))
           Slice(target, group: group),
   ],
   Spoil(:final ways) => [
@@ -192,7 +193,8 @@ Iterable<Slice> _slicesInto(
   Sample() => [
     if (exercise.answer case MatchingAnswer(:final pairs))
       if ([for (final (l, _) in pairs) cube.cell(target.word, l.formKey)]
-          case final group when group.every((c) => c.bundle == bundle))
+          case final group
+          when group.every((c) => c.bundle == bundle && cube.practised(c)))
         Slice(target, group: group),
   ],
   AxisPath(:final axes, :final lengths) => [
@@ -579,7 +581,9 @@ String? _answerObjection(
         if (c == slice.target) continue;
         final fromSource = switch ((choose.from, c)) {
           (Neighbours(:final k), final FormCell f) =>
-            distance(slice.target, f) == k && cube.unlocked(f),
+            distance(slice.target, f) == k &&
+                cube.practised(f) &&
+                cube.unlocked(f),
           (Neighbours(:final withBuiltWrong), final BuiltWrong b) =>
             withBuiltWrong &&
                 cube.builtWrong(slice.target).any((w) => w.text == b.text),
