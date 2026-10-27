@@ -1,0 +1,2 @@
+* New building in the town: the bank costs 1000 coins and then doubles all the coins you earn
+* Before a round you can pick a focus, for example only irregular verbs or only one declension
