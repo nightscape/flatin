@@ -76,7 +76,8 @@ final class TypeFocus extends WordFocus {
 }
 
 /// The fixed groups, then one [TypeFocus] per type that has words in
-/// [practicable], file by file, each file's types sorted by name.
+/// [practicable], file by file, each file's types sorted by name. Vocab has
+/// no grammar to focus on, so it gets no focus of its own.
 /// [displayByType] names the types of each file.
 List<WordFocus> focusesOf(
   Map<String, List<PracticeItem>> practicable,
@@ -87,8 +88,9 @@ List<WordFocus> focusesOf(
   const FileFocus('verbs'),
   const IrregularVerbs(),
   for (final MapEntry(key: file, value: words) in practicable.entries)
-    ...<TypeFocus>[
-      for (final type in {for (final w in words) w.type})
-        TypeFocus(file, type, displayByType[file]![type]!),
-    ]..sort((a, b) => a.display.compareTo(b.display)),
+    if (file != 'vocab')
+      ...<TypeFocus>[
+        for (final type in {for (final w in words) w.type})
+          TypeFocus(file, type, displayByType[file]![type]!),
+      ]..sort((a, b) => a.display.compareTo(b.display)),
 ];

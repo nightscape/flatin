@@ -82,6 +82,7 @@ flutter:
   assets:
     - lib/data/latin_nouns.yaml
     - lib/data/latin_verbs.yaml
+    - lib/data/latin_vocab.yaml
     - lib/data/german_verbs.yaml
     - lib/data/german_nouns.yaml
     - lib/data/migration_v2.yaml

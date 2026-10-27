@@ -26,7 +26,7 @@ void main() {
     expect(practicable['verbs'], isNotEmpty);
     expect(
       items.where(filter.reachesPractice).length,
-      practicable['verbs']!.length,
+      practicable['verbs']!.length + practicable['vocab']!.length,
     );
   });
 }

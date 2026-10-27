@@ -134,6 +134,7 @@ PracticeItem traceItem({
     lemma: lemma,
     type: type,
     translation: translation,
+    bookTranslation: translation,
     principalParts: principalParts,
     formOrder: keys,
     forms: [for (final key in keys) derivation.forms[key]!.result],

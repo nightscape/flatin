@@ -130,7 +130,10 @@ final class _Checker {
           if (wordLesson > s.lesson) {
             fail('"$text": $lemma is taught in lesson $wordLesson');
           }
-          final formLesson = grammarLesson(curriculum, item, key);
+          // A vocab item has no grammar: its word lesson decides alone.
+          final formLesson = item.isVocab
+              ? wordLesson
+              : grammarLesson(curriculum, item, key);
           if (formLesson > s.lesson) {
             fail('"$text": $lemma $key is taught in lesson $formLesson');
           }
@@ -156,7 +159,11 @@ final class _Checker {
     final head = s.tokens[c.head];
     final particle = _particleOf[c.kind];
     if (particle != null) {
-      if (head is! HeadwordToken || head.headword != particle) {
+      final word = switch (head) {
+        FormToken(:final lemma) => lemma,
+        HeadwordToken(:final headword) => headword,
+      };
+      if (word != particle) {
         fail('the head of ${c.kind.name} is "${head.text}", not $particle');
       }
       return;

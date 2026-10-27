@@ -47,7 +47,8 @@ final class DerivedTopicNamer implements TopicNamer {
 }
 
 /// Every topic of [items], in course order: lesson, then data file, then the
-/// first form of the topic. Every bundle of [items] is in exactly one topic.
+/// first form of the topic. Every bundle of [items] is in exactly one topic,
+/// except the vocab bundle: vocab teaches no grammar.
 /// [nounTypeDisplays] maps each noun type to the name the learner reads.
 List<Topic> topicsOf(
   List<PracticeItem> items,
@@ -57,7 +58,7 @@ List<Topic> topicsOf(
   final lessonOf = <(String, GrammarBundle), int>{};
   final formIndexOf = <(String, GrammarBundle), int>{};
   final nameOf = <(String, GrammarBundle), String>{};
-  for (final item in items) {
+  for (final item in items.where((i) => !i.isVocab)) {
     for (var i = 0; i < item.formOrder.length; i++) {
       final key = (item.dataFileId, bundleOf(item, item.formOrder[i]));
       final lesson = grammarLesson(curriculum, item, item.formOrder[i]);

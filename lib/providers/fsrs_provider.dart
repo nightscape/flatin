@@ -57,7 +57,11 @@ Future<List<PracticeItemCard>> dueCards(Ref ref) async {
 Future<Map<String, List<PracticeItem>>> practicableItemsByType(Ref ref) async {
   final filter = await ref.watch(courseFilterProvider.future);
 
-  final itemsByType = <String, List<PracticeItem>>{'nouns': [], 'verbs': []};
+  final itemsByType = <String, List<PracticeItem>>{
+    'nouns': [],
+    'verbs': [],
+    'vocab': [],
+  };
   final language = await ref.watch(dataLanguageProvider.future);
   for (final item in await loadAllPracticeItems(language: language)) {
     if (!filter.reachesPractice(item)) continue;
@@ -80,7 +84,11 @@ Future<Map<String, List<PracticeItem>>> dueItemsByType(Ref ref) async {
     }
   }
 
-  final dueItemsByType = <String, List<PracticeItem>>{'nouns': [], 'verbs': []};
+  final dueItemsByType = <String, List<PracticeItem>>{
+    'nouns': [],
+    'verbs': [],
+    'vocab': [],
+  };
   for (final card in dueCardsList) {
     // Cards exist for items the current selection filters out, too.
     final item = itemsById[card.itemId];

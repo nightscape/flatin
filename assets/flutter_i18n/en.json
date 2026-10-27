@@ -283,6 +283,20 @@
       "deLatType": {
         "question": "Type the Latin form of {word} that means: {german}"
       }
+    },
+    "vocab": {
+      "latDe": {
+        "question": "What does {word} mean?"
+      },
+      "deLat": {
+        "question": "What is the Latin for “{german}”?"
+      },
+      "deLatType": {
+        "question": "Write in Latin: {german}"
+      },
+      "match": {
+        "question": "Match the words to their meanings"
+      }
     }
   },
   "round": {

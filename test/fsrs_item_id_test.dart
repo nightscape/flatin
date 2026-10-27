@@ -13,6 +13,7 @@ PracticeItem _item(String dataFileId, String lemma, String translation) =>
       lemma: lemma,
       type: 'A-Deklination',
       translation: translation,
+      bookTranslation: translation,
       principalParts: [('', lemma)],
       forms: const ['x'],
       acceptedForms: const [

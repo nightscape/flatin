@@ -121,8 +121,50 @@ const kindSpecs = [
   ),
 ];
 
+/// How the translation kinds ask a vocab item: its meaning, with the other
+/// vocab items as the wrong options. No other kind asks one.
+const vocabSpecs = {
+  ExerciseKind.latDeWahl: KindSpec(
+    kind: ExerciseKind.latDeWahl,
+    questionKey: 'exercise.vocab.latDe.question',
+    select: OneCell(),
+    params: {'word': Show(Ref.target, View.latin)},
+    answer: Choose(
+      View.german,
+      from: Neighbours(k: 0, withBuiltWrong: false),
+      count: 4,
+    ),
+  ),
+  ExerciseKind.deLatWahl: KindSpec(
+    kind: ExerciseKind.deLatWahl,
+    questionKey: 'exercise.vocab.deLat.question',
+    select: OneCell(),
+    params: {'german': Show(Ref.target, View.german)},
+    answer: Choose(
+      View.latin,
+      from: Neighbours(k: 0, withBuiltWrong: false),
+      count: 4,
+    ),
+  ),
+  ExerciseKind.deLatTippen: KindSpec(
+    kind: ExerciseKind.deLatTippen,
+    questionKey: 'exercise.vocab.deLatType.question',
+    select: OneCell(),
+    params: {'german': Show(Ref.target, View.german)},
+    answer: Typed(View.latin),
+  ),
+  ExerciseKind.zuordnen: KindSpec(
+    kind: ExerciseKind.zuordnen,
+    questionKey: 'exercise.vocab.match.question',
+    select: Sample(n: 4),
+    params: {},
+    answer: Match(View.latin, View.german),
+  ),
+};
+
 /// The generators the app ships, one per kind. They are stateless: everything
 /// that varies per call comes from [ExerciseContext].
 final List<SpecGenerator> exerciseGenerators = [
-  for (final spec in kindSpecs) SpecGenerator(spec),
+  for (final spec in kindSpecs)
+    SpecGenerator(spec, vocab: vocabSpecs[spec.kind]),
 ];

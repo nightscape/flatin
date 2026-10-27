@@ -9,7 +9,8 @@ import '../data/german_forms.dart';
 import 'practice_item.dart';
 
 /// A form bundle of one data file: for verbs the codes of Modus, Tempus and
-/// Genus verbi (`ind.fut2.pass`), for nouns the type (`U-Deklination`).
+/// Genus verbi (`ind.fut2.pass`), for nouns and vocab the type
+/// (`U-Deklination`, `Vokabel`).
 /// Produced by [bundleOf]; read by the selection and the generators.
 typedef GrammarBundle = String;
 
@@ -25,7 +26,7 @@ GrammarBundle bundleOf(PracticeItem item, FormKey key) {
       for (final e in item.formLabels[index].features.entries)
         if (_bundleAxes.contains(e.key)) e.key: e.value,
     }),
-    'nouns' => item.type,
+    'nouns' || 'vocab' => item.type,
     _ => throw ArgumentError('no bundle rule for data file ${item.dataFileId}'),
   };
 }

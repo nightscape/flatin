@@ -3,6 +3,7 @@ import 'dart:math';
 import '../models/course_filter.dart';
 import '../models/exercise.dart';
 import '../models/fsrs_card.dart';
+import '../models/lesson_range.dart';
 import '../models/practice_item.dart';
 import 'curriculum.dart';
 
@@ -33,12 +34,17 @@ final class SelectedPair {
 }
 
 /// The lesson that introduces form [key] of [word]: its type and its form
-/// are both taught. A bundle's lesson is the minimum over its forms.
+/// are both taught. A bundle's lesson is the minimum over its forms. The
+/// vocab bundle teaches no grammar, so its new card comes after every lesson
+/// and never pre-empts a new topic.
 /// Produced here; read by [BundleIndex] and the topics.
-int grammarLesson(Curriculum curriculum, PracticeItem word, FormKey key) => max(
-  curriculum.typeLesson(word.dataFileId, word.type),
-  curriculum.formLesson(word.dataFileId, key),
-);
+int grammarLesson(Curriculum curriculum, PracticeItem word, FormKey key) =>
+    word.isVocab
+    ? laterLesson
+    : max(
+        curriculum.typeLesson(word.dataFileId, word.type),
+        curriculum.formLesson(word.dataFileId, key),
+      );
 
 /// Which bundles each practised word has, which words each bundle has, and
 /// the first lesson and the data file of every card.

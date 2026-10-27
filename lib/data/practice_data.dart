@@ -11,6 +11,7 @@ import '../models/practice_item.dart';
 const _assets = {
   'nouns': 'lib/data/latin_nouns.yaml',
   'verbs': 'lib/data/latin_verbs.yaml',
+  'vocab': 'lib/data/latin_vocab.yaml',
 };
 
 /// What the settings screen offers for one data file.
@@ -163,10 +164,16 @@ Future<List<PracticeItem>> loadPracticeItems(
   String assetPath, {
   String language = courseLanguage,
 }) async {
-  final loaded = (await _load()).parsed(language);
+  final all = await _load();
+  final loaded = all.parsed(language);
   final file = loaded.file(_dataFileIdOf(assetPath));
+  final book = {
+    for (final item in all.parsed(courseLanguage).file(file.dataFileId).items)
+      item.id: item.translation,
+  };
   return loaded.itemsByFile[file.dataFileId] ??= [
-    for (final item in file.items) _practiceItem(loaded.engine, file, item),
+    for (final item in file.items)
+      _practiceItem(loaded.engine, file, item, book[item.id]!),
   ];
 }
 
@@ -186,6 +193,7 @@ PracticeItem _practiceItem(
   GrammarEngine engine,
   GrammarFile file,
   GrammarItem item,
+  String bookTranslation,
 ) {
   final derivation = engine.of(file.dataFileId, item.id);
   final keys = derivation.forms.keys.toList();
@@ -204,6 +212,7 @@ PracticeItem _practiceItem(
     lemma: item.lemma,
     type: item.typeName,
     translation: item.translation,
+    bookTranslation: bookTranslation,
     principalParts: [
       for (final name in partNames)
         (

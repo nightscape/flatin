@@ -104,7 +104,9 @@ Future<TodayOffer> todayOffer(Ref ref, WordFocus focus) async {
     now: input.now,
   );
   if (pair == null) return const NothingDue();
-  if (!pair.anchorIsGrammar || !pair.anchorIsNew) return const MixedOffer();
+  if (!pair.anchorIsGrammar || !pair.anchorIsNew || pair.word.isVocab) {
+    return const MixedOffer();
+  }
   final topics = await ref.watch(topicsProvider(focus).future);
   return NewTopicOffer(
     topics.singleWhere(

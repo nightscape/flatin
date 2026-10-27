@@ -146,7 +146,7 @@ final class TodayOfferProvider
   }
 }
 
-String _$todayOfferHash() => r'1f3d3d27ae6bb1f87ab4a0e516c6385dd0dd2e9a';
+String _$todayOfferHash() => r'507d16c91fd212c5d884fddf915f35dee21cb23f';
 
 final class TodayOfferFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<TodayOffer>, WordFocus> {

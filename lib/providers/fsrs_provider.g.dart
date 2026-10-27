@@ -203,7 +203,7 @@ final class PracticableItemsByTypeProvider
 }
 
 String _$practicableItemsByTypeHash() =>
-    r'f23e82cdc0665f095bfe801c1dbc33d9fd1bc290';
+    r'3fcffb3126ab32814dc2a1e836ad7ad7e622671c';
 
 /// Provider for due items by exercise type
 
@@ -249,7 +249,7 @@ final class DueItemsByTypeProvider
   }
 }
 
-String _$dueItemsByTypeHash() => r'949517a59cf37a3b731235668277fa34a6333df3';
+String _$dueItemsByTypeHash() => r'93caf40a62766c3a19d2f7b1cf460b1db405be12';
 
 /// The next due item of [dataFileId] that [focus] includes.
 

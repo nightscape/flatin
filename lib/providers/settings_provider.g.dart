@@ -33,7 +33,7 @@ final class SettingsNotifierProvider
   SettingsNotifier create() => SettingsNotifier();
 }
 
-String _$settingsNotifierHash() => r'd101e874a4a0d6e530750af8b2044be0cf422771';
+String _$settingsNotifierHash() => r'8453ba9ebd0e8b9c6deeaec75c7da2be8b88efd0';
 
 abstract class _$SettingsNotifier extends $AsyncNotifier<Settings> {
   FutureOr<Settings> build();

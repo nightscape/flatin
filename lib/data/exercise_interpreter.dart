@@ -40,12 +40,19 @@ final class Slice {
 /// The generator of one spec.
 /// Produced in `exercise_kinds.dart`; read by the selection.
 final class SpecGenerator implements ExerciseGenerator {
-  const SpecGenerator(this.spec);
+  const SpecGenerator(this.spec, {this.vocab});
 
   final KindSpec spec;
 
+  /// How the kind asks a vocab item; null when it asks none.
+  final KindSpec? vocab;
+
   @override
   ExerciseKind get kind => spec.kind;
+
+  KindSpec _specFor(PracticeItem word) => word.isVocab
+      ? vocab ?? (throw CannotBuild('${kind.name} asks no vocab item'))
+      : spec;
 
   @override
   Exercise build(
@@ -55,6 +62,7 @@ final class SpecGenerator implements ExerciseGenerator {
     Random rng,
   ) {
     if (!ctx.unlocked.contains(bundle)) throw CannotBuild('$bundle is locked');
+    final spec = _specFor(word);
     final cube = Cube(ctx);
     final reasons = <String>{};
     for (final slice in _slices(spec.select, cube, word, bundle, rng)) {
@@ -91,6 +99,7 @@ final class SpecGenerator implements ExerciseGenerator {
     GrammarBundle bundle,
     ExerciseContext ctx,
   ) {
+    final spec = _specFor(word);
     if (exercise.kind != spec.kind ||
         exercise.questionKey != spec.questionKey ||
         exercise.wordCardId != word.id ||
@@ -144,7 +153,13 @@ Iterable<Slice> _slices(
         Slice(target, spoiled: spoiled),
   ]..shuffle(rng),
   Sample() => _sample(
-    cube.cellsOf(word, bundle: bundle).toList()..shuffle(rng),
+    word.isVocab
+        ? [
+            ...cube.cellsOf(word, bundle: bundle),
+            ...(cube.neighbours(cube.allCellsOf(word).single, k: 0).toList()
+              ..shuffle(rng)),
+          ]
+        : (cube.cellsOf(word, bundle: bundle).toList()..shuffle(rng)),
   ),
   AxisPath(:final axes, :final lengths) =>
     (cube.cellsOf(word, bundle: bundle).toList()..shuffle(rng)).expand(
@@ -192,7 +207,7 @@ Iterable<Slice> _slicesInto(
   ],
   Sample() => [
     if (exercise.answer case MatchingAnswer(:final pairs))
-      if ([for (final (l, _) in pairs) cube.cell(target.word, l.formKey)]
+      if ([for (final (l, _) in pairs) cube.cellOf(l, target.word)]
           case final group
           when group.every((c) => c.bundle == bundle && cube.practised(c)))
         Slice(target, group: group),
@@ -563,7 +578,7 @@ String? _answerObjection(
       final cells = [
         for (final o in options)
           o.builtWrongBy == null
-              ? cube.cell(slice.target.word, o.formKey)
+              ? cube.cellOf(o, slice.target.word)
               : BuiltWrong(
                   slice.target.word,
                   o.formKey,
@@ -581,9 +596,7 @@ String? _answerObjection(
         if (c == slice.target) continue;
         final fromSource = switch ((choose.from, c)) {
           (Neighbours(:final k), final FormCell f) =>
-            distance(slice.target, f) == k &&
-                cube.practised(f) &&
-                cube.unlocked(f),
+            cube.neighbours(slice.target, k: k).contains(f),
           (Neighbours(:final withBuiltWrong), final BuiltWrong b) =>
             withBuiltWrong &&
                 cube.builtWrong(slice.target).any((w) => w.text == b.text),
@@ -607,7 +620,7 @@ String? _answerObjection(
       final cells = <FormCell>[];
       String? unshown;
       for (final (l, r) in pairs) {
-        final c = cube.cell(slice.target.word, l.formKey);
+        final c = cube.cellOf(l, slice.target.word);
         if (r.formKey != l.formKey) return '${l.text} and ${r.text} differ';
         if (!slice.group.contains(c)) return '$c is not in the sample';
         if (!cube.view(match.left).covers(c) ||

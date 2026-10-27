@@ -30,7 +30,10 @@ void main() {
   setUpAll(() async {
     TestWidgetsFlutterBinding.ensureInitialized();
     SharedPreferences.setMockInitialValues({});
-    items = await loadAllPracticeItems();
+    items = [
+      for (final i in await loadAllPracticeItems())
+        if (!i.isVocab) i,
+    ];
     curriculum = await loadCurriculum(bookAssets);
     lessons = await loadLessonData(bookAssets);
     final nouns = await getFormMetadata('lib/data/latin_nouns.yaml');

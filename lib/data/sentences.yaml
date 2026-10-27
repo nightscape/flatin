@@ -85,7 +85,7 @@ sentences:
     lesson: 24
     latin: "Nōnne pater fīlium laudibus afficit?"
     tokens:
-      - [nōnne]
+      - [nōnne, nōnne, grund]
       - [pater, pater, nom.sg]
       - [fīlium, fīlius, akk.sg]
       - [laudibus, laus, abl.pl]
@@ -104,7 +104,7 @@ sentences:
     lesson: 24
     latin: "Nōnne mīlitēs urbem incendērunt?"
     tokens:
-      - [nōnne]
+      - [nōnne, nōnne, grund]
       - [mīlitēs, mīles, nom.pl]
       - [urbem, urbs, akk.sg]
       - [incendērunt, incendere, ind.perf.akt.3.pl]
@@ -122,7 +122,7 @@ sentences:
     lesson: 24
     latin: "Nōnne dominus servum pūnīvit?"
     tokens:
-      - [nōnne]
+      - [nōnne, nōnne, grund]
       - [dominus, dominus, nom.sg]
       - [servum, servus, akk.sg]
       - [pūnīvit, pūnīre, ind.perf.akt.3.sg]
@@ -138,7 +138,7 @@ sentences:
     lesson: 24
     latin: "Num deī hominēs relinquunt?"
     tokens:
-      - [num]
+      - [num, num, grund]
       - [deī, deus, nom.pl]
       - [hominēs, homō, akk.pl]
       - [relinquunt, relinquere, ind.praes.akt.3.pl]
@@ -156,7 +156,7 @@ sentences:
     lesson: 24
     latin: "Num mīles hostem timet?"
     tokens:
-      - [num]
+      - [num, num, grund]
       - [mīles, mīles, nom.sg]
       - [hostem, hostis, akk.sg]
       - [timet, timēre, ind.praes.akt.3.sg]
@@ -173,7 +173,7 @@ sentences:
     lesson: 24
     latin: "Num amīcī nōs relīquērunt?"
     tokens:
-      - [num]
+      - [num, num, grund]
       - [amīcī, amīcus, nom.pl]
       - [nōs, nōs, akk.pl]
       - [relīquērunt, relinquere, ind.perf.akt.3.pl]

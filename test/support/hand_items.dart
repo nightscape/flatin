@@ -81,6 +81,7 @@ PracticeItem handItem({
     lemma: lemma,
     type: type,
     translation: translation,
+    bookTranslation: translation,
     principalParts: [('', lemma)],
     dataFileId: dataFileId,
     formOrder: keys,

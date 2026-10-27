@@ -283,6 +283,20 @@
       "deLatType": {
         "question": "Schreibe die lateinische Form von {word}, die bedeutet: {german}"
       }
+    },
+    "vocab": {
+      "latDe": {
+        "question": "Was bedeutet {word}?"
+      },
+      "deLat": {
+        "question": "Was heißt „{german}“ auf Latein?"
+      },
+      "deLatType": {
+        "question": "Schreibe auf Latein: {german}"
+      },
+      "match": {
+        "question": "Ordne die Wörter ihren Bedeutungen zu"
+      }
     }
   },
   "round": {

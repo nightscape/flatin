@@ -1,0 +1,87 @@
+data_file_id: vocab
+
+# Words and phrases that are practised by their meaning only: one cell, the
+# word itself, and no form generation. A known word that a later lesson lists
+# with a new meaning gets an item of its own under the spelling that lesson
+# lists, so the new meaning is practised from that lesson on.
+
+axes:
+  wort:
+    name: {de: Wort, en: Word}
+    values:
+      grund: {de: Grundform, en: Basic form}
+
+label:
+  head: [wort]
+  tail: []
+  merge_axis: wort
+
+parts:
+  wort: {label: {de: Wort, en: Word}}
+
+defaults:
+  given_part: wort
+  lemma_part: wort
+
+classes: [vokabel]
+
+types:
+  Vokabel:
+    class: vokabel
+    display: {de: Vokabel, en: Vocabulary}
+    stems:
+      wort: {from: wort, display: {de: Wort, en: Word}}
+    forms:
+      grund: "{wort}"
+
+items:
+  # Lektion 24
+  - parts: {wort: "nōnne"}
+    type: Vokabel
+    translation: {de: "etwa nicht?, denn nicht?", en: "surely?, isn't it?"}
+  - parts: {wort: "num"}
+    type: Vokabel
+    translation: {de: "etwa?", en: "surely not?"}
+  - parts: {wort: "utrum ... an"}
+    type: Vokabel
+    translation: {de: "… oder?", en: "… or?"}
+  - parts: {wort: ["neque (nec)", "neque", "nec"]}
+    type: Vokabel
+    translation: {de: "und nicht, auch nicht; aber nicht", en: "and not, nor; but not"}
+  - parts: {wort: ["quī (fragend)", "quī"]}
+    type: Vokabel
+    translation: {de: "welcher, welche, welches", en: "which"}
+  - parts: {wort: "laudibus afficere"}
+    type: Vokabel
+    translation: {de: "loben", en: "to praise"}
+  # Lektion 26
+  - parts: {wort: "negōtia agere"}
+    type: Vokabel
+    translation: {de: "seinen Geschäften nachgehen", en: "to go about one's business"}
+  - parts: {wort: "aliī... aliī"}
+    type: Vokabel
+    translation: {de: "die einen … die anderen; einige … andere", en: "the ones … the others; some … others"}
+  - parts: {wort: "plūs valēre"}
+    type: Vokabel
+    translation: {de: "mehr gelten (als), mehr Einfluss haben (als)", en: "to count for more (than), to have more influence (than)"}
+  - parts: {wort: "summum bonum"}
+    type: Vokabel
+    translation: {de: "das höchste Gut, das höchste Glück", en: "the highest good, the highest happiness"}
+  - parts: {wort: "aliquem aliquid facere"}
+    type: Vokabel
+    translation: {de: "jemanden zu etwas machen", en: "to make someone into something"}
+  - parts: {wort: "aliquem aliquid putāre"}
+    type: Vokabel
+    translation: {de: "jemanden (oder: etwas) für … halten", en: "to take someone (or: something) for …"}
+  - parts: {wort: "aliquem aliquid dūcere"}
+    type: Vokabel
+    translation: {de: "jemanden für … halten", en: "to take someone for …"}
+  - parts: {wort: "aliquem aliquid vocāre"}
+    type: Vokabel
+    translation: {de: "jemanden … nennen", en: "to call someone …"}
+  - parts: {wort: "aliquem aliquid appellāre"}
+    type: Vokabel
+    translation: {de: "jemanden nennen, jemanden als … bezeichnen", en: "to name someone, to describe someone as …"}
+  - parts: {wort: "sē aliquem praebēre"}
+    type: Vokabel
+    translation: {de: "sich als etwas erweisen, sich als etwas zeigen", en: "to prove oneself something, to show oneself something"}

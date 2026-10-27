@@ -69,9 +69,11 @@ class _Expected {
         label.key,
   ];
 
+  /// A vocab item teaches no grammar: its lesson alone decides.
   bool reaches(PracticeItem item, int grammar) =>
+      item.isVocab ||
       curriculum.typeLesson(item.dataFileId, item.type) <= grammar &&
-      taughtForms(item, grammar).isNotEmpty;
+          taughtForms(item, grammar).isNotEmpty;
 
   Set<String> ids(int fromLesson, int toLesson) => {
     for (final item in items)
@@ -101,6 +103,7 @@ Future<void> _expectTaughtUpTo(
       inInclusiveRange(fromLesson, toLesson),
       reason: item.lemma,
     );
+    if (item.isVocab) continue;
     expect(
       expected.curriculum.typeLesson(item.dataFileId, item.type),
       lessThanOrEqualTo(toLesson),

@@ -100,7 +100,7 @@ List<RoundPair> planBlocked(
 
 /// Mixed: repeated [selectPair] with the anchors and words so far and every
 /// grammar card without a review taken; then reordered so that two neighbours
-/// share no topic where that is possible.
+/// share no topic where that is possible. The vocab pairs count as one topic.
 List<RoundPair> planMixed(SelectionInput input, List<Topic> topics) {
   final taken = {
     for (final card in input.cards.values)
@@ -124,7 +124,9 @@ List<RoundPair> planMixed(SelectionInput input, List<Topic> topics) {
   };
   return spreadTopics(
     pairs,
-    (p) => topicOf[GrammarCardId(p.word.dataFileId, p.bundle)]!,
+    (p) => p.word.isVocab
+        ? p.word.dataFileId
+        : topicOf[GrammarCardId(p.word.dataFileId, p.bundle)]!,
   );
 }
 

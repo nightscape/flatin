@@ -155,7 +155,9 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
   Widget _typed() => Column(
     crossAxisAlignment: CrossAxisAlignment.stretch,
     children: [
+      // A dropdown offers the word's own forms; a vocab item has only one.
       if (widget.inputStrategy is! TextFieldStrategy &&
+          !widget.word.isVocab &&
           ExerciseScreen.inputKinds.contains(widget.exercise.kind))
         KeyedSubtree(
           key: const Key('exercise.input'),

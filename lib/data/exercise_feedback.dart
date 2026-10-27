@@ -11,6 +11,7 @@ List<ExplanationLine> feedbackLines(
   Exercise exercise,
   ExerciseResponse response,
 ) => switch ((exercise.answer, response)) {
+  _ when word.isVocab => _vocabLines(word, exercise.answer, response),
   (final TypedAnswer answer, TypedText(:final text)) => _typed(
     word,
     answer,
@@ -39,6 +40,37 @@ List<ExplanationLine> feedbackLines(
     '${response.runtimeType} does not answer ${exercise.answer.runtimeType}',
   ),
 };
+
+/// A vocab item has no forms to tell apart: its feedback pairs Latin texts
+/// with their meanings.
+List<ExplanationLine> _vocabLines(
+  PracticeItem word,
+  ExerciseAnswer answer,
+  ExerciseResponse response,
+) => switch ((answer, response)) {
+  (MatchingAnswer(:final pairs), MatchedPairs()) => [
+    for (final (latin, german) in pairs)
+      ExplanationLine(
+        'exercise.feedback.option',
+        params: {'form': latin.text, 'label': german.text},
+      ),
+  ],
+  (ChoiceAnswer(:final right), ChosenOption(:final chosen)) => [
+    _vocabLine(word, chosen: identical(chosen, right)),
+  ],
+  (TypedAnswer(), TypedText()) => [_vocabLine(word, chosen: false)],
+  _ => throw ArgumentError(
+    '${response.runtimeType} does not answer ${answer.runtimeType}',
+  ),
+};
+
+ExplanationLine _vocabLine(PracticeItem word, {required bool chosen}) =>
+    ExplanationLine(
+      chosen
+          ? 'exercise.feedback.optionRightChosen'
+          : 'exercise.feedback.optionRight',
+      params: {'form': word.lemma, 'label': word.translation},
+    );
 
 /// The axis ids on which the three options other than [answer.right] share
 /// one value and [answer.right] has another, in axis declaration order.

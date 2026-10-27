@@ -102,10 +102,13 @@ final class _GermanView implements ViewProvider {
   final GermanForms german;
 
   @override
-  bool covers(Cell c) => c is FormCell && german.covers(c.word, c.key);
+  bool covers(Cell c) =>
+      c is FormCell && (c.word.isVocab || german.covers(c.word, c.key));
 
+  /// A vocab item shows its translation.
   @override
   List<String> accepted(Cell c) {
+    if (c.word.isVocab) return [c.word.translation];
     final texts = german.accepted(c.word, c.key);
     if (!_framed(c)) return texts;
     final frame = _subjunctiveFrame[c.key.split('.')[1]]!;
@@ -166,6 +169,14 @@ final class Cube {
     return FormCell(word, index);
   }
 
+  /// The cell [option] shows, of [word] or of another word of the pool.
+  FormCell cellOf(FormOption option, PracticeItem word) => cell(
+    option.lexemeId == word.id
+        ? word
+        : ctx.pool.singleWhere((w) => w.id == option.lexemeId),
+    option.formKey,
+  );
+
   final _cells = <String, List<FormCell>>{};
 
   /// Every cell of [word], practised or not: what a prompt can name.
@@ -187,9 +198,16 @@ final class Cube {
   bool unlocked(FormCell c) => ctx.unlocked.contains(c.bundle);
 
   /// The cells of [c]'s word in an unlocked bundle that differ from [c] on
-  /// exactly [k] axes.
+  /// exactly [k] axes; for a vocab item, the cells of the other vocab items
+  /// of the pool, as its own word has no other cell.
   Iterable<FormCell> neighbours(FormCell c, {required int k}) =>
-      cellsOf(c.word).where((n) => distance(c, n) == k && unlocked(n));
+      (c.word.isVocab
+              ? [
+                  for (final w in ctx.pool)
+                    if (w.isVocab && w.id != c.word.id) ...cellsOf(w),
+                ]
+              : cellsOf(c.word))
+          .where((n) => distance(c, n) == k && unlocked(n));
 
   /// The wrong texts that the endings of the word's other types give for
   /// [c]'s key.
@@ -241,8 +259,16 @@ final class Cube {
     }
   }
 
-  /// Whether the shown text of [a] or [b] in [v] is accepted for the other.
-  bool clash(View v, Cell a, Cell b) => fits(v, a, b) || fits(v, b, a);
+  /// Whether the shown text of [a] or [b] in [v] is accepted for the other,
+  /// or both are vocab items whose book meanings overlap.
+  bool clash(View v, Cell a, Cell b) =>
+      fits(v, a, b) ||
+      fits(v, b, a) ||
+      (a is FormCell &&
+          b is FormCell &&
+          a.word.isVocab &&
+          b.word.isVocab &&
+          meaningsOverlap(a.word.bookTranslation, b.word.bookTranslation));
 
   /// Whether the shown text of [target] in [v] is accepted for [c]; a cell
   /// the view does not cover shows and accepts nothing.
@@ -302,3 +328,24 @@ FormOption optionOf(Cell c, View v, Cube cube) => FormOption(
     FormCell() => null,
   },
 );
+
+/// Whether one meaning of [a] equals one of [b] or holds it word for word:
+/// "jemanden für … halten" overlaps "jemanden (oder: etwas) für … halten".
+/// Meanings are the parts between commas and semicolons, without
+/// parentheses, ellipses and punctuation.
+bool meaningsOverlap(String a, String b) {
+  // Padded with spaces, so containment only matches whole words.
+  List<String> meanings(String text) => [
+    for (final part in text.split(RegExp('[,;]')))
+      if (part
+              .replaceAll(RegExp(r'\([^)]*\)|[…?!:.]'), ' ')
+              .toLowerCase()
+              .split(RegExp(r'\s+'))
+              .where((w) => w.isNotEmpty)
+              .join(' ')
+          case final m when m.isNotEmpty)
+        ' $m ',
+  ];
+  final ma = meanings(a), mb = meanings(b);
+  return ma.any((x) => mb.any((y) => x.contains(y) || y.contains(x)));
+}

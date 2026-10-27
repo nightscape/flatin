@@ -346,9 +346,10 @@ sentences:
 A token is `[text, lemma, key]` when the engine has an item with that lemma:
 `text` must be one of the spellings of form `key` (case aside). A token is
 `[text]` or `[text, headword]` only for a lesson headword that is no engine
-item (et, in, nōnne, `-ne`): `text` is the headword or one of its words
-(`[nec, "neque (nec)"]`). An enclitic token starts with `-` and is written
-onto the word before it in `latin`.
+item (et, in, `-ne`): `text` is the headword or one of its words. A
+vocabulary item's one form is `grund` (`[nōnne, nōnne, grund]`). An
+enclitic token starts with `-` and is written onto the word before it in
+`latin`.
 
 `mistake` is one of `tempus` (wrong tense or time relation), `genusVerbi`
 (active and passive swapped), `bezugswort` (wrong reference word),

@@ -72,7 +72,10 @@ final class CourseFilter {
         Override.none => wordInRange(item),
       };
 
+  /// Vocab items have no grammar: their type and their one form are always
+  /// practised, so only the word decides.
   bool typePracticed(String dataFileId, String typeName) =>
+      dataFileId == 'vocab' ||
       switch (settings.overrideOfType(dataFileId, typeName)) {
         Override.forcedOff => false,
         Override.forcedOn => true,
@@ -91,8 +94,9 @@ final class CourseFilter {
   /// A switched-off axis value hides every form that names it, whatever the
   /// form's own override says.
   bool formPracticed(String dataFileId, FormLabel label) =>
+      dataFileId == 'vocab' ||
       settings.offFeaturesOf(dataFileId, label).isEmpty &&
-      formSelected(dataFileId, label);
+          formSelected(dataFileId, label);
 
   /// The forms asked of a word; a word with none in the grammar range is
   /// asked its basic form once taught, unless the learner switched it off.
@@ -127,11 +131,13 @@ final class CourseFilter {
 
   /// Taught up to the grammar range's end and not switched off.
   bool _formTaught(String dataFileId, FormLabel label) =>
+      dataFileId == 'vocab' ||
       curriculum.formLesson(dataFileId, label.key) <=
-          settings.courseGrammar.to &&
-      settings.offFeaturesOf(dataFileId, label).isEmpty &&
-      settings.overrideOfForm(dataFileId, label.key) != Override.forcedOff &&
-      !_topicSwitchedOff(curriculum.formTopic(dataFileId, label.key));
+              settings.courseGrammar.to &&
+          settings.offFeaturesOf(dataFileId, label).isEmpty &&
+          settings.overrideOfForm(dataFileId, label.key) !=
+              Override.forcedOff &&
+          !_topicSwitchedOff(curriculum.formTopic(dataFileId, label.key));
 
   bool itemPracticed(PracticeItem item) =>
       wordPracticed(item) && typePracticed(item.dataFileId, item.type);
@@ -171,7 +177,8 @@ final class CourseFilter {
 
   /// [wordLesson] lifts the lesson a type is first practised with its words.
   CourseGap? typeGap(String dataFileId, String typeName, [int wordLesson = 1]) {
-    if (settings.overrideOfType(dataFileId, typeName) == Override.forcedOn ||
+    if (dataFileId == 'vocab' ||
+        settings.overrideOfType(dataFileId, typeName) == Override.forcedOn ||
         _topicSwitchedOff(curriculum.typeTopic(dataFileId, typeName)) ||
         typeInRange(dataFileId, typeName)) {
       return null;
@@ -180,7 +187,8 @@ final class CourseFilter {
   }
 
   CourseGap? formGap(String dataFileId, FormLabel label) {
-    if (settings.overrideOfForm(dataFileId, label.key) == Override.forcedOn ||
+    if (dataFileId == 'vocab' ||
+        settings.overrideOfForm(dataFileId, label.key) == Override.forcedOn ||
         _topicSwitchedOff(curriculum.formTopic(dataFileId, label.key)) ||
         formInRange(dataFileId, label)) {
       return null;

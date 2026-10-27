@@ -72,10 +72,7 @@ Future<void> _seed(Map<String, Set<String>> disabledTypes, DateTime due) async {
     }),
   });
 
-  final items = [
-    ...await loadPracticeItems('lib/data/latin_nouns.yaml'),
-    ...await loadPracticeItems('lib/data/latin_verbs.yaml'),
-  ];
+  final items = [...await loadAllPracticeItems()];
   await FsrsStorage.saveCards({
     for (final item in items)
       PracticeItemCard.generateItemId(item): PracticeItemCard(

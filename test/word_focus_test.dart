@@ -103,10 +103,12 @@ void main() {
       expect(const FileFocus('nouns').narrow(practicable), {
         'nouns': nouns,
         'verbs': isEmpty,
+        'vocab': isEmpty,
       });
       expect(const FileFocus('verbs').narrow(practicable), {
         'nouns': isEmpty,
         'verbs': verbs,
+        'vocab': isEmpty,
       });
       expect({
         for (final w in const IrregularVerbs().narrow(practicable)['verbs']!)

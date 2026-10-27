@@ -18,6 +18,12 @@ const _esel = [
   EselKind.lautregel,
 ];
 
+/// The items the classification explains: every one but the vocab items.
+Future<List<PracticeItem>> _grammarItems() async => [
+  for (final i in await loadAllPracticeItems())
+    if (!i.isVocab) i,
+];
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -286,7 +292,7 @@ void main() {
 
   group('T-esel-4 laws over all data', () {
     test('every form of every item yields lawful steps', () async {
-      final all = await loadAllPracticeItems();
+      final all = await _grammarItems();
       for (final item in all) {
         for (final formKey in item.formOrder) {
           final steps = eselSteps(item, formKey);
@@ -356,7 +362,7 @@ void main() {
     });
 
     test('every generated form has a Lautregel question', () async {
-      for (final item in await loadAllPracticeItems()) {
+      for (final item in await _grammarItems()) {
         for (final formKey in item.formOrder) {
           if (item.derivation.forms[formKey] is! GeneratedForm) continue;
           final steps = eselSteps(item, formKey);
@@ -376,7 +382,7 @@ void main() {
 
     test('no stamm option is the uncut dictionary form', () async {
       final offenders = <String>[];
-      for (final item in await loadAllPracticeItems()) {
+      for (final item in await _grammarItems()) {
         final dictionary = {
           for (final part in item.principalParts) norm(part.$2),
           norm(item.lemma),
@@ -410,7 +416,7 @@ void main() {
         var zeroEnding = 0;
         final dictionaryForms = <String>[];
         final withQuestion = <String>[];
-        for (final item in await loadAllPracticeItems()) {
+        for (final item in await _grammarItems()) {
           for (final formKey in item.formOrder) {
             final form = item.derivation.forms[formKey];
             if (form is! GeneratedForm || form.ending.isNotEmpty) continue;
@@ -448,7 +454,7 @@ void main() {
         final de = await germanTexts();
         final en = await englishTexts();
         final emitted = <String>{};
-        for (final item in await loadAllPracticeItems()) {
+        for (final item in await _grammarItems()) {
           for (final formKey in item.formOrder) {
             for (final step in eselSteps(item, formKey)) {
               emitted.add(step.questionKey);
