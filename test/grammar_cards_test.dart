@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/data/asset_text.dart';
-import 'package:latin_practice/data/curriculum.dart';
+import 'package:latin_practice/data/lesson_data.dart';
 import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/models/exercise.dart';
 import 'package:latin_practice/models/fsrs_card.dart';
@@ -56,9 +56,15 @@ void main() {
         for (final key in item.formOrder) GrammarCardId.of(item, key),
     };
     final named = <GrammarCardId>{};
-    for (final asset in curriculumAssets) {
-      for (final entry in loadYaml(await loadAssetText(asset)) as YamlList) {
-        final verbs = (entry as YamlMap)['verbs'] as YamlMap?;
+    for (final asset in bookAssets) {
+      final book = loadYaml(await loadAssetText(asset)) as YamlMap;
+      for (final entry in [
+        for (final lesson in book['lessons'] as YamlList)
+          if ((lesson as YamlMap)['grammar'] != null)
+            lesson['grammar'] as YamlMap,
+        if (book['later'] != null) book['later'] as YamlMap,
+      ]) {
+        final verbs = entry['verbs'] as YamlMap?;
         for (final form in (verbs?['forms'] as YamlList? ?? const [])) {
           final axes = (form as YamlMap);
           named.add(

@@ -213,7 +213,7 @@ final class FormLabel {
 
   FormLabel.fromKey(FormKey key, this.axes) : features = axes.parseKey(key);
 
-  FormKey get key => axes.formatKey(features);
+  late final FormKey key = axes.formatKey(features);
 
   String get displayName => axes.render(features);
 

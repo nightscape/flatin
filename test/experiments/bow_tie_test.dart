@@ -1,8 +1,11 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/experiments/kursstand_chain.dart';
 import 'package:latin_practice/theme.dart';
+
+import '../support/preloaded_i18n.dart';
 
 /// Heights on the shelf: the grammar ribbon below the word ribbon's end,
 /// the bow knot, and the word ribbon above the bow.
@@ -18,6 +21,7 @@ class _Shelf {
   Future<void> pump() async {
     await tester.pumpWidget(
       MaterialApp(
+        localizationsDelegates: [_i18n],
         theme: romanTheme,
         home: Material(
           child: Align(
@@ -81,7 +85,10 @@ class _Shelf {
   }
 }
 
+late final LocalizationsDelegate<FlutterI18n> _i18n;
+
 void main() {
+  setUpAll(() async => _i18n = await preloadedI18n());
   testWidgets('a ribbon dropped on its partner ties; the bow moves both', (
     tester,
   ) async {

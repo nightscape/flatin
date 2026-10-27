@@ -1,9 +1,9 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/curriculum.dart';
-import '../data/lesson_data.dart';
 import '../data/practice_data.dart';
 import '../models/course_filter.dart';
 import '../models/lesson_range.dart';
@@ -12,6 +12,7 @@ import '../models/practice_item.dart';
 import '../providers/locale_provider.dart';
 import '../providers/settings_provider.dart';
 import '../theme.dart';
+import '../widgets/kursstand_shelf.dart';
 import 'course_scope.dart';
 import 'kursstand_sliders.dart';
 
@@ -54,8 +55,18 @@ class _KursstandCardState extends ConsumerState<KursstandCard> {
         },
       );
 
+  /// Each lesson block with the inputs it was built from, so a course change
+  /// rebuilds only the blocks whose chips change.
+  final _built = <int, (List<bool>, Widget)>{};
+
   CourseFilter get _filter => widget.filter;
   SettingsNotifier get _notifier => ref.read(settingsProvider.notifier);
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _built.clear();
+  }
 
   @override
   void dispose() {
@@ -103,9 +114,10 @@ class _KursstandCardState extends ConsumerState<KursstandCard> {
 
   /// The words a lesson introduces; a word listed twice or again in a later
   /// lesson belongs to its first.
-  List<String> _wordsOf(String name) => {
-    for (final w in _filter.lessons.lessonWords[name]!)
-      if (_filter.lessons.wordToLesson[w] == name) w,
+  List<String> _wordsOf(int lesson) => {
+    if (lesson != laterLesson)
+      for (final w in _filter.lessons.lessonWords[lesson]!)
+        if (_filter.lessons.wordToLesson[w] == lesson) w,
   }.toList();
 
   bool _wordOn(String lemma, int lesson) => _filter.settings
@@ -118,12 +130,15 @@ class _KursstandCardState extends ConsumerState<KursstandCard> {
     final settings = _filter.settings;
     final r = words ? settings.courseWords : settings.courseGrammar;
     final count = words
-        ? _tr('wordCount', {'count': '${_filter.summary(widget.items).words}'})
+        ? _tr('wordCount', {
+            'count': '${widget.items.where(_filter.reachesPractice).length}',
+          })
         : _tr('topicCount', {
             'count': '${topics.where(_filter.topicInRange).length}',
           });
     return Text(
-      '$count  ·  ${_stop(r.from)} – ${_stop(r.to)}',
+      '${_tr(words ? 'vocabulary' : 'grammar')}: '
+      '${_stop(r.from)} – ${_stop(r.to)} ($count)',
       key: Key('kursstand.summary.${words ? 'words' : 'grammar'}'),
       style: (words ? _wordsLabel : _grammarLabel).copyWith(fontSize: 14),
     );
@@ -181,6 +196,29 @@ class _KursstandCardState extends ConsumerState<KursstandCard> {
     child: Wrap(spacing: 6, runSpacing: 6, children: chips),
   );
 
+  Widget _cachedBlock(
+    int lesson,
+    List<CourseTopic> topics,
+    Map<String, FormMetadata> metadata,
+  ) {
+    final settings = _filter.settings;
+    final inputs = [
+      settings.courseWords.contains(lesson),
+      settings.courseGrammar.contains(lesson),
+      for (final w in _wordsOf(lesson)) _wordOn(w, lesson),
+      for (final t in topics)
+        if (t.lesson == lesson) ...[
+          _filter.courseReaches(t),
+          _filter.topicInRange(t),
+        ],
+    ];
+    final built = _built[lesson];
+    if (built != null && listEquals(built.$1, inputs)) return built.$2;
+    final block = _block(lesson, topics, metadata);
+    _built[lesson] = (inputs, block);
+    return block;
+  }
+
   Widget _block(
     int lesson,
     List<CourseTopic> topics,
@@ -191,29 +229,32 @@ class _KursstandCardState extends ConsumerState<KursstandCard> {
         settings.courseWords.contains(lesson) ||
         settings.courseGrammar.contains(lesson);
     final ownTopics = topics.where((t) => t.lesson == lesson).toList();
-    return Column(
+    // Its own layer, so a chip animation or a scroll does not repaint the
+    // other blocks.
+    return RepaintBoundary(
       key: _blocks[lesson],
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Container(
-          color: lit ? gold.withAlpha(60) : sand,
-          padding: const EdgeInsets.fromLTRB(16, 10, 16, 6),
-          child: Text(
-            lesson == laterLesson
-                ? _tr('later')
-                : _tr('lesson', {'lesson': '$lesson'}),
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: lit ? ink : mutedText,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Container(
+            color: lit ? gold.withAlpha(60) : sand,
+            padding: const EdgeInsets.fromLTRB(16, 10, 16, 6),
+            child: Text(
+              lesson == laterLesson
+                  ? _tr('later')
+                  : _tr('lesson', {'lesson': '$lesson'}),
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: lit ? ink : mutedText,
+              ),
             ),
           ),
-        ),
-        if (ownTopics.isNotEmpty)
-          _chips([for (final t in ownTopics) _topicChip(t, metadata)]),
-        for (final name in _filter.lessons.lessonNames)
-          if (lessonNumber(name) == lesson)
-            _chips([for (final w in _wordsOf(name)) _wordChip(w, lesson)]),
-      ],
+          if (ownTopics.isNotEmpty)
+            _chips([for (final t in ownTopics) _topicChip(t, metadata)]),
+          if (_wordsOf(lesson) case final words when words.isNotEmpty)
+            _chips([for (final w in words) _wordChip(w, lesson)]),
+        ],
+      ),
     );
   }
 
@@ -245,10 +286,19 @@ class _KursstandCardState extends ConsumerState<KursstandCard> {
             ),
             const SizedBox(height: 8),
             _summary(topics, words: true),
-            KursstandSliders(
-              settings: settings,
-              bookStarts: _filter.lessons.bookStarts,
-              onCourse: _onCourse,
+            // The shelf lays out and paints every frame of a drag; tight
+            // constraints and its own layer keep the rest of the page still.
+            SizedBox(
+              width: double.infinity,
+              height: shelfHeight,
+              child: RepaintBoundary(
+                child: KursstandSliders(
+                  settings: settings,
+                  bookStarts: _filter.lessons.bookStarts,
+                  books: _filter.lessons.books,
+                  onCourse: _onCourse,
+                ),
+              ),
             ),
             Padding(
               padding: const EdgeInsets.only(bottom: 8),
@@ -265,7 +315,8 @@ class _KursstandCardState extends ConsumerState<KursstandCard> {
                   controller: _scroll,
                   child: Column(
                     children: [
-                      for (final l in _lessons) _block(l, topics, metadata),
+                      for (final l in _lessons)
+                        _cachedBlock(l, topics, metadata),
                     ],
                   ),
                 ),

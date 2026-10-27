@@ -85,10 +85,8 @@ flutter:
     - lib/data/german_verbs.yaml
     - lib/data/german_nouns.yaml
     - lib/data/migration_v2.yaml
-    - lib/data/agite_plus_bayern_1.yaml
-    - lib/data/agite_plus_bayern_2.yaml
-    - lib/data/agite_plus_bayern_1_grammatik.yaml
-    - lib/data/agite_plus_bayern_2_grammatik.yaml
+    - lib/data/agite_1.yaml
+    - lib/data/agite_2.yaml
     - lib/data/game_rules.yaml
     - assets/flutter_i18n/
     - assets/town/

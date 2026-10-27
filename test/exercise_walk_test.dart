@@ -46,8 +46,8 @@ void main() {
   setUpAll(() async {
     TestWidgetsFlutterBinding.ensureInitialized();
     items = await loadAllPracticeItems();
-    curriculum = await loadCurriculum(curriculumAssets);
-    lessons = await loadLessonData(lessonDataAssets);
+    curriculum = await loadCurriculum(bookAssets);
+    lessons = await loadLessonData(bookAssets);
     final container = ProviderContainer(
       overrides: [dataLanguageProvider.overrideWith((ref) => 'de')],
     );

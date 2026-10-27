@@ -47,6 +47,7 @@ class KursstandSliders extends StatefulWidget {
     super.key,
     required this.settings,
     required this.bookStarts,
+    required this.books,
     required this.onCourse,
     this.onScale,
     this.onPaintLabels,
@@ -59,7 +60,11 @@ class KursstandSliders extends StatefulWidget {
   /// last lesson.
   final List<int> bookStarts;
 
-  /// Gets the settings with each new course position and link.
+  /// The name of each book in [bookStarts].
+  final List<String> books;
+
+  /// Gets the settings with each new course position and link; a drag
+  /// passes them on only when the finger lets go.
   final void Function(Settings) onCourse;
 
   /// Reports, at each build, the scale the shelf uses, in this widget's
@@ -93,10 +98,28 @@ class _KursstandSlidersState extends State<KursstandSliders>
 
   _Grip? _grip;
 
+  /// Whether the grabbed start lies on its end, so the first move decides
+  /// which of the two the finger holds.
+  var _either = false;
+
   /// While a grabbed ribbon moves: the finger's position as a fraction of
   /// the track, and the ribbon's book at the last width change of the drag.
   ({double unit, int book})? _drag;
+
+  /// Whether the current drag changed [_settings] since it began.
+  var _dragChanged = false;
   double _trackWidth = 0;
+
+  ShelfNames? _names;
+
+  ShelfNames _shelfNames(TextStyle font) {
+    final texts = [...widget.books, _tr('later')];
+    if (_names?.shows(texts, font) != true) {
+      _names?.dispose();
+      _names = ShelfNames(texts, font);
+    }
+    return _names!;
+  }
 
   /// Thumbs are 0 words.from, 1 words.to, 2 grammar.from, 3 grammar.to.
   var _last = 1;
@@ -127,6 +150,7 @@ class _KursstandSlidersState extends State<KursstandSliders>
 
   @override
   void dispose() {
+    _names?.dispose();
     _morph.dispose();
     super.dispose();
   }
@@ -216,10 +240,11 @@ class _KursstandSlidersState extends State<KursstandSliders>
   void _apply(Settings next) {
     if (_drag == null) {
       _settle(next);
+      widget.onCourse(next);
     } else {
       _settings = next;
+      _dragChanged = true;
     }
-    widget.onCourse(next);
   }
 
   /// Puts the dragged ribbon on the lesson under the finger; while the books
@@ -227,9 +252,19 @@ class _KursstandSlidersState extends State<KursstandSliders>
   void _followFinger() {
     final drag = _drag;
     if (drag == null) return;
-    final grip = _grip!;
+    var grip = _grip!;
     final lesson = _scale.lessonAt(shelfInset + drag.unit * _trackWidth);
     final r = grip.words ? _words : _grammar;
+    if (_either && lesson > r.to) {
+      grip = _grip = (
+        words: grip.words,
+        start: false,
+        bow: grip.bow && _tied(false),
+        offset: grip.offset,
+      );
+      _touch(_thumb(grip.words, false));
+    }
+    if (lesson != r.from) _either = false;
     final next = grip.start
         ? LessonRange(min(lesson, r.to), r.to)
         : LessonRange(r.from, max(lesson, r.from));
@@ -295,6 +330,8 @@ class _KursstandSlidersState extends State<KursstandSliders>
     final grip = _gripAt(d.localPosition);
     if (grip == null) return;
     _grip = grip;
+    final r = grip.words ? _words : _grammar;
+    _either = grip.start && r.from == r.to;
     _dragTo();
   }
 
@@ -330,6 +367,10 @@ class _KursstandSlidersState extends State<KursstandSliders>
       _grip = null;
       _drag = null;
     });
+    if (_dragChanged) {
+      _dragChanged = false;
+      widget.onCourse(_settings);
+    }
   }
 
   /// The dragged range's labels at its ribbons on the current book scale.
@@ -430,12 +471,7 @@ class _KursstandSlidersState extends State<KursstandSliders>
           grammar: _grammar,
           tiedFrom: _settings.grammarFromLinked,
           tiedTo: _settings.grammarToLinked,
-          names: [
-            for (var b = 1; b <= widget.bookStarts.length; b++)
-              _tr('book', {'book': '$b'}),
-            _tr('later'),
-          ],
-          font: font,
+          names: _shelfNames(font),
           onPaint: widget.onPaintPages,
         ),
         foregroundPainter: _LabelPainter(

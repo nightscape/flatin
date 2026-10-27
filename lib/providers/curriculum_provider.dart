@@ -12,7 +12,7 @@ part 'curriculum_provider.g.dart';
 /// The grammar progression of the configured volumes.
 @riverpod
 Future<Curriculum> curriculum(Ref ref) async {
-  return loadCurriculum(curriculumAssets);
+  return loadCurriculum(bookAssets);
 }
 
 /// What the learner practises at the current course position.

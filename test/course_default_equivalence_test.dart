@@ -16,8 +16,8 @@ void main() {
     'the default course practises what the settings alone practised',
     () async {
       final settings = Settings();
-      final lessons = await loadLessonData(lessonDataAssets);
-      final curriculum = await loadCurriculum(curriculumAssets);
+      final lessons = await loadLessonData(bookAssets);
+      final curriculum = await loadCurriculum(bookAssets);
       final filter = CourseFilter(settings, curriculum, lessons);
       final items = await loadAllPracticeItems();
 
@@ -46,35 +46,15 @@ void main() {
     'the default course card counts what the settings alone counted',
     () async {
       final settings = Settings();
-      final lessons = await loadLessonData(lessonDataAssets);
-      final curriculum = await loadCurriculum(curriculumAssets);
+      final lessons = await loadLessonData(bookAssets);
+      final curriculum = await loadCurriculum(bookAssets);
       final filter = CourseFilter(settings, curriculum, lessons);
       final items = await loadAllPracticeItems();
 
-      var words = 0, nounForms = 0, verbForms = 0;
-      for (final item in items) {
-        if (!legacyItemSelected(settings, item)) continue;
-        words++;
-        final forms = legacyEnabledForms(
-          settings,
-          item.dataFileId,
-          item.formLabels,
-        ).length;
-        if (item.dataFileId == 'nouns') {
-          nounForms += forms;
-        } else {
-          verbForms += forms;
-        }
-      }
+      final words = items.where((i) => legacyItemSelected(settings, i));
 
-      expect(words, items.length);
-      expect(nounForms, greaterThan(0));
-      expect(verbForms, greaterThan(0));
-      expect(filter.summary(items), (
-        words: words,
-        nounForms: nounForms,
-        verbForms: verbForms,
-      ));
+      expect(words.length, items.length);
+      expect(items.where(filter.reachesPractice), words);
     },
   );
 }

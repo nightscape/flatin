@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/data/curriculum.dart';
+import 'package:latin_practice/data/lesson_data.dart';
 import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/models/lesson_range.dart';
 import 'package:latin_practice/models/practice_item.dart';
@@ -163,7 +164,7 @@ void main() {
   );
 
   test('each pattern is taught in its lesson', () async {
-    final curriculum = await loadCurriculum(curriculumAssets);
+    final curriculum = await loadCurriculum(bookAssets);
     expect(curriculum.taughtType('nouns', _iStem, LessonRange(1, 17)), isFalse);
     expect(curriculum.taughtType('nouns', _iStem, LessonRange(1, 18)), isTrue);
     expect(

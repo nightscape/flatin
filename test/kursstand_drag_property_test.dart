@@ -57,7 +57,7 @@ void main() {
           final finger = scale.lessonAt(
             (x - origin).clamp(scale.left, scale.left + 1e9),
           );
-          final now = probe.settings;
+          final now = probe.shown(tester);
           final r = words ? now.courseWords : now.courseGrammar;
           expect(
             start ? r.from : r.to,

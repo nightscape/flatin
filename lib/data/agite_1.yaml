@@ -1,0 +1,710 @@
+# One course book: its title and, per lesson, the words it introduces and
+# the grammar it teaches.
+#
+# A form belongs to the lesson of the most specific selector that matches it;
+# `{}` is the base of the earliest lesson. A type belongs to the lesson that
+# introduces its paradigm, so a word can be known before it can be inflected.
+
+book: "Agite 1"
+lessons:
+  - lesson: 1
+    words:
+      - "rosa"
+      - "iam"
+      - "diū"
+      - "exspectāre"
+      - "ubi"
+      - "est"
+      - "servus"
+      - "cūr"
+      - "cessāre"
+      - "nōn"
+      - "placēre"
+      - "tandem"
+      - "appropinquāre"
+      - "intrāre"
+      - "et"
+      - "salūtāre"
+      - "salvē! salvēte"
+      - "dominus"
+      - "domina"
+      - "gaudēre"
+      - "serva"
+      - "familia"
+      - "fīlia"
+      - "fīlius"
+      - "nam"
+      - "venīre"
+      - "etiam"
+    grammar:
+      nouns:
+        forms:
+          - {name: Grundformen}
+        types: [A-Deklination, O-Deklination-maskulinum]
+      verbs:
+        forms:
+          - {name: Präsens 3. Person Singular, modus: ind, tempus: praes, genus_verbi: akt, person: "3", numerus: sg}
+          - {name: Infinitiv Präsens, modus: inf, tempus: praes, genus_verbi: akt}
+        types: [A-Konjugation, E-Konjugation, I-Konjugation]
+  - lesson: 2
+    words:
+      - "hīc"
+      - "hortus"
+      - "saepe"
+      - "ambulāre"
+      - "ecce!"
+      - "ibi"
+      - "statim"
+      - "clāmāre"
+      - "tabula"
+      - "sunt"
+      - "explicāre"
+      - "labōrāre"
+      - "dormīre"
+      - "tum"
+      - "rogāre"
+      - "quid"
+      - "certē"
+      - "rīdēre"
+      - "respondēre"
+      - "sed"
+      - "cēnāre"
+      - "subitō"
+      - "vocāre"
+      - "toga"
+      - "properāre"
+    grammar:
+      nouns:
+        forms:
+          - {name: Nominativ Plural, kasus: nom, numerus: pl}
+      verbs:
+        forms:
+          - {name: Präsens 3. Person Plural, modus: ind, tempus: praes, genus_verbi: akt, person: "3", numerus: pl}
+  - lesson: 3
+    words:
+      - "forum"
+      - "aedificium"
+      - "spectāre"
+      - "cūria"
+      - "nam"
+      - "cōnsilium"
+      - "habēre"
+      - "cōnsilium habēre"
+      - "monumentum"
+      - "templum"
+      - "est/sunt"
+      - "vidēre"
+      - "statua"
+      - "portāre"
+      - "basilica"
+      - "aedificāre"
+      - "taberna"
+      - "vīnum"
+      - "frūmentum"
+      - "cibus"
+      - "vīsitāre"
+      - "dēlectāre"
+      - "audīre"
+      - "tacēre"
+      - "quattuor"
+      - "amīcus"
+      - "squirus"
+    grammar:
+      nouns:
+        forms:
+          - {name: Akkusativ, kasus: akk}
+        types: [O-Deklination-neutrum]
+  - lesson: 4
+    words:
+      - "Rōmānus"
+      - "equus"
+      - "populus"
+      - "amphitheātrum"
+      - "sedēre"
+      - "spectāculum"
+      - "valdē"
+      - "bēstia"
+      - "necāre"
+      - "decem"
+      - "appārēre"
+      - "stupēre"
+      - "sex"
+      - "fugāre"
+      - "lūdus"
+      - "amāre"
+      - "arēna"
+      - "pūgnāre"
+      - "autem"
+      - "nōn iam"
+      - "itaque"
+      - "ut"
+      - "probāre"
+      - "mē"
+      - "Capitōlium"
+    grammar:
+      nouns:
+        forms:
+          - {name: Dativ, kasus: dat}
+      verbs:
+        forms:
+          - {name: Konjugation im Präsens, modus: ind, tempus: praes, genus_verbi: akt}
+  - lesson: 5
+    words:
+      - "nunc"
+      - "simulācrum"
+      - "deus"
+      - "servāre"
+      - "dea"
+      - "fēmina"
+      - "cūrāre"
+      - "amīcum cūrāre"
+      - "scīre"
+      - "sapientia"
+      - "imprīmīs"
+      - "puella"
+      - "dōnum"
+      - "dare"
+      - "dōnum dare"
+      - "turba"
+      - "hūc"
+      - "convenīre"
+      - "āra"
+      - "hostia"
+      - "sacrificāre"
+      - "-que"
+      - "prohibēre"
+      - "perīculum"
+      - "perīculum prohibēre"
+      - "incendium"
+      - "apportāre"
+      - "parāre"
+      - "sacrificium"
+    grammar:
+      nouns:
+        forms:
+          - {name: Vokativ, kasus: vok}
+      verbs:
+        forms:
+          - {name: Imperativ, modus: imp, tempus: praes, genus_verbi: akt}
+  - lesson: 6
+    words:
+      - "verbum"
+      - "negōtium"
+      - "negōtium dare"
+      - "tibi"
+      - "porta"
+      - "Tartarus"
+      - "imperāre"
+      - "pārēre"
+      - "mōnstrum"
+      - "paulō post"
+      - "quis"
+      - "tē"
+      - "dēsīderāre"
+      - "rēgnāre"
+      - "umbra"
+      - "servīre"
+      - "manēre"
+      - "valē!/valēte!"
+      - "ergō"
+      - "adversārius"
+      - "temptāre"
+      - "superāre"
+      - "vīlla"
+      - "vōs"
+      - "timēre"
+    grammar:
+      nouns:
+        forms:
+          - {name: Genitiv, kasus: gen}
+      verbs:
+        types: [esse-Typ]
+  - lesson: 7
+    words:
+      - "māgnus"
+      - "Trōiānus"
+      - "plūrimī"
+      - "equus"
+      - "nōnnūllī"
+      - "Graecus"
+      - "timidus"
+      - "laetus"
+      - "quia"
+      - "inimīcus"
+      - "dolus"
+      - "fātum"
+      - "malus"
+      - "malum"
+      - "semper"
+      - "tūtus"
+      - "bonus"
+      - "stultus"
+      - "paucī"
+      - "oppidum"
+      - "aperīre"
+      - "latēre"
+      - "socius"
+      - "dēlēre"
+      - "saevus"
+      - "excitāre"
+    grammar:
+      nouns:
+        types: [Adjektiv-a-o]
+  - lesson: 8
+    words:
+      - "ferus"
+      - "saxum"
+      - "placidus"
+      - "errāre"
+      - "patria"
+      - "adiuvāre"
+      - "nōs"
+      - "auxilium"
+      - "tuus"
+      - "aqua"
+      - "nihil"
+      - "praeda"
+      - "captīvus"
+      - "licet"
+      - "at"
+      - "sē"
+      - "somnus"
+      - "somnō sē dare"
+      - "convocāre"
+      - "īnsidiae"
+      - "īnsidiās parāre"
+      - "profectō"
+      - "oculus"
+      - "apertus"
+    grammar:
+      nouns:
+        forms:
+          - {name: Ablativ, kasus: abl}
+  - lesson: 9
+    words:
+      - "puer"
+      - "multī"
+      - "fābula"
+      - "nārrāre"
+      - "magister"
+      - "vir"
+      - "pulcher"
+      - "in"
+      - "tenēre"
+      - "miser"
+      - "ē"
+      - "ex"
+      - "in"
+      - "novus"
+      - "dēbēre"
+      - "cum"
+      - "ante"
+      - "cūra"
+      - "carēre"
+      - "frūstrā"
+      - "ā"
+      - "ab"
+      - "līber"
+      - "(ā) cūrīs līber"
+      - "pius"
+      - "ad"
+      - "umerus"
+    grammar:
+      nouns:
+        types: [Adjektiv-a-o-er]
+  - lesson: 10
+    words:
+      - "abesse"
+      - "ego"
+      - "mihi"
+      - "adesse"
+      - "per"
+      - "via"
+      - "occultus"
+      - "dolēre"
+      - "tū"
+      - "numquam"
+      - "dēspērāre"
+      - "perterrēre"
+      - "terrēre"
+      - "retinēre"
+      - "animus"
+      - "turbāre"
+      - "Ītalia"
+      - "prīmum"
+      - "impius"
+      - "Rōmānus"
+      - "iūstus"
+      - "superbus"
+      - "terra"
+      - "perturbāre"
+      - "dē"
+      - "cōgitāre"
+    grammar:
+      verbs:
+        forms:
+          - {name: Imperfekt, modus: ind, tempus: impf, genus_verbi: akt}
+        types: [esse-Kompositum]
+  - lesson: 11
+    words:
+      - "imperium"
+      - "contendere"
+      - "dē imperiō contendere"
+      - "in animō habēre"
+      - "regere"
+      - "cōnsulere"
+      - "dē imperiō cōnsulere"
+      - "agere"
+      - "dīcere"
+      - "sīgnum"
+      - "petere"
+      - "auxilium ā deīs petere"
+      - "aspicere"
+      - "incipere"
+      - "quīnque"
+      - "septem"
+      - "duodecim"
+      - "grātia"
+      - "grātiās agere"
+      - "accipere"
+      - "cupere"
+      - "ēripere"
+      - "capere"
+      - "cōnsilium capere"
+      - "mūrus"
+      - "parvus"
+      - "circumdare"
+      - "accēdere"
+    grammar:
+      nouns:
+        types: [Pronomen-personal]
+      verbs:
+        types: [Konsonantische, Mischkonjugation]
+  - lesson: 12
+    words:
+      - "prīmus"
+      - "rēx"
+      - "cōpia"
+      - "uxor"
+      - "coniūnx"
+      - "mīles"
+      - "pater"
+      - "frāter"
+      - "mulier"
+      - "propinquus"
+      - "dūcere"
+      - "parcere"
+      - "facere"
+      - "pāx"
+      - "pācem facere"
+      - "annus"
+      - "redūcere"
+      - "posse"
+      - "iterum"
+      - "vix"
+      - "resistere"
+      - "fūr"
+      - "hospes"
+      - "meus"
+      - "movēre"
+      - "vīvere"
+    grammar:
+      nouns:
+        types: [Konsonantische-Deklination-mf]
+      verbs:
+        types: [Unregelmäßig]
+  - lesson: 13
+    words:
+      - "septimus"
+      - "crūdēlitās"
+      - "vexāre"
+      - "quod"
+      - "soror"
+      - "vōx"
+      - "māgnā vōce"
+      - "ōrātiō"
+      - "ōrātiōnem habēre"
+      - "virtūs"
+      - "quamquam"
+      - "factum"
+      - "tamen"
+      - "adhūc"
+      - "nēmō"
+      - "dum"
+      - "dēesse"
+      - "domī"
+      - "servitūs"
+      - "dūrus"
+      - "ager"
+      - "tam"
+      - "postquam"
+      - "fīnīre"
+      - "amāre"
+      - "cōgitāre"
+      - "convocāre"
+      - "fugāre"
+      - "labōrāre"
+      - "pūgnāre"
+      - "rēgnāre"
+      - "rogāre"
+      - "servāre"
+      - "superāre"
+      - "audīre"
+      - "carēre"
+      - "dēbēre"
+      - "habēre"
+      - "pārēre"
+      - "perterrēre"
+      - "prohibēre"
+      - "stupēre"
+      - "tacēre"
+      - "timēre"
+      - "esse"
+      - "abesse"
+      - "adesse"
+      - "posse"
+    grammar:
+      verbs:
+        forms:
+          - {name: Perfekt, modus: ind, tempus: perf, genus_verbi: akt}
+  - lesson: 14
+    words:
+      - "plēbēius"
+      - "plēbs"
+      - "discēdere"
+      - "appāret"
+      - "vīta"
+      - "sustinēre"
+      - "colere"
+      - "bellum"
+      - "prō"
+      - "īgnōrāre"
+      - "nōn īgnōrāre"
+      - "tempus"
+      - "fīnitimus"
+      - "gerere"
+      - "bellum gerere"
+      - "necesse est"
+      - "flectere"
+      - "animum amīcī flectere"
+      - "senātor"
+      - "ēgregius"
+      - "mittere"
+      - "lūx"
+      - "prīmā lūce"
+      - "antīquus"
+      - "corpus"
+      - "parātus"
+      - "appropinquāre"
+      - "dēspērāre"
+      - "nārrāre"
+      - "properāre"
+      - "scīre"
+      - "cupere"
+      - "appārēre"
+      - "dolēre"
+      - "dīcere"
+    grammar:
+      nouns:
+        types: [Konsonantische-Deklination-n]
+      verbs:
+        forms:
+          - {name: Infinitiv Perfekt, modus: inf, tempus: perf, genus_verbi: akt}
+  - lesson: 15
+    words:
+      - "is"
+      - "clāmāre"
+      - "hostis"
+      - "parāre"
+      - "salūtāre"
+      - "urbs"
+      - "māter"
+      - "spectāre"
+      - "movēre"
+      - "apud"
+      - "multum"
+      - "vidēre"
+      - "valēre"
+      - "venīre"
+      - "multum valēre"
+      - "petere"
+      - "lacrima"
+      - "dūcere"
+      - "castra"
+      - "vīvere"
+      - "nōndum"
+      - "agere"
+      - "aspicere"
+      - "cum"
+      - "īra"
+      - "capere"
+      - "facere"
+      - "ārdēre"
+      - "īrā ārdēre"
+      - "relinquere"
+      - "violāre"
+      - "cīvis"
+      - "honōs"
+      - "afficere"
+      - "honōribus afficere"
+      - "pōnere"
+      - "castra pōnere"
+      - "castra movēre"
+      - "quondam"
+      - "contrā"
+      - "vītam agere"
+      - "abdūcere"
+    grammar:
+      nouns:
+        types: [Pronomen-is]
+      verbs:
+        forms:
+          - {name: Plusquamperfekt, modus: ind, tempus: plusq, genus_verbi: akt}
+  - lesson: 16
+    words:
+      - "hōra"
+      - "procul"
+      - "nūbēs"
+      - "mōns"
+      - "mare"
+      - "nāvis"
+      - "nātūra"
+      - "vīs"
+      - "vīrēs"
+      - "tantus"
+      - "praeclārus"
+      - "quī"
+      - "littera"
+      - "litterīs sē dare"
+      - "liber"
+      - "legere"
+      - "amīca"
+      - "prope"
+      - "regiō"
+      - "alius"
+      - "fugere"
+      - "surgere"
+      - "lītus"
+      - "cadere"
+      - "occidere"
+      - "dare"
+      - "respondēre"
+      - "contendere"
+    grammar:
+      nouns:
+        types:
+          - Konsonantische-Deklination-i-mf
+          - Konsonantische-Deklination-i-n
+          - Pronomen-qui
+  - lesson: 17
+    words:
+      - "solvere"
+      - "nāvem solvere"
+      - "reliquus"
+      - "ē somnō excitāre"
+      - "ruere"
+      - "īnstāre"
+      - "metuere"
+      - "cōnstituere"
+      - "extrā"
+      - "nūper"
+      - "monēre"
+      - "mox"
+      - "flamma"
+      - "vester"
+      - "tūtus ā perīculīs"
+      - "intereā"
+      - "āter"
+      - "dēscendere"
+      - "ubīque"
+      - "nox"
+      - "iuvenis"
+      - "effugere"
+      - "sine"
+      - "sīc"
+      - "circumdare"
+    grammar:
+      verbs:
+        forms:
+          - {name: Futur I, modus: ind, tempus: fut, genus_verbi: akt}
+  - lesson: 18
+    words:
+      - "quīntus"
+      - "sōl"
+      - "īre"
+      - "domō"
+      - "exīre"
+      - "labor"
+      - "domum"
+      - "redīre"
+      - "ācer"
+      - "gravis"
+      - "subīre"
+      - "labōrēs subīre"
+      - "fēlīx"
+      - "trīstis"
+      - "pecus"
+      - "perīre"
+      - "nōbilis"
+      - "omnis"
+      - "iacēre"
+      - "sub"
+      - "cinis"
+      - "nōmen"
+      - "immortālis"
+      - "(deī) immortālēs"
+      - "putāre"
+      - "parcere"
+    grammar:
+      nouns:
+        types: [Adjektiv-zweiendig, Adjektiv-dreiendig, Adjektiv-einendig-i]
+  - lesson: 19
+    words:
+      - "mercātor"
+      - "emere"
+      - "velle"
+      - "cēna"
+      - "tertius"
+      - "lingua"
+      - "Graecus"
+      - "docēre"
+      - "avus"
+      - "doctus"
+      - "nōlle"
+      - "fortis"
+      - "mālle"
+      - "quārtus"
+      - "dēns"
+      - "perdere"
+      - "suus"
+      - "noster"
+      - "hūmānus"
+      - "resistere"
+  - lesson: 20
+    words:
+      - "adīre"
+      - "sī"
+      - "Rōma"
+      - "-ne"
+      - "invenīre"
+      - "ars"
+      - "trādere"
+      - "ūnus"
+      - "carmen"
+      - "poēta"
+      - "vestis"
+      - "dēpōnere"
+      - "cūstōdīre"
+      - "trēs"
+      - "cella"
+      - "secundus"
+      - "ōtium"
+      - "ōtiō sē dare"
+      - "duo"
+      - "lūdere"
+    grammar:
+      nouns:
+        types: [Numerale-unus, Numerale-duo, Numerale-tres]
+      verbs:
+        forms:
+          - {name: Futur II, modus: ind, tempus: fut2, genus_verbi: akt}

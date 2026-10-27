@@ -5,6 +5,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 
 import '../theme.dart';
 import 'experiment.dart';
@@ -203,15 +204,21 @@ class _ChainButtonState extends State<_ChainButton> {
   @override
   Widget build(BuildContext context) {
     final side = widget.left ? 'left' : 'right';
-    final bound = widget.left ? 'Untere' : 'Obere';
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       onEnter: (_) => setState(() => _hovered = true),
       onExit: (_) => setState(() => _hovered = false),
       child: Semantics(
         button: true,
-        label: '$bound Grenzen ${widget.linked ? 'verbunden' : 'getrennt'}',
-        hint: widget.linked ? 'Tippen zum Trennen' : 'Tippen zum Verbinden',
+        label: FlutterI18n.translate(
+          context,
+          'settings.kursstand.${widget.left ? 'chainFrom' : 'chainTo'}'
+          '${widget.linked ? 'Linked' : 'Open'}',
+        ),
+        hint: FlutterI18n.translate(
+          context,
+          'settings.kursstand.${widget.linked ? 'chainUnlink' : 'chainLink'}',
+        ),
         child: GestureDetector(
           key: Key('chain.$side'),
           behavior: HitTestBehavior.opaque,

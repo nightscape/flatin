@@ -67,16 +67,14 @@ void main() {
           : _words('de').difference(_words(language));
       final latin = {
         for (final words in (await loadLessonData(
-          lessonDataAssets,
+          bookAssets,
         )).lessonWords.values)
           for (final word in words)
             ..._word.allMatches(word).map((m) => m[0]!.toLowerCase()),
       };
       // Grammar topic names are German course data, not UI text.
       final topicWords = {
-        for (final topic in (await loadCurriculum(
-          curriculumAssets,
-        )).courseTopics)
+        for (final topic in (await loadCurriculum(bookAssets)).courseTopics)
           if (topic.typeName == null)
             ..._word
                 .allMatches(topic.formsName!)

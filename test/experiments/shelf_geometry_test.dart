@@ -6,13 +6,19 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/experiments/kursstand_chain.dart';
 import 'package:latin_practice/theme.dart';
 
+import '../support/preloaded_i18n.dart';
+
 const _books = 5, _perBook = 20, _squeezed = 22.0;
 
+late final LocalizationsDelegate<FlutterI18n> _i18n;
+
 void main() {
+  setUpAll(() async => _i18n = await preloadedI18n());
   testWidgets('lesson tops on the arc keep the x of the book scale', (
     tester,
   ) async {
@@ -22,6 +28,7 @@ void main() {
     final key = GlobalKey();
     await tester.pumpWidget(
       MaterialApp(
+        localizationsDelegates: [_i18n],
         theme: romanTheme,
         home: Material(
           child: Align(

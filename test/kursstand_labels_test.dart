@@ -127,7 +127,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(
-        (probe.settings.courseWords, probe.settings.courseGrammar),
+        (probe.shown(tester).courseWords, probe.shown(tester).courseGrammar),
         (before.courseWords, before.courseGrammar),
         reason: 'the drag must not move the thumbs',
       );
@@ -183,7 +183,7 @@ void main() {
       }
       await tester.pumpAndSettle();
 
-      final settings = probe.settings;
+      final settings = probe.shown(tester);
       expect(onWords ? settings.courseWords : settings.courseGrammar, expected);
       if (!onWords) {
         expect(

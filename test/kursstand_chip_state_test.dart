@@ -28,7 +28,7 @@ void main() {
   });
 
   testWidgets('a topic chip that is on is not crossed out', (tester) async {
-    final topic = (await loadCurriculum(curriculumAssets)).courseTopics.first;
+    final topic = (await loadCurriculum(bookAssets)).courseTopics.first;
     await openSettingsWith(
       tester,
       Settings(forcedOnTopics: {topic.key}).toJson(),
@@ -58,7 +58,7 @@ void main() {
   testWidgets('a topic chip that is off inside the range is crossed out', (
     tester,
   ) async {
-    final topic = (await loadCurriculum(curriculumAssets)).courseTopics.first;
+    final topic = (await loadCurriculum(bookAssets)).courseTopics.first;
     await openSettingsWith(
       tester,
       Settings(deselectedTopics: {topic.key}).toJson(),

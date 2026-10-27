@@ -8,9 +8,12 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/experiments/kursstand_chain.dart';
 import 'package:latin_practice/theme.dart';
+
+import '../support/preloaded_i18n.dart';
 
 const _cases = int.fromEnvironment('CASES', defaultValue: 40);
 const _seed = int.fromEnvironment('SEED', defaultValue: 1);
@@ -86,7 +89,10 @@ Future<void> _loadIcons() async {
   await loader.load();
 }
 
+late final LocalizationsDelegate<FlutterI18n> _i18n;
+
 void main() {
+  setUpAll(() async => _i18n = await preloadedI18n());
   setUpAll(_loadIcons);
 
   for (final shelf in [false, true]) {
@@ -122,6 +128,7 @@ void main() {
         late BookScale scale;
         await tester.pumpWidget(
           MaterialApp(
+            localizationsDelegates: [_i18n],
             // The outline the slider draws around overlapping thumbs would
             // eat into the thumb pixels the oracle measures.
             theme: romanTheme.copyWith(

@@ -33,7 +33,7 @@ void main() {
   test(
     'a stored word switches off every lemma that shares its letters',
     () async {
-      final lessons = await loadLessonData(lessonDataAssets);
+      final lessons = await loadLessonData(bookAssets);
       final lemmas = lessons.lessonWords.values.expand((words) => words);
 
       final converted = convertSettingsV3(
@@ -56,7 +56,7 @@ void main() {
   );
 
   test('converting an already converted store changes nothing', () async {
-    final lessons = await loadLessonData(lessonDataAssets);
+    final lessons = await loadLessonData(bookAssets);
     final lemmas = lessons.lessonWords.values.expand((words) => words);
 
     final once = convertSettingsV3(_v2(deselected: ['hic']), lemmas);

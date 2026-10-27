@@ -6,12 +6,6 @@ import 'asset_text.dart';
 import 'lesson_data.dart' show lastLesson;
 import 'practice_data.dart';
 
-/// The grammar progression of the configured volumes, by data file id.
-const List<String> curriculumAssets = [
-  'lib/data/agite_plus_bayern_1_grammatik.yaml',
-  'lib/data/agite_plus_bayern_2_grammatik.yaml',
-];
-
 /// What a curriculum is checked against: the form labels and the types one
 /// data file has.
 typedef DataFileShape = ({List<FormLabel> labels, List<String> types});
@@ -36,11 +30,11 @@ final class CourseTopic {
   /// Set for a bundle of forms; not part of [key].
   final String? formsName;
 
-  const CourseTopic.type(this.lesson, this.dataFileId, String this.typeName)
+  CourseTopic.type(this.lesson, this.dataFileId, String this.typeName)
     : selector = const {},
       formsName = null;
 
-  const CourseTopic.forms(
+  CourseTopic.forms(
     this.lesson,
     this.dataFileId,
     this.selector,
@@ -48,7 +42,7 @@ final class CourseTopic {
   ) : typeName = null;
 
   /// Stored in the settings, so it names no language.
-  String get key =>
+  late final String key =
       '$lesson/$dataFileId/${typeName ?? selector.entries.map((e) => '${e.key}=${e.value.join('|')}').join(',')}';
 
   /// The name the learner reads: the YAML `name:` of a bundle of forms, the
@@ -92,21 +86,28 @@ final class Curriculum {
     }
 
     for (var i = 0; i < yamlSources.length; i++) {
-      final where = 'curriculum file ${i + 1}';
-      for (final entry in loadYaml(yamlSources[i]) as YamlList) {
-        final map = entry as YamlMap;
-        final later = map['later'] == true;
-        final lesson = later ? laterLesson : map['lesson'] as int;
-        if (!later && (lesson < 1 || lesson > lastLesson)) {
+      final where = 'book file ${i + 1}';
+      final book = loadYaml(yamlSources[i]) as YamlMap;
+      final grammars = [
+        for (final entry in book['lessons'] as YamlList)
+          if ((entry as YamlMap)['grammar'] != null)
+            (entry['lesson'] as int, entry['grammar'] as YamlMap),
+      ];
+      for (final (lesson, _) in grammars) {
+        if (lesson < 1 || lesson > lastLesson) {
           throw StateError('$where: lesson $lesson is outside 1..$lastLesson');
         }
-        for (final fileId in map.keys.cast<String>()) {
-          if (fileId == 'lesson' || fileId == 'later') continue;
+      }
+      if (book['later'] != null) {
+        grammars.add((laterLesson, book['later'] as YamlMap));
+      }
+      for (final (lesson, grammar) in grammars) {
+        for (final fileId in grammar.keys.cast<String>()) {
           final shape = shapes[fileId];
           if (shape == null) {
             throw StateError('$where, lesson $lesson: no data file "$fileId"');
           }
-          final section = map[fileId] as YamlMap;
+          final section = grammar[fileId] as YamlMap;
           for (final form in (section['forms'] as YamlList? ?? const [])) {
             final entry = form as YamlMap;
             final name = entry['name'];

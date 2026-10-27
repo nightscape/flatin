@@ -42,11 +42,13 @@ Iterable<List<T>> permutations<T>(List<T> items) sync* {
 
 /// A curriculum that teaches every fixture form and type in lesson 1.
 const everythingInLessonOne = '''
-- lesson: 1
-  nouns:
-    forms:
-      - {name: T}
-    types: [A-Deklination, O-Deklination]
+lessons:
+  - lesson: 1
+    grammar:
+      nouns:
+        forms:
+          - {name: T}
+        types: [A-Deklination, O-Deklination]
 ''';
 
 /// A filter whose course has taught [item] completely, so only the learner's
@@ -56,22 +58,24 @@ CourseFilter filterTeachingAll(Settings settings, PracticeItem item) =>
       settings,
       Curriculum.parse(
         [
-          '- lesson: 1\n'
-              '  ${item.dataFileId}:\n'
-              '    forms:\n'
-              '      - {name: T}\n'
-              '    types: [${item.type}]\n',
+          'lessons:\n'
+              '  - lesson: 1\n'
+              '    grammar:\n'
+              '      ${item.dataFileId}:\n'
+              '        forms:\n'
+              '          - {name: T}\n'
+              '        types: [${item.type}]\n',
         ],
         {
           item.dataFileId: (labels: item.formLabels, types: [item.type]),
         },
       ),
       LessonData(
-        lessonNames: const ['Lektion 1'],
-        wordToLesson: {item.lemma: 'Lektion 1'},
+        wordToLesson: {item.lemma: 1},
         lessonWords: {
-          'Lektion 1': [item.lemma],
+          1: [item.lemma],
         },
         bookByLesson: const {1: 1},
+        books: const [],
       ),
     );

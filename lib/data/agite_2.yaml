@@ -1,0 +1,671 @@
+# One course book: its title and, per lesson, the words it introduces and
+# the grammar it teaches. `later:` collects the forms the data can build but
+# no lesson teaches; they sit one stop beyond the last lesson.
+
+book: "Agite 2"
+lessons:
+  - lesson: 21
+    words:
+      - "amor"
+      - "salūs"
+      - "prōvidēre"
+      - "sollicitāre"
+      - "timor"
+      - "incēdere"
+      - "ingēns"
+      - "taurus"
+      - "fōrma"
+      - "offerre"
+      - "dextra"
+      - "tendere"
+      - "flōs"
+      - "virgō"
+      - "tangere"
+      - "abīre"
+      - "īnferre"
+      - "ferre"
+      - "referre"
+      - "auferre"
+      - "quō"
+      - "mūtāre"
+      - "īnsula"
+      - "dolor"
+      - "perferre"
+  - lesson: 22
+    words:
+      - "vocāre"
+      - "habēre"
+      - "audīre"
+      - "docēre"
+      - "tenēre"
+      - "retinēre"
+      - "sustinēre"
+      - "ōrāre"
+      - "mīrus"
+      - "altus"
+      - "munīre"
+      - "habitāre"
+      - "eō"
+      - "crūdēlis"
+      - "dubitāre"
+      - "nāvigāre"
+      - "cōnfirmāre"
+      - "unde"
+      - "clāmor"
+      - "praebēre"
+      - "līberī"
+      - "pūgna"
+      - "mandāre"
+      - "dēmōnstrāre"
+      - "sē fortem praebēre"
+      - "grātiam referre"
+    grammar:
+      verbs:
+        forms:
+          - {name: Perfekt Passiv, modus: ind, tempus: perf, genus_verbi: pass}
+          - {name: Partizip Perfekt Passiv, modus: part, tempus: perf, genus_verbi: pass}
+  - lesson: 23
+    words:
+      - "rēs"
+      - "adversus"
+      - "perniciēs"
+      - "diēs"
+      - "fuga"
+      - "spēs"
+      - "commovēre"
+      - "possidēre"
+      - "caelum"
+      - "incrēdibilis"
+      - "exercēre"
+      - "cōnficere"
+      - "fidēs"
+      - "medius"
+      - "īnfēlix"
+      - "cōnspicere"
+      - "flēre"
+      - "rēs adversae"
+      - "diēs noctēsque"
+      - "fidem habēre"
+      - "dēlēre"
+      - "movēre"
+      - "commovēre"
+      - "sedēre"
+      - "possidēre"
+      - "venīre"
+      - "convenīre"
+      - "invenīre"
+      - "dīcere"
+      - "aspicere"
+      - "cōnspicere"
+      - "facere"
+      - "afficere"
+      - "cōnficere"
+    grammar:
+      nouns:
+        types: [E-Deklination, E-Deklination-Konsonantstamm]
+      verbs:
+        forms:
+          - {name: Plusquamperfekt Passiv, modus: ind, tempus: plusq, genus_verbi: pass}
+          - {name: Futur II Passiv, modus: ind, tempus: fut2, genus_verbi: pass}
+  - lesson: 24
+    words:
+      - "quaerere"
+      - "pūnīre"
+      - "nōnne"
+      - "laus"
+      - "num"
+      - "laedere"
+      - "utrum ... an"
+      - "iniūria"
+      - "repetere"
+      - "vincere"
+      - "quī"
+      - "homō"
+      - "incendere"
+      - "nōtus"
+      - "iungere"
+      - "dīmittere"
+      - "respicere"
+      - "neque (nec)"
+      - "cōgnōscere"
+      - "laudibus afficere"
+      - "respondēre"
+      - "petere"
+      - "repetere"
+      - "dūcere"
+      - "abdūcere"
+      - "redūcere"
+      - "flectere"
+      - "mittere"
+      - "dīmittere"
+      - "dēscendere"
+    grammar:
+      nouns:
+        types: [Pronomen-quis]
+      verbs:
+        forms:
+          - {name: Infinitiv Perfekt Passiv, modus: inf, tempus: perf, genus_verbi: pass}
+  - lesson: 25
+    words:
+      - "vērus"
+      - "pulvis"
+      - "tegere"
+      - "condere"
+      - "cūstōs"
+      - "iubēre"
+      - "addūcere"
+      - "interficere"
+      - "negāre"
+      - "vetāre"
+      - "lēx"
+      - "statuere"
+      - "oppūgnāre"
+      - "paene"
+      - "fortūna"
+      - "etsī"
+      - "mortuus"
+      - "neglegere"
+      - "mors"
+      - "quam"
+      - "lēgem statuere"
+      - "dare"
+      - "circumdare"
+      - "legere"
+      - "neglegere"
+      - "condere"
+      - "perdere"
+      - "trādere"
+      - "statuere"
+      - "cōnstituere"
+      - "capere"
+      - "accipere"
+      - "incipere"
+  - lesson: 26
+    words:
+      - "negōtia agere"
+      - "aliī... aliī"
+      - "plūs valēre"
+      - "facere"
+      - "summum bonum"
+      - "putāre"
+      - "vocāre"
+      - "dūcere"
+      - "reprehendere"
+      - "plūs"
+      - "cupiditās"
+      - "beātus"
+      - "dīvitiae"
+      - "summus"
+      - "tālis"
+      - "appellāre"
+      - "philosophus"
+      - "canis"
+      - "respōnsum"
+      - "paulum"
+      - "intellegere"
+      - "rīdēre"
+      - "agere"
+      - "cupere"
+      - "ferre"
+      - "auferre"
+      - "īnferre"
+      - "offerre"
+      - "perferre"
+      - "referre"
+    grammar:
+      verbs:
+        forms:
+          - {name: Partizip Präsens Aktiv, modus: part, tempus: praes, genus_verbi: akt}
+  - lesson: 27
+    words:
+      - "auctor"
+      - "memoria"
+      - "odium"
+      - "temperāre"
+      - "dignitās"
+      - "aedis"
+      - "cotīdiē"
+      - "caedere"
+      - "nūmen"
+      - "exīstimāre"
+      - "animal"
+      - "alere"
+      - "crēdere"
+      - "equidem"
+      - "atque/ac"
+      - "modus"
+      - "clārus"
+      - "exstinguere"
+      - "parere"
+      - "memoriae trādere"
+      - "īrae temperāre"
+      - "aedēs"
+      - "iterum atque iterum"
+      - "eō modō"
+      - "adiuvāre"
+      - "colere"
+      - "pōnere"
+      - "dēpōnere"
+    grammar:
+      verbs:
+        forms:
+          - {name: Präsens Passiv, modus: ind, tempus: praes, genus_verbi: pass}
+          - {name: Infinitiv Präsens Passiv, modus: inf, tempus: praes, genus_verbi: pass}
+  - lesson: 28
+    words:
+      - "tempestās"
+      - "iactāre"
+      - "nauta"
+      - "occāsiō"
+      - "āmittere"
+      - "ascendere"
+      - "salvus"
+      - "pellere"
+      - "hic"
+      - "īnfēstus"
+      - "locus"
+      - "scelus"
+      - "committere"
+      - "vendere"
+      - "dēserere"
+      - "occāsiōnem āmittere"
+      - "fidem dare"
+      - "fidem servāre"
+      - "scelus committere"
+      - "īre in cōnsilium"
+      - "vidēre"
+      - "prōvidēre"
+      - "aperīre"
+      - "tangere"
+      - "īre"
+    grammar:
+      nouns:
+        types: [Pronomen-hic]
+      verbs:
+        forms:
+          - {name: Imperfekt Passiv, modus: ind, tempus: impf, genus_verbi: pass}
+          - {name: Futur I Passiv, modus: ind, tempus: fut, genus_verbi: pass}
+  - lesson: 29
+    words:
+      - "medicus"
+      - "initium"
+      - "morbus"
+      - "animadvertere"
+      - "nōn modo... sed etiam"
+      - "adhibēre"
+      - "ferrum"
+      - "sententia"
+      - "nisī"
+      - "inīre"
+      - "ferē"
+      - "mōs"
+      - "māiōrēs"
+      - "scrībere"
+      - "cavēre"
+      - "gēns"
+      - "cunctī"
+      - "barbarus"
+      - "orbis"
+      - "initiō"
+      - "sententiam mūtāre"
+      - "cōnsilium inīre"
+      - "mōrēs māiōrum"
+      - "orbis terrārum"
+    grammar:
+      verbs:
+        forms:
+          - {name: Konjunktiv Imperfekt, modus: konj, tempus: impf, genus_verbi: akt}
+  - lesson: 30
+    words:
+      - "ille"
+      - "Cicerō"
+      - "prōvincia"
+      - "praeesse"
+      - "sepulcrum"
+      - "iste"
+      - "stāre"
+      - "scientia"
+      - "studēre"
+      - "studium"
+      - "aliquandō"
+      - "dēfendere"
+      - "imperātor"
+      - "prius"
+      - "prūdēns"
+      - "perspicere"
+      - "sōlus"
+      - "senex"
+      - "gladius"
+      - "interrogāre"
+      - "dux"
+      - "indicāre"
+      - "occīdere"
+      - "prōvinciae praeesse"
+    grammar:
+      nouns:
+        types: [Pronomen-ille, Pronomen-iste]
+      verbs:
+        forms:
+          - {name: Konjunktiv Plusquamperfekt, modus: konj, tempus: plusq, genus_verbi: akt}
+  - lesson: 31
+    words:
+      - "proelium"
+      - "victōria"
+      - "clādēs"
+      - "nūntiāre"
+      - "Rōmae"
+      - "māximus"
+      - "nūntius"
+      - "afferre"
+      - "tōtus"
+      - "potestās"
+      - "discrīmen"
+      - "vīvus"
+      - "incertus"
+      - "legiō"
+      - "explōrāre"
+      - "impedīre"
+      - "cōgere"
+      - "silentium"
+      - "praetereā"
+      - "repellere"
+      - "proelium facere"
+      - "victōriam ferre"
+      - "nūntium afferre"
+      - "in potestāte tenēre"
+      - "dē salūte dēspērāre"
+      - "rēs in summō discrīmine est"
+      - "relinquere"
+  - lesson: 32
+    words:
+      - "Caesar"
+      - "flūctus"
+      - "classis"
+      - "cōnspectus"
+      - "metus"
+      - "gemitus"
+      - "cursus"
+      - "impetus"
+      - "nūllus"
+      - "comes"
+      - "vīgintī"
+      - "pecūnia"
+      - "quīnquāgintā"
+      - "caput"
+      - "pōstulāre"
+      - "cōnferre"
+      - "versus"
+      - "compōnere"
+      - "recitāre"
+      - "laudāre"
+      - "scelerātus"
+      - "nimis"
+      - "comparāre"
+      - "pars"
+      - "in cōnspectum venīre"
+      - "impetum facere"
+      - "lūdere"
+      - "solvere"
+    grammar:
+      nouns:
+        types: [U-Deklination]
+  - lesson: 33
+    words:
+      - "facinus"
+      - "indignus"
+      - "imāgō"
+      - "aureus"
+      - "impetrāre"
+      - "ut"
+      - "efficere"
+      - "domus"
+      - "rēgīna"
+      - "sēnsus"
+      - "rapere"
+      - "optāre"
+      - "quantus"
+      - "superbia"
+      - "vultus"
+      - "potentia"
+      - "augēre"
+      - "pūblicus"
+      - "lībertās"
+      - "manus"
+      - "nē"
+      - "timēre"
+      - "rēs pūblica"
+      - "perīculum est"
+      - "regere"
+      - "surgere"
+      - "rapere"
+      - "ēripere"
+    grammar:
+      verbs:
+        forms:
+          - {name: Konjunktiv Präsens, modus: konj, tempus: praes, genus_verbi: akt}
+  - lesson: 34
+    words:
+      - "nescīre"
+      - "auctōritās"
+      - "senātus"
+      - "vestrum"
+      - "cōnsul"
+      - "lēgātus"
+      - "iter"
+      - "Gallia"
+      - "obsidēre"
+      - "arma"
+      - "exercitus"
+      - "Rōmam"
+      - "terror"
+      - "umquam"
+      - "inicere"
+      - "utrum... an"
+      - "adventus"
+      - "enim"
+      - "vāstāre"
+      - "quis vestrum"
+      - "iter facere"
+      - "bellum īnferre"
+      - "terrōrem inicere"
+    grammar:
+      verbs:
+        forms:
+          - {name: Konjunktiv Perfekt, modus: konj, tempus: perf, genus_verbi: akt}
+  - lesson: 35
+    words:
+      - "celer"
+      - "vāstus"
+      - "ut"
+      - "pervenīre"
+      - "acerbus"
+      - "tot"
+      - "ut"
+      - "arcēre"
+      - "cum"
+      - "ipse"
+      - "nefārius"
+      - "ergā"
+      - "continēre"
+      - "aciēs"
+      - "ēvādere"
+      - "deinde"
+      - "quoque"
+      - "attingere"
+      - "asper"
+      - "armātus"
+      - "nē"
+      - "ut nōn"
+      - "odium ergā hostēs"
+      - "odium continēre"
+      - "fugā salūtem petere"
+      - "in tutō"
+    grammar:
+      nouns:
+        types: [Pronomen-ipse]
+  - lesson: 36
+    words:
+      - "mīlia"
+      - "exilium"
+      - "expellere"
+      - "posteā"
+      - "venia"
+      - "reditus"
+      - "māiestās"
+      - "restituere"
+      - "aquaeductus"
+      - "pōns"
+      - "prīnceps"
+      - "mūnus"
+      - "fīnis"
+      - "pācāre"
+      - "clēmentia"
+      - "iūstitia"
+      - "pietās"
+      - "causa"
+      - "cōnsulātus"
+      - "terrā marīque"
+      - "causā"
+      - "annum agere"
+      - "cōnsulere"
+    grammar:
+      nouns:
+        types: [Numerale-milia]
+  - lesson: 37
+    words:
+      - "fāma"
+      - "subicere"
+      - "clēmēns"
+      - "īrācundia"
+      - "dēcernere"
+      - "īdem"
+      - "ita"
+      - "callidus"
+      - "līberāre"
+      - "foedus"
+      - "amīcitia"
+      - "clam"
+      - "frangere"
+      - "quōmodo"
+      - "silva"
+      - "advenīre"
+      - "undique"
+      - "opprimere"
+      - "calamitās"
+      - "fāma est"
+      - "foedus facere"
+      - "proelium committere"
+      - "nātūra locī"
+      - "in aciē pūgnāre"
+      - "sibi mortem dare"
+    grammar:
+      nouns:
+        types: [Pronomen-idem]
+      verbs:
+        forms:
+          - {name: Konjunktiv Präsens Passiv, modus: konj, tempus: praes, genus_verbi: pass}
+          - {name: Konjunktiv Imperfekt Passiv, modus: konj, tempus: impf, genus_verbi: pass}
+  - lesson: 38
+    words:
+      - "cārus"
+      - "quam"
+      - "precēs"
+      - "dēdūcere"
+      - "cōnsistere"
+      - "obsecrāre"
+      - "sūmere"
+      - "turpis"
+      - "dī"
+      - "cor"
+      - "lūdibrium"
+      - "rūrsus"
+      - "reddere"
+      - "bibere"
+      - "voluptās"
+      - "in aciē cōnsistere"
+      - "auxiliō venīre"
+      - "arma sūmere"
+      - "honōrī esse"
+      - "cordī esse"
+      - "ex quō tempore"
+      - "lūdibriō esse"
+      - "dolōrī esse"
+      - "memoriam dēpōnere"
+      - "voluptātī esse"
+      - "emere"
+      - "sūmere"
+    grammar:
+      verbs:
+        forms:
+          - {name: Konjunktiv Perfekt Passiv, modus: konj, tempus: perf, genus_verbi: pass}
+          - {name: Konjunktiv Plusquamperfekt Passiv, modus: konj, tempus: plusq, genus_verbi: pass}
+  - lesson: 39
+    words:
+      - "nōmināre"
+      - "ostendere"
+      - "igitur"
+      - "pulchritūdō"
+      - "praedicāre"
+      - "permovēre"
+      - "ōs"
+      - "digitus"
+      - "pēs"
+      - "īmmō"
+      - "auris"
+      - "efferre"
+      - "mollis"
+      - "pauper"
+      - "dīves"
+      - "aurum"
+      - "ōrnāmentum"
+      - "fingere"
+      - "īrātus"
+      - "forās"
+      - "vetus"
+      - "vērē"
+      - "aetās"
+      - "ait"
+      - "laudibus efferre"
+    grammar:
+      nouns:
+        types: [Adjektiv-einendig-Konsonantstamm]
+  - lesson: 40
+    words:
+      - "mātrimōnium"
+      - "crēscere"
+      - "sermō"
+      - "ōsculum"
+      - "fallere"
+      - "arbor"
+      - "frūctus"
+      - "albus"
+      - "ubi (prīmum)/ut (prīmum)"
+      - "occultāre"
+      - "cruentus"
+      - "sanguis"
+      - "tingere"
+      - "stringere"
+      - "inquit"
+      - "vulnus"
+      - "trahere"
+      - "caedēs"
+      - "in mātrimōnium dūcere"
+      - "sermōnem habēre"
+      - "nihil habeō"
+      - "vim sibi afferre"
+later:
+  nouns:
+    forms:
+      - {name: Steigerung der Adjektive, grad: [komp, sup], numerus: [sg, pl], genus: [m, f, n]}
+      - {name: Steigerung der Adverbien, adverb: adv, grad: [komp, sup]}
+  verbs:
+    forms:
+      - {name: Infinitiv Futur Aktiv, modus: inf, tempus: fut, genus_verbi: akt}
+      - {name: Infinitiv Futur Passiv, modus: inf, tempus: fut, genus_verbi: pass}
+      - {name: Imperativ Futur, modus: imp, tempus: fut, genus_verbi: akt}
+      - {name: Imperativ Präsens Passiv, modus: imp, tempus: praes, genus_verbi: pass}
+      - {name: Partizip Futur Aktiv, modus: part, tempus: fut, genus_verbi: akt}
+      - {name: Partizip Perfekt Aktiv, modus: part, tempus: perf, genus_verbi: akt}
+      - {name: Gerundium, modus: ger}
+      - {name: Gerundivum, modus: gerv}
+      - {name: Supinum, modus: sup}

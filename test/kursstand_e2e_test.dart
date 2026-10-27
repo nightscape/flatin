@@ -120,8 +120,8 @@ Future<void> _expectTaughtUpTo(
 
 Future<_Expected> _expected() async => _Expected(
   await loadAllPracticeItems(),
-  await loadLessonData(lessonDataAssets),
-  await loadCurriculum(curriculumAssets),
+  await loadLessonData(bookAssets),
+  await loadCurriculum(bookAssets),
 );
 
 Future<Map<String, dynamic>> _stored() => storedSettings();

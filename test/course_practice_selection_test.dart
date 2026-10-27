@@ -34,7 +34,7 @@ void main() {
     'a narrowed course hides the later lessons and the later forms',
     () async {
       seedSettings(_upToFive);
-      final lessons = await loadLessonData(lessonDataAssets);
+      final lessons = await loadLessonData(bookAssets);
       final container = await _containerWithLateGenitive();
       addTearDown(container.dispose);
 
@@ -103,7 +103,7 @@ void main() {
   });
 
   test('a word forced on outside the range is practised', () async {
-    final lessons = await loadLessonData(lessonDataAssets);
+    final lessons = await loadLessonData(bookAssets);
     seedSettings(_upToFive.copyWith(forcedOnWords: {'animus'}));
     final container = ProviderContainer();
     addTearDown(container.dispose);
@@ -117,7 +117,7 @@ void main() {
   });
 
   test('a word forced off inside the range is not practised', () async {
-    final lessons = await loadLessonData(lessonDataAssets);
+    final lessons = await loadLessonData(bookAssets);
     seedSettings(_upToFive.copyWith(deselectedWords: {'rosa'}));
     final container = ProviderContainer();
     addTearDown(container.dispose);

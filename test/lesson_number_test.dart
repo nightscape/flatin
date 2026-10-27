@@ -8,24 +8,8 @@ import 'support/hand_items.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  test('a unit name carries its lesson number', () {
-    expect(lessonNumber('Lektion 22 Stammformen'), 22);
-    expect(lessonNumber('Lektion 1'), 1);
-    expect(lessonNumber('Plateaulektion 11 – 15 Stammformen'), 11);
-    expect(() => lessonNumber('Anhang'), throwsStateError);
-  });
-
-  test('every unit name of the data carries a lesson number', () async {
-    final lessons = await loadLessonData(lessonDataAssets);
-
-    expect(lessons.lessonNames, hasLength(73));
-    for (final name in lessons.lessonNames) {
-      expect(lessonNumber(name), inInclusiveRange(1, lastLesson), reason: name);
-    }
-  });
-
   test('the lesson scale runs 1..lastLesson, split over two volumes', () async {
-    final lessons = await loadLessonData(lessonDataAssets);
+    final lessons = await loadLessonData(bookAssets);
 
     expect(lessons.lessonNumbers, [for (var i = 1; i <= lastLesson; i++) i]);
     expect(lessons.bookOf(20), 1);
@@ -33,7 +17,7 @@ void main() {
   });
 
   test('every practice item belongs to a lesson', () async {
-    final lessons = await loadLessonData(lessonDataAssets);
+    final lessons = await loadLessonData(bookAssets);
     final items = await loadAllPracticeItems();
 
     assertLessonsCoverItems(lessons, items);
@@ -48,12 +32,12 @@ void main() {
 
   test('an item no lesson introduces is named', () {
     const lessons = LessonData(
-      lessonNames: ['Lektion 1'],
-      wordToLesson: {'amāre': 'Lektion 1'},
+      wordToLesson: {'amāre': 1},
       lessonWords: {
-        'Lektion 1': ['amāre'],
+        1: ['amāre'],
       },
       bookByLesson: {1: 1},
+      books: [],
     );
     final orphan = handItem(
       dataFileId: 'verbs',

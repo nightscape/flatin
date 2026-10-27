@@ -69,8 +69,8 @@ void main() {
     TestWidgetsFlutterBinding.ensureInitialized();
     SharedPreferences.setMockInitialValues({});
     _items = await loadAllPracticeItems();
-    _curriculum = await loadCurriculum(curriculumAssets);
-    _lessons = await loadLessonData(lessonDataAssets);
+    _curriculum = await loadCurriculum(bookAssets);
+    _lessons = await loadLessonData(bookAssets);
     await FsrsStorage.syncCards(_items);
     all = await FsrsStorage.syncGrammarCards(_items);
     filter = _filter(laterLesson);

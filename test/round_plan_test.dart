@@ -30,8 +30,8 @@ void main() {
     TestWidgetsFlutterBinding.ensureInitialized();
     SharedPreferences.setMockInitialValues({});
     final all = await loadAllPracticeItems();
-    final curriculum = await loadCurriculum(curriculumAssets);
-    final lessons = await loadLessonData(lessonDataAssets);
+    final curriculum = await loadCurriculum(bookAssets);
+    final lessons = await loadLessonData(bookAssets);
     filter = CourseFilter(
       Settings(courseWords: LessonRange.full),
       curriculum,

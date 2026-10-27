@@ -20,11 +20,13 @@ void main() {
       practicableItemsByTypeProvider.future,
     );
     final filter = await container.read(courseFilterProvider.future);
-    final summary = filter.summary(await loadAllPracticeItems());
+    final items = await loadAllPracticeItems();
 
     expect(practicable['nouns'], isEmpty);
     expect(practicable['verbs'], isNotEmpty);
-    expect(summary.words, practicable['verbs']!.length);
-    expect(summary.nounForms, 0);
+    expect(
+      items.where(filter.reachesPractice).length,
+      practicable['verbs']!.length,
+    );
   });
 }

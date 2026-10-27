@@ -13,7 +13,7 @@ void main() {
   late Map<String, FormMetadata> metadata;
 
   setUpAll(() async {
-    curriculum = await loadCurriculum(curriculumAssets);
+    curriculum = await loadCurriculum(bookAssets);
     metadata = {
       for (final path in [
         'lib/data/latin_nouns.yaml',

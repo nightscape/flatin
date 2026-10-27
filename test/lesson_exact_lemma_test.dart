@@ -8,16 +8,16 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   test('words that differ only in quantity keep their own lesson', () async {
-    final lessons = await loadLessonData(lessonDataAssets);
+    final lessons = await loadLessonData(bookAssets);
 
-    expect(lessons.wordToLesson['hīc'], 'Lektion 2');
-    expect(lessons.wordToLesson['hic'], 'Lektion 28');
-    expect(lessons.wordToLesson['pārēre'], 'Lektion 6');
-    expect(lessons.wordToLesson['parere'], 'Lektion 27');
+    expect(lessons.wordToLesson['hīc'], 2);
+    expect(lessons.wordToLesson['hic'], 28);
+    expect(lessons.wordToLesson['pārēre'], 6);
+    expect(lessons.wordToLesson['parere'], 27);
   });
 
   test('an item is looked up by its own spelling', () async {
-    final lessons = await loadLessonData(lessonDataAssets);
+    final lessons = await loadLessonData(bookAssets);
     final items = await loadAllPracticeItems();
 
     int lessonOf(String lemma) =>
@@ -33,12 +33,12 @@ void main() {
 
   test('a lesson word spelt without the item\'s macrons fails the load', () {
     const lessons = LessonData(
-      lessonNames: ['Lektion 1'],
-      wordToLesson: {'ignorare': 'Lektion 1'},
+      wordToLesson: {'ignorare': 1},
       lessonWords: {
-        'Lektion 1': ['ignorare'],
+        1: ['ignorare'],
       },
       bookByLesson: {1: 1},
+      books: [],
     );
     final item = handItem(
       dataFileId: 'verbs',

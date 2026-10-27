@@ -6,9 +6,12 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/experiments/kursstand_chain.dart';
 import 'package:latin_practice/theme.dart';
+
+import '../support/preloaded_i18n.dart';
 
 final _children = <int, List<int>>{};
 final _orphans = <String>[];
@@ -50,7 +53,10 @@ class _RecordingBinding extends AutomatedTestWidgetsFlutterBinding {
       _RecordingBuilder();
 }
 
+late final LocalizationsDelegate<FlutterI18n> _i18n;
+
 void main() {
+  setUpAll(() async => _i18n = await preloadedI18n());
   _RecordingBinding();
 
   testWidgets('switching tabs, scrolling and dragging sends no orphan', (
@@ -63,6 +69,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         child: MaterialApp(
+          localizationsDelegates: [_i18n],
           theme: romanTheme,
           home: DefaultTabController(
             length: variants.length,

@@ -67,23 +67,21 @@ class _WordList extends ConsumerWidget {
     final needle = normalizeDiacritics(query.trim()).toLowerCase();
 
     final rows = <Object>[];
-    int? shownLesson;
-    for (final name in filter.lessons.lessonNames) {
+    for (final MapEntry(key: lesson, value: words)
+        in filter.lessons.lessonWords.entries) {
       // A word several lessons list belongs to the one that introduces it,
       // so it gets one row and one toggle.
       final matches = [
-        for (final lemma in filter.lessons.lessonWords[name]!)
+        for (final lemma in words)
           if (byLemma.containsKey(lemma) &&
-              filter.lessons.wordToLesson[lemma] == name &&
+              filter.lessons.wordToLesson[lemma] == lesson &&
               normalizeDiacritics(lemma).toLowerCase().contains(needle))
             byLemma[lemma]!,
       ];
       if (matches.isEmpty) continue;
-      if (lessonNumber(name) != shownLesson) {
-        shownLesson = lessonNumber(name);
-        rows.add(shownLesson);
-      }
-      rows.addAll(matches);
+      rows
+        ..add(lesson)
+        ..addAll(matches);
     }
 
     return ListView.builder(

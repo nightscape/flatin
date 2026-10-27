@@ -2,7 +2,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/data/lesson_data.dart';
 import 'package:latin_practice/models/course_filter.dart';
 import 'package:latin_practice/models/lesson_range.dart';
-import 'package:latin_practice/models/practice_item.dart';
 import 'package:latin_practice/models/settings.dart';
 
 import 'support/course_fixture.dart';
@@ -12,13 +11,13 @@ import 'support/test_axes.dart';
 /// A learner whose course reaches lesson 23: "nauta" is a word of lesson 21,
 /// but its type is not taught before lesson 32.
 const _lessons = LessonData(
-  lessonNames: ['Lektion 21', 'Lektion 32'],
-  wordToLesson: {'nauta': 'Lektion 21', 'cornu': 'Lektion 32'},
+  wordToLesson: {'nauta': 21, 'cornu': 32},
   lessonWords: {
-    'Lektion 21': ['nauta'],
-    'Lektion 32': ['cornū'],
+    21: ['nauta'],
+    32: ['cornū'],
   },
   bookByLesson: {21: 2, 32: 2},
+  books: [],
 );
 
 final _nauta = handItem(
@@ -35,14 +34,17 @@ final _nauta = handItem(
 );
 
 const _lateType = '''
-- lesson: 21
-  nouns:
-    forms:
-      - {name: T}
-    types: [O-Deklination]
-- lesson: 32
-  nouns:
-    types: [A-Deklination]
+lessons:
+  - lesson: 21
+    grammar:
+      nouns:
+        forms:
+          - {name: T}
+        types: [O-Deklination]
+  - lesson: 32
+    grammar:
+      nouns:
+        types: [A-Deklination]
 ''';
 
 CourseFilter _filter(Settings settings, String curriculum) => CourseFilter(
@@ -65,11 +67,13 @@ void main() {
 
   test('once the type is taught the item is practised', () {
     final filter = _filter(Settings().withWordRange(LessonRange(21, 23)), '''
-- lesson: 21
-  nouns:
-    forms:
-      - {name: T}
-    types: [A-Deklination, O-Deklination]
+lessons:
+  - lesson: 21
+    grammar:
+      nouns:
+        forms:
+          - {name: T}
+        types: [A-Deklination, O-Deklination]
 ''');
 
     expect(filter.itemPracticed(_nauta), isTrue);
@@ -127,26 +131,25 @@ void main() {
 
   test('practicedForms and summary count what the learner sees', () {
     final filter = _filter(Settings().withWordRange(LessonRange(21, 23)), '''
-- lesson: 21
-  nouns:
-    forms:
-      - {name: T}
-    types: [A-Deklination, O-Deklination]
-- lesson: 32
-  nouns:
-    forms:
-      - {name: T, numerus: pl}
+lessons:
+  - lesson: 21
+    grammar:
+      nouns:
+        forms:
+          - {name: T}
+        types: [A-Deklination, O-Deklination]
+  - lesson: 32
+    grammar:
+      nouns:
+        forms:
+          - {name: T, numerus: pl}
 ''');
 
     expect(filter.practicedForms('nouns', _nauta.formLabels), {
       'nom.sg',
       'gen.sg',
     });
-    expect(filter.summary(<PracticeItem>[_nauta]), (
-      words: 1,
-      nounForms: 2,
-      verbForms: 0,
-    ));
+    expect(filter.reachesPractice(_nauta), isTrue);
   });
 
   test('a word without a basic form is a data error', () {
@@ -160,13 +163,16 @@ void main() {
       },
     );
     final filter = _filter(Settings().withWordRange(LessonRange(21, 23)), '''
-- lesson: 21
-  nouns:
-    types: [A-Deklination, O-Deklination]
-- lesson: 32
-  nouns:
-    forms:
-      - {name: T}
+lessons:
+  - lesson: 21
+    grammar:
+      nouns:
+        types: [A-Deklination, O-Deklination]
+  - lesson: 32
+    grammar:
+      nouns:
+        forms:
+          - {name: T}
 ''');
 
     expect(
@@ -183,15 +189,18 @@ void main() {
 
   group('grammar topics', () {
     const lateForms = '''
-- lesson: 21
-  nouns:
-    forms:
-      - {name: T}
-    types: [A-Deklination, O-Deklination]
-- lesson: 32
-  nouns:
-    forms:
-      - {name: T, numerus: pl}
+lessons:
+  - lesson: 21
+    grammar:
+      nouns:
+        forms:
+          - {name: T}
+        types: [A-Deklination, O-Deklination]
+  - lesson: 32
+    grammar:
+      nouns:
+        forms:
+          - {name: T, numerus: pl}
 ''';
     final inRange = Settings().withWordRange(LessonRange(21, 23));
 

@@ -45,15 +45,15 @@ Future<Map<String, DataFileShape>> _shapes() async {
 /// forms on both sides of it.
 Future<Curriculum> lateGenitiveCurriculum() async {
   final shapes = await _shapes();
-  final yaml = StringBuffer('- lesson: 1\n');
+  final yaml = StringBuffer('lessons:\n  - lesson: 1\n    grammar:\n');
   for (final file in shapes.entries) {
-    yaml.writeln('  ${file.key}:');
-    yaml.writeln('    forms:');
-    yaml.writeln('      - {name: T}');
-    yaml.writeln('    types: [${file.value.types.join(', ')}]');
+    yaml.writeln('      ${file.key}:');
+    yaml.writeln('        forms:');
+    yaml.writeln('          - {name: T}');
+    yaml.writeln('        types: [${file.value.types.join(', ')}]');
   }
   yaml.write(
-    '- lesson: 30\n  nouns:\n    forms:\n      - {name: T, kasus: gen}\n',
+    '  - lesson: 30\n    grammar:\n      nouns:\n        forms:\n          - {name: T, kasus: gen}\n',
   );
   return Curriculum.parse([yaml.toString()], shapes);
 }
@@ -66,18 +66,20 @@ Future<Curriculum> lateTypeCurriculum(
   int lesson,
 ) async {
   final shapes = await _shapes();
-  final yaml = StringBuffer('- lesson: 1\n');
+  final yaml = StringBuffer('lessons:\n  - lesson: 1\n    grammar:\n');
   for (final file in shapes.entries) {
     final types = [
       for (final type in file.value.types)
         if (!(file.key == dataFileId && type == typeName)) type,
     ];
-    yaml.writeln('  ${file.key}:');
-    yaml.writeln('    forms:');
-    yaml.writeln('      - {name: T}');
-    yaml.writeln('    types: [${types.join(', ')}]');
+    yaml.writeln('      ${file.key}:');
+    yaml.writeln('        forms:');
+    yaml.writeln('          - {name: T}');
+    yaml.writeln('        types: [${types.join(', ')}]');
   }
-  yaml.write('- lesson: $lesson\n  $dataFileId:\n    types: [$typeName]\n');
+  yaml.write(
+    '  - lesson: $lesson\n    grammar:\n      $dataFileId:\n        types: [$typeName]\n',
+  );
   return Curriculum.parse([yaml.toString()], shapes);
 }
 
@@ -85,17 +87,17 @@ Future<Curriculum> lateTypeCurriculum(
 /// every form of [dataFileId] in [lesson].
 Future<Curriculum> lateFormsCurriculum(String dataFileId, int lesson) async {
   final shapes = await _shapes();
-  final yaml = StringBuffer('- lesson: 1\n');
+  final yaml = StringBuffer('lessons:\n  - lesson: 1\n    grammar:\n');
   for (final file in shapes.entries) {
-    yaml.writeln('  ${file.key}:');
+    yaml.writeln('      ${file.key}:');
     if (file.key != dataFileId) {
-      yaml.writeln('    forms:');
-      yaml.writeln('      - {name: T}');
+      yaml.writeln('        forms:');
+      yaml.writeln('          - {name: T}');
     }
-    yaml.writeln('    types: [${file.value.types.join(', ')}]');
+    yaml.writeln('        types: [${file.value.types.join(', ')}]');
   }
   yaml.write(
-    '- lesson: $lesson\n  $dataFileId:\n    forms:\n      - {name: T}\n',
+    '  - lesson: $lesson\n    grammar:\n      $dataFileId:\n        forms:\n          - {name: T}\n',
   );
   return Curriculum.parse([yaml.toString()], shapes);
 }

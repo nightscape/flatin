@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/models/course_filter.dart';
 import 'package:latin_practice/models/lesson_range.dart';
+import 'package:latin_practice/models/practice_item.dart';
 import 'package:latin_practice/models/settings.dart';
 import 'package:latin_practice/providers/curriculum_provider.dart';
 
@@ -37,7 +38,7 @@ void main() {
       final inRange = items.where(filter.wordInRange).toList();
 
       expect(inRange, isNotEmpty);
-      expect(filter.summary(items).words, inRange.length);
+      expect(items.where(filter.reachesPractice).length, inRange.length);
     });
   }
 
@@ -46,14 +47,17 @@ void main() {
     () async {
       final items = await loadAllPracticeItems();
       final filter = await _unlinked(LessonRange(25, 28), LessonRange(25, 28));
-      final nouns = items
-          .where((i) => i.dataFileId == 'nouns' && filter.wordInRange(i))
-          .toList();
-      final summary = filter.summary(items);
+      final inRange = items.where(filter.wordInRange);
+      int forms(PracticeItem i) =>
+          filter.practicedForms(i.dataFileId, i.formLabels).length;
+      final nouns = inRange.where((i) => i.dataFileId == 'nouns').toList();
 
       expect(nouns, isNotEmpty);
-      expect(summary.nounForms, nouns.length);
-      expect(summary.verbForms, greaterThan(0));
+      expect(nouns.map(forms), everyElement(1));
+      expect(
+        inRange.where((i) => i.dataFileId == 'verbs').map(forms),
+        contains(greaterThan(0)),
+      );
     },
   );
 }

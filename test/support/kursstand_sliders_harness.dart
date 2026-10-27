@@ -7,6 +7,7 @@ import 'package:latin_practice/screens/kursstand_sliders.dart';
 import 'package:latin_practice/theme.dart';
 import 'package:latin_practice/widgets/kursstand_shelf.dart';
 
+import 'kursstand_shelf_driver.dart';
 import 'word_classification_harness.dart';
 
 /// What a [KursstandSliders] under test reports: the settings it last
@@ -20,6 +21,17 @@ class SlidersProbe {
   var tops = <Offset>[];
   var spines = <Rect>[];
   final key = GlobalKey();
+
+  /// The course the shelf shows; during a drag it runs ahead of [settings].
+  Settings shown(WidgetTester tester) {
+    final shelf = shelfPainter(tester);
+    return Settings(
+      courseWords: shelf.words,
+      courseGrammar: shelf.grammar,
+      grammarFromLinked: shelf.tiedFrom,
+      grammarToLinked: shelf.tiedTo,
+    );
+  }
 
   Offset origin(WidgetTester tester) => tester.getTopLeft(find.byKey(key));
 
@@ -45,9 +57,7 @@ Future<SlidersProbe> pumpSliders(
   Key? boundary,
   double width = 366,
 }) async {
-  final bookStarts = (await tester.runAsync(
-    () => loadLessonData(lessonDataAssets),
-  ))!.bookStarts;
+  final lessons = (await tester.runAsync(() => loadLessonData(bookAssets)))!;
   final probe = SlidersProbe(
     Settings(
       courseWords: words,
@@ -70,7 +80,8 @@ Future<SlidersProbe> pumpSliders(
                 child: KursstandSliders(
                   key: probe.key,
                   settings: probe.settings,
-                  bookStarts: bookStarts,
+                  bookStarts: lessons.bookStarts,
+                  books: lessons.books,
                   onCourse: (s) => probe.settings = s,
                   onScale: (s) => probe.scale = s,
                   onPaintLabels: (l) => probe.labels = l,

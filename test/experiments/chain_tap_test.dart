@@ -4,9 +4,12 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/experiments/kursstand_chain.dart';
 import 'package:latin_practice/theme.dart';
+
+import '../support/preloaded_i18n.dart';
 
 Future<void> _loadIcons() async {
   final loader = FontLoader('MaterialIcons')
@@ -28,6 +31,7 @@ Future<(List<(Offset, Offset)> Function(), Offset)> _pumpOpenChains(
   final key = GlobalKey();
   await tester.pumpWidget(
     MaterialApp(
+      localizationsDelegates: [_i18n],
       theme: romanTheme,
       home: Material(
         child: Align(
@@ -52,7 +56,10 @@ Future<(List<(Offset, Offset)> Function(), Offset)> _pumpOpenChains(
   return (() => ends, tester.getTopLeft(find.byKey(key)));
 }
 
+late final LocalizationsDelegate<FlutterI18n> _i18n;
+
 void main() {
+  setUpAll(() async => _i18n = await preloadedI18n());
   setUpAll(_loadIcons);
 
   for (final (left, shelf) in [

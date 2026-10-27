@@ -9,12 +9,12 @@ import 'support/hand_items.dart';
 import 'support/test_axes.dart';
 
 const _lessons = LessonData(
-  lessonNames: ['Lektion 21'],
-  wordToLesson: {'nauta': 'Lektion 21'},
+  wordToLesson: {'nauta': 21},
   lessonWords: {
-    'Lektion 21': ['nauta'],
+    21: ['nauta'],
   },
   bookByLesson: {21: 2},
+  books: [],
 );
 
 final _nauta = handItem(
@@ -31,36 +31,45 @@ final _nauta = handItem(
 );
 
 const _lateType = '''
-- lesson: 1
-  nouns:
-    forms:
-      - {name: T}
-    types: [O-Deklination]
-- lesson: 32
-  nouns:
-    types: [A-Deklination]
+lessons:
+  - lesson: 1
+    grammar:
+      nouns:
+        forms:
+          - {name: T}
+        types: [O-Deklination]
+  - lesson: 32
+    grammar:
+      nouns:
+        types: [A-Deklination]
 ''';
 
 const _lateGenitive = '''
-- lesson: 1
-  nouns:
-    forms:
-      - {name: T}
-    types: [A-Deklination, O-Deklination]
-- lesson: 30
-  nouns:
-    forms:
-      - {name: T, kasus: gen}
+lessons:
+  - lesson: 1
+    grammar:
+      nouns:
+        forms:
+          - {name: T}
+        types: [A-Deklination, O-Deklination]
+  - lesson: 30
+    grammar:
+      nouns:
+        forms:
+          - {name: T, kasus: gen}
 ''';
 
 const _lateForms = '''
-- lesson: 1
-  nouns:
-    types: [A-Deklination, O-Deklination]
-- lesson: 30
-  nouns:
-    forms:
-      - {name: T}
+lessons:
+  - lesson: 1
+    grammar:
+      nouns:
+        types: [A-Deklination, O-Deklination]
+  - lesson: 30
+    grammar:
+      nouns:
+        forms:
+          - {name: T}
 ''';
 
 CourseFilter _filter(Settings settings, String curriculum) => CourseFilter(
@@ -159,11 +168,13 @@ void main() {
       courseGrammar: LessonRange(5, 40),
     );
     const early = '''
-- lesson: 2
-  nouns:
-    forms:
-      - {name: T}
-    types: [A-Deklination, O-Deklination]
+lessons:
+  - lesson: 2
+    grammar:
+      nouns:
+        forms:
+          - {name: T}
+        types: [A-Deklination, O-Deklination]
 ''';
 
     final gap = _filter(settings, early).formGap('nouns', _gen);

@@ -15,7 +15,7 @@ void main() {
 
   test('deselected forms, types and words stay off after a reload', () async {
     SharedPreferences.setMockInitialValues({});
-    final lessons = await loadLessonData(lessonDataAssets);
+    final lessons = await loadLessonData(bookAssets);
     final word = lessons.lessonWords.values
         .expand((words) => words)
         .firstWhere((w) => w != normalizeDiacritics(w));
@@ -79,9 +79,9 @@ void main() {
     final otherType = map.types['nouns']!.values.firstWhere(
       (t) => t != newType,
     );
-    final lessons = await loadLessonData(lessonDataAssets);
-    final allWords = lessons.lessonNames
-        .expand((name) => lessons.lessonWords[name]!)
+    final lessons = await loadLessonData(bookAssets);
+    final allWords = lessons.lessonWords.values
+        .expand((words) => words)
         .map(normalizeDiacritics)
         .toList();
 
@@ -122,10 +122,8 @@ void main() {
   test(
     'conversion deselects every lesson word the old format left out',
     () async {
-      final lessons = await loadLessonData(lessonDataAssets);
-      final lessonWords = lessons.lessonNames.expand(
-        (name) => lessons.lessonWords[name]!,
-      );
+      final lessons = await loadLessonData(bookAssets);
+      final lessonWords = lessons.lessonWords.values.expand((words) => words);
 
       // The old format stored the words without their macrons; what comes back
       // is the exact lemma of each.

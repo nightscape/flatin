@@ -7,15 +7,18 @@ import 'support/test_axes.dart';
 void main() {
   test('the most specific selector wins', () {
     final curriculum = parseNouns('''
-- lesson: 1
-  nouns:
-    forms:
-      - {name: T}
-    types: [A-Deklination, O-Deklination]
-- lesson: 5
-  nouns:
-    forms:
-      - {name: T, kasus: dat}
+lessons:
+  - lesson: 1
+    grammar:
+      nouns:
+        forms:
+          - {name: T}
+        types: [A-Deklination, O-Deklination]
+  - lesson: 5
+    grammar:
+      nouns:
+        forms:
+          - {name: T, kasus: dat}
 ''');
 
     expect(curriculum.formLesson('nouns', nounLabel('dat', 'pl').key), 5);
@@ -25,15 +28,18 @@ void main() {
 
   test('a selector accepts a list of codes', () {
     final curriculum = parseNouns('''
-- lesson: 1
-  nouns:
-    forms:
-      - {name: T}
-    types: [A-Deklination, O-Deklination]
-- lesson: 7
-  nouns:
-    forms:
-      - {name: T, kasus: [dat, abl]}
+lessons:
+  - lesson: 1
+    grammar:
+      nouns:
+        forms:
+          - {name: T}
+        types: [A-Deklination, O-Deklination]
+  - lesson: 7
+    grammar:
+      nouns:
+        forms:
+          - {name: T, kasus: [dat, abl]}
 ''');
 
     expect(curriculum.formLesson('nouns', nounLabel('dat', 'pl').key), 7);
@@ -44,11 +50,13 @@ void main() {
   test('a form no selector matches is a load error', () {
     expect(
       () => parseNouns('''
-- lesson: 1
-  nouns:
-    forms:
-      - {name: T, kasus: nom}
-    types: [A-Deklination, O-Deklination]
+lessons:
+  - lesson: 1
+    grammar:
+      nouns:
+        forms:
+          - {name: T, kasus: nom}
+        types: [A-Deklination, O-Deklination]
 '''),
       throwsA(
         isStateError.having((e) => e.message, 'message', contains('gen.sg')),
@@ -59,11 +67,13 @@ void main() {
   test('a type no lesson teaches is a load error', () {
     expect(
       () => parseNouns('''
-- lesson: 1
-  nouns:
-    forms:
-      - {name: T}
-    types: [A-Deklination]
+lessons:
+  - lesson: 1
+    grammar:
+      nouns:
+        forms:
+          - {name: T}
+        types: [A-Deklination]
 '''),
       throwsA(
         isStateError.having(
@@ -78,14 +88,17 @@ void main() {
   test('a type two lessons teach is a load error', () {
     expect(
       () => parseNouns('''
-- lesson: 1
-  nouns:
-    forms:
-      - {name: T}
-    types: [A-Deklination, O-Deklination]
-- lesson: 4
-  nouns:
-    types: [A-Deklination]
+lessons:
+  - lesson: 1
+    grammar:
+      nouns:
+        forms:
+          - {name: T}
+        types: [A-Deklination, O-Deklination]
+  - lesson: 4
+    grammar:
+      nouns:
+        types: [A-Deklination]
 '''),
       throwsA(
         isStateError.having((e) => e.message, 'message', contains('twice')),
@@ -96,19 +109,23 @@ void main() {
   test('two equally specific selectors of different lessons conflict', () {
     expect(
       () => parseNouns('''
-- lesson: 1
-  nouns:
-    forms:
-      - {name: T}
-    types: [A-Deklination, O-Deklination]
-- lesson: 4
-  nouns:
-    forms:
-      - {name: T, kasus: dat}
-- lesson: 9
-  nouns:
-    forms:
-      - {name: T, numerus: pl}
+lessons:
+  - lesson: 1
+    grammar:
+      nouns:
+        forms:
+          - {name: T}
+        types: [A-Deklination, O-Deklination]
+  - lesson: 4
+    grammar:
+      nouns:
+        forms:
+          - {name: T, kasus: dat}
+  - lesson: 9
+    grammar:
+      nouns:
+        forms:
+          - {name: T, numerus: pl}
 '''),
       throwsA(
         isStateError.having(
@@ -123,29 +140,33 @@ void main() {
   test('an interleaved more specific selector does not hide a conflict', () {
     const entries = [
       '''
-- lesson: 1
-  nouns:
-    forms:
-      - {name: T}
-    types: [A-Deklination, O-Deklination]
+  - lesson: 1
+    grammar:
+      nouns:
+        forms:
+          - {name: T}
+        types: [A-Deklination, O-Deklination]
 ''',
       '''
-- lesson: 4
-  nouns:
-    forms:
-      - {name: T, kasus: dat}
+  - lesson: 4
+    grammar:
+      nouns:
+        forms:
+          - {name: T, kasus: dat}
 ''',
       '''
-- lesson: 7
-  nouns:
-    forms:
-      - {name: T, kasus: dat, numerus: pl}
+  - lesson: 7
+    grammar:
+      nouns:
+        forms:
+          - {name: T, kasus: dat, numerus: pl}
 ''',
       '''
-- lesson: 9
-  nouns:
-    forms:
-      - {name: T, numerus: pl}
+  - lesson: 9
+    grammar:
+      nouns:
+        forms:
+          - {name: T, numerus: pl}
 ''',
     ];
     final conflict = throwsA(
@@ -160,7 +181,7 @@ void main() {
     expect(orders, hasLength(24));
     for (final order in orders) {
       expect(
-        () => parseNouns(order.join()),
+        () => parseNouns('lessons:\n${order.join()}'),
         conflict,
         reason: order
             .map((e) => RegExp(r'lesson: (\d+)').firstMatch(e)![1])
@@ -171,16 +192,19 @@ void main() {
 
   test('two equally specific selectors of the same lesson are fine', () {
     final curriculum = parseNouns('''
-- lesson: 1
-  nouns:
-    forms:
-      - {name: T}
-    types: [A-Deklination, O-Deklination]
-- lesson: 4
-  nouns:
-    forms:
-      - {name: T, kasus: dat}
-      - {name: T, numerus: pl}
+lessons:
+  - lesson: 1
+    grammar:
+      nouns:
+        forms:
+          - {name: T}
+        types: [A-Deklination, O-Deklination]
+  - lesson: 4
+    grammar:
+      nouns:
+        forms:
+          - {name: T, kasus: dat}
+          - {name: T, numerus: pl}
 ''');
 
     expect(curriculum.formLesson('nouns', nounLabel('dat', 'pl').key), 4);
@@ -189,11 +213,13 @@ void main() {
   test('a selector naming an unknown axis is a load error', () {
     expect(
       () => parseNouns('''
-- lesson: 1
-  nouns:
-    forms:
-      - {name: T, tempus: praes}
-    types: [A-Deklination, O-Deklination]
+lessons:
+  - lesson: 1
+    grammar:
+      nouns:
+        forms:
+          - {name: T, tempus: praes}
+        types: [A-Deklination, O-Deklination]
 '''),
       throwsA(
         isStateError.having((e) => e.message, 'message', contains('tempus')),
@@ -204,11 +230,13 @@ void main() {
   test('a selector naming an unknown code is a load error', () {
     expect(
       () => parseNouns('''
-- lesson: 1
-  nouns:
-    forms:
-      - {name: T, kasus: lok}
-    types: [A-Deklination, O-Deklination]
+lessons:
+  - lesson: 1
+    grammar:
+      nouns:
+        forms:
+          - {name: T, kasus: lok}
+        types: [A-Deklination, O-Deklination]
 '''),
       throwsA(
         isStateError.having((e) => e.message, 'message', contains('lok')),
@@ -219,11 +247,13 @@ void main() {
   test('a type no data file has is a load error', () {
     expect(
       () => parseNouns('''
-- lesson: 1
-  nouns:
-    forms:
-      - {name: T}
-    types: [A-Deklination, O-Deklination, U-Deklination]
+lessons:
+  - lesson: 1
+    grammar:
+      nouns:
+        forms:
+          - {name: T}
+        types: [A-Deklination, O-Deklination, U-Deklination]
 '''),
       throwsA(
         isStateError.having(
@@ -239,11 +269,13 @@ void main() {
     for (final lesson in [0, 41]) {
       expect(
         () => parseNouns('''
-- lesson: $lesson
-  nouns:
-    forms:
-      - {name: T}
-    types: [A-Deklination, O-Deklination]
+lessons:
+  - lesson: $lesson
+    grammar:
+      nouns:
+        forms:
+          - {name: T}
+        types: [A-Deklination, O-Deklination]
 '''),
         throwsA(
           isStateError.having((e) => e.message, 'message', contains('outside')),
@@ -255,14 +287,17 @@ void main() {
 
   test('taught* answers against a range', () {
     final curriculum = parseNouns('''
-- lesson: 3
-  nouns:
-    forms:
-      - {name: T}
-    types: [A-Deklination]
-- lesson: 12
-  nouns:
-    types: [O-Deklination]
+lessons:
+  - lesson: 3
+    grammar:
+      nouns:
+        forms:
+          - {name: T}
+        types: [A-Deklination]
+  - lesson: 12
+    grammar:
+      nouns:
+        types: [O-Deklination]
 ''');
 
     expect(
@@ -295,11 +330,13 @@ void main() {
     test('a forms entry $entry without a name is a load error', () {
       expect(
         () => parseNouns('''
-- lesson: 1
-  nouns:
-    forms:
-      - $entry
-    types: [A-Deklination, O-Deklination]
+lessons:
+  - lesson: 1
+    grammar:
+      nouns:
+        forms:
+          - $entry
+        types: [A-Deklination, O-Deklination]
 '''),
         throwsA(isA<StateError>()),
       );
@@ -308,20 +345,24 @@ void main() {
 
   test('the name is not part of the stored key', () {
     final named = parseNouns('''
-- lesson: 1
-  nouns:
-    forms:
-      - {name: T}
-      - {name: Dativ, kasus: dat}
-    types: [A-Deklination, O-Deklination]
+lessons:
+  - lesson: 1
+    grammar:
+      nouns:
+        forms:
+          - {name: T}
+          - {name: Dativ, kasus: dat}
+        types: [A-Deklination, O-Deklination]
 ''');
     final other = parseNouns('''
-- lesson: 1
-  nouns:
-    forms:
-      - {name: T}
-      - {name: Anders, kasus: dat}
-    types: [A-Deklination, O-Deklination]
+lessons:
+  - lesson: 1
+    grammar:
+      nouns:
+        forms:
+          - {name: T}
+          - {name: Anders, kasus: dat}
+        types: [A-Deklination, O-Deklination]
 ''');
     expect(
       [for (final t in named.courseTopics) t.key],

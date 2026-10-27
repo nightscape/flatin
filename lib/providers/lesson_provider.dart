@@ -8,7 +8,7 @@ part 'lesson_provider.g.dart';
 /// The lesson → word mapping of the configured volumes.
 @riverpod
 Future<LessonData> lessonData(Ref ref) async {
-  return loadLessonData(lessonDataAssets);
+  return loadLessonData(bookAssets);
 }
 
 /// Every practice item of the loaded data files, nouns first.

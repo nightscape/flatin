@@ -40,7 +40,7 @@ class SettingsNotifier extends _$SettingsNotifier {
     final map = MigrationMap.parse(
       await loadAssetText('lib/data/migration_v2.yaml'),
     );
-    final lessons = await loadLessonData(lessonDataAssets);
+    final lessons = await loadLessonData(bookAssets);
     final converted = convertSettingsV2(json, map);
     final isV0 = !json.containsKey('disabledForms');
     if (isV0) {
@@ -68,8 +68,8 @@ class SettingsNotifier extends _$SettingsNotifier {
       for (final word in selectedWords) map.wordMap['$word'] ?? '$word',
     };
     return {
-      for (final name in lessons.lessonNames)
-        for (final word in lessons.lessonWords[name]!)
+      for (final words in lessons.lessonWords.values)
+        for (final word in words)
           if (!selected.contains(normalizeDiacritics(word))) word,
     }.toList();
   }

@@ -31,8 +31,8 @@ void main() {
     TestWidgetsFlutterBinding.ensureInitialized();
     SharedPreferences.setMockInitialValues({});
     items = await loadAllPracticeItems();
-    curriculum = await loadCurriculum(curriculumAssets);
-    lessons = await loadLessonData(lessonDataAssets);
+    curriculum = await loadCurriculum(bookAssets);
+    lessons = await loadLessonData(bookAssets);
     final nouns = await getFormMetadata('lib/data/latin_nouns.yaml');
     topics = topicsOf(items, curriculum, nounTypeDisplays: nouns.displayByType);
   });

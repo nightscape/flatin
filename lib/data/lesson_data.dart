@@ -2,60 +2,49 @@ import 'package:yaml/yaml.dart';
 import 'asset_text.dart';
 import '../models/practice_item.dart';
 
-/// The lesson word lists of the configured volumes, in reading order.
-const List<String> lessonDataAssets = [
-  'lib/data/agite_plus_bayern_1.yaml',
-  'lib/data/agite_plus_bayern_2.yaml',
+/// The course books, in reading order: each lists its lessons' words and
+/// grammar.
+const List<String> bookAssets = [
+  'lib/data/agite_1.yaml',
+  'lib/data/agite_2.yaml',
 ];
 
 /// The highest lesson number of the configured volumes.
 const int lastLesson = 40;
-
-/// The lesson number a unit name carries: "Lektion 22 Stammformen" -> 22,
-/// "Plateaulektion 11 – 15 Stammformen" -> 11.
-int lessonNumber(String lessonName) {
-  final match = RegExp(r'[Ll]ektion\s+(\d+)').firstMatch(lessonName);
-  if (match == null) {
-    throw StateError('unit name "$lessonName" carries no lesson number');
-  }
-  return int.parse(match.group(1)!);
-}
 
 /// Maps each Latin word to the lesson in which it was introduced.
 ///
 /// Lookup is by the exact spelling, macrons included: hīc (adverb) and hic
 /// (pronoun) are different words and belong to different lessons.
 class LessonData {
-  /// Lesson names in presentation order.
-  final List<String> lessonNames;
+  /// word in its exact spelling -> its lesson (first occurrence wins).
+  final Map<String, int> wordToLesson;
 
-  /// word in its exact spelling -> lesson name (first occurrence wins).
-  final Map<String, String> wordToLesson;
-
-  /// lesson name -> word list in its exact spelling, in YAML order.
-  final Map<String, List<String>> lessonWords;
+  /// lesson -> word list in its exact spelling, in YAML order; the lessons
+  /// in reading order.
+  final Map<int, List<String>> lessonWords;
 
   /// lesson number -> the 1-based index of the first asset that lists it.
   final Map<int, int> bookByLesson;
 
+  /// The name of each asset's book, in asset order.
+  final List<String> books;
+
   const LessonData({
-    required this.lessonNames,
     required this.wordToLesson,
     required this.lessonWords,
     required this.bookByLesson,
+    required this.books,
   });
-
-  /// Returns the lesson for a [PracticeItem], or null if no match.
-  String? lessonFor(PracticeItem item) => wordToLesson[item.lemma];
 
   /// The lesson that introduces [item]. Every practice item belongs to one;
   /// see [assertLessonsCoverItems].
   int lessonNumberOf(PracticeItem item) {
-    final name = lessonFor(item);
-    if (name == null) {
+    final lesson = wordToLesson[item.lemma];
+    if (lesson == null) {
       throw StateError('no lesson lists "${item.lemma}" (${item.id})');
     }
-    return lessonNumber(name);
+    return lesson;
   }
 
   /// The lesson numbers of the loaded data, ascending: the course scale.
@@ -94,68 +83,71 @@ String normalizeDiacritics(String text) {
   return result;
 }
 
-/// Load the lesson mapping from YAML assets, concatenated in the given order.
+/// Load the books' lessons from YAML assets, concatenated in the given
+/// order.
 ///
-/// Expected top-level shape of each asset:
+/// Expected top-level shape of each asset (`grammar:` and `later:` are read
+/// by the curriculum):
 /// ```yaml
-/// - lesson: "Lektion 1"
-///   words: ["iam", "diū", ...]
+/// book: "Agite 1"
+/// lessons:
+///   - lesson: 1
+///     words: ["iam", "diū", ...]
+///     grammar: {...}
 /// ```
 ///
-/// A lesson name must be unique across the assets; a word introduced by
-/// several lessons belongs to the first one. A word is keyed by its exact
-/// spelling, so a lesson list must spell it as the practice item does; see
+/// A lesson must be unique across the assets; a word introduced by several
+/// lessons belongs to the first one. A word is keyed by its exact spelling,
+/// so a lesson list must spell it as the practice item does; see
 /// [assertLessonsCoverItems].
 Future<LessonData> loadLessonData(List<String> assetPaths) async {
-  final names = <String>[];
-  final wordToLesson = <String, String>{};
-  final lessonWords = <String, List<String>>{};
+  final wordToLesson = <String, int>{};
+  final lessonWords = <int, List<String>>{};
   final bookByLesson = <int, int>{};
+  final books = <String>[];
 
   for (var book = 1; book <= assetPaths.length; book++) {
     final assetPath = assetPaths[book - 1];
-    final yamlString = await loadAssetText(assetPath);
-    final yaml = loadYaml(yamlString) as YamlList;
+    final yaml = loadYaml(await loadAssetText(assetPath)) as YamlMap;
+    books.add(yaml['book'] as String);
 
-    for (final entry in yaml) {
+    for (final entry in yaml['lessons'] as YamlList) {
       final map = entry as YamlMap;
-      final name = map['lesson'] as String;
-      if (lessonWords.containsKey(name)) {
-        throw StateError('lesson "$name" is listed twice ($assetPath)');
+      final lesson = map['lesson'] as int;
+      if (lessonWords.containsKey(lesson)) {
+        throw StateError('lesson $lesson is listed twice ($assetPath)');
       }
-      names.add(name);
-      bookByLesson.putIfAbsent(lessonNumber(name), () => book);
+      bookByLesson[lesson] = book;
 
-      final words = map['words'] as YamlList;
-      final rawWords = <String>[];
-      for (final word in words) {
+      final words = <String>[];
+      for (final word in map['words'] as YamlList) {
         final raw = word as String;
         if (raw.contains(',') || raw.contains('?')) {
           throw StateError(
-            '$assetPath, "$name": the word "$raw" is no headword',
+            '$assetPath, lesson $lesson: the word "$raw" is no headword',
           );
         }
-        rawWords.add(raw);
-        wordToLesson.putIfAbsent(raw, () => name);
+        words.add(raw);
+        wordToLesson.putIfAbsent(raw, () => lesson);
       }
-      lessonWords[name] = rawWords;
+      lessonWords[lesson] = words;
     }
   }
 
   // A test loads one volume on its own, so only the configured course is
   // pinned to [lastLesson]; a lesson above it breaks the scale either way.
   final highest = bookByLesson.keys.reduce((a, b) => a > b ? a : b);
-  final wholeCourse = assetPaths.join() == lessonDataAssets.join();
+  final wholeCourse = assetPaths.join() == bookAssets.join();
   assert(
     wholeCourse ? highest == lastLesson : highest <= lastLesson,
     'the data ends at lesson $highest, lastLesson says $lastLesson',
   );
 
   return LessonData(
-    lessonNames: names,
     wordToLesson: wordToLesson,
     lessonWords: lessonWords,
     bookByLesson: bookByLesson,
+    books: books,
   );
 }
 
@@ -168,7 +160,7 @@ void assertLessonsCoverItems(LessonData lessons, List<PracticeItem> items) {
   };
   final orphans = <String>[];
   for (final item in items) {
-    if (lessons.lessonFor(item) != null) continue;
+    if (lessons.wordToLesson.containsKey(item.lemma)) continue;
     final otherSpelling = byLetters[normalizeDiacritics(item.lemma)];
     final hint = otherSpelling == null
         ? ''

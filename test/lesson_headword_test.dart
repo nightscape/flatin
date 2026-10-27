@@ -24,8 +24,10 @@ void main() {
 
   test('a word list entry that is no headword is a load error', () async {
     _serve('bad.yaml', '''
-- lesson: "Lektion 1"
-  words: ["is, ea, id"]
+book: "B"
+lessons:
+  - lesson: 1
+    words: ["is, ea, id"]
 ''');
 
     expect(
@@ -36,7 +38,7 @@ void main() {
           'message',
           allOf(
             contains('bad.yaml'),
-            contains('Lektion 1'),
+            contains('lesson 1'),
             contains('is, ea, id'),
           ),
         ),
@@ -46,20 +48,22 @@ void main() {
 
   test('a question mark marks a gloss, not a headword', () async {
     _serve('bad.yaml', '''
-- lesson: "Lektion 1"
-  words: ["quis?"]
+book: "B"
+lessons:
+  - lesson: 1
+    words: ["quis?"]
 ''');
 
     expect(loadLessonData(['bad.yaml']), throwsStateError);
   });
 
   test('the shipped index lists headwords only', () async {
-    final lessons = await loadLessonData(lessonDataAssets);
+    final lessons = await loadLessonData(bookAssets);
 
     for (final entry in lessons.lessonWords.entries) {
       for (final word in entry.value) {
-        expect(word, isNot(contains(',')), reason: entry.key);
-        expect(word, isNot(contains('?')), reason: entry.key);
+        expect(word, isNot(contains(',')), reason: '${entry.key}');
+        expect(word, isNot(contains('?')), reason: '${entry.key}');
       }
     }
   });

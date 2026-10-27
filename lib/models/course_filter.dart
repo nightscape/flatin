@@ -102,15 +102,19 @@ final class CourseFilter {
         if (formPracticed(dataFileId, label)) label.key,
     };
     if (practiced.isNotEmpty) return practiced;
+    final basic = _basicForm(dataFileId, labels);
+    return {if (_formTaught(dataFileId, basic)) basic.key};
+  }
+
+  FormLabel _basicForm(String dataFileId, List<FormLabel> labels) {
     final (axis, value) = basicFormFeature[dataFileId]!;
-    final basic = labels.firstWhere(
+    return labels.firstWhere(
       (l) => l.features[axis] == value,
       orElse: () => throw StateError(
         'no basic form ($axis: $value) among the $dataFileId forms '
         '${labels.map((l) => l.key)}',
       ),
     );
-    return {if (_formTaught(dataFileId, basic)) basic.key};
   }
 
   /// The forms the dropdowns offer: the practised ones and every other
@@ -133,9 +137,12 @@ final class CourseFilter {
       wordPracticed(item) && typePracticed(item.dataFileId, item.type);
 
   /// Whether practice offers the item: it is practised and has a form to ask.
-  bool reachesPractice(PracticeItem item) =>
-      itemPracticed(item) &&
-      practicedForms(item.dataFileId, item.formLabels).isNotEmpty;
+  bool reachesPractice(PracticeItem item) {
+    final (id, labels) = (item.dataFileId, item.formLabels);
+    return itemPracticed(item) &&
+        (labels.any((l) => formPracticed(id, l)) ||
+            _formTaught(id, _basicForm(id, labels)));
+  }
 
   /// Null when practice offers the word, or when the learner's own choice,
   /// not the course, keeps it from practice.
@@ -185,23 +192,4 @@ final class CourseFilter {
       grammarLesson > settings.courseGrammar.to
       ? FromLesson(grammarLesson > wordLesson ? grammarLesson : wordLesson)
       : const GrammarOutsideRange();
-
-  /// The live counts of the course card: the words practice offers and, per
-  /// data file, the practised forms they add up to.
-  ({int words, int nounForms, int verbForms}) summary(
-    List<PracticeItem> items,
-  ) {
-    var words = 0, nounForms = 0, verbForms = 0;
-    for (final item in items) {
-      if (!reachesPractice(item)) continue;
-      words++;
-      final forms = practicedForms(item.dataFileId, item.formLabels).length;
-      if (item.dataFileId == 'nouns') {
-        nounForms += forms;
-      } else {
-        verbForms += forms;
-      }
-    }
-    return (words: words, nounForms: nounForms, verbForms: verbForms);
-  }
 }

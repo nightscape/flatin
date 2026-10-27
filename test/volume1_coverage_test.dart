@@ -171,7 +171,7 @@ void main() {
   test(
     'every inflectable word of volume 1 has an item or a listed reason',
     () async {
-      final lessons = await loadLessonData([lessonDataAssets.first]);
+      final lessons = await loadLessonData([bookAssets.first]);
       final items = await loadAllPracticeItems();
       final lemmas = {for (final i in items) normalizeDiacritics(i.lemma)};
 
@@ -191,7 +191,7 @@ void main() {
   test(
     'index words sharing a normalized head each have their own item',
     () async {
-      final lessons = await loadLessonData([lessonDataAssets.first]);
+      final lessons = await loadLessonData([bookAssets.first]);
       final items = await loadAllPracticeItems();
       final words = {for (final ws in lessons.lessonWords.values) ...ws};
 

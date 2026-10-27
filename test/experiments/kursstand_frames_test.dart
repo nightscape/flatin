@@ -7,9 +7,12 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/experiments/kursstand_chain.dart';
 import 'package:latin_practice/theme.dart';
+
+import '../support/preloaded_i18n.dart';
 
 const _fonts = '/opt/homebrew/share/flutter/bin/cache/artifacts/material_fonts';
 const _out = String.fromEnvironment('OUT');
@@ -41,6 +44,7 @@ Future<void> _pumpBooks(WidgetTester tester, BookFocus focus) async {
   addTearDown(tester.view.reset);
   await tester.pumpWidget(
     MaterialApp(
+      localizationsDelegates: [_i18n],
       debugShowCheckedModeBanner: false,
       theme: romanTheme,
       home: Scaffold(
@@ -131,7 +135,10 @@ class _Drag {
   }
 }
 
+late final LocalizationsDelegate<FlutterI18n> _i18n;
+
 void main() {
+  setUpAll(() async => _i18n = await preloadedI18n());
   setUpAll(() async {
     await _load('Roboto', ['Roboto-Regular.ttf', 'Roboto-Bold.ttf']);
     await _load('MaterialIcons', ['MaterialIcons-Regular.otf']);

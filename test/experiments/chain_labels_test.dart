@@ -3,9 +3,12 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/experiments/kursstand_chain.dart';
 import 'package:latin_practice/theme.dart';
+
+import '../support/preloaded_i18n.dart';
 
 const _width = 366.0, _later = 101, _wordsY = 76.0;
 
@@ -19,7 +22,10 @@ Future<void> _loadIcons() async {
   await loader.load();
 }
 
+late final LocalizationsDelegate<FlutterI18n> _i18n;
+
 void main() {
+  setUpAll(() async => _i18n = await preloadedI18n());
   setUpAll(_loadIcons);
 
   // (name, words, grammar, left linked, right linked, grab words?, grab lesson)
@@ -101,6 +107,7 @@ void main() {
         final key = GlobalKey();
         await tester.pumpWidget(
           MaterialApp(
+            localizationsDelegates: [_i18n],
             theme: romanTheme,
             home: Material(
               child: Align(
@@ -226,6 +233,7 @@ void main() {
         final labels = <String, List<Rect>>{};
         await tester.pumpWidget(
           MaterialApp(
+            localizationsDelegates: [_i18n],
             theme: romanTheme,
             home: Scaffold(
               body: BooksDemo(

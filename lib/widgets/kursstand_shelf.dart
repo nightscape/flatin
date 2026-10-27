@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../models/lesson_range.dart';
@@ -59,35 +60,74 @@ int bookIndex(List<int> bookStarts, int lesson) => lesson == laterLesson
     ? bookStarts.length
     : bookStarts.lastIndexWhere((s) => s <= lesson);
 
+/// The widest a book opens per lesson, so a wide window shows books, not a
+/// fan of pages.
+const shelfMaxCell = 14.0;
+
 /// Lesson ↔ x on a track where book b is [_squeezed] wide plus its share,
-/// by its expansion in 0..1, of what the squeezed books leave free.
-/// "Später" is a squeezed segment after the last book.
+/// by its expansion in 0..1, of what the squeezed books leave free, up to
+/// [shelfMaxCell] per lesson. Room a full book cannot take goes to the
+/// others, then to the closed ones by their lessons; what is left centres
+/// the row. "Später" is a squeezed segment after the last book.
 class BookScale {
   BookScale(this.bookStarts, List<double> expansion, this.left, double width) {
     assert(bookStarts.first == 1, 'the first book starts at lesson 1');
-    final total = expansion.fold(0.0, (a, b) => a + b);
-    // With every thumb on "Später", the books share the room equally.
-    final shares = total == 0 ? [for (final _ in expansion) 1.0] : expansion;
-    final sum = total == 0 ? expansion.length.toDouble() : total;
+    assert(expansion.length == bookStarts.length);
     final free = width - (bookStarts.length + 1) * _squeezed;
     assert(free > 0, 'the track is too short for the books');
-    var x = left;
-    for (final e in [...shares, 0.0]) {
+    final room = [
+      for (var b = 0; b < bookStarts.length; b++)
+        min(free, lessonsIn(b) * shelfMaxCell - _squeezed),
+    ];
+    final extra = [for (final _ in expansion) 0.0];
+    final open = {for (var b = 0; b < expansion.length; b++) b};
+    var rest = free;
+    while (rest > 1e-9 && open.isNotEmpty) {
+      final weighted = open.where((b) => expansion[b] > 0);
+      // Closed books share what the opened ones cannot take by their lessons.
+      double share(int b) => weighted.isEmpty
+          ? lessonsIn(b).toDouble()
+          : (expansion[b] > 0 ? expansion[b] : 0.0);
+      final sum = open.map(share).fold(0.0, (a, s) => a + s);
+      final full = open
+          .where((b) => extra[b] + rest * share(b) / sum >= room[b])
+          .toList();
+      if (full.isEmpty) {
+        for (final b in open) {
+          extra[b] += rest * share(b) / sum;
+        }
+        rest = 0;
+      }
+      for (final b in full) {
+        rest -= room[b] - extra[b];
+        extra[b] = room[b];
+        open.remove(b);
+      }
+    }
+    var x = left + rest / 2;
+    for (final e in [...extra, 0.0]) {
       starts.add(x);
-      widths.add(_squeezed + e / sum * free);
+      widths.add(_squeezed + e);
       x += widths.last;
     }
+    _room = room;
   }
 
   final List<int> bookStarts;
+
+  /// The left end of the track.
   final double left;
   final starts = <double>[], widths = <double>[];
+  late final List<double> _room;
 
   int bookOf(int lesson) => bookIndex(bookStarts, lesson);
 
   int lessonsIn(int book) =>
       (book + 1 < bookStarts.length ? bookStarts[book + 1] : laterLesson) -
       bookStarts[book];
+
+  /// 0 for a closed book, 1 for one as wide as it can open on this track.
+  double fan(int book) => (widths[book] - _squeezed) / _room[book];
 
   double cell(int lesson) {
     final b = bookOf(lesson);
@@ -122,11 +162,7 @@ class _ShelfBook {
     : later = index == scale.bookStarts.length,
       left = scale.starts[index],
       width = scale.widths[index],
-      fan = index == scale.bookStarts.length
-          ? 0
-          : (scale.widths[index] - _squeezed) /
-                (scale.widths.fold(0.0, (a, w) => a + w) -
-                    scale.widths.length * _squeezed);
+      fan = index == scale.bookStarts.length ? 0 : scale.fan(index);
 
   final int index;
 
@@ -134,7 +170,6 @@ class _ShelfBook {
   final bool later;
   final double left, width;
 
-  /// 0 for a closed book, 1 for one that has all the free width.
   final double fan;
 
   double get centre => left + width / 2;
@@ -196,6 +231,46 @@ double shelfGrammarEnd(BookScale scale, int lesson) =>
     shelfGrammarY -
     _coverLine;
 
+/// The name of each book and then of "Später", laid out once per colour.
+class ShelfNames {
+  ShelfNames(this.texts, this.font);
+
+  final List<String> texts;
+  final TextStyle font;
+  final _painters = <(int, bool), TextPainter>{};
+
+  TextPainter painter(int index, {required bool open}) =>
+      _painters.putIfAbsent((index, open), () {
+        final text = TextPainter(
+          text: TextSpan(
+            text: texts[index],
+            style: font.copyWith(
+              fontSize: 10,
+              fontWeight: FontWeight.w700,
+              color: open ? ink : mutedText,
+            ),
+          ),
+          textDirection: TextDirection.ltr,
+        )..layout();
+        assert(
+          text.width <= _coverLine - shelfPageTop,
+          '"${texts[index]}" is too long for the front of a book',
+        );
+        return text;
+      });
+
+  int get length => texts.length;
+
+  bool shows(List<String> texts, TextStyle font) =>
+      listEquals(texts, this.texts) && font == this.font;
+
+  void dispose() {
+    for (final p in _painters.values) {
+      p.dispose();
+    }
+  }
+}
+
 /// The books in one row on a shelf, on [scale], with a gold bookmark ribbon
 /// at each word bound and a terracotta one at each grammar bound. A bow ties
 /// the two ribbons of a linked bound.
@@ -207,17 +282,14 @@ class ShelfPainter extends CustomPainter {
     required this.tiedFrom,
     required this.tiedTo,
     required this.names,
-    required this.font,
     this.onPaint,
-  });
+  }) : assert(names.length == scale.bookStarts.length + 1);
 
   final BookScale scale;
   final LessonRange words, grammar;
   final bool tiedFrom, tiedTo;
 
-  /// The name of each book and then of "Später".
-  final List<String> names;
-  final TextStyle font;
+  final ShelfNames names;
 
   /// Reports the top of the pages of each lesson 1 to "Später" and the spine
   /// of each book.
@@ -236,17 +308,17 @@ class ShelfPainter extends CustomPainter {
       ..drawRect(
         Rect.fromLTRB(0, _shelfY, size.width, _shelfY + 4),
         Paint()..color = outlineColor,
+      )
+      ..drawLine(
+        const Offset(0, _shelfY),
+        Offset(size.width, _shelfY),
+        Paint()
+          ..color = _cover
+          ..strokeWidth = 1.5,
       );
     for (final book in books) {
       _book(canvas, book);
     }
-    canvas.drawLine(
-      const Offset(0, _shelfY),
-      Offset(size.width, _shelfY),
-      Paint()
-        ..color = _cover
-        ..strokeWidth = 1.5,
-    );
     for (final book in books) {
       _name(canvas, book);
     }
@@ -396,17 +468,7 @@ class ShelfPainter extends CustomPainter {
 
   /// The book's name on the front of its pages, read from bottom to top.
   void _name(Canvas canvas, _ShelfBook book) {
-    final text = TextPainter(
-      text: TextSpan(
-        text: names[book.index],
-        style: font.copyWith(
-          fontSize: 10,
-          fontWeight: FontWeight.w700,
-          color: book.fan > 0.5 ? ink : mutedText,
-        ),
-      ),
-      textDirection: TextDirection.ltr,
-    )..layout();
+    final text = names.painter(book.index, open: book.fan > 0.5);
     final mid = Offset.lerp(
       book.top(book.centre),
       book.bottom(book.centre),
