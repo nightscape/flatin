@@ -12,29 +12,11 @@ import 'package:latin_practice/providers/fsrs_provider.dart';
 import 'package:latin_practice/screens/practice_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'support/kursstand_shelf_driver.dart';
 import 'support/stored_settings.dart';
 import 'support/word_classification_harness.dart' show letItLoad;
 
 Finder _key(String key) => find.byKey(Key(key));
-
-/// Drags one thumb of a range slider from the stop [from] to the stop [to].
-Future<void> _dragThumb(
-  WidgetTester tester,
-  String slider,
-  int from,
-  int to,
-) async {
-  double x(int stop) => tester.getCenter(_key('kursstand.words.bar.$stop')).dx;
-  final y = tester.getCenter(_key(slider)).dy;
-  final gesture = await tester.startGesture(Offset(x(from), y));
-  // The drag claims the thumb nearest to where it is recognised, so first
-  // move past the touch slop, then to the target.
-  await gesture.moveBy(Offset(to > from ? 20 : -20, 0));
-  await gesture.moveTo(Offset(x(to), y));
-  await gesture.up();
-  await tester.pumpAndSettle();
-  await letItLoad(tester);
-}
 
 Future<void> _openSettings(WidgetTester tester) async {
   await tester.tap(find.byType(DrawerButton));
@@ -165,8 +147,7 @@ void main() {
       await startApp(tester);
       await _openSettings(tester);
 
-      await _dragThumb(tester, 'kursstand.words.slider', laterLesson, 23);
-      await _dragThumb(tester, 'kursstand.words.slider', 1, 21);
+      await dragRange(tester, words: true, to: LessonRange(21, 23));
 
       final stored = await _stored();
       expect(stored['courseWords'], {'from': 21, 'to': 23});
@@ -200,8 +181,7 @@ void main() {
     final expected = await _expected();
     await startApp(tester);
     await _openSettings(tester);
-    await _dragThumb(tester, 'kursstand.words.slider', laterLesson, 23);
-    await _dragThumb(tester, 'kursstand.words.slider', 1, 21);
+    await dragRange(tester, words: true, to: LessonRange(21, 23));
 
     final inside = expected.firstWhere(
       (i) =>
@@ -232,7 +212,7 @@ void main() {
     expect(stored['forcedOnWords'], [outside.lemma]);
     expect(stored['deselectedWords'], [inside.lemma]);
 
-    await _dragThumb(tester, 'kursstand.words.slider', 23, 24);
+    await dragBound(tester, words: true, start: false, to: 24);
     expect((await _stored())['courseWords'], {'from': 21, 'to': 24});
     final range2124 = expected.ids(21, 24);
     final moved = {...range2124, outside.id}..remove(inside.id);

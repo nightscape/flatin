@@ -9,8 +9,8 @@ import 'support/kursstand_sliders_harness.dart';
 
 const _width = 366.0;
 
-/// The labels clear each other, the card, the dragged slider's thumbs, the
-/// chains and their symbol targets.
+/// The labels clear each other, the card and the dragged range's ribbon
+/// ends.
 void _expectClear(SlidersProbe probe, LessonRange r, double y) {
   expect(probe.labels, hasLength(2));
   final [start, end] = probe.labels;
@@ -27,19 +27,6 @@ void _expectClear(SlidersProbe probe, LessonRange r, double y) {
         radius: 10,
       );
       expect(label.overlaps(thumb), isFalse, reason: '$label covers $thumb');
-    }
-    for (final (a, s, b) in probe.chains) {
-      final symbol = Rect.fromCenter(center: s, width: 44, height: 44);
-      expect(label.overlaps(symbol), isFalse, reason: '$label covers $symbol');
-      // The chain is at most 9 px wide.
-      for (var t = 0.0; t <= 2; t += 0.01) {
-        final p = t <= 1 ? Offset.lerp(a, s, t)! : Offset.lerp(s, b, t - 1)!;
-        expect(
-          label.inflate(4.5).contains(p),
-          isFalse,
-          reason: '$label covers the chain at $p',
-        );
-      }
     }
   }
 }

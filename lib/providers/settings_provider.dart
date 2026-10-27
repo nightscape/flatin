@@ -151,11 +151,15 @@ class SettingsNotifier extends _$SettingsNotifier {
   Future<void> setWordRange(LessonRange range) =>
       _update((s) => s.withWordRange(range));
 
-  Future<void> setGrammarRange(LessonRange range) =>
-      _update((s) => s.withGrammarRange(range));
-
-  Future<void> setGrammarLinked({bool? from, bool? to}) =>
-      _update((s) => s.withGrammarLinked(from: from, to: to));
+  /// Takes the course ranges and their links from [course].
+  Future<void> setCourse(Settings course) => _update(
+    (s) => s.copyWith(
+      courseWords: course.courseWords,
+      courseGrammar: course.courseGrammar,
+      grammarFromLinked: course.grammarFromLinked,
+      grammarToLinked: course.grammarToLinked,
+    ),
+  );
 
   Future<void> toggleReward(String id) => _update((s) => s.toggleReward(id));
 

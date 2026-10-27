@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/models/lesson_range.dart';
 
@@ -54,8 +55,8 @@ void main() {
     }
   });
 
-  testWidgets('a chain toggle that moves a thumb into another book counts as '
-      'a book change: that book grows', (tester) async {
+  testWidgets('a screen-reader tie that moves a ribbon into another book '
+      'counts as a book change: that book grows', (tester) async {
     final probe = await pumpSliders(
       tester,
       words: LessonRange(5, 30),
@@ -66,8 +67,10 @@ void main() {
     final before = probe.scale.widths;
     expect(before[0], lessThan(before[1]), reason: 'book 1 starts half open');
 
-    final (_, symbol, _) = probe.chains[0];
-    await tester.tapAt(probe.origin(tester) + symbol);
+    tester
+        .widget<Semantics>(find.byKey(const Key('kursstand.tie.left')))
+        .properties
+        .onTap!();
     await tester.pumpAndSettle();
 
     expect(probe.settings.courseGrammar, LessonRange(5, 35));

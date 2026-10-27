@@ -5,19 +5,20 @@ import 'package:latin_practice/models/lesson_range.dart';
 import 'package:latin_practice/models/settings.dart';
 import 'package:latin_practice/screens/kursstand_sliders.dart';
 import 'package:latin_practice/theme.dart';
+import 'package:latin_practice/widgets/kursstand_shelf.dart';
 
 import 'word_classification_harness.dart';
 
-/// What a [KursstandSliders] under test reports: the settings its
-/// callbacks lead to, its scale, and what it painted, all in its own
-/// coordinates.
+/// What a [KursstandSliders] under test reports: the settings it last
+/// passed on, its scale, and what it painted, all in its own coordinates.
 class SlidersProbe {
   SlidersProbe(this.settings);
 
   Settings settings;
   late BookScale scale;
-  var chains = <(Offset, Offset, Offset)>[];
   var labels = <Rect>[];
+  var tops = <Offset>[];
+  var spines = <Rect>[];
   final key = GlobalKey();
 
   Offset origin(WidgetTester tester) => tester.getTopLeft(find.byKey(key));
@@ -55,7 +56,6 @@ Future<SlidersProbe> pumpSliders(
       grammarToLinked: to,
     ),
   );
-  Widget bar(int lesson) => Container(height: 10, color: outlineColor);
   await tester.pumpWidget(
     wrapInApp(
       Theme(
@@ -71,17 +71,13 @@ Future<SlidersProbe> pumpSliders(
                   key: probe.key,
                   settings: probe.settings,
                   bookStarts: bookStarts,
-                  wordBar: bar,
-                  grammarBar: bar,
-                  onWords: (r) =>
-                      probe.settings = probe.settings.withWordRange(r),
-                  onGrammar: (r) =>
-                      probe.settings = probe.settings.withGrammarRange(r),
-                  onLinked: ({from, to}) => probe.settings = probe.settings
-                      .withGrammarLinked(from: from, to: to),
+                  onCourse: (s) => probe.settings = s,
                   onScale: (s) => probe.scale = s,
-                  onPaintChains: (e) => probe.chains = e,
                   onPaintLabels: (l) => probe.labels = l,
+                  onPaintPages: (t, s) {
+                    probe.tops = t;
+                    probe.spines = s;
+                  },
                 ),
               ),
             ),

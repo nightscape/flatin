@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,6 +7,7 @@ import '../data/lesson_data.dart';
 import '../data/practice_data.dart';
 import '../models/course_filter.dart';
 import '../models/lesson_range.dart';
+import '../models/settings.dart';
 import '../models/practice_item.dart';
 import '../providers/locale_provider.dart';
 import '../providers/settings_provider.dart';
@@ -88,28 +87,18 @@ class _KursstandCardState extends ConsumerState<KursstandCard> {
     );
   }
 
-  void _move(
-    LessonRange old,
-    LessonRange next,
-    Future<void> Function(LessonRange) set,
-  ) {
-    set(next);
-    final movedStart = next.from != old.from;
-    _reveal(movedStart ? next.from : next.to, start: movedStart);
-  }
-
-  void _moveWords(LessonRange next) =>
-      _move(_filter.settings.courseWords, next, _notifier.setWordRange);
-
-  /// Moving a linked grammar bound opens its chain.
-  void _moveGrammar(LessonRange next) =>
-      _move(_filter.settings.courseGrammar, next, _notifier.setGrammarRange);
-
-  /// The range with the handle nearer to [lesson] moved onto it.
-  LessonRange _nearest(LessonRange r, int lesson) {
-    final moveStart =
-        lesson < r.from || (lesson <= r.to && lesson - r.from <= r.to - lesson);
-    return moveStart ? LessonRange(lesson, r.to) : LessonRange(r.from, lesson);
+  void _onCourse(Settings next) {
+    final old = _filter.settings;
+    _notifier.setCourse(next);
+    for (final (before, after) in [
+      (old.courseWords, next.courseWords),
+      (old.courseGrammar, next.courseGrammar),
+    ]) {
+      if (before == after) continue;
+      final movedStart = after.from != before.from;
+      _reveal(movedStart ? after.from : after.to, start: movedStart);
+      return;
+    }
   }
 
   /// The words a lesson introduces; a word listed twice or again in a later
@@ -123,124 +112,20 @@ class _KursstandCardState extends ConsumerState<KursstandCard> {
       .overrideOfWord(lemma)
       .verdict(inRange: _filter.settings.courseWords.contains(lesson));
 
-  Widget Function(int) _histogram({
-    required Key Function(int) keyOf,
-    required Map<int, int> total,
-    required Map<int, int> off,
-    required bool Function(int) inRange,
-    required String tooltipUnit,
-    required void Function(int) onTap,
-    required Color color,
-    bool down = false,
-  }) {
-    final peak = total.values.reduce(max);
-    const radius = Radius.circular(2);
-    return (l) => GestureDetector(
-      key: keyOf(l),
-      onTap: () => onTap(l),
-      child: Tooltip(
-        message: '${_stop(l)}: ${total[l] ?? 0} $tooltipUnit',
-        child: Container(
-          height: 3 + 44 * (total[l] ?? 0) / peak,
-          decoration: BoxDecoration(
-            color: !inRange(l)
-                ? outlineColor
-                : (off[l] ?? 0) > 0
-                ? color.withAlpha(110)
-                : color,
-            borderRadius: BorderRadius.vertical(
-              top: down ? Radius.zero : radius,
-              bottom: down ? radius : Radius.zero,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget Function(int) _wordsHistogram() {
-    final lessons = _filter.lessons;
-    final total = <int, int>{}, off = <int, int>{};
-    for (final name in lessons.lessonNames) {
-      final lesson = lessonNumber(name);
-      final words = _wordsOf(name);
-      total.update(
-        lesson,
-        (n) => n + words.length,
-        ifAbsent: () => words.length,
-      );
-      final switchedOff = words.where((w) => !_wordOn(w, lesson)).length;
-      off.update(lesson, (n) => n + switchedOff, ifAbsent: () => switchedOff);
-    }
-    return _histogram(
-      keyOf: (l) => Key('kursstand.words.bar.$l'),
-      total: total,
-      off: off,
-      inRange: _filter.settings.courseWords.contains,
-      tooltipUnit: _tr('words'),
-      onTap: (l) => _moveWords(_nearest(_filter.settings.courseWords, l)),
-      color: gold,
-    );
-  }
-
-  Widget Function(int) _grammarHistogram(List<CourseTopic> topics) {
-    final total = <int, int>{}, off = <int, int>{};
-    for (final t in topics) {
-      total.update(t.lesson, (n) => n + 1, ifAbsent: () => 1);
-      if (!_filter.topicInRange(t)) {
-        off.update(t.lesson, (n) => n + 1, ifAbsent: () => 1);
-      }
-    }
-    return _histogram(
-      keyOf: (l) => Key('kursstand.grammar.bar.$l'),
-      total: total,
-      off: off,
-      inRange: _filter.settings.courseGrammar.contains,
-      tooltipUnit: _tr('grammar'),
-      onTap: (l) => _moveGrammar(_nearest(_filter.settings.courseGrammar, l)),
-      color: terracotta,
-      down: true,
-    );
-  }
-
-  Widget _tag(String text, TextStyle style) => Container(
-    padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
-    decoration: BoxDecoration(
-      color: marble.withAlpha(210),
-      borderRadius: BorderRadius.circular(4),
-    ),
-    child: Text(text, style: style),
-  );
-
-  Widget _summary(List<CourseTopic> topics) {
+  /// The count and range of the words over the shelf, or of the grammar
+  /// topics under it.
+  Widget _summary(List<CourseTopic> topics, {required bool words}) {
     final settings = _filter.settings;
-    final words = _tr('wordCount', {
-      'count': '${_filter.summary(widget.items).words}',
-    });
-    final themes = _tr('topicCount', {
-      'count': '${topics.where(_filter.topicInRange).length}',
-    });
-    String range(LessonRange r) => '${_stop(r.from)} – ${_stop(r.to)}';
-    final linked = settings.courseWords == settings.courseGrammar;
-    return Text.rich(
-      key: const Key('kursstand.summary'),
-      TextSpan(
-        style: const TextStyle(fontWeight: FontWeight.w600),
-        children: [
-          if (linked) TextSpan(text: '${range(settings.courseWords)}:  '),
-          TextSpan(
-            text: linked ? words : '$words (${range(settings.courseWords)})',
-            style: _wordsLabel.copyWith(fontSize: 14),
-          ),
-          const TextSpan(text: '  ·  '),
-          TextSpan(
-            text: linked
-                ? themes
-                : '$themes (${range(settings.courseGrammar)})',
-            style: _grammarLabel.copyWith(fontSize: 14),
-          ),
-        ],
-      ),
+    final r = words ? settings.courseWords : settings.courseGrammar;
+    final count = words
+        ? _tr('wordCount', {'count': '${_filter.summary(widget.items).words}'})
+        : _tr('topicCount', {
+            'count': '${topics.where(_filter.topicInRange).length}',
+          });
+    return Text(
+      '$count  ·  ${_stop(r.from)} – ${_stop(r.to)}',
+      key: Key('kursstand.summary.${words ? 'words' : 'grammar'}'),
+      style: (words ? _wordsLabel : _grammarLabel).copyWith(fontSize: 14),
     );
   }
 
@@ -359,32 +244,15 @@ class _KursstandCardState extends ConsumerState<KursstandCard> {
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
-            Stack(
-              children: [
-                KursstandSliders(
-                  settings: settings,
-                  bookStarts: _filter.lessons.bookStarts,
-                  wordBar: _wordsHistogram(),
-                  grammarBar: _grammarHistogram(topics),
-                  onWords: _moveWords,
-                  onGrammar: _moveGrammar,
-                  onLinked: _notifier.setGrammarLinked,
-                ),
-                Positioned(
-                  top: 14,
-                  left: 24,
-                  child: _tag(_tr('words'), _wordsLabel),
-                ),
-                Positioned(
-                  bottom: 0,
-                  left: 24,
-                  child: _tag(_tr('grammar'), _grammarLabel),
-                ),
-              ],
+            _summary(topics, words: true),
+            KursstandSliders(
+              settings: settings,
+              bookStarts: _filter.lessons.bookStarts,
+              onCourse: _onCourse,
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8),
-              child: _summary(topics),
+              padding: const EdgeInsets.only(bottom: 8),
+              child: _summary(topics, words: false),
             ),
             SizedBox(
               height: 320,

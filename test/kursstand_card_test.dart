@@ -9,66 +9,19 @@ import 'package:latin_practice/models/settings.dart';
 import 'package:latin_practice/providers/curriculum_provider.dart';
 
 import 'support/course_providers.dart';
+import 'support/kursstand_shelf_driver.dart';
 import 'support/stored_settings.dart';
 import 'support/word_classification_harness.dart' show letItLoad;
 
 Finder _text(String key) => find.byKey(Key(key));
 
 String _plain(WidgetTester tester, String key) =>
-    tester.widget<Text>(_text(key)).textSpan!.toPlainText();
+    tester.widget<Text>(_text(key)).data!;
 
 Future<void> _tapChip(WidgetTester tester, String key) async {
   await tester.ensureVisible(_text(key));
   await tester.pumpAndSettle();
   await tester.tap(_text(key));
-  await tester.pumpAndSettle();
-  await letItLoad(tester);
-}
-
-/// The x of [lesson] on the shared scale: the centre of its bar.
-double _x(WidgetTester tester, int lesson) =>
-    tester.getCenter(_text('kursstand.words.bar.$lesson')).dx;
-
-/// Moves one thumb of [slider] onto [lesson], as a drag that ends there.
-Future<void> _set(
-  WidgetTester tester,
-  String slider, {
-  required bool start,
-  required int lesson,
-}) async {
-  final widget = tester.widget<RangeSlider>(_text(slider));
-  final rect = tester.getRect(_text(slider));
-  final unit = (_x(tester, lesson) - rect.left - 24) / (rect.width - 48);
-  final v = start
-      ? RangeValues(unit, widget.values.end)
-      : RangeValues(widget.values.start, unit);
-  widget.onChanged!(v);
-  widget.onChangeEnd!(v);
-  await tester.pumpAndSettle();
-  await letItLoad(tester);
-}
-
-Future<void> _move(WidgetTester tester, String slider, int from, int to) async {
-  final values = tester.widget<RangeSlider>(_text(slider)).values;
-  final rect = tester.getRect(_text(slider));
-  final endFirst =
-      (_x(tester, from) - rect.left - 24) / (rect.width - 48) > values.end;
-  for (final start in endFirst ? [false, true] : [true, false]) {
-    await _set(tester, slider, start: start, lesson: start ? from : to);
-  }
-}
-
-/// Drags the thumb on [lesson] by [dx] pixels.
-Future<void> _dragThumb(
-  WidgetTester tester,
-  String slider,
-  int lesson,
-  double dx,
-) async {
-  await tester.dragFrom(
-    Offset(_x(tester, lesson), tester.getCenter(_text(slider)).dy),
-    Offset(dx, 0),
-  );
   await tester.pumpAndSettle();
   await letItLoad(tester);
 }
@@ -91,41 +44,23 @@ Future<void> _open(
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  testWidgets('the card shows histograms, sliders, chains, summary and reset', (
+  testWidgets('the card shows the shelf, both summaries and reset', (
     tester,
   ) async {
     await _open(tester, Settings());
 
+    expect(shelfPainter(tester).scale.bookStarts, isNotEmpty);
     expect(_text('kursstand.words.slider'), findsOneWidget);
     expect(_text('kursstand.grammar.slider'), findsOneWidget);
-    expect(_text('kursstand.words.bar.1'), findsOneWidget);
-    expect(_text('kursstand.words.bar.$laterLesson'), findsOneWidget);
-    expect(_text('kursstand.grammar.bar.$laterLesson'), findsOneWidget);
-    expect(_text('kursstand.chain.left'), findsOneWidget);
-    expect(_text('kursstand.chain.right'), findsOneWidget);
     expect(
-      _plain(tester, 'kursstand.summary'),
-      matches(r'^L1 – Später:  \d+ Wörter  ·  \d+ Themen$'),
+      _plain(tester, 'kursstand.summary.words'),
+      matches(r'^\d+ Wörter  ·  L1 – Später$'),
+    );
+    expect(
+      _plain(tester, 'kursstand.summary.grammar'),
+      matches(r'^\d+ Themen  ·  L1 – Später$'),
     );
     expect(find.text('Auf Kursstand zurücksetzen'), findsOneWidget);
-  });
-
-  testWidgets('both sliders and both histograms share one scale', (
-    tester,
-  ) async {
-    await _open(tester, Settings());
-
-    expect(
-      tester.getRect(_text('kursstand.words.slider')).width,
-      tester.getRect(_text('kursstand.grammar.slider')).width,
-    );
-    for (final lesson in [1, 20, lastLesson, laterLesson]) {
-      expect(
-        tester.getCenter(_text('kursstand.words.bar.$lesson')).dx,
-        tester.getCenter(_text('kursstand.grammar.bar.$lesson')).dx,
-        reason: 'lesson $lesson',
-      );
-    }
   });
 
   testWidgets('the words reach Später, the linked grammar with them', (
@@ -133,25 +68,31 @@ void main() {
   ) async {
     await _open(tester, Settings(courseWords: LessonRange(10, 20)));
 
-    await _move(tester, 'kursstand.words.slider', 12, laterLesson);
+    await dragRange(tester, words: true, to: LessonRange(12, laterLesson));
     final stored = await storedSettings();
     expect(stored['courseWords'], LessonRange(12, laterLesson).toJson());
     expect(stored['courseGrammar'], LessonRange(1, laterLesson).toJson());
   });
 
-  testWidgets('each chain symbol toggles its own link', (tester) async {
+  testWidgets('each screen-reader tie button ties or unties its bound', (
+    tester,
+  ) async {
     await _open(tester, Settings(courseWords: LessonRange(10, 20)));
+    Future<void> tie(String side) async {
+      tester
+          .widget<Semantics>(_text('kursstand.tie.$side'))
+          .properties
+          .onTap!();
+      await tester.pumpAndSettle();
+      await letItLoad(tester);
+    }
 
-    await tester.tap(_text('kursstand.chain.right'));
-    await tester.pumpAndSettle();
-    await letItLoad(tester);
+    await tie('right');
     var stored = await storedSettings();
     expect(stored['grammarToLinked'], isFalse);
     expect(stored['grammarFromLinked'], isFalse);
 
-    await tester.tap(_text('kursstand.chain.left'));
-    await tester.pumpAndSettle();
-    await letItLoad(tester);
+    await tie('left');
     stored = await storedSettings();
     expect(stored['grammarFromLinked'], isTrue);
     expect(stored['courseGrammar'], LessonRange(10, 20).toJson());
@@ -162,113 +103,43 @@ void main() {
   ) async {
     await _open(tester, Settings());
 
-    await _move(tester, 'kursstand.words.slider', 21, 23);
+    await dragRange(tester, words: true, to: LessonRange(21, 23));
 
     final stored = await storedSettings();
     expect(stored['courseWords'], LessonRange(21, 23).toJson());
     expect(stored['courseGrammar'], LessonRange(1, 23).toJson());
   });
 
-  testWidgets('dragging the word thumbs to the ends stops at L1 and Später', (
+  testWidgets('dragging the word ribbons to the ends stops at L1 and Später', (
     tester,
   ) async {
     await _open(tester, Settings(courseWords: LessonRange(10, 20)));
 
-    await _dragThumb(tester, 'kursstand.words.slider', 20, 1000);
-    expect(
-      (await storedSettings())['courseWords'],
-      LessonRange(10, laterLesson).toJson(),
-    );
-
-    await _dragThumb(tester, 'kursstand.words.slider', 10, -1000);
-    expect(
-      (await storedSettings())['courseWords'],
-      LessonRange(1, laterLesson).toJson(),
-    );
+    for (final (start, dx, expected) in [
+      (false, 1000.0, LessonRange(10, laterLesson)),
+      (true, -1000.0, LessonRange(1, laterLesson)),
+    ]) {
+      await tester.dragFrom(
+        shelfGrip(tester, words: true, start: start),
+        Offset(dx, 0),
+      );
+      await tester.pumpAndSettle();
+      await letItLoad(tester);
+      expect((await storedSettings())['courseWords'], expected.toJson());
+    }
   });
 
-  testWidgets('the grammar slider moves on its own when unlinked', (
+  testWidgets('the grammar ribbons move on their own when unlinked', (
     tester,
   ) async {
     await _open(tester, Settings(grammarToLinked: false));
 
-    await _move(tester, 'kursstand.words.slider', 1, 5);
-    await _move(tester, 'kursstand.grammar.slider', 3, 12);
+    await dragRange(tester, words: true, to: LessonRange(1, 5));
+    await dragRange(tester, words: false, to: LessonRange(3, 12));
 
     final stored = await storedSettings();
     expect(stored['courseWords'], LessonRange(1, 5).toJson());
     expect(stored['courseGrammar'], LessonRange(3, 12).toJson());
-  });
-
-  group('a tap on a bar moves the nearer handle', () {
-    Future<void> tapBar(WidgetTester tester, String bar, int lesson) async {
-      await tester.tap(_text('kursstand.$bar.bar.$lesson'));
-      await tester.pumpAndSettle();
-      await letItLoad(tester);
-    }
-
-    for (final (lesson, expected, why) in [
-      (5, LessonRange(5, 20), 'left of the range moves the start'),
-      (30, LessonRange(10, 30), 'right of the range moves the end'),
-      (12, LessonRange(12, 20), 'inside, nearer the start'),
-      (18, LessonRange(10, 18), 'inside, nearer the end'),
-    ]) {
-      testWidgets('words: $lesson, $why', (tester) async {
-        await _open(tester, Settings(courseWords: LessonRange(10, 20)));
-
-        await tapBar(tester, 'words', lesson);
-
-        expect((await storedSettings())['courseWords'], expected.toJson());
-      });
-    }
-
-    testWidgets('grammar bar, chain open: moves only the grammar', (
-      tester,
-    ) async {
-      await _open(
-        tester,
-        Settings(
-          grammarToLinked: false,
-          courseWords: LessonRange(10, 20),
-          courseGrammar: LessonRange(5, 20),
-        ),
-      );
-
-      await tapBar(tester, 'grammar', laterLesson);
-
-      final stored = await storedSettings();
-      expect(stored['courseGrammar'], LessonRange(5, laterLesson).toJson());
-      expect(stored['courseWords'], LessonRange(10, 20).toJson());
-    });
-
-    testWidgets('grammar bar, chain closed: moves the grammar and opens '
-        'the chain', (tester) async {
-      await _open(tester, Settings(courseWords: LessonRange(10, 20)));
-
-      await tapBar(tester, 'grammar', 30);
-
-      final stored = await storedSettings();
-      expect(stored['courseWords'], LessonRange(10, 20).toJson());
-      expect(stored['courseGrammar'], LessonRange(1, 30).toJson());
-      expect(stored['grammarToLinked'], isFalse);
-    });
-  });
-
-  testWidgets('a bar tap that moves a thumb into another book widens that '
-      'book', (tester) async {
-    await _open(tester, Settings(courseWords: LessonRange(25, 32)));
-    double width() => tester.getSize(_text('kursstand.words.bar.3')).width;
-    final before = width();
-
-    await tester.tap(_text('kursstand.words.bar.10'));
-    await tester.pumpAndSettle();
-    await letItLoad(tester);
-
-    expect(
-      (await storedSettings())['courseWords'],
-      LessonRange(10, 32).toJson(),
-    );
-    expect(width(), greaterThan(before));
   });
 
   testWidgets('a word chip flips the word against the range', (tester) async {
@@ -526,7 +397,7 @@ void main() {
       Settings(forcedOnWords: {'rosa'}, deselectedWords: {'servus'}),
     );
 
-    await _move(tester, 'kursstand.words.slider', 1, 12);
+    await dragRange(tester, words: true, to: LessonRange(1, 12));
 
     final stored = await storedSettings();
     expect(stored['forcedOnWords'], ['rosa']);

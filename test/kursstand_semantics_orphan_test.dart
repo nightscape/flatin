@@ -11,6 +11,7 @@ import 'package:latin_practice/models/settings.dart';
 import 'package:latin_practice/screens/settings_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'support/kursstand_shelf_driver.dart';
 import 'support/word_classification_harness.dart';
 
 final _children = <int, List<int>>{};
@@ -53,24 +54,11 @@ class _RecordingBinding extends AutomatedTestWidgetsFlutterBinding {
       _RecordingBuilder();
 }
 
-Future<void> _dragSlider(WidgetTester tester, String key) async {
-  final r = tester.getRect(find.byKey(Key(key)));
-  final g = await tester.startGesture(
-    Offset(r.left + r.width * 0.6, r.center.dy),
-  );
-  for (var i = 0; i < 20; i++) {
-    await g.moveBy(const Offset(-8, 0));
-    await tester.pump(const Duration(milliseconds: 16));
-  }
-  await g.up();
-  await tester.pumpAndSettle();
-}
-
 void main() {
   _RecordingBinding();
 
   testWidgets('scrolling the Kursstand card away and back, dragging both '
-      'sliders and toggling both chains sends no orphan semantics node', (
+      'ranges and tying both bounds sends no orphan semantics node', (
     tester,
   ) async {
     final semantics = tester.ensureSemantics();
@@ -85,13 +73,10 @@ void main() {
       wrapInApp(const SettingsScreen(), forcedLocale: const Locale('de')),
     );
     await letItLoad(tester);
-    for (final slider in [
-      'kursstand.words.slider',
-      'kursstand.grammar.slider',
-    ]) {
-      _phase = 'drag $slider';
-      await _dragSlider(tester, slider);
-      _phase = 'scroll away and back, $slider';
+    for (final (words, to) in [(true, 25), (false, 12)]) {
+      _phase = 'drag ${words ? 'words' : 'grammar'}';
+      await dragBound(tester, words: words, start: false, to: to);
+      _phase = 'scroll away and back, ${words ? 'words' : 'grammar'}';
       for (var k = 0; k < 20; k++) {
         await tester.dragFrom(
           const Offset(4, 300),
@@ -102,8 +87,11 @@ void main() {
       await tester.pumpAndSettle();
     }
     for (final side in ['left', 'right']) {
-      _phase = 'toggle the $side chain';
-      await tester.tap(find.byKey(Key('kursstand.chain.$side')));
+      _phase = 'tie or untie the $side bound';
+      tester
+          .widget<Semantics>(find.byKey(Key('kursstand.tie.$side')))
+          .properties
+          .onTap!();
       await tester.pumpAndSettle();
     }
     await tester.pump(const Duration(seconds: 4));

@@ -17,7 +17,9 @@ void main() {
 }
 
 class LatinPracticeApp extends ConsumerWidget {
-  const LatinPracticeApp({super.key});
+  const LatinPracticeApp({super.key, this.home = const HomeScreen()});
+
+  final Widget home;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -47,7 +49,7 @@ class LatinPracticeApp extends ConsumerWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       builder: FlutterI18n.rootAppBuilder(),
-      home: const HomeScreen(),
+      home: home,
     );
   }
 }
