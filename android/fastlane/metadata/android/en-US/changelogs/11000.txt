@@ -1,0 +1,4 @@
+* New course progress page: set words and grammar separately, and see all books at a glance
+* You now earn coins for correct answers in nouns, verbs and word classification
+* In the grammar exercises where you build forms, you can now pick from a list instead of typing
+* Narrowing the grammar range no longer makes words disappear

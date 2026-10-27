@@ -1,0 +1,4 @@
+* Neue Kursstand-Seite: Wörter und Grammatik lassen sich getrennt einstellen, und die Bücher sind auf einen Blick zu sehen
+* Für richtige Antworten in Nomen, Verben und Wortbestimmung gibt es jetzt Münzen
+* Bei den Grammatik-Aufgaben zum Bilden von Formen kannst du jetzt auswählen statt tippen
+* Wenn du die Grammatik einschränkst, verschwinden keine Wörter mehr
