@@ -27,7 +27,12 @@ const _prices = {
   'castra': 600,
   'bibliotheca': 400,
   'amphitheatrum': 600,
+  'argentaria': 1000,
 };
+
+/// The bank doubles every coin gained while it stands.
+int _times(String buildings) =>
+    buildings.split(' ').contains('argentaria') ? 2 : 1;
 
 /// Coins and the bonus share of them.
 (int, int) _reference(RewardEvent event) => switch (event) {
@@ -102,9 +107,12 @@ void main() {
 
   test('the rule file and the reference agree after every event', () {
     var steps = 0;
+    var doubled = 0;
     for (var seed = 0; seed < 600; seed++) {
-      var ledger = const RewardLedger();
-      var expected = (balance: 0, earned: 0, bonus: 0, buildings: '');
+      // Odd seeds start rich enough that the bank gets bought.
+      final start = seed.isOdd ? 1000 : 0;
+      var ledger = RewardLedger(earned: {coins: start});
+      var expected = (balance: start, earned: start, bonus: 0, buildings: '');
       for (final step in _sequence(Random(seed))) {
         steps++;
         if (step.buy case final pick?) {
@@ -133,10 +141,12 @@ void main() {
               .gainsOf(ledger, event)
               .fold(ledger, (l, e) => l.apply(e));
           final (gained, bonus) = _reference(event);
+          final times = _times(expected.buildings);
+          if (times > 1 && gained > 0) doubled++;
           expected = (
-            balance: expected.balance + gained,
-            earned: expected.earned + gained,
-            bonus: expected.bonus + bonus,
+            balance: expected.balance + gained * times,
+            earned: expected.earned + gained * times,
+            bonus: expected.bonus + bonus * times,
             buildings: expected.buildings,
           );
         }
@@ -144,5 +154,6 @@ void main() {
       }
     }
     expect(steps, 600 * 80);
+    expect(doubled, greaterThan(0));
   });
 }

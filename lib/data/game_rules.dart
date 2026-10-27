@@ -95,18 +95,25 @@ final class GameRules {
             );
       }
     }
-    final built = [
-      for (final b in buildings)
-        if (ledger.buildings.contains(b.id)) ...b.modifies,
-    ];
     return [
       for (final MapEntry(key: resource, value: byTag) in sums.entries)
-        ..._shares(resource, byTag, [
-          for (final m in built)
-            if (m.resource == resource) m,
-        ]),
+        ..._shares(resource, byTag, _modifiersOf(ledger, resource)),
     ];
   }
+
+  /// The product of the multiplies the built buildings apply to [resource].
+  num multiplierOf(RewardLedger ledger, String resource) =>
+      _multiply(_modifiersOf(ledger, resource));
+
+  List<Modifier> _modifiersOf(RewardLedger ledger, String resource) => [
+    for (final b in buildings)
+      if (ledger.buildings.contains(b.id))
+        for (final m in b.modifies)
+          if (m.resource == resource) m,
+  ];
+
+  static num _multiply(List<Modifier> modifiers) =>
+      modifiers.fold<num>(1, (p, m) => p * m.multiply);
 
   static List<ResourceGained> _shares(
     String resource,
@@ -114,7 +121,7 @@ final class GameRules {
     List<Modifier> modifiers,
   ) {
     final add = modifiers.fold(0, (sum, m) => sum + m.add);
-    final num multiply = modifiers.fold<num>(1, (p, m) => p * m.multiply);
+    final multiply = _multiply(modifiers);
     final int total = ((byTag.values.reduce((a, b) => a + b) + add) * multiply)
         .round();
     final tagged = <String, int>{

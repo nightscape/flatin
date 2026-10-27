@@ -121,6 +121,13 @@ const List<TownSprite> townSprites = [
     bottom: 0.4834,
   ),
   (
+    sprite: 'argentaria',
+    building: 'argentaria',
+    left: 0.1328,
+    width: 0.1045,
+    bottom: 0.5029,
+  ),
+  (
     sprite: 'taberna',
     building: 'taberna',
     left: 0.3242,

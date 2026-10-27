@@ -70,7 +70,7 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
   String? _selectedTranslation;
   Map<String, EselProgress> _panels = {};
   Set<String> _expandedPanels = {};
-  ({int coins, int serial})? _burst;
+  ({int coins, num factor, int serial})? _burst;
 
   void _ensureAnswerSlots(int count) {
     if (_userAnswers.length != count) {
@@ -131,15 +131,25 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
   /// same answer is never paid twice.
   Future<void> _payChoices(int right) async {
     if (right == 0) return;
-    final effects = await ref
-        .read(rewardsProvider.notifier)
-        .send(ChoicesChecked(right));
+    // Every ref use comes before the first await: the learner may leave
+    // the screen while the coins are saved.
+    final rewards = ref.read(rewardsProvider.notifier);
+    final rules = ref.read(gameRulesProvider.future);
+    final ledger = ref.read(rewardsProvider.future);
+    final effects = await rewards.send(ChoicesChecked(right));
+    final factor = (await rules).multiplierOf(await ledger, coins);
     final gained = effects
         .whereType<ResourceGained>()
         .where((e) => e.resource == coins)
         .fold(0, (sum, e) => sum + e.amount);
     if (!mounted) return;
-    setState(() => _burst = (coins: gained, serial: (_burst?.serial ?? 0) + 1));
+    setState(
+      () => _burst = (
+        coins: gained,
+        factor: factor,
+        serial: (_burst?.serial ?? 0) + 1,
+      ),
+    );
   }
 
   void _hideAnswers() {
@@ -326,8 +336,9 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
       // The burst rides in the button slot so it floats above the page.
       floatingActionButtonLocation: FloatingActionButtonLocation.centerTop,
       floatingActionButton: switch (_burst) {
-        (:final coins, :final serial) => RewardBurst(
+        (:final coins, :final factor, :final serial) => RewardBurst(
           coins,
+          factor: factor,
           key: ValueKey(serial),
         ),
         null => null,

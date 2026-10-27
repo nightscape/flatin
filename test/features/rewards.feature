@@ -51,3 +51,12 @@ Feature: Rewards
     And I have built 2 buildings
     And the app is running
     Then I should see no town
+
+  Scenario: Coins earned after buying the bank count double
+    Given I have 1020 coins
+    And the app is running
+    When I buy "argentaria"
+    And I start a round
+    And I answer the task correctly
+    And I leave the round
+    Then I should have 40 coins

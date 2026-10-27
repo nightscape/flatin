@@ -154,7 +154,7 @@ void main() {
       File(gameRulesAsset).readAsStringSync(),
       gameRulesAsset,
     );
-    expect(rules.buildings, hasLength(20));
+    expect(rules.buildings, hasLength(21));
     for (final b in rules.buildings) {
       expect(
         File('assets/town/${b.id}.png').existsSync(),
@@ -166,6 +166,9 @@ void main() {
       final keys = translationKeys(code);
       for (final b in rules.buildings) {
         expect(keys, contains('reward.building.${b.id}'));
+        if (b.modifies.isNotEmpty) {
+          expect(keys, contains('reward.effect.${b.id}'));
+        }
       }
     }
   });

@@ -194,7 +194,7 @@ class _TownPanel extends ConsumerWidget {
           : null;
       content = Stack(
         children: [
-          TownView(ledger),
+          TownView(ledger, ref.watch(gameRulesProvider).requireValue),
           if (caption != null)
             Positioned(
               top: 10,

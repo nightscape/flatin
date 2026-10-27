@@ -225,7 +225,11 @@
       "murus": "Stadtmauer",
       "castra": "Lager",
       "bibliotheca": "Bibliothek",
-      "amphitheatrum": "Amphitheater"
+      "amphitheatrum": "Amphitheater",
+      "argentaria": "Wechselstube"
+    },
+    "effect": {
+      "argentaria": "Verdoppelt alle Münzen"
     }
   },
   "language": {

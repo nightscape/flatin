@@ -962,6 +962,59 @@ runFeatures() {
         steps.iShouldSeeNoTown(widgetTester),
       );
     });
+    testWidgets('Coins earned after buying the bank count double', (
+      WidgetTester widgetTester,
+    ) async {
+      await step(
+        widgetTester,
+        'Rewards',
+        'Coins earned after buying the bank count double',
+        'Given I have 1020 coins',
+        steps.iHaveCoins(widgetTester, 1020),
+      );
+      await step(
+        widgetTester,
+        'Rewards',
+        'Coins earned after buying the bank count double',
+        'And the app is running',
+        steps.theAppIsRunning(widgetTester),
+      );
+      await step(
+        widgetTester,
+        'Rewards',
+        'Coins earned after buying the bank count double',
+        'When I buy "argentaria"',
+        steps.iBuy(widgetTester, 'argentaria'),
+      );
+      await step(
+        widgetTester,
+        'Rewards',
+        'Coins earned after buying the bank count double',
+        'And I start a round',
+        steps.iStartARound(widgetTester),
+      );
+      await step(
+        widgetTester,
+        'Rewards',
+        'Coins earned after buying the bank count double',
+        'And I answer the task correctly',
+        steps.iAnswerCorrectly(widgetTester),
+      );
+      await step(
+        widgetTester,
+        'Rewards',
+        'Coins earned after buying the bank count double',
+        'And I leave the round',
+        steps.iLeaveTheRound(widgetTester),
+      );
+      await step(
+        widgetTester,
+        'Rewards',
+        'Coins earned after buying the bank count double',
+        'Then I should have 40 coins',
+        steps.iShouldHaveCoins(widgetTester, 40),
+      );
+    });
   });
   group('Word Classification', () {
     testWidgets('User opens word classification screen', (

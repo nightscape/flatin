@@ -1,18 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 
+import '../data/game_rules.dart';
 import '../data/rewards.dart';
 import '../models/reward.dart';
 
 /// The town scene: built buildings back to front.
 class TownView extends StatelessWidget {
-  const TownView(this.ledger, {super.key});
+  const TownView(this.ledger, this.rules, {super.key});
 
   final RewardLedger ledger;
+  final GameRules rules;
 
   @override
   Widget build(BuildContext context) {
     final built = ledger.buildings.toSet();
+    final modifying = {
+      for (final b in rules.buildings)
+        if (b.modifies.isNotEmpty) b.id,
+    };
     return ClipRRect(
       borderRadius: BorderRadius.circular(12),
       child: AspectRatio(
@@ -45,10 +51,17 @@ class TownView extends StatelessWidget {
                       s.sprite.startsWith('aquaeductus-')
                           ? Image.asset('assets/town/${s.sprite}.png')
                           : Tooltip(
-                              message: FlutterI18n.translate(
-                                context,
-                                'reward.building.${s.building}',
-                              ),
+                              message: [
+                                FlutterI18n.translate(
+                                  context,
+                                  'reward.building.${s.building}',
+                                ),
+                                if (modifying.contains(s.building))
+                                  FlutterI18n.translate(
+                                    context,
+                                    'reward.effect.${s.building}',
+                                  ),
+                              ].join('\n'),
                               child: Image.asset('assets/town/${s.sprite}.png'),
                             ),
                     ),

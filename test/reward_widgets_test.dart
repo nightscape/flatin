@@ -1,8 +1,10 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:latin_practice/data/game_rules.dart';
 import 'package:latin_practice/data/rewards.dart';
 import 'package:latin_practice/models/reward.dart';
 import 'package:latin_practice/models/settings.dart';
@@ -116,7 +118,13 @@ void main() {
     Future<void> pumpTown(WidgetTester tester, List<String> ids) async {
       await tester.pumpWidget(
         wrapInApp(
-          TownView(RewardLedger(buildings: ids)),
+          TownView(
+            RewardLedger(buildings: ids),
+            GameRules.parse(
+              File(gameRulesAsset).readAsStringSync(),
+              gameRulesAsset,
+            ),
+          ),
           forcedLocale: const Locale('de'),
         ),
       );
@@ -136,6 +144,17 @@ void main() {
       expect(find.byKey(const Key('town.building.fons')), findsOneWidget);
     });
 
+    testWidgets('names the effect of a building that has modifiers', (
+      tester,
+    ) async {
+      await pumpTown(tester, ['domus', 'argentaria']);
+
+      expect(
+        tester.widgetList<Tooltip>(find.byType(Tooltip)).map((t) => t.message),
+        ['Wechselstube\nVerdoppelt alle Münzen', 'Haus'],
+      );
+    });
+
     testWidgets('renders repeated ids from old ledgers once', (tester) async {
       await pumpTown(tester, ['domus', 'hortus', 'domus']);
 
@@ -150,6 +169,7 @@ void main() {
       bool disableAnimations = false,
       VoidCallback? onTapBelow,
       int bonus = 0,
+      num factor = 1,
     }) async {
       _store(settings);
       tester.platformDispatcher.accessibilityFeaturesTestValue =
@@ -173,7 +193,7 @@ void main() {
                       onTap: onTapBelow,
                     ),
                   ),
-                  RewardBurst(10, bonus: bonus),
+                  RewardBurst(10, bonus: bonus, factor: factor),
                 ],
               ),
             ),
@@ -188,6 +208,13 @@ void main() {
       await pumpBurst(tester, Settings(), bonus: 10);
       expect(find.text('🪙 +10'), findsOneWidget);
       expect(find.text('⭐ +10'), findsOneWidget);
+      await tester.pumpAndSettle();
+    });
+
+    testWidgets('marks multiplied gains with the factor', (tester) async {
+      await pumpBurst(tester, Settings(), bonus: 10, factor: 2);
+      expect(find.text('🪙 +10 (×2)'), findsOneWidget);
+      expect(find.text('⭐ +10 (×2)'), findsOneWidget);
       await tester.pumpAndSettle();
     });
 

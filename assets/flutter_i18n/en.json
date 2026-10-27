@@ -225,7 +225,11 @@
       "murus": "City wall",
       "castra": "Camp",
       "bibliotheca": "Library",
-      "amphitheatrum": "Amphitheatre"
+      "amphitheatrum": "Amphitheatre",
+      "argentaria": "Bank"
+    },
+    "effect": {
+      "argentaria": "Doubles all coins"
     }
   },
   "language": {

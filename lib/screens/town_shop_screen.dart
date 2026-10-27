@@ -27,12 +27,16 @@ class TownShopScreen extends ConsumerWidget {
               leading: Image.asset('assets/town/${b.id}.png', width: 56),
               title: Text(t('reward.building.${b.id}')),
               subtitle: Text(
-                ledger.canAfford(b.price)
-                    ? t('shop.price', {'price': '${b.price[coins]}'})
-                    : t('shop.missing', {
-                        'price': '${b.price[coins]}',
-                        'missing': '${b.price[coins]! - ledger.balance(coins)}',
-                      }),
+                [
+                  ledger.canAfford(b.price)
+                      ? t('shop.price', {'price': '${b.price[coins]}'})
+                      : t('shop.missing', {
+                          'price': '${b.price[coins]}',
+                          'missing':
+                              '${b.price[coins]! - ledger.balance(coins)}',
+                        }),
+                  if (b.modifies.isNotEmpty) t('reward.effect.${b.id}'),
+                ].join('\n'),
               ),
               onTap: () => _confirm(context, ref, b),
             ),

@@ -40,7 +40,12 @@ class _TownScreenState extends ConsumerState<TownScreen> {
           Positioned.fill(
             child: InteractiveViewer(
               maxScale: townMaxScale,
-              child: Center(child: TownView(ledger)),
+              child: Center(
+                child: TownView(
+                  ledger,
+                  ref.watch(gameRulesProvider).requireValue,
+                ),
+              ),
             ),
           ),
           SafeArea(

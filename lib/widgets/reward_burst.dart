@@ -3,12 +3,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/settings_provider.dart';
 
+/// " (×F)" when the built buildings multiply the gains by [factor].
+String multiplierSuffix(num factor) => factor == 1 ? '' : ' (×$factor)';
+
 /// "🪙 +N", and "⭐ +M" next to it when M > 0, that drifts up and fades out; it never takes a tap.
+/// Both carry the [multiplierSuffix] of [factor].
 class RewardBurst extends ConsumerStatefulWidget {
-  const RewardBurst(this.points, {this.bonus = 0, super.key});
+  const RewardBurst(this.points, {this.bonus = 0, this.factor = 1, super.key});
 
   final int points;
   final int bonus;
+  final num factor;
 
   @override
   ConsumerState<RewardBurst> createState() => _RewardBurstState();
@@ -25,6 +30,7 @@ class _RewardBurstState extends ConsumerState<RewardBurst> {
     if (!enabled || MediaQuery.disableAnimationsOf(context) || _done) {
       return const SizedBox.shrink();
     }
+    final times = multiplierSuffix(widget.factor);
     return IgnorePointer(
       child: TweenAnimationBuilder<double>(
         tween: Tween(begin: 0, end: 1),
@@ -40,8 +46,8 @@ class _RewardBurstState extends ConsumerState<RewardBurst> {
             mainAxisSize: MainAxisSize.min,
             spacing: 12,
             children: [
-              Text('🪙 +${widget.points}'),
-              if (widget.bonus > 0) Text('⭐ +${widget.bonus}'),
+              Text('🪙 +${widget.points}$times'),
+              if (widget.bonus > 0) Text('⭐ +${widget.bonus}$times'),
             ],
           ),
         ),

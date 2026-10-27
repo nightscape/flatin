@@ -112,6 +112,63 @@ void main() {
     expect(() => ChoicesChecked(0), throwsA(isA<AssertionError>()));
   });
 
+  group('the Argentaria', () {
+    Answered right(double? difficulty) => _answered(
+      right: true,
+      firstAttempt: true,
+      wordDifficulty: difficulty,
+      at: DateTime(2026, 10, 26),
+    );
+    int gained(RewardLedger ledger, RewardEvent event) =>
+        _send(ledger, event).earnedOf(coins) - ledger.earnedOf(coins);
+    int bonus(RewardLedger ledger, RewardEvent event) =>
+        _send(ledger, event).taggedOf(coins, 'bonus') -
+        ledger.taggedOf(coins, 'bonus');
+    const before = RewardLedger(earned: {coins: 1000}, buildings: ['domus']);
+    final after = _rules
+        .buy(_rules.buildings.singleWhere((b) => b.id == 'argentaria'))
+        .fold(before, (l, e) => l.apply(e));
+
+    test('costs 1000 coins and multiplies coins by 2 by its rule', () {
+      expect(after.balance(coins), 0);
+      expect(after.earnedOf(coins), before.earnedOf(coins));
+      expect(_rules.multiplierOf(before, coins), 1);
+      expect(_rules.multiplierOf(after, coins), 2);
+    });
+
+    test('leaves the gains before the purchase unchanged', () {
+      expect(gained(before, right(null)), 10);
+      expect(gained(before, right(9)), 20);
+      expect(bonus(before, right(9)), 10);
+      expect(gained(before, const ChoicesChecked(4)), 12);
+    });
+
+    test('doubles answered, bonus and choicesChecked gains', () {
+      expect(gained(after, right(null)), 20);
+      expect(gained(after, right(9)), 40);
+      expect(bonus(after, right(9)), 20);
+      expect(gained(after, const ChoicesChecked(4)), 24);
+    });
+
+    test('counts only when the loaded ledger lists it', () {
+      RewardLedger load(List<String> buildings) => RewardLedger.fromJson(
+        jsonDecode(
+              jsonEncode({
+                'earned': {coins: 1200},
+                'tagged': {},
+                'spent': {coins: 1000},
+                'buildings': buildings,
+                'practiceDays': 3,
+                'lastPracticeDay': '2026-10-25',
+              }),
+            )
+            as Map<String, Object?>,
+      );
+      expect(gained(load(['domus']), right(null)), 10);
+      expect(gained(load(['domus', 'argentaria']), right(null)), 20);
+    });
+  });
+
   test('the shop offers the unbuilt buildings, each with a price', () {
     expect(_rules.unbuilt(const RewardLedger()), _rules.buildings);
     expect(
@@ -122,6 +179,7 @@ void main() {
       250,
       400,
       600,
+      1000,
     });
   });
 

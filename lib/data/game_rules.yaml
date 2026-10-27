@@ -52,3 +52,6 @@ buildings:
   - {id: castra, price: {coins: 600}}
   - {id: bibliotheca, price: {coins: 400}}
   - {id: amphitheatrum, price: {coins: 600}}
+  - id: argentaria
+    price: {coins: 1000}
+    modifies: [{resource: coins, multiply: 2}]
