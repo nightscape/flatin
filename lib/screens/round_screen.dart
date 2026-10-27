@@ -59,7 +59,10 @@ class _RoundScreenState extends ConsumerState<RoundScreen> {
     ref.listen(provider, (_, next) {
       if (next.value?.isOver ?? false) {
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => RoundEndScreen(start: _start!)),
+          MaterialPageRoute(
+            builder: (_) =>
+                RoundEndScreen(start: _start!, focus: widget.request.focus),
+          ),
         );
       }
     });

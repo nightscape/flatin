@@ -8,6 +8,7 @@ import 'package:fsrs/fsrs.dart';
 import '../data/asset_text.dart';
 import '../data/exercise_kinds.dart';
 import '../data/german_forms.dart';
+import '../data/word_focus.dart';
 import '../models/distractor_strategy.dart';
 import '../models/exercise.dart';
 import '../models/practice_item.dart';
@@ -90,12 +91,29 @@ Future<Map<String, List<PracticeItem>>> dueItemsByType(Ref ref) async {
   return dueItemsByType;
 }
 
-/// Get next due item for a specific exercise type
+/// The next due item of [dataFileId] that [focus] includes.
 @riverpod
-Future<PracticeItem?> nextDueItem(Ref ref, String dataFileId) async {
+Future<PracticeItem?> nextDueItem(
+  Ref ref,
+  String dataFileId,
+  WordFocus focus,
+) async {
   final dueItemsByType = await ref.watch(dueItemsByTypeProvider.future);
-  final items = dueItemsByType[dataFileId] ?? [];
-  return items.isNotEmpty ? items.first : null;
+  return dueItemsByType[dataFileId]!.where(focus.includes).firstOrNull;
+}
+
+/// The focus choices for the words in the course range.
+@riverpod
+Future<List<WordFocus>> wordFocuses(Ref ref) async {
+  final practicable = await ref.watch(practicableItemsByTypeProvider.future);
+  final language = await ref.watch(dataLanguageProvider.future);
+  return focusesOf(practicable, {
+    for (final file in practicable.keys)
+      file: (await getFormMetadata(
+        'lib/data/latin_$file.yaml',
+        language: language,
+      )).displayByType,
+  });
 }
 
 /// Review a card with a rating; the grammar cards of [grammar] are reviewed

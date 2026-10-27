@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fsrs/fsrs.dart';
+import 'package:latin_practice/data/word_focus.dart';
 import 'package:latin_practice/data/attribution.dart';
 import 'package:latin_practice/data/round.dart';
 import 'package:latin_practice/data/round_plan.dart' show roundLength;
@@ -90,14 +91,22 @@ void main() {
     seedSettings(Settings(courseWords: LessonRange(1, 1)));
     final c = _container();
     addTearDown(c.dispose);
-    final offer = await c.read(todayOfferProvider.future);
+    final offer = await c.read(todayOfferProvider(const AllWords()).future);
     expect(offer, isA<NewTopicOffer>());
     expect((offer as NewTopicOffer).topic.lesson, 1);
   });
 
   test('round requests compare by value', () {
     expect(BlockedRound('verbs:1'), const BlockedRound('verbs:1'));
-    expect(BlockedRound('verbs:1').hashCode, 'verbs:1'.hashCode);
+    expect(
+      BlockedRound('verbs:1').hashCode,
+      const BlockedRound('verbs:1').hashCode,
+    );
+    expect(
+      BlockedRound('verbs:1', const IrregularVerbs()),
+      isNot(const BlockedRound('verbs:1')),
+    );
+    expect(MixedRound(const IrregularVerbs()), isNot(const MixedRound()));
     expect(BlockedRound('verbs:1'), isNot(const BlockedRound('nouns:1')));
     expect(MixedRound(), const MixedRound());
   });
@@ -111,7 +120,9 @@ void main() {
       seedSettings(Settings(courseWords: LessonRange(1, 1)));
       final c = _container();
       addTearDown(c.dispose);
-      final offer = await c.read(todayOfferProvider.future) as NewTopicOffer;
+      final offer =
+          await c.read(todayOfferProvider(const AllWords()).future)
+              as NewTopicOffer;
       final scheduler = c.read(fsrsSchedulerProvider);
 
       final run = await _run(c, BlockedRound(offer.topic.id), wrong);
@@ -179,7 +190,9 @@ void main() {
     seedSettings(Settings(courseWords: LessonRange(1, 1)));
     final c = _container();
     addTearDown(c.dispose);
-    final offer = await c.read(todayOfferProvider.future) as NewTopicOffer;
+    final offer =
+        await c.read(todayOfferProvider(const AllWords()).future)
+            as NewTopicOffer;
     final provider = roundProvider(BlockedRound(offer.topic.id));
     c.listen(provider, (_, _) {});
     final task = (await c.read(provider.future)).queue.first;
@@ -218,7 +231,9 @@ void main() {
       ],
     );
     addTearDown(c.dispose);
-    final offer = await c.read(todayOfferProvider.future) as NewTopicOffer;
+    final offer =
+        await c.read(todayOfferProvider(const AllWords()).future)
+            as NewTopicOffer;
     final provider = roundProvider(BlockedRound(offer.topic.id));
     c.listen(provider, (_, _) {});
     final task = (await c.read(provider.future)).queue.first;
@@ -256,7 +271,9 @@ void main() {
       seedSettings(Settings(courseWords: LessonRange(1, 1)));
       final c = _container();
       addTearDown(c.dispose);
-      final offer = await c.read(todayOfferProvider.future) as NewTopicOffer;
+      final offer =
+          await c.read(todayOfferProvider(const AllWords()).future)
+              as NewTopicOffer;
       final provider = roundProvider(BlockedRound(offer.topic.id));
       final sub = c.listen(provider, (_, _) {});
       await c.read(provider.future);

@@ -10,6 +10,7 @@ import '../data/round.dart';
 import '../data/round_plan.dart';
 import '../data/selection.dart';
 import '../data/topics.dart';
+import '../data/word_focus.dart';
 import '../models/course_filter.dart';
 import '../models/exercise.dart';
 import '../models/fsrs_card.dart';
@@ -23,10 +24,11 @@ import 'settings_provider.dart';
 
 part 'round_providers.g.dart';
 
-/// The topics the course offers now, in course order.
+/// The topics the course offers now with words of [focus], in course order.
 @riverpod
-Future<List<Topic>> topics(Ref ref) async {
+Future<List<Topic>> topics(Ref ref, WordFocus focus) async {
   final byType = await ref.watch(practicableItemsByTypeProvider.future);
+  final focused = focus.narrow(byType);
   final filter = await ref.watch(courseFilterProvider.future);
   final curriculum = await ref.watch(curriculumProvider.future);
   final language = await ref.watch(dataLanguageProvider.future);
@@ -43,7 +45,7 @@ Future<List<Topic>> topics(Ref ref) async {
     for (final topic in all)
       if (offeredBundles(
         topic,
-        unlockedBundles(filter, byType[topic.dataFileId]!),
+        unlockedBundles(filter, focused[topic.dataFileId]!),
       ).isNotEmpty)
         topic,
   ];
@@ -87,10 +89,10 @@ SelectionInput _selectionInput(
 }
 
 @riverpod
-Future<TodayOffer> todayOffer(Ref ref) async {
+Future<TodayOffer> todayOffer(Ref ref, WordFocus focus) async {
   final input = _selectionInput(
     await ref.watch(fsrsCardsProvider.future),
-    await ref.watch(practicableItemsByTypeProvider.future),
+    focus.narrow(await ref.watch(practicableItemsByTypeProvider.future)),
     await ref.watch(courseFilterProvider.future),
     ref.watch(fsrsSchedulerProvider),
   );
@@ -103,7 +105,7 @@ Future<TodayOffer> todayOffer(Ref ref) async {
   );
   if (pair == null) return const NothingDue();
   if (!pair.anchorIsGrammar || !pair.anchorIsNew) return const MixedOffer();
-  final topics = await ref.watch(topicsProvider.future);
+  final topics = await ref.watch(topicsProvider(focus).future);
   return NewTopicOffer(
     topics.singleWhere(
       (t) =>
@@ -114,30 +116,33 @@ Future<TodayOffer> todayOffer(Ref ref) async {
 }
 
 sealed class RoundRequest {
-  const RoundRequest();
+  /// The round asks only words of this focus, within the course range.
+  final WordFocus focus;
+
+  const RoundRequest(this.focus);
 }
 
 final class BlockedRound extends RoundRequest {
   final String topicId;
 
-  const BlockedRound(this.topicId);
+  const BlockedRound(this.topicId, [super.focus = const AllWords()]);
 
   @override
   bool operator ==(Object other) =>
-      other is BlockedRound && other.topicId == topicId;
+      other is BlockedRound && other.topicId == topicId && other.focus == focus;
 
   @override
-  int get hashCode => topicId.hashCode;
+  int get hashCode => Object.hash(topicId, focus);
 }
 
 final class MixedRound extends RoundRequest {
-  const MixedRound();
+  const MixedRound([super.focus = const AllWords()]);
 
   @override
-  bool operator ==(Object other) => other is MixedRound;
+  bool operator ==(Object other) => other is MixedRound && other.focus == focus;
 
   @override
-  int get hashCode => (MixedRound).hashCode;
+  int get hashCode => Object.hash(MixedRound, focus);
 }
 
 /// One round. Auto-dispose and never stored: leaving it aborts it, which
@@ -159,13 +164,14 @@ class Round extends _$Round {
     final practicable = await ref.read(practicableItemsByTypeProvider.future);
     final filter = await ref.read(courseFilterProvider.future);
     final german = await ref.read(germanFormsProvider.future);
-    final topics = await ref.read(topicsProvider.future);
+    final topics = await ref.read(topicsProvider(request.focus).future);
     final avoidMacronTwins = (await ref.read(
       settingsProvider.future,
     )).avoidMacronTwins;
+    final focused = request.focus.narrow(practicable);
     final input = _selectionInput(
       cards,
-      practicable,
+      focused,
       filter,
       ref.read(fsrsSchedulerProvider),
     );
@@ -188,7 +194,10 @@ class Round extends _$Round {
         final topic = topics.singleWhere((t) => t.id == topicId);
         return planBlocked(
           topic,
-          offeredBundles(topic, _contexts[topic.dataFileId]!.unlocked),
+          offeredBundles(
+            topic,
+            unlockedBundles(filter, focused[topic.dataFileId]!),
+          ),
           input,
         );
       }(),

@@ -251,12 +251,12 @@ final class DueItemsByTypeProvider
 
 String _$dueItemsByTypeHash() => r'949517a59cf37a3b731235668277fa34a6333df3';
 
-/// Get next due item for a specific exercise type
+/// The next due item of [dataFileId] that [focus] includes.
 
 @ProviderFor(nextDueItem)
 final nextDueItemProvider = NextDueItemFamily._();
 
-/// Get next due item for a specific exercise type
+/// The next due item of [dataFileId] that [focus] includes.
 
 final class NextDueItemProvider
     extends
@@ -266,10 +266,10 @@ final class NextDueItemProvider
           FutureOr<PracticeItem?>
         >
     with $FutureModifier<PracticeItem?>, $FutureProvider<PracticeItem?> {
-  /// Get next due item for a specific exercise type
+  /// The next due item of [dataFileId] that [focus] includes.
   NextDueItemProvider._({
     required NextDueItemFamily super.from,
-    required String super.argument,
+    required (String, WordFocus) super.argument,
   }) : super(
          retry: null,
          name: r'nextDueItemProvider',
@@ -285,7 +285,7 @@ final class NextDueItemProvider
   String toString() {
     return r'nextDueItemProvider'
         ''
-        '($argument)';
+        '$argument';
   }
 
   @$internal
@@ -296,8 +296,8 @@ final class NextDueItemProvider
 
   @override
   FutureOr<PracticeItem?> create(Ref ref) {
-    final argument = this.argument as String;
-    return nextDueItem(ref, argument);
+    final argument = this.argument as (String, WordFocus);
+    return nextDueItem(ref, argument.$1, argument.$2);
   }
 
   @override
@@ -311,12 +311,16 @@ final class NextDueItemProvider
   }
 }
 
-String _$nextDueItemHash() => r'dad7b8776eee2406d6d0c580044ff80c0b40d24c';
+String _$nextDueItemHash() => r'71aab425f369a6a7a2c63b4885c1730ee96c0a08';
 
-/// Get next due item for a specific exercise type
+/// The next due item of [dataFileId] that [focus] includes.
 
 final class NextDueItemFamily extends $Family
-    with $FunctionalFamilyOverride<FutureOr<PracticeItem?>, String> {
+    with
+        $FunctionalFamilyOverride<
+          FutureOr<PracticeItem?>,
+          (String, WordFocus)
+        > {
   NextDueItemFamily._()
     : super(
         retry: null,
@@ -326,14 +330,58 @@ final class NextDueItemFamily extends $Family
         isAutoDispose: true,
       );
 
-  /// Get next due item for a specific exercise type
+  /// The next due item of [dataFileId] that [focus] includes.
 
-  NextDueItemProvider call(String dataFileId) =>
-      NextDueItemProvider._(argument: dataFileId, from: this);
+  NextDueItemProvider call(String dataFileId, WordFocus focus) =>
+      NextDueItemProvider._(argument: (dataFileId, focus), from: this);
 
   @override
   String toString() => r'nextDueItemProvider';
 }
+
+/// The focus choices for the words in the course range.
+
+@ProviderFor(wordFocuses)
+final wordFocusesProvider = WordFocusesProvider._();
+
+/// The focus choices for the words in the course range.
+
+final class WordFocusesProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<WordFocus>>,
+          List<WordFocus>,
+          FutureOr<List<WordFocus>>
+        >
+    with $FutureModifier<List<WordFocus>>, $FutureProvider<List<WordFocus>> {
+  /// The focus choices for the words in the course range.
+  WordFocusesProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'wordFocusesProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$wordFocusesHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<List<WordFocus>> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<List<WordFocus>> create(Ref ref) {
+    return wordFocuses(ref);
+  }
+}
+
+String _$wordFocusesHash() => r'b7a2a0b776a01bf47f2832238992163bd8cafc5a';
 
 /// The German texts of the Latin verbs and nouns; none for a UI language
 /// other than German, so the kinds that show them are not built.

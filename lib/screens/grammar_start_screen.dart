@@ -3,34 +3,45 @@ import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/topics.dart';
+import '../data/word_focus.dart';
 import '../models/lesson_range.dart';
 import '../providers/reward_provider.dart';
 import '../providers/round_providers.dart';
+import '../widgets/focus_picker.dart';
 import 'round_screen.dart';
 
-/// The round [offer] starts; null when nothing is due.
-RoundRequest? requestOf(TodayOffer offer) => switch (offer) {
-  MixedOffer() => const MixedRound(),
-  NewTopicOffer(:final topic) => BlockedRound(topic.id),
+/// The round [offer] starts with [focus]; null when nothing is due.
+RoundRequest? requestOf(TodayOffer offer, WordFocus focus) => switch (offer) {
+  MixedOffer() => MixedRound(focus),
+  NewTopicOffer(:final topic) => BlockedRound(topic.id, focus),
   NothingDue() => null,
 };
 
-/// "Heute dran" on top, then every topic the course offers.
-class GrammarStartScreen extends ConsumerWidget {
+/// The focus on top, then "Heute dran", then every topic the course offers
+/// with words of the focus. The focus starts at "Alles" on every visit.
+class GrammarStartScreen extends ConsumerStatefulWidget {
   const GrammarStartScreen({super.key, this.namer = const DerivedTopicNamer()});
 
   final TopicNamer namer;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<GrammarStartScreen> createState() => _GrammarStartState();
+}
+
+class _GrammarStartState extends ConsumerState<GrammarStartScreen> {
+  WordFocus _focus = const AllWords();
+
+  @override
+  Widget build(BuildContext context) {
+    final namer = widget.namer;
     String t(String key, [Map<String, String>? params]) =>
         FlutterI18n.translate(context, key, translationParams: params);
     void open(RoundRequest request) => Navigator.of(
       context,
     ).push(MaterialPageRoute(builder: (_) => RoundScreen(request)));
 
-    final offer = ref.watch(todayOfferProvider);
-    final topics = ref.watch(topicsProvider);
+    final offer = ref.watch(todayOfferProvider(_focus));
+    final topics = ref.watch(topicsProvider(_focus));
     final rewards = ref.watch(rewardsProvider);
     final error = offer.error ?? topics.error ?? rewards.error;
     final Widget body;
@@ -39,10 +50,15 @@ class GrammarStartScreen extends ConsumerWidget {
     } else if (!offer.hasValue || !topics.hasValue || !rewards.hasValue) {
       body = const Center(child: CircularProgressIndicator());
     } else {
-      final request = requestOf(offer.requireValue);
+      final request = requestOf(offer.requireValue, _focus);
       body = ListView(
         padding: const EdgeInsets.all(16),
         children: [
+          FocusPicker(
+            value: _focus,
+            onChanged: (focus) => setState(() => _focus = focus),
+          ),
+          const SizedBox(height: 8),
           Card(
             child: Padding(
               padding: const EdgeInsets.all(16),
@@ -87,7 +103,7 @@ class GrammarStartScreen extends ConsumerWidget {
                     ? t('round.start.later')
                     : t('round.start.lesson', {'n': '${topic.lesson}'}),
               ),
-              onTap: () => open(BlockedRound(topic.id)),
+              onTap: () => open(BlockedRound(topic.id, _focus)),
             ),
         ],
       );

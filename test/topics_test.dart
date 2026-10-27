@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:latin_practice/data/word_focus.dart';
 import 'package:latin_practice/data/curriculum.dart';
 import 'package:latin_practice/data/exercise_choice.dart';
 import 'package:latin_practice/data/lesson_data.dart';
@@ -177,7 +178,9 @@ void main() {
     });
     final container = ProviderContainer();
     addTearDown(container.dispose);
-    final listed = await container.read(topicsProvider.future);
+    final listed = await container.read(
+      topicsProvider(const AllWords()).future,
+    );
     expect(listed.map((t) => t.id), contains('verbs:10'));
     expect(listed.map((t) => t.id), isNot(contains('verbs:23')));
     expect(

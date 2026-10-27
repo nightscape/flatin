@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:latin_practice/data/word_focus.dart';
 import 'package:latin_practice/data/exercise_kinds.dart';
 import 'package:latin_practice/data/topics.dart';
 import 'package:latin_practice/models/reward.dart';
@@ -107,8 +108,12 @@ void main() {
     final container = ProviderScope.containerOf(
       tester.element(find.byType(GrammarStartScreen)),
     );
-    final offer = container.read(todayOfferProvider).requireValue;
-    final topics = container.read(topicsProvider).requireValue;
+    final offer = container
+        .read(todayOfferProvider(const AllWords()))
+        .requireValue;
+    final topics = container
+        .read(topicsProvider(const AllWords()))
+        .requireValue;
     const namer = DerivedTopicNamer();
     expect(find.text('Heute dran'), findsOneWidget);
     expect(
@@ -135,7 +140,9 @@ void main() {
     final container = ProviderScope.containerOf(
       tester.element(find.byType(GrammarStartScreen)),
     );
-    final topics = container.read(topicsProvider).requireValue;
+    final topics = container
+        .read(topicsProvider(const AllWords()))
+        .requireValue;
     expect(find.text('Neues Thema: Thema X'), findsOneWidget);
     expect(find.text('Thema X'), findsNWidgets(topics.length));
     for (final topic in topics) {
@@ -213,7 +220,7 @@ void main() {
       wrapInApp(
         Consumer(
           builder: (_, ref, _) => ref.watch(rewardsProvider).hasValue
-              ? const RoundEndScreen(start: RewardLedger())
+              ? const RoundEndScreen(start: RewardLedger(), focus: AllWords())
               : const SizedBox(),
         ),
         forcedLocale: const Locale('de'),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../data/word_focus.dart';
 import '../models/reward.dart';
 import '../providers/reward_provider.dart';
 import '../providers/round_providers.dart';
@@ -10,11 +11,13 @@ import '../widgets/town_view.dart';
 import 'grammar_start_screen.dart';
 import 'round_screen.dart';
 
-/// Shows only what the round added to the ledger since [start].
+/// Shows only what the round added to the ledger since [start]; the next
+/// round keeps [focus].
 class RoundEndScreen extends ConsumerWidget {
-  const RoundEndScreen({super.key, required this.start});
+  const RoundEndScreen({super.key, required this.start, required this.focus});
 
   final RewardLedger start;
+  final WordFocus focus;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -22,8 +25,8 @@ class RoundEndScreen extends ConsumerWidget {
         FlutterI18n.translate(context, key, translationParams: params);
     final ledger = ref.watch(rewardsProvider).requireValue;
     final rules = ref.watch(gameRulesProvider).requireValue;
-    final offer = ref.watch(todayOfferProvider).value;
-    final next = offer == null ? null : requestOf(offer);
+    final offer = ref.watch(todayOfferProvider(focus)).value;
+    final next = offer == null ? null : requestOf(offer, focus);
     final bonus =
         ledger.taggedOf(coins, 'bonus') - start.taggedOf(coins, 'bonus');
     final gained = ledger.earnedOf(coins) - start.earnedOf(coins) - bonus;

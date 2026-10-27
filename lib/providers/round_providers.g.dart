@@ -8,12 +8,12 @@ part of 'round_providers.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
-/// The topics the course offers now, in course order.
+/// The topics the course offers now with words of [focus], in course order.
 
 @ProviderFor(topics)
-final topicsProvider = TopicsProvider._();
+final topicsProvider = TopicsFamily._();
 
-/// The topics the course offers now, in course order.
+/// The topics the course offers now with words of [focus], in course order.
 
 final class TopicsProvider
     extends
@@ -23,20 +23,27 @@ final class TopicsProvider
           FutureOr<List<Topic>>
         >
     with $FutureModifier<List<Topic>>, $FutureProvider<List<Topic>> {
-  /// The topics the course offers now, in course order.
-  TopicsProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'topicsProvider',
-        isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
+  /// The topics the course offers now with words of [focus], in course order.
+  TopicsProvider._({
+    required TopicsFamily super.from,
+    required WordFocus super.argument,
+  }) : super(
+         retry: null,
+         name: r'topicsProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
   @override
   String debugGetCreateSourceHash() => _$topicsHash();
+
+  @override
+  String toString() {
+    return r'topicsProvider'
+        ''
+        '($argument)';
+  }
 
   @$internal
   @override
@@ -46,14 +53,47 @@ final class TopicsProvider
 
   @override
   FutureOr<List<Topic>> create(Ref ref) {
-    return topics(ref);
+    final argument = this.argument as WordFocus;
+    return topics(ref, argument);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is TopicsProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
   }
 }
 
-String _$topicsHash() => r'a6e4800b4c166e691a0ad6a13d56951d2173837e';
+String _$topicsHash() => r'bcc1fe93b8d1837c5a839987c75326a6bc36923f';
+
+/// The topics the course offers now with words of [focus], in course order.
+
+final class TopicsFamily extends $Family
+    with $FunctionalFamilyOverride<FutureOr<List<Topic>>, WordFocus> {
+  TopicsFamily._()
+    : super(
+        retry: null,
+        name: r'topicsProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  /// The topics the course offers now with words of [focus], in course order.
+
+  TopicsProvider call(WordFocus focus) =>
+      TopicsProvider._(argument: focus, from: this);
+
+  @override
+  String toString() => r'topicsProvider';
+}
 
 @ProviderFor(todayOffer)
-final todayOfferProvider = TodayOfferProvider._();
+final todayOfferProvider = TodayOfferFamily._();
 
 final class TodayOfferProvider
     extends
@@ -63,19 +103,26 @@ final class TodayOfferProvider
           FutureOr<TodayOffer>
         >
     with $FutureModifier<TodayOffer>, $FutureProvider<TodayOffer> {
-  TodayOfferProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'todayOfferProvider',
-        isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
+  TodayOfferProvider._({
+    required TodayOfferFamily super.from,
+    required WordFocus super.argument,
+  }) : super(
+         retry: null,
+         name: r'todayOfferProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
   @override
   String debugGetCreateSourceHash() => _$todayOfferHash();
+
+  @override
+  String toString() {
+    return r'todayOfferProvider'
+        ''
+        '($argument)';
+  }
 
   @$internal
   @override
@@ -84,11 +131,40 @@ final class TodayOfferProvider
 
   @override
   FutureOr<TodayOffer> create(Ref ref) {
-    return todayOffer(ref);
+    final argument = this.argument as WordFocus;
+    return todayOffer(ref, argument);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is TodayOfferProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
   }
 }
 
-String _$todayOfferHash() => r'8acb5080c7ebe00e292c4887f7a326596ffd51f0';
+String _$todayOfferHash() => r'1f3d3d27ae6bb1f87ab4a0e516c6385dd0dd2e9a';
+
+final class TodayOfferFamily extends $Family
+    with $FunctionalFamilyOverride<FutureOr<TodayOffer>, WordFocus> {
+  TodayOfferFamily._()
+    : super(
+        retry: null,
+        name: r'todayOfferProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  TodayOfferProvider call(WordFocus focus) =>
+      TodayOfferProvider._(argument: focus, from: this);
+
+  @override
+  String toString() => r'todayOfferProvider';
+}
 
 /// One round. Auto-dispose and never stored: leaving it aborts it, which
 /// keeps the word reviews already written and reviews no bundle.
@@ -137,7 +213,7 @@ final class RoundProvider extends $AsyncNotifierProvider<Round, RoundState> {
   }
 }
 
-String _$roundHash() => r'd6d169cbe0edf509ad4233baf5d5ae6757d5b008';
+String _$roundHash() => r'21701506a8621e0c35a808fc98cd4b5030235094';
 
 /// One round. Auto-dispose and never stored: leaving it aborts it, which
 /// keeps the word reviews already written and reviews no bundle.

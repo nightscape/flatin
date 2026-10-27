@@ -309,5 +309,13 @@
       "again": "Another round",
       "done": "Done"
     }
+  },
+  "focus": {
+    "label": "Focus",
+    "all": "All",
+    "nouns": "Nouns",
+    "verbs": "Verbs",
+    "irregular": "Irregular verbs",
+    "empty": "no words in your course range"
   }
 }

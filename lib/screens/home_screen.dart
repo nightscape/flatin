@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import '../data/rewards.dart';
+import '../data/word_focus.dart';
 import '../models/reward.dart';
 import '../widgets/app_drawer.dart';
-import '../models/practice_item.dart';
+import '../widgets/focus_picker.dart';
 import '../providers/fsrs_provider.dart';
 import '../providers/reward_provider.dart';
 import '../providers/settings_provider.dart';
@@ -52,19 +53,7 @@ class HomeScreen extends ConsumerWidget {
               builder: (context, box) {
                 final menu = Column(
                   children: [
-                    const _PracticeTypeButton(
-                      dataFileId: 'nouns',
-                      labelKey: 'home.nouns',
-                      icon: Icons.account_balance,
-                      buttonKey: Key('home.nouns.button'),
-                    ),
-                    const SizedBox(height: 14),
-                    const _PracticeTypeButton(
-                      dataFileId: 'verbs',
-                      labelKey: 'home.verbs',
-                      icon: Icons.directions_run,
-                      buttonKey: Key('home.verbs.button'),
-                    ),
+                    const _PracticeStart(),
                     const SizedBox(height: 14),
                     _MenuButton(
                       buttonKey: const Key('home.grammar.button'),
@@ -242,20 +231,61 @@ class _TownPanel extends ConsumerWidget {
   }
 }
 
-/// Entry point for one exercise type: opens the next due item, or any
-/// practicable one, and is disabled while the type has none.
+/// The focus of the noun and verb practice, then their two buttons. The
+/// focus starts at "Alles" whenever the home screen is built anew.
+class _PracticeStart extends StatefulWidget {
+  const _PracticeStart();
+
+  @override
+  State<_PracticeStart> createState() => _PracticeStartState();
+}
+
+class _PracticeStartState extends State<_PracticeStart> {
+  WordFocus _focus = const AllWords();
+
+  @override
+  Widget build(BuildContext context) => Column(
+    children: [
+      FocusPicker(
+        value: _focus,
+        onChanged: (focus) => setState(() => _focus = focus),
+      ),
+      const SizedBox(height: 8),
+      _PracticeTypeButton(
+        dataFileId: 'nouns',
+        labelKey: 'home.nouns',
+        icon: Icons.account_balance,
+        buttonKey: const Key('home.nouns.button'),
+        focus: _focus,
+      ),
+      const SizedBox(height: 14),
+      _PracticeTypeButton(
+        dataFileId: 'verbs',
+        labelKey: 'home.verbs',
+        icon: Icons.directions_run,
+        buttonKey: const Key('home.verbs.button'),
+        focus: _focus,
+      ),
+    ],
+  );
+}
+
+/// Entry point for one exercise type: opens the next due item of [focus], or
+/// any practicable one, and is disabled while the type has none.
 class _PracticeTypeButton extends ConsumerWidget {
   const _PracticeTypeButton({
     required this.dataFileId,
     required this.labelKey,
     required this.icon,
     required this.buttonKey,
+    required this.focus,
   });
 
   final String dataFileId;
   final String labelKey;
   final IconData icon;
   final Key buttonKey;
+  final WordFocus focus;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -272,9 +302,10 @@ class _PracticeTypeButton extends ConsumerWidget {
       );
     }
 
-    final practicable =
-        practicableAsync.value?[dataFileId] ?? const <PracticeItem>[];
-    final due = dueAsync.value?[dataFileId] ?? const <PracticeItem>[];
+    final practicable = [
+      ...?practicableAsync.value?[dataFileId]?.where(focus.includes),
+    ];
+    final due = [...?dueAsync.value?[dataFileId]?.where(focus.includes)];
     final itemToShow = !dueAsync.hasValue
         ? null
         : due.isNotEmpty
@@ -292,7 +323,8 @@ class _PracticeTypeButton extends ConsumerWidget {
           ? null
           : () => Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => PracticeScreen(item: itemToShow),
+                builder: (context) =>
+                    PracticeScreen(item: itemToShow, focus: focus),
               ),
             ),
     );

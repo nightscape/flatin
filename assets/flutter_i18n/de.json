@@ -309,5 +309,13 @@
       "again": "Noch eine Runde",
       "done": "Fertig"
     }
+  },
+  "focus": {
+    "label": "Fokus",
+    "all": "Alles",
+    "nouns": "Nomen",
+    "verbs": "Verben",
+    "irregular": "Unregelmäßige Verben",
+    "empty": "keine Wörter im Kursstand"
   }
 }

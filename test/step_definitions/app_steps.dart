@@ -9,12 +9,16 @@ import 'package:latin_practice/main.dart' as app;
 import 'package:integration_test/integration_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:latin_practice/data/game_rules.dart';
+import 'package:latin_practice/data/round_plan.dart' show roundLength;
+import 'package:latin_practice/data/word_focus.dart';
 import 'package:latin_practice/models/derivation.dart' show norm;
 import 'package:latin_practice/models/reward.dart';
 import 'package:latin_practice/models/settings.dart';
 import 'package:latin_practice/providers/curriculum_provider.dart';
 import 'package:latin_practice/providers/fsrs_provider.dart';
+import 'package:latin_practice/providers/round_providers.dart';
 import 'package:latin_practice/screens/practice_screen.dart';
+import 'package:latin_practice/screens/round_screen.dart';
 import 'package:latin_practice/screens/word_classification_screen.dart';
 import 'package:latin_practice/services/reward_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -679,6 +683,40 @@ class AppSteps {
     await letItLoad(tester);
   }
 
+  @When('I start a round with the focus {string}')
+  @And('I start a round with the focus {string}')
+  Future<void> iStartAFocusedRound(WidgetTester tester, String focus) async {
+    tester.view.physicalSize = const Size(1200, 2400);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+    await tap(tester, 'home.grammar.button');
+    await letItLoad(tester);
+    await tester.tap(find.byKey(const Key('focus.picker')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text(focus).last);
+    await tester.pumpAndSettle();
+    await tap(tester, 'round.start.go');
+    await letItLoad(tester);
+  }
+
+  @Then('every task of the round asks an irregular verb')
+  @And('every task of the round asks an irregular verb')
+  Future<void> everyTaskAsksAnIrregularVerb(WidgetTester tester) async {
+    final screen = find.byType(RoundScreen);
+    final round = ProviderScope.containerOf(
+      tester.element(screen),
+    ).read(roundProvider(tester.widget<RoundScreen>(screen).request));
+    var asked = 0;
+    for (var i = 0; i < 12; i++) {
+      if (find.byKey(const Key('round.end.done')).evaluate().isNotEmpty) break;
+      final word = round.requireValue.queue.first.word;
+      expect(const IrregularVerbs().includes(word), isTrue, reason: word.id);
+      asked++;
+      await iAnswerCorrectly(tester);
+    }
+    expect(asked, roundLength);
+  }
+
   @When('I answer the task correctly')
   @And('I answer the task correctly')
   Future<void> iAnswerCorrectly(WidgetTester tester) async {
@@ -854,6 +892,13 @@ class AppSteps {
   @And('the device language is the store locale')
   Future<void> theDeviceLanguageIsTheStoreLocale(WidgetTester tester) async {
     tester.platformDispatcher.localesTestValue = [storeDeviceLocale];
+    addTearDown(tester.platformDispatcher.clearLocalesTestValue);
+  }
+
+  @Given('the device language is German')
+  @And('the device language is German')
+  Future<void> theDeviceLanguageIsGerman(WidgetTester tester) async {
+    tester.platformDispatcher.localesTestValue = [const Locale('de')];
     addTearDown(tester.platformDispatcher.clearLocalesTestValue);
   }
 

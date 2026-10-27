@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:latin_practice/data/word_focus.dart';
 import 'package:latin_practice/data/exercise_kinds.dart';
 import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/main.dart' show noRetry;
@@ -94,7 +95,7 @@ ProviderContainer _container(List<ExerciseGenerator> registry) {
 
 Future<List<Exercise>> _round(ProviderContainer c, String dataFileId) async {
   final topic = (await c.read(
-    topicsProvider.future,
+    topicsProvider(const AllWords()).future,
   )).firstWhere((t) => t.dataFileId == dataFileId);
   final provider = roundProvider(BlockedRound(topic.id));
   c.listen(provider, (_, _) {});

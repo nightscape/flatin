@@ -356,6 +356,41 @@ runFeatures() {
       );
     });
   });
+  group('Focus on a word group', () {
+    testWidgets(
+      'A round with the focus "Unregelmäßige Verben" asks only irregular verbs',
+      (WidgetTester widgetTester) async {
+        await step(
+          widgetTester,
+          'Focus on a word group',
+          'A round with the focus "Unregelmäßige Verben" asks only irregular verbs',
+          'Given the device language is German',
+          steps.theDeviceLanguageIsGerman(widgetTester),
+        );
+        await step(
+          widgetTester,
+          'Focus on a word group',
+          'A round with the focus "Unregelmäßige Verben" asks only irregular verbs',
+          'And the app is running',
+          steps.theAppIsRunning(widgetTester),
+        );
+        await step(
+          widgetTester,
+          'Focus on a word group',
+          'A round with the focus "Unregelmäßige Verben" asks only irregular verbs',
+          'When I start a round with the focus "Unregelmäßige Verben"',
+          steps.iStartAFocusedRound(widgetTester, 'Unregelmäßige Verben'),
+        );
+        await step(
+          widgetTester,
+          'Focus on a word group',
+          'A round with the focus "Unregelmäßige Verben" asks only irregular verbs',
+          'Then every task of the round asks an irregular verb',
+          steps.everyTaskAsksAnIrregularVerb(widgetTester),
+        );
+      },
+    );
+  });
   group('Store pictures', () {
     testWidgets('Home screen with town and coins', (
       WidgetTester widgetTester,

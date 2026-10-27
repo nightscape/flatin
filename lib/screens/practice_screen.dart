@@ -7,6 +7,7 @@ import '../data/attribution.dart';
 import '../data/diagnosis.dart' show diagnose;
 import '../data/esel_steps.dart';
 import '../data/explanation.dart' show ExplanationLine;
+import '../data/word_focus.dart';
 import '../models/derivation.dart' show norm;
 import '../models/exercise.dart' show bundleOf;
 import '../models/practice_item.dart';
@@ -53,7 +54,14 @@ bool paysCoins(PracticeItem item, String formKey) {
 class PracticeScreen extends ConsumerStatefulWidget {
   final PracticeItem item;
 
-  const PracticeScreen({super.key, required this.item});
+  /// The next item is the next due one this focus includes.
+  final WordFocus focus;
+
+  const PracticeScreen({
+    super.key,
+    required this.item,
+    this.focus = const AllWords(),
+  });
 
   @override
   ConsumerState<PracticeScreen> createState() => _PracticeScreenState();
@@ -192,14 +200,15 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
     }
 
     final nextItem = await ref.read(
-      nextDueItemProvider(widget.item.dataFileId).future,
+      nextDueItemProvider(widget.item.dataFileId, widget.focus).future,
     );
 
     if (mounted) {
       if (nextItem != null && nextItem != widget.item) {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
-            builder: (context) => PracticeScreen(item: nextItem),
+            builder: (context) =>
+                PracticeScreen(item: nextItem, focus: widget.focus),
           ),
         );
       } else {
