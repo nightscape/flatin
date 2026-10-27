@@ -1,2 +1,2 @@
 * Die Auswahllisten zeigen jetzt mehr als eine Antwort: alle Formen, die du schon gelernt hast
-* Bei "Fehler finden" und "Formenkette" kannst du jetzt auswählen statt tippen
+* Bei allen Formen-Aufgaben gilt jetzt deine Eingabe-Einstellung

@@ -1,2 +1,2 @@
 * The drop-down lists now show more than one choice: all the forms you have learned so far
-* "Find the mistake" and "Form chain" now let you pick instead of type
+* All form exercises now use your input setting
