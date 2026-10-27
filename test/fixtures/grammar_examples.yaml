@@ -190,9 +190,9 @@ types:
     abstract: true
     inherits_from: 3-Endungen
     forms:
-      abl.sg.m: ["{stamm}e", "{stamm}ī"]
-      abl.sg.f: ["{stamm}e", "{stamm}ī"]
-      abl.sg.n: ["{stamm}e", "{stamm}ī"]
+      abl.sg.m: "{stamm}e"
+      abl.sg.f: "{stamm}e"
+      abl.sg.n: "{stamm}e"
       akk.pl.m: "{stamm}ēs"
       akk.pl.f: "{stamm}ēs"
 

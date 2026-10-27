@@ -106,7 +106,7 @@ void main() {
       _golden(
         'amare',
         'part.praes.akt.sg.abl.m',
-        'amante / amantī',
+        'amante',
         '{ppa}+e [3-Endungen-Partizip]',
       );
     });

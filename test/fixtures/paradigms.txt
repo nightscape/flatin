@@ -789,9 +789,9 @@ part.praes.akt.sg.dat.n | amantī | {ppa}+ī [3-Endungen]
 part.praes.akt.sg.akk.m | amantem | {ppa}+em [3-Endungen]
 part.praes.akt.sg.akk.f | amantem | {ppa}+em [3-Endungen]
 part.praes.akt.sg.akk.n | amāns | {ppa_nom}+ [3-Endungen]
-part.praes.akt.sg.abl.m | amante / amantī | {ppa}+e [3-Endungen-Partizip]
-part.praes.akt.sg.abl.f | amante / amantī | {ppa}+e [3-Endungen-Partizip]
-part.praes.akt.sg.abl.n | amante / amantī | {ppa}+e [3-Endungen-Partizip]
+part.praes.akt.sg.abl.m | amante | {ppa}+e [3-Endungen-Partizip]
+part.praes.akt.sg.abl.f | amante | {ppa}+e [3-Endungen-Partizip]
+part.praes.akt.sg.abl.n | amante | {ppa}+e [3-Endungen-Partizip]
 part.praes.akt.sg.vok.m | amāns | {ppa_nom}+ [3-Endungen]
 part.praes.akt.sg.vok.f | amāns | {ppa_nom}+ [3-Endungen]
 part.praes.akt.sg.vok.n | amāns | {ppa_nom}+ [3-Endungen]
@@ -1081,9 +1081,9 @@ part.praes.akt.sg.dat.n | agentī | {ppa}+ī [3-Endungen]
 part.praes.akt.sg.akk.m | agentem | {ppa}+em [3-Endungen]
 part.praes.akt.sg.akk.f | agentem | {ppa}+em [3-Endungen]
 part.praes.akt.sg.akk.n | agēns | {ppa_nom}+ [3-Endungen]
-part.praes.akt.sg.abl.m | agente / agentī | {ppa}+e [3-Endungen-Partizip]
-part.praes.akt.sg.abl.f | agente / agentī | {ppa}+e [3-Endungen-Partizip]
-part.praes.akt.sg.abl.n | agente / agentī | {ppa}+e [3-Endungen-Partizip]
+part.praes.akt.sg.abl.m | agente | {ppa}+e [3-Endungen-Partizip]
+part.praes.akt.sg.abl.f | agente | {ppa}+e [3-Endungen-Partizip]
+part.praes.akt.sg.abl.n | agente | {ppa}+e [3-Endungen-Partizip]
 part.praes.akt.sg.vok.m | agēns | {ppa_nom}+ [3-Endungen]
 part.praes.akt.sg.vok.f | agēns | {ppa_nom}+ [3-Endungen]
 part.praes.akt.sg.vok.n | agēns | {ppa_nom}+ [3-Endungen]
@@ -1374,9 +1374,9 @@ part.praes.akt.sg.dat.n | capientī | {ppa}+ī [3-Endungen]
 part.praes.akt.sg.akk.m | capientem | {ppa}+em [3-Endungen]
 part.praes.akt.sg.akk.f | capientem | {ppa}+em [3-Endungen]
 part.praes.akt.sg.akk.n | capiēns | {ppa_nom}+ [3-Endungen]
-part.praes.akt.sg.abl.m | capiente / capientī | {ppa}+e [3-Endungen-Partizip]
-part.praes.akt.sg.abl.f | capiente / capientī | {ppa}+e [3-Endungen-Partizip]
-part.praes.akt.sg.abl.n | capiente / capientī | {ppa}+e [3-Endungen-Partizip]
+part.praes.akt.sg.abl.m | capiente | {ppa}+e [3-Endungen-Partizip]
+part.praes.akt.sg.abl.f | capiente | {ppa}+e [3-Endungen-Partizip]
+part.praes.akt.sg.abl.n | capiente | {ppa}+e [3-Endungen-Partizip]
 part.praes.akt.sg.vok.m | capiēns | {ppa_nom}+ [3-Endungen]
 part.praes.akt.sg.vok.f | capiēns | {ppa_nom}+ [3-Endungen]
 part.praes.akt.sg.vok.n | capiēns | {ppa_nom}+ [3-Endungen]
@@ -1598,9 +1598,9 @@ part.praes.akt.sg.dat.n | hortantī | {ppa}+ī [3-Endungen]
 part.praes.akt.sg.akk.m | hortantem | {ppa}+em [3-Endungen]
 part.praes.akt.sg.akk.f | hortantem | {ppa}+em [3-Endungen]
 part.praes.akt.sg.akk.n | hortāns | {ppa_nom}+ [3-Endungen]
-part.praes.akt.sg.abl.m | hortante / hortantī | {ppa}+e [3-Endungen-Partizip]
-part.praes.akt.sg.abl.f | hortante / hortantī | {ppa}+e [3-Endungen-Partizip]
-part.praes.akt.sg.abl.n | hortante / hortantī | {ppa}+e [3-Endungen-Partizip]
+part.praes.akt.sg.abl.m | hortante | {ppa}+e [3-Endungen-Partizip]
+part.praes.akt.sg.abl.f | hortante | {ppa}+e [3-Endungen-Partizip]
+part.praes.akt.sg.abl.n | hortante | {ppa}+e [3-Endungen-Partizip]
 part.praes.akt.sg.vok.m | hortāns | {ppa_nom}+ [3-Endungen]
 part.praes.akt.sg.vok.f | hortāns | {ppa_nom}+ [3-Endungen]
 part.praes.akt.sg.vok.n | hortāns | {ppa_nom}+ [3-Endungen]
@@ -1821,9 +1821,9 @@ part.praes.akt.sg.dat.n | patientī | {ppa}+ī [3-Endungen]
 part.praes.akt.sg.akk.m | patientem | {ppa}+em [3-Endungen]
 part.praes.akt.sg.akk.f | patientem | {ppa}+em [3-Endungen]
 part.praes.akt.sg.akk.n | patiēns | {ppa_nom}+ [3-Endungen]
-part.praes.akt.sg.abl.m | patiente / patientī | {ppa}+e [3-Endungen-Partizip]
-part.praes.akt.sg.abl.f | patiente / patientī | {ppa}+e [3-Endungen-Partizip]
-part.praes.akt.sg.abl.n | patiente / patientī | {ppa}+e [3-Endungen-Partizip]
+part.praes.akt.sg.abl.m | patiente | {ppa}+e [3-Endungen-Partizip]
+part.praes.akt.sg.abl.f | patiente | {ppa}+e [3-Endungen-Partizip]
+part.praes.akt.sg.abl.n | patiente | {ppa}+e [3-Endungen-Partizip]
 part.praes.akt.sg.vok.m | patiēns | {ppa_nom}+ [3-Endungen]
 part.praes.akt.sg.vok.f | patiēns | {ppa_nom}+ [3-Endungen]
 part.praes.akt.sg.vok.n | patiēns | {ppa_nom}+ [3-Endungen]
@@ -2045,9 +2045,9 @@ part.praes.akt.sg.dat.n | largientī | {ppa}+ī [3-Endungen]
 part.praes.akt.sg.akk.m | largientem | {ppa}+em [3-Endungen]
 part.praes.akt.sg.akk.f | largientem | {ppa}+em [3-Endungen]
 part.praes.akt.sg.akk.n | largiēns | {ppa_nom}+ [3-Endungen]
-part.praes.akt.sg.abl.m | largiente / largientī | {ppa}+e [3-Endungen-Partizip]
-part.praes.akt.sg.abl.f | largiente / largientī | {ppa}+e [3-Endungen-Partizip]
-part.praes.akt.sg.abl.n | largiente / largientī | {ppa}+e [3-Endungen-Partizip]
+part.praes.akt.sg.abl.m | largiente | {ppa}+e [3-Endungen-Partizip]
+part.praes.akt.sg.abl.f | largiente | {ppa}+e [3-Endungen-Partizip]
+part.praes.akt.sg.abl.n | largiente | {ppa}+e [3-Endungen-Partizip]
 part.praes.akt.sg.vok.m | largiēns | {ppa_nom}+ [3-Endungen]
 part.praes.akt.sg.vok.f | largiēns | {ppa_nom}+ [3-Endungen]
 part.praes.akt.sg.vok.n | largiēns | {ppa_nom}+ [3-Endungen]
@@ -2338,9 +2338,9 @@ part.praes.akt.sg.dat.n | monentī | {ppa}+ī [3-Endungen]
 part.praes.akt.sg.akk.m | monentem | {ppa}+em [3-Endungen]
 part.praes.akt.sg.akk.f | monentem | {ppa}+em [3-Endungen]
 part.praes.akt.sg.akk.n | monēns | {ppa_nom}+ [3-Endungen]
-part.praes.akt.sg.abl.m | monente / monentī | {ppa}+e [3-Endungen-Partizip]
-part.praes.akt.sg.abl.f | monente / monentī | {ppa}+e [3-Endungen-Partizip]
-part.praes.akt.sg.abl.n | monente / monentī | {ppa}+e [3-Endungen-Partizip]
+part.praes.akt.sg.abl.m | monente | {ppa}+e [3-Endungen-Partizip]
+part.praes.akt.sg.abl.f | monente | {ppa}+e [3-Endungen-Partizip]
+part.praes.akt.sg.abl.n | monente | {ppa}+e [3-Endungen-Partizip]
 part.praes.akt.sg.vok.m | monēns | {ppa_nom}+ [3-Endungen]
 part.praes.akt.sg.vok.f | monēns | {ppa_nom}+ [3-Endungen]
 part.praes.akt.sg.vok.n | monēns | {ppa_nom}+ [3-Endungen]
@@ -2631,9 +2631,9 @@ part.praes.akt.sg.dat.n | audientī | {ppa}+ī [3-Endungen]
 part.praes.akt.sg.akk.m | audientem | {ppa}+em [3-Endungen]
 part.praes.akt.sg.akk.f | audientem | {ppa}+em [3-Endungen]
 part.praes.akt.sg.akk.n | audiēns | {ppa_nom}+ [3-Endungen]
-part.praes.akt.sg.abl.m | audiente / audientī | {ppa}+e [3-Endungen-Partizip]
-part.praes.akt.sg.abl.f | audiente / audientī | {ppa}+e [3-Endungen-Partizip]
-part.praes.akt.sg.abl.n | audiente / audientī | {ppa}+e [3-Endungen-Partizip]
+part.praes.akt.sg.abl.m | audiente | {ppa}+e [3-Endungen-Partizip]
+part.praes.akt.sg.abl.f | audiente | {ppa}+e [3-Endungen-Partizip]
+part.praes.akt.sg.abl.n | audiente | {ppa}+e [3-Endungen-Partizip]
 part.praes.akt.sg.vok.m | audiēns | {ppa_nom}+ [3-Endungen]
 part.praes.akt.sg.vok.f | audiēns | {ppa_nom}+ [3-Endungen]
 part.praes.akt.sg.vok.n | audiēns | {ppa_nom}+ [3-Endungen]
@@ -2923,9 +2923,9 @@ part.praes.akt.sg.dat.n | regentī | {ppa}+ī [3-Endungen]
 part.praes.akt.sg.akk.m | regentem | {ppa}+em [3-Endungen]
 part.praes.akt.sg.akk.f | regentem | {ppa}+em [3-Endungen]
 part.praes.akt.sg.akk.n | regēns | {ppa_nom}+ [3-Endungen]
-part.praes.akt.sg.abl.m | regente / regentī | {ppa}+e [3-Endungen-Partizip]
-part.praes.akt.sg.abl.f | regente / regentī | {ppa}+e [3-Endungen-Partizip]
-part.praes.akt.sg.abl.n | regente / regentī | {ppa}+e [3-Endungen-Partizip]
+part.praes.akt.sg.abl.m | regente | {ppa}+e [3-Endungen-Partizip]
+part.praes.akt.sg.abl.f | regente | {ppa}+e [3-Endungen-Partizip]
+part.praes.akt.sg.abl.n | regente | {ppa}+e [3-Endungen-Partizip]
 part.praes.akt.sg.vok.m | regēns | {ppa_nom}+ [3-Endungen]
 part.praes.akt.sg.vok.f | regēns | {ppa_nom}+ [3-Endungen]
 part.praes.akt.sg.vok.n | regēns | {ppa_nom}+ [3-Endungen]
@@ -3151,9 +3151,9 @@ part.praes.akt.sg.dat.n | audentī | {ppa}+ī [3-Endungen]
 part.praes.akt.sg.akk.m | audentem | {ppa}+em [3-Endungen]
 part.praes.akt.sg.akk.f | audentem | {ppa}+em [3-Endungen]
 part.praes.akt.sg.akk.n | audēns | {ppa_nom}+ [3-Endungen]
-part.praes.akt.sg.abl.m | audente / audentī | {ppa}+e [3-Endungen-Partizip]
-part.praes.akt.sg.abl.f | audente / audentī | {ppa}+e [3-Endungen-Partizip]
-part.praes.akt.sg.abl.n | audente / audentī | {ppa}+e [3-Endungen-Partizip]
+part.praes.akt.sg.abl.m | audente | {ppa}+e [3-Endungen-Partizip]
+part.praes.akt.sg.abl.f | audente | {ppa}+e [3-Endungen-Partizip]
+part.praes.akt.sg.abl.n | audente | {ppa}+e [3-Endungen-Partizip]
 part.praes.akt.sg.vok.m | audēns | {ppa_nom}+ [3-Endungen]
 part.praes.akt.sg.vok.f | audēns | {ppa_nom}+ [3-Endungen]
 part.praes.akt.sg.vok.n | audēns | {ppa_nom}+ [3-Endungen]
@@ -3551,9 +3551,9 @@ part.praes.akt.sg.dat.n | euntī | {ppa}+ī [3-Endungen]
 part.praes.akt.sg.akk.m | euntem | {ppa}+em [3-Endungen]
 part.praes.akt.sg.akk.f | euntem | {ppa}+em [3-Endungen]
 part.praes.akt.sg.akk.n | iēns | {ppa_nom}+ [3-Endungen]
-part.praes.akt.sg.abl.m | eunte / euntī | {ppa}+e [3-Endungen-Partizip]
-part.praes.akt.sg.abl.f | eunte / euntī | {ppa}+e [3-Endungen-Partizip]
-part.praes.akt.sg.abl.n | eunte / euntī | {ppa}+e [3-Endungen-Partizip]
+part.praes.akt.sg.abl.m | eunte | {ppa}+e [3-Endungen-Partizip]
+part.praes.akt.sg.abl.f | eunte | {ppa}+e [3-Endungen-Partizip]
+part.praes.akt.sg.abl.n | eunte | {ppa}+e [3-Endungen-Partizip]
 part.praes.akt.sg.vok.m | iēns | {ppa_nom}+ [3-Endungen]
 part.praes.akt.sg.vok.f | iēns | {ppa_nom}+ [3-Endungen]
 part.praes.akt.sg.vok.n | iēns | {ppa_nom}+ [3-Endungen]
@@ -3736,9 +3736,9 @@ part.praes.akt.sg.dat.n | abeuntī | compose(praefix:ab + ire[part.praes.akt.sg.
 part.praes.akt.sg.akk.m | abeuntem | compose(praefix:ab + ire[part.praes.akt.sg.akk.m]=euntem, join="")
 part.praes.akt.sg.akk.f | abeuntem | compose(praefix:ab + ire[part.praes.akt.sg.akk.f]=euntem, join="")
 part.praes.akt.sg.akk.n | abiēns | compose(praefix:ab + ire[part.praes.akt.sg.akk.n]=iēns, join="")
-part.praes.akt.sg.abl.m | abeunte / abeuntī | compose(praefix:ab + ire[part.praes.akt.sg.abl.m]=eunte, join="")
-part.praes.akt.sg.abl.f | abeunte / abeuntī | compose(praefix:ab + ire[part.praes.akt.sg.abl.f]=eunte, join="")
-part.praes.akt.sg.abl.n | abeunte / abeuntī | compose(praefix:ab + ire[part.praes.akt.sg.abl.n]=eunte, join="")
+part.praes.akt.sg.abl.m | abeunte | compose(praefix:ab + ire[part.praes.akt.sg.abl.m]=eunte, join="")
+part.praes.akt.sg.abl.f | abeunte | compose(praefix:ab + ire[part.praes.akt.sg.abl.f]=eunte, join="")
+part.praes.akt.sg.abl.n | abeunte | compose(praefix:ab + ire[part.praes.akt.sg.abl.n]=eunte, join="")
 part.praes.akt.sg.vok.m | abiēns | compose(praefix:ab + ire[part.praes.akt.sg.vok.m]=iēns, join="")
 part.praes.akt.sg.vok.f | abiēns | compose(praefix:ab + ire[part.praes.akt.sg.vok.f]=iēns, join="")
 part.praes.akt.sg.vok.n | abiēns | compose(praefix:ab + ire[part.praes.akt.sg.vok.n]=iēns, join="")
@@ -3921,9 +3921,9 @@ part.praes.akt.sg.dat.n | redeuntī | compose(praefix:red + ire[part.praes.akt.s
 part.praes.akt.sg.akk.m | redeuntem | compose(praefix:red + ire[part.praes.akt.sg.akk.m]=euntem, join="")
 part.praes.akt.sg.akk.f | redeuntem | compose(praefix:red + ire[part.praes.akt.sg.akk.f]=euntem, join="")
 part.praes.akt.sg.akk.n | rediēns | compose(praefix:red + ire[part.praes.akt.sg.akk.n]=iēns, join="")
-part.praes.akt.sg.abl.m | redeunte / redeuntī | compose(praefix:red + ire[part.praes.akt.sg.abl.m]=eunte, join="")
-part.praes.akt.sg.abl.f | redeunte / redeuntī | compose(praefix:red + ire[part.praes.akt.sg.abl.f]=eunte, join="")
-part.praes.akt.sg.abl.n | redeunte / redeuntī | compose(praefix:red + ire[part.praes.akt.sg.abl.n]=eunte, join="")
+part.praes.akt.sg.abl.m | redeunte | compose(praefix:red + ire[part.praes.akt.sg.abl.m]=eunte, join="")
+part.praes.akt.sg.abl.f | redeunte | compose(praefix:red + ire[part.praes.akt.sg.abl.f]=eunte, join="")
+part.praes.akt.sg.abl.n | redeunte | compose(praefix:red + ire[part.praes.akt.sg.abl.n]=eunte, join="")
 part.praes.akt.sg.vok.m | rediēns | compose(praefix:red + ire[part.praes.akt.sg.vok.m]=iēns, join="")
 part.praes.akt.sg.vok.f | rediēns | compose(praefix:red + ire[part.praes.akt.sg.vok.f]=iēns, join="")
 part.praes.akt.sg.vok.n | rediēns | compose(praefix:red + ire[part.praes.akt.sg.vok.n]=iēns, join="")
@@ -4177,9 +4177,9 @@ part.praes.akt.sg.dat.n | ferentī | {ppa}+ī [3-Endungen]
 part.praes.akt.sg.akk.m | ferentem | {ppa}+em [3-Endungen]
 part.praes.akt.sg.akk.f | ferentem | {ppa}+em [3-Endungen]
 part.praes.akt.sg.akk.n | ferēns | {ppa_nom}+ [3-Endungen]
-part.praes.akt.sg.abl.m | ferente / ferentī | {ppa}+e [3-Endungen-Partizip]
-part.praes.akt.sg.abl.f | ferente / ferentī | {ppa}+e [3-Endungen-Partizip]
-part.praes.akt.sg.abl.n | ferente / ferentī | {ppa}+e [3-Endungen-Partizip]
+part.praes.akt.sg.abl.m | ferente | {ppa}+e [3-Endungen-Partizip]
+part.praes.akt.sg.abl.f | ferente | {ppa}+e [3-Endungen-Partizip]
+part.praes.akt.sg.abl.n | ferente | {ppa}+e [3-Endungen-Partizip]
 part.praes.akt.sg.vok.m | ferēns | {ppa_nom}+ [3-Endungen]
 part.praes.akt.sg.vok.f | ferēns | {ppa_nom}+ [3-Endungen]
 part.praes.akt.sg.vok.n | ferēns | {ppa_nom}+ [3-Endungen]
@@ -4463,9 +4463,9 @@ part.praes.akt.sg.dat.n | afferentī / adferentī | compose(praefix:af(d_angleic
 part.praes.akt.sg.akk.m | afferentem / adferentem | compose(praefix:af(d_angleich) + ferre[part.praes.akt.sg.akk.m]=ferentem, join="")
 part.praes.akt.sg.akk.f | afferentem / adferentem | compose(praefix:af(d_angleich) + ferre[part.praes.akt.sg.akk.f]=ferentem, join="")
 part.praes.akt.sg.akk.n | afferēns / adferēns | compose(praefix:af(d_angleich) + ferre[part.praes.akt.sg.akk.n]=ferēns, join="")
-part.praes.akt.sg.abl.m | afferente / adferente / afferentī / adferentī | compose(praefix:af(d_angleich) + ferre[part.praes.akt.sg.abl.m]=ferente, join="")
-part.praes.akt.sg.abl.f | afferente / adferente / afferentī / adferentī | compose(praefix:af(d_angleich) + ferre[part.praes.akt.sg.abl.f]=ferente, join="")
-part.praes.akt.sg.abl.n | afferente / adferente / afferentī / adferentī | compose(praefix:af(d_angleich) + ferre[part.praes.akt.sg.abl.n]=ferente, join="")
+part.praes.akt.sg.abl.m | afferente / adferente | compose(praefix:af(d_angleich) + ferre[part.praes.akt.sg.abl.m]=ferente, join="")
+part.praes.akt.sg.abl.f | afferente / adferente | compose(praefix:af(d_angleich) + ferre[part.praes.akt.sg.abl.f]=ferente, join="")
+part.praes.akt.sg.abl.n | afferente / adferente | compose(praefix:af(d_angleich) + ferre[part.praes.akt.sg.abl.n]=ferente, join="")
 part.praes.akt.sg.vok.m | afferēns / adferēns | compose(praefix:af(d_angleich) + ferre[part.praes.akt.sg.vok.m]=ferēns, join="")
 part.praes.akt.sg.vok.f | afferēns / adferēns | compose(praefix:af(d_angleich) + ferre[part.praes.akt.sg.vok.f]=ferēns, join="")
 part.praes.akt.sg.vok.n | afferēns / adferēns | compose(praefix:af(d_angleich) + ferre[part.praes.akt.sg.vok.n]=ferēns, join="")

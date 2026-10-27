@@ -140,9 +140,9 @@ verbs:abesse	part.praes.akt.sg.dat.n	absentī
 verbs:abesse	part.praes.akt.sg.akk.m	absentem
 verbs:abesse	part.praes.akt.sg.akk.f	absentem
 verbs:abesse	part.praes.akt.sg.akk.n	absēns
-verbs:abesse	part.praes.akt.sg.abl.m	absente / absentī
-verbs:abesse	part.praes.akt.sg.abl.f	absente / absentī
-verbs:abesse	part.praes.akt.sg.abl.n	absente / absentī
+verbs:abesse	part.praes.akt.sg.abl.m	absente
+verbs:abesse	part.praes.akt.sg.abl.f	absente
+verbs:abesse	part.praes.akt.sg.abl.n	absente
 verbs:abesse	part.praes.akt.sg.vok.m	absēns
 verbs:abesse	part.praes.akt.sg.vok.f	absēns
 verbs:abesse	part.praes.akt.sg.vok.n	absēns
@@ -488,9 +488,9 @@ verbs:praeesse	part.praes.akt.sg.dat.n	praesentī
 verbs:praeesse	part.praes.akt.sg.akk.m	praesentem
 verbs:praeesse	part.praes.akt.sg.akk.f	praesentem
 verbs:praeesse	part.praes.akt.sg.akk.n	praesēns
-verbs:praeesse	part.praes.akt.sg.abl.m	praesente / praesentī
-verbs:praeesse	part.praes.akt.sg.abl.f	praesente / praesentī
-verbs:praeesse	part.praes.akt.sg.abl.n	praesente / praesentī
+verbs:praeesse	part.praes.akt.sg.abl.m	praesente
+verbs:praeesse	part.praes.akt.sg.abl.f	praesente
+verbs:praeesse	part.praes.akt.sg.abl.n	praesente
 verbs:praeesse	part.praes.akt.sg.vok.m	praesēns
 verbs:praeesse	part.praes.akt.sg.vok.f	praesēns
 verbs:praeesse	part.praes.akt.sg.vok.n	praesēns
