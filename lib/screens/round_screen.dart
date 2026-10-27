@@ -112,7 +112,7 @@ class _RoundScreenState extends ConsumerState<RoundScreen> {
             inputStrategy: InputStrategy.byId(
               settings.requireValue.getInputStrategyId(task.word.dataFileId),
             ),
-            practicedForms: filter.requireValue.practicedForms(
+            optionForms: filter.requireValue.optionForms(
               task.word.dataFileId,
               task.word.formLabels,
             ),

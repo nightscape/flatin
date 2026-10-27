@@ -21,12 +21,17 @@ class ExerciseScreen extends StatefulWidget {
   /// How [inputKinds] take the answer: the input setting of [word]'s data file.
   final InputStrategy inputStrategy;
 
-  /// The forms of [word] the learner practises; the dropdowns offer only these.
-  final Set<FormKey> practicedForms;
+  /// The forms of [word] the dropdowns offer.
+  final Set<FormKey> optionForms;
   final void Function(ExerciseResponse response) onResponse;
 
   /// The typed kinds that follow [inputStrategy]; the others always take text.
-  static const inputKinds = {ExerciseKind.formBilden, ExerciseKind.umformen};
+  static const inputKinds = {
+    ExerciseKind.formBilden,
+    ExerciseKind.umformen,
+    ExerciseKind.fehlerFinden,
+    ExerciseKind.formenKette,
+  };
 
   const ExerciseScreen({
     super.key,
@@ -34,7 +39,7 @@ class ExerciseScreen extends StatefulWidget {
     required this.exercise,
     this.title,
     required this.inputStrategy,
-    required this.practicedForms,
+    required this.optionForms,
     required this.onResponse,
   });
 
@@ -182,14 +187,14 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
   InputContext _inputContext() {
     final expected = (widget.exercise.answer as TypedAnswer).expected;
     assert(expected.lexemeId == widget.word.id, 'the target is another word');
-    final practiced = widget.word.filterForms(widget.practicedForms);
-    final index = practiced.keys.indexOf(expected.formKey);
-    assert(index >= 0, '${expected.formKey} is not practised');
+    final offered = widget.word.filterForms(widget.optionForms);
+    final index = offered.keys.indexOf(expected.formKey);
+    assert(index >= 0, '${expected.formKey} is not offered');
     return InputContext(
       index: index,
       correctAnswer: expected.text,
-      allForms: practiced.forms,
-      inferredForms: practiced.inferredForms,
+      allForms: offered.forms,
+      inferredForms: offered.inferredForms,
       isChecked: _response != null,
       borderColor: Theme.of(context).colorScheme.outline,
       labelFontSize: 16,

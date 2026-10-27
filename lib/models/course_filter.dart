@@ -110,10 +110,19 @@ final class CourseFilter {
         '${labels.map((l) => l.key)}',
       ),
     );
-    return {if (_basicFormTaught(dataFileId, basic)) basic.key};
+    return {if (_formTaught(dataFileId, basic)) basic.key};
   }
 
-  bool _basicFormTaught(String dataFileId, FormLabel label) =>
+  /// The forms the dropdowns offer: the practised ones and every other
+  /// taught one, whatever the grammar range's lower bound.
+  Set<FormKey> optionForms(String dataFileId, List<FormLabel> labels) => {
+    ...practicedForms(dataFileId, labels),
+    for (final label in labels)
+      if (_formTaught(dataFileId, label)) label.key,
+  };
+
+  /// Taught up to the grammar range's end and not switched off.
+  bool _formTaught(String dataFileId, FormLabel label) =>
       curriculum.formLesson(dataFileId, label.key) <=
           settings.courseGrammar.to &&
       settings.offFeaturesOf(dataFileId, label).isEmpty &&

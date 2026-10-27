@@ -324,6 +324,15 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
     _filteredInferredForms = filteredData.inferredForms;
     _filteredKeys = filteredData.keys;
     _ensureAnswerSlots(_filteredForms.length);
+    final optionForms = filterAsync.when(
+      data: (filter) => widget.item
+          .filterForms(
+            filter.optionForms(widget.item.dataFileId, widget.item.formLabels),
+          )
+          .forms,
+      loading: () => widget.item.forms,
+      error: (_, _) => widget.item.forms,
+    );
 
     final strategyId = settingsAsync.when(
       data: (s) => s.getInputStrategyId(widget.item.dataFileId),
@@ -549,7 +558,7 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
                                                 InputContext(
                                                   index: index,
                                                   correctAnswer: correctAnswer,
-                                                  allForms: _filteredForms,
+                                                  allForms: optionForms,
                                                   inferredForms:
                                                       _filteredInferredForms,
                                                   isChecked: state.isChecked,

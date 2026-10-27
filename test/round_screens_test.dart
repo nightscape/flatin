@@ -291,7 +291,7 @@ void main() {
   _macronTwinTest();
 
   for (final dropdownFile in ['nouns', 'verbs']) {
-    testWidgets('a noun round\'s formBilden and umformen take the nouns\' '
+    testWidgets('a noun round\'s typed form kinds take the nouns\' '
         'input setting: dropdown for $dropdownFile', (tester) async {
       tester.view.physicalSize = const Size(1200, 2400);
       tester.view.devicePixelRatio = 1.0;
@@ -335,9 +335,68 @@ void main() {
         await letItLoad(tester);
       }
       expect(seen, {
-        ('nouns', ExerciseKind.formBilden),
+        ('nouns', ExerciseKind.fehlerFinden),
         ('nouns', ExerciseKind.umformen),
       });
+    });
+  }
+
+  for (final (kind, fits) in [
+    (ExerciseKind.fehlerFinden, (Topic t) => t.dataFileId == 'nouns'),
+    (ExerciseKind.formenKette, (Topic t) => t.bundles.contains('ind.fut2.akt')),
+  ]) {
+    testWidgets('a round\'s ${kind.name} takes the dropdown setting', (
+      tester,
+    ) async {
+      tester.view.physicalSize = const Size(1200, 2400);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.reset);
+      seedSettings(
+        Settings(
+          inputStrategyIds: {
+            'nouns': 'dropdown_distractors',
+            'verbs': 'dropdown_distractors',
+          },
+        ),
+      );
+      await tester.pumpWidget(
+        wrapInApp(
+          const GrammarStartScreen(),
+          forcedLocale: const Locale('de'),
+          overrides: [
+            exerciseRandomProvider.overrideWithValue(Random(17)),
+            exerciseRegistryProvider.overrideWithValue([
+              for (final g in exerciseGenerators)
+                if (g.kind == kind) g,
+            ]),
+          ],
+        ),
+      );
+      await letItLoad(tester);
+      final topic = ProviderScope.containerOf(
+        tester.element(find.byType(GrammarStartScreen)),
+      ).read(topicsProvider(const AllWords())).requireValue.firstWhere(fits);
+      await tap(tester, 'round.topic.${topic.id}');
+      await letItLoad(tester);
+
+      var shown = 0;
+      while (find.byType(ExerciseScreen).evaluate().isNotEmpty) {
+        final screen = tester.widget<ExerciseScreen>(
+          find.byType(ExerciseScreen),
+        );
+        shown++;
+        expect(
+          find.descendant(
+            of: find.byKey(const Key('exercise.input')),
+            matching: find.byType(DropdownButtonFormField<String>),
+          ),
+          findsOneWidget,
+          reason: screen.word.lemma,
+        );
+        await answer(tester, screen.exercise, right: true);
+        await letItLoad(tester);
+      }
+      expect(shown, greaterThan(0));
     });
   }
 }
