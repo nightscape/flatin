@@ -1,0 +1,3 @@
+* Kursstand: Deine Bücher stehen jetzt in einem Regal. Mit den Lesezeichen wählst du, welche Lektionen du übst.
+* Die Übersicht zeigt Vokabeln und Grammatik getrennt, jeweils mit Lektionen und Anzahl.
+* Partizip Präsens: Der Ablativ Singular endet jetzt nur auf -e (z. B. absente).
