@@ -188,6 +188,7 @@ class Round extends _$Round {
           avoidMacronTwins: avoidMacronTwins,
           formPracticed: (word, label) =>
               filter.formPracticed(word.dataFileId, label),
+          stabilityOf: (cardId) => cards[cardId]?.card.stability,
         ),
     };
 

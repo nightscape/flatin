@@ -146,6 +146,23 @@ const kindSpecs = [
     params: {},
     answer: Sort(View.latin, tick: false),
   ),
+  KindSpec(
+    kind: ExerciseKind.stammformen,
+    questionKey: 'exercise.stammformen.question',
+    select: PrincipalParts(
+      row: [
+        (key: 'inf.praes.akt', name: 'exercise.stammformen.part.infinitive'),
+        (key: 'ind.praes.akt.1.sg', name: 'exercise.stammformen.part.present'),
+        (key: 'ind.perf.akt.1.sg', name: 'exercise.stammformen.part.perfect'),
+        (key: 'sup.akk', name: 'exercise.stammformen.part.supine'),
+      ],
+      promptsFrom: ['ind.perf.akt.1.sg', 'sup.akk', 'part.perf.'],
+      supine: 'sup.akk',
+      minParts: 3,
+    ),
+    params: {'form': Show(Ref.target, View.latin)},
+    answer: Parts(View.latin),
+  ),
 ];
 
 /// How the translation kinds ask a vocab item: its meaning, with the other

@@ -262,6 +262,15 @@
     "build": {
       "question": "{label} von {word}"
     },
+    "stammformen": {
+      "question": "Stammformen zu {form}",
+      "part": {
+        "infinitive": "Infinitiv",
+        "present": "1. Person Singular Präsens",
+        "perfect": "1. Person Singular Perfekt",
+        "supine": "Supinum"
+      }
+    },
     "bestimmen": {
       "question": "Bestimme {form} (von {word})"
     },

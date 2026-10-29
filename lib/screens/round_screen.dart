@@ -11,6 +11,7 @@ import '../providers/round_providers.dart';
 import '../providers/settings_provider.dart';
 import '../widgets/reward_burst.dart';
 import 'exercise_match_widget.dart';
+import 'exercise_parts_widget.dart';
 import 'exercise_screen.dart';
 import 'exercise_sort_widget.dart';
 import 'round_end_screen.dart';
@@ -110,6 +111,19 @@ class _RoundScreenState extends ConsumerState<RoundScreen> {
             word: task.word,
             exercise: task.exercise,
             title: title,
+            onResponse: respond,
+          ),
+          PartsAnswer() => ExercisePartsWidget(
+            word: task.word,
+            exercise: task.exercise,
+            title: title,
+            inputStrategy: InputStrategy.byId(
+              settings.requireValue.getInputStrategyId(task.word.dataFileId),
+            ),
+            optionForms: filter.requireValue.optionForms(
+              task.word.dataFileId,
+              task.word.formLabels,
+            ),
             onResponse: respond,
           ),
           ChoiceAnswer() || TypedAnswer() => ExerciseScreen(

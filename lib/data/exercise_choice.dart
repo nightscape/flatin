@@ -24,7 +24,8 @@ KindClass classOf(ExerciseKind kind) => switch (kind) {
   ExerciseKind.umformen ||
   ExerciseKind.fehlerFinden ||
   ExerciseKind.formenKette ||
-  ExerciseKind.paradigma => KindClass.building,
+  ExerciseKind.paradigma ||
+  ExerciseKind.stammformen => KindClass.building,
 };
 
 /// From each lower bound of the FSRS stability in days, the chance that the
@@ -36,6 +37,12 @@ const buildingChanceFrom = <({double stability, double chance})>[
   (stability: 2, chance: 0.5),
   (stability: 7, chance: 1),
 ];
+
+/// Whether the learner knows every card of [stabilities] well: each was
+/// reviewed and reached the stability from which building is always asked.
+bool knowsWell(Iterable<double?> stabilities) => stabilities.every(
+  (s) => s != null && s >= buildingChanceFrom.last.stability,
+);
 
 /// The class to ask first for a pair whose weaker card has [stability].
 KindClass classFor(double stability, Random rng) {

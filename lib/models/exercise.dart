@@ -59,6 +59,7 @@ enum ExerciseKind {
   paradigma,
   ankreuzen,
   sortieren,
+  stammformen,
 }
 
 /// One text the learner sees as an option, with the form it stands for, so a
@@ -118,6 +119,26 @@ final class TypedAnswer extends ExerciseAnswer {
   }
 }
 
+/// One typed answer per asked principal part, in the order shown, each with
+/// the i18n key of the part's name; [prompt] is the form the question shows.
+final class PartsAnswer extends ExerciseAnswer {
+  final FormOption prompt;
+  final List<({String name, TypedAnswer answer})> slots;
+
+  /// The parts spelt like [prompt]: shown at their place [at] of the row,
+  /// not asked.
+  final List<({int at, String name, FormOption form})> given;
+
+  PartsAnswer(this.prompt, this.slots, {this.given = const []}) {
+    assert(slots.isNotEmpty);
+    assert(
+      given.every(
+        (g) => g.at < slots.length + given.length && g.form.text == prompt.text,
+      ),
+    );
+  }
+}
+
 final class MatchingAnswer extends ExerciseAnswer {
   /// The right pairs; the screen shuffles each side.
   final List<(FormOption, FormOption)> pairs;
@@ -166,6 +187,12 @@ final class ChosenOption extends ExerciseResponse {
 final class TypedText extends ExerciseResponse {
   final String text;
   const TypedText(this.text);
+}
+
+/// One text per slot of a [PartsAnswer], in its order.
+final class TypedTexts extends ExerciseResponse {
+  final List<String> texts;
+  const TypedTexts(this.texts);
 }
 
 final class MatchedPairs extends ExerciseResponse {
@@ -234,15 +261,22 @@ final class ExerciseContext {
   /// steps come only from practised forms.
   final bool Function(PracticeItem word, FormLabel label) formPracticed;
 
+  /// The FSRS stability in days of the card [cardId]; null when the card is
+  /// absent or never reviewed.
+  final double? Function(String cardId) stabilityOf;
+
   const ExerciseContext({
     required this.unlocked,
     required this.pool,
     required this.german,
     this.avoidMacronTwins = true,
     this.formPracticed = _everyForm,
+    this.stabilityOf = _neverReviewed,
   });
 
   static bool _everyForm(PracticeItem word, FormLabel label) => true;
+
+  static double? _neverReviewed(String cardId) => null;
 }
 
 /// Builds the exercises of one kind.

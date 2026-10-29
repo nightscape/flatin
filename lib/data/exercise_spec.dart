@@ -4,6 +4,7 @@
 library;
 
 import '../models/exercise.dart';
+import '../models/form_label.dart' show FormKey;
 import 'exercise_cube.dart';
 
 /// One kind of exercise.
@@ -92,6 +93,29 @@ final class LookAlikes extends Selection {
   });
 }
 
+/// The principal parts of a verb: the cells of [row] the word has and the
+/// learner practises, in that order. While the part cards are not known well
+/// the prompt is the first part and the rest of the row is asked; once they
+/// are, the prompt is a practised form whose key starts with one of
+/// [promptsFrom] and the whole row is asked. A row with a deponent part has
+/// no [supine]: hortārī, hortor, hortātus sum.
+final class PrincipalParts extends Selection {
+  /// Each part's key and the i18n key of its name.
+  final List<({FormKey key, String name})> row;
+  final List<String> promptsFrom;
+  final FormKey supine;
+
+  /// The fewest distinct texts a row needs to be worth asking.
+  final int minParts;
+
+  const PrincipalParts({
+    required this.row,
+    required this.promptsFrom,
+    required this.supine,
+    required this.minParts,
+  });
+}
+
 /// How a [Spoil] builds its wrong text.
 enum SpoilWay {
   /// The participle or the auxiliary of a two-word form, taken from the same
@@ -149,6 +173,14 @@ final class Typed extends AnswerSpec {
   final View view;
 
   const Typed(this.view);
+}
+
+/// The learner types the [view] text of every asked part of a
+/// [PrincipalParts] row, one slot each.
+final class Parts extends AnswerSpec {
+  final View view;
+
+  const Parts(this.view);
 }
 
 /// The learner pairs the [left] text of every sampled cell with its [right]

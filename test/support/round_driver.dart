@@ -19,6 +19,19 @@ Exercise shown(WidgetTester tester) {
             .exercise;
 }
 
+/// Scrolls the page's list until [finder], built lazily, is on screen.
+Future<void> reveal(WidgetTester tester, Finder finder) =>
+    tester.scrollUntilVisible(
+      finder,
+      100,
+      scrollable: find
+          .descendant(
+            of: find.byType(ListView),
+            matching: find.byType(Scrollable),
+          )
+          .first,
+    );
+
 Future<void> tap(WidgetTester tester, String key) async {
   final button = find.byKey(Key(key));
   await tester.ensureVisible(button);
@@ -55,6 +68,37 @@ Future<void> answer(
         );
       }
       await tap(tester, 'exercise.check.button');
+    case PartsAnswer(:final slots):
+      for (final (i, (name: _, answer: slot)) in slots.indexed) {
+        final key = 'exercise.slot.$i';
+        await reveal(tester, find.byKey(Key(key)));
+        final field = find.descendant(
+          of: find.byKey(Key(key)),
+          matching: find.byType(TextField),
+        );
+        final wrong = !right && i == 0;
+        if (field.evaluate().isNotEmpty) {
+          await tester.enterText(field, wrong ? 'xyz' : slot.expected.text);
+        } else {
+          final options = dropdownOptions(tester, key);
+          await choose(
+            tester,
+            wrong
+                ? options.firstWhere(
+                    (o) => !slot.accepted.any((a) => norm(a) == norm(o)),
+                  )
+                : options.singleWhere(
+                    (o) => norm(o) == norm(slot.expected.text),
+                  ),
+            key,
+          );
+        }
+      }
+      // A focused field scrolls itself back on screen; let that settle first.
+      await tester.pumpAndSettle();
+      await reveal(tester, find.byKey(const Key('exercise.check.button')));
+      await tap(tester, 'exercise.check.button');
+      await reveal(tester, find.byKey(const Key('exercise.next.button')));
     case MatchingAnswer(:final pairs):
       for (var i = 0; i < pairs.length; i++) {
         await tap(tester, 'exercise.match.left.$i');
@@ -86,12 +130,15 @@ Future<void> answer(
 }
 
 /// The options of the exercise's input dropdown.
-List<String> dropdownOptions(WidgetTester tester) => [
+List<String> dropdownOptions(
+  WidgetTester tester, [
+  String key = 'exercise.input',
+]) => [
   for (final item
       in tester
           .widget<DropdownButton<String>>(
             find.descendant(
-              of: find.byKey(const Key('exercise.input')),
+              of: find.byKey(Key(key)),
               matching: find.byType(DropdownButton<String>),
             ),
           )
@@ -100,12 +147,16 @@ List<String> dropdownOptions(WidgetTester tester) => [
 ];
 
 /// Opens the exercise's input dropdown and picks [option].
-Future<void> choose(WidgetTester tester, String option) async {
-  await tester.tap(find.byKey(const Key('exercise.input')));
+Future<void> choose(
+  WidgetTester tester,
+  String option, [
+  String key = 'exercise.input',
+]) async {
+  await tester.tap(find.byKey(Key(key)));
   await tester.pumpAndSettle();
   final menu = find.byType(Scrollable).last;
   final item = find.descendant(of: menu, matching: find.text(option));
-  await tester.scrollUntilVisible(item, 100, scrollable: menu);
+  await tester.scrollUntilVisible(item, 300, scrollable: menu);
   await tester.ensureVisible(item);
   await tester.pumpAndSettle();
   await tester.tap(item);

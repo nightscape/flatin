@@ -297,6 +297,10 @@ void main() {
           case TypedAnswer(:final expected, :final accepted):
             expect(expected.lexemeId, word.id);
             expect(accepted, contains(expected.text));
+          case PartsAnswer(:final slots):
+            expect(slots.map((s) => s.answer.expected.lexemeId).toSet(), {
+              word.id,
+            });
         }
       });
     }

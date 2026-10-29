@@ -81,6 +81,10 @@ List<ExerciseResponse> _responses(Exercise exercise) =>
         rightSorting(exercise.answer as SortingAnswer),
         wrongSorting(exercise.answer as SortingAnswer),
       ],
+      PartsAnswer(:final slots) => [
+        TypedTexts([for (final s in slots) s.answer.expected.text]),
+        TypedTexts([for (final _ in slots) 'xyz']),
+      ],
     };
 
 void main() {
@@ -119,6 +123,11 @@ void main() {
       ),
       isNotEmpty,
       reason: 'the sweep builds an agreement round',
+    );
+    expect(
+      built.where((b) => b.$2.kind == ExerciseKind.stammformen),
+      isNotEmpty,
+      reason: 'the sweep builds a principal-parts exercise',
     );
     for (final (word, exercise) in built) {
       for (final response in _responses(exercise)) {

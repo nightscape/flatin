@@ -7,8 +7,10 @@ import 'dart:math';
 
 import 'package:flutter/foundation.dart' show listEquals, mapEquals;
 
+import '../models/derivation.dart' show norm;
 import '../models/exercise.dart';
 import '../models/practice_item.dart';
+import 'exercise_choice.dart' show knowsWell;
 import 'exercise_cube.dart';
 import 'exercise_spec.dart';
 
@@ -19,7 +21,8 @@ final class Slice {
   /// [AxisPath]: start … target.
   final List<FormCell> path;
 
-  /// [OddOneOut]: the majority and the target.
+  /// [OddOneOut]: the majority and the target; [PrincipalParts]: the asked
+  /// row cells.
   final List<FormCell> group;
 
   /// [Spoil]: the wrong text built for the target's key.
@@ -138,6 +141,7 @@ final class SpecGenerator implements ExerciseGenerator {
             )
             .$1
             .formKey,
+      PartsAnswer(:final prompt) => prompt.formKey,
     });
     final objections = <String>[];
     for (final slice in _slicesInto(spec, cube, target, bundle, exercise)) {
@@ -189,6 +193,7 @@ Iterable<Slice> _slices(
         : (cube.cellsOf(word, bundle: bundle).toList()..shuffle(rng)),
   ),
   LookAlikes() => _lookAlikes(select, cube, word, bundle, rng),
+  PrincipalParts() => _principalParts(select, cube, word, bundle, rng),
   AxisPath(:final axes, :final lengths) =>
     (cube.cellsOf(word, bundle: bundle).toList()..shuffle(rng)).expand(
       (target) => (lengths.toList()..shuffle(rng)).expand(
@@ -256,6 +261,14 @@ Iterable<Slice> _slicesInto(
               group.every((c) => lookAlikes.contains(c.bundle)))
             Slice(target, group: group, lookAlikes: lookAlikes),
   ],
+  PrincipalParts select => _principalParts(
+    select,
+    cube,
+    target.word,
+    bundle,
+    null,
+    into: target,
+  ).where((slice) => slice.target == target),
   AxisPath(:final axes, :final lengths) => [
     if (target.bundle == bundle)
       for (final n in lengths)
@@ -263,6 +276,78 @@ Iterable<Slice> _slicesInto(
           Slice(target, path: path),
   ],
 };
+
+/// The slices of [select] for [word] in [bundle]: the prompt is the target,
+/// the asked parts are the group; shuffled with [rng], in cell order without,
+/// only those whose prompt is [into] when given.
+Iterable<Slice> _principalParts(
+  PrincipalParts select,
+  Cube cube,
+  PracticeItem word,
+  GrammarBundle bundle,
+  Random? rng, {
+  FormCell? into,
+}) {
+  final deponent = select.row.any(
+    (p) => word.derivation.deponentKeys.contains(p.key),
+  );
+  final row = [
+    for (final (:key, name: _) in select.row)
+      if (word.formOrder.contains(key) && !(deponent && key == select.supine))
+        cube.cell(word, key),
+  ].where(cube.practised).toList();
+  if (!row.any((c) => c.bundle == bundle) ||
+      {for (final c in row) norm(c.word.forms[c.index])}.length <
+          select.minParts) {
+    return const [];
+  }
+  if (!knowsWell([
+    cube.ctx.stabilityOf(word.id),
+    for (final c in row) cube.ctx.stabilityOf(GrammarCardId.of(word, c.key)),
+  ])) {
+    final given = row.first;
+    final asked = row.skip(1).toList();
+    return [
+      if (given.key == select.row.first.key &&
+          asked.any((c) => c.bundle == bundle) &&
+          !asked.any((c) => cube.lookAlike(c, given)))
+        Slice(given, group: asked),
+    ];
+  }
+  final prompts = [
+    for (final c in cube.cellsOf(word))
+      if (select.promptsFrom.any(c.key.startsWith) && (into ?? c) == c) c,
+  ];
+  if (rng != null) prompts.shuffle(rng);
+  final owners = _spellingOwners[cube.ctx.pool] ??= _ownersOf(cube.ctx.pool);
+  String text(FormCell c) => optionOf(c, View.latin, cube).text;
+  return prompts
+      .where(
+        (p) =>
+            (owners[norm(word.forms[p.index])] ?? const {}).every(
+              (id) => id == word.id,
+            ) &&
+            // A part spelt like the prompt is given, not asked.
+            row.any((c) => c.bundle == bundle && text(c) != text(p)),
+      )
+      .map((p) => Slice(p, group: row));
+}
+
+/// The ids of the words of a pool that write each spelling, read without
+/// macrons; kept per pool, as indexing every form of a pool is slow.
+final _spellingOwners = Expando<Map<String, Set<String>>>();
+
+Map<String, Set<String>> _ownersOf(List<PracticeItem> pool) {
+  final owners = <String, Set<String>>{};
+  for (final word in pool) {
+    for (final spellings in word.acceptedForms) {
+      for (final s in spellings) {
+        (owners[norm(s)] ??= {}).add(word.id);
+      }
+    }
+  }
+  return owners;
+}
 
 /// Up to [OddOneOut.maxDraws] groups: a cell of [bundle], cells of [bundle]
 /// that share one of its axis values, and a cell that differs from it on that
@@ -526,13 +611,23 @@ String? _uncovered(KindSpec spec, Slice slice, Cube cube) {
       if (!cube.view(view).covers(cell)) return '$view does not cover $cell';
     }
   }
-  final view = switch (spec.answer) {
-    Choose(:final view) || Typed(:final view) || Sort(:final view) => view,
-    Match() => null,
+  final (view, asked) = switch (spec.answer) {
+    Choose(:final view) ||
+    Typed(:final view) ||
+    Sort(:final view) => (view, [slice.target]),
+    Parts(:final view) => (view, slice.group),
+    Match() => (null, const <FormCell>[]),
   };
-  return view == null || cube.view(view).covers(slice.target)
-      ? null
-      : '$view does not cover ${slice.target}';
+  for (final c in asked) {
+    if (!cube.view(view!).covers(c)) return '$view does not cover $c';
+  }
+  // A row is asked whole, so each of its parts must be reached.
+  if (spec.answer is Parts) {
+    for (final c in [slice.target, ...slice.group]) {
+      if (!cube.unlocked(c)) return '$c is locked';
+    }
+  }
+  return null;
 }
 
 Map<String, String> _paramsOf(KindSpec spec, Slice slice, Cube cube) => {
@@ -584,7 +679,30 @@ ExerciseAnswer? _answerOf(KindSpec spec, Slice slice, Cube cube, Random rng) =>
             ? _match(spec, match, slice, cube)
             : _matchAgreeing(spec, match, slice, cube, rng),
       final Sort sort => _sort(sort, slice, cube),
+      Parts(:final view) => _parts(spec, view, slice, cube),
     };
+
+/// The prompt and one slot per part of the row, named by
+/// [PrincipalParts.row]; a part spelt like the prompt is given, not asked.
+PartsAnswer _parts(KindSpec spec, View view, Slice slice, Cube cube) {
+  final row = (spec.select as PrincipalParts).row;
+  final prompt = optionOf(slice.target, View.latin, cube);
+  final slots = <({String name, TypedAnswer answer})>[];
+  final given = <({int at, String name, FormOption form})>[];
+  for (final (at, c) in slice.group.indexed) {
+    final name = row.singleWhere((p) => p.key == c.key).name;
+    final option = optionOf(c, view, cube);
+    if (option.text == prompt.text) {
+      given.add((at: at, name: name, form: option));
+    } else {
+      slots.add((
+        name: name,
+        answer: TypedAnswer(option, cube.view(view).accepted(c)),
+      ));
+    }
+  }
+  return PartsAnswer(prompt, slots, given: given);
+}
 
 /// The groups of [slice]'s set, the target's first with [Sort.tick], and
 /// each cell of the group with its group.
@@ -809,6 +927,8 @@ Set<FormCell> _readings(KindSpec spec, Slice slice, Cube cube) {
       throw ArgumentError('a sample has no typed answer');
     case LookAlikes():
       throw ArgumentError('look-alikes have no typed answer');
+    case PrincipalParts():
+      throw ArgumentError('principal parts have a typed answer per slot');
   }
 }
 
@@ -870,6 +990,33 @@ String? _answerObjection(
     case (final Match match, MatchingAnswer(:final pairs, :final agreements))
         when match.agreeing.isNotEmpty:
       return _agreementObjection(spec, match, slice, cube, pairs, agreements);
+    case (
+      final Parts parts,
+      PartsAnswer(:final prompt, :final slots, :final given),
+    ):
+      final ours = _parts(spec, parts.view, slice, cube);
+      if (prompt.text != ours.prompt.text) return 'prompt ${prompt.text}';
+      if (!listEquals(
+        [for (final g in given) (g.at, g.name, g.form.formKey, g.form.text)],
+        [
+          for (final g in ours.given)
+            (g.at, g.name, g.form.formKey, g.form.text),
+        ],
+      )) {
+        return 'given ${[for (final g in given) g.form.text]}';
+      }
+      if (slots.length != ours.slots.length) return '${slots.length} slots';
+      for (final (i, slot) in slots.indexed) {
+        final our = ours.slots[i];
+        if (slot.name != our.name ||
+            slot.answer.expected.formKey != our.answer.expected.formKey ||
+            slot.answer.expected.text != our.answer.expected.text ||
+            !listEquals(slot.answer.accepted, our.answer.accepted)) {
+          return 'slot $i is ${slot.answer.expected.text}, '
+              'not ${our.answer.expected.text}';
+        }
+      }
+      return null;
     case (Match match, MatchingAnswer(:final pairs)):
       final n = (spec.select as Sample).n;
       if (pairs.length != n) return '${pairs.length} pairs';

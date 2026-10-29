@@ -1,6 +1,7 @@
 import '../models/derivation.dart' show norm;
 import '../models/exercise.dart';
 import '../models/practice_item.dart';
+import 'attribution.dart' show typedRight;
 import 'diagnosis.dart';
 import 'explanation.dart';
 
@@ -59,6 +60,19 @@ List<ExplanationLine> feedbackLines(
             },
           ),
     ],
+  (PartsAnswer(:final slots), TypedTexts(:final texts)) => [
+    for (final (i, (name: _, :answer)) in slots.indexed)
+      if (typedRight(answer, texts[i]))
+        _optionLine(
+          word,
+          answer.expected,
+          answer.expected.text,
+          right: true,
+          chosen: true,
+        )
+      else
+        ..._typed(word, answer, texts[i]),
+  ],
   (MatchingAnswer(:final pairs), MatchedPairs()) => [
     for (final (latin, _) in pairs)
       _optionLine(word, latin, latin.text, right: false, chosen: false),

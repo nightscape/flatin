@@ -40,14 +40,14 @@ Attribution attribute(
     answer,
     groupOf,
   ),
+  (final PartsAnswer answer, TypedTexts(:final texts)) => _parts(answer, texts),
   _ => throw ArgumentError(
     '${response.runtimeType} does not answer ${exercise.answer.runtimeType}',
   ),
 };
 
 Attribution _typed(PracticeItem word, TypedAnswer answer, String text) {
-  final given = norm(text);
-  if (answer.accepted.any((s) => norm(s) == given)) return _good;
+  if (typedRight(answer, text)) return _good;
   return _byDiagnosis(diagnose(word, answer.expected.formKey, text));
 }
 
@@ -106,6 +106,18 @@ Attribution _sorted(SortingAnswer answer, Map<FormOption, int> groupOf) {
       ? _good
       : (word: Rating.good, grammar: Rating.again);
 }
+
+/// A wrong slot gets the row wrong, whichever part it is.
+Attribution _parts(PartsAnswer answer, List<String> texts) {
+  assert(texts.length == answer.slots.length, '${texts.length} texts');
+  return answer.slots.indexed.every((e) => typedRight(e.$2.answer, texts[e.$1]))
+      ? _good
+      : (word: Rating.good, grammar: Rating.again);
+}
+
+/// Whether [text] is a spelling of [answer], read without macrons.
+bool typedRight(TypedAnswer answer, String text) =>
+    answer.accepted.any((s) => norm(s) == norm(text));
 
 Rating _worse(Rating a, Rating b) => a.value <= b.value ? a : b;
 

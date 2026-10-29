@@ -24,6 +24,11 @@ Set<FormKey> _keysOf(Exercise e) => switch (e.answer) {
     for (final (o, _) in forms)
       if (o.lexemeId == e.wordCardId) o.formKey,
   },
+  PartsAnswer(:final prompt, :final slots, :final given) => {
+    prompt.formKey,
+    for (final (name: _, :answer) in slots) answer.expected.formKey,
+    for (final g in given) g.form.formKey,
+  },
 };
 
 void main() {

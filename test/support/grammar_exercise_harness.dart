@@ -17,6 +17,10 @@ import 'package:latin_practice/models/practice_item.dart';
       word.forms.firstWhere((f) => !accepted.any((a) => norm(a) == norm(f))),
     ),
   ),
+  PartsAnswer(:final slots) => (
+    TypedTexts([for (final s in slots) s.answer.expected.text]),
+    TypedTexts([for (final _ in slots) 'xyz']),
+  ),
   MatchingAnswer(:final pairs) => (
     MatchedPairs(pairs),
     MatchedPairs([

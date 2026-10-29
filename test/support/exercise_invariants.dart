@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart' show listEquals;
+import 'package:latin_practice/data/exercise_choice.dart' show knowsWell;
 import 'package:latin_practice/data/exercise_cube.dart';
 import 'package:latin_practice/data/exercise_spec.dart';
 import 'package:latin_practice/models/derivation.dart' show norm;
@@ -14,6 +16,7 @@ Set<GrammarBundle> unlockedFor(
   AxisPath(:final lengths) when lengths.any((n) => n > 1) => {
     for (final key in word.formOrder) bundleOf(word, key),
   },
+  PrincipalParts() => {for (final key in word.formOrder) bundleOf(word, key)},
   LookAlikes(:final sets) => {
     for (final s in sets)
       if (s.contains(bundle)) ...s,
@@ -187,6 +190,101 @@ List<String> violations(
               cube.lookAlike(c, o2)) {
             found.add('$c reads like $o2');
           }
+        }
+      }
+    case (
+      Parts(:final view),
+      PartsAnswer(:final prompt, :final slots, :final given),
+    ):
+      final select = spec.select as PrincipalParts;
+      final deponent = select.row.any(
+        (p) => word.derivation.deponentKeys.contains(p.key),
+      );
+      final row = [
+        for (final (:key, name: _) in select.row)
+          if (word.formOrder.contains(key) &&
+              !(deponent && key == select.supine) &&
+              cube.practised(cube.cell(word, key)))
+            key,
+      ];
+      final known = knowsWell([
+        ctx.stabilityOf(word.id),
+        for (final k in row) ctx.stabilityOf(GrammarCardId.of(word, k)),
+      ]);
+      final promptCell = cube.cell(word, prompt.formKey);
+      final cells = [
+        for (final s in slots) cube.cell(word, s.answer.expected.formKey),
+      ];
+      for (final c in [
+        promptCell,
+        ...cells,
+        for (final g in given) cube.cell(word, g.form.formKey),
+      ]) {
+        if (!cube.unlocked(c)) found.add('$c is locked');
+      }
+      final shown = [for (final c in cells) c.key];
+      for (final g in given) {
+        shown.insert(g.at, g.form.formKey);
+        if (g.form.text != prompt.text) {
+          found.add('given ${g.form.text} is not spelt like ${prompt.text}');
+        }
+        if (g.name !=
+            select.row.singleWhere((p) => p.key == g.form.formKey).name) {
+          found.add('given ${g.form.text} is named ${g.name}');
+        }
+      }
+      for (final s in slots) {
+        if (s.answer.expected.text == prompt.text) {
+          found.add('slot ${s.answer.expected.text} is spelt like the prompt');
+        }
+      }
+      if (known) {
+        if (!select.promptsFrom.any(prompt.formKey.startsWith)) {
+          found.add('prompt ${prompt.formKey} is no prompt form');
+        }
+        if (!cube.practised(promptCell)) {
+          found.add('prompt $promptCell is not practised');
+        }
+        final plain = norm(prompt.text);
+        for (final other in ctx.pool) {
+          // The length test only skips the slow norm of most forms.
+          if (other.id != word.id &&
+              other.acceptedForms.any(
+                (fs) => fs.any(
+                  (f) => f.length == prompt.text.length && norm(f) == plain,
+                ),
+              )) {
+            found.add('prompt ${prompt.text} is also a form of ${other.id}');
+          }
+        }
+      } else {
+        if (prompt.formKey != select.row.first.key) {
+          found.add('prompt ${prompt.formKey} is not the first part');
+        }
+        if (cells.any((c) => cube.lookAlike(c, promptCell))) {
+          found.add('prompt ${prompt.text} is the answer of a slot');
+        }
+      }
+      if (!listEquals(shown, known ? row : row.skip(1).toList())) {
+        found.add('parts $shown are not the row $row');
+      }
+      if ({
+            for (final k in row) norm(word.forms[word.formOrder.indexOf(k)]),
+          }.length <
+          select.minParts) {
+        found.add('the row $row has too few distinct parts');
+      }
+      if (!cells.any((c) => c.bundle == bundle)) {
+        found.add('no asked slot in the rated bundle $bundle');
+      }
+      for (final (i, (:name, :answer)) in slots.indexed) {
+        final c = cells[i];
+        if (name != select.row.singleWhere((p) => p.key == c.key).name) {
+          found.add('slot $i is named $name');
+        }
+        if (answer.expected.text != cube.view(view).accepted(c).first ||
+            !listEquals(answer.accepted, cube.view(view).accepted(c))) {
+          found.add('slot ${answer.expected.text} is not the text of $c');
         }
       }
     default:
