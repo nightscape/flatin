@@ -1,0 +1,783 @@
+# Short Latin sentences for sentence exercises, each with one construction
+# and its German renderings. The shape is documented in SCHEMA.md
+# ("Sentence corpus"); test/sentence_corpus_test.dart checks every token
+# against the grammar engine and the lessons.
+#
+# A token is [text, lemma, form key] for a form the engine generates, or
+# [text] / [text, headword] for a lesson headword the engine has no item for.
+
+# Noun lemma -> genus, for the nouns whose forms carry none and that a
+# participle refers to.
+genders:
+  canis: m
+  cēna: f
+  cīvis: m
+  fīlia: f
+  fīlius: m
+  homō: m
+  hostis: m
+  lēx: f
+  mīles: m
+  mulier: f
+  nāvis: f
+  oppidum: n
+  puella: f
+  senātor: m
+  servus: m
+  templum: n
+  urbs: f
+  fēmina: f
+
+sentences:
+  # --- L24: questions with -ne, nōnne, num -----------------------------------
+  - id: l24-ne-1
+    lesson: 24
+    latin: "Vīdistīne hominem in forō?"
+    tokens:
+      - [vīdistī, vidēre, ind.perf.akt.2.sg]
+      - [-ne]
+      - [hominem, homō, akk.sg]
+      - [in]
+      - [forō, forum, abl.sg]
+    construction: {kind: frageNe, head: 1}
+    right:
+      - "Hast du den Menschen auf dem Forum gesehen?"
+      - "Sahst du den Menschen auf dem Forum?"
+    wrong:
+      - {de: "Du hast den Menschen auf dem Forum gesehen.", mistake: aussage}
+      - {de: "Siehst du den Menschen auf dem Forum?", mistake: tempus}
+      - {de: "Hast du den Menschen auf dem Forum etwa gesehen?", mistake: frageart}
+
+  - id: l24-ne-2
+    lesson: 24
+    latin: "Audīvistisne clāmōrem mīlitum?"
+    tokens:
+      - [audīvistis, audīre, ind.perf.akt.2.pl]
+      - [-ne]
+      - [clāmōrem, clāmor, akk.sg]
+      - [mīlitum, mīles, gen.pl]
+    construction: {kind: frageNe, head: 1}
+    right:
+      - "Habt ihr das Geschrei der Soldaten gehört?"
+      - "Hörtet ihr das Geschrei der Soldaten?"
+    wrong:
+      - {de: "Ihr habt das Geschrei der Soldaten gehört.", mistake: aussage}
+      - {de: "Hört ihr das Geschrei der Soldaten?", mistake: tempus}
+
+  - id: l24-ne-3
+    lesson: 24
+    latin: "Timēsne perīcula maris?"
+    tokens:
+      - [timēs, timēre, ind.praes.akt.2.sg]
+      - [-ne]
+      - [perīcula, perīculum, akk.pl]
+      - [maris, mare, gen.sg]
+    construction: {kind: frageNe, head: 1}
+    right:
+      - "Fürchtest du die Gefahren des Meeres?"
+      - "Hast du Angst vor den Gefahren des Meeres?"
+    wrong:
+      - {de: "Du fürchtest die Gefahren des Meeres.", mistake: aussage}
+      - {de: "Fürchtest du die Gefahren des Meeres etwa nicht?", mistake: frageart}
+      - {de: "Fürchtetest du die Gefahren des Meeres?", mistake: tempus}
+
+  - id: l24-nonne-1
+    lesson: 24
+    latin: "Nōnne pater fīlium laudibus afficit?"
+    tokens:
+      - [nōnne]
+      - [pater, pater, nom.sg]
+      - [fīlium, fīlius, akk.sg]
+      - [laudibus, laus, abl.pl]
+      - [afficit, afficere, ind.praes.akt.3.sg]
+    construction: {kind: frageNonne, head: 0}
+    right:
+      - "Lobt der Vater den Sohn nicht?"
+      - "Lobt der Vater den Sohn etwa nicht?"
+      - "Überhäuft der Vater den Sohn nicht mit Lob?"
+    wrong:
+      - {de: "Lobt der Vater den Sohn etwa?", mistake: frageart}
+      - {de: "Der Vater lobt den Sohn nicht.", mistake: aussage}
+      - {de: "Lobt der Sohn den Vater nicht?", mistake: rollen}
+
+  - id: l24-nonne-2
+    lesson: 24
+    latin: "Nōnne mīlitēs urbem incendērunt?"
+    tokens:
+      - [nōnne]
+      - [mīlitēs, mīles, nom.pl]
+      - [urbem, urbs, akk.sg]
+      - [incendērunt, incendere, ind.perf.akt.3.pl]
+    construction: {kind: frageNonne, head: 0}
+    right:
+      - "Haben die Soldaten die Stadt nicht angezündet?"
+      - "Zündeten die Soldaten die Stadt nicht an?"
+      - "Haben die Soldaten die Stadt etwa nicht in Brand gesteckt?"
+    wrong:
+      - {de: "Haben die Soldaten die Stadt etwa angezündet?", mistake: frageart}
+      - {de: "Zünden die Soldaten die Stadt nicht an?", mistake: tempus}
+      - {de: "Die Soldaten haben die Stadt nicht angezündet.", mistake: aussage}
+
+  - id: l24-nonne-3
+    lesson: 24
+    latin: "Nōnne dominus servum pūnīvit?"
+    tokens:
+      - [nōnne]
+      - [dominus, dominus, nom.sg]
+      - [servum, servus, akk.sg]
+      - [pūnīvit, pūnīre, ind.perf.akt.3.sg]
+    construction: {kind: frageNonne, head: 0}
+    right:
+      - "Hat der Herr den Sklaven nicht bestraft?"
+      - "Bestrafte der Herr den Sklaven etwa nicht?"
+    wrong:
+      - {de: "Hat der Herr den Sklaven etwa bestraft?", mistake: frageart}
+      - {de: "Hat der Sklave den Herrn nicht bestraft?", mistake: rollen}
+
+  - id: l24-num-1
+    lesson: 24
+    latin: "Num deī hominēs relinquunt?"
+    tokens:
+      - [num]
+      - [deī, deus, nom.pl]
+      - [hominēs, homō, akk.pl]
+      - [relinquunt, relinquere, ind.praes.akt.3.pl]
+    construction: {kind: frageNum, head: 0}
+    right:
+      - "Verlassen die Götter etwa die Menschen?"
+      - "Verlassen die Götter die Menschen denn etwa?"
+      - "Die Götter verlassen die Menschen doch nicht etwa?"
+    wrong:
+      - {de: "Verlassen die Götter die Menschen nicht?", mistake: frageart}
+      - {de: "Verlassen die Menschen etwa die Götter?", mistake: rollen}
+      - {de: "Haben die Götter die Menschen etwa verlassen?", mistake: tempus}
+
+  - id: l24-num-2
+    lesson: 24
+    latin: "Num mīles hostem timet?"
+    tokens:
+      - [num]
+      - [mīles, mīles, nom.sg]
+      - [hostem, hostis, akk.sg]
+      - [timet, timēre, ind.praes.akt.3.sg]
+    construction: {kind: frageNum, head: 0}
+    right:
+      - "Fürchtet der Soldat etwa den Feind?"
+      - "Fürchtet der Soldat den Feind denn etwa?"
+    wrong:
+      - {de: "Fürchtet der Soldat den Feind nicht?", mistake: frageart}
+      - {de: "Fürchtet der Feind etwa den Soldaten?", mistake: rollen}
+      - {de: "Fürchtete der Soldat etwa den Feind?", mistake: tempus}
+
+  - id: l24-num-3
+    lesson: 24
+    latin: "Num amīcī nōs relīquērunt?"
+    tokens:
+      - [num]
+      - [amīcī, amīcus, nom.pl]
+      - [nōs, nōs, akk.pl]
+      - [relīquērunt, relinquere, ind.perf.akt.3.pl]
+    construction: {kind: frageNum, head: 0}
+    right:
+      - "Haben uns die Freunde etwa verlassen?"
+      - "Verließen uns die Freunde etwa?"
+      - "Die Freunde haben uns doch nicht etwa verlassen?"
+    wrong:
+      - {de: "Haben uns die Freunde nicht verlassen?", mistake: frageart}
+      - {de: "Haben wir die Freunde etwa verlassen?", mistake: rollen}
+      - {de: "Verlassen uns die Freunde etwa?", mistake: tempus}
+
+  # --- L24: passive AcI (Infinitiv Perfekt Passiv) ---------------------------
+  - id: l24-aci-1
+    lesson: 24
+    latin: "Mīles dīcit urbem captam esse."
+    tokens:
+      - [mīles, mīles, nom.sg]
+      - [dīcit, dīcere, ind.praes.akt.3.sg]
+      - [urbem, urbs, akk.sg]
+      - [captam, capere, part.perf.pass.sg.akk.f]
+      - [esse, esse, inf.praes.akt]
+    construction: {kind: aciPassiv, head: 3, reference: 2}
+    right:
+      - "Der Soldat sagt, dass die Stadt eingenommen worden ist."
+      - "Der Soldat sagt, die Stadt sei eingenommen worden."
+      - "Der Soldat sagt, dass man die Stadt erobert hat."
+    wrong:
+      - {de: "Der Soldat sagt, dass die Stadt eingenommen wird.", mistake: tempus}
+      - {de: "Der Soldat sagt, dass er die Stadt eingenommen hat.", mistake: genusVerbi}
+
+  - id: l24-aci-2
+    lesson: 24
+    latin: "Cīvēs audīvērunt hostēs victōs esse."
+    tokens:
+      - [cīvēs, cīvis, nom.pl]
+      - [audīvērunt, audīre, ind.perf.akt.3.pl]
+      - [hostēs, hostis, akk.pl]
+      - [victōs, vincere, part.perf.pass.pl.akk.m]
+      - [esse, esse, inf.praes.akt]
+    construction: {kind: aciPassiv, head: 3, reference: 2}
+    right:
+      - "Die Bürger hörten, dass die Feinde besiegt worden waren."
+      - "Die Bürger hörten, die Feinde seien besiegt worden."
+    wrong:
+      - {de: "Die Bürger hörten, dass die Feinde gesiegt hatten.", mistake: genusVerbi}
+      - {de: "Die Bürger hörten, dass die Feinde besiegt werden.", mistake: tempus}
+      - {de: "Die Bürger hörten, dass sie selbst besiegt worden waren.", mistake: bezugswort}
+
+  - id: l24-aci-3
+    lesson: 24
+    latin: "Senātor scit templa violāta esse."
+    tokens:
+      - [senātor, senātor, nom.sg]
+      - [scit, scīre, ind.praes.akt.3.sg]
+      - [templa, templum, akk.pl]
+      - [violāta, violāre, part.perf.pass.pl.akk.n]
+      - [esse, esse, inf.praes.akt]
+    construction: {kind: aciPassiv, head: 3, reference: 2}
+    right:
+      - "Der Senator weiß, dass die Tempel entweiht worden sind."
+      - "Der Senator weiß, dass man die Tempel entweiht hat."
+    wrong:
+      - {de: "Der Senator weiß, dass die Tempel entweiht werden.", mistake: tempus}
+      - {de: "Der Senator weiß, dass er die Tempel entweiht hat.", mistake: genusVerbi}
+
+  - id: l24-aci-4
+    lesson: 24
+    latin: "Rēx cōgnōscit fīliam suam abductam esse."
+    tokens:
+      - [rēx, rēx, nom.sg]
+      - [cōgnōscit, cōgnōscere, ind.praes.akt.3.sg]
+      - [fīliam, fīlia, akk.sg]
+      - [suam, suus, akk.sg.f.pos]
+      - [abductam, abdūcere, part.perf.pass.sg.akk.f]
+      - [esse, esse, inf.praes.akt]
+    construction: {kind: aciPassiv, head: 4, reference: 2}
+    right:
+      - "Der König erfährt, dass seine Tochter entführt worden ist."
+      - "Der König erfährt, seine Tochter sei weggeführt worden."
+      - "Der König erfährt, dass man seine Tochter entführt hat."
+    wrong:
+      - {de: "Der König erfährt, dass seine Tochter entführt wird.", mistake: tempus}
+      - {de: "Der König erfährt, dass er seine Tochter entführt hat.", mistake: genusVerbi}
+
+  - id: l24-aci-5
+    lesson: 24
+    latin: "Mercātor putat nāvem dēlētam esse."
+    tokens:
+      - [mercātor, mercātor, nom.sg]
+      - [putat, putāre, ind.praes.akt.3.sg]
+      - [nāvem, nāvis, akk.sg]
+      - [dēlētam, dēlēre, part.perf.pass.sg.akk.f]
+      - [esse, esse, inf.praes.akt]
+    construction: {kind: aciPassiv, head: 3, reference: 2}
+    right:
+      - "Der Kaufmann glaubt, dass das Schiff zerstört worden ist."
+      - "Der Kaufmann glaubt, das Schiff sei zerstört worden."
+    wrong:
+      - {de: "Der Kaufmann glaubt, dass das Schiff zerstört wird.", mistake: tempus}
+      - {de: "Der Kaufmann glaubt, dass er das Schiff zerstört hat.", mistake: genusVerbi}
+
+  - id: l24-aci-6
+    lesson: 24
+    latin: "Māter videt cēnam parātam esse."
+    tokens:
+      - [māter, māter, nom.sg]
+      - [videt, vidēre, ind.praes.akt.3.sg]
+      - [cēnam, cēna, akk.sg]
+      - [parātam, parāre, part.perf.pass.sg.akk.f]
+      - [esse, esse, inf.praes.akt]
+    construction: {kind: aciPassiv, head: 3, reference: 2}
+    right:
+      - "Die Mutter sieht, dass das Essen zubereitet worden ist."
+      - "Die Mutter sieht, dass man das Essen zubereitet hat."
+    wrong:
+      - {de: "Die Mutter sieht, dass das Essen zubereitet wird.", mistake: tempus}
+      - {de: "Die Mutter sieht, dass sie selbst das Essen zubereitet hat.", mistake: genusVerbi}
+
+  - id: l24-aci-7
+    lesson: 24
+    latin: "Omnēs sciunt oppidum dolō captum esse."
+    tokens:
+      - [omnēs, omnis, nom.pl.m.pos]
+      - [sciunt, scīre, ind.praes.akt.3.pl]
+      - [oppidum, oppidum, akk.sg]
+      - [dolō, dolus, abl.sg]
+      - [captum, capere, part.perf.pass.sg.akk.n]
+      - [esse, esse, inf.praes.akt]
+    construction: {kind: aciPassiv, head: 4, reference: 2}
+    right:
+      - "Alle wissen, dass die Stadt durch eine List eingenommen worden ist."
+      - "Alle wissen, die Stadt sei durch eine List erobert worden."
+      - "Alle wissen, dass man die Stadt mit einer List erobert hat."
+    wrong:
+      - {de: "Alle wissen, dass die Stadt durch eine List eingenommen wird.", mistake: tempus}
+      - {de: "Alle wissen, dass sie selbst die Stadt durch eine List eingenommen haben.", mistake: genusVerbi}
+
+  - id: l24-aci-8
+    lesson: 24
+    latin: "Pater audit fīlium servātum esse."
+    tokens:
+      - [pater, pater, nom.sg]
+      - [audit, audīre, ind.praes.akt.3.sg]
+      - [fīlium, fīlius, akk.sg]
+      - [servātum, servāre, part.perf.pass.sg.akk.m]
+      - [esse, esse, inf.praes.akt]
+    construction: {kind: aciPassiv, head: 3, reference: 2}
+    right:
+      - "Der Vater hört, dass der Sohn gerettet worden ist."
+      - "Der Vater hört, der Sohn sei gerettet worden."
+      - "Der Vater hört, dass man den Sohn gerettet hat."
+    wrong:
+      - {de: "Der Vater hört, dass der Sohn gerettet wird.", mistake: tempus}
+      - {de: "Der Vater hört, dass er selbst den Sohn gerettet hat.", mistake: genusVerbi}
+
+  # --- L25: PPP as participium coniunctum ------------------------------------
+  - id: l25-ppp-1
+    lesson: 25
+    latin: "Mīlitēs ab hostibus captī pācem petīvērunt."
+    tokens:
+      - [mīlitēs, mīles, nom.pl]
+      - [ab]
+      - [hostibus, hostis, abl.pl]
+      - [captī, capere, part.perf.pass.pl.nom.m]
+      - [pācem, pāx, akk.sg]
+      - [petīvērunt, petere, ind.perf.akt.3.pl]
+    construction: {kind: pcPpp, head: 3, reference: 0, meaning: [temporal, kausal]}
+    right:
+      - "Nachdem die Soldaten von den Feinden gefangen genommen worden waren, baten sie um Frieden."
+      - "Weil die Soldaten von den Feinden gefangen genommen worden waren, baten sie um Frieden."
+      - "Die Soldaten wurden von den Feinden gefangen genommen und baten dann um Frieden."
+      - "Die von den Feinden gefangen genommenen Soldaten baten um Frieden."
+    wrong:
+      - {de: "Die Soldaten baten um Frieden, während sie von den Feinden gefangen genommen wurden.", mistake: tempus}
+      - {de: "Nachdem die Soldaten die Feinde gefangen genommen hatten, baten sie um Frieden.", mistake: genusVerbi}
+      - {de: "Obwohl die Soldaten von den Feinden gefangen genommen worden waren, baten sie um Frieden.", mistake: sinnrichtung}
+
+  - id: l25-ppp-2
+    lesson: 25
+    latin: "Servus ā dominō pūnītus tacuit."
+    tokens:
+      - [servus, servus, nom.sg]
+      - [ā]
+      - [dominō, dominus, abl.sg]
+      - [pūnītus, pūnīre, part.perf.pass.sg.nom.m]
+      - [tacuit, tacēre, ind.perf.akt.3.sg]
+    construction: {kind: pcPpp, head: 3, reference: 0, meaning: [temporal, kausal]}
+    right:
+      - "Nachdem der Sklave vom Herrn bestraft worden war, schwieg er."
+      - "Weil der Sklave vom Herrn bestraft worden war, schwieg er."
+      - "Der Sklave wurde vom Herrn bestraft und schwieg dann."
+      - "Der vom Herrn bestrafte Sklave schwieg."
+    wrong:
+      - {de: "Der Sklave schwieg, während er vom Herrn bestraft wurde.", mistake: tempus}
+      - {de: "Nachdem der Sklave den Herrn bestraft hatte, schwieg er.", mistake: genusVerbi}
+
+  - id: l25-ppp-3
+    lesson: 25
+    latin: "Hostēs saepe victī tamen pūgnāvērunt."
+    tokens:
+      - [hostēs, hostis, nom.pl]
+      - [saepe]
+      - [victī, vincere, part.perf.pass.pl.nom.m]
+      - [tamen]
+      - [pūgnāvērunt, pūgnāre, ind.perf.akt.3.pl]
+    construction: {kind: pcPpp, head: 2, reference: 0, meaning: [konzessiv]}
+    right:
+      - "Obwohl die Feinde oft besiegt worden waren, kämpften sie dennoch."
+      - "Die Feinde waren oft besiegt worden, kämpften aber trotzdem."
+      - "Trotz häufiger Niederlagen kämpften die Feinde dennoch."
+    wrong:
+      - {de: "Weil die Feinde oft besiegt worden waren, kämpften sie dennoch.", mistake: sinnrichtung}
+      - {de: "Obwohl die Feinde oft gesiegt hatten, kämpften sie dennoch.", mistake: genusVerbi}
+
+  - id: l25-ppp-4
+    lesson: 25
+    latin: "Pater fīliam ā mīlitibus servātam domum dūxit."
+    tokens:
+      - [pater, pater, nom.sg]
+      - [fīliam, fīlia, akk.sg]
+      - [ā]
+      - [mīlitibus, mīles, abl.pl]
+      - [servātam, servāre, part.perf.pass.sg.akk.f]
+      - [domum]
+      - [dūxit, dūcere, ind.perf.akt.3.sg]
+    construction: {kind: pcPpp, head: 4, reference: 1, meaning: [temporal]}
+    right:
+      - "Der Vater führte die Tochter, die von den Soldaten gerettet worden war, nach Hause."
+      - "Nachdem die Tochter von den Soldaten gerettet worden war, führte der Vater sie nach Hause."
+      - "Der Vater führte die von den Soldaten gerettete Tochter nach Hause."
+      - "Die Tochter wurde von den Soldaten gerettet, und dann führte der Vater sie nach Hause."
+    wrong:
+      - {de: "Nachdem der Vater von den Soldaten gerettet worden war, führte er die Tochter nach Hause.", mistake: bezugswort}
+      - {de: "Der Vater führte die Tochter, die die Soldaten gerettet hatte, nach Hause.", mistake: genusVerbi}
+      - {de: "Der Vater führte die Tochter, während sie von den Soldaten gerettet wurde, nach Hause.", mistake: tempus}
+
+  - id: l25-ppp-5
+    lesson: 25
+    latin: "Cīvēs ab hostibus territī in urbem fūgērunt."
+    tokens:
+      - [cīvēs, cīvis, nom.pl]
+      - [ab]
+      - [hostibus, hostis, abl.pl]
+      - [territī, terrēre, part.perf.pass.pl.nom.m]
+      - [in]
+      - [urbem, urbs, akk.sg]
+      - [fūgērunt, fugere, ind.perf.akt.3.pl]
+    construction: {kind: pcPpp, head: 3, reference: 0, meaning: [kausal, temporal]}
+    right:
+      - "Weil die Bürger von den Feinden erschreckt worden waren, flohen sie in die Stadt."
+      - "Nachdem die Bürger von den Feinden erschreckt worden waren, flohen sie in die Stadt."
+      - "Die Bürger wurden von den Feinden in Schrecken versetzt und flohen deshalb in die Stadt."
+      - "Von den Feinden erschreckt, flohen die Bürger in die Stadt."
+    wrong:
+      - {de: "Obwohl die Bürger von den Feinden erschreckt worden waren, flohen sie in die Stadt.", mistake: sinnrichtung}
+      - {de: "Weil die Bürger die Feinde erschreckt hatten, flohen sie in die Stadt.", mistake: genusVerbi}
+
+  - id: l25-ppp-6
+    lesson: 25
+    latin: "Plēbs lēgem ā senātōribus statūtam neglēxit."
+    tokens:
+      - [plēbs, plēbs, nom.sg]
+      - [lēgem, lēx, akk.sg]
+      - [ā]
+      - [senātōribus, senātor, abl.pl]
+      - [statūtam, statuere, part.perf.pass.sg.akk.f]
+      - [neglēxit, neglegere, ind.perf.akt.3.sg]
+    construction: {kind: pcPpp, head: 4, reference: 1, meaning: [konzessiv, temporal]}
+    right:
+      - "Die Plebs missachtete das Gesetz, das von den Senatoren erlassen worden war."
+      - "Obwohl das Gesetz von den Senatoren erlassen worden war, missachtete die Plebs es."
+      - "Die Plebs missachtete das von den Senatoren erlassene Gesetz."
+    wrong:
+      - {de: "Die Plebs missachtete das Gesetz, das von den Senatoren erlassen wird.", mistake: tempus}
+      - {de: "Die Plebs missachtete, nachdem sie von den Senatoren eingesetzt worden war, das Gesetz.", mistake: bezugswort}
+
+  - id: l25-ppp-7
+    lesson: 25
+    latin: "Rōmānī urbem diū oppūgnātam tandem cēpērunt."
+    tokens:
+      - [Rōmānī, Rōmānus, nom.pl]
+      - [urbem, urbs, akk.sg]
+      - [diū]
+      - [oppūgnātam, oppūgnāre, part.perf.pass.sg.akk.f]
+      - [tandem]
+      - [cēpērunt, capere, ind.perf.akt.3.pl]
+    construction: {kind: pcPpp, head: 3, reference: 1, meaning: [temporal]}
+    right:
+      - "Die Römer nahmen die Stadt, die lange belagert worden war, endlich ein."
+      - "Nachdem die Stadt lange belagert worden war, nahmen die Römer sie endlich ein."
+      - "Die Römer belagerten die Stadt lange und nahmen sie endlich ein."
+      - "Die Römer nahmen die lange belagerte Stadt endlich ein."
+    wrong:
+      - {de: "Die Römer nahmen die Stadt, die lange belagert wird, endlich ein.", mistake: tempus}
+      - {de: "Nachdem die Römer lange belagert worden waren, nahmen sie die Stadt endlich ein.", mistake: bezugswort}
+
+  - id: l25-ppp-8
+    lesson: 25
+    latin: "Mulier ā taurō petīta clāmāvit."
+    tokens:
+      - [mulier, mulier, nom.sg]
+      - [ā]
+      - [taurō, taurus, abl.sg]
+      - [petīta, petere, part.perf.pass.sg.nom.f]
+      - [clāmāvit, clāmāre, ind.perf.akt.3.sg]
+    construction: {kind: pcPpp, head: 3, reference: 0, meaning: [kausal, temporal]}
+    right:
+      - "Weil die Frau vom Stier angegriffen worden war, schrie sie."
+      - "Nachdem die Frau vom Stier angegriffen worden war, schrie sie."
+      - "Die Frau wurde vom Stier angegriffen und schrie deshalb."
+    wrong:
+      - {de: "Nachdem die Frau den Stier angegriffen hatte, schrie sie.", mistake: genusVerbi}
+      - {de: "Obwohl die Frau vom Stier angegriffen worden war, schrie sie.", mistake: sinnrichtung}
+      - {de: "Die Frau schrie, während sie vom Stier angegriffen wurde.", mistake: tempus}
+
+  # --- L26: PPA as participium coniunctum ------------------------------------
+  - id: l26-ppa-1
+    lesson: 26
+    latin: "Puella rīdēns domum vēnit."
+    tokens:
+      - [puella, puella, nom.sg]
+      - [rīdēns, rīdēre, part.praes.akt.sg.nom.f]
+      - [domum]
+      - [vēnit, venīre, ind.perf.akt.3.sg]
+    construction: {kind: pcPpa, head: 1, reference: 0, meaning: [modal]}
+    right:
+      - "Das Mädchen kam lachend nach Hause."
+      - "Das Mädchen kam nach Hause und lachte dabei."
+      - "Das Mädchen kam nach Hause, wobei es lachte."
+    wrong:
+      - {de: "Das Mädchen kam nach Hause, nachdem es gelacht hatte.", mistake: tempus}
+      - {de: "Das Mädchen kam nach Hause, weil es ausgelacht wurde.", mistake: genusVerbi}
+
+  - id: l26-ppa-2
+    lesson: 26
+    latin: "Hominēs semper plūs cupientēs numquam beātī sunt."
+    tokens:
+      - [hominēs, homō, nom.pl]
+      - [semper]
+      - [plūs]
+      - [cupientēs, cupere, part.praes.akt.pl.nom.m]
+      - [numquam]
+      - [beātī, beātus, nom.pl.m.pos]
+      - [sunt, esse, ind.praes.akt.3.pl]
+    construction: {kind: pcPpa, head: 3, reference: 0, meaning: [kausal]}
+    right:
+      - "Weil die Menschen immer mehr begehren, sind sie niemals glücklich."
+      - "Menschen, die immer mehr begehren, sind niemals glücklich."
+      - "Die Menschen begehren immer mehr und sind deshalb niemals glücklich."
+    wrong:
+      - {de: "Menschen, die immer mehr begehrt haben, sind niemals glücklich.", mistake: tempus}
+      - {de: "Menschen, die immer mehr begehrt werden, sind niemals glücklich.", mistake: genusVerbi}
+
+  - id: l26-ppa-3
+    lesson: 26
+    latin: "Vīdī fīlium tuum in hortō lūdentem."
+    tokens:
+      - [vīdī, vidēre, ind.perf.akt.1.sg]
+      - [fīlium, fīlius, akk.sg]
+      - [tuum, tuus, akk.sg.m.pos]
+      - [in]
+      - [hortō, hortus, abl.sg]
+      - [lūdentem, lūdere, part.praes.akt.sg.akk.m]
+    construction: {kind: pcPpa, head: 5, reference: 1, meaning: [temporal]}
+    right:
+      - "Ich sah deinen Sohn, während er im Garten spielte."
+      - "Ich sah deinen Sohn, der im Garten spielte."
+      - "Ich habe deinen Sohn im Garten spielen sehen."
+    wrong:
+      - {de: "Ich sah deinen Sohn, der im Garten gespielt hatte.", mistake: tempus}
+      - {de: "Während ich im Garten spielte, sah ich deinen Sohn.", mistake: bezugswort}
+
+  - id: l26-ppa-4
+    lesson: 26
+    latin: "Mīlitēs mortem timentēs tamen fortiter pūgnāvērunt."
+    tokens:
+      - [mīlitēs, mīles, nom.pl]
+      - [mortem, mors, akk.sg]
+      - [timentēs, timēre, part.praes.akt.pl.nom.m]
+      - [tamen]
+      - [fortiter, fortis, adv.pos]
+      - [pūgnāvērunt, pūgnāre, ind.perf.akt.3.pl]
+    construction: {kind: pcPpa, head: 2, reference: 0, meaning: [konzessiv]}
+    right:
+      - "Obwohl die Soldaten den Tod fürchteten, kämpften sie dennoch tapfer."
+      - "Die Soldaten fürchteten den Tod, kämpften aber dennoch tapfer."
+      - "Trotz ihrer Angst vor dem Tod kämpften die Soldaten tapfer."
+    wrong:
+      - {de: "Weil die Soldaten den Tod fürchteten, kämpften sie dennoch tapfer.", mistake: sinnrichtung}
+      - {de: "Obwohl die Soldaten den Tod gefürchtet hatten, kämpften sie dennoch tapfer.", mistake: tempus}
+
+  - id: l26-ppa-5
+    lesson: 26
+    latin: "Rēx fīliae flentī dōnum dedit."
+    tokens:
+      - [rēx, rēx, nom.sg]
+      - [fīliae, fīlia, dat.sg]
+      - [flentī, flēre, part.praes.akt.sg.dat.f]
+      - [dōnum, dōnum, akk.sg]
+      - [dedit, dare, ind.perf.akt.3.sg]
+    construction: {kind: pcPpa, head: 2, reference: 1, meaning: [temporal, kausal]}
+    right:
+      - "Der König gab der weinenden Tochter ein Geschenk."
+      - "Der König gab der Tochter, die weinte, ein Geschenk."
+      - "Weil die Tochter weinte, gab ihr der König ein Geschenk."
+      - "Als die Tochter weinte, gab ihr der König ein Geschenk."
+    wrong:
+      - {de: "Der König gab weinend der Tochter ein Geschenk.", mistake: bezugswort}
+      - {de: "Der König gab der Tochter, die geweint hatte, ein Geschenk.", mistake: tempus}
+      - {de: "Der König gab der Tochter, die beweint wurde, ein Geschenk.", mistake: genusVerbi}
+
+  - id: l26-ppa-6
+    lesson: 26
+    latin: "Philosophus canem in viā dormientem cōnspexit."
+    tokens:
+      - [philosophus, philosophus, nom.sg]
+      - [canem, canis, akk.sg]
+      - [in]
+      - [viā, via, abl.sg]
+      - [dormientem, dormīre, part.praes.akt.sg.akk.m]
+      - [cōnspexit, cōnspicere, ind.perf.akt.3.sg]
+    construction: {kind: pcPpa, head: 4, reference: 1, meaning: [temporal]}
+    right:
+      - "Der Philosoph erblickte einen Hund, der auf der Straße schlief."
+      - "Der Philosoph erblickte einen auf der Straße schlafenden Hund."
+      - "Der Philosoph erblickte einen Hund, während dieser auf der Straße schlief."
+    wrong:
+      - {de: "Der Philosoph erblickte, während er auf der Straße schlief, einen Hund.", mistake: bezugswort}
+      - {de: "Der Philosoph erblickte einen Hund, der auf der Straße geschlafen hatte.", mistake: tempus}
+
+  - id: l26-ppa-7
+    lesson: 26
+    latin: "Senātōrēs dē pāce cōnsulentēs clāmōrem audīvērunt."
+    tokens:
+      - [senātōrēs, senātor, nom.pl]
+      - [dē]
+      - [pāce, pāx, abl.sg]
+      - [cōnsulentēs, cōnsulere, part.praes.akt.pl.nom.m]
+      - [clāmōrem, clāmor, akk.sg]
+      - [audīvērunt, audīre, ind.perf.akt.3.pl]
+    construction: {kind: pcPpa, head: 3, reference: 0, meaning: [temporal]}
+    right:
+      - "Während die Senatoren über den Frieden berieten, hörten sie Geschrei."
+      - "Die Senatoren berieten über den Frieden und hörten dabei Geschrei."
+      - "Die über den Frieden beratenden Senatoren hörten Geschrei."
+      - "Bei der Beratung über den Frieden hörten die Senatoren Geschrei."
+    wrong:
+      - {de: "Nachdem die Senatoren über den Frieden beraten hatten, hörten sie Geschrei.", mistake: tempus}
+      - {de: "Die Senatoren hörten das Geschrei derer, die über den Frieden berieten.", mistake: bezugswort}
+
+  - id: l26-ppa-8
+    lesson: 26
+    latin: "Fēminae apud āram sacrificantēs deōs ōrāvērunt."
+    tokens:
+      - [fēminae, fēmina, nom.pl]
+      - [apud]
+      - [āram, āra, akk.sg]
+      - [sacrificantēs, sacrificāre, part.praes.akt.pl.nom.f]
+      - [deōs, deus, akk.pl]
+      - [ōrāvērunt, ōrāre, ind.perf.akt.3.pl]
+    construction: {kind: pcPpa, head: 3, reference: 0, meaning: [temporal, modal]}
+    right:
+      - "Während die Frauen am Altar opferten, beteten sie zu den Göttern."
+      - "Die Frauen opferten am Altar und beteten dabei zu den Göttern."
+      - "Die am Altar opfernden Frauen beteten zu den Göttern."
+    wrong:
+      - {de: "Nachdem die Frauen am Altar geopfert hatten, beteten sie zu den Göttern.", mistake: tempus}
+      - {de: "Die Frauen beteten zu den Göttern, die am Altar opferten.", mistake: bezugswort}
+
+  # --- L26: double accusative ------------------------------------------------
+  - id: l26-dakk-1
+    lesson: 26
+    latin: "Philosophī sapientiam summum bonum putant."
+    tokens:
+      - [philosophī, philosophus, nom.pl]
+      - [sapientiam, sapientia, akk.sg]
+      - [summum, summus, akk.sg.n.pos]
+      - [bonum, bonus, akk.sg.n.pos]
+      - [putant, putāre, ind.praes.akt.3.pl]
+    construction: {kind: doppelterAkkusativ, head: 3, reference: 1}
+    right:
+      - "Die Philosophen halten die Weisheit für das höchste Gut."
+      - "Die Philosophen meinen, die Weisheit sei das höchste Gut."
+    wrong:
+      - {de: "Die Weisheit hält die Philosophen für das höchste Gut.", mistake: rollen}
+      - {de: "Die Philosophen hielten die Weisheit für das höchste Gut.", mistake: tempus}
+
+  - id: l26-dakk-2
+    lesson: 26
+    latin: "Cīvēs hominem iūstum rēgem fēcērunt."
+    tokens:
+      - [cīvēs, cīvis, nom.pl]
+      - [hominem, homō, akk.sg]
+      - [iūstum, iūstus, akk.sg.m.pos]
+      - [rēgem, rēx, akk.sg]
+      - [fēcērunt, facere, ind.perf.akt.3.pl]
+    construction: {kind: doppelterAkkusativ, head: 3, reference: 1}
+    right:
+      - "Die Bürger machten einen gerechten Menschen zum König."
+      - "Die Bürger haben einen gerechten Mann zum König gemacht."
+    wrong:
+      - {de: "Die Bürger machten den König zu einem gerechten Menschen.", mistake: rollen}
+      - {de: "Die Bürger machen einen gerechten Menschen zum König.", mistake: tempus}
+
+  - id: l26-dakk-3
+    lesson: 26
+    latin: "Poēta tē amīcum vocat."
+    tokens:
+      - [poēta, poēta, nom.sg]
+      - [tē, tū, akk.sg]
+      - [amīcum, amīcus, akk.sg]
+      - [vocat, vocāre, ind.praes.akt.3.sg]
+    construction: {kind: doppelterAkkusativ, head: 2, reference: 1}
+    right:
+      - "Der Dichter nennt dich einen Freund."
+      - "Der Dichter bezeichnet dich als Freund."
+    wrong:
+      - {de: "Der Dichter ruft dich und den Freund.", mistake: praedikativum}
+      - {de: "Der Dichter nannte dich einen Freund.", mistake: tempus}
+
+  - id: l26-dakk-4
+    lesson: 26
+    latin: "Hominēs philosophum canem appellābant."
+    tokens:
+      - [hominēs, homō, nom.pl]
+      - [philosophum, philosophus, akk.sg]
+      - [canem, canis, akk.sg]
+      - [appellābant, appellāre, ind.impf.akt.3.pl]
+    construction: {kind: doppelterAkkusativ, head: 2, reference: 1}
+    right:
+      - "Die Menschen nannten den Philosophen einen Hund."
+      - "Die Menschen bezeichneten den Philosophen als Hund."
+      - "Die Menschen pflegten den Philosophen einen Hund zu nennen."
+    wrong:
+      - {de: "Die Menschen nannten den Hund einen Philosophen.", mistake: rollen}
+      - {de: "Die Menschen riefen den Hund des Philosophen.", mistake: praedikativum}
+
+  - id: l26-dakk-5
+    lesson: 26
+    latin: "Rōmānī Ītaliam patriam suam putābant."
+    tokens:
+      - [Rōmānī, Rōmānus, nom.pl]
+      - [Ītaliam, Ītalia, akk.sg]
+      - [patriam, patria, akk.sg]
+      - [suam, suus, akk.sg.f.pos]
+      - [putābant, putāre, ind.impf.akt.3.pl]
+    construction: {kind: doppelterAkkusativ, head: 2, reference: 1}
+    right:
+      - "Die Römer hielten Italien für ihre Heimat."
+      - "Die Römer betrachteten Italien als ihre Heimat."
+    wrong:
+      - {de: "Die Römer dachten an Italien, ihre Heimat.", mistake: praedikativum}
+      - {de: "Die Römer halten Italien für ihre Heimat.", mistake: tempus}
+
+  - id: l26-dakk-6
+    lesson: 26
+    latin: "Philosophus mortem nōn malum putat."
+    tokens:
+      - [philosophus, philosophus, nom.sg]
+      - [mortem, mors, akk.sg]
+      - [nōn]
+      - [malum, malum, akk.sg]
+      - [putat, putāre, ind.praes.akt.3.sg]
+    construction: {kind: doppelterAkkusativ, head: 3, reference: 1}
+    right:
+      - "Der Philosoph hält den Tod nicht für ein Übel."
+      - "Der Philosoph meint, der Tod sei kein Übel."
+    wrong:
+      - {de: "Der Philosoph hält das Übel nicht für den Tod.", mistake: rollen}
+      - {de: "Der Philosoph glaubt nicht an den Tod, das Übel.", mistake: praedikativum}
+
+  - id: l26-dakk-7
+    lesson: 26
+    latin: "Rēx mē socium fēcit."
+    tokens:
+      - [rēx, rēx, nom.sg]
+      - [mē, ego, akk.sg]
+      - [socium, socius, akk.sg]
+      - [fēcit, facere, ind.perf.akt.3.sg]
+    construction: {kind: doppelterAkkusativ, head: 2, reference: 1}
+    right:
+      - "Der König machte mich zum Gefährten."
+      - "Der König hat mich zu seinem Gefährten gemacht."
+    wrong:
+      - {de: "Der König machte meinen Gefährten.", mistake: praedikativum}
+      - {de: "Der Gefährte machte mich zum König.", mistake: rollen}
+      - {de: "Der König macht mich zum Gefährten.", mistake: tempus}
+
+  - id: l26-dakk-8
+    lesson: 26
+    latin: "Cīvēs senātōrem iūstum patrem patriae appellāvērunt."
+    tokens:
+      - [cīvēs, cīvis, nom.pl]
+      - [senātōrem, senātor, akk.sg]
+      - [iūstum, iūstus, akk.sg.m.pos]
+      - [patrem, pater, akk.sg]
+      - [patriae, patria, gen.sg]
+      - [appellāvērunt, appellāre, ind.perf.akt.3.pl]
+    construction: {kind: doppelterAkkusativ, head: 3, reference: 1}
+    right:
+      - "Die Bürger nannten den gerechten Senator Vater des Vaterlandes."
+      - "Die Bürger bezeichneten den gerechten Senator als Vater des Vaterlandes."
+    wrong:
+      - {de: "Die Bürger nannten den Vater des Vaterlandes einen gerechten Senator.", mistake: rollen}
+      - {de: "Die Bürger riefen den gerechten Senator und den Vater des Vaterlandes.", mistake: praedikativum}

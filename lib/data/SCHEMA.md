@@ -304,3 +304,63 @@ keys are internal (S8). Any other value, and the key on a deponent, throws.
 **Collisions.** A key produced twice — by own forms, by delegation or by
 composition other than a variant rule (S24) — throws. There is no precedence between them; inheritance (S6) is
 the only override mechanism besides item overrides.
+
+# Sentence corpus
+
+`lib/data/sentences.yaml` holds short Latin sentences for sentence exercises;
+`lib/data/sentences.dart` reads it. The loader checks the shape;
+`test/sentence_corpus_test.dart` checks every sentence against the grammar
+engine and the course books.
+
+```yaml
+genders:                       # noun lemma -> m | f | n
+  urbs: f                      # only nouns whose forms carry no genus and
+                               # that a participle agrees with
+
+sentences:
+  - id: l25-ppp-1              # unique
+    lesson: 25                 # words and grammar stay within lessons 1..25
+    latin: "Mīlitēs ab hostibus captī pācem petīvērunt."
+    tokens:                    # the words of `latin`, in order
+      - [mīlitēs, mīles, nom.pl]                    # text, item lemma, form key
+      - [ab]                                        # a lesson headword
+      - [hostibus, hostis, abl.pl]
+      - [captī, capere, part.perf.pass.pl.nom.m]
+      - [pācem, pāx, akk.sg]
+      - [petīvērunt, petere, ind.perf.akt.3.pl]
+    construction:
+      kind: pcPpp              # frageNe | frageNonne | frageNum | aciPassiv
+                               # | pcPpa | pcPpp | doppelterAkkusativ
+      head: 3                  # token index: participle, question particle
+                               # or predicative accusative
+      reference: 0             # token index of its reference word; none for
+                               # a question
+      meaning: [temporal, kausal]  # Sinnrichtung, exactly for pcPpa / pcPpp:
+                                   # temporal | kausal | konzessiv | modal
+    right:                     # 2-4 right German renderings
+      - "Nachdem die Soldaten … gefangen genommen worden waren, baten sie um Frieden."
+    wrong:                     # 2-3 renderings, wrong under every reading
+      - {de: "…, während sie … gefangen genommen wurden.", mistake: tempus}
+```
+
+A token is `[text, lemma, key]` when the engine has an item with that lemma:
+`text` must be one of the spellings of form `key` (case aside). A token is
+`[text]` or `[text, headword]` only for a lesson headword that is no engine
+item (et, in, nōnne, `-ne`): `text` is the headword or one of its words
+(`[nec, "neque (nec)"]`). An enclitic token starts with `-` and is written
+onto the word before it in `latin`.
+
+`mistake` is one of `tempus` (wrong tense or time relation), `genusVerbi`
+(active and passive swapped), `bezugswort` (wrong reference word),
+`sinnrichtung`, `frageart` (wrong expected answer), `aussage` (statement
+instead of question), `rollen` (subject, object or predicate swapped),
+`praedikativum` (second accusative not read as predicate).
+
+The data test fails a sentence when a token is no form of its item, when an
+item, headword, form or type is taught after `lesson`, when a headword token
+names a word the engine has an item for, when the tokens do not spell
+`latin`, when a participle does not agree with its reference word in case,
+number and gender, when a passive AcI's participle has no accusative subject
+or no `esse` after it, when a question's head is not its particle, or when a
+double accusative has no two accusatives. A `genders` entry that no
+agreement reads fails too.

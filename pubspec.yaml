@@ -87,6 +87,7 @@ flutter:
     - lib/data/migration_v2.yaml
     - lib/data/agite_1.yaml
     - lib/data/agite_2.yaml
+    - lib/data/sentences.yaml
     - lib/data/game_rules.yaml
     - assets/flutter_i18n/
     - assets/town/
