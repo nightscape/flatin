@@ -12,6 +12,7 @@ import 'package:latin_practice/providers/fsrs_provider.dart';
 import 'package:latin_practice/providers/locale_provider.dart';
 
 import 'exercise_pair_sweep_test.dart' show sweep;
+import 'support/grammar_exercise_harness.dart';
 
 /// Builds, on the first call for a word, every kind that fits it, so that the
 /// sweep reaches kinds the selection would only ask later.
@@ -57,6 +58,10 @@ List<ExerciseResponse> _responses(Exercise exercise) =>
           ChosenOption(o),
       ],
       MatchingAnswer(:final pairs) => [MatchedPairs(pairs)],
+      SortingAnswer() => [
+        rightSorting(exercise.answer as SortingAnswer),
+        wrongSorting(exercise.answer as SortingAnswer),
+      ],
     };
 
 void main() {

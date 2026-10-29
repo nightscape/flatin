@@ -14,6 +14,10 @@ Set<GrammarBundle> unlockedFor(
   AxisPath(:final lengths) when lengths.any((n) => n > 1) => {
     for (final key in word.formOrder) bundleOf(word, key),
   },
+  LookAlikes(:final sets) => {
+    for (final s in sets)
+      if (s.contains(bundle)) ...s,
+  },
   _ => {bundle},
 };
 
@@ -138,6 +142,52 @@ List<String> violations(
           }
         }
         cells.add(c);
+      }
+    case (
+      Sort(:final view, :final tick),
+      SortingAnswer(:final groups, :final forms),
+    ):
+      final select = spec.select as LookAlikes;
+      if (forms.length < select.count.min || forms.length > select.count.max) {
+        found.add('${forms.length} forms');
+      }
+      if (tick && groups.length != 2) found.add('tick with $groups');
+      final cells = [
+        for (final (o, _) in forms)
+          cube.cell(ctx.pool.singleWhere((w) => w.id == o.lexemeId), o.formKey),
+      ];
+      final lookAlikes = select.sets.where(
+        (s) => s.contains(bundle) && cells.every((c) => s.contains(c.bundle)),
+      );
+      if (lookAlikes.isEmpty) found.add('no set holds $bundle and the forms');
+      if (!cells.any((c) => c.word.id == word.id && c.bundle == bundle)) {
+        found.add('no form of ${word.id} in $bundle');
+      }
+      for (final (i, c) in cells.indexed) {
+        final (o, group) = forms[i];
+        if (o.builtWrongBy != null) found.add('${o.text} is a wrong text');
+        if (o.text != cube.view(view).accepted(c).first) {
+          found.add('${o.text} is not the shown text of $c');
+        }
+        if (!cube.unlocked(c)) found.add('$c is locked');
+        final same = [
+          for (final (j, d) in cells.indexed)
+            if (d.bundle == c.bundle) forms[j].$2,
+        ];
+        if (same.toSet().length != 1) found.add('$c splits its bundle');
+        if (tick && (group == 0) != (c.bundle == bundle)) {
+          found.add('$c is ticked wrong');
+        }
+        for (final other in cells.take(i)) {
+          if (cube.lookAlike(other, c)) found.add('$other clashes with $c');
+        }
+        for (final o2 in cube.allCellsOf(c.word)) {
+          if (o2.bundle != c.bundle &&
+              lookAlikes.any((s) => s.contains(o2.bundle)) &&
+              cube.lookAlike(c, o2)) {
+            found.add('$c reads like $o2');
+          }
+        }
       }
     default:
       found.add('answer ${e.answer.runtimeType} for ${spec.answer}');

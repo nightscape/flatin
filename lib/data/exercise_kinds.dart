@@ -119,6 +119,33 @@ const kindSpecs = [
     },
     answer: Typed(View.latin),
   ),
+  KindSpec(
+    kind: ExerciseKind.ankreuzen,
+    questionKey: 'exercise.tick.question',
+    select: LookAlikes(
+      sets: [
+        ['ind.impf.akt', 'ind.fut.akt'],
+        ['ind.fut.akt', 'ind.praes.pass'],
+      ],
+      count: (min: 8, max: 12),
+      words: 4,
+    ),
+    params: {'group': BundleName()},
+    answer: Sort(View.latin, tick: true),
+  ),
+  KindSpec(
+    kind: ExerciseKind.sortieren,
+    questionKey: 'exercise.sort.question',
+    select: LookAlikes(
+      sets: [
+        ['ind.perf.akt', 'ind.plusq.akt', 'ind.fut2.akt'],
+      ],
+      count: (min: 9, max: 12),
+      words: 4,
+    ),
+    params: {},
+    answer: Sort(View.latin, tick: false),
+  ),
 ];
 
 /// How the translation kinds ask a vocab item: its meaning, with the other

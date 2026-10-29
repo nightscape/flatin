@@ -36,6 +36,10 @@ Attribution attribute(
     answer,
     pairs,
   ),
+  (final SortingAnswer answer, SortedForms(:final groupOf)) => _sorted(
+    answer,
+    groupOf,
+  ),
   _ => throw ArgumentError(
     '${response.runtimeType} does not answer ${exercise.answer.runtimeType}',
   ),
@@ -84,6 +88,15 @@ Attribution _matched(
       attached,
     ),
 ]);
+
+/// A form in another group tells the bundles apart wrong, whichever word it
+/// belongs to.
+Attribution _sorted(SortingAnswer answer, Map<FormOption, int> groupOf) {
+  assert(groupOf.length == answer.forms.length, 'a form has no group');
+  return answer.forms.every((f) => groupOf[f.$1] == f.$2)
+      ? _good
+      : (word: Rating.good, grammar: Rating.again);
+}
 
 Rating _worse(Rating a, Rating b) => a.value <= b.value ? a : b;
 

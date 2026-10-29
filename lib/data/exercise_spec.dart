@@ -73,6 +73,25 @@ final class Spoil extends Selection {
   const Spoil({required this.ways});
 }
 
+/// [count] cells of the context's words, each in one bundle of a set of
+/// [sets] that holds the asked bundle; the target is a cell of the asked word
+/// in the asked bundle. No cell reads like a cell of its word in another
+/// bundle of the set.
+final class LookAlikes extends Selection {
+  /// Bundles whose forms look alike, in the order the learner reads them.
+  final List<List<GrammarBundle>> sets;
+  final ({int min, int max}) count;
+
+  /// The most words the cells come from, the asked one included.
+  final int words;
+
+  const LookAlikes({
+    required this.sets,
+    required this.count,
+    required this.words,
+  });
+}
+
 /// How a [Spoil] builds its wrong text.
 enum SpoilWay {
   /// The participle or the auxiliary of a two-word form, taken from the same
@@ -99,6 +118,11 @@ final class Show extends Param {
 /// The steps of an [AxisPath], e.g. "Perfekt → Plural".
 final class AxisChanges extends Param {
   const AxisChanges();
+}
+
+/// The name of the target's bundle, e.g. "Indikativ Futur I Aktiv".
+final class BundleName extends Param {
+  const BundleName();
 }
 
 /// What a [Show] param shows of a selection: its target cell, the start of
@@ -134,6 +158,16 @@ final class Match extends AnswerSpec {
   final View right;
 
   const Match(this.left, this.right);
+}
+
+/// The learner puts every selected cell, shown in [view], into the group of
+/// its bundle; with [tick] the groups are the target's bundle and the rest,
+/// and the learner ticks the first.
+final class Sort extends AnswerSpec {
+  final View view;
+  final bool tick;
+
+  const Sort(this.view, {required this.tick});
 }
 
 /// Where the wrong options of a [Choose] come from.

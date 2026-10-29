@@ -20,6 +20,10 @@ Set<FormKey> _keysOf(Exercise e) => switch (e.answer) {
   MatchingAnswer(:final pairs) => {
     for (final (a, b) in pairs) ...[a.formKey, b.formKey],
   },
+  SortingAnswer(:final forms) => {
+    for (final (o, _) in forms)
+      if (o.lexemeId == e.wordCardId) o.formKey,
+  },
 };
 
 void main() {

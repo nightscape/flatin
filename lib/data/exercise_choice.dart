@@ -16,7 +16,9 @@ KindClass classOf(ExerciseKind kind) => switch (kind) {
   ExerciseKind.latDeWahl ||
   ExerciseKind.deLatWahl ||
   ExerciseKind.irrlaeufer ||
-  ExerciseKind.zuordnen => KindClass.recognition,
+  ExerciseKind.zuordnen ||
+  ExerciseKind.ankreuzen ||
+  ExerciseKind.sortieren => KindClass.recognition,
   ExerciseKind.formBilden ||
   ExerciseKind.deLatTippen ||
   ExerciseKind.umformen ||

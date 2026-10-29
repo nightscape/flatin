@@ -24,4 +24,14 @@ import 'package:latin_practice/models/practice_item.dart';
         (left, pairs[(i + 1) % pairs.length].$2),
     ]),
   ),
+  final SortingAnswer answer => (rightSorting(answer), wrongSorting(answer)),
 };
+
+SortedForms rightSorting(SortingAnswer answer) =>
+    SortedForms({for (final (o, g) in answer.forms) o: g});
+
+/// The first form in the next group, the others in their own.
+SortedForms wrongSorting(SortingAnswer answer) => SortedForms({
+  for (final (i, (o, g)) in answer.forms.indexed)
+    o: i == 0 ? (g + 1) % answer.groups.length : g,
+});

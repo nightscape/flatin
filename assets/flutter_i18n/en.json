@@ -245,7 +245,8 @@
       "optionRight": "{form} – {label} (right)",
       "optionChosen": "{form} – {label} (your choice)",
       "optionRightChosen": "{form} – {label} (right, your choice)",
-      "oddAxes": "The other three: {values}"
+      "oddAxes": "The other three: {values}",
+      "misplaced": "{form} – {label}, not {chosen}"
     },
     "screen": {
       "title": "Exercise",
@@ -300,6 +301,13 @@
       "match": {
         "question": "Match the words to their meanings"
       }
+    },
+    "tick": {
+      "question": "Tick every form in the {group}"
+    },
+    "sort": {
+      "question": "Put each form into its group",
+      "hint": "Drag each form into its group."
     }
   },
   "round": {

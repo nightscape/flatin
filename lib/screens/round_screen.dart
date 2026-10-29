@@ -12,6 +12,7 @@ import '../providers/settings_provider.dart';
 import '../widgets/reward_burst.dart';
 import 'exercise_match_widget.dart';
 import 'exercise_screen.dart';
+import 'exercise_sort_widget.dart';
 import 'round_end_screen.dart';
 
 /// Asks the tasks of one round; leaving the screen aborts the round.
@@ -100,6 +101,12 @@ class _RoundScreenState extends ConsumerState<RoundScreen> {
       children: [
         switch (task.exercise.answer) {
           MatchingAnswer() => ExerciseMatchWidget(
+            word: task.word,
+            exercise: task.exercise,
+            title: title,
+            onResponse: respond,
+          ),
+          SortingAnswer() => ExerciseSortWidget(
             word: task.word,
             exercise: task.exercise,
             title: title,

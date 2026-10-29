@@ -5,7 +5,7 @@ library;
 
 import 'dart:math';
 
-import 'package:flutter/foundation.dart' show mapEquals;
+import 'package:flutter/foundation.dart' show listEquals, mapEquals;
 
 import '../models/exercise.dart';
 import '../models/practice_item.dart';
@@ -25,11 +25,15 @@ final class Slice {
   /// [Spoil]: the wrong text built for the target's key.
   final BuiltWrong? spoiled;
 
+  /// [LookAlikes]: the set the group is drawn from.
+  final List<GrammarBundle> lookAlikes;
+
   Slice(
     this.target, {
     List<FormCell>? path,
     this.group = const [],
     this.spoiled,
+    this.lookAlikes = const [],
   }) : path = path ?? [target];
 
   @override
@@ -111,6 +115,15 @@ final class SpecGenerator implements ExerciseGenerator {
       ChoiceAnswer(:final right) => right.formKey,
       TypedAnswer(:final expected) => expected.formKey,
       MatchingAnswer(:final pairs) => pairs.first.$1.formKey,
+      SortingAnswer(:final forms) =>
+        forms
+            .firstWhere(
+              (f) =>
+                  f.$1.lexemeId == word.id &&
+                  bundleOf(word, f.$1.formKey) == bundle,
+            )
+            .$1
+            .formKey,
     });
     final objections = <String>[];
     for (final slice in _slicesInto(spec, cube, target, bundle, exercise)) {
@@ -161,6 +174,7 @@ Iterable<Slice> _slices(
           ]
         : (cube.cellsOf(word, bundle: bundle).toList()..shuffle(rng)),
   ),
+  LookAlikes() => _lookAlikes(select, cube, word, bundle, rng),
   AxisPath(:final axes, :final lengths) =>
     (cube.cellsOf(word, bundle: bundle).toList()..shuffle(rng)).expand(
       (target) => (lengths.toList()..shuffle(rng)).expand(
@@ -212,6 +226,22 @@ Iterable<Slice> _slicesInto(
           when group.every((c) => c.bundle == bundle && cube.practised(c)))
         Slice(target, group: group),
   ],
+  LookAlikes(:final sets) => [
+    if (exercise.answer case SortingAnswer(:final forms))
+      if ([
+            for (final (o, _) in forms)
+              cube.cell(
+                cube.ctx.pool.singleWhere((w) => w.id == o.lexemeId),
+                o.formKey,
+              ),
+          ]
+          case final group
+          when group.every(cube.practised) && group.contains(target))
+        for (final lookAlikes in sets)
+          if (lookAlikes.contains(bundle) &&
+              group.every((c) => lookAlikes.contains(c.bundle)))
+            Slice(target, group: group, lookAlikes: lookAlikes),
+  ],
   AxisPath(:final axes, :final lengths) => [
     if (target.bundle == bundle)
       for (final n in lengths)
@@ -251,6 +281,91 @@ Iterable<Slice> _oddOneOut(
     final group = [...majority, odd];
     if (_aloneOnlyOdd(group, odd)) yield Slice(odd, group: group);
   }
+}
+
+/// For each set of [select] that holds [bundle] and is unlocked, one group:
+/// cells of [word] and up to [LookAlikes.words] - 1 other words of the pool,
+/// taken from the bundles of the set in turn, the first a cell of [word] in
+/// [bundle].
+Iterable<Slice> _lookAlikes(
+  LookAlikes select,
+  Cube cube,
+  PracticeItem word,
+  GrammarBundle bundle,
+  Random rng,
+) sync* {
+  final targets = cube.cellsOf(word, bundle: bundle).toList()..shuffle(rng);
+  final others = [
+    for (final w in cube.ctx.pool)
+      if (w.id != word.id) w,
+  ]..shuffle(rng);
+  final words = [word, ...others.take(select.words - 1)];
+  final sets = [
+    for (final s in select.sets)
+      if (s.contains(bundle) && s.every(cube.ctx.unlocked.contains)) s,
+  ]..shuffle(rng);
+  for (final lookAlikes in sets) {
+    final n =
+        select.count.min + rng.nextInt(select.count.max - select.count.min + 1);
+    final picked = <FormCell>[];
+    bool fits(FormCell c) =>
+        !_readsAsOther(cube, c, lookAlikes) &&
+        !picked.any((p) => _alike(cube, View.latin, p, c));
+    final target = targets.where(fits).firstOrNull;
+    if (target == null) continue;
+    picked.add(target);
+    final queues = [
+      for (final b in lookAlikes)
+        [for (final w in words) ...cube.cellsOf(w, bundle: b)]..shuffle(rng),
+    ];
+    var added = true;
+    while (picked.length < n && added) {
+      added = false;
+      for (final queue in queues) {
+        if (picked.length == n) break;
+        while (queue.isNotEmpty) {
+          final c = queue.removeLast();
+          if (fits(c)) {
+            picked.add(c);
+            added = true;
+            break;
+          }
+        }
+      }
+    }
+    if (picked.length < select.count.min ||
+        lookAlikes.any((b) => picked.where((c) => c.bundle == b).length < 2)) {
+      continue;
+    }
+    picked.shuffle(rng);
+    final first = picked.firstWhere(
+      (c) => c.word == word && c.bundle == bundle,
+    );
+    yield Slice(first, group: picked, lookAlikes: lookAlikes);
+  }
+}
+
+/// Whether [c] reads like a cell of its word in another bundle of
+/// [lookAlikes], so it would belong to two groups.
+bool _readsAsOther(Cube cube, FormCell c, List<GrammarBundle> lookAlikes) =>
+    cube
+        .allCellsOf(c.word)
+        .any(
+          (o) =>
+              o.bundle != c.bundle &&
+              lookAlikes.contains(o.bundle) &&
+              _alike(cube, View.latin, c, o),
+        );
+
+const _bundleAxes = ['modus', 'tempus', 'genus_verbi'];
+
+/// The name of [c]'s bundle, e.g. "Indikativ Futur I Aktiv".
+String _bundleName(FormCell c) {
+  final name = [
+    for (final axis in _bundleAxes) c.word.formLabels[c.index].display(axis),
+  ].nonNulls.join(' ');
+  assert(name.isNotEmpty, '${c.bundle} has no name');
+  return name;
 }
 
 /// The param that shows the spoiled text.
@@ -398,7 +513,7 @@ String? _uncovered(KindSpec spec, Slice slice, Cube cube) {
     }
   }
   final view = switch (spec.answer) {
-    Choose(:final view) || Typed(:final view) => view,
+    Choose(:final view) || Typed(:final view) || Sort(:final view) => view,
     Match() => null,
   };
   return view == null || cube.view(view).covers(slice.target)
@@ -415,6 +530,7 @@ Map<String, String> _paramsOf(KindSpec spec, Slice slice, Cube cube) => {
         for (var i = 1; i < slice.path.length; i++)
           _changeLabel(slice.path[i - 1], slice.path[i]),
       ].join(' → '),
+      BundleName() => _bundleName(slice.target),
     },
 };
 
@@ -450,7 +566,32 @@ ExerciseAnswer? _answerOf(KindSpec spec, Slice slice, Cube cube, Random rng) =>
         _accepted(spec, view, slice, cube),
       ),
       final Match match => _match(spec, match, slice, cube),
+      final Sort sort => _sort(sort, slice, cube),
     };
+
+/// The groups of [slice]'s set, the target's first with [Sort.tick], and
+/// each cell of the group with its group.
+SortingAnswer _sort(Sort sort, Slice slice, Cube cube) {
+  final asked = slice.target.bundle;
+  final bundles = sort.tick
+      ? [asked, ...slice.lookAlikes.where((b) => b != asked)]
+      : slice.lookAlikes;
+  String name(GrammarBundle b) =>
+      _bundleName(slice.group.firstWhere((c) => c.bundle == b));
+  return SortingAnswer(
+    sort.tick
+        ? [name(asked), bundles.skip(1).map(name).join(' / ')]
+        : bundles.map(name).toList(),
+    [
+      for (final c in slice.group)
+        (
+          optionOf(c, sort.view, cube),
+          sort.tick ? (c.bundle == asked ? 0 : 1) : bundles.indexOf(c.bundle),
+        ),
+    ],
+    tick: sort.tick,
+  );
+}
 
 /// The first [Sample.n] covered cells of the group that nobody can take for
 /// another in either view.
@@ -556,6 +697,8 @@ Set<FormCell> _readings(KindSpec spec, Slice slice, Cube cube) {
       throw ArgumentError('an odd one out has no typed answer');
     case Sample():
       throw ArgumentError('a sample has no typed answer');
+    case LookAlikes():
+      throw ArgumentError('look-alikes have no typed answer');
   }
 }
 
@@ -637,6 +780,32 @@ String? _answerObjection(
         cells.add(c);
       }
       return unshown;
+    case (final Sort sort, SortingAnswer(:final groups, :final forms)):
+      final select = spec.select as LookAlikes;
+      final ours = _sort(sort, slice, cube);
+      if (!listEquals(groups, ours.groups)) return 'groups $groups';
+      if (forms.length < select.count.min || forms.length > select.count.max) {
+        return '${forms.length} forms';
+      }
+      if ({for (final c in slice.group) c.word.id}.length > select.words) {
+        return 'too many words';
+      }
+      for (final (i, c) in slice.group.indexed) {
+        if (forms[i].$1.text != ours.forms[i].$1.text ||
+            forms[i].$2 != ours.forms[i].$2) {
+          return '${forms[i].$1.text} is not in its group';
+        }
+        if (!cube.unlocked(c)) return '$c is locked';
+        if (_readsAsOther(cube, c, slice.lookAlikes)) {
+          return '$c reads like another group';
+        }
+        for (final other in slice.group.take(i)) {
+          if (_alike(cube, View.latin, other, c)) {
+            return '$other clashes with $c';
+          }
+        }
+      }
+      return null;
     default:
       return 'answer is a ${answer.runtimeType}';
   }

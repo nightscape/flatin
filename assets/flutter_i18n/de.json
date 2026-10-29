@@ -245,7 +245,8 @@
       "optionRight": "{form} – {label} (richtig)",
       "optionChosen": "{form} – {label} (deine Wahl)",
       "optionRightChosen": "{form} – {label} (richtig, deine Wahl)",
-      "oddAxes": "Die anderen drei: {values}"
+      "oddAxes": "Die anderen drei: {values}",
+      "misplaced": "{form} – {label}, nicht {chosen}"
     },
     "screen": {
       "title": "Aufgabe",
@@ -300,6 +301,13 @@
       "match": {
         "question": "Ordne die Wörter ihren Bedeutungen zu"
       }
+    },
+    "tick": {
+      "question": "Kreuze alle Formen im {group} an"
+    },
+    "sort": {
+      "question": "Ordne jede Form der richtigen Gruppe zu",
+      "hint": "Ziehe jede Form in ihre Gruppe."
     }
   },
   "round": {

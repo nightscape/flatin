@@ -258,6 +258,20 @@ void main() {
         'exercise.match.question',
         {'word'},
       ),
+      (
+        ExerciseKind.ankreuzen,
+        'verbs:vocare',
+        'ind.fut.akt',
+        'exercise.tick.question',
+        {'group'},
+      ),
+      (
+        ExerciseKind.sortieren,
+        'verbs:vocare',
+        'ind.plusq.akt',
+        'exercise.sort.question',
+        <String>{},
+      ),
     ];
 
     for (final (kind, id, bundleName, key, params) in shapes) {
@@ -277,6 +291,9 @@ void main() {
             expect(options.map((o) => o.lexemeId).toSet(), {word.id});
           case MatchingAnswer(:final pairs):
             expect(pairs, hasLength(4));
+          case SortingAnswer(:final forms):
+            expect(forms.length, inInclusiveRange(8, 12));
+            expect(forms.map((f) => f.$1.lexemeId), contains(word.id));
           case TypedAnswer(:final expected, :final accepted):
             expect(expected.lexemeId, word.id);
             expect(accepted, contains(expected.text));

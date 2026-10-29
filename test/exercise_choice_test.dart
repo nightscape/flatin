@@ -88,6 +88,8 @@ void main() {
         ExerciseKind.deLatWahl,
         ExerciseKind.irrlaeufer,
         ExerciseKind.zuordnen,
+        ExerciseKind.ankreuzen,
+        ExerciseKind.sortieren,
       },
     );
   });

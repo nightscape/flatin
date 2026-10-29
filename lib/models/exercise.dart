@@ -57,6 +57,8 @@ enum ExerciseKind {
   fehlerFinden,
   formenKette,
   paradigma,
+  ankreuzen,
+  sortieren,
 }
 
 /// One text the learner sees as an option, with the form it stands for, so a
@@ -125,6 +127,26 @@ final class MatchingAnswer extends ExerciseAnswer {
   }
 }
 
+/// Every form belongs to one of [groups]; with [tick] there are two, the
+/// asked bundle and the rest, and the learner ticks the forms of the first.
+final class SortingAnswer extends ExerciseAnswer {
+  /// The names the learner reads.
+  final List<String> groups;
+
+  /// Each shown form with the index of its group in [groups].
+  final List<(FormOption, int)> forms;
+  final bool tick;
+
+  SortingAnswer(this.groups, this.forms, {required this.tick}) {
+    assert(groups.length >= 2 && (!tick || groups.length == 2));
+    assert(forms.every((f) => f.$2 >= 0 && f.$2 < groups.length));
+    assert(
+      forms.map((f) => f.$1.text).toSet().length == forms.length,
+      'no two forms read the same',
+    );
+  }
+}
+
 /// What the learner gave.
 /// Produced by the screen; read by `attribute`.
 sealed class ExerciseResponse {
@@ -144,6 +166,13 @@ final class TypedText extends ExerciseResponse {
 final class MatchedPairs extends ExerciseResponse {
   final List<(FormOption, FormOption)> pairs;
   const MatchedPairs(this.pairs);
+}
+
+/// The group index the learner gave each form of a [SortingAnswer], keyed by
+/// the answer's own [FormOption]s.
+final class SortedForms extends ExerciseResponse {
+  final Map<FormOption, int> groupOf;
+  const SortedForms(this.groupOf);
 }
 
 /// One exercise: a word card and a grammar card asked through one kind.

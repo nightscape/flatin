@@ -4,15 +4,19 @@ import 'package:latin_practice/models/derivation.dart' show norm;
 import 'package:latin_practice/models/exercise.dart';
 import 'package:latin_practice/screens/exercise_match_widget.dart';
 import 'package:latin_practice/screens/exercise_screen.dart';
+import 'package:latin_practice/screens/exercise_sort_widget.dart';
 
 /// The task on screen, whether a single task or a matching one.
 Exercise shown(WidgetTester tester) {
   final screen = find.byType(ExerciseScreen);
-  return screen.evaluate().isEmpty
-      ? tester
+  final sort = find.byType(ExerciseSortWidget);
+  return screen.evaluate().isNotEmpty
+      ? tester.widget<ExerciseScreen>(screen).exercise
+      : sort.evaluate().isNotEmpty
+      ? tester.widget<ExerciseSortWidget>(sort).exercise
+      : tester
             .widget<ExerciseMatchWidget>(find.byType(ExerciseMatchWidget))
-            .exercise
-      : tester.widget<ExerciseScreen>(screen).exercise;
+            .exercise;
 }
 
 Future<void> tap(WidgetTester tester, String key) async {
@@ -58,6 +62,23 @@ Future<void> answer(
           tester,
           'exercise.match.right.${right ? i : (i + 1) % pairs.length}',
         );
+      }
+      await tap(tester, 'exercise.check.button');
+    case SortingAnswer(:final groups, :final forms, :final tick):
+      for (final (i, (_, g)) in forms.indexed) {
+        final given = right || i > 0 ? g : (g + 1) % groups.length;
+        if (tick) {
+          if (given == 0) await tap(tester, 'exercise.sort.form.$i');
+        } else {
+          final from = tester.getCenter(
+            find.byKey(Key('exercise.sort.form.$i')),
+          );
+          final to = tester.getCenter(
+            find.byKey(Key('exercise.sort.group.$given')),
+          );
+          await tester.dragFrom(from, to - from);
+          await tester.pumpAndSettle();
+        }
       }
       await tap(tester, 'exercise.check.button');
   }

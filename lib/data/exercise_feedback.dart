@@ -36,6 +36,22 @@ List<ExplanationLine> feedbackLines(
     for (final (latin, _) in pairs)
       _optionLine(word, latin, latin.text, right: false, chosen: false),
   ],
+  (SortingAnswer(:final groups, :final forms), SortedForms(:final groupOf)) => [
+    for (final (option, group) in forms)
+      groupOf[option] == group
+          ? ExplanationLine(
+              'exercise.feedback.option',
+              params: {'form': option.text, 'label': groups[group]},
+            )
+          : ExplanationLine(
+              'exercise.feedback.misplaced',
+              params: {
+                'form': option.text,
+                'label': groups[group],
+                'chosen': groups[groupOf[option]!],
+              },
+            ),
+  ],
   _ => throw ArgumentError(
     '${response.runtimeType} does not answer ${exercise.answer.runtimeType}',
   ),

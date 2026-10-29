@@ -84,7 +84,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
   String get _rightText => switch (widget.exercise.answer) {
     ChoiceAnswer(:final right) => right.text,
     TypedAnswer(:final accepted) => accepted.join(' / '),
-    MatchingAnswer() => throw UnsupportedError('matching'),
+    MatchingAnswer() || SortingAnswer() => throw UnsupportedError('grouping'),
   };
 
   void _respond(ExerciseResponse response) =>
@@ -113,7 +113,8 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
               switch (exercise.answer) {
                 ChoiceAnswer() => _choices(exercise.answer as ChoiceAnswer),
                 TypedAnswer() => _typed(),
-                MatchingAnswer() => throw UnsupportedError('matching'),
+                MatchingAnswer() ||
+                SortingAnswer() => throw UnsupportedError('grouping'),
               },
               if (_response != null) ..._feedback(),
             ],
