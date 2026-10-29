@@ -6,28 +6,6 @@
 # A token is [text, lemma, form key] for a form the engine generates, or
 # [text] / [text, headword] for a lesson headword the engine has no item for.
 
-# Noun lemma -> genus, for the nouns whose forms carry none and that a
-# participle refers to.
-genders:
-  canis: m
-  cēna: f
-  cīvis: m
-  fīlia: f
-  fīlius: m
-  homō: m
-  hostis: m
-  lēx: f
-  mīles: m
-  mulier: f
-  nāvis: f
-  oppidum: n
-  puella: f
-  senātor: m
-  servus: m
-  templum: n
-  urbs: f
-  fēmina: f
-
 sentences:
   # --- L24: questions with -ne, nōnne, num -----------------------------------
   - id: l24-ne-1

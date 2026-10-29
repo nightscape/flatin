@@ -22,6 +22,7 @@ PracticeItem _item(String dataFileId, String lemma, String translation) =>
       formLabels: [nounLabel('nom', 'sg')],
       dataFileId: dataFileId,
       formOrder: const ['nominative_singular'],
+      baseFormKeys: const [],
       derivation: Derivation(
         type: 'A-Deklination',
         recognition: const TypeDeclared(),

@@ -1,6 +1,7 @@
 /// The word group one round asks, chosen at its start and never stored.
 library;
 
+import '../models/course_filter.dart';
 import '../models/practice_item.dart';
 
 /// The verb types whose forms the data gives by hand instead of by one of
@@ -14,6 +15,10 @@ sealed class WordFocus {
   const WordFocus(this.id);
 
   bool includes(PracticeItem word);
+
+  /// Whether the practice opens [word] under [filter]: it is included and has
+  /// something to ask.
+  bool offers(PracticeItem word, CourseFilter filter) => includes(word);
 
   /// [practicable] with only the words of this focus, under the same keys.
   Map<String, List<PracticeItem>> narrow(
@@ -60,6 +65,29 @@ final class IrregularVerbs extends WordFocus {
   bool includes(PracticeItem word) =>
       word.dataFileId == 'verbs' && irregularVerbTypes.contains(word.type);
 }
+
+/// Every noun and verb, asked only for its base forms
+/// ([PracticeItem.baseFormKeys]).
+final class BaseForms extends WordFocus {
+  const BaseForms() : super('baseForms');
+
+  @override
+  bool includes(PracticeItem word) => !word.isVocab;
+
+  /// A word whose base forms all lie outside the course range, and that has
+  /// no genus to ask, waits until one of them is taught.
+  @override
+  bool offers(PracticeItem word, CourseFilter filter) =>
+      word.genus.isNotEmpty ||
+      askedBaseForms(
+        word,
+        filter.practicedForms(word.dataFileId, word.formLabels),
+      ).isNotEmpty;
+}
+
+/// The base forms [BaseForms] asks of [word] when the course asks [practiced].
+List<FormKey> askedBaseForms(PracticeItem word, Set<FormKey> practiced) =>
+    word.baseFormKeys.where(practiced.contains).toList();
 
 /// The words of one declension or conjugation type; [display] names it.
 final class TypeFocus extends WordFocus {

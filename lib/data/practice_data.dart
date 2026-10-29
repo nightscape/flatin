@@ -227,6 +227,16 @@ PracticeItem _practiceItem(
     dataFileId: file.dataFileId,
     formOrder: keys,
     derivation: derivation,
+    // A vocab item is asked only for its meaning.
+    baseFormKeys: file.dataFileId == 'vocab'
+        ? const []
+        : _baseFormKeys(
+            file,
+            item,
+            derivation,
+            engine.regularOf(file.dataFileId, item.id),
+          ),
+    genus: file.genusOf(item),
     inferredForms: [
       for (final form in forms)
         form is IrregularForm && form.regular != null
@@ -235,3 +245,39 @@ PracticeItem _practiceItem(
     ],
   );
 }
+
+/// The file's base forms, then the item's displayed parts, then every form
+/// the rules cannot give and its [regular] reading writes otherwise; without
+/// the lemma's key, which the screen shows.
+List<FormKey> _baseFormKeys(
+  GrammarFile file,
+  GrammarItem item,
+  Derivation derivation,
+  Derivation? regular,
+) {
+  final forms = derivation.forms;
+  FormKey keyOf(String part) => file.parts[part]!.keys.firstWhere(
+    forms.containsKey,
+    orElse: () => throw StateError(
+      '${file.dataFileId}:${item.id} has no key for its part "$part"',
+    ),
+  );
+  return ({
+    ...file.baseForms.where(forms.containsKey),
+    for (final name in item.parts.keys)
+      if (file.parts[name]!.display) keyOf(name),
+    for (final MapEntry(:key, :value) in forms.entries)
+      if (value is IrregularForm &&
+          !_writes(regular?.forms[key], value) &&
+          !_writes(_gerundiveOf(key, forms), value))
+        key,
+  }..remove(keyOf((file.lemmaPart ?? file.givenPart)!))).toList();
+}
+
+bool _writes(FormDerivation? form, FormDerivation value) =>
+    form?.variants.join('|') == value.variants.join('|');
+
+/// S27: the gerundive form a gerund key follows from, `ger.gen` from
+/// `gerv.sg.gen.n`.
+FormDerivation? _gerundiveOf(FormKey key, Map<FormKey, FormDerivation> forms) =>
+    key.startsWith('ger.') ? forms['gerv.sg.${key.substring(4)}.n'] : null;

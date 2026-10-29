@@ -8,6 +8,8 @@ import '../data/word_focus.dart';
 import '../models/reward.dart';
 import '../widgets/app_drawer.dart';
 import '../widgets/focus_picker.dart';
+import '../models/practice_item.dart';
+import '../providers/curriculum_provider.dart';
 import '../providers/fsrs_provider.dart';
 import '../providers/reward_provider.dart';
 import '../providers/settings_provider.dart';
@@ -249,6 +251,7 @@ class _PracticeStartState extends State<_PracticeStart> {
       FocusPicker(
         value: _focus,
         onChanged: (focus) => setState(() => _focus = focus),
+        offersBaseForms: true,
       ),
       const SizedBox(height: 8),
       _PracticeTypeButton(
@@ -291,7 +294,8 @@ class _PracticeTypeButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final practicableAsync = ref.watch(practicableItemsByTypeProvider);
     final dueAsync = ref.watch(dueItemsByTypeProvider);
-    final error = practicableAsync.error ?? dueAsync.error;
+    final filterAsync = ref.watch(courseFilterProvider);
+    final error = practicableAsync.error ?? dueAsync.error ?? filterAsync.error;
     if (error != null) {
       return Text(
         FlutterI18n.translate(
@@ -302,10 +306,13 @@ class _PracticeTypeButton extends ConsumerWidget {
       );
     }
 
+    final filter = filterAsync.value;
+    bool offered(PracticeItem word) =>
+        filter != null && focus.offers(word, filter);
     final practicable = [
-      ...?practicableAsync.value?[dataFileId]?.where(focus.includes),
+      ...?practicableAsync.value?[dataFileId]?.where(offered),
     ];
-    final due = [...?dueAsync.value?[dataFileId]?.where(focus.includes)];
+    final due = [...?dueAsync.value?[dataFileId]?.where(offered)];
     final itemToShow = !dueAsync.hasValue
         ? null
         : due.isNotEmpty

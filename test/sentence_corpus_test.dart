@@ -31,26 +31,21 @@ void main() {
     for (final sentence in corpus.sentences) {
       checker.check(sentence);
     }
-    final unused = corpus.genders.keys.toSet().difference(checker.usedGenders);
-    for (final lemma in unused) {
-      checker.problems.add('genders: "$lemma" is used by no agreement');
-    }
     expect(checker.problems, isEmpty, reason: checker.problems.join('\n'));
   });
 
-  test('a gender entry names a noun without genus forms, neuter by type', () {
-    const neuterTypes = {
-      'O-Deklination-neutrum',
-      'Konsonantische-Deklination-n',
-      'Konsonantische-Deklination-i-n',
-    };
-    for (final MapEntry(key: lemma, value: genus) in corpus.genders.entries) {
-      final item = itemByLemma[lemma];
-      expect(item, isNotNull, reason: '"$lemma" is no item');
-      expect(item!.formLabels.first.features['genus'], isNull, reason: lemma);
-      expect(genus, isIn(['m', 'f', 'n']), reason: lemma);
-      expect(genus == 'n', neuterTypes.contains(item.type), reason: lemma);
-    }
+  test('the noun data agrees with the genders checked by hand', () {
+    expect(
+      {
+        for (final lemma in _checkedGenders.keys)
+          lemma: itemByLemma[lemma]!.genus,
+      },
+      {
+        for (final MapEntry(key: lemma, value: genus)
+            in _checkedGenders.entries)
+          lemma: [genus],
+      },
+    );
   });
 
   test('the corpus covers each topic of lessons 24-26', () {
@@ -74,6 +69,27 @@ void main() {
   });
 }
 
+const _checkedGenders = {
+  'canis': 'm',
+  'cēna': 'f',
+  'cīvis': 'm',
+  'fīlia': 'f',
+  'fīlius': 'm',
+  'homō': 'm',
+  'hostis': 'm',
+  'lēx': 'f',
+  'mīles': 'm',
+  'mulier': 'f',
+  'nāvis': 'f',
+  'oppidum': 'n',
+  'puella': 'f',
+  'senātor': 'm',
+  'servus': 'm',
+  'templum': 'n',
+  'urbs': 'f',
+  'fēmina': 'f',
+};
+
 const _participleOf = {
   ConstructionKind.pcPpa: 'part.praes.akt.',
   ConstructionKind.pcPpp: 'part.perf.pass.',
@@ -92,7 +108,6 @@ final class _Checker {
   final LessonData lessons;
   final Curriculum curriculum;
   final problems = <String>[];
-  final usedGenders = <String>{};
 
   _Checker(this.corpus, this.itemByLemma, this.lessons, this.curriculum);
 
@@ -187,20 +202,19 @@ final class _Checker {
     if (!(head as FormToken).key.startsWith(participle)) {
       fail('the head "${head.text}" is no $participle* form');
     }
-    final refGenus = refFeatures['genus'] ?? corpus.genders[reference.lemma];
-    if (refFeatures['genus'] == null) usedGenders.add(reference.lemma);
-    if (refGenus == null) {
-      fail('"${reference.text}": no genus; add ${reference.lemma} to genders');
-    }
-    for (final (axis, value) in [
-      ('kasus', refFeatures['kasus']),
-      ('numerus', refFeatures['numerus']),
+    final refGenus = switch (refFeatures['genus']) {
+      final genus? => [genus],
+      null => itemByLemma[reference.lemma]!.genus,
+    };
+    for (final (axis, values) in [
+      ('kasus', [refFeatures['kasus']]),
+      ('numerus', [refFeatures['numerus']]),
       ('genus', refGenus),
     ]) {
-      if (headFeatures[axis] != value) {
+      if (!values.contains(headFeatures[axis])) {
         fail(
           '"${head.text}" ($axis ${headFeatures[axis]}) does not agree '
-          'with "${reference.text}" ($axis $value)',
+          'with "${reference.text}" ($axis ${values.join("/")})',
         );
       }
     }

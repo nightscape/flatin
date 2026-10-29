@@ -46,6 +46,12 @@ class PracticeItem {
   /// How every form of this item follows from its principal parts.
   final Derivation derivation;
 
+  /// The keys the base-forms focus asks, in the order it asks them.
+  final List<FormKey> baseFormKeys;
+
+  /// The genus codes of a noun, two for common gender; empty for other words.
+  final List<String> genus;
+
   PracticeItem({
     required this.id,
     required this.lemma,
@@ -60,6 +66,8 @@ class PracticeItem {
     required this.dataFileId,
     required this.formOrder,
     required this.derivation,
+    required this.baseFormKeys,
+    this.genus = const [],
     List<String>? inferredForms,
   }) : inferredForms = inferredForms ?? forms,
        assert(principalParts.isNotEmpty),
@@ -87,27 +95,24 @@ class PracticeItem {
     List<String> inferredForms,
     List<String> keys,
   })
-  filterForms(Set<String> enabledFormKeys) {
-    final filteredForms = <String>[];
-    final filteredLabels = <FormLabel>[];
-    final filteredInferred = <String>[];
-    final filteredKeys = <String>[];
+  filterForms(Set<String> enabledFormKeys) =>
+      pickForms(formOrder.where(enabledFormKeys.contains).toList());
 
-    for (int i = 0; i < formOrder.length; i++) {
-      final formKey = formOrder[i];
-      if (enabledFormKeys.contains(formKey)) {
-        filteredForms.add(forms[i]);
-        filteredLabels.add(formLabels[i]);
-        filteredInferred.add(inferredForms[i]);
-        filteredKeys.add(formKey);
-      }
-    }
-
+  /// The rows of [keys], in their order.
+  ({
+    List<String> forms,
+    List<FormLabel> labels,
+    List<String> inferredForms,
+    List<String> keys,
+  })
+  pickForms(List<FormKey> keys) {
+    final indexes = [for (final key in keys) formOrder.indexOf(key)];
+    assert(!indexes.contains(-1), 'not every key of $keys is a form of $id');
     return (
-      forms: filteredForms,
-      labels: filteredLabels,
-      inferredForms: filteredInferred,
-      keys: filteredKeys,
+      forms: [for (final i in indexes) forms[i]],
+      labels: [for (final i in indexes) formLabels[i]],
+      inferredForms: [for (final i in indexes) inferredForms[i]],
+      keys: keys,
     );
   }
 }

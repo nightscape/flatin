@@ -35,20 +35,31 @@ Rating suggestRating(List<bool?> formResults, bool translationCorrect) {
   return Rating.again;
 }
 
-/// The principal parts the screen shows under the heading.
-Iterable<(String, String)> shownPrincipalParts(PracticeItem item) =>
-    item.principalParts.where((part) => part.$1.isNotEmpty);
+/// The principal parts the screen shows under the heading; [BaseForms] asks
+/// them instead.
+Iterable<(String, String)> shownPrincipalParts(
+  PracticeItem item, [
+  WordFocus focus = const AllWords(),
+]) => focus is BaseForms
+    ? const []
+    : item.principalParts.where((part) => part.$1.isNotEmpty);
 
 /// A field whose accepted answers are all shown on the screen, in the heading
-/// or a principal part, pays no coins.
-bool paysCoins(PracticeItem item, String formKey) {
+/// or a principal part, pays no coins; every base form [BaseForms] asks pays,
+/// also one spelled like the lemma.
+bool paysCoins(
+  PracticeItem item,
+  String formKey, [
+  WordFocus focus = const AllWords(),
+]) {
   final shown = {
     norm(item.lemma),
     for (final part in shownPrincipalParts(item)) norm(part.$2),
   };
-  return !item.acceptedForms[item.formOrder.indexOf(formKey)].every(
-    (f) => shown.contains(norm(f)),
-  );
+  return focus is BaseForms ||
+      !item.acceptedForms[item.formOrder.indexOf(formKey)].every(
+        (f) => shown.contains(norm(f)),
+      );
 }
 
 class PracticeScreen extends ConsumerStatefulWidget {
@@ -76,9 +87,15 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
   Rating? _suggestedRating;
   bool _showRatingButtons = false;
   String? _selectedTranslation;
+  String? _selectedGenus;
+  bool? _genusRight;
   Map<String, EselProgress> _panels = {};
   Set<String> _expandedPanels = {};
   ({int coins, num factor, int serial})? _burst;
+
+  /// [BaseForms] asks a noun's genus, as a choice that pays like a form.
+  bool get _asksGenus =>
+      widget.focus is BaseForms && widget.item.genus.isNotEmpty;
 
   void _ensureAnswerSlots(int count) {
     if (_userAnswers.length != count) {
@@ -91,15 +108,20 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
     notifier.checkAnswers(
       _userAnswers,
       _filteredKeys,
-      selectedTranslation: _selectedTranslation,
+      selectedTranslation: widget.focus is BaseForms
+          ? widget.item.translation
+          : _selectedTranslation,
       correctTranslation: widget.item.translation,
     );
 
     final state = ref.read(practiceProvider(widget.item));
-    _suggestedRating = suggestRating(
-      state.validationResults,
-      state.translationCorrect!,
-    );
+    _genusRight = _asksGenus && _selectedGenus != null
+        ? widget.item.genus.contains(_selectedGenus)
+        : null;
+    _suggestedRating = suggestRating([
+      ...state.validationResults,
+      if (_asksGenus) _genusRight,
+    ], state.translationCorrect!);
 
     final wrongIndexes = [
       for (var i = 0; i < _filteredKeys.length; i++)
@@ -127,11 +149,12 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
     });
     _payChoices(
       [
-        for (var i = 0; i < _filteredKeys.length; i++)
-          if (state.validationResults[i] == true &&
-              paysCoins(widget.item, _filteredKeys[i]))
-            i,
-      ].length,
+            for (var i = 0; i < _filteredKeys.length; i++)
+              if (state.validationResults[i] == true &&
+                  paysCoins(widget.item, _filteredKeys[i], widget.focus))
+                i,
+          ].length +
+          (_genusRight == true ? 1 : 0),
     );
   }
 
@@ -300,6 +323,43 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
     );
   }
 
+  Widget _genusChoice(PracticeState state, double fontSize) => Row(
+    children: [
+      for (final code in const ['m', 'f', 'n'])
+        Padding(
+          padding: const EdgeInsets.only(right: 8),
+          child: ChoiceChip(
+            key: Key('practice.genus.$code'),
+            label: Text(code, style: TextStyle(fontSize: fontSize)),
+            selected: _selectedGenus == code,
+            onSelected: state.isChecked
+                ? null
+                : (_) => setState(() => _selectedGenus = code),
+          ),
+        ),
+      if (state.isChecked && _genusRight != null)
+        Text(
+          widget.item.genus.join('/'),
+          key: const Key('practice.genus.answer'),
+          style: TextStyle(
+            fontSize: fontSize,
+            fontWeight: FontWeight.bold,
+            color: _genusRight! ? Colors.green : Colors.red,
+          ),
+        ),
+    ],
+  );
+
+  Widget _shownTranslation(double fontSize) => Text(
+    widget.item.translation,
+    key: const Key('practice.translation.shown'),
+    style: TextStyle(
+      fontSize: fontSize,
+      fontWeight: FontWeight.bold,
+      color: Colors.black,
+    ),
+  );
+
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(practiceProvider(widget.item));
@@ -309,14 +369,18 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
     final screenWidth = MediaQuery.of(context).size.width;
     final isMobile = screenWidth < 600;
 
-    final filteredData = filterAsync.when(
-      data: (filter) => widget.item.filterForms(
-        filter.practicedForms(widget.item.dataFileId, widget.item.formLabels),
-      ),
-      loading: () =>
-          widget.item.filterForms(Set<String>.from(widget.item.formOrder)),
-      error: (_, _) =>
-          widget.item.filterForms(Set<String>.from(widget.item.formOrder)),
+    final practiced = filterAsync.when(
+      data: (filter) =>
+          filter.practicedForms(widget.item.dataFileId, widget.item.formLabels),
+      loading: () => Set<String>.from(widget.item.formOrder),
+      error: (_, _) => Set<String>.from(widget.item.formOrder),
+    );
+    final filteredData = widget.focus is BaseForms
+        ? widget.item.pickForms(askedBaseForms(widget.item, practiced))
+        : widget.item.filterForms(practiced);
+    assert(
+      filteredData.keys.isNotEmpty || _asksGenus,
+      '${widget.item.id} has nothing to ask in ${widget.focus.id}',
     );
 
     _filteredForms = filteredData.forms;
@@ -425,12 +489,14 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
                         Expanded(
                           flex: state.isTranslationVisible ? 1 : 2,
                           child: choicesAsync.when(
-                            data: (choices) => _buildTranslationDropdown(
-                              choices,
-                              state,
-                              labelFontSize,
-                              isMobile,
-                            ),
+                            data: (choices) => widget.focus is BaseForms
+                                ? _shownTranslation(headerFontSize)
+                                : _buildTranslationDropdown(
+                                    choices,
+                                    state,
+                                    labelFontSize,
+                                    isMobile,
+                                  ),
                             loading: () => const SizedBox(
                               height: 40,
                               child: Center(
@@ -439,21 +505,45 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
                                 ),
                               ),
                             ),
-                            error: (_, _) => Text(
-                              widget.item.translation,
-                              style: TextStyle(
-                                fontSize: headerFontSize,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
-                            ),
+                            error: (_, _) => _shownTranslation(headerFontSize),
                           ),
                         ),
                       ],
                     ),
                   ),
+                  if (_asksGenus)
+                    Padding(
+                      padding: EdgeInsets.only(bottom: verticalPadding),
+                      child: Row(
+                        children: [
+                          if (state.isTranslationVisible)
+                            Expanded(
+                              flex: 1,
+                              child: Text(
+                                FlutterI18n.translate(
+                                  context,
+                                  'practice.genus',
+                                ),
+                                style: TextStyle(
+                                  fontSize: labelFontSize,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                          if (state.isTranslationVisible)
+                            SizedBox(width: isMobile ? 12.0 : 24.0),
+                          Expanded(
+                            flex: state.isTranslationVisible ? 1 : 2,
+                            child: _genusChoice(state, labelFontSize),
+                          ),
+                        ],
+                      ),
+                    ),
                   // One row per principal part the data names
-                  for (final part in shownPrincipalParts(widget.item))
+                  for (final part in shownPrincipalParts(
+                    widget.item,
+                    widget.focus,
+                  ))
                     Padding(
                       padding: EdgeInsets.only(bottom: verticalPadding),
                       child: Row(

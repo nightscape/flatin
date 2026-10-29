@@ -13,6 +13,7 @@
     "noData": "No data available"
   },
   "practice": {
+    "genus": "Gender:",
     "translation": "Translation:",
     "chooseTranslation": "Choose translation...",
     "check": "check",
@@ -329,6 +330,7 @@
     "nouns": "Nouns",
     "verbs": "Verbs",
     "irregular": "Irregular verbs",
+    "baseForms": "Base forms only",
     "empty": "no words in your course range"
   }
 }

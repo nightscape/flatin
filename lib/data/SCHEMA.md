@@ -31,12 +31,15 @@ label:
        values: {fut: {de: Futur, en: Future}}}
 
 parts:                               # the principal parts an item may give
-  infinitiv:    {label: {de: Infinitiv, en: Infinitive}}
+  infinitiv:    {label: {de: Infinitiv, en: Infinitive},
+                 key: inf.praes.akt}   # the keys that hold it, first one an item has wins
   praefix:      {label: {de: Präfix, en: Prefix}, display: false}
 
 defaults:
   given_part: praesens_1sg           # the form the practice screen shows
   lemma_part: infinitiv              # the lesson key and the card id
+  base_forms: [ind.perf.akt.1.sg]    # asked by the base-forms focus, with every
+                                     # displayed part and every irregular form
 
 type_inference:                      # S11; keyed by part, rules in list order
   infinitiv:
@@ -99,6 +102,7 @@ items:
     parts: {infinitiv: esse, perfekt_1sg: fuī}
     forms: {ind.praes.akt.1.sg: sum} # overrides
     deponent: [perf, plusq, fut2]
+    regular_type: Konsonantische     # S27
     absent: [{modus: imp}]           # S15
     slots: {hilfsverb: hv_sein}      # S23
 ```
@@ -301,6 +305,23 @@ impersonal passive: its passive keys with `person: 1`, `person: 2` or
 key that sets `genus` reads the neuter (`ventum est`), and its delegated passive
 keys are internal (S8). Any other value, and the key on a deponent, throws.
 
+**S26. Genus.** A type may give `genus: <code>` (inherited, the child wins), an
+item `genus: <code>` or a list of codes for a noun of common gender
+(`cūstōs: [m, f]`); a code is one of the axis `genus`. Once a type of a class
+gives a genus, every item of that class has exactly one source of it: its
+type's or its own. An item of any other class gives none. A missing, doubled or
+unknown genus throws.
+
+**S27. Regular reading.** `regular_type: <type>` names another concrete type
+of the file. The item is read once more as that type, with its parts and
+without its forms; a form of the item counts as irregular for the base-forms
+focus only when this reading has no form for its key or writes it otherwise
+(`ferre` read as Konsonantische: `ferimus` is regular, `fers` is not).
+`regular_passiv: unpersönlich` gives only this reading the impersonal passive
+of S25 (`īre`: `itum est` is regular); the item's own keys stay as they are.
+A gerund form spelled like the neuter singular of the gerundive in its case
+follows from the gerundive and is not irregular (`abeundī`).
+
 **Collisions.** A key produced twice — by own forms, by delegation or by
 composition other than a variant rule (S24) — throws. There is no precedence between them; inheritance (S6) is
 the only override mechanism besides item overrides.
@@ -313,10 +334,6 @@ the only override mechanism besides item overrides.
 engine and the course books.
 
 ```yaml
-genders:                       # noun lemma -> m | f | n
-  urbs: f                      # only nouns whose forms carry no genus and
-                               # that a participle agrees with
-
 sentences:
   - id: l25-ppp-1              # unique
     lesson: 25                 # words and grammar stay within lessons 1..25
@@ -361,7 +378,6 @@ The data test fails a sentence when a token is no form of its item, when an
 item, headword, form or type is taught after `lesson`, when a headword token
 names a word the engine has an item for, when the tokens do not spell
 `latin`, when a participle does not agree with its reference word in case,
-number and gender, when a passive AcI's participle has no accusative subject
-or no `esse` after it, when a question's head is not its particle, or when a
-double accusative has no two accusatives. A `genders` entry that no
-agreement reads fails too.
+number and gender (a noun's gender is its `genus`, S26), when a passive AcI's
+participle has no accusative subject or no `esse` after it, when a question's
+head is not its particle, or when a double accusative has no two accusatives.

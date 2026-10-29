@@ -97,10 +97,8 @@ final class Sentence {
 }
 
 final class SentenceCorpus {
-  /// Noun lemma -> genus code, for nouns whose forms carry no genus.
-  final Map<String, String> genders;
   final List<Sentence> sentences;
-  const SentenceCorpus(this.genders, this.sentences);
+  const SentenceCorpus(this.sentences);
 }
 
 Future<SentenceCorpus> loadSentenceCorpus() async =>
@@ -116,10 +114,7 @@ SentenceCorpus parseSentenceCorpus(String source) {
   for (final s in sentences) {
     if (!ids.add(s.id)) throw StateError('sentence id "${s.id}" is twice');
   }
-  return SentenceCorpus(
-    (yaml['genders'] as YamlMap).cast<String, String>(),
-    sentences,
-  );
+  return SentenceCorpus(sentences);
 }
 
 Sentence _sentence(YamlMap map) {

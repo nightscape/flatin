@@ -107,7 +107,10 @@ Future<PracticeItem?> nextDueItem(
   WordFocus focus,
 ) async {
   final dueItemsByType = await ref.watch(dueItemsByTypeProvider.future);
-  return dueItemsByType[dataFileId]!.where(focus.includes).firstOrNull;
+  final filter = await ref.watch(courseFilterProvider.future);
+  return dueItemsByType[dataFileId]!
+      .where((word) => focus.offers(word, filter))
+      .firstOrNull;
 }
 
 /// The focus choices for the words in the course range.

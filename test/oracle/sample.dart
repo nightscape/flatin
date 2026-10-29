@@ -141,12 +141,15 @@ _Built? _verbItem(
   );
 }
 
+/// [needsGenus]: the item gives its genus (S26), read from the line's
+/// `i, n.`; a line without one is left out.
 _Built? _nounItem(
   Collatinus collatinus,
   String lemmaKey,
   Map<String, String> build,
-  String type,
-) {
+  String type, {
+  required bool needsGenus,
+}) {
   final fields = collatinus.lemmaLines[lemmaKey]!;
   final canonical = _lemmaOf(fields);
   if (canonical.contains(',')) return null;
@@ -156,6 +159,10 @@ _Built? _nounItem(
   final radical = _radical(fields[2]);
   if (radical != null && radical.length > 1) return null;
   final stem = radical?.single ?? nom.substring(0, nom.length - cut);
+  final genus = {
+    for (final m in RegExp(r'\b([mfn])\.').allMatches(fields[4])) m[1]!,
+  };
+  if (needsGenus && genus.isEmpty) return null;
   return (
     idSpelling: nom,
     text:
@@ -163,7 +170,7 @@ _Built? _nounItem(
   - type: $type
     translation: {de: ${_yaml(lemmaKey)}, en: ${_yaml(lemmaKey)}}
     parts: {nom: ${_yaml(nom)}, gen: ${_yaml(stem + build['genitive']!)}}
-''',
+${needsGenus ? '    genus: [${genus.join(', ')}]\n' : ''}''',
   );
 }
 
@@ -240,6 +247,12 @@ Sample buildSample({
     if (owner == null) continue;
     final type = spec.types.firstWhere(owner.value.$2.contains);
     final dataFileId = owner.key;
+    final types = owner.value.$3.types;
+    final needsGenus =
+        types[type]!.genus == null &&
+        types.values.any(
+          (t) => t.genus != null && t.wordClass == types[type]!.wordClass,
+        );
 
     final candidates =
         collatinus.lemmaLines.entries
@@ -261,7 +274,13 @@ Sample buildSample({
       if (takenLemmas.contains(candidate.key)) continue;
       final built = switch (spec.kind) {
         'verb' => _verbItem(collatinus, candidate.key, spec.build, type),
-        'noun' => _nounItem(collatinus, candidate.key, spec.build, type),
+        'noun' => _nounItem(
+          collatinus,
+          candidate.key,
+          spec.build,
+          type,
+          needsGenus: needsGenus,
+        ),
         'adjective' => _adjectiveItem(
           collatinus,
           candidate.key,

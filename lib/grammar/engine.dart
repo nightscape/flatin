@@ -200,6 +200,13 @@ final class GrammarEngine {
     return _derive(file, file.item(itemId));
   }
 
+  /// S27: the item read as its `regular_type`, or null when it names none.
+  Derivation? regularOf(String dataFileId, String itemId) {
+    final file = _byDataFile[dataFileId]!;
+    final regular = file.regularItems[itemId];
+    return regular == null ? null : _derive(file, regular);
+  }
+
   GrammarType _resolved(String typeName) => _byType[typeName]!.types[typeName]!;
 
   /// S6: the type that wrote [key]'s template — the first of the inheritance

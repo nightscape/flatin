@@ -88,6 +88,7 @@ PracticeItem handItem({
     forms: [for (final key in keys) forms[key]!.first],
     acceptedForms: [for (final key in keys) forms[key]!],
     formLabels: [for (final key in keys) FormLabel.fromKey(key, axes)],
+    baseFormKeys: const [],
     derivation: Derivation(
       type: type,
       recognition: const TypeDeclared(),

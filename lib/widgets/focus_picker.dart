@@ -9,10 +9,18 @@ import '../providers/fsrs_provider.dart';
 /// course range is shown but cannot be picked. The held [value] is always
 /// listed, also when a narrower course range has dropped its type.
 class FocusPicker extends ConsumerWidget {
-  const FocusPicker({super.key, required this.value, required this.onChanged});
+  const FocusPicker({
+    super.key,
+    required this.value,
+    required this.onChanged,
+    this.offersBaseForms = false,
+  });
 
   final WordFocus value;
   final ValueChanged<WordFocus> onChanged;
+
+  /// Only the noun and verb practice can ask base forms alone.
+  final bool offersBaseForms;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -39,7 +47,11 @@ class FocusPicker extends ConsumerWidget {
             value: value,
             onChanged: (focus) => onChanged(focus!),
             items: [
-              for (final focus in {...focuses, value})
+              for (final focus in {
+                ...focuses,
+                if (offersBaseForms) const BaseForms(),
+                value,
+              })
                 DropdownMenuItem(
                   key: Key('focus.option.${focus.id}'),
                   value: focus,
@@ -62,6 +74,7 @@ class FocusPicker extends ConsumerWidget {
         AllWords() => t('focus.all'),
         FileFocus(:final dataFileId) => t('focus.$dataFileId'),
         IrregularVerbs() => t('focus.irregular'),
+        BaseForms() => t('focus.baseForms'),
         TypeFocus(:final display) => display,
       };
 }

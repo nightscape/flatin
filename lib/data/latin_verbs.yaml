@@ -61,20 +61,21 @@ label:
   merge_axis: person
 
 parts:
-  praesens_1sg:   {label: {de: "1. Person Singular", en: "1st person singular"}}
-  infinitiv:      {label: {de: Infinitiv, en: Infinitive}}
-  perfekt_1sg:    {label: {de: Perfekt, en: Perfect}}
-  supinum:        {label: {de: Supinum, en: Supine}}
+  praesens_1sg:   {label: {de: "1. Person Singular", en: "1st person singular"}, key: ind.praes.akt.1.sg}
+  infinitiv:      {label: {de: Infinitiv, en: Infinitive}, key: inf.praes.akt}
+  perfekt_1sg:    {label: {de: Perfekt, en: Perfect}, key: ind.perf.akt.1.sg}
+  supinum:        {label: {de: Supinum, en: Supine}, key: sup.akk}
   praefix:        {label: {de: Präfix, en: Prefix}, display: false}
   praesens_stamm: {label: {de: Präsensstamm, en: Present stem}, display: false}
-  futurpartizip:  {label: {de: Partizip Futur, en: Future participle}}
-  ppa_nom:        {label: {de: Partizip Präsens, en: Present participle}}
-  ppa_gen:        {label: {de: Partizip Präsens Genitiv, en: Present participle genitive}}
-  gerundiv:       {label: {de: Gerundivum, en: Gerundive}}
+  futurpartizip:  {label: {de: Partizip Futur, en: Future participle}, key: part.fut.akt.sg.nom.m}
+  ppa_nom:        {label: {de: Partizip Präsens, en: Present participle}, key: part.praes.akt.sg.nom.m}
+  ppa_gen:        {label: {de: Partizip Präsens Genitiv, en: Present participle genitive}, key: part.praes.akt.sg.gen.m}
+  gerundiv:       {label: {de: Gerundivum, en: Gerundive}, key: gerv.sg.nom.m}
 
 defaults:
   given_part: praesens_1sg
   lemma_part: infinitiv
+  base_forms: [inf.praes.akt, ind.praes.akt.1.sg, ind.perf.akt.1.sg, sup.akk]
 
 type_inference:
   infinitiv:
@@ -767,6 +768,7 @@ items:
     de_verb: "setzen"
   - id: ferre
     type: Unregelmäßig
+    regular_type: Konsonantische
     translation: {de: "tragen; bringen; ertragen; berichten", en: "carry; bring; endure"}
     parts: {infinitiv: "ferre", praesens_1sg: "ferō", perfekt_1sg: "tulī", supinum: "lātum", ppa_nom: "ferēns", ppa_gen: "ferentis", gerundiv: "ferendus"}
     de_verb: "tragen"
@@ -848,6 +850,8 @@ items:
     de_verb: "können"
   - id: ire
     type: Unregelmäßig
+    regular_type: I-Konjugation
+    regular_passiv: unpersönlich
     translation: {de: gehen, en: go}
     parts: {infinitiv: "īre", praesens_1sg: "eō", perfekt_1sg: ["iī", "īvī"], supinum: "itum", ppa_nom: "iēns", ppa_gen: "euntis", gerundiv: "eundus"}
     de_verb: "gehen"
@@ -915,6 +919,7 @@ items:
       ger.abl: "eundō"
   - id: velle
     type: Unregelmäßig
+    regular_type: Konsonantische
     translation: {de: wollen, en: "want, be willing"}
     parts: {infinitiv: "velle", praesens_1sg: "volō", perfekt_1sg: "voluī", ppa_nom: "volēns", ppa_gen: "volentis"}
     de_verb: "wollen"
@@ -952,6 +957,7 @@ items:
       inf.praes.akt: "velle"
   - id: nolle
     type: Unregelmäßig
+    regular_type: Konsonantische
     translation: {de: nicht wollen, en: "not want, be unwilling"}
     parts: {infinitiv: "nōlle", praesens_1sg: "nōlō", perfekt_1sg: "nōluī", ppa_nom: "nōlēns", ppa_gen: "nōlentis"}
     de_verb: "nicht wollen"
@@ -995,6 +1001,7 @@ items:
       inf.praes.akt: "nōlle"
   - id: malle
     type: Unregelmäßig
+    regular_type: Konsonantische
     translation: {de: lieber wollen, en: prefer}
     parts: {infinitiv: "mālle", praesens_1sg: "mālō", perfekt_1sg: "māluī"}
     de_verb: "lieber wollen"
@@ -1086,6 +1093,7 @@ items:
     de_verb: "heranrücken"
     passiv: unpersönlich
   - type: Unregelmäßig
+    regular_type: Konsonantische
     translation: {de: "entgegenbringen, anbieten", en: offer}
     parts: {infinitiv: "offerre", praesens_1sg: "offerō", perfekt_1sg: "obtulī", supinum: "oblātum", ppa_nom: "offerēns", ppa_gen: "offerentis", gerundiv: "offerendus"}
     de_verb: "entgegenbringen"
@@ -1137,6 +1145,7 @@ items:
     parts: {infinitiv: "tangere", praesens_1sg: "tangō", perfekt_1sg: "tetigī", supinum: "tāctum"}
     de_verb: "berühren"
   - type: Unregelmäßig
+    regular_type: I-Konjugation
     translation: {de: weggehen, en: go away}
     parts: {infinitiv: "abīre", praesens_1sg: "abeō", perfekt_1sg: ["abiī", "abīvī"], ppa_nom: "abiēns", ppa_gen: "abeuntis", gerundiv: "abeundus"}
     de_verb: "weggehen"
@@ -1192,6 +1201,7 @@ items:
       ger.akk: "abeundum"
       ger.abl: "abeundō"
   - type: Unregelmäßig
+    regular_type: Konsonantische
     translation: {de: hineintragen, en: "carry in, bring in"}
     parts: {infinitiv: "īnferre", praesens_1sg: "īnferō", perfekt_1sg: "intulī", supinum: "illātum", ppa_nom: "īnferēns", ppa_gen: "īnferentis", gerundiv: "īnferendus"}
     de_verb: "hineintragen"
@@ -1234,6 +1244,7 @@ items:
       imp.fut.akt.3.pl: "īnferuntō"
       inf.praes.akt: "īnferre"
   - type: Unregelmäßig
+    regular_type: Konsonantische
     translation: {de: "zurückbringen; berichten", en: "bring back; report"}
     parts: {infinitiv: "referre", praesens_1sg: "referō", perfekt_1sg: "rettulī", supinum: "relātum", ppa_nom: "referēns", ppa_gen: "referentis", gerundiv: "referendus"}
     de_verb: "zurückbringen"
@@ -1276,6 +1287,7 @@ items:
       imp.fut.akt.3.pl: "referuntō"
       inf.praes.akt: "referre"
   - type: Unregelmäßig
+    regular_type: Konsonantische
     translation: {de: "wegtragen, wegbringen", en: "carry away, take away"}
     parts: {infinitiv: "auferre", praesens_1sg: "auferō", perfekt_1sg: "abstulī", supinum: "ablātum", ppa_nom: "auferēns", ppa_gen: "auferentis", gerundiv: "auferendus"}
     de_verb: "wegtragen"
@@ -1321,6 +1333,7 @@ items:
     parts: {infinitiv: "mūtāre", praesens_1sg: "mūtō", perfekt_1sg: "mūtāvī", supinum: "mūtātum"}
     de_verb: "verändern"
   - type: Unregelmäßig
+    regular_type: Konsonantische
     translation: {de: "ertragen, aushalten; überbringen", en: "endure, bear"}
     parts: {infinitiv: "perferre", praesens_1sg: "perferō", perfekt_1sg: "pertulī", supinum: "perlātum", ppa_nom: "perferēns", ppa_gen: "perferentis", gerundiv: "perferendus"}
     de_verb: "ertragen"
@@ -1648,6 +1661,7 @@ items:
     parts: {infinitiv: "adhibēre", praesens_1sg: "adhibeō", perfekt_1sg: "adhibuī", supinum: "adhibitum"}
     de_verb: "hinzuziehen"
   - type: Unregelmäßig
+    regular_type: I-Konjugation
     translation: {de: "hineingehen; beginnen", en: "go in, enter"}
     parts: {infinitiv: "inīre", praesens_1sg: "ineō", perfekt_1sg: ["iniī", "inīvī"], supinum: "initum", ppa_nom: "iniēns", ppa_gen: "ineuntis", gerundiv: "ineundus"}
     de_verb: "hineingehen"
@@ -1740,6 +1754,7 @@ items:
     parts: {infinitiv: "nūntiāre", praesens_1sg: "nūntiō", perfekt_1sg: "nūntiāvī", supinum: "nūntiātum"}
     de_verb: "melden"
   - type: Unregelmäßig
+    regular_type: Konsonantische
     translation: {de: "herbeitragen, hinzufügen", en: "bring (to); add"}
     parts: {infinitiv: "afferre", praesens_1sg: "afferō", perfekt_1sg: "attulī", supinum: "allātum", ppa_nom: "afferēns", ppa_gen: "afferentis", gerundiv: "afferendus"}
     de_verb: "herbeitragen"
@@ -1803,6 +1818,7 @@ items:
     parts: {infinitiv: "pōstulāre", praesens_1sg: "pōstulō", perfekt_1sg: "pōstulāvī", supinum: "pōstulātum"}
     de_verb: "fordern"
   - type: Unregelmäßig
+    regular_type: Konsonantische
     translation: {de: "zusammentragen, zusammenbringen; hinbringen; vergleichen", en: "bring together, gather; compare"}
     parts: {infinitiv: "cōnferre", praesens_1sg: "cōnferō", perfekt_1sg: "contulī", supinum: "collātum", ppa_nom: "cōnferēns", ppa_gen: "cōnferentis", gerundiv: "cōnferendus"}
     de_verb: "zusammentragen"
@@ -2008,6 +2024,7 @@ items:
     parts: {infinitiv: "permovēre", praesens_1sg: "permoveō", perfekt_1sg: "permōvī", supinum: "permōtum"}
     de_verb: "veranlassen"
   - type: Unregelmäßig
+    regular_type: Konsonantische
     translation: {de: "wegbringen; zu Grabe tragen; hochheben; loben", en: "carry out; raise"}
     parts: {infinitiv: "efferre", praesens_1sg: "efferō", perfekt_1sg: "extulī", supinum: "ēlātum", ppa_nom: "efferēns", ppa_gen: "efferentis", gerundiv: "efferendus"}
     forms:
@@ -2226,6 +2243,7 @@ items:
     de_verb: "entkommen"
     passiv: unpersönlich
   - type: Unregelmäßig
+    regular_type: I-Konjugation
     translation: {de: hinausgehen, en: go out}
     parts: {infinitiv: "exīre", praesens_1sg: "exeō", perfekt_1sg: ["exiī", "exīvī"], ppa_nom: "exiēns", ppa_gen: "exeuntis", gerundiv: "exeundus"}
     de_verb: "hinausgehen"
@@ -2281,6 +2299,7 @@ items:
       ger.akk: "exeundum"
       ger.abl: "exeundō"
   - type: Unregelmäßig
+    regular_type: I-Konjugation
     translation: {de: zurückkehren, en: "return, go back"}
     parts: {infinitiv: "redīre", praesens_1sg: "redeō", perfekt_1sg: ["rediī", "redīvī"], ppa_nom: "rediēns", ppa_gen: "redeuntis", gerundiv: "redeundus"}
     de_verb: "zurückkehren"
@@ -2336,6 +2355,7 @@ items:
       ger.akk: "redeundum"
       ger.abl: "redeundō"
   - type: Unregelmäßig
+    regular_type: I-Konjugation
     translation: {de: "herangehen, auf sich nehmen", en: "approach; undergo"}
     parts: {infinitiv: "subīre", praesens_1sg: "subeō", perfekt_1sg: ["subiī", "subīvī"], ppa_nom: "subiēns", ppa_gen: "subeuntis", gerundiv: "subeundus"}
     de_verb: "herangehen"
@@ -2391,6 +2411,7 @@ items:
       ger.akk: "subeundum"
       ger.abl: "subeundō"
   - type: Unregelmäßig
+    regular_type: I-Konjugation
     translation: {de: zugrunde gehen, en: "perish, die"}
     parts: {infinitiv: "perīre", praesens_1sg: "pereō", perfekt_1sg: ["periī", "perīvī"], ppa_nom: "periēns", ppa_gen: "pereuntis", gerundiv: "pereundus"}
     de_verb: "zugrunde gehen"
@@ -2446,6 +2467,7 @@ items:
       ger.akk: "pereundum"
       ger.abl: "pereundō"
   - type: Unregelmäßig
+    regular_type: I-Konjugation
     translation: {de: "herangehen, aufsuchen", en: "approach, visit"}
     parts: {infinitiv: "adīre", praesens_1sg: "adeō", perfekt_1sg: ["adiī", "adīvī"], ppa_nom: "adiēns", ppa_gen: "adeuntis", gerundiv: "adeundus"}
     de_verb: "herangehen"

@@ -13,6 +13,7 @@
     "noData": "Keine Daten verfügbar"
   },
   "practice": {
+    "genus": "Genus:",
     "translation": "Übersetzung:",
     "chooseTranslation": "Übersetzung wählen...",
     "check": "prüfen",
@@ -329,6 +330,7 @@
     "nouns": "Nomen",
     "verbs": "Verben",
     "irregular": "Unregelmäßige Verben",
+    "baseForms": "Nur Stammformen",
     "empty": "keine Wörter im Kursstand"
   }
 }

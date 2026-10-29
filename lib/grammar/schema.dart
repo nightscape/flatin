@@ -54,7 +54,16 @@ final class PartSpec {
   /// false for parts that are internal, like a prefix.
   final bool display;
 
-  PartSpec({required this.name, required this.label, this.display = true});
+  /// The keys that can hold this part, most likely first; an item's part is
+  /// the first of them the item has.
+  final List<FormKey> keys;
+
+  PartSpec({
+    required this.name,
+    required this.label,
+    this.display = true,
+    this.keys = const [],
+  });
 }
 
 /// One `type_inference` rule (S11).
@@ -367,6 +376,9 @@ final class GrammarType {
 
   final DeponentSpec? deponent;
 
+  /// S26: the genus of every item of this type.
+  final String? genus;
+
   GrammarType({
     required this.name,
     this.isAbstract = false,
@@ -381,6 +393,7 @@ final class GrammarType {
     this.slots = const {},
     this.sandhi = const [],
     this.deponent,
+    this.genus,
   });
 
   bool get isLeaf => delegates.isEmpty && composes.isEmpty;
@@ -408,6 +421,7 @@ final class GrammarType {
     slots: {...parent.slots, ...slots},
     sandhi: sandhi.isNotEmpty ? sandhi : parent.sandhi,
     deponent: deponent ?? parent.deponent,
+    genus: genus ?? parent.genus,
   );
 }
 
@@ -449,6 +463,15 @@ final class GrammarItem {
   /// S25: `passiv: unpersönlich`.
   final bool impersonalPassive;
 
+  /// S26: the item's own genus codes; two for a noun of common gender.
+  final List<String> genus;
+
+  /// S27: the type whose rules tell which of the item's forms are irregular.
+  final String? regularType;
+
+  /// S27: `regular_passiv: unpersönlich`, the passive of the regular reading.
+  final bool regularImpersonalPassive;
+
   GrammarItem({
     required this.id,
     required this.translation,
@@ -464,6 +487,9 @@ final class GrammarItem {
     this.declaredType,
     this.typeRule,
     this.impersonalPassive = false,
+    this.genus = const [],
+    this.regularType,
+    this.regularImpersonalPassive = false,
   });
 
   /// The first spelling of [part], or null.
@@ -520,6 +546,9 @@ final class GrammarFile {
   final String? givenPart;
   final String? lemmaPart;
 
+  /// The keys the base-forms focus asks of every item that has them.
+  final List<FormKey> baseForms;
+
   /// Rules in part declaration order, then list order (S11).
   final List<InferenceRule> typeInference;
 
@@ -540,6 +569,17 @@ final class GrammarFile {
   /// Item id → its keys.
   late final Map<String, ItemKeys> keysByItem;
 
+  /// S27: item id → the item read as its `regular_type`; its keys are in
+  /// [keysByItem] under its own id.
+  final Map<String, GrammarItem> regularItems = {};
+
+  /// S26: the genus codes of [item]; empty for an item of a class without one.
+  List<String> genusOf(GrammarItem item) =>
+      switch (types[item.typeName]!.genus) {
+        final genus? => [genus],
+        null => item.genus,
+      };
+
   GrammarFile({
     required this.path,
     required this.language,
@@ -552,6 +592,7 @@ final class GrammarFile {
     required this.declaredTypes,
     this.givenPart,
     this.lemmaPart,
+    this.baseForms = const [],
   });
 
   GrammarItem item(String id) => items.firstWhere(
@@ -686,6 +727,7 @@ class _FileParser {
       parts: parts,
       givenPart: defaults?['given_part'] as String?,
       lemmaPart: defaults?['lemma_part'] as String?,
+      baseForms: _keyList(defaults?['base_forms']),
       typeInference: _typeInference(parts),
       sandhi: _sandhi(),
       classes: classes,
@@ -798,6 +840,7 @@ class _FileParser {
           name: '${entry.key}',
           label: _text((entry.value as YamlMap)['label'], 'part ${entry.key}'),
           display: (entry.value as YamlMap)['display'] as bool? ?? true,
+          keys: _keyList((entry.value as YamlMap)['key']),
         ),
     };
   }
@@ -960,6 +1003,11 @@ class _FileParser {
           for (final id in (spec['sandhi'] as YamlList?) ?? const []) '$id',
         ],
         deponent: _deponent(spec['deponent'], 'type $name'),
+        genus: switch (_genus(spec['genus'], 'type $name', axes)) {
+          [] => null,
+          [final genus] => genus,
+          _ => _bad('S26', 'type $name gives one genus'),
+        },
       );
     }
     return types;
@@ -1317,6 +1365,19 @@ class _FileParser {
     _bad('S13', 'type $type: a compose part needs self, lexeme, slot or stem');
   }
 
+  /// S26: codes of the axis `genus`, without repeats.
+  List<String> _genus(Object? node, String where, Axes axes) {
+    if (node == null) return const [];
+    final codes = [for (final code in _asList(node)) '$code'];
+    final axis = axes.axes.where((a) => a.id == 'genus').firstOrNull;
+    if (axis == null ||
+        codes.toSet().length != codes.length ||
+        codes.any((code) => axis.indexOf(code) < 0)) {
+      _bad('S26', '$where: "genus: $node" is no list of genus codes');
+    }
+    return codes;
+  }
+
   DeponentSpec? _deponent(Object? node, String where) {
     if (node == null) return null;
     if (node is String && node == 'all') return DeponentSpec.all();
@@ -1371,6 +1432,16 @@ class _FileParser {
           item: id,
         ),
       };
+      final regularImpersonal = switch (spec['regular_passiv']) {
+        null => false,
+        'unpersönlich' when spec['regular_type'] != null => true,
+        final other => _bad(
+          'S27',
+          '"regular_passiv: $other" is not "unpersönlich" next to a '
+              'regular_type',
+          item: id,
+        ),
+      };
       if (impersonal && spec['deponent'] != null) {
         _bad('S25', 'a deponent has no impersonal passive', item: id);
       }
@@ -1414,6 +1485,9 @@ class _FileParser {
           deNoun: spec['de_noun'] as String?,
           slots: _slots(spec['slots'], 'item $id'),
           impersonalPassive: impersonal,
+          genus: _genus(spec['genus'], 'item $id', file.axes),
+          regularType: spec['regular_type'] as String?,
+          regularImpersonalPassive: regularImpersonal,
         ),
       );
     }
@@ -1429,6 +1503,11 @@ const _personalPassive = [
 ];
 
 Iterable<Object?> _asList(Object? node) => node is YamlList ? node : [node];
+
+List<FormKey> _keyList(Object? node) => [
+  if (node != null)
+    for (final key in _asList(node)) '$key',
+];
 
 // ---------------------------------------------------------------- linking
 
@@ -1650,6 +1729,9 @@ class _Linker {
       declaredType: declared,
       typeRule: matched,
       impersonalPassive: item.impersonalPassive,
+      genus: item.genus,
+      regularType: item.regularType,
+      regularImpersonalPassive: item.regularImpersonalPassive,
     );
   }
 
@@ -1661,10 +1743,68 @@ class _Linker {
       _checkDeponent(file, item, type);
       _checkSlots(file, item, type);
       _checkLexemeAcyclic(file, item, [item.id]);
+      _checkGenus(file, item, type);
     }
     for (final item in file.items) {
       file.keysByItem[item.id] = _planKeys(file, item);
     }
+    for (final item in file.items) {
+      if (item.regularType case final name?) _planRegular(file, item, name);
+    }
+  }
+
+  /// S26: once a type of a class gives a genus, every item of the class has
+  /// exactly one source of it.
+  void _checkGenus(GrammarFile file, GrammarItem item, GrammarType type) {
+    final needed = file.types.values.any(
+      (t) => t.genus != null && t.wordClass == type.wordClass,
+    );
+    final sources = [
+      if (type.genus != null) 'type',
+      if (item.genus.isNotEmpty) 'item',
+    ];
+    if (needed ? sources.length != 1 : sources.isNotEmpty) {
+      _fail(
+        'S26',
+        file.path,
+        needed
+            ? 'a ${type.wordClass} gives its genus in its type or in the item, '
+                  'here: ${sources.isEmpty ? "nowhere" : sources.join(" and ")}'
+            : 'no type of class ${type.wordClass} gives a genus, so the item '
+                  'gives none',
+        item: item.id,
+      );
+    }
+  }
+
+  /// S27: the item read as [name], with its parts, deponent, slots and
+  /// impersonal passive (S25 or `regular_passiv`), and none of its forms.
+  void _planRegular(GrammarFile file, GrammarItem item, String name) {
+    final type = file.types[name];
+    if (type == null || type.isAbstract || name == item.typeName) {
+      _fail(
+        'S27',
+        file.path,
+        'regular_type "$name" is no other concrete type of this file',
+        item: item.id,
+      );
+    }
+    final regular = GrammarItem(
+      id: '${item.id}~$name',
+      translation: item.translation,
+      parts: item.parts,
+      forms: const {},
+      absent: const [],
+      typeName: name,
+      lemma: item.lemma,
+      deponent: item.deponent,
+      slots: item.slots,
+      impersonalPassive:
+          item.impersonalPassive || item.regularImpersonalPassive,
+    );
+    _checkStems(file, regular, type);
+    file.keysByItem[regular.id] = _planKeys(file, regular);
+    file.regularItems[item.id] = regular;
   }
 
   /// S3 and S4.

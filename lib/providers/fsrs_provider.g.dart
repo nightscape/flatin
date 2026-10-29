@@ -311,7 +311,7 @@ final class NextDueItemProvider
   }
 }
 
-String _$nextDueItemHash() => r'71aab425f369a6a7a2c63b4885c1730ee96c0a08';
+String _$nextDueItemHash() => r'e34e2308c3b0e16c30d26052e1cf5bc850c1e80c';
 
 /// The next due item of [dataFileId] that [focus] includes.
 
