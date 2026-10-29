@@ -135,6 +135,13 @@ const List<TownSprite> townSprites = [
     bottom: 0.5131,
   ),
   (
+    sprite: 'moneta',
+    building: 'moneta',
+    left: 0.4121,
+    width: 0.0811,
+    bottom: 0.5257,
+  ),
+  (
     sprite: 'castellum',
     building: 'aquaeductus',
     left: 0.8096,

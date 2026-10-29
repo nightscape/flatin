@@ -154,7 +154,7 @@ void main() {
       File(gameRulesAsset).readAsStringSync(),
       gameRulesAsset,
     );
-    expect(rules.buildings, hasLength(21));
+    expect(rules.buildings, hasLength(22));
     for (final b in rules.buildings) {
       expect(
         File('assets/town/${b.id}.png').existsSync(),

@@ -226,10 +226,12 @@
       "castra": "Camp",
       "bibliotheca": "Library",
       "amphitheatrum": "Amphitheatre",
-      "argentaria": "Bank"
+      "argentaria": "Bank",
+      "moneta": "Moneta"
     },
     "effect": {
-      "argentaria": "Doubles all coins"
+      "argentaria": "Doubles all coins",
+      "moneta": "Multiplies all coins by 5"
     }
   },
   "language": {

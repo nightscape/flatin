@@ -226,10 +226,12 @@
       "castra": "Lager",
       "bibliotheca": "Bibliothek",
       "amphitheatrum": "Amphitheater",
-      "argentaria": "Wechselstube"
+      "argentaria": "Wechselstube",
+      "moneta": "Moneta"
     },
     "effect": {
-      "argentaria": "Verdoppelt alle Münzen"
+      "argentaria": "Verdoppelt alle Münzen",
+      "moneta": "Verfünffacht alle Münzen"
     }
   },
   "language": {

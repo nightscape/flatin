@@ -55,3 +55,6 @@ buildings:
   - id: argentaria
     price: {coins: 1000}
     modifies: [{resource: coins, multiply: 2}]
+  - id: moneta
+    price: {coins: 10000}
+    modifies: [{resource: coins, multiply: 5}]

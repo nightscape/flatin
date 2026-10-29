@@ -28,11 +28,15 @@ const _prices = {
   'bibliotheca': 400,
   'amphitheatrum': 600,
   'argentaria': 1000,
+  'moneta': 10000,
 };
 
-/// The bank doubles every coin gained while it stands.
-int _times(String buildings) =>
-    buildings.split(' ').contains('argentaria') ? 2 : 1;
+/// The bank doubles and the mint quintuples every coin gained while it stands.
+int _times(String buildings) {
+  final built = buildings.split(' ');
+  return (built.contains('argentaria') ? 2 : 1) *
+      (built.contains('moneta') ? 5 : 1);
+}
 
 /// Coins and the bonus share of them.
 (int, int) _reference(RewardEvent event) => switch (event) {

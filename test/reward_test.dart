@@ -169,6 +169,34 @@ void main() {
     });
   });
 
+  group('the Moneta', () {
+    final right = _answered(
+      right: true,
+      firstAttempt: true,
+      wordDifficulty: null,
+      at: DateTime(2026, 10, 29),
+    );
+    const before = RewardLedger(earned: {coins: 11000});
+    RewardLedger buy(RewardLedger ledger, String id) => _rules
+        .buy(_rules.buildings.singleWhere((b) => b.id == id))
+        .fold(ledger, (l, e) => l.apply(e));
+    int gained(RewardLedger ledger) =>
+        _send(ledger, right).earnedOf(coins) - ledger.earnedOf(coins);
+
+    test('alone multiplies coins by 5', () {
+      final after = buy(before, 'moneta');
+      expect(_rules.multiplierOf(after, coins), 5);
+      expect(gained(after), 50);
+    });
+
+    test('with the Argentaria multiplies coins by 10', () {
+      final after = buy(buy(before, 'argentaria'), 'moneta');
+      expect(after.balance(coins), 0);
+      expect(_rules.multiplierOf(after, coins), 10);
+      expect(gained(after), 100);
+    });
+  });
+
   test('the shop offers the unbuilt buildings, each with a price', () {
     expect(_rules.unbuilt(const RewardLedger()), _rules.buildings);
     expect(
@@ -180,6 +208,7 @@ void main() {
       400,
       600,
       1000,
+      10000,
     });
   });
 
