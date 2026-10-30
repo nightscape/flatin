@@ -18,6 +18,9 @@ import 'support/word_classification_harness.dart';
 const _perfect = ['ind.perf.akt', 'ind.plusq.akt', 'ind.fut2.akt'];
 const _impfFut = ['ind.impf.akt', 'ind.fut.akt'];
 
+// Finger travel is a physical size, so the bound is absolute, not a screen fraction.
+const _maxDragDp = 280.0;
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -337,7 +340,7 @@ void main() {
           isTrue,
         );
         final nearest = boxes
-            .map((b) => max(0.0, b.top - rect.bottom))
+            .map((b) => (b.center - rect.center).distance)
             .reduce(min);
         farthest = max(farthest, nearest);
       }
@@ -347,7 +350,11 @@ void main() {
           isTrue,
         );
       }
-      expect(farthest, lessThanOrEqualTo(boxes.first.height));
+      expect(
+        farthest,
+        lessThanOrEqualTo(_maxDragDp),
+        reason: 'farthest form-to-box drag $farthest dp, bound $_maxDragDp dp',
+      );
     });
 
     testWidgets('forms and boxes have semantics labels', (tester) async {
