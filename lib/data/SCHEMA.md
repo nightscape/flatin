@@ -328,6 +328,24 @@ regular.
 A gerund form spelled like the neuter singular of the gerundive in its case
 follows from the gerundive and is not irregular (`abeundī`).
 
+**S28. Forms that follow by a rule.** The base-forms focus does not ask a form
+that a rule gives from a form that is asked, shown or itself dropped this way;
+the root of every chain is an asked or shown form. A rule counts only when its
+spelling equals the data's spelling of the form. Every other exercise still
+practises all forms.
+- Other persons: a person of a tense, voice and mood follows from its first
+  person singular when exactly one ending set of the file fits the ending of
+  that form (`ībam` gives `ībās`). The sets are read from the generated forms
+  of the regular conjugation types only, never from an irregular type, so
+  `-bō` gives `-bis` and `-am` gives `-ēs`. Two fitting sets drop nothing for
+  that tense: several sets fit `eō`, so the present of `īre` stays asked.
+- Konjunktiv Imperfekt Aktiv is the present infinitive plus the ending the
+  regular reading (S27) shows (`ferrent` from `ferre`).
+- Konjunktiv Plusquamperfekt Aktiv is the perfect infinitive plus that ending
+  (`īssent` from `īsse`).
+- The impersonal passive 3 sg of a verb with `passiv: unpersönlich` follows
+  from the active 3 sg of the same tense and mood (`ībātur` from `ībat`, which follows from `ībam`).
+
 **Collisions.** A key produced twice — by own forms, by delegation or by
 composition other than a variant rule (S24) — throws. There is no precedence between them; inheritance (S6) is
 the only override mechanism besides item overrides.

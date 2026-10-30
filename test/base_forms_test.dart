@@ -7,6 +7,7 @@ import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/data/word_focus.dart';
 import 'package:latin_practice/grammar/engine.dart';
 import 'package:latin_practice/grammar/schema.dart';
+import 'package:latin_practice/models/derivation.dart';
 import 'package:latin_practice/models/lesson_range.dart';
 import 'package:latin_practice/models/practice_item.dart';
 import 'package:latin_practice/models/reward.dart';
@@ -37,9 +38,51 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   late List<PracticeItem> all;
+  late GrammarEngine engine;
+  late GrammarFile verbsFile;
+  late Map<String, List<EndingSet>> endings;
   PracticeItem word(String id) => all.singleWhere((i) => i.id == id);
 
-  setUpAll(() async => all = await loadAllPracticeItems());
+  setUpAll(() async {
+    all = await loadAllPracticeItems();
+    engine = GrammarEngine(
+      parseGrammarFiles({
+        for (final f in ['latin_nouns', 'latin_verbs'])
+          'lib/data/$f.yaml': File('lib/data/$f.yaml').readAsStringSync(),
+      }),
+    );
+    verbsFile = await loadGrammarFile('verbs');
+    endings = endingSetsOf(engine, verbsFile);
+  });
+
+  FollowContext contextOf(String id, [Set<FormKey>? available]) {
+    final forms = engine.of('verbs', id).forms;
+    return FollowContext(
+      forms,
+      engine.regularOf('verbs', id)?.forms ?? const {},
+      verbsFile.item(id).impersonalPassive,
+      endings,
+      available ?? forms.keys.toSet(),
+    );
+  }
+
+  FormDerivation given(FormKey key, String spelling) =>
+      GivenForm(formKey: key, variants: [spelling]);
+
+  FollowContext made(
+    Map<FormKey, String> forms,
+    Map<FormKey, String> regular,
+    Map<String, List<EndingSet>> sets,
+  ) => FollowContext(
+    {for (final e in forms.entries) e.key: given(e.key, e.value)},
+    {for (final e in regular.entries) e.key: given(e.key, e.value)},
+    true,
+    sets,
+    forms.keys.toSet(),
+  );
+
+  bool dropsBy(FollowRule rule, FormKey key, FollowContext context) =>
+      rule(key, context)?.writes(context.forms[key]!) ?? false;
 
   test('a regular noun asks the genitive', () {
     expect(_baseForms(word('nouns:rex')), ['rēgis']);
@@ -145,38 +188,266 @@ void main() {
     );
   });
 
-  test('esse asks its principal parts, then every form the data lists', () {
+  test('esse asks its principal parts, then the forms no rule gives', () {
     final esse = word('verbs:esse');
     expect(_baseForms(esse).take(3), ['sum', 'fuī', 'futūrus']);
-    expect(_baseForms(esse), containsAll(['es', 'est', 'sumus', 'este']));
+    expect(_baseForms(esse), containsAll(['eram', 'erō', 'sim', 'essem']));
     expect(esse.baseFormKeys, isNot(contains('inf.praes.akt')));
-    expect(esse.baseFormKeys, hasLength(39));
+  });
+
+  test('rule 1 gives ībant from ībam, but not eunt from eō', () {
+    final ire = contextOf('ire');
+    expect(
+      followByFirstPerson('ind.impf.akt.3.pl', ire)!.source,
+      'ind.impf.akt.1.sg',
+    );
+    expect(dropsBy(followByFirstPerson, 'ind.impf.akt.3.pl', ire), isTrue);
+    expect(dropsBy(followByFirstPerson, 'ind.praes.akt.3.pl', ire), isFalse);
+    expect(word('verbs:ire').baseFormKeys, contains('ind.praes.akt.3.pl'));
+  });
+
+  test('rule 1 gives nothing when two ending sets fit the first person', () {
+    final key = 'ind.fut.akt';
+    final forms = {'$key.1.sg': 'amābō', '$key.3.sg': 'amābit'};
+    final one = <EndingSet>[
+      {'3.sg': ('ō', 'it')},
+    ];
+    final two = [
+      ...one,
+      {'3.sg': ('bō', 'bat')},
+    ];
+    expect(
+      followByFirstPerson('$key.3.sg', made(forms, {}, {key: one}))!.source,
+      '$key.1.sg',
+    );
+    expect(
+      followByFirstPerson('$key.3.sg', made(forms, {}, {key: two})),
+      isNull,
+    );
   });
 
   test(
-    'the verbs with a regular reading ask the forms of the golden',
-    () async {
-      final verbs = await loadGrammarFile('verbs');
-      final rows = <String>[
-        '| verb | key | asked form |',
-        '| --- | --- | --- |',
-      ];
-      for (final item in verbs.items.where((i) => i.regularType != null)) {
-        final verb = word('verbs:${item.id}');
-        for (final key in verb.baseFormKeys) {
-          rows.add(
-            '| ${item.lemma} (${item.regularType}) | $key '
-            '| ${verb.forms[verb.formOrder.indexOf(key)]} |',
+    'rule 1 drops nothing the single fitting ending set spells otherwise',
+    () {
+      final context = made(
+        {'ind.praes.akt.1.sg': 'eō', 'ind.praes.akt.2.sg': 'īs'},
+        {},
+        {
+          'ind.praes.akt': [
+            {'2.sg': ('ō', 'is')},
+          ],
+        },
+      );
+      expect(followByFirstPerson('ind.praes.akt.2.sg', context)!.gives, [
+        'eis',
+      ]);
+      expect(
+        dropsBy(followByFirstPerson, 'ind.praes.akt.2.sg', context),
+        isFalse,
+      );
+    },
+  );
+
+  test('rule 1 reads only an available first person', () {
+    final ire = contextOf('ire', {'ind.impf.akt.3.pl'});
+    expect(followByFirstPerson('ind.impf.akt.3.pl', ire), isNull);
+  });
+
+  test('rule 2 gives ferrent from ferre, but not a form spelled otherwise', () {
+    expect(
+      dropsBy(
+        followByImperfectSubjunctive,
+        'konj.impf.akt.3.pl',
+        contextOf('ferre', {'inf.praes.akt'}),
+      ),
+      isTrue,
+    );
+    final other = made(
+      {'inf.praes.akt': 'ferre', 'konj.impf.akt.3.pl': 'ferant'},
+      {'inf.praes.akt': 'ferere', 'konj.impf.akt.3.pl': 'fererent'},
+      {},
+    );
+    expect(
+      dropsBy(followByImperfectSubjunctive, 'konj.impf.akt.3.pl', other),
+      isFalse,
+    );
+  });
+
+  test('rule 3 gives īssent from īsse, but not a form spelled otherwise', () {
+    final ire = contextOf('ire', {'inf.perf.akt'});
+    expect(
+      dropsBy(followByPluperfectSubjunctive, 'konj.plusq.akt.3.pl', ire),
+      isTrue,
+    );
+    final other = made(
+      {'inf.perf.akt': 'īsse', 'konj.plusq.akt.3.pl': 'īvissent'},
+      {'inf.perf.akt': 'audīvisse', 'konj.plusq.akt.3.pl': 'audīvissent'},
+      {},
+    );
+    expect(
+      dropsBy(followByPluperfectSubjunctive, 'konj.plusq.akt.3.pl', other),
+      isFalse,
+    );
+  });
+
+  test('rule 4 gives ībātur from ībat, but not itum est from iit', () {
+    final ire = contextOf('ire');
+    expect(
+      dropsBy(followByImpersonalPassive, 'ind.impf.pass.3.sg', ire),
+      isTrue,
+    );
+    expect(
+      dropsBy(followByImpersonalPassive, 'ind.perf.pass.3.sg', ire),
+      isFalse,
+    );
+  });
+
+  test(
+    'rule 4 drops nothing the single fitting ending set spells otherwise',
+    () {
+      final context = made(
+        {'ind.fut.akt.3.sg': 'it', 'ind.fut.pass.3.sg': 'ītur'},
+        {},
+        {
+          'ind.fut.impersonal': [
+            {'3.sg': ('', 'ur')},
+          ],
+        },
+      );
+      expect(followByImpersonalPassive('ind.fut.pass.3.sg', context)!.gives, [
+        'itur',
+      ]);
+      expect(
+        dropsBy(followByImpersonalPassive, 'ind.fut.pass.3.sg', context),
+        isFalse,
+      );
+    },
+  );
+
+  test('rule 4 drops no passive of a verb without the impersonal passive', () {
+    expect(word('verbs:ferre').baseFormKeys, contains('ind.praes.pass.3.sg'));
+  });
+
+  test('no rule gives the present of esse or posse', () {
+    for (final id in ['esse', 'posse']) {
+      for (final tense in ['ind.praes.akt', 'konj.praes.akt']) {
+        for (final person in ['2.sg', '3.sg', '1.pl', '2.pl', '3.pl']) {
+          expect(
+            followedFrom('$tense.$person', contextOf(id)),
+            isNull,
+            reason: '$id $tense.$person',
           );
         }
       }
-      final table = '${rows.join('\n')}\n';
-      final golden = File('test/golden/base_forms_regular.md');
-      if (Platform.environment['BASE_FORMS_GOLDEN_UPDATE'] == '1') {
-        golden.writeAsStringSync(table);
+    }
+    final esse = word('verbs:esse').baseFormKeys;
+    for (final person in ['1.sg', '2.sg', '3.sg', '1.pl', '2.pl', '3.pl']) {
+      expect(esse, contains('ind.praes.akt.$person'), reason: person);
+    }
+  });
+
+  test('a dropped form leads back to an asked or shown form', () {
+    final lost = <String>[];
+    final paths = <String, List<FormKey>>{};
+    for (final item in verbsFile.items) {
+      final derivation = engine.of('verbs', item.id);
+      final regular = engine.regularOf('verbs', item.id);
+      final before = baseFormKeysBeforeRules(
+        verbsFile,
+        item,
+        derivation,
+        regular,
+      );
+      final roots = {...word('verbs:${item.id}').baseFormKeys, 'inf.praes.akt'};
+      final source = <FormKey, FormKey>{};
+      var changed = true;
+      while (changed) {
+        changed = false;
+        final context = FollowContext(
+          derivation.forms,
+          regular?.forms ?? const {},
+          item.impersonalPassive,
+          endings,
+          {...roots, ...source.keys},
+        );
+        for (final key in before.where((k) => !roots.contains(k))) {
+          if (source.containsKey(key)) continue;
+          for (final rule in followRules) {
+            final follow = rule(key, context);
+            if (follow != null && follow.writes(derivation.forms[key]!)) {
+              source[key] = follow.source;
+              changed = true;
+              break;
+            }
+          }
+        }
       }
-      expect(table, golden.readAsStringSync());
-    },
+      for (final key in before.where((k) => !roots.contains(k))) {
+        if (!source.containsKey(key)) {
+          lost.add('${item.id} $key ${derivation.forms[key]!.result}');
+          continue;
+        }
+        final path = [key];
+        while (!roots.contains(path.last)) {
+          path.add(source[path.last]!);
+        }
+        paths['${item.id} $key'] = path;
+      }
+    }
+    expect(lost, isEmpty);
+    expect(paths['ire ind.impf.pass.3.sg'], [
+      'ind.impf.pass.3.sg',
+      'ind.impf.akt.3.sg',
+      'ind.impf.akt.1.sg',
+    ]);
+  });
+
+  test('a non-focus round of ire still asks the forms the focus drops', () {
+    final ire = word('verbs:ire');
+    final every = ire.formOrder.toSet();
+    expect(ire.filterForms(every).keys, contains('ind.impf.akt.3.pl'));
+    expect(askedBaseForms(ire, every), isNot(contains('ind.impf.akt.3.pl')));
+  });
+
+  test('ire and its compounds ask at most 14 forms', () {
+    expect(word('verbs:ire').baseFormKeys, hasLength(14));
+    expect(word('verbs:abire').baseFormKeys, hasLength(13));
+  });
+
+  Future<void> expectGolden(
+    String name,
+    bool Function(GrammarItem) selects,
+  ) async {
+    final verbs = await loadGrammarFile('verbs');
+    final rows = <String>['| verb | key | asked form |', '| --- | --- | --- |'];
+    for (final item in verbs.items.where(selects)) {
+      final verb = word('verbs:${item.id}');
+      for (final key in verb.baseFormKeys) {
+        rows.add(
+          '| ${item.lemma} (${item.regularType ?? item.typeName}) | $key '
+          '| ${verb.forms[verb.formOrder.indexOf(key)]} |',
+        );
+      }
+    }
+    final table = '${rows.join('\n')}\n';
+    final golden = File('test/golden/$name.md');
+    if (Platform.environment['BASE_FORMS_GOLDEN_UPDATE'] == '1') {
+      golden.writeAsStringSync(table);
+    }
+    expect(table, golden.readAsStringSync());
+  }
+
+  test(
+    'the verbs with a regular reading ask the forms of the golden',
+    () => expectGolden('base_forms_regular', (i) => i.regularType != null),
+  );
+
+  test(
+    'the irregular verbs without a regular reading ask the forms of the golden',
+    () => expectGolden(
+      'base_forms_irregular',
+      (i) => i.regularType == null && irregularVerbTypes.contains(i.typeName),
+    ),
   );
 
   test('every noun and verb has a base form besides its lemma', () {

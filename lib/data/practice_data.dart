@@ -5,6 +5,7 @@ import '../grammar/engine.dart';
 import '../grammar/schema.dart';
 import '../models/derivation.dart';
 import '../models/practice_item.dart';
+import 'word_focus.dart' show irregularVerbTypes;
 
 /// The data files, by data file id. Nouns and verbs are parsed together
 /// because the verbs delegate their participles to noun ending tables.
@@ -171,9 +172,12 @@ Future<List<PracticeItem>> loadPracticeItems(
     for (final item in all.parsed(courseLanguage).file(file.dataFileId).items)
       item.id: item.translation,
   };
-  return loaded.itemsByFile[file.dataFileId] ??= [
+  final cached = loaded.itemsByFile[file.dataFileId];
+  if (cached != null) return cached;
+  final endings = endingSetsOf(loaded.engine, file);
+  return loaded.itemsByFile[file.dataFileId] = [
     for (final item in file.items)
-      _practiceItem(loaded.engine, file, item, book[item.id]!),
+      _practiceItem(loaded.engine, file, item, book[item.id]!, endings),
   ];
 }
 
@@ -194,6 +198,7 @@ PracticeItem _practiceItem(
   GrammarFile file,
   GrammarItem item,
   String bookTranslation,
+  Map<String, List<EndingSet>> endings,
 ) {
   final derivation = engine.of(file.dataFileId, item.id);
   final keys = derivation.forms.keys.toList();
@@ -235,6 +240,7 @@ PracticeItem _practiceItem(
             item,
             derivation,
             engine.regularOf(file.dataFileId, item.id),
+            endings,
           ),
     genus: file.genusOf(item),
     inferredForms: [
@@ -247,31 +253,314 @@ PracticeItem _practiceItem(
 }
 
 /// The file's base forms, then the item's displayed parts, then every form
-/// the rules cannot give and its [regular] reading writes otherwise; without
-/// the lemma's key, which the screen shows.
+/// the rules cannot give and its [regular] reading writes otherwise, minus the
+/// forms [dropFollowing] removes; without the lemma's key, which the screen
+/// shows.
 List<FormKey> _baseFormKeys(
+  GrammarFile file,
+  GrammarItem item,
+  Derivation derivation,
+  Derivation? regular,
+  Map<String, List<EndingSet>> endings,
+) {
+  final asked = baseFormKeysBeforeRules(file, item, derivation, regular);
+  final lemmaKey = _keyOf(
+    file,
+    item,
+    derivation,
+    file.lemmaPart ?? file.givenPart!,
+  );
+  return dropFollowing(
+    asked,
+    {lemmaKey},
+    derivation.forms,
+    regular?.forms,
+    item.impersonalPassive,
+    endings,
+  );
+}
+
+FormKey _keyOf(
+  GrammarFile file,
+  GrammarItem item,
+  Derivation derivation,
+  String part,
+) => file.parts[part]!.keys.firstWhere(
+  derivation.forms.containsKey,
+  orElse: () => throw StateError(
+    '${file.dataFileId}:${item.id} has no key for its part "$part"',
+  ),
+);
+
+/// The base forms before [dropFollowing] removes the ones a rule gives.
+List<FormKey> baseFormKeysBeforeRules(
   GrammarFile file,
   GrammarItem item,
   Derivation derivation,
   Derivation? regular,
 ) {
   final forms = derivation.forms;
-  FormKey keyOf(String part) => file.parts[part]!.keys.firstWhere(
-    forms.containsKey,
-    orElse: () => throw StateError(
-      '${file.dataFileId}:${item.id} has no key for its part "$part"',
-    ),
-  );
   return ({
-    ...file.baseForms.where(forms.containsKey),
-    for (final name in item.parts.keys)
-      if (file.parts[name]!.display) keyOf(name),
-    for (final MapEntry(:key, :value) in forms.entries)
-      if (value is IrregularForm &&
-          !_writes(regular?.forms[key], value) &&
-          !_writes(_gerundiveOf(key, forms), value))
-        key,
-  }..remove(keyOf((file.lemmaPart ?? file.givenPart)!))).toList();
+        ...file.baseForms.where(forms.containsKey),
+        for (final name in item.parts.keys)
+          if (file.parts[name]!.display) _keyOf(file, item, derivation, name),
+        for (final MapEntry(:key, :value) in forms.entries)
+          if (value is IrregularForm &&
+              !_writes(regular?.forms[key], value) &&
+              !_writes(_gerundiveOf(key, forms), value))
+            key,
+      }..remove(
+        _keyOf(file, item, derivation, (file.lemmaPart ?? file.givenPart)!),
+      ))
+      .toList();
+}
+
+/// What a rule reads: the item's [forms], its [regular] reading (empty without
+/// one), whether it has the [impersonalPassive], the [endings] of the file and
+/// the forms [available], asked or shown.
+class FollowContext {
+  final Map<FormKey, FormDerivation> forms;
+  final Map<FormKey, FormDerivation> regular;
+  final bool impersonalPassive;
+  final Map<String, List<EndingSet>> endings;
+  final Set<FormKey> available;
+
+  const FollowContext(
+    this.forms,
+    this.regular,
+    this.impersonalPassive,
+    this.endings,
+    this.available,
+  );
+}
+
+/// The spellings a rule gives a form from the available form [source].
+class Follow {
+  final FormKey source;
+  final List<String> gives;
+
+  const Follow(this.source, this.gives);
+
+  bool writes(FormDerivation form) =>
+      gives.join('|') == form.variants.join('|');
+}
+
+/// What a rule gives `key` from an available form, or null when the rule does
+/// not apply to `key`.
+typedef FollowRule = Follow? Function(FormKey key, FollowContext context);
+
+/// S28: the rules.
+const followRules = <FollowRule>[
+  followByFirstPerson,
+  followByImperfectSubjunctive,
+  followByPluperfectSubjunctive,
+  followByImpersonalPassive,
+];
+
+/// The form `key` follows from by some rule that gives the data's spelling.
+FormKey? followedFrom(
+  FormKey key,
+  FollowContext context, [
+  List<FollowRule> rules = followRules,
+]) {
+  for (final rule in rules) {
+    final follow = rule(key, context);
+    if (follow != null && follow.writes(context.forms[key]!)) {
+      return follow.source;
+    }
+  }
+  return null;
+}
+
+/// S28: [asked] without the forms some rule gives from a form that is asked or
+/// [shown]; a source that is dropped itself leads back to an asked or shown
+/// form, because no rule reads a form that depends on its own target.
+List<FormKey> dropFollowing(
+  List<FormKey> asked,
+  Set<FormKey> shown,
+  Map<FormKey, FormDerivation> forms,
+  Map<FormKey, FormDerivation>? regular,
+  bool impersonalPassive,
+  Map<String, List<EndingSet>> endings,
+) {
+  final context = FollowContext(
+    forms,
+    regular ?? const {},
+    impersonalPassive,
+    endings,
+    {...asked, ...shown},
+  );
+  return [
+    for (final key in asked)
+      if (followedFrom(key, context) == null) key,
+  ];
+}
+
+/// The endings one tense, voice and mood swaps for another person, by person
+/// (`2.sg`): the ending the 1 sg spelling loses and the ending it takes.
+typedef EndingSet = Map<String, (String, String)>;
+
+/// The ending sets of the impersonal passive are filed under this tense voice.
+const impersonal = 'impersonal';
+
+const _persons = ['2.sg', '3.sg', '1.pl', '2.pl', '3.pl'];
+
+/// S28: the [EndingSet]s of each tense, voice and mood (`ind.fut.akt`) that
+/// the generated forms of the regular conjugation types show, never those of
+/// an irregular type, whose paradigm is the verb's own; the impersonal passive's sets
+/// are filed under `mood.tense.impersonal`.
+Map<String, List<EndingSet>> endingSetsOf(
+  GrammarEngine engine,
+  GrammarFile file,
+) {
+  final byFamily = <String, Map<String, EndingSet>>{};
+  final doneTypes = <String>{};
+  for (final item in file.items.where(
+    (i) => !irregularVerbTypes.contains(i.typeName),
+  )) {
+    final forms = engine.of(file.dataFileId, item.id).forms;
+    for (final key in forms.keys.where((k) => k.endsWith('.1.sg'))) {
+      final family = key.substring(0, key.length - 5);
+      final generated = [
+        for (final person in ['1.sg', ..._persons]) forms['$family.$person'],
+      ];
+      if (generated.any((f) => f == null || f is IrregularForm) ||
+          !doneTypes.add('${item.typeName}/$family')) {
+        continue;
+      }
+      final one = generated.first!.result;
+      byFamily.putIfAbsent(family, () => {})[item.typeName] = {
+        for (var i = 0; i < _persons.length; i++)
+          _persons[i]: _swap(one, generated[i + 1]!.result),
+      };
+    }
+    for (final key in forms.keys.where((k) => k.endsWith('.akt.3.sg'))) {
+      final active = forms[key]!;
+      final passive = forms[key.replaceFirst('.akt.', '.pass.')];
+      final family = '${key.substring(0, key.length - 9)}.$impersonal';
+      if (passive == null ||
+          active is IrregularForm ||
+          passive is IrregularForm ||
+          !doneTypes.add('${item.typeName}/$family')) {
+        continue;
+      }
+      byFamily.putIfAbsent(family, () => {})[item.typeName] = {
+        '3.sg': _swap(active.result, passive.result),
+      };
+    }
+  }
+  return {
+    for (final MapEntry(:key, :value) in byFamily.entries)
+      key: {
+        for (final set in value.values) set.toString(): set,
+      }.values.toList(),
+  };
+}
+
+(String, String) _swap(String from, String to) {
+  var common = 0;
+  while (common < from.length &&
+      common < to.length &&
+      from[common] == to[common]) {
+    common++;
+  }
+  return (from.substring(common), to.substring(common));
+}
+
+/// S28: another person of a tense follows from the first person singular
+/// when exactly one ending set of the file fits that form's ending
+/// (`ībās` from `ībam`, not `īs` from `eō`).
+Follow? followByFirstPerson(FormKey key, FollowContext context) {
+  final parts = key.split('.');
+  if (parts.length != 5 ||
+      !const {'ind', 'konj'}.contains(parts[0]) ||
+      (parts[3] == '1' && parts[4] == 'sg')) {
+    return null;
+  }
+  final family = parts.take(3).join('.');
+  return _followByEndings(
+    '$family.1.sg',
+    family,
+    '${parts[3]}.${parts[4]}',
+    context,
+  );
+}
+
+/// S28: the active imperfect subjunctive is the present infinitive plus an
+/// ending (`ferrēs` from `ferre`).
+Follow? followByImperfectSubjunctive(FormKey key, FollowContext context) =>
+    key.startsWith('konj.impf.akt.')
+    ? _followByRegularSwap('inf.praes.akt', key, context)
+    : null;
+
+/// S28: the active pluperfect subjunctive is the perfect infinitive plus an
+/// ending (`īssem` from `īsse`).
+Follow? followByPluperfectSubjunctive(FormKey key, FollowContext context) =>
+    key.startsWith('konj.plusq.akt.')
+    ? _followByRegularSwap('inf.perf.akt', key, context)
+    : null;
+
+/// S28: the impersonal passive follows from the active third person singular
+/// of the same tense and mood (`ībātur` from `ībat`).
+Follow? followByImpersonalPassive(FormKey key, FollowContext context) {
+  final parts = key.split('.');
+  return context.impersonalPassive &&
+          parts.length == 5 &&
+          parts[2] == 'pass' &&
+          parts[3] == '3' &&
+          parts[4] == 'sg'
+      ? _followByEndings(
+          '${parts[0]}.${parts[1]}.akt.3.sg',
+          '${parts[0]}.${parts[1]}.$impersonal',
+          '3.sg',
+          context,
+        )
+      : null;
+}
+
+/// The spelling of `source` with the swap's ending replaced, or null when
+/// `source` does not end in it.
+List<String>? _swapped(Iterable<String> source, (String, String) swap) =>
+    source.every((v) => v.endsWith(swap.$1))
+    ? [
+        for (final v in source)
+          v.substring(0, v.length - swap.$1.length) + swap.$2,
+      ]
+    : null;
+
+/// The spellings `source` gives for `person` when exactly one ending set under
+/// `setsKey` fits it.
+Follow? _followByEndings(
+  FormKey source,
+  String setsKey,
+  String person,
+  FollowContext context,
+) {
+  if (!context.available.contains(source)) return null;
+  final one = context.forms[source]!.variants;
+  final fitting = [
+    for (final set in context.endings[setsKey] ?? const <EndingSet>[])
+      if (set.values.every((swap) => _swapped(one, swap) != null)) set,
+  ];
+  return fitting.length == 1
+      ? Follow(source, _swapped(one, fitting.single[person]!)!)
+      : null;
+}
+
+/// The spellings `source` gives when its ending is swapped the way the
+/// regular reading swaps it into `target`.
+Follow? _followByRegularSwap(
+  FormKey source,
+  FormKey target,
+  FollowContext context,
+) {
+  final from = context.regular[source]?.result;
+  final to = context.regular[target]?.result;
+  if (from == null || to == null || !context.available.contains(source)) {
+    return null;
+  }
+  final gives = _swapped(context.forms[source]!.variants, _swap(from, to));
+  return gives == null ? null : Follow(source, gives);
 }
 
 bool _writes(FormDerivation? form, FormDerivation value) =>
