@@ -141,8 +141,16 @@ _Built? _verbItem(
   );
 }
 
+/// The genus letters (m, f, n) of a noun line's description: a letter on its
+/// own followed by `.`, `,`, a space or the end, as in `n.`, `ei, f` or `m, f`.
+Set<String> genusOf(String description) => {
+  for (final m in RegExp(r'\b([mfn])(?=[.,\s]|$)').allMatches(description))
+    m[1]!,
+};
+
 /// [needsGenus]: the item gives its genus (S26), read from the line's
-/// `i, n.`; a line without one is left out.
+/// description; a line with no genus letter in any form `genusOf` accepts is
+/// left out.
 _Built? _nounItem(
   Collatinus collatinus,
   String lemmaKey,
@@ -159,9 +167,7 @@ _Built? _nounItem(
   final radical = _radical(fields[2]);
   if (radical != null && radical.length > 1) return null;
   final stem = radical?.single ?? nom.substring(0, nom.length - cut);
-  final genus = {
-    for (final m in RegExp(r'\b([mfn])\.').allMatches(fields[4])) m[1]!,
-  };
+  final genus = genusOf(fields[4]);
   if (needsGenus && genus.isEmpty) return null;
   return (
     idSpelling: nom,
