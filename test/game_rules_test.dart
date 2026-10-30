@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/data/game_rules.dart';
+import 'package:latin_practice/data/rewards.dart';
 import 'package:latin_practice/models/reward.dart';
 
 import 'support/i18n_keys.dart';
@@ -171,5 +172,16 @@ void main() {
         }
       }
     }
+  });
+
+  test('every building has a town slot and every slot a building', () {
+    final rules = GameRules.parse(
+      File(gameRulesAsset).readAsStringSync(),
+      gameRulesAsset,
+    );
+    final ids = {for (final b in rules.buildings) b.id};
+    final slotted = {for (final s in townSprites) s.building};
+    expect(slotted.difference(ids), isEmpty, reason: 'slots without building');
+    expect(ids.difference(slotted), isEmpty, reason: 'buildings without slot');
   });
 }

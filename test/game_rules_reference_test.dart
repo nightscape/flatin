@@ -111,10 +111,12 @@ void main() {
 
   test('the rule file and the reference agree after every event', () {
     var steps = 0;
-    var doubled = 0;
+    final richStart = rules.buildings.fold(0, (s, b) => s + b.price[coins]!);
+    final bought = <String>{};
+    final multipliers = <int>{};
     for (var seed = 0; seed < 600; seed++) {
-      // Odd seeds start rich enough that the bank gets bought.
-      final start = seed.isOdd ? 1000 : 0;
+      // Odd seeds start rich enough to buy every building.
+      final start = seed.isOdd ? richStart : 0;
       var ledger = RewardLedger(earned: {coins: start});
       var expected = (balance: start, earned: start, bonus: 0, buildings: '');
       for (final step in _sequence(Random(seed))) {
@@ -126,17 +128,18 @@ void main() {
               if (!built.contains(e.key) && e.value <= expected.balance) e,
           ];
           if (offer.isEmpty) continue;
-          final bought = offer[pick % offer.length];
+          final choice = offer[pick % offer.length];
+          bought.add(choice.key);
           ledger = rules
-              .buy(rules.buildings.singleWhere((b) => b.id == bought.key))
+              .buy(rules.buildings.singleWhere((b) => b.id == choice.key))
               .fold(ledger, (l, e) => l.apply(e));
           expected = (
-            balance: expected.balance - bought.value,
+            balance: expected.balance - choice.value,
             earned: expected.earned,
             bonus: expected.bonus,
             buildings: [
               if (expected.buildings.isNotEmpty) expected.buildings,
-              bought.key,
+              choice.key,
             ].join(' '),
           );
         } else {
@@ -146,7 +149,7 @@ void main() {
               .fold(ledger, (l, e) => l.apply(e));
           final (gained, bonus) = _reference(event);
           final times = _times(expected.buildings);
-          if (times > 1 && gained > 0) doubled++;
+          if (gained > 0) multipliers.add(times);
           expected = (
             balance: expected.balance + gained * times,
             earned: expected.earned + gained * times,
@@ -158,6 +161,7 @@ void main() {
       }
     }
     expect(steps, 600 * 80);
-    expect(doubled, greaterThan(0));
+    expect(bought, {for (final b in rules.buildings) b.id});
+    expect(multipliers, {1, 2, 5, 10});
   });
 }
