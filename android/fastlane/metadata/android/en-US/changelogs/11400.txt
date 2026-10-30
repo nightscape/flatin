@@ -1,0 +1,3 @@
+* New exercise: tick forms and drag them to their tense.
+* īre now has only the impersonal passive (itur, itum est).
+* "Base forms only" asks fewer forms: forms that follow by a regular rule are no longer asked.
