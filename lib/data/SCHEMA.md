@@ -317,6 +317,11 @@ item `genus: <code>` or a list of codes for a noun of common gender
 gives a genus, every item of that class has exactly one source of it: its
 type's or its own. An item of any other class gives none. A missing, doubled or
 unknown genus throws.
+A noun whose gender differs from its declension's type gets a type of its own
+that inherits the declension; an item never overrides the type's genus.
+Example, as a type and not as data: `O-Deklination-femininum` with
+`class: deklination`, `inherits_from: O-Deklination-maskulinum` and
+`genus: f` holds `humus`.
 
 **S27. Regular reading.** `regular_type: <type>` names another concrete type
 of the file. The item is read once more as that type, with its parts and

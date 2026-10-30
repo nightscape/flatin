@@ -1773,6 +1773,7 @@ class _Linker {
         needed
             ? 'a ${type.wordClass} gives its genus in its type or in the item, '
                   'here: ${sources.isEmpty ? "nowhere" : sources.join(" and ")}'
+                  '${sources.length == 2 ? "; give the noun its own type that inherits the declension and sets the genus" : ""}'
             : 'no type of class ${type.wordClass} gives a genus, so the item '
                   'gives none',
         item: item.id,

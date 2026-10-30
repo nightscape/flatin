@@ -769,6 +769,78 @@ void main() {
       );
     });
   });
+
+  group('a noun whose gender differs from its declension (S26)', () {
+    const dataPath = 'lib/data/latin_nouns.yaml';
+    const anchor = '  O-Deklination-neutrum:\n';
+    const feminine = '''  O-Deklination-femininum:
+    class: deklination
+    inherits_from: O-Deklination-maskulinum
+    genus: f
+    display: {de: O-Deklination-femininum, en: "2nd declension, feminine"}
+
+''';
+    const humus = '''  - type: O-Deklination-femininum
+    translation: {de: die Erde, en: soil}
+    parts: {nom: "humus"}
+''';
+
+    Map<String, String> nounsWith(List<(String, String)> edits) {
+      var text = File(dataPath).readAsStringSync();
+      for (final (original, replacement) in edits) {
+        expect(text.split(original).length, 2, reason: original);
+        text = text.replaceFirst(original, replacement);
+      }
+      return {dataPath: text};
+    }
+
+    Map<String, String> withFeminineHumus() => nounsWith([
+      (anchor, '$feminine$anchor'),
+      ('\nitems:\n', '\nitems:\n$humus'),
+    ]);
+
+    test('a type inheriting the declension with another genus', () {
+      final nouns = parseGrammarFiles(withFeminineHumus()).single;
+      final engine = GrammarEngine([nouns]);
+      final item = nouns.items.singleWhere((i) => i.id == 'humus');
+      expect(nouns.genusOf(item), ['f']);
+      final masculineForms = engine.of('nouns', 'servus').forms;
+      final feminineForms = engine.of('nouns', 'humus').forms;
+      expect(feminineForms.keys, masculineForms.keys);
+      expect(feminineForms['gen.pl']!.variants, ['humōrum']);
+    });
+
+    test('a noun keeps its id when it moves to another type', () {
+      final moved = parseGrammarFiles(
+        nounsWith([
+          (anchor, '$feminine$anchor'),
+          (
+            '    parts: {nom: "servus"}\n',
+            '    type: O-Deklination-femininum\n    parts: {nom: "servus"}\n',
+          ),
+        ]),
+      ).single;
+      final original = parseGrammarFiles(nounsWith([])).single;
+      final before = original.items.singleWhere((i) => i.id == 'servus');
+      final after = moved.items.singleWhere((i) => i.id == 'servus');
+      expect(before.typeName, 'O-Deklination-maskulinum');
+      expect(after.typeName, 'O-Deklination-femininum');
+    });
+
+    test('an item with its own genus on a single-gender type', () {
+      _expectRejected(
+        'S26',
+        'give the noun its own type that inherits the declension and sets '
+            'the genus',
+        nounsWith([
+          (
+            '    parts: {nom: "servus"}\n',
+            '    parts: {nom: "servus"}\n    genus: f\n',
+          ),
+        ]),
+      );
+    });
+  });
 }
 
 /// The smallest file that loads, for the top-level key tests.
