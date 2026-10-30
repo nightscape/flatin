@@ -596,6 +596,36 @@ void main() {
       );
     });
 
+    for (final key in [
+      'konj.impf.pass.1.sg',
+      'konj.impf.pass.2.sg',
+      'ind.perf.pass.3.pl',
+    ]) {
+      test('S25: a marked item lists the personal passive $key', () {
+        _expectRejected(
+          'S25',
+          'lists the personal passive "$key"',
+          _fixtureWith(
+            agereParts,
+            '$agereParts\n    passiv: unpersönlich\n    forms: {$key: x}',
+          ),
+        );
+      });
+    }
+
+    test('S25: an unmarked item lists a personal passive; a marked one an '
+        'impersonal passive', () {
+      for (final extra in [
+        '    forms: {konj.impf.pass.1.sg: x}',
+        '    passiv: unpersönlich\n    forms: {ind.praes.pass.3.sg: x}',
+      ]) {
+        final derivation = GrammarEngine(
+          parseGrammarFiles(_fixtureWith(agereParts, '$agereParts\n$extra')),
+        ).of('verbs', 'agere');
+        expect(derivation.forms, isNotEmpty);
+      }
+    });
+
     test('S16: a before entry that is not letters', () {
       _expectRejected(
         'S16',

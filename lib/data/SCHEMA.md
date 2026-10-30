@@ -308,6 +308,7 @@ impersonal passive: its passive keys with `person: 1`, `person: 2` or
 `person: 3, numerus: pl` are absent (S15). A `self` part of a composed passive
 key that sets `genus` reads the neuter (`ventum est`), and its delegated passive
 keys are internal (S8). Any other value, and the key on a deponent, throws.
+A marked item lists none of these keys; listing one throws.
 A verb that has no object has only this passive: `īre` (`itum est`), but not
 its transitive compound `inīre` (`initus sum`).
 

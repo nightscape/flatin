@@ -1450,6 +1450,18 @@ class _FileParser {
       if (impersonal && spec['deponent'] != null) {
         _bad('S25', 'a deponent has no impersonal passive', item: id);
       }
+      if (impersonal) {
+        for (final key in forms.keys) {
+          final features = file.axes.parseKey(key);
+          if (_personalPassive.any((p) => _patternMatches(features, p))) {
+            _bad(
+              'S25',
+              'a marked item lists the personal passive "$key"',
+              item: id,
+            );
+          }
+        }
+      }
       final absent = <Map<String, String>>[];
       for (final pattern in [
         ...(spec['absent'] as YamlList?) ?? const [],
@@ -1505,6 +1517,11 @@ const _personalPassive = [
   {'genus_verbi': 'pass', 'person': '2'},
   {'genus_verbi': 'pass', 'person': '3', 'numerus': 'pl'},
 ];
+
+bool _patternMatches(
+  Map<String, String> features,
+  Map<String, String> pattern,
+) => pattern.entries.every((e) => features[e.key] == e.value);
 
 Iterable<Object?> _asList(Object? node) => node is YamlList ? node : [node];
 
@@ -2178,11 +2195,6 @@ class _Linker {
     Map<String, String> features,
     Map<String, List<String>> match,
   ) => match.entries.every((e) => e.value.contains(features[e.key]));
-
-  bool _patternMatches(
-    Map<String, String> features,
-    Map<String, String> pattern,
-  ) => pattern.entries.every((e) => features[e.key] == e.value);
 
   /// S13: the keys one compose rule makes.
   Set<FormKey> _composedKeys(
