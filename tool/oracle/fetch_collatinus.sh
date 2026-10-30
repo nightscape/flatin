@@ -7,11 +7,16 @@
 # pinned and every file is checked against its SHA-256, so the oracle compares
 # against one fixed version of Collatinus.
 #
-# Run: tool/oracle/fetch_collatinus.sh && flutter test --tags oracle --run-skipped
+# Files are copied from the cache dir ${COLLATINUS_CACHE:-~/.cache/latin-oracle/collatinus}
+# when present there, and downloaded (then cached) otherwise. A file with the
+# wrong SHA-256 is deleted and downloaded anew.
+#
+# Run the oracle with the one command: tool/oracle/run.sh
 set -euo pipefail
 
 commit=e1fef78818b5c5f8e7f9754cf58f50062b30abff
 target="$(cd "$(dirname "$0")/../.." && pwd)/.dart_tool/oracle/collatinus"
+cache="${COLLATINUS_CACHE:-$HOME/.cache/latin-oracle/collatinus}"
 
 files=(
   "modeles.la 6f462eed98fe6e16389c52222700ae4de354de759d04b4987ef0cabae39a1697"
@@ -30,15 +35,24 @@ mkdir -p "$target"
 for entry in "${files[@]}"; do
   read -r name want <<<"$entry"
   out="$target/$name"
+  if [ ! -f "$out" ] && [ -f "$cache/$name" ]; then
+    cp "$cache/$name" "$out"
+  fi
+  if [ -f "$out" ] && [ "$(sha256 "$out")" != "$want" ]; then
+    rm -f "$out"
+  fi
   if [ ! -f "$out" ]; then
     curl -fsSL -o "$out" \
-      "https://raw.githubusercontent.com/biblissima/collatinus/$commit/bin/data/$name"
-  fi
-  got="$(sha256 "$out")"
-  if [ "$got" != "$want" ]; then
-    rm -f "$out"
-    echo "$name: SHA-256 $got, expected $want for commit $commit" >&2
-    exit 1
+      "https://raw.githubusercontent.com/biblissima/collatinus/$commit/bin/data/$name" ||
+      { rm -f "$out"; echo "$name: download failed" >&2; exit 1; }
+    got="$(sha256 "$out")"
+    if [ "$got" != "$want" ]; then
+      rm -f "$out"
+      echo "$name: SHA-256 $got, expected $want for commit $commit" >&2
+      exit 1
+    fi
+    mkdir -p "$cache"
+    cp "$out" "$cache/$name"
   fi
 done
 
