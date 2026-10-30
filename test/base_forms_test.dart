@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart' show listEquals;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -81,8 +82,11 @@ void main() {
     forms.keys.toSet(),
   );
 
-  bool dropsBy(FollowRule rule, FormKey key, FollowContext context) =>
-      rule(key, context)?.writes(context.forms[key]!) ?? false;
+  bool dropsBy(FollowRule rule, FormKey key, FollowContext context) {
+    final follow = rule(key, context);
+    return follow != null &&
+        listEquals(follow.gives, context.forms[key]!.variants);
+  }
 
   test('a regular noun asks the genitive', () {
     expect(_baseForms(word('nouns:rex')), ['rēgis']);
@@ -374,7 +378,8 @@ void main() {
           if (source.containsKey(key)) continue;
           for (final rule in followRules) {
             final follow = rule(key, context);
-            if (follow != null && follow.writes(derivation.forms[key]!)) {
+            if (follow != null &&
+                listEquals(follow.gives, derivation.forms[key]!.variants)) {
               source[key] = follow.source;
               changed = true;
               break;
