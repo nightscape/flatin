@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/data/word_focus.dart';
+import 'package:latin_practice/grammar/engine.dart';
 import 'package:latin_practice/grammar/schema.dart';
 import 'package:latin_practice/models/lesson_range.dart';
 import 'package:latin_practice/models/practice_item.dart';
@@ -113,21 +114,34 @@ void main() {
     }
   });
 
-  test('regular_passiv needs a regular_type', () {
+  test('the regular reading of an impersonal verb is impersonal too', () {
+    final engine = GrammarEngine(
+      parseGrammarFiles({
+        for (final f in ['latin_nouns', 'latin_verbs'])
+          'lib/data/$f.yaml': File('lib/data/$f.yaml').readAsStringSync(),
+      }),
+    );
+    final regular = engine.regularOf('verbs', 'ire')!.forms;
+    expect(regular['ind.perf.pass.3.sg']!.variants, ['itum est']);
+  });
+
+  test('regular_passiv is no item key', () {
     final verbs = File('lib/data/latin_verbs.yaml').readAsStringSync();
-    const ire = '    regular_type: I-Konjugation\n    regular_passiv:';
-    expect(verbs, contains(ire));
     expect(
       () => parseGrammarFiles({
         'lib/data/latin_nouns.yaml': File(
           'lib/data/latin_nouns.yaml',
         ).readAsStringSync(),
         'lib/data/latin_verbs.yaml': verbs.replaceFirst(
-          ire,
-          '    regular_passiv:',
+          '    regular_type: I-Konjugation\n    passiv:',
+          '    regular_type: I-Konjugation\n    regular_passiv:',
         ),
       }),
-      throwsA(isA<SchemaError>().having((e) => e.rule, 'rule', 'S27')),
+      throwsA(
+        isA<SchemaError>()
+            .having((e) => e.rule, 'rule', 'file')
+            .having((e) => e.toString(), 'message', contains('regular_passiv')),
+      ),
     );
   });
 

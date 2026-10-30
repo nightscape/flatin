@@ -2437,15 +2437,12 @@
 | īre | ind.perf.akt.3.sg | iit | er/sie/es ist gegangen | er/sie/es ging |
 | īre | ind.perf.akt.3.pl | iērunt | sie (Pl.) sind gegangen | sie (Pl.) gingen |
 | īre | ind.perf.pass.3.sg | itum est | — |  |
-| īre | ind.perf.pass.3.pl | itī sunt | — |  |
 | īre | ind.plusq.akt.3.sg | ierat | er/sie/es war gegangen |  |
 | īre | ind.plusq.akt.3.pl | ierant | sie (Pl.) waren gegangen |  |
 | īre | ind.plusq.pass.3.sg | itum erat | — |  |
-| īre | ind.plusq.pass.3.pl | itī erant | — |  |
 | īre | ind.fut2.akt.3.sg | ierit | er/sie/es wird gegangen sein |  |
 | īre | ind.fut2.akt.3.pl | ierint | sie (Pl.) werden gegangen sein |  |
 | īre | ind.fut2.pass.3.sg | itum erit | — |  |
-| īre | ind.fut2.pass.3.pl | itī erunt | — |  |
 | īre | konj.praes.akt.3.sg | eat | er/sie/es geht |  |
 | īre | konj.praes.akt.3.pl | eant | sie (Pl.) gehen |  |
 | īre | konj.praes.pass.3.sg | eātur | — |  |
@@ -2455,11 +2452,9 @@
 | īre | konj.perf.akt.3.sg | ierit | er/sie/es gegangen ist |  |
 | īre | konj.perf.akt.3.pl | ierint | sie (Pl.) gegangen sind |  |
 | īre | konj.perf.pass.3.sg | itum sit | — |  |
-| īre | konj.perf.pass.3.pl | itī sint | — |  |
 | īre | konj.plusq.akt.3.sg | īsset | er/sie/es gegangen wäre |  |
 | īre | konj.plusq.akt.3.pl | īssent | sie (Pl.) gegangen wären |  |
 | īre | konj.plusq.pass.3.sg | itum esset | — |  |
-| īre | konj.plusq.pass.3.pl | itī essent | — |  |
 | velle | ind.praes.akt.3.sg | vult | er/sie/es will |  |
 | velle | ind.praes.akt.3.pl | volunt | sie (Pl.) wollen |  |
 | velle | ind.impf.akt.3.sg | volēbat | er/sie/es wollte |  |

@@ -376,7 +376,6 @@
 | īre | inf.perf.akt | īsse | gegangen sein |  |
 | īre | inf.perf.pass | itum esse | — |  |
 | īre | part.praes.akt | iēns | gehend |  |
-| īre | part.perf.pass | itus | — |  |
 | velle | inf.praes.akt | velle | wollen |  |
 | velle | inf.perf.akt | voluisse | gewollt haben |  |
 | velle | part.praes.akt | volēns | wollend |  |

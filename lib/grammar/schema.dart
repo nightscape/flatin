@@ -469,9 +469,6 @@ final class GrammarItem {
   /// S27: the type whose rules tell which of the item's forms are irregular.
   final String? regularType;
 
-  /// S27: `regular_passiv: unpersönlich`, the passive of the regular reading.
-  final bool regularImpersonalPassive;
-
   GrammarItem({
     required this.id,
     required this.translation,
@@ -489,7 +486,6 @@ final class GrammarItem {
     this.impersonalPassive = false,
     this.genus = const [],
     this.regularType,
-    this.regularImpersonalPassive = false,
   });
 
   /// The first spelling of [part], or null.
@@ -707,6 +703,22 @@ class _FileParser {
     'types',
     'items',
     'shared',
+  };
+
+  static const _itemKeys = {
+    'id',
+    'type',
+    'translation',
+    'parts',
+    'forms',
+    'absent',
+    'passiv',
+    'deponent',
+    'de_verb',
+    'de_noun',
+    'slots',
+    'genus',
+    'regular_type',
   };
 
   GrammarFile parse() {
@@ -1395,6 +1407,9 @@ class _FileParser {
     final ids = <String>{};
     for (final entry in node) {
       final spec = entry as YamlMap;
+      for (final key in spec.keys) {
+        if (!_itemKeys.contains(key)) _bad('file', 'unknown item key "$key"');
+      }
       final parts = <String, List<String>>{};
       for (final p in ((spec['parts'] as YamlMap?) ?? YamlMap()).entries) {
         final name = '${p.key}';
@@ -1429,16 +1444,6 @@ class _FileParser {
         final other => _bad(
           'S25',
           '"passiv: $other" is not "unpersönlich"',
-          item: id,
-        ),
-      };
-      final regularImpersonal = switch (spec['regular_passiv']) {
-        null => false,
-        'unpersönlich' when spec['regular_type'] != null => true,
-        final other => _bad(
-          'S27',
-          '"regular_passiv: $other" is not "unpersönlich" next to a '
-              'regular_type',
           item: id,
         ),
       };
@@ -1487,7 +1492,6 @@ class _FileParser {
           impersonalPassive: impersonal,
           genus: _genus(spec['genus'], 'item $id', file.axes),
           regularType: spec['regular_type'] as String?,
-          regularImpersonalPassive: regularImpersonal,
         ),
       );
     }
@@ -1731,7 +1735,6 @@ class _Linker {
       impersonalPassive: item.impersonalPassive,
       genus: item.genus,
       regularType: item.regularType,
-      regularImpersonalPassive: item.regularImpersonalPassive,
     );
   }
 
@@ -1778,7 +1781,7 @@ class _Linker {
   }
 
   /// S27: the item read as [name], with its parts, deponent, slots and
-  /// impersonal passive (S25 or `regular_passiv`), and none of its forms.
+  /// impersonal passive (S25), and none of its forms.
   void _planRegular(GrammarFile file, GrammarItem item, String name) {
     final type = file.types[name];
     if (type == null || type.isAbstract || name == item.typeName) {
@@ -1799,8 +1802,7 @@ class _Linker {
       lemma: item.lemma,
       deponent: item.deponent,
       slots: item.slots,
-      impersonalPassive:
-          item.impersonalPassive || item.regularImpersonalPassive,
+      impersonalPassive: item.impersonalPassive,
     );
     _checkStems(file, regular, type);
     file.keysByItem[regular.id] = _planKeys(file, regular);

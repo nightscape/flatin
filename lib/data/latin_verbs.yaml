@@ -851,7 +851,7 @@ items:
   - id: ire
     type: Unregelmäßig
     regular_type: I-Konjugation
-    regular_passiv: unpersönlich
+    passiv: unpersönlich
     translation: {de: gehen, en: go}
     parts: {infinitiv: "īre", praesens_1sg: "eō", perfekt_1sg: ["iī", "īvī"], supinum: "itum", ppa_nom: "iēns", ppa_gen: "euntis", gerundiv: "eundus"}
     de_verb: "gehen"
@@ -908,13 +908,8 @@ items:
       ind.praes.pass.3.sg: "ītur"
       ind.impf.pass.3.sg: "ībātur"
       ind.fut.pass.3.sg: "ībitur"
-      ind.perf.pass.3.sg: "itum est"
-      ind.plusq.pass.3.sg: "itum erat"
-      ind.fut2.pass.3.sg: "itum erit"
       konj.praes.pass.3.sg: "eātur"
       konj.impf.pass.3.sg: "īrētur"
-      konj.perf.pass.3.sg: "itum sit"
-      konj.plusq.pass.3.sg: "itum esset"
       inf.praes.pass: "īrī"
       ger.abl: "eundō"
   - id: velle

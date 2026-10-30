@@ -1,5 +1,5 @@
 // ferre has a full passive and a perfect passive; ire has the impersonal
-// passive and a perfect passive participle.
+// passive and an internal perfect passive participle.
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/models/practice_item.dart';
@@ -99,18 +99,11 @@ void main() {
     );
   });
 
-  test('ire perfect passive participle', () {
-    expect(
-      forms('ire', [
-        'part.perf.pass.sg.nom.m',
-        'part.perf.pass.sg.nom.f',
-        'part.perf.pass.sg.nom.n',
-      ]),
-      {
-        'part.perf.pass.sg.nom.m': 'itus',
-        'part.perf.pass.sg.nom.f': 'ita',
-        'part.perf.pass.sg.nom.n': 'itum',
-      },
-    );
+  test('ire perfect passive participle is internal', () {
+    final ire = verbs['verbs:ire']!;
+    expect(ire.formOrder.where((k) => k.startsWith('part.perf.pass')), isEmpty);
+    expect(ire.derivation.internal['part.perf.pass.sg.nom.m']?.variants, [
+      'itus',
+    ]);
   });
 }

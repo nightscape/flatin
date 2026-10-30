@@ -117,6 +117,10 @@ silently dropping the section. `shared:` is the one key the loader only
 accepts: it holds anchors that items alias (`absent: *ohne_steigerung`), and it
 sits above `items:` because a YAML alias resolves only below its anchor.
 
+An item has no other keys than `id`, `type`, `translation`, `parts`, `forms`,
+`absent`, `passiv`, `deponent`, `de_verb`, `de_noun`, `slots`, `genus` and
+`regular_type`; any other one throws.
+
 Loading a file resolves which keys every item has — `GrammarFile.keysByItem`,
 one `ItemKeys` per item, after S4, S10, S13, S14 and S15. That set is the
 contract between this library and the engine: the engine generates a form for
@@ -304,6 +308,8 @@ impersonal passive: its passive keys with `person: 1`, `person: 2` or
 `person: 3, numerus: pl` are absent (S15). A `self` part of a composed passive
 key that sets `genus` reads the neuter (`ventum est`), and its delegated passive
 keys are internal (S8). Any other value, and the key on a deponent, throws.
+A verb that has no object has only this passive: `īre` (`itum est`), but not
+its transitive compound `inīre` (`initus sum`).
 
 **S26. Genus.** A type may give `genus: <code>` (inherited, the child wins), an
 item `genus: <code>` or a list of codes for a noun of common gender
@@ -317,8 +323,8 @@ of the file. The item is read once more as that type, with its parts and
 without its forms; a form of the item counts as irregular for the base-forms
 focus only when this reading has no form for its key or writes it otherwise
 (`ferre` read as Konsonantische: `ferimus` is regular, `fers` is not).
-`regular_passiv: unpersönlich` gives only this reading the impersonal passive
-of S25 (`īre`: `itum est` is regular); the item's own keys stay as they are.
+The regular reading keeps the item's `passiv` (S25), so `īre`: `itum est` is
+regular.
 A gerund form spelled like the neuter singular of the gerundive in its case
 follows from the gerundive and is not irregular (`abeundī`).
 

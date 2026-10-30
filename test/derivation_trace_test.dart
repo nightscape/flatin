@@ -269,17 +269,17 @@ void main() {
     // present (absēns, praesēns).
     expect(
       [generatedCount, generatedSeamCount, composedCount, regularCount],
-      [74988, 3583, 7030, 90],
+      [74952, 3583, 7010, 85],
     );
     expect(
       [regularPlainCount, regularSeamCount, regularComposedCount],
-      [84, 1, 5],
+      [84, 1, 0],
     );
     expect(
       regularPlainCount + regularSeamCount + regularComposedCount,
       regularCount,
     );
-    expect([affixPartCount, lexemePartCount], [172, 13898]);
+    expect([affixPartCount, lexemePartCount], [172, 13848]);
   });
 
   test('T-trace-6 an affix whose seam takes no sandhi keeps its spelling', () {

@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:latin_practice/data/asset_text.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:latin_practice/data/diagnosis.dart';
 import 'package:latin_practice/data/explanation.dart';
 import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/models/derivation.dart';
@@ -82,24 +81,13 @@ void main() {
       for (final line in lines) renderDe(de, line),
     ];
 
-    test('īre: the regular form of an irregular one is composed', () async {
+    test('īre: the impersonal passive is composed by the rule', () async {
       final verbs = await loadPracticeItems(_verbs);
       final item = verbs.firstWhere((i) => i.lemma == 'īre');
-      const key = 'konj.plusq.pass.3.sg';
-      final form = item.derivation.forms[key]! as IrregularForm;
+      final form = item.derivation.forms['konj.plusq.pass.3.sg']!;
+      expect(form, isA<ComposedForm>());
       expect(form.variants, ['itum esset']);
-      expect(form.regular, isA<ComposedForm>());
-      expect(form.regular!.result, 'itus esset');
-      expect(
-        diagnose(item, key, 'itus esset'),
-        isA<RegularInsteadOfIrregular>(),
-      );
-      expect(
-        german(explainWrongAnswer(item, key, 'itus esset')).last,
-        'Du hast itus esset geschrieben – das wäre die regelmäßige Form, '
-        'aber Konjunktiv Plusquamperfekt Passiv: 3. Person Singular ist hier '
-        'unregelmäßig',
-      );
+      expect(item.derivation.forms, isNot(contains('konj.plusq.pass.3.pl')));
     });
 
     test('hortor: a deponent says so before the form', () {

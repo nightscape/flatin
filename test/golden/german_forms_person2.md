@@ -2278,28 +2278,18 @@
 | īre | ind.fut.akt.2.pl | ībitis | ihr werdet gehen |  |
 | īre | ind.perf.akt.2.sg | īstī | du bist gegangen | du gingst |
 | īre | ind.perf.akt.2.pl | īstis | ihr seid gegangen | ihr gingt |
-| īre | ind.perf.pass.2.sg | itus es | — |  |
-| īre | ind.perf.pass.2.pl | itī estis | — |  |
 | īre | ind.plusq.akt.2.sg | ierās | du warst gegangen |  |
 | īre | ind.plusq.akt.2.pl | ierātis | ihr wart gegangen |  |
-| īre | ind.plusq.pass.2.sg | itus erās | — |  |
-| īre | ind.plusq.pass.2.pl | itī erātis | — |  |
 | īre | ind.fut2.akt.2.sg | ieris | du wirst gegangen sein |  |
 | īre | ind.fut2.akt.2.pl | ieritis | ihr werdet gegangen sein |  |
-| īre | ind.fut2.pass.2.sg | itus eris | — |  |
-| īre | ind.fut2.pass.2.pl | itī eritis | — |  |
 | īre | konj.praes.akt.2.sg | eās | du gehst |  |
 | īre | konj.praes.akt.2.pl | eātis | ihr geht |  |
 | īre | konj.impf.akt.2.sg | īrēs | du gehen würdest |  |
 | īre | konj.impf.akt.2.pl | īrētis | ihr gehen würdet |  |
 | īre | konj.perf.akt.2.sg | ieris | du gegangen bist |  |
 | īre | konj.perf.akt.2.pl | ieritis | ihr gegangen seid |  |
-| īre | konj.perf.pass.2.sg | itus sīs | — |  |
-| īre | konj.perf.pass.2.pl | itī sītis | — |  |
 | īre | konj.plusq.akt.2.sg | īssēs | du gegangen wärest |  |
 | īre | konj.plusq.akt.2.pl | īssētis | ihr gegangen wäret |  |
-| īre | konj.plusq.pass.2.sg | itus essēs | — |  |
-| īre | konj.plusq.pass.2.pl | itī essētis | — |  |
 | velle | ind.praes.akt.2.sg | vīs | du willst |  |
 | velle | ind.praes.akt.2.pl | vultis | ihr wollt |  |
 | velle | ind.impf.akt.2.sg | volēbās | du wolltest |  |

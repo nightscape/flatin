@@ -2278,28 +2278,18 @@
 | īre | ind.fut.akt.1.pl | ībimus | wir werden gehen |  |
 | īre | ind.perf.akt.1.sg | iī | ich bin gegangen | ich ging |
 | īre | ind.perf.akt.1.pl | iimus | wir sind gegangen | wir gingen |
-| īre | ind.perf.pass.1.sg | itus sum | — |  |
-| īre | ind.perf.pass.1.pl | itī sumus | — |  |
 | īre | ind.plusq.akt.1.sg | ieram | ich war gegangen |  |
 | īre | ind.plusq.akt.1.pl | ierāmus | wir waren gegangen |  |
-| īre | ind.plusq.pass.1.sg | itus eram | — |  |
-| īre | ind.plusq.pass.1.pl | itī erāmus | — |  |
 | īre | ind.fut2.akt.1.sg | ierō | ich werde gegangen sein |  |
 | īre | ind.fut2.akt.1.pl | ierimus | wir werden gegangen sein |  |
-| īre | ind.fut2.pass.1.sg | itus erō | — |  |
-| īre | ind.fut2.pass.1.pl | itī erimus | — |  |
 | īre | konj.praes.akt.1.sg | eam | ich gehe |  |
 | īre | konj.praes.akt.1.pl | eāmus | wir gehen |  |
 | īre | konj.impf.akt.1.sg | īrem | ich gehen würde |  |
 | īre | konj.impf.akt.1.pl | īrēmus | wir gehen würden |  |
 | īre | konj.perf.akt.1.sg | ierim | ich gegangen bin |  |
 | īre | konj.perf.akt.1.pl | ierimus | wir gegangen sind |  |
-| īre | konj.perf.pass.1.sg | itus sim | — |  |
-| īre | konj.perf.pass.1.pl | itī sīmus | — |  |
 | īre | konj.plusq.akt.1.sg | īssem | ich gegangen wäre |  |
 | īre | konj.plusq.akt.1.pl | īssēmus | wir gegangen wären |  |
-| īre | konj.plusq.pass.1.sg | itus essem | — |  |
-| īre | konj.plusq.pass.1.pl | itī essēmus | — |  |
 | velle | ind.praes.akt.1.sg | volō | ich will |  |
 | velle | ind.praes.akt.1.pl | volumus | wir wollen |  |
 | velle | ind.impf.akt.1.sg | volēbam | ich wollte |  |

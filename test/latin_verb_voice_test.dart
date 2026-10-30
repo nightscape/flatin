@@ -25,6 +25,7 @@ void main() {
     r'^(ind|konj|imp)\.\w+\.pass\.(1\.|2\.|3\.pl)',
   );
   final intransitive = [
+    'ire',
     'venire',
     'convenire',
     'pervenire',
@@ -93,9 +94,16 @@ void main() {
     expect(formsOf('ambulare')['ind.praes.pass.3.sg'], 'ambulātur');
   });
 
+  test('ire has only the impersonal perfect passive', () {
+    final ire = formsOf('ire');
+    expect(ire, isNot(contains('ind.perf.pass.1.sg')));
+    expect(ire['ind.perf.pass.3.sg'], 'itum est');
+  });
+
   test('a transitive verb keeps the personal passive', () {
     expect(formsOf('audire')['ind.praes.pass.3.pl'], 'audiuntur');
     expect(formsOf('invenire')['ind.perf.pass.1.sg'], 'inventus sum');
+    expect(formsOf('inire')['ind.perf.pass.1.sg'], 'initus sum');
   });
 
   const supines = {
