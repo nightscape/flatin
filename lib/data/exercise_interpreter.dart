@@ -44,19 +44,30 @@ final class Slice {
 /// The generator of one spec.
 /// Produced in `exercise_kinds.dart`; read by the selection.
 final class SpecGenerator implements ExerciseGenerator {
-  const SpecGenerator(this.spec, {this.vocab});
+  const SpecGenerator(this.spec, {this.vocab, this.agreement});
 
   final KindSpec spec;
 
   /// How the kind asks a vocab item; null when it asks none.
   final KindSpec? vocab;
 
+  /// How the kind also asks a word of the [Match.agreeing] types; null when
+  /// it has no such way.
+  final KindSpec? agreement;
+
   @override
   ExerciseKind get kind => spec.kind;
 
-  KindSpec _specFor(PracticeItem word) => word.isVocab
-      ? vocab ?? (throw CannotBuild('${kind.name} asks no vocab item'))
-      : spec;
+  List<KindSpec> _specsFor(PracticeItem word) => word.isVocab
+      ? [vocab ?? (throw CannotBuild('${kind.name} asks no vocab item'))]
+      : [spec, ?agreement].where((s) => _asks(s, word)).toList();
+
+  static bool _asks(KindSpec spec, PracticeItem word) => switch (spec.answer) {
+    Match(:final agreeing) when agreeing.isNotEmpty => agreeing.contains(
+      word.type,
+    ),
+    _ => true,
+  };
 
   @override
   Exercise build(
@@ -66,28 +77,29 @@ final class SpecGenerator implements ExerciseGenerator {
     Random rng,
   ) {
     if (!ctx.unlocked.contains(bundle)) throw CannotBuild('$bundle is locked');
-    final spec = _specFor(word);
     final cube = Cube(ctx);
     final reasons = <String>{};
-    for (final slice in _slices(spec.select, cube, word, bundle, rng)) {
-      final missing = _uncovered(spec, slice, cube);
-      if (missing != null) {
-        reasons.add(missing);
-        continue;
+    for (final spec in _specsFor(word)..shuffle(rng)) {
+      for (final slice in _slices(spec.select, cube, word, bundle, rng)) {
+        final missing = _uncovered(spec, slice, cube);
+        if (missing != null) {
+          reasons.add(missing);
+          continue;
+        }
+        final answer = _answerOf(spec, slice, cube, rng);
+        if (answer == null) {
+          reasons.add('too few options for ${slice.target.key}');
+          continue;
+        }
+        return Exercise(
+          wordCardId: word.id,
+          grammarCardId: GrammarCardId(word.dataFileId, bundle),
+          kind: spec.kind,
+          questionKey: spec.questionKey,
+          questionParams: _paramsOf(spec, slice, cube),
+          answer: answer,
+        );
       }
-      final answer = _answerOf(spec, slice, cube, rng);
-      if (answer == null) {
-        reasons.add('too few options for ${slice.target.key}');
-        continue;
-      }
-      return Exercise(
-        wordCardId: word.id,
-        grammarCardId: GrammarCardId(word.dataFileId, bundle),
-        kind: spec.kind,
-        questionKey: spec.questionKey,
-        questionParams: _paramsOf(spec, slice, cube),
-        answer: answer,
-      );
     }
     throw CannotBuild(
       '${word.id} in $bundle: '
@@ -103,9 +115,11 @@ final class SpecGenerator implements ExerciseGenerator {
     GrammarBundle bundle,
     ExerciseContext ctx,
   ) {
-    final spec = _specFor(word);
-    if (exercise.kind != spec.kind ||
-        exercise.questionKey != spec.questionKey ||
+    final spec = _specsFor(
+      word,
+    ).where((s) => s.questionKey == exercise.questionKey).firstOrNull;
+    if (spec == null ||
+        exercise.kind != spec.kind ||
         exercise.wordCardId != word.id ||
         exercise.grammarCardId != GrammarCardId(word.dataFileId, bundle)) {
       return ['kind, question or cards differ'];
@@ -565,7 +579,10 @@ ExerciseAnswer? _answerOf(KindSpec spec, Slice slice, Cube cube, Random rng) =>
         optionOf(slice.target, view, cube),
         _accepted(spec, view, slice, cube),
       ),
-      final Match match => _match(spec, match, slice, cube),
+      final Match match =>
+        match.agreeing.isEmpty
+            ? _match(spec, match, slice, cube)
+            : _matchAgreeing(spec, match, slice, cube, rng),
       final Sort sort => _sort(sort, slice, cube),
     };
 
@@ -611,6 +628,99 @@ MatchingAnswer? _match(KindSpec spec, Match match, Slice slice, Cube cube) {
     for (final c in picked)
       (optionOf(c, match.left, cube), optionOf(c, match.right, cube)),
   ]);
+}
+
+/// A case, number and gender a form can have.
+typedef _Kng = (String kasus, String numerus, String genus);
+
+/// The readings of [c] itself: the genus comes from its key, or for a noun
+/// from its word.
+Set<_Kng> _kngOf(FormCell c) {
+  final kasus = c.features['kasus'];
+  final numerus = c.features['numerus'];
+  if (kasus == null || numerus == null) return {};
+  final genus = c.features['genus'];
+  return {
+    for (final g in genus == null ? c.word.genus : [genus]) (kasus, numerus, g),
+  };
+}
+
+/// The readings of [c]'s spelling: those of every cell of its word that the
+/// spelling fits.
+Set<_Kng> _readingsOf(Cube cube, FormCell c) => {
+  for (final o in cube.allCellsOf(c.word))
+    if (cube.fits(View.latin, c, o)) ..._kngOf(o),
+};
+
+/// Whether the spellings of [a] and [b] agree in case, number and gender.
+bool _agrees(Cube cube, FormCell a, FormCell b) =>
+    _readingsOf(cube, a).intersection(_readingsOf(cube, b)).isNotEmpty;
+
+bool _isNoun(PracticeItem w) =>
+    w.genus.isNotEmpty &&
+    w.derivation.grammar.classByType[w.type] == 'deklination';
+
+/// The cases, numbers and genders that the spellings of [left] and [right]
+/// share, as one label of [left]'s word.
+String _agreementLabel(Cube cube, FormCell left, FormCell right) {
+  final shared = _readingsOf(cube, right);
+  return describeLabels([
+    for (final o in cube.allCellsOf(left.word))
+      if (cube.fits(View.latin, left, o) &&
+          _kngOf(o).intersection(shared).isNotEmpty)
+        o.word.formLabels[o.index],
+  ]);
+}
+
+/// The first [Sample.n] cells of the group that agree with a practised noun
+/// cell of the pool, each paired with one; no spelling of a side can be taken
+/// for another, and no left spelling agrees with the right one of another
+/// pair.
+MatchingAnswer? _matchAgreeing(
+  KindSpec spec,
+  Match match,
+  Slice slice,
+  Cube cube,
+  Random rng,
+) {
+  final n = (spec.select as Sample).n;
+  final nouns = [
+    for (final w in cube.ctx.pool)
+      if (_isNoun(w))
+        for (final c in cube.cellsOf(w))
+          if (cube.unlocked(c)) c,
+  ]..shuffle(rng);
+  final readings = <FormCell, Set<_Kng>>{};
+  bool agree(FormCell a, FormCell b) => readings
+      .putIfAbsent(a, () => _readingsOf(cube, a))
+      .intersection(readings.putIfAbsent(b, () => _readingsOf(cube, b)))
+      .isNotEmpty;
+  final pairs = <(FormCell, FormCell)>[];
+  for (final c in slice.group) {
+    if (pairs.length == n) break;
+    if (_kngOf(c).isEmpty ||
+        pairs.any((p) => _alike(cube, match.left, p.$1, c) || agree(c, p.$2))) {
+      continue;
+    }
+    final partner = nouns
+        .where(
+          (r) =>
+              _kngOf(c).intersection(_kngOf(r)).isNotEmpty &&
+              !pairs.any(
+                (p) => _alike(cube, match.right, p.$2, r) || agree(p.$1, r),
+              ),
+        )
+        .firstOrNull;
+    if (partner != null) pairs.add((c, partner));
+  }
+  if (pairs.length < n) return null;
+  return MatchingAnswer(
+    [
+      for (final (l, r) in pairs)
+        (optionOf(l, match.left, cube), optionOf(r, match.right, cube)),
+    ],
+    agreements: [for (final (l, r) in pairs) _agreementLabel(cube, l, r)],
+  );
 }
 
 bool _clashes(Match match, Cell a, Cell b, Cube cube) =>
@@ -757,6 +867,9 @@ String? _answerObjection(
         }
       }
       return null;
+    case (final Match match, MatchingAnswer(:final pairs, :final agreements))
+        when match.agreeing.isNotEmpty:
+      return _agreementObjection(spec, match, slice, cube, pairs, agreements);
     case (Match match, MatchingAnswer(:final pairs)):
       final n = (spec.select as Sample).n;
       if (pairs.length != n) return '${pairs.length} pairs';
@@ -809,4 +922,49 @@ String? _answerObjection(
     default:
       return 'answer is a ${answer.runtimeType}';
   }
+}
+
+String? _agreementObjection(
+  KindSpec spec,
+  Match match,
+  Slice slice,
+  Cube cube,
+  List<(FormOption, FormOption)> pairs,
+  List<String>? agreements,
+) {
+  final word = slice.target.word;
+  if (pairs.length != (spec.select as Sample).n) return '${pairs.length} pairs';
+  if (agreements == null) return 'no agreement labels';
+  final cells = <(FormCell, FormCell)>[];
+  for (final (i, (l, r)) in pairs.indexed) {
+    if (l.lexemeId != word.id) return '${l.text} is no form of ${word.id}';
+    final left = cube.cellOf(l, word);
+    final right = cube.cellOf(r, word);
+    if (!_isNoun(right.word) ||
+        !cube.practised(right) ||
+        !cube.unlocked(right)) {
+      return '$right is no practised noun form';
+    }
+    if (l.text != optionOf(left, match.left, cube).text ||
+        r.text != optionOf(right, match.right, cube).text) {
+      return '${l.text} or ${r.text} does not show its cell';
+    }
+    if (_kngOf(left).intersection(_kngOf(right)).isEmpty) {
+      return '$left and $right do not agree';
+    }
+    if (agreements[i] != _agreementLabel(cube, left, right)) {
+      return 'label ${agreements[i]} of $left and $right';
+    }
+    for (final (pl, pr) in cells) {
+      if (_alike(cube, match.left, pl, left) ||
+          _alike(cube, match.right, pr, right)) {
+        return '$left or $right clashes with a pair';
+      }
+      if (_agrees(cube, pl, right) || _agrees(cube, left, pr)) {
+        return '$left or $right agrees with another pair';
+      }
+    }
+    cells.add((left, right));
+  }
+  return null;
 }

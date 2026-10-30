@@ -189,9 +189,41 @@ const vocabSpecs = {
   ),
 };
 
+/// How a kind asks, beside its own way, a pronoun or adjective that stands
+/// next to a noun: the forms of the word with the noun forms they agree with.
+const agreementSpecs = {
+  ExerciseKind.zuordnen: KindSpec(
+    kind: ExerciseKind.zuordnen,
+    questionKey: 'exercise.agree.question',
+    select: Sample(n: 4),
+    params: {},
+    answer: Match(
+      View.latin,
+      View.latin,
+      agreeing: {
+        'Pronomen-hic',
+        'Pronomen-ille',
+        'Pronomen-iste',
+        'Pronomen-ipse',
+        'Pronomen-idem',
+        'Adjektiv-a-o',
+        'Adjektiv-a-o-er',
+        'Adjektiv-zweiendig',
+        'Adjektiv-dreiendig',
+        'Adjektiv-einendig-i',
+        'Adjektiv-einendig-Konsonantstamm',
+      },
+    ),
+  ),
+};
+
 /// The generators the app ships, one per kind. They are stateless: everything
 /// that varies per call comes from [ExerciseContext].
 final List<SpecGenerator> exerciseGenerators = [
   for (final spec in kindSpecs)
-    SpecGenerator(spec, vocab: vocabSpecs[spec.kind]),
+    SpecGenerator(
+      spec,
+      vocab: vocabSpecs[spec.kind],
+      agreement: agreementSpecs[spec.kind],
+    ),
 ];

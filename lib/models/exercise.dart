@@ -122,8 +122,13 @@ final class MatchingAnswer extends ExerciseAnswer {
   /// The right pairs; the screen shuffles each side.
   final List<(FormOption, FormOption)> pairs;
 
-  MatchingAnswer(this.pairs) {
+  /// For each pair whose forms agree in case, number and gender, the label of
+  /// what they share; null when each right text is its left form's meaning.
+  final List<String>? agreements;
+
+  MatchingAnswer(this.pairs, {this.agreements}) {
     assert(pairs.length >= 2);
+    assert(agreements == null || agreements!.length == pairs.length);
   }
 }
 

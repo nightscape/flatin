@@ -14,8 +14,11 @@ import 'package:latin_practice/providers/locale_provider.dart';
 import 'exercise_pair_sweep_test.dart' show sweep;
 import 'support/grammar_exercise_harness.dart';
 
-/// Builds, on the first call for a word, every kind that fits it, so that the
-/// sweep reaches kinds the selection would only ask later.
+final _everyBundle = Expando<Set<GrammarBundle>>();
+
+/// Builds, on the first call for a word, every kind that fits it, also with
+/// every bundle of the pool unlocked, so that the sweep reaches kinds and
+/// modes the selection would only ask later.
 class _Recording implements ExerciseGenerator {
   _Recording(this._inner, this._all, this._built, this._teed);
 
@@ -35,11 +38,21 @@ class _Recording implements ExerciseGenerator {
     Random rng,
   ) {
     if (_teed.add(word.id)) {
+      final everyBundle = ExerciseContext(
+        unlocked: _everyBundle[ctx.pool] ??= {
+          for (final w in ctx.pool)
+            for (final key in w.formOrder) bundleOf(w, key),
+        },
+        pool: ctx.pool,
+        german: ctx.german,
+      );
       for (final g in _all) {
-        try {
-          _built.add((word, g.build(word, bundle, ctx, Random(0))));
-        } on CannotBuild {
-          continue;
+        for (final c in [ctx, everyBundle]) {
+          try {
+            _built.add((word, g.build(word, bundle, c, Random(0))));
+          } on CannotBuild {
+            continue;
+          }
         }
       }
     }
@@ -57,7 +70,13 @@ List<ExerciseResponse> _responses(Exercise exercise) =>
         for (final o in [right, options.firstWhere((o) => o != right)])
           ChosenOption(o),
       ],
-      MatchingAnswer(:final pairs) => [MatchedPairs(pairs)],
+      MatchingAnswer(:final pairs) => [
+        MatchedPairs(pairs),
+        MatchedPairs([
+          for (final (i, (left, _)) in pairs.indexed)
+            (left, pairs[(i + 1) % pairs.length].$2),
+        ]),
+      ],
       SortingAnswer() => [
         rightSorting(exercise.answer as SortingAnswer),
         wrongSorting(exercise.answer as SortingAnswer),
@@ -91,6 +110,16 @@ void main() {
       ],
     );
     expect(built, isNotEmpty);
+    expect(
+      built.where(
+        (b) => switch (b.$2.answer) {
+          MatchingAnswer(:final agreements) => agreements != null,
+          _ => false,
+        },
+      ),
+      isNotEmpty,
+      reason: 'the sweep builds an agreement round',
+    );
     for (final (word, exercise) in built) {
       for (final response in _responses(exercise)) {
         expect(

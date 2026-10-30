@@ -246,7 +246,9 @@
       "optionChosen": "{form} – {label} (your choice)",
       "optionRightChosen": "{form} – {label} (right, your choice)",
       "oddAxes": "The other three: {values}",
-      "misplaced": "{form} – {label}, not {chosen}"
+      "misplaced": "{form} – {label}, not {chosen}",
+      "agrees": "{form} {partner} – {label}",
+      "agreesNot": "{form} {partner} – {label}, not {chosen}"
     },
     "screen": {
       "title": "Exercise",
@@ -276,6 +278,10 @@
     "match": {
       "question": "Match the forms of {word}",
       "hint": "Tap a Latin form first, then the German form that fits it."
+    },
+    "agree": {
+      "question": "Match the forms that agree in case, number and gender",
+      "hint": "Tap a form on the left first, then the noun form that agrees with it."
     },
     "translate": {
       "latDe": {

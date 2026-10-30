@@ -246,7 +246,9 @@
       "optionChosen": "{form} – {label} (deine Wahl)",
       "optionRightChosen": "{form} – {label} (richtig, deine Wahl)",
       "oddAxes": "Die anderen drei: {values}",
-      "misplaced": "{form} – {label}, nicht {chosen}"
+      "misplaced": "{form} – {label}, nicht {chosen}",
+      "agrees": "{form} {partner} – {label}",
+      "agreesNot": "{form} {partner} – {label}, nicht {chosen}"
     },
     "screen": {
       "title": "Aufgabe",
@@ -276,6 +278,10 @@
     "match": {
       "question": "Ordne die Formen von {word} zu",
       "hint": "Tippe erst eine lateinische, dann die passende deutsche Form."
+    },
+    "agree": {
+      "question": "Ordne die Formen zu, die in Kasus, Numerus und Genus übereinstimmen",
+      "hint": "Tippe erst eine Form links, dann die Form des Nomens, die zu ihr passt."
     },
     "translate": {
       "latDe": {

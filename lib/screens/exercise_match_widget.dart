@@ -9,7 +9,7 @@ import '../models/practice_item.dart';
 import '../widgets/explanation_lines.dart';
 
 /// Shows one matching [Exercise]: the learner pairs each Latin form with a
-/// German text; after the feedback, "next" hands the pairs to [onResponse]
+/// German text or a noun form it agrees with; after the feedback, "next" hands the pairs to [onResponse]
 /// once. The pairs carry the exercise's own [FormOption]s, as `attribute`
 /// compares them by identity.
 /// Produced here for the caller that wires the exercises into the app.
@@ -111,7 +111,13 @@ class _ExerciseMatchWidgetState extends State<ExerciseMatchWidget> {
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               const SizedBox(height: 8),
-              Text(_t('exercise.match.hint')),
+              Text(
+                _t(
+                  (exercise.answer as MatchingAnswer).agreements == null
+                      ? 'exercise.match.hint'
+                      : 'exercise.agree.hint',
+                ),
+              ),
               const SizedBox(height: 16),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,

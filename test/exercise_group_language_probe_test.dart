@@ -3,10 +3,12 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:latin_practice/data/exercise_interpreter.dart';
 import 'package:latin_practice/data/exercise_kinds.dart';
 import 'package:latin_practice/main.dart' show noRetry;
 import 'package:latin_practice/models/exercise.dart';
 import 'package:latin_practice/providers/fsrs_provider.dart';
+import 'package:latin_practice/screens/exercise_match_widget.dart';
 import 'package:latin_practice/screens/exercise_sort_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -23,6 +25,17 @@ const _german = [
   'Plusquamperfekt',
   'Aktiv',
   'Passiv',
+];
+
+const _germanCases = [
+  'Nominativ',
+  'Genitiv',
+  'Dativ',
+  'Akkusativ',
+  'Ablativ',
+  'maskulin',
+  'feminin',
+  'neutrum',
 ];
 
 void main() {
@@ -82,6 +95,67 @@ void main() {
           reason: '$kind in $language: $text',
         );
       }
+    });
+  }
+
+  for (final language in ['en', 'de']) {
+    testWidgets('app locale $language: agreement labels', (tester) async {
+      SharedPreferences.setMockInitialValues({'app_locale': language});
+      final c = ProviderContainer(retry: noRetry);
+      addTearDown(c.dispose);
+      final byType = await tester.runAsync(
+        () => c.read(practicableItemsByTypeProvider.future),
+      );
+      final nouns = byType!['nouns']!;
+      final hic = nouns.singleWhere((i) => i.id == 'nouns:hic');
+      final rosa = nouns.singleWhere((i) => i.id == 'nouns:rosa');
+      final e =
+          SpecGenerator(
+            (generatorFor(ExerciseKind.zuordnen, exerciseGenerators)
+                    as SpecGenerator)
+                .agreement!,
+          ).build(
+            hic,
+            hic.type,
+            fakeExerciseContext(
+              unlocked: {hic.type, rosa.type},
+              pool: [hic, rosa],
+            ),
+            Random(0),
+          );
+      final pairs = (e.answer as MatchingAnswer).pairs;
+      tester.view.physicalSize = const Size(390, 800);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.reset);
+      await tester.pumpWidget(
+        wrapInApp(
+          ExerciseMatchWidget(word: hic, exercise: e, onResponse: (_) {}),
+          forcedLocale: Locale(language),
+        ),
+      );
+      await tester.pumpAndSettle();
+      for (var i = 0; i < pairs.length; i++) {
+        for (final side in ['left', 'right']) {
+          final button = find.byKey(Key('exercise.match.$side.$i'));
+          await tester.ensureVisible(button);
+          await tester.tap(button);
+          await tester.pump();
+        }
+      }
+      final check = find.byKey(const Key('exercise.check.button'));
+      await tester.ensureVisible(check);
+      await tester.tap(check);
+      await tester.pumpAndSettle();
+      final text = [
+        for (final t in tester.widgetList<Text>(find.byType(Text)))
+          t.data ?? t.textSpan?.toPlainText() ?? '',
+        ...(e.answer as MatchingAnswer).agreements!,
+      ].join(' | ');
+      expect(
+        _germanCases.where((w) => RegExp('\\b$w\\b').hasMatch(text)),
+        language == 'en' ? isEmpty : isNotEmpty,
+        reason: 'agreement in $language: $text',
+      );
     });
   }
 }

@@ -32,6 +32,33 @@ List<ExplanationLine> feedbackLines(
         params: {'values': _oddValues(word, answer)},
       ),
   ],
+  (
+    MatchingAnswer(:final pairs, agreements: final agreements?),
+    MatchedPairs(pairs: final given),
+  ) =>
+    [
+      for (final (i, (left, right)) in pairs.indexed)
+        if (given.singleWhere((g) => identical(g.$1, left)).$2 case final chosen
+            when !identical(chosen, right))
+          ExplanationLine(
+            'exercise.feedback.agreesNot',
+            params: {
+              'form': left.text,
+              'partner': right.text,
+              'label': agreements[i],
+              'chosen': chosen.text,
+            },
+          )
+        else
+          ExplanationLine(
+            'exercise.feedback.agrees',
+            params: {
+              'form': left.text,
+              'partner': right.text,
+              'label': agreements[i],
+            },
+          ),
+    ],
   (MatchingAnswer(:final pairs), MatchedPairs()) => [
     for (final (latin, _) in pairs)
       _optionLine(word, latin, latin.text, right: false, chosen: false),

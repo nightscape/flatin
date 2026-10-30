@@ -75,19 +75,28 @@ Attribution _chosen(PracticeItem word, FormOption right, FormOption chosen) {
 }
 
 /// A pair is right when its [FormOption]s are the very ones of a right pair;
-/// a wrong pair is judged by the option it attached to the left one.
+/// a wrong pair is judged by the option it attached to the left one, or with
+/// [MatchingAnswer.agreements] tells case, number or gender wrong.
 Attribution _matched(
   PracticeItem word,
   MatchingAnswer answer,
   List<(FormOption, FormOption)> pairs,
-) => _worst([
-  for (final (left, attached) in pairs)
-    _chosen(
-      word,
-      answer.pairs.singleWhere((p) => identical(p.$1, left)).$2,
-      attached,
-    ),
-]);
+) => answer.agreements != null
+    ? pairs.every(
+            (p) => answer.pairs.any(
+              (r) => identical(r.$1, p.$1) && identical(r.$2, p.$2),
+            ),
+          )
+          ? _good
+          : (word: Rating.good, grammar: Rating.again)
+    : _worst([
+        for (final (left, attached) in pairs)
+          _chosen(
+            word,
+            answer.pairs.singleWhere((p) => identical(p.$1, left)).$2,
+            attached,
+          ),
+      ]);
 
 /// A form in another group tells the bundles apart wrong, whichever word it
 /// belongs to.

@@ -152,12 +152,14 @@ final class Typed extends AnswerSpec {
 }
 
 /// The learner pairs the [left] text of every sampled cell with its [right]
-/// text.
+/// text, or for a word of an [agreeing] type with the [right] text of a noun
+/// cell of the pool that agrees with it in case, number and gender.
 final class Match extends AnswerSpec {
   final View left;
   final View right;
+  final Set<String> agreeing;
 
-  const Match(this.left, this.right);
+  const Match(this.left, this.right, {this.agreeing = const {}});
 }
 
 /// The learner puts every selected cell, shown in [view], into the group of
