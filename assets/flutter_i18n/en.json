@@ -200,6 +200,7 @@
     "title": "Buy buildings",
     "price": "{price} coins",
     "missing": "{price} coins – you need {missing} more",
+    "locked": "Unlocks with: {names}",
     "confirm": "Buy {name} for {price} coins?",
     "cancel": "Cancel",
     "buy": "Buy"

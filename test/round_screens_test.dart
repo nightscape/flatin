@@ -233,6 +233,32 @@ void main() {
     expect(find.text('Kontostand: 50 Münzen'), findsOneWidget);
   });
 
+  testWidgets('the end screen offers no purchase when every affordable '
+      'building still waits for others', (tester) async {
+    seedSettings(Settings(courseWords: LessonRange(1, 1)));
+    await tester.runAsync(
+      () => RewardStorage.save(
+        const RewardLedger(
+          earned: {coins: 300},
+          buildings: ['domus', 'hortus', 'ager', 'fons', 'vinea'],
+        ),
+      ),
+    );
+    await tester.pumpWidget(
+      wrapInApp(
+        Consumer(
+          builder: (_, ref, _) => ref.watch(rewardsProvider).hasValue
+              ? const RoundEndScreen(start: RewardLedger(), focus: AllWords())
+              : const SizedBox(),
+        ),
+        forcedLocale: const Locale('de'),
+      ),
+    );
+    await letItLoad(tester);
+
+    expect(find.byKey(const Key('round.end.canBuy')), findsNothing);
+  });
+
   testWidgets('with the animation off a right answer shows no burst', (
     tester,
   ) async {

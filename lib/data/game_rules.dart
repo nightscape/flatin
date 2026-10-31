@@ -2,6 +2,7 @@ import 'package:yaml/yaml.dart';
 
 import '../models/reward.dart';
 import 'asset_text.dart';
+import 'unlock_graph.dart';
 
 const String gameRulesAsset = 'lib/data/game_rules.yaml';
 
@@ -51,8 +52,14 @@ final class Building {
   final String id;
   final Map<String, int> price;
   final List<Modifier> modifies;
+  final List<String> requires;
 
-  const Building(this.id, this.price, [this.modifies = const []]);
+  const Building(
+    this.id,
+    this.price, [
+    this.modifies = const [],
+    this.requires = const [],
+  ]);
 }
 
 final class GameRules {
@@ -62,11 +69,9 @@ final class GameRules {
   /// In shop order.
   final List<Building> buildings;
 
-  const GameRules({
-    required this.resources,
-    required this.earn,
-    required this.buildings,
-  });
+  final UnlockGraph<String> _unlocks;
+
+  GameRules._(this.resources, this.earn, this.buildings, this._unlocks);
 
   /// Throws a [FormatException] naming [file] and the path of the first entry
   /// that is not part of the schema.
@@ -136,16 +141,28 @@ final class GameRules {
     ];
   }
 
-  List<RewardEffect> buy(Building building) => [
-    for (final p in building.price.entries) ResourceSpent(p.key, p.value),
-    BuildingAdded(building.id),
-  ];
+  List<RewardEffect> buy(RewardLedger ledger, Building building) {
+    final missing = missingFor(ledger, building);
+    if (missing.isNotEmpty) {
+      throw StateError('${building.id} needs ${missing.join(', ')}');
+    }
+    return [
+      for (final p in building.price.entries) ResourceSpent(p.key, p.value),
+      BuildingAdded(building.id),
+    ];
+  }
 
-  /// The buildings the shop offers.
+  /// The buildings not built yet, locked ones included.
   List<Building> unbuilt(RewardLedger ledger) => [
     for (final b in buildings)
       if (!ledger.buildings.contains(b.id)) b,
   ];
+
+  List<String> missingFor(RewardLedger ledger, Building b) =>
+      _unlocks.missing(ledger.buildings.toSet(), b.id);
+
+  bool isBuyable(RewardLedger ledger, Building b) =>
+      missingFor(ledger, b).isEmpty && ledger.canAfford(b.price);
 }
 
 const String _atLeast = 'AtLeast';
@@ -213,6 +230,7 @@ final class _Reader {
     for (final (i, b) in buildings.indexed) {
       if (!ids.add(b.id)) _fail('buildings[$i].id', 'duplicate ${b.id}');
     }
+    final unlocks = _unlocks(buildings);
     final earn = [
       for (final (i, r) in _list(top['earn'], 'earn').indexed)
         _rule(r, 'earn[$i]'),
@@ -228,7 +246,7 @@ final class _Reader {
         }
       }
     }
-    return GameRules(resources: _resources, earn: earn, buildings: buildings);
+    return GameRules._(_resources, earn, buildings, unlocks);
   }
 
   EarnRule _rule(Object? value, String path) {
@@ -288,12 +306,26 @@ final class _Reader {
     return fits(value) ? value! : _fail(path, 'expected $type, got $value');
   }
 
+  UnlockGraph<String> _unlocks(List<Building> buildings) {
+    try {
+      return UnlockGraph({for (final b in buildings) b.id: b.requires});
+    } on UnknownRequirement<String> catch (e) {
+      final i = buildings.indexWhere((b) => b.id == e.node);
+      _fail(
+        'buildings[$i].requires[${buildings[i].requires.indexOf(e.id)}]',
+        '$e',
+      );
+    } on RequirementCycle<String> catch (e) {
+      _fail('buildings', '$e');
+    }
+  }
+
   Building _building(Object? value, String path) {
     final map = _map(
       value,
       path,
       required: {'id', 'price'},
-      optional: {'modifies'},
+      optional: {'modifies', 'requires'},
     );
     return Building(
       _as<String>(map['id'], '$path.id'),
@@ -304,6 +336,13 @@ final class _Reader {
           '$path.modifies',
         ).indexed)
           _modifier(m, '$path.modifies[$i]'),
+      ],
+      [
+        for (final (i, r) in _list(
+          map['requires'] ?? YamlList(),
+          '$path.requires',
+        ).indexed)
+          _as<String>(r, '$path.requires[$i]'),
       ],
     );
   }

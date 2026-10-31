@@ -78,7 +78,7 @@ final class RewardsProvider
   Rewards create() => Rewards();
 }
 
-String _$rewardsHash() => r'4f326c499ec02dd9bf1d3956d4cb18ac76f82b68';
+String _$rewardsHash() => r'4f6756eab645f8bb8ddb6b473b62de488f975aed';
 
 /// Loads after [gameRulesProvider], so a screen that has the ledger also has
 /// the rules.

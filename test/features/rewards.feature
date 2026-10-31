@@ -30,6 +30,7 @@ Feature: Rewards
 
   Scenario: A building bought with enough coins appears in the town
     Given I have 900 coins
+    And I have built "domus, fons"
     And the app is running
     When I buy "templum"
     Then I should have 300 coins
@@ -37,6 +38,7 @@ Feature: Rewards
 
   Scenario: A building that costs more than my coins cannot be bought
     Given I have 500 coins
+    And I have built "domus, fons"
     And the app is running
     Then I cannot buy "templum"
 
@@ -54,6 +56,7 @@ Feature: Rewards
 
   Scenario: Coins earned after buying the bank count double
     Given I have 1020 coins
+    And I have built "portus, bibliotheca, murus"
     And the app is running
     When I buy "argentaria"
     And I start a round

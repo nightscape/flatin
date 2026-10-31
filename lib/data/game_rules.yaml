@@ -6,7 +6,8 @@
 # or `<field>AtLeast`), `gain` per resource, times the event field `per`.
 # `tag` marks the share for the statistics.
 # buildings: in shop order; `modifies` changes later gains of a resource
-# while the building stands (`add` or `multiply`).
+# while the building stands (`add` or `multiply`); `requires` lists the
+# buildings that must stand before it can be bought.
 
 resources: [coins]
 
@@ -35,26 +36,28 @@ buildings:
   - {id: domus, price: {coins: 400}}
   - {id: hortus, price: {coins: 250}}
   - {id: fons, price: {coins: 250}}
-  - {id: taberna, price: {coins: 400}}
-  - {id: villa, price: {coins: 400}}
-  - {id: templum, price: {coins: 600}}
+  - {id: taberna, price: {coins: 400}, requires: [domus]}
+  - {id: villa, price: {coins: 400}, requires: [domus, hortus]}
+  - {id: templum, price: {coins: 600}, requires: [domus, fons]}
   - {id: ager, price: {coins: 250}}
-  - {id: vinea, price: {coins: 250}}
-  - {id: stabulum, price: {coins: 400}}
-  - {id: figlina, price: {coins: 400}}
-  - {id: pistrinum, price: {coins: 400}}
-  - {id: aquaeductus, price: {coins: 600}}
-  - {id: thermae, price: {coins: 600}}
-  - {id: statua, price: {coins: 250}}
-  - {id: portus, price: {coins: 600}}
-  - {id: navis, price: {coins: 400}}
-  - {id: murus, price: {coins: 400}}
-  - {id: castra, price: {coins: 600}}
-  - {id: bibliotheca, price: {coins: 400}}
-  - {id: amphitheatrum, price: {coins: 600}}
+  - {id: vinea, price: {coins: 250}, requires: [ager]}
+  - {id: stabulum, price: {coins: 400}, requires: [ager]}
+  - {id: figlina, price: {coins: 400}, requires: [taberna, fons]}
+  - {id: pistrinum, price: {coins: 400}, requires: [ager, taberna]}
+  - {id: aquaeductus, price: {coins: 600}, requires: [fons, figlina]}
+  - {id: thermae, price: {coins: 600}, requires: [aquaeductus]}
+  - {id: statua, price: {coins: 250}, requires: [templum]}
+  - {id: portus, price: {coins: 600}, requires: [taberna, figlina]}
+  - {id: navis, price: {coins: 400}, requires: [portus]}
+  - {id: murus, price: {coins: 400}, requires: [figlina, stabulum]}
+  - {id: castra, price: {coins: 600}, requires: [murus, stabulum]}
+  - {id: bibliotheca, price: {coins: 400}, requires: [templum, villa]}
+  - {id: amphitheatrum, price: {coins: 600}, requires: [thermae, castra]}
   - id: argentaria
     price: {coins: 1000}
+    requires: [portus, bibliotheca, murus]
     modifies: [{resource: coins, multiply: 2}]
   - id: moneta
     price: {coins: 10000}
+    requires: [argentaria, amphitheatrum]
     modifies: [{resource: coins, multiply: 5}]

@@ -660,6 +660,15 @@ class AppSteps {
     );
   }
 
+  @Given('I have built {string}')
+  @And('I have built {string}')
+  Future<void> iHaveBuiltIds(WidgetTester tester, String ids) async {
+    final ledger = await RewardStorage.load();
+    await RewardStorage.save(
+      RewardLedger(earned: ledger.earned, buildings: ids.split(', ')),
+    );
+  }
+
   @Given('I switched the {string} reward off')
   @And('I switched the {string} reward off')
   Future<void> iSwitchedRewardOff(WidgetTester tester, String reward) async {

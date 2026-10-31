@@ -34,7 +34,7 @@ class Rewards extends _$Rewards {
     final ledger = await future;
     assert(!ledger.buildings.contains(building.id), '${building.id} is built');
     final rules = await ref.read(gameRulesProvider.future);
-    await _apply(ledger, rules.buy(building));
+    await _apply(ledger, rules.buy(ledger, building));
   }
 
   Future<List<RewardEffect>> _apply(

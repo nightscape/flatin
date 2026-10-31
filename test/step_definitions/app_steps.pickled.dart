@@ -883,6 +883,13 @@ runFeatures() {
         widgetTester,
         'Rewards',
         'A building bought with enough coins appears in the town',
+        'And I have built "domus, fons"',
+        steps.iHaveBuiltIds(widgetTester, 'domus, fons'),
+      );
+      await step(
+        widgetTester,
+        'Rewards',
+        'A building bought with enough coins appears in the town',
         'And the app is running',
         steps.theAppIsRunning(widgetTester),
       );
@@ -917,6 +924,13 @@ runFeatures() {
         'A building that costs more than my coins cannot be bought',
         'Given I have 500 coins',
         steps.iHaveCoins(widgetTester, 500),
+      );
+      await step(
+        widgetTester,
+        'Rewards',
+        'A building that costs more than my coins cannot be bought',
+        'And I have built "domus, fons"',
+        steps.iHaveBuiltIds(widgetTester, 'domus, fons'),
       );
       await step(
         widgetTester,
@@ -1006,6 +1020,13 @@ runFeatures() {
         'Coins earned after buying the bank count double',
         'Given I have 1020 coins',
         steps.iHaveCoins(widgetTester, 1020),
+      );
+      await step(
+        widgetTester,
+        'Rewards',
+        'Coins earned after buying the bank count double',
+        'And I have built "portus, bibliotheca, murus"',
+        steps.iHaveBuiltIds(widgetTester, 'portus, bibliotheca, murus'),
       );
       await step(
         widgetTester,

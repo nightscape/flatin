@@ -16,25 +16,40 @@ class TownShopScreen extends ConsumerWidget {
         FlutterI18n.translate(context, key, translationParams: params);
     final ledger = ref.watch(rewardsProvider).requireValue;
     final rules = ref.watch(gameRulesProvider).requireValue;
+    final unbuilt = rules.unbuilt(ledger);
+    final open = [
+      for (final b in unbuilt)
+        if (rules.missingFor(ledger, b).isEmpty) b,
+    ];
+    final locked = [
+      for (final b in unbuilt)
+        if (rules.missingFor(ledger, b).isNotEmpty) b,
+    ];
+    String priceLine(Building b) => ledger.canAfford(b.price)
+        ? t('shop.price', {'price': '${b.price[coins]}'})
+        : t('shop.missing', {
+            'price': '${b.price[coins]}',
+            'missing': '${b.price[coins]! - ledger.balance(coins)}',
+          });
+    String unlockLine(Building b) => t('shop.locked', {
+      'names': rules
+          .missingFor(ledger, b)
+          .map((id) => t('reward.building.$id'))
+          .join(', '),
+    });
     return Scaffold(
       appBar: AppBar(title: Text(t('shop.title'))),
       body: ListView(
         children: [
-          for (final b in rules.unbuilt(ledger))
+          for (final b in [...open, ...locked])
             ListTile(
               key: Key('shop.item.${b.id}'),
-              enabled: ledger.canAfford(b.price),
+              enabled: rules.isBuyable(ledger, b),
               leading: Image.asset('assets/town/${b.id}.png', width: 56),
               title: Text(t('reward.building.${b.id}')),
               subtitle: Text(
                 [
-                  ledger.canAfford(b.price)
-                      ? t('shop.price', {'price': '${b.price[coins]}'})
-                      : t('shop.missing', {
-                          'price': '${b.price[coins]}',
-                          'missing':
-                              '${b.price[coins]! - ledger.balance(coins)}',
-                        }),
+                  locked.contains(b) ? unlockLine(b) : priceLine(b),
                   if (b.modifies.isNotEmpty) t('reward.effect.${b.id}'),
                 ].join('\n'),
               ),

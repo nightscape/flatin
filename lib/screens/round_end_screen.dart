@@ -51,7 +51,7 @@ class RoundEndScreen extends ConsumerWidget {
             ),
           Text(t('round.end.total', {'total': '${ledger.balance(coins)}'})),
           const SizedBox(height: 16),
-          if (rules.unbuilt(ledger).any((b) => ledger.canAfford(b.price)))
+          if (rules.unbuilt(ledger).any((b) => rules.isBuyable(ledger, b)))
             Text(
               t('round.end.canBuy'),
               key: const Key('round.end.canBuy'),

@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/models/reward.dart';
 import 'package:latin_practice/screens/home_screen.dart';
 import 'package:latin_practice/services/reward_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'support/word_classification_harness.dart';
 
@@ -14,7 +15,7 @@ void main() {
     addTearDown(tester.view.reset);
     await seedNothingDue({'nouns': <String>{}, 'verbs': <String>{}});
     await RewardStorage.save(
-      const RewardLedger(earned: {coins: 300}, buildings: ['domus']),
+      const RewardLedger(earned: {coins: 300}, buildings: ['domus', 'fons']),
     );
     await tester.pumpWidget(
       wrapInApp(const HomeScreen(), forcedLocale: const Locale('de')),
@@ -41,11 +42,87 @@ void main() {
     );
   });
 
+  testWidgets('a building whose prerequisites are missing is shown as '
+      'unlocking later and does not open a dialog', (tester) async {
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+    await seedNothingDue({'nouns': <String>{}, 'verbs': <String>{}});
+    await RewardStorage.save(const RewardLedger(earned: {coins: 5000}));
+    await tester.pumpWidget(
+      wrapInApp(const HomeScreen(), forcedLocale: const Locale('de')),
+    );
+    await letItLoad(tester);
+    await tester.tap(find.byKey(const Key('home.town')));
+    await letItLoad(tester);
+    await tester.tap(find.byKey(const Key('town.build')));
+    await letItLoad(tester);
+
+    expect(
+      tester.widget<ListTile>(find.byKey(const Key('shop.item.domus'))).enabled,
+      isTrue,
+    );
+
+    final argentaria = find.byKey(const Key('shop.item.argentaria'));
+    await tester.scrollUntilVisible(argentaria, 200);
+    expect(tester.widget<ListTile>(argentaria).enabled, isFalse);
+    expect(
+      find.text(
+        'Wird frei mit: Hafen, Bibliothek, Stadtmauer\n'
+        'Verdoppelt alle Münzen',
+      ),
+      findsOneWidget,
+    );
+    await tester.tap(argentaria);
+    await letItLoad(tester);
+    expect(find.byKey(const Key('shop.confirm')), findsNothing);
+  });
+
+  testWidgets('a locked building names only the buildings still missing', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+    await seedNothingDue({'nouns': <String>{}, 'verbs': <String>{}});
+    await RewardStorage.save(
+      const RewardLedger(earned: {coins: 5000}, buildings: ['murus']),
+    );
+    await tester.pumpWidget(
+      wrapInApp(const HomeScreen(), forcedLocale: const Locale('de')),
+    );
+    await letItLoad(tester);
+    await tester.tap(find.byKey(const Key('home.town')));
+    await letItLoad(tester);
+    await tester.tap(find.byKey(const Key('town.build')));
+    await letItLoad(tester);
+
+    final argentaria = find.byKey(const Key('shop.item.argentaria'));
+    await tester.scrollUntilVisible(argentaria, 200);
+    expect(
+      find.text('Wird frei mit: Hafen, Bibliothek\nVerdoppelt alle Münzen'),
+      findsOneWidget,
+    );
+  });
+
+  test(
+    'an old save with a building without its prerequisites keeps it',
+    () async {
+      SharedPreferences.setMockInitialValues({});
+      await RewardStorage.save(
+        const RewardLedger(earned: {coins: 5000}, buildings: ['argentaria']),
+      );
+      expect((await RewardStorage.load()).buildings, ['argentaria']);
+    },
+  );
+
   testWidgets(
     'buying asks for confirmation, then spends the price and builds',
     (tester) async {
       await seedNothingDue({'nouns': <String>{}, 'verbs': <String>{}});
-      await RewardStorage.save(const RewardLedger(earned: {coins: 900}));
+      await RewardStorage.save(
+        const RewardLedger(earned: {coins: 900}, buildings: ['domus']),
+      );
       await tester.pumpWidget(
         wrapInApp(const HomeScreen(), forcedLocale: const Locale('de')),
       );
@@ -62,7 +139,7 @@ void main() {
 
       final ledger = await RewardStorage.load();
       expect(ledger.balance(coins), 500);
-      expect(ledger.buildings, ['taberna']);
+      expect(ledger.buildings, ['domus', 'taberna']);
     },
   );
 }

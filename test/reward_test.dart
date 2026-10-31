@@ -90,7 +90,9 @@ void main() {
   test('buying spends the price, adds the building and cannot overdraw', () {
     const ledger = RewardLedger(earned: {coins: 900});
     final hortus = _rules.buildings.singleWhere((b) => b.id == 'hortus');
-    final bought = _rules.buy(hortus).fold(ledger, (l, e) => l.apply(e));
+    final bought = _rules
+        .buy(ledger, hortus)
+        .fold(ledger, (l, e) => l.apply(e));
     expect(bought.balance(coins), 650);
     expect(bought.earnedOf(coins), 900);
     expect(bought.buildings, ['hortus']);
@@ -124,9 +126,12 @@ void main() {
     int bonus(RewardLedger ledger, RewardEvent event) =>
         _send(ledger, event).taggedOf(coins, 'bonus') -
         ledger.taggedOf(coins, 'bonus');
-    const before = RewardLedger(earned: {coins: 1000}, buildings: ['domus']);
+    const before = RewardLedger(
+      earned: {coins: 1000},
+      buildings: ['domus', 'portus', 'bibliotheca', 'murus'],
+    );
     final after = _rules
-        .buy(_rules.buildings.singleWhere((b) => b.id == 'argentaria'))
+        .buy(before, _rules.buildings.singleWhere((b) => b.id == 'argentaria'))
         .fold(before, (l, e) => l.apply(e));
 
     test('costs 1000 coins and multiplies coins by 2 by its rule', () {
@@ -176,18 +181,15 @@ void main() {
       wordDifficulty: null,
       at: DateTime(2026, 10, 29),
     );
-    const before = RewardLedger(earned: {coins: 11000});
+    const before = RewardLedger(
+      earned: {coins: 11000},
+      buildings: ['portus', 'bibliotheca', 'murus', 'amphitheatrum'],
+    );
     RewardLedger buy(RewardLedger ledger, String id) => _rules
-        .buy(_rules.buildings.singleWhere((b) => b.id == id))
+        .buy(ledger, _rules.buildings.singleWhere((b) => b.id == id))
         .fold(ledger, (l, e) => l.apply(e));
     int gained(RewardLedger ledger) =>
         _send(ledger, right).earnedOf(coins) - ledger.earnedOf(coins);
-
-    test('alone multiplies coins by 5', () {
-      final after = buy(before, 'moneta');
-      expect(_rules.multiplierOf(after, coins), 5);
-      expect(gained(after), 50);
-    });
 
     test('with the Argentaria multiplies coins by 10', () {
       final after = buy(buy(before, 'argentaria'), 'moneta');

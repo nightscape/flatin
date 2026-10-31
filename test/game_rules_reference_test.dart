@@ -31,6 +31,32 @@ const _prices = {
   'moneta': 10000,
 };
 
+/// The town plan: each building with the buildings it requires.
+const _requires = {
+  'domus': <String>[],
+  'hortus': <String>[],
+  'fons': <String>[],
+  'taberna': ['domus'],
+  'villa': ['domus', 'hortus'],
+  'templum': ['domus', 'fons'],
+  'ager': <String>[],
+  'vinea': ['ager'],
+  'stabulum': ['ager'],
+  'figlina': ['taberna', 'fons'],
+  'pistrinum': ['ager', 'taberna'],
+  'aquaeductus': ['fons', 'figlina'],
+  'thermae': ['aquaeductus'],
+  'statua': ['templum'],
+  'portus': ['taberna', 'figlina'],
+  'navis': ['portus'],
+  'murus': ['figlina', 'stabulum'],
+  'castra': ['murus', 'stabulum'],
+  'bibliotheca': ['templum', 'villa'],
+  'amphitheatrum': ['thermae', 'castra'],
+  'argentaria': ['portus', 'bibliotheca', 'murus'],
+  'moneta': ['argentaria', 'amphitheatrum'],
+};
+
 /// The bank doubles and the mint quintuples every coin gained while it stands.
 int _times(String buildings) {
   final built = buildings.split(' ');
@@ -65,11 +91,11 @@ typedef _Step = ({RewardEvent? event, int? buy});
 List<_Step> _sequence(Random random) {
   var at = DateTime(2026, 1, 1, 8);
   return [
-    for (var i = 0; i < 80; i++)
+    for (var i = 0; i < 120; i++)
       switch (random.nextInt(10)) {
         0 => (event: const RoundFinished(), buy: null),
         1 || 2 => (event: ChoicesChecked(1 + random.nextInt(20)), buy: null),
-        3 => (event: null, buy: random.nextInt(20)),
+        3 || 4 || 5 => (event: null, buy: random.nextInt(20)),
         _ => () {
           at = at.add(Duration(hours: random.nextInt(30) - 2));
           final right = random.nextBool();
@@ -109,6 +135,24 @@ void main() {
     );
   });
 
+  test('the rule file lists the requirements of the town plan', () {
+    expect({for (final b in rules.buildings) b.id: b.requires}, _requires);
+  });
+
+  test('every building can be reached from the empty town', () {
+    final built = <String>{};
+    var progress = true;
+    while (progress) {
+      final next = [
+        for (final e in _requires.entries)
+          if (!built.contains(e.key) && built.containsAll(e.value)) e.key,
+      ];
+      progress = next.isNotEmpty;
+      built.addAll(next);
+    }
+    expect(built, _prices.keys.toSet());
+  });
+
   test('the rule file and the reference agree after every event', () {
     var steps = 0;
     final richStart = rules.buildings.fold(0, (s, b) => s + b.price[coins]!);
@@ -125,13 +169,19 @@ void main() {
           final built = expected.buildings.split(' ');
           final offer = [
             for (final e in _prices.entries)
-              if (!built.contains(e.key) && e.value <= expected.balance) e,
+              if (!built.contains(e.key) &&
+                  e.value <= expected.balance &&
+                  built.toSet().containsAll(_requires[e.key]!))
+                e,
           ];
           if (offer.isEmpty) continue;
           final choice = offer[pick % offer.length];
           bought.add(choice.key);
           ledger = rules
-              .buy(rules.buildings.singleWhere((b) => b.id == choice.key))
+              .buy(
+                ledger,
+                rules.buildings.singleWhere((b) => b.id == choice.key),
+              )
               .fold(ledger, (l, e) => l.apply(e));
           expected = (
             balance: expected.balance - choice.value,
@@ -160,8 +210,8 @@ void main() {
         expect(_of(ledger), expected, reason: 'seed $seed, step $steps');
       }
     }
-    expect(steps, 600 * 80);
+    expect(steps, 600 * 120);
     expect(bought, {for (final b in rules.buildings) b.id});
-    expect(multipliers, {1, 2, 5, 10});
+    expect(multipliers, {1, 2, 10});
   });
 }

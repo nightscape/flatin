@@ -63,6 +63,51 @@ void main() {
       );
     });
 
+    test('of an unknown required building', () {
+      expect(
+        () => GameRules.parse(
+          _rules(
+            buildings:
+                '  - {id: domus, price: {coins: 1}}\n'
+                '  - {id: villa, price: {coins: 1}, requires: [domus, hortus]}',
+          ),
+          _file,
+        ),
+        _failsAt('buildings[1].requires[1]'),
+      );
+    });
+
+    test('of a cycle between buildings, naming the ids', () {
+      expect(
+        () => GameRules.parse(
+          _rules(
+            buildings:
+                '  - {id: a, price: {coins: 1}, requires: [b]}\n'
+                '  - {id: b, price: {coins: 1}, requires: [a]}\n'
+                '  - {id: c, price: {coins: 1}}',
+          ),
+          _file,
+        ),
+        throwsA(
+          isA<FormatException>().having(
+            (e) => e.message,
+            'message',
+            allOf(contains('cycle'), contains('a'), contains('b')),
+          ),
+        ),
+      );
+    });
+
+    test('of a building that requires itself', () {
+      expect(
+        () => GameRules.parse(
+          _rules(buildings: '  - {id: a, price: {coins: 1}, requires: [a]}'),
+          _file,
+        ),
+        throwsA(isA<FormatException>()),
+      );
+    });
+
     test('of a when field the event does not have', () {
       expect(
         () => GameRules.parse(
@@ -100,6 +145,46 @@ void main() {
         _failsAt('earn[0].per'),
       );
     });
+  });
+
+  test('buying a building with missing prerequisites throws', () {
+    final rules = GameRules.parse(
+      _rules(
+        buildings:
+            '  - {id: a, price: {coins: 1}}\n'
+            '  - {id: c, price: {coins: 1}, requires: [a]}',
+      ),
+      _file,
+    );
+    const ledger = RewardLedger(earned: {coins: 5});
+    expect(
+      () => rules.buy(ledger, rules.buildings.last),
+      throwsA(
+        isA<StateError>().having((e) => e.message, 'message', 'c needs a'),
+      ),
+    );
+    expect(
+      rules.buy(const RewardLedger(buildings: ['a']), rules.buildings.last),
+      isNotEmpty,
+    );
+  });
+
+  test('missingFor lists the prerequisites not built, in file order', () {
+    final rules = GameRules.parse(
+      _rules(
+        buildings:
+            '  - {id: a, price: {coins: 1}}\n'
+            '  - {id: b, price: {coins: 1}}\n'
+            '  - {id: c, price: {coins: 1}, requires: [b, a]}',
+      ),
+      _file,
+    );
+    final c = rules.buildings.last;
+    expect(c.requires, ['b', 'a']);
+    expect(rules.missingFor(const RewardLedger(), c), ['b', 'a']);
+    expect(rules.missingFor(const RewardLedger(buildings: ['b']), c), ['a']);
+    expect(rules.missingFor(const RewardLedger(buildings: ['a', 'b']), c), []);
+    expect(rules.missingFor(const RewardLedger(), rules.buildings.first), []);
   });
 
   test('the facts of every event are the fields the loader knows', () {

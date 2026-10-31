@@ -200,6 +200,7 @@
     "title": "Gebäude kaufen",
     "price": "{price} Münzen",
     "missing": "{price} Münzen – dir fehlen {missing}",
+    "locked": "Wird frei mit: {names}",
     "confirm": "{name} für {price} Münzen kaufen?",
     "cancel": "Abbrechen",
     "buy": "Kaufen"
