@@ -6,6 +6,7 @@ import 'dart:math';
 
 import '../data/diagnosis.dart';
 import '../data/german_forms.dart';
+import '../data/sentences.dart';
 import 'practice_item.dart';
 
 /// A form bundle of one data file: for verbs the codes of Modus, Tempus and
@@ -265,6 +266,13 @@ final class ExerciseContext {
   /// absent or never reviewed.
   final double? Function(String cardId) stabilityOf;
 
+  /// The sentences a sentence exercise draws from; a [reachedLesson] comes
+  /// with them.
+  final SentenceCorpus? sentences;
+
+  /// The last lesson whose words and grammar the learner has reached.
+  final int? reachedLesson;
+
   const ExerciseContext({
     required this.unlocked,
     required this.pool,
@@ -272,7 +280,9 @@ final class ExerciseContext {
     this.avoidMacronTwins = true,
     this.formPracticed = _everyForm,
     this.stabilityOf = _neverReviewed,
-  });
+    this.sentences,
+    this.reachedLesson,
+  }) : assert((sentences == null) == (reachedLesson == null));
 
   static bool _everyForm(PracticeItem word, FormLabel label) => true;
 

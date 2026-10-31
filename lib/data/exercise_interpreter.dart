@@ -5,7 +5,8 @@ library;
 
 import 'dart:math';
 
-import 'package:flutter/foundation.dart' show listEquals, mapEquals;
+import 'package:flutter/foundation.dart'
+    show listEquals, mapEquals, visibleForTesting;
 
 import '../models/derivation.dart' show norm;
 import '../models/exercise.dart';
@@ -13,6 +14,7 @@ import '../models/practice_item.dart';
 import 'exercise_choice.dart' show knowsWell;
 import 'exercise_cube.dart';
 import 'exercise_spec.dart';
+import 'sentences.dart';
 
 /// The cells one exercise is about.
 final class Slice {
@@ -22,8 +24,12 @@ final class Slice {
   final List<FormCell> path;
 
   /// [OddOneOut]: the majority and the target; [PrincipalParts]: the asked
-  /// row cells.
+  /// row cells; [OneSentence]: the sentence's forms in token order, the
+  /// first of them the target.
   final List<FormCell> group;
+
+  /// [OneSentence]: the sentence.
+  final Sentence? sentence;
 
   /// [Spoil]: the wrong text built for the target's key.
   final BuiltWrong? spoiled;
@@ -37,6 +43,7 @@ final class Slice {
     this.group = const [],
     this.spoiled,
     this.lookAlikes = const [],
+    this.sentence,
   }) : path = path ?? [target];
 
   @override
@@ -206,7 +213,72 @@ Iterable<Slice> _slices(
         ).map((path) => Slice(target, path: path)),
       ),
     ),
+  OneSentence() => sentenceSlices(select, cube),
 };
+
+/// One slice per sentence of [select], in corpus order; throws [CannotBuild]
+/// naming the filter that leaves none.
+@visibleForTesting
+List<Slice> sentenceSlices(OneSentence select, Cube cube) {
+  final corpus = cube.ctx.sentences!;
+  final reached = cube.ctx.reachedLesson!;
+  var left = [
+    for (final s in corpus.sentences)
+      if (s.lesson <= reached) s,
+  ];
+  if (left.isEmpty) throw CannotBuild('no sentence up to lesson $reached');
+  if (select.constructions case final kinds?) {
+    assert(
+      kinds.every(ConstructionKind.values.map((k) => k.name).contains),
+      '$kinds names no construction kind',
+    );
+    left = [
+      for (final s in left)
+        if (kinds.contains(s.construction.kind.name)) s,
+    ];
+    if (left.isEmpty) {
+      throw CannotBuild('no sentence of $kinds up to lesson $reached');
+    }
+  }
+  final placed = [
+    for (final s in left)
+      if (_formCells(s, cube) case final cells?)
+        Slice(cells.first, group: cells, sentence: s),
+  ];
+  if (placed.isEmpty) {
+    throw CannotBuild(
+      'no sentence up to lesson $reached has its forms in the pool',
+    );
+  }
+  final open = [
+    for (final slice in placed)
+      if (slice.group.every(cube.unlocked)) slice,
+  ];
+  if (open.isEmpty) {
+    throw CannotBuild(
+      'every sentence up to lesson $reached has a locked bundle',
+    );
+  }
+  return open;
+}
+
+/// The cells of the form tokens of [s]; null when a token's item is not in
+/// the pool or has no form of its key.
+List<FormCell>? _formCells(Sentence s, Cube cube) {
+  final cells = <FormCell>[];
+  for (final token in s.tokens.whereType<FormToken>()) {
+    final items = [
+      for (final w in cube.ctx.pool)
+        if (w.lemma == token.lemma) w,
+    ];
+    assert(items.length <= 1, 'the pool has ${items.length} "${token.lemma}"');
+    if (items.isEmpty || !items.single.formOrder.contains(token.key)) {
+      return null;
+    }
+    cells.add(cube.cell(items.single, token.key));
+  }
+  return cells;
+}
 
 /// One slice of all [cells]; the answer takes the cells it can use.
 Iterable<Slice> _sample(List<FormCell> cells) => [
@@ -275,6 +347,7 @@ Iterable<Slice> _slicesInto(
         for (final path in _routes(cube, target, n, axes, null))
           Slice(target, path: path),
   ],
+  OneSentence() => throw UnimplementedError('no kind asks a sentence'),
 };
 
 /// The slices of [select] for [word] in [bundle]: the prompt is the target,
@@ -929,6 +1002,8 @@ Set<FormCell> _readings(KindSpec spec, Slice slice, Cube cube) {
       throw ArgumentError('look-alikes have no typed answer');
     case PrincipalParts():
       throw ArgumentError('principal parts have a typed answer per slot');
+    case OneSentence():
+      throw UnimplementedError('no kind asks a sentence');
   }
 }
 

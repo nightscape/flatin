@@ -116,6 +116,15 @@ final class PrincipalParts extends Selection {
   });
 }
 
+/// A sentence of the context's corpus the learner can see: of a lesson up to
+/// the reached one, every form an unlocked cell of a pool word, its
+/// construction kind's name in [constructions] when given.
+final class OneSentence extends Selection {
+  final Set<String>? constructions;
+
+  const OneSentence({this.constructions});
+}
+
 /// How a [Spoil] builds its wrong text.
 enum SpoilWay {
   /// The participle or the auxiliary of a two-word form, taken from the same
