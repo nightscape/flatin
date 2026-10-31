@@ -358,5 +358,12 @@
     "irregular": "Irregular verbs",
     "baseForms": "Base forms only",
     "empty": "no words in your course range"
+  },
+  "kursstand": {
+    "title": "Current lesson",
+    "chip": "Current lesson: {lesson}",
+    "next": "Continue to lesson {lesson}",
+    "pick": "Other lesson",
+    "lesson": "Lesson {lesson}"
   }
 }

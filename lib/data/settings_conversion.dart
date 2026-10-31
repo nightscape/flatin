@@ -73,9 +73,9 @@ class MigrationMap {
   static String _word(String itemId) => itemId.split(':').last;
 }
 
-/// The format `Settings.toJson` writes and `convertSettingsV3` produces.
+/// The format `Settings.toJson` writes and `convertSettingsV4` produces.
 const settingsVersionField = 'settingsVersion';
-const settingsVersion = 3;
+const settingsVersion = 4;
 
 /// Reads stored settings of any older format against the v2 data.
 ///
@@ -160,6 +160,13 @@ Map<String, dynamic> convertSettingsV3(
     'deselectedWords': exact(json['deselectedWords']),
     'forcedOnWords': exact(json['forcedOnWords']),
   };
+}
+
+/// The v4 format adds the Kursstand. A store without one takes the furthest
+/// lesson its course ranges reach (`Settings`); the ranges stay as they are.
+Map<String, dynamic> convertSettingsV4(Map<String, dynamic> json) {
+  if (_versionOf(json) >= 4) return json;
+  return {...json, settingsVersionField: 4};
 }
 
 int _versionOf(Map<String, dynamic> json) =>

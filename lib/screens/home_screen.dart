@@ -8,6 +8,7 @@ import '../data/word_focus.dart';
 import '../models/reward.dart';
 import '../widgets/app_drawer.dart';
 import '../widgets/focus_picker.dart';
+import '../widgets/kursstand_chip.dart';
 import '../models/practice_item.dart';
 import '../providers/curriculum_provider.dart';
 import '../providers/fsrs_provider.dart';
@@ -44,7 +45,7 @@ class HomeScreen extends ConsumerWidget {
           FlutterI18n.translate(context, 'app.title'),
           style: TextStyle(fontSize: titleFontSize),
         ),
-        actions: [if (showCoins) const _Coins()],
+        actions: [const KursstandChip(), if (showCoins) const _Coins()],
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(isMobile ? 16 : 24),

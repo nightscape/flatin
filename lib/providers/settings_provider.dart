@@ -50,9 +50,11 @@ class SettingsNotifier extends _$SettingsNotifier {
         lessons,
       );
     }
-    return convertSettingsV3(
-      converted,
-      lessons.lessonWords.values.expand((words) => words),
+    return convertSettingsV4(
+      convertSettingsV3(
+        converted,
+        lessons.lessonWords.values.expand((words) => words),
+      ),
     );
   }
 
@@ -150,6 +152,9 @@ class SettingsNotifier extends _$SettingsNotifier {
 
   Future<void> setWordRange(LessonRange range) =>
       _update((s) => s.withWordRange(range));
+
+  Future<void> setKursstand(int lesson) =>
+      _update((s) => s.withKursstand(lesson));
 
   /// Takes the course ranges and their links from [course].
   Future<void> setCourse(Settings course) => _update(

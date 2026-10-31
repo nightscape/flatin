@@ -358,5 +358,12 @@
     "irregular": "Unregelmäßige Verben",
     "baseForms": "Nur Stammformen",
     "empty": "keine Wörter im Kursstand"
+  },
+  "kursstand": {
+    "title": "Kursstand",
+    "chip": "Kursstand: Lektion {lesson}",
+    "next": "Weiter zu Lektion {lesson}",
+    "pick": "Andere Lektion",
+    "lesson": "Lektion {lesson}"
   }
 }

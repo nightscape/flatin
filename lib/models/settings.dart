@@ -61,6 +61,10 @@ class Settings {
   /// the word bound.
   final LessonRange courseGrammar;
 
+  /// The lesson the class has reached, 1..[lastLesson]: what the learner
+  /// knows. The course ranges say what is practised.
+  final int kursstand;
+
   /// Whether the grammar range starts where the word range starts.
   final bool grammarFromLinked;
 
@@ -102,6 +106,7 @@ class Settings {
     Set<String>? deselectedWords,
     LessonRange? courseWords,
     LessonRange? courseGrammar,
+    int? kursstand,
     this.grammarFromLinked = false,
     this.grammarToLinked = true,
     Set<String>? forcedOnWords,
@@ -124,12 +129,22 @@ class Settings {
          from: grammarFromLinked,
          to: grammarToLinked,
        ),
+       kursstand =
+           kursstand ??
+           _furthestLesson(
+             courseWords ?? LessonRange.full,
+             grammarToLinked ? null : courseGrammar ?? LessonRange.full,
+           ),
        forcedOnWords = forcedOnWords ?? {},
        forcedOnTypes = forcedOnTypes ?? {},
        forcedOnForms = forcedOnForms ?? {},
        deselectedTopics = deselectedTopics ?? {},
        forcedOnTopics = forcedOnTopics ?? {},
        disabledRewards = disabledRewards ?? {} {
+    assert(
+      1 <= this.kursstand && this.kursstand <= lastLesson,
+      'Kursstand ${this.kursstand} is outside 1..$lastLesson',
+    );
     assert(
       this.forcedOnWords.intersection(this.deselectedWords).isEmpty,
       'a word is both forced on and forced off',
@@ -157,6 +172,7 @@ class Settings {
     Set<String>? deselectedWords,
     LessonRange? courseWords,
     LessonRange? courseGrammar,
+    int? kursstand,
     bool? grammarFromLinked,
     bool? grammarToLinked,
     Set<String>? forcedOnWords,
@@ -177,6 +193,7 @@ class Settings {
       deselectedWords: deselectedWords ?? this.deselectedWords,
       courseWords: courseWords ?? this.courseWords,
       courseGrammar: courseGrammar ?? this.courseGrammar,
+      kursstand: kursstand ?? this.kursstand,
       grammarFromLinked: grammarFromLinked ?? this.grammarFromLinked,
       grammarToLinked: grammarToLinked ?? this.grammarToLinked,
       forcedOnWords: forcedOnWords ?? this.forcedOnWords,
@@ -205,7 +222,31 @@ class Settings {
         : LessonRange(min(start, end), end);
   }
 
+  /// The furthest lesson the course ranges reach; an open end counts as the
+  /// last lesson. [grammar] is null while it ends where the words end.
+  static int _furthestLesson(LessonRange words, LessonRange? grammar) =>
+      min(max(words.to, grammar?.to ?? words.to), lastLesson);
+
   Settings withWordRange(LessonRange range) => copyWith(courseWords: range);
+
+  /// A course range that ends at the Kursstand moves its end with it; a
+  /// range that ends earlier is a chosen subset, and one that starts above
+  /// [lesson] lies past the Kursstand, so both stay. A grammar end that then
+  /// differs from the word end is unlinked.
+  Settings withKursstand(int lesson) {
+    LessonRange follow(LessonRange range) =>
+        min(range.to, lastLesson) == kursstand && range.from <= lesson
+        ? LessonRange(range.from, lesson)
+        : range;
+    final words = follow(courseWords);
+    final grammar = follow(courseGrammar);
+    return copyWith(
+      kursstand: lesson,
+      courseWords: words,
+      courseGrammar: grammar,
+      grammarToLinked: grammarToLinked && grammar.to == words.to,
+    );
+  }
 
   /// Moving a linked grammar bound away from the word bound unlinks it.
   Settings withGrammarRange(LessonRange range) => copyWith(
@@ -380,6 +421,7 @@ class Settings {
       'deselectedWords': deselectedWords.toList(),
       'courseWords': courseWords.toJson(),
       'courseGrammar': courseGrammar.toJson(),
+      'kursstand': kursstand,
       'grammarFromLinked': grammarFromLinked,
       'grammarToLinked': grammarToLinked,
       'forcedOnWords': forcedOnWords.toList(),
@@ -485,6 +527,7 @@ class Settings {
       courseGrammar: grammarRange == null
           ? null
           : LessonRange.fromJson(grammarRange),
+      kursstand: json['kursstand'] as int?,
       grammarFromLinked: linked.from,
       grammarToLinked: linked.to,
       forcedOnWords: forcedOnWords,

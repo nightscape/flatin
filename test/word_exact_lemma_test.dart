@@ -43,7 +43,7 @@ void main() {
 
       expect(converted['deselectedWords'], containsAll(['hic', 'hīc']));
       expect(converted['forcedOnWords'], containsAll(['parere', 'pārēre']));
-      expect(converted[settingsVersionField], settingsVersion);
+      expect(converted[settingsVersionField], 3);
       // A word the lessons no longer list keeps the learner's choice.
       expect(
         convertSettingsV3(
