@@ -10,11 +10,11 @@ import '../providers/round_providers.dart';
 import '../widgets/focus_picker.dart';
 import 'round_screen.dart';
 
-/// The round [offer] starts with [focus]; null when nothing is due.
+/// The round [offer] starts with [focus]; null when no round can start.
 RoundRequest? requestOf(TodayOffer offer, WordFocus focus) => switch (offer) {
-  MixedOffer() => MixedRound(focus),
+  MixedOffer() || NothingDue() => MixedRound(focus),
   NewTopicOffer(:final topic) => BlockedRound(topic.id, focus),
-  NothingDue() => null,
+  NothingToPractise() => null,
 };
 
 /// The focus on top, then "Heute dran", then every topic the course offers
@@ -75,7 +75,8 @@ class _GrammarStartState extends ConsumerState<GrammarStartScreen> {
                     NewTopicOffer(:final topic) => t('round.start.newTopic', {
                       'name': namer.name(topic),
                     }),
-                    NothingDue() => t('round.start.nothingDue'),
+                    NothingDue() ||
+                    NothingToPractise() => t('round.start.nothingDue'),
                   }),
                   if (request != null) ...[
                     const SizedBox(height: 8),

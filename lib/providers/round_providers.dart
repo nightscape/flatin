@@ -48,13 +48,13 @@ Future<List<Topic>> topics(Ref ref, WordFocus focus) async {
     curriculum,
     nounTypeDisplays: nouns.displayByType,
   );
+  final unlocked = {
+    for (final MapEntry(:key, :value) in focused.entries)
+      key: unlockedBundles(filter, value),
+  };
   return [
     for (final topic in all)
-      if (offeredBundles(
-        topic,
-        unlockedBundles(filter, focused[topic.dataFileId]!),
-      ).isNotEmpty)
-        topic,
+      if (offeredBundles(topic, unlocked[topic.dataFileId]!).isNotEmpty) topic,
   ];
 }
 
@@ -74,8 +74,14 @@ final class NewTopicOffer extends TodayOffer {
   const NewTopicOffer(this.topic);
 }
 
+/// Nothing is due; a mixed round still starts, with the cards of lowest R.
 final class NothingDue extends TodayOffer {
   const NothingDue();
+}
+
+/// No word of the focus reaches practice, so no round can start.
+final class NothingToPractise extends TodayOffer {
+  const NothingToPractise();
 }
 
 SelectionInput _selectionInput(
@@ -103,14 +109,22 @@ Future<TodayOffer> todayOffer(Ref ref, WordFocus focus) async {
     await ref.watch(courseFilterProvider.future),
     ref.watch(fsrsSchedulerProvider),
   );
-  final pair = selectPair(
+  final index = BundleIndex(input.items, input.filter);
+  SelectedPair? select({required bool includeNotDue}) => selectPair(
+    index: index,
     cards: input.cards,
     items: input.items,
     filter: input.filter,
     retrievability: input.retrievability,
     now: input.now,
+    includeNotDue: includeNotDue,
   );
-  if (pair == null) return const NothingDue();
+  final pair = select(includeNotDue: false);
+  if (pair == null) {
+    return select(includeNotDue: true) == null
+        ? const NothingToPractise()
+        : const NothingDue();
+  }
   if (!pair.anchorIsGrammar || !pair.anchorIsNew || pair.word.isVocab) {
     return const MixedOffer();
   }

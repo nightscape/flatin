@@ -124,10 +124,20 @@ void main() {
           !reviewedGrammar.contains(c.itemId),
     );
     final pairs = planMixed(plan, topics);
-    expect(pairs, isNotEmpty);
+    expect(pairs, hasLength(roundLength));
+    final words = plan.cards.values.where(
+      (c) => !c.itemId.startsWith('grammar:'),
+    );
+    final weakest = (words.map((c) => r[c.itemId]!).toList()
+      ..sort())[roundLength - 1];
     for (final (:word, :bundle) in pairs) {
       final id = GrammarCardId(word.dataFileId, bundle);
-      expect(reviewedGrammar, contains(id));
+      if (reviewedGrammar.contains(id)) continue;
+      expect(
+        r[PracticeItemCard.generateItemId(word)],
+        lessThanOrEqualTo(weakest),
+        reason: 'the word of $id is its anchor',
+      );
     }
   });
 

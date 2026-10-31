@@ -68,6 +68,14 @@ final class BundleIndex {
     }
 
     for (final word in items.where(filter.reachesPractice)) {
+      final bundles = {
+        for (final label in word.formLabels)
+          if (filter.formPracticed(word.dataFileId, label))
+            bundleOf(word, label.key),
+      };
+      // Practice reaches a word without a practised form by its basic form,
+      // which no round asks.
+      if (bundles.isEmpty) continue;
       teach(
         PracticeItemCard.generateItemId(word),
         word.dataFileId,
@@ -81,11 +89,6 @@ final class BundleIndex {
           grammarLesson(filter.curriculum, word, label.key),
         );
       }
-      final bundles = {
-        for (final label in word.formLabels)
-          if (filter.formPracticed(word.dataFileId, label))
-            bundleOf(word, label.key),
-      };
       bundlesOfWord[word] = bundles;
       for (final bundle in bundles) {
         wordsOfBundle
@@ -100,12 +103,15 @@ final class BundleIndex {
   }
 }
 
-/// The next exercise's word and bundle, or null when no card is due.
+/// The next exercise's word and bundle, or null when no card is due (with
+/// [includeNotDue]: when every card is taken).
 ///
 /// The anchor is the due card, word or grammar, with the lowest R among those
 /// that have a review. Only when none is due, the anchor is a new card: the
 /// one whose lesson comes first in the course; on equal lessons the data file
-/// with fewer reviewed grammar cards, then the smaller card id. The partner is the
+/// with fewer reviewed grammar cards, then the smaller card id. With
+/// [includeNotDue], when no card is due, the anchor is the card with the
+/// lowest R among the rest. The partner is the
 /// card of the other kind with the highest R among those that match the
 /// anchor: the bundles the anchor word has, or the words that have the anchor
 /// bundle; on equal R the earlier lesson, then the smaller card id. Only words
@@ -125,6 +131,7 @@ SelectedPair? selectPair({
   required Retrievability retrievability,
   required DateTime now,
   Set<String> taken = const {},
+  bool includeNotDue = false,
   BundleIndex? index,
 }) {
   final BundleIndex(:bundlesOfWord, :wordsOfBundle, :lessonOf, :fileOf) =
@@ -153,14 +160,18 @@ SelectedPair? selectPair({
     for (final word in bundlesOfWord.keys)
       word: cardOf(PracticeItemCard.generateItemId(word)),
   };
-  final all = [
+  final untaken = [
     for (final card in [
       ...wordCardOf.values,
       ...wordsOfBundle.keys.map(cardOf),
     ])
-      if (isDue(card) && !taken.contains(card.itemId)) card,
+      if (!taken.contains(card.itemId)) card,
   ];
-  if (all.isEmpty) return null;
+  final due = untaken.where(isDue).toList();
+  final notDue = includeNotDue
+      ? untaken.where((c) => !isDue(c)).toList()
+      : const <PracticeItemCard>[];
+  if (due.isEmpty && notDue.isEmpty) return null;
 
   final reviewedIn = <String, int>{};
   for (final id in fileOf.keys) {
@@ -177,10 +188,14 @@ SelectedPair? selectPair({
     return byReviewed != 0 ? byReviewed : a.itemId.compareTo(b.itemId);
   }
 
-  final reviewedDue = all.where((c) => c.lastReview != null);
+  final reviewedDue = due.where((c) => c.lastReview != null);
+  PracticeItemCard weakest(PracticeItemCard a, PracticeItemCard b) =>
+      byWeakest(a, b) <= 0 ? a : b;
   final anchor = reviewedDue.isNotEmpty
-      ? reviewedDue.reduce((a, b) => byWeakest(a, b) <= 0 ? a : b)
-      : all.reduce((a, b) => inCourseOrder(a, b) <= 0 ? a : b);
+      ? reviewedDue.reduce(weakest)
+      : due.isNotEmpty
+      ? due.reduce((a, b) => inCourseOrder(a, b) <= 0 ? a : b)
+      : notDue.reduce(weakest);
 
   T strongest<T>(Iterable<T> candidates, PracticeItemCard Function(T) cardFor) {
     final untaken = candidates.where((c) => !taken.contains(cardFor(c).itemId));

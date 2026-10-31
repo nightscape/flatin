@@ -112,7 +112,7 @@ final class TopicsProvider
   }
 }
 
-String _$topicsHash() => r'bcc1fe93b8d1837c5a839987c75326a6bc36923f';
+String _$topicsHash() => r'5c1c819419d516216d624e38125c7d0eec888ea9';
 
 /// The topics the course offers now with words of [focus], in course order.
 
@@ -190,7 +190,7 @@ final class TodayOfferProvider
   }
 }
 
-String _$todayOfferHash() => r'507d16c91fd212c5d884fddf915f35dee21cb23f';
+String _$todayOfferHash() => r'6a5103489c42f8a98e2c34eb078565a6c9cbddca';
 
 final class TodayOfferFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<TodayOffer>, WordFocus> {

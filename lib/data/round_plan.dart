@@ -33,6 +33,7 @@ SelectedPair? _select(
   retrievability: input.retrievability,
   now: input.now,
   taken: taken,
+  includeNotDue: true,
 );
 
 /// Blocked: the [offered] bundles of [topic] in turn, weakest bundle card
@@ -98,8 +99,9 @@ List<RoundPair> planBlocked(
   ];
 }
 
-/// Mixed: repeated [selectPair] with the anchors and words so far and every
-/// grammar card without a review taken; then reordered so that two neighbours
+/// Mixed: repeated [selectPair], the due cards first, then the rest by lowest
+/// R, with the anchors and words so far and every grammar card without a
+/// review taken; then reordered so that two neighbours
 /// share no topic where that is possible. The vocab pairs count as one topic.
 List<RoundPair> planMixed(SelectionInput input, List<Topic> topics) {
   final taken = {
