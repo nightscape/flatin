@@ -1,0 +1,2 @@
+* The town grows step by step: new buildings unlock through other buildings. The shop shows what unlocks each building.
+* The exchange office and the Moneta now come late. The buildings you already built stay.

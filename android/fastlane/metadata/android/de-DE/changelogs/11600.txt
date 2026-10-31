@@ -1,0 +1,2 @@
+* Die Stadt wächst Schritt für Schritt: Neue Gebäude werden durch andere Gebäude frei. Im Laden steht bei jedem Gebäude, womit es frei wird.
+* Wechselstube und Moneta kommen jetzt erst spät. Deine schon gebauten Gebäude bleiben.
