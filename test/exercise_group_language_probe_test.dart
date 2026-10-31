@@ -73,7 +73,7 @@ void main() {
               Random(0),
             );
         final groups = (e.answer as SortingAnswer).groups;
-        tester.view.physicalSize = const Size(390, 800);
+        tester.view.physicalSize = const Size(390, 4000);
         tester.view.devicePixelRatio = 1.0;
         addTearDown(tester.view.reset);
         await tester.pumpWidget(
@@ -124,7 +124,7 @@ void main() {
             Random(0),
           );
       final pairs = (e.answer as MatchingAnswer).pairs;
-      tester.view.physicalSize = const Size(390, 800);
+      tester.view.physicalSize = const Size(390, 4000);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(tester.view.reset);
       await tester.pumpWidget(

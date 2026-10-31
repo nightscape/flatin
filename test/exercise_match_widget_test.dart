@@ -255,6 +255,41 @@ void main() {
       expect(find.byKey(const Key('exercise.check.button')), findsNothing);
     });
 
+    testWidgets('the next exercise starts unpaired and checks its own pairs', (
+      tester,
+    ) async {
+      final first = build(vocare, _bundle);
+      final next = build(vocare, 'ind.perf.akt');
+      final responses = await pump(tester, first);
+      for (int i = 0; i < 4; i++) {
+        await pair(tester, i, i);
+      }
+      await tester.pumpWidget(
+        wrapInApp(
+          ExerciseMatchWidget(
+            word: vocare,
+            exercise: next,
+            onResponse: responses.add,
+          ),
+          forcedLocale: const Locale('de'),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('exercise.check.button')), findsNothing);
+      expect(find.textContaining(' · '), findsNothing);
+      for (int i = 0; i < 4; i++) {
+        await pair(tester, i, i);
+      }
+      await tester.tap(find.byKey(const Key('exercise.check.button')));
+      await tester.pumpAndSettle();
+      expect(find.text('Richtig'), findsOneWidget);
+      await tapNext(tester);
+      expect(attribute(vocare, next, responses.single), (
+        word: Rating.good,
+        grammar: Rating.good,
+      ));
+    });
+
     for (final language in ['de', 'en']) {
       testWidgets('shows $language text and no key', (tester) async {
         await pump(tester, build(vocare, _bundle), language: language);

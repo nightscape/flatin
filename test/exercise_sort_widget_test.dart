@@ -260,6 +260,45 @@ void main() {
       expect(formIn(0, other), findsOneWidget);
     });
 
+    testWidgets('the next exercise starts with empty boxes and checks its own '
+        'forms', (tester) async {
+      final first = sortExercise();
+      final next = build(
+        ExerciseKind.sortieren,
+        'ind.fut2.akt',
+        unlocked: _perfect,
+        seed: 1,
+      );
+      expect(next, isNot(first));
+      final responses = await pump(tester, first);
+      await dragToGroup(tester, 0, answerOf(first).forms.first.$2);
+      await tester.pumpWidget(
+        wrapInApp(
+          ExerciseSortWidget(
+            word: vocare,
+            exercise: next,
+            onResponse: responses.add,
+          ),
+          forcedLocale: const Locale('de'),
+        ),
+      );
+      await tester.pumpAndSettle();
+      final forms = answerOf(next).forms;
+      for (var i = 0; i < forms.length; i++) {
+        for (var g = 0; g < 3; g++) {
+          expect(formIn(i, g), findsNothing);
+        }
+      }
+      expect(find.byKey(const Key('exercise.check.button')), findsNothing);
+      for (final (i, (_, group)) in forms.indexed) {
+        await dragToGroup(tester, i, group);
+      }
+      await tap(tester, 'exercise.check.button');
+      expect(find.text('Richtig'), findsOneWidget);
+      await tap(tester, 'exercise.next.button');
+      expect(responses.single.groupOf, {for (final (o, g) in forms) o: g});
+    });
+
     testWidgets('a form dropped outside every box returns to the pool', (
       tester,
     ) async {

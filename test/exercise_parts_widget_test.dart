@@ -210,9 +210,10 @@ void main() {
       await load(tester, language);
       final e = _build(cognoscere, verbs, known: true);
       await pump(tester, e, language);
-      final check = find.byKey(const Key('exercise.check.button'));
-      await reveal(tester, check);
-      await tester.tap(check);
+      tester.view.physicalSize = const Size(360, 4000);
+      tester.view.viewInsets = FakeViewPadding.zero;
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('exercise.check.button')));
       await tester.pumpAndSettle();
       final text = shownText(tester);
       expect(
