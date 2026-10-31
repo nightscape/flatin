@@ -1,0 +1,2 @@
+* New exercise "Principal parts": you get one form of a verb and give the infinitive and all principal parts.
+* New exercise: match forms that agree in case, number and gender.
