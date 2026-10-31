@@ -1,0 +1,1531 @@
+{
+ "whole course, seed 0": [
+  {
+   "retry": false,
+   "word": "nouns:domina",
+   "bundle": "A-Deklination",
+   "kind": "latDeWahl",
+   "question": "exercise.translate.latDe.question",
+   "params": {
+    "form": "dominam",
+    "word": "domina"
+   },
+   "answer": {
+    "options": [
+     "mit der Herrin",
+     "(ich helfe) der Herrin",
+     "(ich sehe) die Herrinnen",
+     "(ich sehe) die Herrin"
+    ],
+    "right": "(ich sehe) die Herrin"
+   }
+  },
+  {
+   "retry": false,
+   "word": "verbs:appropinquare",
+   "bundle": "ind.praes.akt",
+   "kind": "zuordnen",
+   "question": "exercise.match.question",
+   "params": {
+    "word": "appropinquāre"
+   },
+   "answer": {
+    "pairs": [
+     "appropinquātis = ihr nähert euch",
+     "appropinquant = sie (Pl.) nähern sich",
+     "appropinquāmus = wir nähern uns",
+     "appropinquō = ich nähere mich"
+    ],
+    "agreements": null
+   }
+  },
+  {
+   "retry": false,
+   "word": "nouns:dominus",
+   "bundle": "O-Deklination-maskulinum",
+   "kind": "zuordnen",
+   "question": "exercise.match.question",
+   "params": {
+    "word": "dominus"
+   },
+   "answer": {
+    "pairs": [
+     "dominī = die Hausherren (sind da)",
+     "dominō = (ich helfe) dem Hausherrn",
+     "dominum = (ich sehe) den Hausherrn",
+     "dominōrum = (die Farbe) der Hausherren"
+    ],
+    "agreements": null
+   }
+  },
+  {
+   "retry": false,
+   "word": "verbs:cessare",
+   "bundle": "ind.praes.akt",
+   "kind": "latDeWahl",
+   "question": "exercise.translate.latDe.question",
+   "params": {
+    "form": "cessāmus",
+    "word": "cessāre"
+   },
+   "answer": {
+    "options": [
+     "wir zögern",
+     "sie (Pl.) zögern",
+     "ich zögere",
+     "ihr zögert"
+    ],
+    "right": "wir zögern"
+   }
+  },
+  {
+   "retry": false,
+   "word": "nouns:familia",
+   "bundle": "A-Deklination",
+   "kind": "bestimmen",
+   "question": "exercise.bestimmen.question",
+   "params": {
+    "form": "familiārum",
+    "word": "familia"
+   },
+   "answer": {
+    "options": [
+     "Akkusativ Plural",
+     "Nominativ Plural",
+     "Genitiv Plural",
+     "Dativ Plural"
+    ],
+    "right": "Genitiv Plural"
+   }
+  },
+  {
+   "retry": false,
+   "word": "nouns:filia",
+   "bundle": "A-Deklination",
+   "kind": "deLatWahl",
+   "question": "exercise.translate.deLat.question",
+   "params": {
+    "german": "(ich sehe) die Tochter",
+    "word": "fīlia"
+   },
+   "answer": {
+    "options": [
+     "fīliem",
+     "fīliam",
+     "fīliās",
+     "fīlium"
+    ],
+    "right": "fīliam"
+   }
+  },
+  {
+   "retry": false,
+   "word": "nouns:filius",
+   "bundle": "O-Deklination-maskulinum",
+   "kind": "zuordnen",
+   "question": "exercise.match.question",
+   "params": {
+    "word": "fīlius"
+   },
+   "answer": {
+    "pairs": [
+     "fīliī = die Söhne (sind da)",
+     "fīlius = der Sohn (ist da)",
+     "fīliīs = (ich helfe) den Söhnen",
+     "fīlium = (ich sehe) den Sohn"
+    ],
+    "agreements": null
+   }
+  },
+  {
+   "retry": false,
+   "word": "nouns:rosa",
+   "bundle": "A-Deklination",
+   "kind": "bestimmen",
+   "question": "exercise.bestimmen.question",
+   "params": {
+    "form": "rosā",
+    "word": "rosa"
+   },
+   "answer": {
+    "options": [
+     "Ablativ Plural",
+     "Vokativ Singular",
+     "Nominativ Singular",
+     "Ablativ Singular"
+    ],
+    "right": "Ablativ Singular"
+   }
+  },
+  {
+   "retry": false,
+   "word": "nouns:serva",
+   "bundle": "A-Deklination",
+   "kind": "latDeWahl",
+   "question": "exercise.translate.latDe.question",
+   "params": {
+    "form": "servīs",
+    "word": "serva"
+   },
+   "answer": {
+    "options": [
+     "die Sklavinnen (sind da)",
+     "mit der Sklavin",
+     "mit den Sklavinnen",
+     "(ich sehe) die Sklavinnen"
+    ],
+    "right": "mit den Sklavinnen"
+   }
+  },
+  {
+   "retry": false,
+   "word": "nouns:servus",
+   "bundle": "O-Deklination-maskulinum",
+   "kind": "zuordnen",
+   "question": "exercise.match.question",
+   "params": {
+    "word": "servus"
+   },
+   "answer": {
+    "pairs": [
+     "servī = (o) Sklaven!",
+     "servīs = (ich helfe) den Sklaven",
+     "servōs = (ich sehe) die Sklaven",
+     "servus = der Sklave (ist da)"
+    ],
+    "agreements": null
+   }
+  },
+  {
+   "retry": true,
+   "word": "nouns:domina",
+   "bundle": "A-Deklination",
+   "kind": "zuordnen",
+   "question": "exercise.match.question",
+   "params": {
+    "word": "domina"
+   },
+   "answer": {
+    "pairs": [
+     "domina = (o) Herrin!",
+     "dominīs = (ich helfe) den Herrinnen",
+     "dominae = (o) Herrinnen!",
+     "dominās = (ich sehe) die Herrinnen"
+    ],
+    "agreements": null
+   }
+  },
+  {
+   "retry": true,
+   "word": "verbs:appropinquare",
+   "bundle": "ind.praes.akt",
+   "kind": "irrlaeufer",
+   "question": "exercise.oddone.question",
+   "params": {},
+   "answer": {
+    "options": [
+     "appropinquat",
+     "appropinquās",
+     "appropinquāmus",
+     "appropinquō"
+    ],
+    "right": "appropinquāmus"
+   }
+  },
+  {
+   "retry": true,
+   "word": "nouns:dominus",
+   "bundle": "O-Deklination-maskulinum",
+   "kind": "bestimmen",
+   "question": "exercise.bestimmen.question",
+   "params": {
+    "form": "dominīs",
+    "word": "dominus"
+   },
+   "answer": {
+    "options": [
+     "Dativ Plural",
+     "Akkusativ Plural",
+     "Genitiv Plural",
+     "Vokativ Plural"
+    ],
+    "right": "Dativ Plural"
+   }
+  }
+ ],
+ "whole course, seed 1": [
+  {
+   "retry": false,
+   "word": "nouns:domina",
+   "bundle": "A-Deklination",
+   "kind": "zuordnen",
+   "question": "exercise.match.question",
+   "params": {
+    "word": "domina"
+   },
+   "answer": {
+    "pairs": [
+     "dominīs = (ich helfe) den Herrinnen",
+     "dominae = (o) Herrinnen!",
+     "dominam = (ich sehe) die Herrin",
+     "dominās = (ich sehe) die Herrinnen"
+    ],
+    "agreements": null
+   }
+  },
+  {
+   "retry": false,
+   "word": "verbs:appropinquare",
+   "bundle": "ind.praes.akt",
+   "kind": "latDeWahl",
+   "question": "exercise.translate.latDe.question",
+   "params": {
+    "form": "appropinquant",
+    "word": "appropinquāre"
+   },
+   "answer": {
+    "options": [
+     "sie (Pl.) haben sich genähert",
+     "wir nähern uns",
+     "sie (Pl.) nähern sich",
+     "sie (Pl.) werden sich nähern"
+    ],
+    "right": "sie (Pl.) nähern sich"
+   }
+  },
+  {
+   "retry": false,
+   "word": "nouns:dominus",
+   "bundle": "O-Deklination-maskulinum",
+   "kind": "zuordnen",
+   "question": "exercise.match.question",
+   "params": {
+    "word": "dominus"
+   },
+   "answer": {
+    "pairs": [
+     "dominōs = (ich sehe) die Hausherren",
+     "dominī = die Hausherren (sind da)",
+     "dominō = (ich helfe) dem Hausherrn",
+     "domine = (o) Hausherr!"
+    ],
+    "agreements": null
+   }
+  },
+  {
+   "retry": false,
+   "word": "verbs:cessare",
+   "bundle": "ind.praes.akt",
+   "kind": "bestimmen",
+   "question": "exercise.bestimmen.question",
+   "params": {
+    "form": "cessās",
+    "word": "cessāre"
+   },
+   "answer": {
+    "options": [
+     "Futur II: 2. Person Singular",
+     "Konjunktiv Präsens: 2. Person Singular",
+     "Präsens: 2. Person Plural",
+     "Präsens: 2. Person Singular"
+    ],
+    "right": "Präsens: 2. Person Singular"
+   }
+  },
+  {
+   "retry": false,
+   "word": "nouns:familia",
+   "bundle": "A-Deklination",
+   "kind": "latDeWahl",
+   "question": "exercise.translate.latDe.question",
+   "params": {
+    "form": "familiae",
+    "word": "familia"
+   },
+   "answer": {
+    "options": [
+     "die Familie (ist da)",
+     "mit der Familie",
+     "(ich helfe) der Familie",
+     "(ich helfe) den Familien"
+    ],
+    "right": "(ich helfe) der Familie"
+   }
+  },
+  {
+   "retry": false,
+   "word": "nouns:filia",
+   "bundle": "A-Deklination",
+   "kind": "bestimmen",
+   "question": "exercise.bestimmen.question",
+   "params": {
+    "form": "fīliae",
+    "word": "fīlia"
+   },
+   "answer": {
+    "options": [
+     "Dativ Plural",
+     "Nominativ Singular",
+     "Ablativ Singular",
+     "Dativ Singular"
+    ],
+    "right": "Dativ Singular"
+   }
+  },
+  {
+   "retry": false,
+   "word": "nouns:filius",
+   "bundle": "O-Deklination-maskulinum",
+   "kind": "deLatWahl",
+   "question": "exercise.translate.deLat.question",
+   "params": {
+    "german": "der Sohn (ist da)",
+    "word": "fīlius"
+   },
+   "answer": {
+    "options": [
+     "fīlius",
+     "fīliēs",
+     "fīlia",
+     "fīliī"
+    ],
+    "right": "fīlius"
+   }
+  },
+  {
+   "retry": false,
+   "word": "nouns:rosa",
+   "bundle": "A-Deklination",
+   "kind": "bestimmen",
+   "question": "exercise.bestimmen.question",
+   "params": {
+    "form": "rosae",
+    "word": "rosa"
+   },
+   "answer": {
+    "options": [
+     "Akkusativ Plural",
+     "Vokativ Plural",
+     "Vokativ Singular",
+     "Dativ Plural"
+    ],
+    "right": "Vokativ Plural"
+   }
+  },
+  {
+   "retry": false,
+   "word": "nouns:serva",
+   "bundle": "A-Deklination",
+   "kind": "deLatWahl",
+   "question": "exercise.translate.deLat.question",
+   "params": {
+    "german": "(ich sehe) die Sklavinnen",
+    "word": "serva"
+   },
+   "answer": {
+    "options": [
+     "servās",
+     "servārum",
+     "servēs",
+     "servae"
+    ],
+    "right": "servās"
+   }
+  },
+  {
+   "retry": false,
+   "word": "nouns:servus",
+   "bundle": "O-Deklination-maskulinum",
+   "kind": "latDeWahl",
+   "question": "exercise.translate.latDe.question",
+   "params": {
+    "form": "servus",
+    "word": "servus"
+   },
+   "answer": {
+    "options": [
+     "die Sklaven (sind da)",
+     "(die Farbe) des Sklaven",
+     "der Sklave (ist da)",
+     "(o) Sklave!"
+    ],
+    "right": "der Sklave (ist da)"
+   }
+  },
+  {
+   "retry": true,
+   "word": "nouns:domina",
+   "bundle": "A-Deklination",
+   "kind": "latDeWahl",
+   "question": "exercise.translate.latDe.question",
+   "params": {
+    "form": "domina",
+    "word": "domina"
+   },
+   "answer": {
+    "options": [
+     "mit der Herrin",
+     "(o) Herrin!",
+     "(ich helfe) der Herrin",
+     "(ich sehe) die Herrin"
+    ],
+    "right": "(o) Herrin!"
+   }
+  },
+  {
+   "retry": true,
+   "word": "verbs:appropinquare",
+   "bundle": "ind.praes.akt",
+   "kind": "zuordnen",
+   "question": "exercise.match.question",
+   "params": {
+    "word": "appropinquāre"
+   },
+   "answer": {
+    "pairs": [
+     "appropinquātis = ihr nähert euch",
+     "appropinquant = sie (Pl.) nähern sich",
+     "appropinquāmus = wir nähern uns",
+     "appropinquō = ich nähere mich"
+    ],
+    "agreements": null
+   }
+  },
+  {
+   "retry": true,
+   "word": "nouns:dominus",
+   "bundle": "O-Deklination-maskulinum",
+   "kind": "irrlaeufer",
+   "question": "exercise.oddone.question",
+   "params": {},
+   "answer": {
+    "options": [
+     "dominum",
+     "dominōrum",
+     "domine",
+     "dominī"
+    ],
+    "right": "dominōrum"
+   }
+  }
+ ],
+ "lesson 25, seed 0": [
+  {
+   "retry": false,
+   "word": "nouns:domina",
+   "bundle": "A-Deklination",
+   "kind": "latDeWahl",
+   "question": "exercise.translate.latDe.question",
+   "params": {
+    "form": "dominam",
+    "word": "domina"
+   },
+   "answer": {
+    "options": [
+     "mit der Herrin",
+     "(ich helfe) der Herrin",
+     "(ich sehe) die Herrinnen",
+     "(ich sehe) die Herrin"
+    ],
+    "right": "(ich sehe) die Herrin"
+   }
+  },
+  {
+   "retry": false,
+   "word": "verbs:appropinquare",
+   "bundle": "ind.praes.akt",
+   "kind": "zuordnen",
+   "question": "exercise.match.question",
+   "params": {
+    "word": "appropinquāre"
+   },
+   "answer": {
+    "pairs": [
+     "appropinquātis = ihr nähert euch",
+     "appropinquant = sie (Pl.) nähern sich",
+     "appropinquāmus = wir nähern uns",
+     "appropinquō = ich nähere mich"
+    ],
+    "agreements": null
+   }
+  },
+  {
+   "retry": false,
+   "word": "nouns:dominus",
+   "bundle": "O-Deklination-maskulinum",
+   "kind": "zuordnen",
+   "question": "exercise.match.question",
+   "params": {
+    "word": "dominus"
+   },
+   "answer": {
+    "pairs": [
+     "dominī = die Hausherren (sind da)",
+     "dominō = (ich helfe) dem Hausherrn",
+     "dominum = (ich sehe) den Hausherrn",
+     "dominōrum = (die Farbe) der Hausherren"
+    ],
+    "agreements": null
+   }
+  },
+  {
+   "retry": false,
+   "word": "verbs:cessare",
+   "bundle": "ind.praes.akt",
+   "kind": "latDeWahl",
+   "question": "exercise.translate.latDe.question",
+   "params": {
+    "form": "cessāmus",
+    "word": "cessāre"
+   },
+   "answer": {
+    "options": [
+     "sie (Pl.) zögern",
+     "wir hatten gezögert",
+     "wir haben gezögert",
+     "wir zögern"
+    ],
+    "right": "wir zögern"
+   }
+  },
+  {
+   "retry": false,
+   "word": "nouns:familia",
+   "bundle": "A-Deklination",
+   "kind": "zuordnen",
+   "question": "exercise.match.question",
+   "params": {
+    "word": "familia"
+   },
+   "answer": {
+    "pairs": [
+     "familiās = (ich sehe) die Familien",
+     "familiam = (ich sehe) die Familie",
+     "familiae = (o) Familien!",
+     "familiīs = (ich helfe) den Familien"
+    ],
+    "agreements": null
+   }
+  },
+  {
+   "retry": false,
+   "word": "nouns:filia",
+   "bundle": "A-Deklination",
+   "kind": "bestimmen",
+   "question": "exercise.bestimmen.question",
+   "params": {
+    "form": "fīliā",
+    "word": "fīlia"
+   },
+   "answer": {
+    "options": [
+     "Ablativ Plural",
+     "Ablativ Singular",
+     "Genitiv Singular",
+     "Akkusativ Singular"
+    ],
+    "right": "Ablativ Singular"
+   }
+  },
+  {
+   "retry": false,
+   "word": "nouns:filius",
+   "bundle": "O-Deklination-maskulinum",
+   "kind": "bestimmen",
+   "question": "exercise.bestimmen.question",
+   "params": {
+    "form": "fīliōrum",
+    "word": "fīlius"
+   },
+   "answer": {
+    "options": [
+     "Ablativ Plural",
+     "Genitiv Plural",
+     "Nominativ Plural",
+     "Dativ Plural"
+    ],
+    "right": "Genitiv Plural"
+   }
+  },
+  {
+   "retry": false,
+   "word": "nouns:rosa",
+   "bundle": "A-Deklination",
+   "kind": "deLatWahl",
+   "question": "exercise.translate.deLat.question",
+   "params": {
+    "german": "(o) Rosen!",
+    "word": "rosa"
+   },
+   "answer": {
+    "options": [
+     "rosēs",
+     "rosae",
+     "rosūs",
+     "rosa"
+    ],
+    "right": "rosae"
+   }
+  },
+  {
+   "retry": false,
+   "word": "nouns:serva",
+   "bundle": "A-Deklination",
+   "kind": "deLatWahl",
+   "question": "exercise.translate.deLat.question",
+   "params": {
+    "german": "mit der Sklavin",
+    "word": "serva"
+   },
+   "answer": {
+    "options": [
+     "servī",
+     "servō",
+     "servā",
+     "servae"
+    ],
+    "right": "servā"
+   }
+  },
+  {
+   "retry": false,
+   "word": "nouns:servus",
+   "bundle": "O-Deklination-maskulinum",
+   "kind": "deLatWahl",
+   "question": "exercise.translate.deLat.question",
+   "params": {
+    "german": "(die Farbe) der Sklaven",
+    "word": "servus"
+   },
+   "answer": {
+    "options": [
+     "servīs",
+     "servōrum",
+     "servium",
+     "servī"
+    ],
+    "right": "servōrum"
+   }
+  },
+  {
+   "retry": true,
+   "word": "nouns:domina",
+   "bundle": "A-Deklination",
+   "kind": "deLatWahl",
+   "question": "exercise.translate.deLat.question",
+   "params": {
+    "german": "die Herrinnen (sind da)",
+    "word": "domina"
+   },
+   "answer": {
+    "options": [
+     "dominēs",
+     "dominia",
+     "dominae",
+     "dominās"
+    ],
+    "right": "dominae"
+   }
+  },
+  {
+   "retry": true,
+   "word": "verbs:appropinquare",
+   "bundle": "ind.praes.akt",
+   "kind": "irrlaeufer",
+   "question": "exercise.oddone.question",
+   "params": {},
+   "answer": {
+    "options": [
+     "appropinquat",
+     "appropinquās",
+     "appropinquō",
+     "appropinquātis"
+    ],
+    "right": "appropinquātis"
+   }
+  },
+  {
+   "retry": true,
+   "word": "nouns:dominus",
+   "bundle": "O-Deklination-maskulinum",
+   "kind": "bestimmen",
+   "question": "exercise.bestimmen.question",
+   "params": {
+    "form": "dominum",
+    "word": "dominus"
+   },
+   "answer": {
+    "options": [
+     "Vokativ Singular",
+     "Genitiv Singular",
+     "Akkusativ Singular",
+     "Dativ Singular"
+    ],
+    "right": "Akkusativ Singular"
+   }
+  }
+ ],
+ "lesson 25, seed 1": [
+  {
+   "retry": false,
+   "word": "nouns:domina",
+   "bundle": "A-Deklination",
+   "kind": "zuordnen",
+   "question": "exercise.match.question",
+   "params": {
+    "word": "domina"
+   },
+   "answer": {
+    "pairs": [
+     "dominīs = (ich helfe) den Herrinnen",
+     "dominae = (o) Herrinnen!",
+     "dominam = (ich sehe) die Herrin",
+     "dominās = (ich sehe) die Herrinnen"
+    ],
+    "agreements": null
+   }
+  },
+  {
+   "retry": false,
+   "word": "verbs:appropinquare",
+   "bundle": "ind.praes.akt",
+   "kind": "latDeWahl",
+   "question": "exercise.translate.latDe.question",
+   "params": {
+    "form": "appropinquant",
+    "word": "appropinquāre"
+   },
+   "answer": {
+    "options": [
+     "ihr nähert euch",
+     "sie (Pl.) näherten sich",
+     "sie (Pl.) werden sich genähert haben",
+     "sie (Pl.) nähern sich"
+    ],
+    "right": "sie (Pl.) nähern sich"
+   }
+  },
+  {
+   "retry": false,
+   "word": "nouns:dominus",
+   "bundle": "O-Deklination-maskulinum",
+   "kind": "irrlaeufer",
+   "question": "exercise.oddone.question",
+   "params": {},
+   "answer": {
+    "options": [
+     "dominōrum",
+     "dominōs",
+     "dominīs",
+     "dominō"
+    ],
+    "right": "dominō"
+   }
+  },
+  {
+   "retry": false,
+   "word": "verbs:cessare",
+   "bundle": "ind.praes.akt",
+   "kind": "deLatWahl",
+   "question": "exercise.translate.deLat.question",
+   "params": {
+    "german": "du zögerst",
+    "word": "cessāre"
+   },
+   "answer": {
+    "options": [
+     "cessās",
+     "cessat",
+     "cessābis",
+     "cessāverās"
+    ],
+    "right": "cessās"
+   }
+  },
+  {
+   "retry": false,
+   "word": "nouns:familia",
+   "bundle": "A-Deklination",
+   "kind": "bestimmen",
+   "question": "exercise.bestimmen.question",
+   "params": {
+    "form": "familiam",
+    "word": "familia"
+   },
+   "answer": {
+    "options": [
+     "Vokativ Singular",
+     "Nominativ Singular",
+     "Akkusativ Plural",
+     "Akkusativ Singular"
+    ],
+    "right": "Akkusativ Singular"
+   }
+  },
+  {
+   "retry": false,
+   "word": "nouns:filia",
+   "bundle": "A-Deklination",
+   "kind": "latDeWahl",
+   "question": "exercise.translate.latDe.question",
+   "params": {
+    "form": "fīliae",
+    "word": "fīlia"
+   },
+   "answer": {
+    "options": [
+     "(ich sehe) die Töchter",
+     "(ich helfe) den Töchtern",
+     "(o) Töchter!",
+     "(o) Tochter!"
+    ],
+    "right": "(o) Töchter!"
+   }
+  },
+  {
+   "retry": false,
+   "word": "nouns:filius",
+   "bundle": "O-Deklination-maskulinum",
+   "kind": "zuordnen",
+   "question": "exercise.match.question",
+   "params": {
+    "word": "fīlius"
+   },
+   "answer": {
+    "pairs": [
+     "fīliī = die Söhne (sind da)",
+     "fīliō = (ich helfe) dem Sohn",
+     "fīlium = (ich sehe) den Sohn",
+     "fīlius = der Sohn (ist da)"
+    ],
+    "agreements": null
+   }
+  },
+  {
+   "retry": false,
+   "word": "nouns:rosa",
+   "bundle": "A-Deklination",
+   "kind": "zuordnen",
+   "question": "exercise.match.question",
+   "params": {
+    "word": "rosa"
+   },
+   "answer": {
+    "pairs": [
+     "rosā = mit der Rose",
+     "rosārum = (die Farbe) der Rosen",
+     "rosīs = (ich helfe) den Rosen",
+     "rosae = (die Farbe) der Rose"
+    ],
+    "agreements": null
+   }
+  },
+  {
+   "retry": false,
+   "word": "nouns:serva",
+   "bundle": "A-Deklination",
+   "kind": "deLatWahl",
+   "question": "exercise.translate.deLat.question",
+   "params": {
+    "german": "die Sklavin (ist da)",
+    "word": "serva"
+   },
+   "answer": {
+    "options": [
+     "servus",
+     "servā",
+     "servam",
+     "serva"
+    ],
+    "right": "serva"
+   }
+  },
+  {
+   "retry": false,
+   "word": "nouns:servus",
+   "bundle": "O-Deklination-maskulinum",
+   "kind": "latDeWahl",
+   "question": "exercise.translate.latDe.question",
+   "params": {
+    "form": "serve",
+    "word": "servus"
+   },
+   "answer": {
+    "options": [
+     "(die Farbe) des Sklaven",
+     "(o) Sklave!",
+     "der Sklave (ist da)",
+     "(ich helfe) dem Sklaven"
+    ],
+    "right": "(o) Sklave!"
+   }
+  },
+  {
+   "retry": true,
+   "word": "nouns:domina",
+   "bundle": "A-Deklination",
+   "kind": "irrlaeufer",
+   "question": "exercise.oddone.question",
+   "params": {},
+   "answer": {
+    "options": [
+     "dominā",
+     "dominīs",
+     "dominam",
+     "domina"
+    ],
+    "right": "dominīs"
+   }
+  },
+  {
+   "retry": true,
+   "word": "verbs:appropinquare",
+   "bundle": "ind.praes.akt",
+   "kind": "zuordnen",
+   "question": "exercise.match.question",
+   "params": {
+    "word": "appropinquāre"
+   },
+   "answer": {
+    "pairs": [
+     "appropinquātis = ihr nähert euch",
+     "appropinquō = ich nähere mich",
+     "appropinquās = du näherst dich",
+     "appropinquant = sie (Pl.) nähern sich"
+    ],
+    "agreements": null
+   }
+  },
+  {
+   "retry": true,
+   "word": "nouns:dominus",
+   "bundle": "O-Deklination-maskulinum",
+   "kind": "bestimmen",
+   "question": "exercise.bestimmen.question",
+   "params": {
+    "form": "dominō",
+    "word": "dominus"
+   },
+   "answer": {
+    "options": [
+     "Akkusativ Singular",
+     "Dativ Plural",
+     "Dativ Singular",
+     "Genitiv Singular"
+    ],
+    "right": "Dativ Singular"
+   }
+  }
+ ],
+ "lesson 5, seed 0": [
+  {
+   "retry": false,
+   "word": "nouns:domina",
+   "bundle": "A-Deklination",
+   "kind": "latDeWahl",
+   "question": "exercise.translate.latDe.question",
+   "params": {
+    "form": "domina",
+    "word": "domina"
+   },
+   "answer": {
+    "options": [
+     "(ich helfe) der Herrin",
+     "(o) Herrinnen!",
+     "(ich sehe) die Herrin",
+     "(o) Herrin!"
+    ],
+    "right": "(o) Herrin!"
+   }
+  },
+  {
+   "retry": false,
+   "word": "verbs:appropinquare",
+   "bundle": "ind.praes.akt",
+   "kind": "deLatWahl",
+   "question": "exercise.translate.deLat.question",
+   "params": {
+    "german": "ihr nähert euch",
+    "word": "appropinquāre"
+   },
+   "answer": {
+    "options": [
+     "appropinquās",
+     "appropinquant",
+     "appropinquāitis",
+     "appropinquātis"
+    ],
+    "right": "appropinquātis"
+   }
+  },
+  {
+   "retry": false,
+   "word": "nouns:dominus",
+   "bundle": "O-Deklination-maskulinum",
+   "kind": "zuordnen",
+   "question": "exercise.match.question",
+   "params": {
+    "word": "dominus"
+   },
+   "answer": {
+    "pairs": [
+     "dominīs = (ich helfe) den Hausherren",
+     "dominō = (ich helfe) dem Hausherrn",
+     "dominī = die Hausherren (sind da)",
+     "dominus = der Hausherr (ist da)"
+    ],
+    "agreements": null
+   }
+  },
+  {
+   "retry": false,
+   "word": "verbs:cessare",
+   "bundle": "ind.praes.akt",
+   "kind": "latDeWahl",
+   "question": "exercise.translate.latDe.question",
+   "params": {
+    "form": "cessāmus",
+    "word": "cessāre"
+   },
+   "answer": {
+    "options": [
+     "ihr zögert",
+     "sie (Pl.) zögern",
+     "ich zögere",
+     "wir zögern"
+    ],
+    "right": "wir zögern"
+   }
+  },
+  {
+   "retry": false,
+   "word": "nouns:familia",
+   "bundle": "A-Deklination",
+   "kind": "irrlaeufer",
+   "question": "exercise.oddone.question",
+   "params": {},
+   "answer": {
+    "options": [
+     "familiīs",
+     "familiam",
+     "familiae",
+     "familia"
+    ],
+    "right": "familiīs"
+   }
+  },
+  {
+   "retry": false,
+   "word": "nouns:filia",
+   "bundle": "A-Deklination",
+   "kind": "bestimmen",
+   "question": "exercise.bestimmen.question",
+   "params": {
+    "form": "fīliās",
+    "word": "fīlia"
+   },
+   "answer": {
+    "options": [
+     "Vokativ Plural",
+     "Akkusativ Plural",
+     "Dativ Plural",
+     "Akkusativ Singular"
+    ],
+    "right": "Akkusativ Plural"
+   }
+  },
+  {
+   "retry": false,
+   "word": "nouns:filius",
+   "bundle": "O-Deklination-maskulinum",
+   "kind": "bestimmen",
+   "question": "exercise.bestimmen.question",
+   "params": {
+    "form": "fīliī",
+    "word": "fīlius"
+   },
+   "answer": {
+    "options": [
+     "Nominativ Plural",
+     "Akkusativ Plural",
+     "Nominativ Singular",
+     "Dativ Plural"
+    ],
+    "right": "Nominativ Plural"
+   }
+  },
+  {
+   "retry": false,
+   "word": "nouns:rosa",
+   "bundle": "A-Deklination",
+   "kind": "bestimmen",
+   "question": "exercise.bestimmen.question",
+   "params": {
+    "form": "rosās",
+    "word": "rosa"
+   },
+   "answer": {
+    "options": [
+     "Dativ Plural",
+     "Vokativ Plural",
+     "Akkusativ Singular",
+     "Akkusativ Plural"
+    ],
+    "right": "Akkusativ Plural"
+   }
+  },
+  {
+   "retry": false,
+   "word": "nouns:serva",
+   "bundle": "A-Deklination",
+   "kind": "latDeWahl",
+   "question": "exercise.translate.latDe.question",
+   "params": {
+    "form": "servam",
+    "word": "serva"
+   },
+   "answer": {
+    "options": [
+     "(o) Sklavin!",
+     "(ich helfe) der Sklavin",
+     "(ich sehe) die Sklavin",
+     "(ich sehe) die Sklavinnen"
+    ],
+    "right": "(ich sehe) die Sklavin"
+   }
+  },
+  {
+   "retry": false,
+   "word": "nouns:servus",
+   "bundle": "O-Deklination-maskulinum",
+   "kind": "bestimmen",
+   "question": "exercise.bestimmen.question",
+   "params": {
+    "form": "servīs",
+    "word": "servus"
+   },
+   "answer": {
+    "options": [
+     "Dativ Singular",
+     "Dativ Plural",
+     "Nominativ Plural",
+     "Vokativ Plural"
+    ],
+    "right": "Dativ Plural"
+   }
+  },
+  {
+   "retry": true,
+   "word": "nouns:domina",
+   "bundle": "A-Deklination",
+   "kind": "deLatWahl",
+   "question": "exercise.translate.deLat.question",
+   "params": {
+    "german": "(o) Herrin!",
+    "word": "domina"
+   },
+   "answer": {
+    "options": [
+     "domina",
+     "dominae",
+     "dominēs",
+     "dominum"
+    ],
+    "right": "domina"
+   }
+  },
+  {
+   "retry": true,
+   "word": "verbs:appropinquare",
+   "bundle": "ind.praes.akt",
+   "kind": "bestimmen",
+   "question": "exercise.bestimmen.question",
+   "params": {
+    "form": "appropinquō",
+    "word": "appropinquāre"
+   },
+   "answer": {
+    "options": [
+     "Präsens: 1. Person Plural",
+     "Präsens: 1. Person Singular",
+     "Präsens: 3. Person Singular",
+     "Präsens: 2. Person Singular"
+    ],
+    "right": "Präsens: 1. Person Singular"
+   }
+  },
+  {
+   "retry": true,
+   "word": "nouns:dominus",
+   "bundle": "O-Deklination-maskulinum",
+   "kind": "deLatWahl",
+   "question": "exercise.translate.deLat.question",
+   "params": {
+    "german": "(ich helfe) dem Hausherrn",
+    "word": "dominus"
+   },
+   "answer": {
+    "options": [
+     "dominuī",
+     "domineī",
+     "dominae",
+     "dominō"
+    ],
+    "right": "dominō"
+   }
+  }
+ ],
+ "lesson 5, seed 1": [
+  {
+   "retry": false,
+   "word": "nouns:domina",
+   "bundle": "A-Deklination",
+   "kind": "zuordnen",
+   "question": "exercise.match.question",
+   "params": {
+    "word": "domina"
+   },
+   "answer": {
+    "pairs": [
+     "dominīs = (ich helfe) den Herrinnen",
+     "dominae = die Herrinnen (sind da)",
+     "dominam = (ich sehe) die Herrin",
+     "dominās = (ich sehe) die Herrinnen"
+    ],
+    "agreements": null
+   }
+  },
+  {
+   "retry": false,
+   "word": "verbs:appropinquare",
+   "bundle": "ind.praes.akt",
+   "kind": "latDeWahl",
+   "question": "exercise.translate.latDe.question",
+   "params": {
+    "form": "appropinquāmus",
+    "word": "appropinquāre"
+   },
+   "answer": {
+    "options": [
+     "ich nähere mich",
+     "ihr nähert euch",
+     "sie (Pl.) nähern sich",
+     "wir nähern uns"
+    ],
+    "right": "wir nähern uns"
+   }
+  },
+  {
+   "retry": false,
+   "word": "nouns:dominus",
+   "bundle": "O-Deklination-maskulinum",
+   "kind": "latDeWahl",
+   "question": "exercise.translate.latDe.question",
+   "params": {
+    "form": "domine",
+    "word": "dominus"
+   },
+   "answer": {
+    "options": [
+     "(ich helfe) dem Hausherrn",
+     "(o) Hausherren!",
+     "(o) Hausherr!",
+     "der Hausherr (ist da)"
+    ],
+    "right": "(o) Hausherr!"
+   }
+  },
+  {
+   "retry": false,
+   "word": "verbs:cessare",
+   "bundle": "ind.praes.akt",
+   "kind": "zuordnen",
+   "question": "exercise.match.question",
+   "params": {
+    "word": "cessāre"
+   },
+   "answer": {
+    "pairs": [
+     "cessō = ich zögere",
+     "cessās = du zögerst",
+     "cessant = sie (Pl.) zögern",
+     "cessāmus = wir zögern"
+    ],
+    "agreements": null
+   }
+  },
+  {
+   "retry": false,
+   "word": "nouns:familia",
+   "bundle": "A-Deklination",
+   "kind": "irrlaeufer",
+   "question": "exercise.oddone.question",
+   "params": {},
+   "answer": {
+    "options": [
+     "familia",
+     "familiīs",
+     "familiae",
+     "familiās"
+    ],
+    "right": "familia"
+   }
+  },
+  {
+   "retry": false,
+   "word": "nouns:filia",
+   "bundle": "A-Deklination",
+   "kind": "latDeWahl",
+   "question": "exercise.translate.latDe.question",
+   "params": {
+    "form": "fīliīs",
+    "word": "fīlia"
+   },
+   "answer": {
+    "options": [
+     "(o) Töchter!",
+     "(ich helfe) den Töchtern",
+     "(ich sehe) die Töchter",
+     "(ich helfe) der Tochter"
+    ],
+    "right": "(ich helfe) den Töchtern"
+   }
+  },
+  {
+   "retry": false,
+   "word": "nouns:filius",
+   "bundle": "O-Deklination-maskulinum",
+   "kind": "zuordnen",
+   "question": "exercise.match.question",
+   "params": {
+    "word": "fīlius"
+   },
+   "answer": {
+    "pairs": [
+     "fīliōs = (ich sehe) die Söhne",
+     "fīlius = der Sohn (ist da)",
+     "fīliō = (ich helfe) dem Sohn",
+     "fīliīs = (ich helfe) den Söhnen"
+    ],
+    "agreements": null
+   }
+  },
+  {
+   "retry": false,
+   "word": "nouns:rosa",
+   "bundle": "A-Deklination",
+   "kind": "latDeWahl",
+   "question": "exercise.translate.latDe.question",
+   "params": {
+    "form": "rosās",
+    "word": "rosa"
+   },
+   "answer": {
+    "options": [
+     "(ich sehe) die Rose",
+     "(ich helfe) den Rosen",
+     "die Rosen (sind da)",
+     "(ich sehe) die Rosen"
+    ],
+    "right": "(ich sehe) die Rosen"
+   }
+  },
+  {
+   "retry": false,
+   "word": "nouns:serva",
+   "bundle": "A-Deklination",
+   "kind": "bestimmen",
+   "question": "exercise.bestimmen.question",
+   "params": {
+    "form": "serva",
+    "word": "serva"
+   },
+   "answer": {
+    "options": [
+     "Akkusativ Singular",
+     "Nominativ Singular",
+     "Nominativ Plural",
+     "Dativ Singular"
+    ],
+    "right": "Nominativ Singular"
+   }
+  },
+  {
+   "retry": false,
+   "word": "nouns:servus",
+   "bundle": "O-Deklination-maskulinum",
+   "kind": "deLatWahl",
+   "question": "exercise.translate.deLat.question",
+   "params": {
+    "german": "der Sklave (ist da)",
+    "word": "servus"
+   },
+   "answer": {
+    "options": [
+     "servus",
+     "servō",
+     "servī",
+     "servum"
+    ],
+    "right": "servus"
+   }
+  },
+  {
+   "retry": true,
+   "word": "nouns:domina",
+   "bundle": "A-Deklination",
+   "kind": "irrlaeufer",
+   "question": "exercise.oddone.question",
+   "params": {},
+   "answer": {
+    "options": [
+     "dominās",
+     "domina",
+     "dominīs",
+     "dominae"
+    ],
+    "right": "domina"
+   }
+  },
+  {
+   "retry": true,
+   "word": "verbs:appropinquare",
+   "bundle": "ind.praes.akt",
+   "kind": "bestimmen",
+   "question": "exercise.bestimmen.question",
+   "params": {
+    "form": "appropinquātis",
+    "word": "appropinquāre"
+   },
+   "answer": {
+    "options": [
+     "Präsens: 1. Person Plural",
+     "Präsens: 2. Person Plural",
+     "Präsens: 2. Person Singular",
+     "Imperativ Präsens: 2. Person Plural"
+    ],
+    "right": "Präsens: 2. Person Plural"
+   }
+  },
+  {
+   "retry": true,
+   "word": "nouns:dominus",
+   "bundle": "O-Deklination-maskulinum",
+   "kind": "bestimmen",
+   "question": "exercise.bestimmen.question",
+   "params": {
+    "form": "dominō",
+    "word": "dominus"
+   },
+   "answer": {
+    "options": [
+     "Dativ Singular",
+     "Dativ Plural",
+     "Vokativ Singular",
+     "Nominativ Singular"
+    ],
+    "right": "Dativ Singular"
+   }
+  }
+ ]
+}

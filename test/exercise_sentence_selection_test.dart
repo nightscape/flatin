@@ -183,6 +183,61 @@ void main() {
     });
   });
 
+  group('a sentence kind asks only sentences that hold the asked cell', () {
+    test('each held (word, bundle) gets exactly the sentences holding it, '
+        'its first cell there the target', () {
+      final cube = Cube(context(reached: 25));
+      final candidates = sentenceSlices(const OneSentence(), cube);
+      final held = {
+        for (final slice in candidates)
+          for (final c in slice.group) (c.word, c.bundle),
+      };
+      expect(held.map((p) => p.$1.dataFileId).toSet(), {
+        'nouns',
+        'verbs',
+        'vocab',
+      });
+      for (final (word, bundle) in held) {
+        bool asks(FormCell c) => c.word == word && c.bundle == bundle;
+        final asked = sentenceSlicesAsking(
+          const OneSentence(),
+          cube,
+          word,
+          bundle,
+        );
+        expect(
+          [for (final s in asked) s.sentence!.id],
+          [
+            for (final s in candidates)
+              if (s.group.any(asks)) s.sentence!.id,
+          ],
+          reason: '${word.id} $bundle',
+        );
+        for (final s in asked) {
+          expect(s.target, s.group.firstWhere(asks));
+        }
+      }
+    });
+
+    test('a pair no sentence holds is declined', () {
+      final cube = Cube(context(reached: 25));
+      final held = {
+        for (final slice in sentenceSlices(const OneSentence(), cube))
+          for (final c in slice.group) (c.word.id, c.bundle),
+      };
+      final word = items.firstWhere(
+        (w) =>
+            w.dataFileId == 'verbs' &&
+            !held.contains((w.id, bundleOf(w, w.formOrder.first))),
+      );
+      final bundle = bundleOf(word, word.formOrder.first);
+      expect(
+        () => sentenceSlicesAsking(const OneSentence(), cube, word, bundle),
+        declines('no sentence up to lesson 25 holds ${word.id} in $bundle'),
+      );
+    });
+  });
+
   test('the selection equals the filters applied one by one', () {
     final names = [for (final k in ConstructionKind.values) k.name];
     final corpusItems = {

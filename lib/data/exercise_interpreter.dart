@@ -24,8 +24,7 @@ final class Slice {
   final List<FormCell> path;
 
   /// [OddOneOut]: the majority and the target; [PrincipalParts]: the asked
-  /// row cells; [OneSentence]: the sentence's forms in token order, the
-  /// first of them the target.
+  /// row cells; [OneSentence]: the sentence's forms in token order.
   final List<FormCell> group;
 
   /// [OneSentence]: the sentence.
@@ -213,11 +212,37 @@ Iterable<Slice> _slices(
         ).map((path) => Slice(target, path: path)),
       ),
     ),
-  OneSentence() => sentenceSlices(select, cube),
+  OneSentence() => sentenceSlicesAsking(select, cube, word, bundle),
 };
 
-/// One slice per sentence of [select], in corpus order; throws [CannotBuild]
-/// naming the filter that leaves none.
+/// The slices of [sentenceSlices] whose sentence holds a cell of [word] in
+/// [bundle], that cell the target, so the exercise rates the cards it asks.
+@visibleForTesting
+List<Slice> sentenceSlicesAsking(
+  OneSentence select,
+  Cube cube,
+  PracticeItem word,
+  GrammarBundle bundle,
+) {
+  final asking = [
+    for (final slice in sentenceSlices(select, cube))
+      if (slice.group
+              .where((c) => c.word.id == word.id && c.bundle == bundle)
+              .firstOrNull
+          case final target?)
+        Slice(target, group: slice.group, sentence: slice.sentence),
+  ];
+  if (asking.isEmpty) {
+    throw CannotBuild(
+      'no sentence up to lesson ${cube.ctx.reachedLesson} holds ${word.id} '
+      'in $bundle',
+    );
+  }
+  return asking;
+}
+
+/// One slice per sentence of [select], in corpus order, its first form the
+/// target; throws [CannotBuild] naming the filter that leaves none.
 @visibleForTesting
 List<Slice> sentenceSlices(OneSentence select, Cube cube) {
   final corpus = cube.ctx.sentences!;

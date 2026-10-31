@@ -8,6 +8,50 @@ part of 'round_providers.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
+/// The sentences of the sentence kinds; an asset, so loaded once.
+
+@ProviderFor(sentenceCorpus)
+final sentenceCorpusProvider = SentenceCorpusProvider._();
+
+/// The sentences of the sentence kinds; an asset, so loaded once.
+
+final class SentenceCorpusProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<SentenceCorpus>,
+          SentenceCorpus,
+          FutureOr<SentenceCorpus>
+        >
+    with $FutureModifier<SentenceCorpus>, $FutureProvider<SentenceCorpus> {
+  /// The sentences of the sentence kinds; an asset, so loaded once.
+  SentenceCorpusProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'sentenceCorpusProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$sentenceCorpusHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<SentenceCorpus> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<SentenceCorpus> create(Ref ref) {
+    return sentenceCorpus(ref);
+  }
+}
+
+String _$sentenceCorpusHash() => r'480225cb39aa746cfc121c888fb033c9123570ea';
+
 /// The topics the course offers now with words of [focus], in course order.
 
 @ProviderFor(topics)
@@ -213,7 +257,7 @@ final class RoundProvider extends $AsyncNotifierProvider<Round, RoundState> {
   }
 }
 
-String _$roundHash() => r'8969ebb8c00e235fb50f3c4e5101141536298afa';
+String _$roundHash() => r'5cb5b23a2f1bbdb73b57936810b07cf51ae9cf93';
 
 /// One round. Auto-dispose and never stored: leaving it aborts it, which
 /// keeps the word reviews already written and reviews no bundle.

@@ -5,10 +5,13 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../data/attribution.dart';
 import '../data/exercise_choice.dart';
+import '../data/exercise_interpreter.dart' show SpecGenerator;
+import '../data/exercise_spec.dart' show OneSentence;
 import '../data/practice_data.dart';
 import '../data/round.dart';
 import '../data/round_plan.dart';
 import '../data/selection.dart';
+import '../data/sentences.dart';
 import '../data/topics.dart';
 import '../data/word_focus.dart';
 import '../models/course_filter.dart';
@@ -23,6 +26,10 @@ import 'reward_provider.dart';
 import 'settings_provider.dart';
 
 part 'round_providers.g.dart';
+
+/// The sentences of the sentence kinds; an asset, so loaded once.
+@Riverpod(keepAlive: true)
+Future<SentenceCorpus> sentenceCorpus(Ref ref) => loadSentenceCorpus();
 
 /// The topics the course offers now with words of [focus], in course order.
 @riverpod
@@ -147,10 +154,31 @@ final class MixedRound extends RoundRequest {
   int get hashCode => Object.hash(MixedRound, focus);
 }
 
+/// Asks [inner] in [ctx], whatever context the caller passes.
+final class _InContext implements ExerciseGenerator {
+  const _InContext(this.inner, this.ctx);
+
+  final ExerciseGenerator inner;
+  final ExerciseContext ctx;
+
+  @override
+  ExerciseKind get kind => inner.kind;
+
+  @override
+  Exercise build(
+    PracticeItem word,
+    GrammarBundle bundle,
+    ExerciseContext _,
+    Random rng,
+  ) => inner.build(word, bundle, ctx, rng);
+}
+
 /// One round. Auto-dispose and never stored: leaving it aborts it, which
 /// keeps the word reviews already written and reviews no bundle.
 @riverpod
 class Round extends _$Round {
+  /// Per data file; a sentence kind gets the context over all files instead,
+  /// as its sentences mix the files.
   late Map<String, ExerciseContext> _contexts;
   late Random _rng;
   late List<ExerciseGenerator> _registry;
@@ -167,9 +195,8 @@ class Round extends _$Round {
     final filter = await ref.read(courseFilterProvider.future);
     final german = await ref.read(germanFormsProvider.future);
     final topics = await ref.read(topicsProvider(request.focus).future);
-    final avoidMacronTwins = (await ref.read(
-      settingsProvider.future,
-    )).avoidMacronTwins;
+    final settings = await ref.read(settingsProvider.future);
+    final corpus = await ref.read(sentenceCorpusProvider.future);
     final focused = request.focus.narrow(practicable);
     final input = _selectionInput(
       cards,
@@ -177,20 +204,37 @@ class Round extends _$Round {
       filter,
       ref.read(fsrsSchedulerProvider),
     );
+    ExerciseContext contextOf(
+      List<PracticeItem> pool, {
+      SentenceCorpus? sentences,
+      int? reached,
+    }) => ExerciseContext(
+      unlocked: unlockedBundles(filter, pool),
+      pool: pool,
+      german: german,
+      avoidMacronTwins: settings.avoidMacronTwins,
+      formPracticed: (word, label) =>
+          filter.formPracticed(word.dataFileId, label),
+      stabilityOf: (cardId) => cards[cardId]?.card.stability,
+      sentences: sentences,
+      reachedLesson: reached,
+    );
     _rng = ref.read(exerciseRandomProvider);
-    _registry = ref.read(exerciseRegistryProvider);
     _contexts = {
       for (final MapEntry(key: file, value: pool) in practicable.entries)
-        file: ExerciseContext(
-          unlocked: unlockedBundles(filter, pool),
-          pool: pool,
-          german: german,
-          avoidMacronTwins: avoidMacronTwins,
-          formPracticed: (word, label) =>
-              filter.formPracticed(word.dataFileId, label),
-          stabilityOf: (cardId) => cards[cardId]?.card.stability,
-        ),
+        file: contextOf(pool),
     };
+    final acrossFiles = contextOf(
+      [for (final pool in practicable.values) ...pool],
+      sentences: corpus,
+      reached: reachedLesson(filter.settings),
+    );
+    _registry = [
+      for (final g in ref.read(exerciseRegistryProvider))
+        g is SpecGenerator && g.spec.select is OneSentence
+            ? _InContext(g, acrossFiles)
+            : g,
+    ];
 
     final pairs = switch (request) {
       BlockedRound(:final topicId) => () {

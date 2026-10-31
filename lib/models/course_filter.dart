@@ -30,6 +30,12 @@ final class FromLesson extends CourseGap {
   const FromLesson(this.lesson);
 }
 
+/// The last lesson whose words and grammar the learner has reached: the
+/// lower end of the word and the grammar range. `laterLesson` stays, so a
+/// course open at the top reaches every lesson.
+int reachedLesson(Settings settings) =>
+    min(settings.courseWords.to, settings.courseGrammar.to);
+
 /// Per data file, the feature of a word's basic form: its first form with
 /// it spells the lemma.
 const basicFormFeature = {'nouns': ('kasus', 'nom'), 'verbs': ('modus', 'inf')};
