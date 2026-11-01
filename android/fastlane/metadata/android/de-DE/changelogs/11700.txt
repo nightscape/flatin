@@ -1,0 +1,2 @@
+* Neu: Oben neben den Münzen zeigt ein Chip deinen Kursstand, also die Lektion, in der deine Klasse gerade ist. Tippe darauf, dann bringt dich „Weiter zu Lektion …“ mit einem Tipp zur nächsten Lektion.
+* Du kannst jetzt immer eine Runde starten. Wenn heute nichts fällig ist, übst du die Wörter, die du am ehesten vergisst.

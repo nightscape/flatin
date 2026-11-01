@@ -1,0 +1,2 @@
+* New: a chip next to the coins shows your course position, the lesson your class is at. Tap it, and "Next: lesson …" moves you to the next lesson with one tap.
+* You can now always start a round. When nothing is due today, you practise the words you are most likely to forget.
