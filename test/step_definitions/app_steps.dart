@@ -479,13 +479,22 @@ class AppSteps {
     final selectors = selectorsFor(item.filterForms(enabled).labels);
     _payingChoices = selectors.sections.length;
     for (final section in selectors.sections) {
-      await tester.tap(find.byKey(Key('classification.0.$section')));
+      final dropdown = find.byKey(Key('classification.0.$section'));
+      await tester.ensureVisible(dropdown);
       await tester.pumpAndSettle();
-      final text = selectors.optionText(
-        section,
-        label.features[section] ?? absentValue,
-      );
-      await tester.tap(find.text(text).last);
+      await tester.tap(dropdown);
+      await tester.pumpAndSettle();
+      final option = find
+          .text(
+            selectors.optionText(
+              section,
+              label.features[section] ?? absentValue,
+            ),
+          )
+          .last;
+      await tester.ensureVisible(option);
+      await tester.pumpAndSettle();
+      await tester.tap(option);
       await tester.pumpAndSettle();
     }
   }
@@ -823,12 +832,16 @@ class AppSteps {
     expect(buildings, hasLength(count));
   }
 
-  Future<void> _showShopItem(WidgetTester tester, String id) =>
-      tester.scrollUntilVisible(
-        find.byKey(Key('shop.item.$id')),
-        100,
-        scrollable: find.byType(Scrollable).last,
-      );
+  /// The scroll moves the item on the next frame, so the pump comes before
+  /// any tap on it.
+  Future<void> _showShopItem(WidgetTester tester, String id) async {
+    await tester.scrollUntilVisible(
+      find.byKey(Key('shop.item.$id')),
+      100,
+      scrollable: find.byType(Scrollable).last,
+    );
+    await tester.pumpAndSettle();
+  }
 
   @When('I open the shop')
   @And('I open the shop')

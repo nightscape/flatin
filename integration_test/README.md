@@ -35,7 +35,9 @@ Play Store upload lanes.
 the step `the screen looks like "store-NNNN-<slug>.png"`. The step renders the
 screen at 1080 x 1920 with the real fonts (`test/support/app_fonts.dart`) and
 writes it to `build/store_shots/<locale>/`; `build/` is git-ignored, so no
-picture enters the history. Nothing is compared yet.
+picture enters the history. On a device the working directory is read-only,
+so the step writes into the app's temporary directory instead. Nothing is
+compared yet.
 
 - Numbers have 4 digits and gaps of 100 (`store-1100`, `store-1200`); the
   order of the store pictures comes only from the number.

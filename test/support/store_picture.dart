@@ -20,8 +20,15 @@ Locale get storeDeviceLocale {
   return Locale(language, country);
 }
 
+/// Headless runs write into `build/store_shots/<locale>/`, where
+/// `fastlane store_pictures` collects them; an app on a device has a
+/// read-only working directory, so it writes into its temporary directory.
+String get _pictureDir => Platform.environment.containsKey('FLUTTER_TEST')
+    ? 'build/store_shots/$storeLocale'
+    : '${Directory.systemTemp.path}/store_shots/$storeLocale';
+
 /// Renders the screen as a 1080 x 1920 phone picture into
-/// `build/store_shots/<locale>/<name>`.
+/// `<_pictureDir>/<name>`.
 Future<void> saveStorePicture(WidgetTester tester, String name) async {
   tester.view.physicalSize = const Size(1080, 1920);
   tester.view.devicePixelRatio = _pixelRatio;
@@ -44,7 +51,7 @@ Future<void> saveStorePicture(WidgetTester tester, String name) async {
     final png = await image.toByteData(format: ui.ImageByteFormat.png);
     return png!.buffer.asUint8List();
   });
-  File('build/store_shots/$storeLocale/$name')
+  File('$_pictureDir/$name')
     ..createSync(recursive: true)
     ..writeAsBytesSync(bytes!);
 }
