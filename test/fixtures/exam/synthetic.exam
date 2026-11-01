@@ -1,0 +1,225 @@
+schema: 1
+id: synthetisch
+titel: Übungspack – Im Garten
+lektionen:
+  von: 1
+  bis: 2
+schwerpunkte: [verbs:2, L2.1]
+schwerpunkt: Relativsatz, Perfekt Passiv, Participium coniunctum
+thema: Marcella im Garten
+zeit_min: 20
+punkte_uebersetzung: 12
+punkte_gesamt: 24
+uebersetzung:
+  hilfen:
+  - lemma: Marcella
+    angabe: Marcella, Marcellae f.
+    de: Marcella (ein Mädchen)
+    tokens: [s1_1]
+  saetze:
+  - id: s1
+    tokens:
+    - {id: s1_1, la: Marcella, lemma: Marcella, analyse: {wortart: subst, kasus: nom, numerus: sg, genus: f}, rolle: subjekt}
+    - {id: s1_2, la: ','}
+    - {id: s1_3, la: quae, lemma: quī, analyse: {wortart: pron, pronomen: relativ, kasus: nom, numerus: sg, genus: f}, rolle: subjekt, bezug: s1_1}
+    - {id: s1_4, la: in, lemma: in, analyse: {wortart: praep}, rolle: adverbiale}
+    - {id: s1_5, la: hortō, lemma: hortus, analyse: {wortart: subst, kasus: abl, numerus: sg, genus: m}, rolle: adverbiale}
+    - {id: s1_6, la: parvō, lemma: parvus, analyse: {wortart: adj, kasus: abl, numerus: sg, genus: m}, rolle: attribut, bezug: s1_5}
+    - {id: s1_7, la: sedet, lemma: sedēre, analyse: {wortart: verb, numerus: sg, person: 3, tempus: praes, modus: ind, genus_verbi: akt}, rolle: praedikat}
+    - {id: s1_8, la: ','}
+    - {id: s1_9, la: rosās, lemma: rosa, analyse: {wortart: subst, kasus: akk, numerus: pl, genus: f}, rolle: objekt}
+    - {id: s1_10, la: spectat, lemma: spectāre, analyse: {wortart: verb, numerus: sg, person: 3, tempus: praes, modus: ind, genus_verbi: akt}, rolle: praedikat}
+    - {id: s1_11, la: .}
+    teilsaetze:
+    - id: s1a
+      art: haupt
+      tokens: [s1_1, s1_9, s1_10, s1_11]
+      de:
+      - Marcella (betrachtet die Rosen | sieht die Rosen an).
+      ausrichtung:
+      - {tokens: [s1_1], de: Marcella}
+      - {tokens: [s1_9], de: die Rosen}
+      - {tokens: [s1_10], de: (betrachtet | sieht an)}
+    - id: s1b
+      art: relativ
+      tokens: [s1_2, s1_3, s1_4, s1_5, s1_6, s1_7, s1_8]
+      uebergeordnet: s1a
+      de:
+      - ', die (im | in dem) kleinen Garten sitzt,'
+      ausrichtung:
+      - {tokens: [s1_3], de: die}
+      - {tokens: [s1_4, s1_5], de: (im | in dem) Garten}
+      - {tokens: [s1_6], de: kleinen}
+      - {tokens: [s1_7], de: sitzt}
+    de:
+    - Marcella, die (im | in dem) kleinen Garten sitzt, (betrachtet die Rosen | sieht die Rosen an).
+  - id: s2
+    tokens:
+    - {id: s2_1, la: Rosae, lemma: rosa, analyse: {wortart: subst, kasus: nom, numerus: pl, genus: f}, rolle: subjekt}
+    - {id: s2_2, la: ā, lemma: ā, analyse: {wortart: praep}, rolle: adverbiale}
+    - {id: s2_3, la: servō, lemma: servus, analyse: {wortart: subst, kasus: abl, numerus: sg, genus: m}, rolle: adverbiale}
+    - {id: s2_4, la: portātae, lemma: portāre, analyse: {wortart: verb, kasus: nom, numerus: pl, genus: f, person: 3, tempus: perf, modus: ind, genus_verbi: pass}, rolle: praedikat, verbform: [s2_4, s2_5]}
+    - {id: s2_5, la: sunt, lemma: esse, analyse: {wortart: verb, numerus: pl, person: 3, tempus: praes, modus: ind, genus_verbi: akt}, rolle: praedikat, verbform: [s2_4, s2_5]}
+    - {id: s2_6, la: .}
+    teilsaetze:
+    - id: s2a
+      art: haupt
+      tokens: [s2_1, s2_2, s2_3, s2_4, s2_5, s2_6]
+      de:
+      - Die Rosen (sind (vom | von dem) Sklaven getragen worden | wurden (vom | von dem) Sklaven getragen).
+      ausrichtung:
+      - {tokens: [s2_1], de: die Rosen}
+      - {tokens: [s2_2, s2_3], de: (vom | von dem) Sklaven}
+      - {tokens: [s2_4, s2_5], de: (sind getragen worden | wurden getragen)}
+    de:
+    - Die Rosen (sind (vom | von dem) Sklaven getragen worden | wurden (vom | von dem) Sklaven getragen).
+  - id: s3
+    tokens:
+    - {id: s3_1, la: Vidēs, lemma: vidēre, analyse: {wortart: verb, numerus: sg, person: 2, tempus: praes, modus: ind, genus_verbi: akt}, rolle: praedikat}
+    - {id: s3_2, la: -ne, lemma: -ne, analyse: {wortart: partikel}}
+    - {id: s3_3, la: servum, lemma: servus, analyse: {wortart: subst, kasus: akk, numerus: sg, genus: m}, rolle: objekt}
+    - {id: s3_4, la: ā, lemma: ā, analyse: {wortart: praep}, rolle: adverbiale}
+    - {id: s3_5, la: dominā, lemma: domina, analyse: {wortart: subst, kasus: abl, numerus: sg, genus: f}, rolle: adverbiale}
+    - {id: s3_6, la: laudātum, lemma: laudāre, analyse: {wortart: verb, kasus: akk, numerus: sg, genus: m, tempus: perf, modus: part, genus_verbi: pass}, rolle: attribut, bezug: s3_3}
+    - {id: s3_7, la: '?'}
+    teilsaetze:
+    - id: s3a
+      art: haupt
+      tokens: [s3_1, s3_2, s3_3, s3_7]
+      de:
+      - Siehst du den Sklaven?
+      ausrichtung:
+      - {tokens: [s3_1], de: siehst du}
+      - {tokens: [s3_2], de: ''}
+      - {tokens: [s3_3], de: den Sklaven}
+    - id: s3b
+      art: pc
+      tokens: [s3_4, s3_5, s3_6]
+      uebergeordnet: s3a
+      sinnrichtung: attributiv
+      de:
+      - der von der Herrin gelobt worden ist
+      - den von der Herrin gelobten
+      ausrichtung:
+      - {tokens: [s3_4, s3_5], de: von der Herrin}
+      - {tokens: [s3_6], de: (gelobt worden ist | gelobten)}
+    de:
+    - Siehst du den Sklaven, der von der Herrin gelobt worden ist?
+    - Siehst du den von der Herrin gelobten Sklaven?
+aufgaben:
+- id: a1
+  titel: Formen bestimmen
+  punkte: 2
+  art: bestimmen
+  frage: Bestimme `portātae` (Satz 2) und `laudātum` (Satz 3).
+  items:
+  - token: s2_4
+    merkmale: [lemma, person, numerus, tempus, modus, genus_verbi]
+    punkte: 1
+  - token: s3_6
+    merkmale: [lemma, kasus, numerus, genus, bezug]
+    punkte: 1
+  loesung:
+  - '`portātae sunt` (portāre): 3. Pers. Pl. Perfekt Indikativ Passiv'
+  - '`laudātum` (laudāre): Akk. Sg. m., Bezugswort `servum`'
+- id: a2
+  titel: Stammformen
+  punkte: 1
+  art: stammformen
+  frage: Nenne die Stammformen von `laudāre`.
+  items:
+  - lemma: laudāre
+    stammformen: [laudāre, laudō, laudāvī, laudātum]
+    punkte: 1
+  loesung:
+  - '`laudāre – laudō – laudāvī – laudātum`'
+- id: a3
+  titel: Formen bilden
+  punkte: 2
+  art: bilden
+  frage: 'Bilde: a) `spectāre` 3. Pers. Pl. Perfekt Passiv (f.); b) `sedēre` 1. Pers. Sg. Futur I.'
+  items:
+  - lemma: spectāre
+    merkmale: {kasus: nom, genus: f, person: 3, numerus: pl, tempus: perf, modus: ind, genus_verbi: pass}
+    form: spectātae sunt
+    punkte: 1
+  - lemma: sedēre
+    merkmale: {person: 1, numerus: sg, tempus: fut, modus: ind, genus_verbi: akt}
+    form: sedēbō
+    punkte: 1
+  loesung:
+  - a) `spectātae sunt` – b) `sedēbō`
+- id: a4
+  titel: Ins Passiv setzen
+  punkte: 1
+  art: umformen
+  frage: Setze ins Passiv – `Servus rosās portat.`
+  items:
+  - vorgabe: Servus rosās portat.
+    ziel:
+    - Rosae ā servō portantur.
+    punkte: 1
+  loesung:
+  - '`Rosae ā servō portantur.`'
+- id: a5
+  titel: Wortschatz
+  punkte: 1
+  art: vokabel
+  frage: Gib eine Bedeutung von `hortus` an.
+  items:
+  - {la: hortus, de: ['[der] (Garten | Park)'], punkte: 1}
+  loesung:
+  - der Garten
+- id: a6
+  titel: Fremdwort
+  punkte: 1
+  art: ableitung
+  frage: Von welchem lateinischen Verb kommt „Spektakel“?
+  items:
+  - {fremdwort: Spektakel, la: spectāre, punkte: 1}
+  loesung:
+  - '`spectāre` (betrachten)'
+- id: a7
+  titel: Inhalt
+  punkte: 1
+  art: kurzantwort
+  frage: Wer trägt die Rosen?
+  items:
+  - frage: Träger der Rosen
+    stichwoerter:
+    - [Sklave, Sklaven, Diener]
+    punkte: 1
+  loesung:
+  - der Sklave
+- id: a8
+  titel: Sinnrichtung
+  punkte: 1
+  art: wissen_mc
+  frage: Welche Sinnrichtung hat `laudātum` in Satz 3?
+  items:
+  - frage: Vidēsne servum ā dominā laudātum?
+    teilsatz: s3b
+    optionen: [temporal, kausal, attributiv]
+    richtig: attributiv
+    punkte: 1
+  loesung:
+  - attributiv („der … gelobt worden ist“)
+- id: a9
+  titel: Reihenfolge
+  punkte: 1
+  art: ordnen
+  frage: Bringe die Sätze in die Reihenfolge des Textes.
+  elemente:
+  - Marcella betrachtet die Rosen.
+  - Der Sklave hat die Rosen getragen.
+  - Die Herrin hat den Sklaven gelobt.
+  loesung:
+  - Rosen betrachtet – Rosen getragen – Sklave gelobt
+- id: a10
+  titel: Eigene Übersetzung
+  punkte: 1
+  art: frei
+  frage: Übersetze Satz 3 auf zwei Arten.
+  loesung:
+  - Siehst du den Sklaven, der von der Herrin gelobt worden ist?
+  - Siehst du den von der Herrin gelobten Sklaven?
