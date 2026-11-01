@@ -105,6 +105,18 @@ List<ExplanationLine> feedbackLines(
               params: {'word': words[pill.word], 'chosen': words[wordOf[i]]},
             ),
   ],
+  (TickAnswer(:final options), TickedOptions(:final ticked)) => [
+    for (final (i, (:text, :mistake)) in options.indexed)
+      ExplanationLine(
+        switch ((mistake, ticked.contains(i))) {
+          (null, true) => 'exercise.ticks.feedback.rightTicked',
+          (null, false) => 'exercise.ticks.feedback.rightLeft',
+          (final m?, true) => 'exercise.ticks.feedback.wrongTicked.${m.name}',
+          (_?, false) => 'exercise.ticks.feedback.wrongLeft',
+        },
+        params: {'text': text},
+      ),
+  ],
   _ => throw ArgumentError(
     '${response.runtimeType} does not answer ${exercise.answer.runtimeType}',
   ),

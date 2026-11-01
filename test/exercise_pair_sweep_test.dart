@@ -6,7 +6,9 @@ import 'package:latin_practice/data/exercise_choice.dart';
 import 'package:latin_practice/data/exercise_kinds.dart';
 import 'package:latin_practice/data/german_forms.dart';
 import 'package:latin_practice/data/practice_data.dart';
+import 'package:latin_practice/data/sentences.dart';
 import 'package:latin_practice/models/exercise.dart';
+import 'package:latin_practice/models/lesson_range.dart';
 import 'package:latin_practice/models/practice_item.dart';
 import 'package:latin_practice/providers/fsrs_provider.dart';
 import 'package:latin_practice/providers/locale_provider.dart';
@@ -102,6 +104,44 @@ void main() {
     },
     tags: 'sweep',
   );
+
+  test('every word x bundle pair a corpus sentence holds builds a sentence '
+      'exercise in the German UI', () async {
+    final corpus = await loadSentenceCorpus();
+    final ctx = ExerciseContext(
+      unlocked: {
+        for (final w in items)
+          for (final k in w.formOrder) bundleOf(w, k),
+      },
+      pool: items,
+      german: german,
+      sentences: corpus,
+      reachedLesson: laterLesson,
+    );
+    final held = {
+      for (final s in corpus.sentences)
+        for (final t in s.tokens.whereType<FormToken>())
+          if (items.singleWhere((w) => w.lemma == t.lemma) case final w
+              when !w.isVocab)
+            (w, bundleOf(w, t.key)),
+    };
+    final generator = generatorFor(
+      ExerciseKind.satzAnkreuzen,
+      exerciseGenerators,
+    );
+    final failures = <String>[];
+    for (final (word, bundle) in held) {
+      for (final seed in _seeds) {
+        try {
+          generator.build(word, bundle, ctx, Random(seed));
+        } on CannotBuild catch (e) {
+          failures.add('${word.id} / $bundle / seed $seed: ${e.reason}');
+        }
+      }
+    }
+    expect(failures, isEmpty);
+    expect(held.length, greaterThan(50));
+  }, tags: 'sweep');
 
   test('a pair no kind fits fails naming word, bundle and locale', () {
     expect(

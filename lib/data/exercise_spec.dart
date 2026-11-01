@@ -159,6 +159,11 @@ final class BundleName extends Param {
   const BundleName();
 }
 
+/// The Latin text of a [OneSentence] slice.
+final class SentenceText extends Param {
+  const SentenceText();
+}
+
 /// What a [Show] param shows of a selection: its target cell, the start of
 /// its path or its spoiled text.
 enum Ref { target, start, spoiled }
@@ -220,6 +225,15 @@ final class Marks extends AnswerSpec {
   final Map<ConstructionKind, ({String head, String reference})> roles;
 
   const Marks(this.roles);
+}
+
+/// The learner ticks every right German rendering of a [OneSentence] among
+/// [count] options taken from the corpus: some right, the rest typical
+/// mistakes.
+final class TickMany extends AnswerSpec {
+  final int count;
+
+  const TickMany({required this.count});
 }
 
 /// Where the wrong options of a [Choose] come from.

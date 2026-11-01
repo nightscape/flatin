@@ -42,7 +42,8 @@ Object _answerOf(ExerciseAnswer a) => switch (a) {
     'forms': [for (final (f, g) in forms) '${f.text} $g'],
     'tick': tick,
   },
-  MarksAnswer() => throw StateError('a per-file round asks no sentence'),
+  MarksAnswer() ||
+  TickAnswer() => throw StateError('a per-file round asks no sentence'),
 };
 
 /// Every task a mixed round shows when the learner answers its first three

@@ -1,9 +1,14 @@
 import 'dart:math';
 
+import 'package:latin_practice/data/curriculum.dart';
+import 'package:latin_practice/data/exercise_choice.dart';
+import 'package:latin_practice/data/german_forms.dart';
+import 'package:latin_practice/data/lesson_data.dart';
 import 'package:latin_practice/data/sentences.dart';
-import 'package:latin_practice/models/course_filter.dart' show reachedLesson;
+import 'package:latin_practice/models/course_filter.dart';
 import 'package:latin_practice/models/exercise.dart';
 import 'package:latin_practice/models/practice_item.dart';
+import 'package:latin_practice/models/settings.dart';
 
 import 'gen_settings.dart';
 
@@ -98,4 +103,82 @@ List<Sentence> visibleSentences(
           s.tokens.whereType<FormToken>().every(placed))
         s,
   ];
+}
+
+/// The data a sentence context is built from.
+typedef SentenceWorld = ({
+  List<PracticeItem> items,
+  Curriculum curriculum,
+  LessonData lessons,
+  SentenceCorpus corpus,
+  GermanForms german,
+});
+
+/// A learner around the corpus: [settings], its filter and the context a
+/// round hands a sentence kind for them (every file's practicable words, the
+/// bundles the filter unlocks, the Kursstand).
+typedef SettingsLearner = ({
+  Settings settings,
+  CourseFilter filter,
+  ExerciseContext ctx,
+});
+
+/// The learner of [settings]; [german] replaces the world's German forms.
+SettingsLearner settingsLearnerOf(
+  SentenceWorld world,
+  Settings settings, {
+  GermanForms? german,
+}) {
+  final filter = CourseFilter(settings, world.curriculum, world.lessons);
+  final pool = world.items.where(filter.reachesPractice).toList();
+  return (
+    settings: settings,
+    filter: filter,
+    ctx: ExerciseContext(
+      unlocked: unlockedBundles(filter, pool),
+      pool: pool,
+      german: german ?? world.german,
+      avoidMacronTwins: settings.avoidMacronTwins,
+      formPracticed: (word, label) =>
+          filter.formPracticed(word.dataFileId, label),
+      sentences: world.corpus,
+      reachedLesson: reachedLesson(settings),
+    ),
+  );
+}
+
+/// [drawSettings] whose word and form overrides come from the corpus' words
+/// and forms, each off with chance [off]; the English UI (no German forms)
+/// with chance [english].
+SettingsLearner drawSettingsLearner(
+  Random rng,
+  SentenceWorld world, {
+  double off = 0.1,
+  double english = 0.2,
+}) {
+  final tokens = [
+    for (final s in world.corpus.sentences) ...s.tokens.whereType<FormToken>(),
+  ];
+  final byLemma = {
+    for (final t in tokens)
+      t.lemma: world.items.singleWhere((w) => w.lemma == t.lemma),
+  };
+  final settings = drawSettings(
+    rng,
+    words: byLemma.keys.toSet(),
+    forms: {
+      for (final t in tokens)
+        byLemma[t.lemma]!.dataFileId: {
+          for (final u in tokens)
+            if (byLemma[u.lemma]!.dataFileId == byLemma[t.lemma]!.dataFileId)
+              u.key,
+        },
+    },
+    off: off,
+  );
+  return settingsLearnerOf(
+    world,
+    settings,
+    german: rng.nextDouble() < english ? const NoForms() : null,
+  );
 }

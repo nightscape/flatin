@@ -357,6 +357,24 @@
           "wrong": "The predicative accusative is {word}, not {chosen}."
         }
       }
+    },
+    "ticks": {
+      "question": "Which renderings of “{sentence}” are right? Tick every right one.",
+      "feedback": {
+        "rightTicked": "“{text}” – right",
+        "rightLeft": "“{text}” – right, not ticked",
+        "wrongLeft": "“{text}” – wrong",
+        "wrongTicked": {
+          "tempus": "“{text}” – wrong: tense or time relation",
+          "genusVerbi": "“{text}” – wrong: active and passive swapped",
+          "bezugswort": "“{text}” – wrong: wrong reference word",
+          "sinnrichtung": "“{text}” – wrong: wrong sense of the participle",
+          "frageart": "“{text}” – wrong: expects another answer",
+          "aussage": "“{text}” – wrong: a statement, not a question",
+          "rollen": "“{text}” – wrong: subject, object or predicate swapped",
+          "praedikativum": "“{text}” – wrong: second accusative not read as predicate"
+        }
+      }
     }
   },
   "round": {

@@ -87,7 +87,8 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
     MatchingAnswer() ||
     SortingAnswer() ||
     PartsAnswer() ||
-    MarksAnswer() => throw UnsupportedError('own widget'),
+    MarksAnswer() ||
+    TickAnswer() => throw UnsupportedError('own widget'),
   };
 
   void _respond(ExerciseResponse response) =>
@@ -119,7 +120,8 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                 MatchingAnswer() ||
                 SortingAnswer() ||
                 PartsAnswer() ||
-                MarksAnswer() => throw UnsupportedError('own widget'),
+                MarksAnswer() ||
+                TickAnswer() => throw UnsupportedError('own widget'),
               },
               if (_response != null) ..._feedback(),
             ],

@@ -357,6 +357,24 @@
           "wrong": "Das Prädikativum ist {word}, nicht {chosen}."
         }
       }
+    },
+    "ticks": {
+      "question": "Welche Übersetzungen von „{sentence}“ sind richtig? Kreuze alle richtigen an.",
+      "feedback": {
+        "rightTicked": "„{text}“ – richtig",
+        "rightLeft": "„{text}“ – richtig, nicht angekreuzt",
+        "wrongLeft": "„{text}“ – falsch",
+        "wrongTicked": {
+          "tempus": "„{text}“ – falsch: Tempus oder Zeitverhältnis",
+          "genusVerbi": "„{text}“ – falsch: Aktiv und Passiv vertauscht",
+          "bezugswort": "„{text}“ – falsch: falsches Bezugswort",
+          "sinnrichtung": "„{text}“ – falsch: falsche Sinnrichtung",
+          "frageart": "„{text}“ – falsch: erwartet eine andere Antwort",
+          "aussage": "„{text}“ – falsch: Aussage statt Frage",
+          "rollen": "„{text}“ – falsch: Subjekt, Objekt oder Prädikat vertauscht",
+          "praedikativum": "„{text}“ – falsch: zweiter Akkusativ nicht als Prädikativum gelesen"
+        }
+      }
     }
   },
   "round": {

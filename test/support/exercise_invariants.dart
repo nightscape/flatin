@@ -321,6 +321,39 @@ List<String> violations(
       if (cell is! FormCell || cell.bundle != bundle) {
         found.add('target $cell is not in $bundle');
       }
+    case (TickMany(:final count), TickAnswer(:final sentence, :final options)):
+      final right = options.where((o) => o.mistake == null).length;
+      if (options.length != count) found.add('${options.length} options');
+      if (right < 1 || 2 * right > count) found.add('$right right of $count');
+      for (final o in options) {
+        if (!(o.mistake == null
+            ? sentence.right.contains(o.text)
+            : sentence.wrong.any(
+                (w) => w.german == o.text && w.mistake == o.mistake,
+              ))) {
+          found.add('${o.text} is no such rendering of ${sentence.id}');
+        }
+      }
+      if (e.questionParams['sentence'] != sentence.latin) {
+        found.add('the question shows ${e.questionParams['sentence']}');
+      }
+      if (sentence.lesson > ctx.reachedLesson!) {
+        found.add('${sentence.id} is of lesson ${sentence.lesson}');
+      }
+      var asks = false;
+      for (final t in sentence.tokens.whereType<FormToken>()) {
+        final c = cube.cell(
+          ctx.pool.singleWhere((w) => w.lemma == t.lemma),
+          t.key,
+        );
+        if (!cube.unlocked(c) || !cube.practised(c)) {
+          found.add('$c is not open');
+        }
+        asks |= c.word.id == word.id && c.bundle == bundle;
+      }
+      if (!asks) {
+        found.add('${sentence.id} does not hold ${word.id} in $bundle');
+      }
     default:
       found.add('answer ${e.answer.runtimeType} for ${spec.answer}');
   }

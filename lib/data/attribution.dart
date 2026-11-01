@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:fsrs/fsrs.dart';
 
 import '../models/derivation.dart' show norm;
@@ -44,6 +46,10 @@ Attribution attribute(
   (final MarksAnswer answer, MarksResponse(:final wordOf)) => _marked(
     answer,
     wordOf,
+  ),
+  (final TickAnswer answer, TickedOptions(:final ticked)) => (
+    word: tickRating(answer, ticked),
+    grammar: tickRating(answer, ticked),
   ),
   _ => throw ArgumentError(
     '${response.runtimeType} does not answer ${exercise.answer.runtimeType}',
@@ -135,6 +141,39 @@ Rating marksRating(int right, int all) {
   assert(0 <= right && right <= all, '$right of $all');
   if (right == all) return Rating.good;
   return 2 * right >= all ? Rating.hard : Rating.again;
+}
+
+/// The score of ticking [c] right and [w] wrong of [n] options, [k] of them
+/// right, in points of one right answer; random extra ticks never raise its
+/// expected value.
+double tickScore({
+  required int n,
+  required int k,
+  required int c,
+  required int w,
+}) {
+  assert(1 <= k && 2 * k <= n, '$k of $n options are right');
+  assert(0 <= c && c <= k && 0 <= w && w <= n - k, '$c right, $w wrong');
+  final rho = (n + 1 - 2 * k) / (2 * (n - k));
+  return c * pow(rho, w).toDouble();
+}
+
+/// Good for the best score `k`, Hard from half of it, Again below.
+Rating tickRating(TickAnswer answer, Set<int> ticked) {
+  final right = answer.right;
+  final share =
+      tickScore(
+        n: answer.options.length,
+        k: right.length,
+        c: ticked.intersection(right).length,
+        w: ticked.difference(right).length,
+      ) /
+      right.length;
+  return share == 1
+      ? Rating.good
+      : share >= 0.5
+      ? Rating.hard
+      : Rating.again;
 }
 
 /// Whether [text] is a spelling of [answer], read without macrons.

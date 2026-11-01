@@ -303,6 +303,8 @@ void main() {
             });
           case MarksAnswer(:final pills):
             expect(pills, hasLength(2));
+          case TickAnswer(:final options):
+            expect(options, hasLength(4));
         }
       });
     }

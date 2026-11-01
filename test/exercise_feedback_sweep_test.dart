@@ -99,6 +99,7 @@ List<ExerciseResponse> _responses(Exercise exercise) =>
         TypedTexts([for (final _ in slots) 'xyz']),
       ],
       final MarksAnswer answer => [rightMarks(answer), wrongMarks(answer)],
+      final TickAnswer answer => [rightTicks(answer), wrongTicks(answer)],
     };
 
 void main() {

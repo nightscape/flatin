@@ -14,6 +14,7 @@ import '../models/practice_item.dart';
 import 'exercise_choice.dart' show knowsWell;
 import 'exercise_cube.dart';
 import 'exercise_spec.dart';
+import 'german_forms.dart' show NoForms;
 import 'sentences.dart';
 
 /// The cells one exercise is about.
@@ -154,6 +155,16 @@ final class SpecGenerator implements ExerciseGenerator {
             .formKey,
       PartsAnswer(:final prompt) => prompt.formKey,
       MarksAnswer(:final target) => target.formKey,
+      TickAnswer(:final sentence) =>
+        sentence.tokens
+            .whereType<FormToken>()
+            .firstWhere(
+              (t) =>
+                  t.lemma == word.lemma &&
+                  word.formOrder.contains(t.key) &&
+                  bundleOf(word, t.key) == bundle,
+            )
+            .key,
     });
     final objections = <String>[];
     for (final slice in _slicesInto(spec, cube, target, bundle, exercise)) {
@@ -390,6 +401,14 @@ Iterable<Slice> _slicesInto(
       for (final s in sentenceSlices(select, cube))
         if (s.sentence!.id == sentenceId && s.group.contains(target))
           Slice(target, group: s.group, sentence: s.sentence),
+    if (exercise.answer case TickAnswer(:final sentence))
+      for (final slice in sentenceSlicesAsking(
+        select,
+        cube,
+        target.word,
+        bundle,
+      ))
+        if (slice.sentence!.id == sentence.id && slice.target == target) slice,
   ],
 };
 
@@ -727,12 +746,20 @@ String? _uncovered(KindSpec spec, Slice slice, Cube cube) {
       if (!cube.view(view).covers(cell)) return '$view does not cover $cell';
     }
   }
+  if (spec.answer is TickMany) {
+    if (cube.ctx.german is NoForms) {
+      return 'the renderings of ${slice.sentence!.id} are German';
+    }
+    for (final c in slice.group) {
+      if (!cube.practised(c)) return '$c is not practised';
+    }
+  }
   final (view, asked) = switch (spec.answer) {
     Choose(:final view) ||
     Typed(:final view) ||
     Sort(:final view) => (view, [slice.target]),
     Parts(:final view) => (view, slice.group),
-    Match() || Marks() => (null, const <FormCell>[]),
+    Match() || Marks() || TickMany() => (null, const <FormCell>[]),
   };
   for (final c in asked) {
     if (!cube.view(view!).covers(c)) return '$view does not cover $c';
@@ -756,6 +783,7 @@ Map<String, String> _paramsOf(KindSpec spec, Slice slice, Cube cube) => {
           _changeLabel(slice.path[i - 1], slice.path[i]),
       ].join(' → '),
       BundleName() => _bundleName(slice.target),
+      SentenceText() => slice.sentence!.latin,
     },
 };
 
@@ -797,6 +825,7 @@ ExerciseAnswer? _answerOf(KindSpec spec, Slice slice, Cube cube, Random rng) =>
       final Sort sort => _sort(sort, slice, cube),
       Parts(:final view) => _parts(spec, view, slice, cube),
       final Marks marks => _marks(marks, slice, cube),
+      final TickMany tick => _tick(tick, slice, rng),
     };
 
 /// One pill on the head and one on the reference word of the slice's
@@ -835,6 +864,29 @@ MarksAnswer? _marks(Marks marks, Slice slice, Cube cube) {
     }
   }
   return null;
+}
+
+/// [TickMany.count] renderings of the slice's sentence: k right and the rest
+/// wrong, k drawn among the counts up to half that the sentence has enough
+/// renderings for.
+TickAnswer? _tick(TickMany tick, Slice slice, Random rng) {
+  final s = slice.sentence!;
+  final n = tick.count;
+  final ks = [
+    for (var k = 1; 2 * k <= n; k++)
+      if (k <= s.right.length && n - k <= s.wrong.length) k,
+  ];
+  if (ks.isEmpty) return null;
+  final k = ks[rng.nextInt(ks.length)];
+  return TickAnswer(
+    s,
+    <({String text, Mistake? mistake})>[
+      for (final text in (s.right.toList()..shuffle(rng)).take(k))
+        (text: text, mistake: null),
+      for (final w in (s.wrong.toList()..shuffle(rng)).take(n - k))
+        (text: w.german, mistake: w.mistake),
+    ]..shuffle(rng),
+  );
 }
 
 /// The prompt and one slot per part of the row, named by
@@ -1234,6 +1286,19 @@ String? _answerObjection(
       if (given.target.formKey != ours.target.formKey ||
           given.target.text != ours.target.text) {
         return 'target ${given.target.text}';
+      }
+      return null;
+    case (TickMany(:final count), TickAnswer(:final sentence, :final options)):
+      if (sentence.id != slice.sentence!.id) return 'sentence ${sentence.id}';
+      if (options.length != count) return '${options.length} options';
+      for (final o in options) {
+        if (!(o.mistake == null
+            ? sentence.right.contains(o.text)
+            : sentence.wrong.any(
+                (w) => w.german == o.text && w.mistake == o.mistake,
+              ))) {
+          return '${o.text} is no such rendering of ${sentence.id}';
+        }
       }
       return null;
     default:

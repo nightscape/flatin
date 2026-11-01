@@ -19,7 +19,8 @@ KindClass classOf(ExerciseKind kind) => switch (kind) {
   ExerciseKind.zuordnen ||
   ExerciseKind.ankreuzen ||
   ExerciseKind.sortieren ||
-  ExerciseKind.markieren => KindClass.recognition,
+  ExerciseKind.markieren ||
+  ExerciseKind.satzAnkreuzen => KindClass.recognition,
   ExerciseKind.formBilden ||
   ExerciseKind.deLatTippen ||
   ExerciseKind.umformen ||

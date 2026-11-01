@@ -30,6 +30,7 @@ import 'package:latin_practice/models/practice_item.dart';
   ),
   final SortingAnswer answer => (rightSorting(answer), wrongSorting(answer)),
   final MarksAnswer answer => (rightMarks(answer), wrongMarks(answer)),
+  final TickAnswer answer => (rightTicks(answer), wrongTicks(answer)),
 };
 
 MarksResponse rightMarks(MarksAnswer answer) =>
@@ -45,6 +46,14 @@ MarksResponse wrongMarks(MarksAnswer answer) {
     for (final (i, p) in answer.pills.indexed) i == 0 ? unmarked : p.word,
   ]);
 }
+
+TickedOptions rightTicks(TickAnswer answer) => TickedOptions(answer.right);
+
+/// Every right option and one wrong one.
+TickedOptions wrongTicks(TickAnswer answer) => TickedOptions({
+  ...answer.right,
+  answer.options.indexWhere((o) => o.mistake != null),
+});
 
 SortedForms rightSorting(SortingAnswer answer) =>
     SortedForms({for (final (o, g) in answer.forms) o: g});

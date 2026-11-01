@@ -62,6 +62,7 @@ enum ExerciseKind {
   sortieren,
   stammformen,
   markieren,
+  satzAnkreuzen,
 }
 
 /// One text the learner sees as an option, with the form it stands for, so a
@@ -195,6 +196,30 @@ final class MarksAnswer extends ExerciseAnswer {
   }
 }
 
+/// The German renderings of [sentence] shown as options; a right one has no
+/// mistake. At most half of them are right, so a blind tick does not pay.
+final class TickAnswer extends ExerciseAnswer {
+  final Sentence sentence;
+  final List<({String text, Mistake? mistake})> options;
+
+  TickAnswer(this.sentence, this.options) {
+    assert(
+      right.isNotEmpty && 2 * right.length <= options.length,
+      '${right.length} of ${options.length} options are right',
+    );
+    assert(
+      options.map((o) => o.text).toSet().length == options.length,
+      'no two options read the same',
+    );
+  }
+
+  /// The indices of the right options.
+  Set<int> get right => {
+    for (final (i, o) in options.indexed)
+      if (o.mistake == null) i,
+  };
+}
+
 /// What the learner gave.
 /// Produced by the screen; read by `attribute`.
 sealed class ExerciseResponse {
@@ -234,6 +259,15 @@ final class SortedForms extends ExerciseResponse {
 final class MarksResponse extends ExerciseResponse {
   final List<int> wordOf;
   const MarksResponse(this.wordOf);
+}
+
+/// The option indices the learner ticked of a [TickAnswer]; at least one.
+final class TickedOptions extends ExerciseResponse {
+  final Set<int> ticked;
+
+  TickedOptions(this.ticked) {
+    assert(ticked.isNotEmpty, 'nothing ticked');
+  }
 }
 
 /// One exercise: a word card and a grammar card asked through one kind.

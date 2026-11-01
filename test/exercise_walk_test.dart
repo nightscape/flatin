@@ -33,9 +33,10 @@ void _answer(PracticeItem word, Exercise exercise) {
     grammar: Rating.good,
   ), reason: '${exercise.kind} of ${word.id}');
   final rating = attribute(word, exercise, wrong);
-  // A marking with one of its pills wrong rates Hard, not Again.
+  // A marking with one of its pills wrong, or one wrong tick beside a single
+  // right one, rates Hard, not Again.
   expect(
-    exercise.answer is MarksAnswer
+    exercise.answer is MarksAnswer || exercise.answer is TickAnswer
         ? !isRight(rating)
         : rating.word == Rating.again || rating.grammar == Rating.again,
     isTrue,

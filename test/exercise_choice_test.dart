@@ -91,6 +91,7 @@ void main() {
         ExerciseKind.ankreuzen,
         ExerciseKind.sortieren,
         ExerciseKind.markieren,
+        ExerciseKind.satzAnkreuzen,
       },
     );
   });

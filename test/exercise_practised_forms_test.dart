@@ -32,6 +32,9 @@ Set<FormKey> _keysOf(Exercise e) => switch (e.answer) {
   // The corpus holds no degree; exercise_tap_test pins the marking's practised
   // forms.
   MarksAnswer(:final target) => {target.formKey},
+  TickAnswer() => throw StateError(
+    'a context of one data file has no sentence',
+  ),
 };
 
 void main() {

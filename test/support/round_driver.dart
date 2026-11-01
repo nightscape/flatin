@@ -6,6 +6,7 @@ import 'package:latin_practice/screens/exercise_match_widget.dart';
 import 'package:latin_practice/screens/exercise_screen.dart';
 import 'package:latin_practice/screens/exercise_sort_widget.dart';
 import 'package:latin_practice/screens/exercise_tap_widget.dart';
+import 'package:latin_practice/screens/exercise_ticks_widget.dart';
 
 import 'grammar_exercise_harness.dart';
 
@@ -14,12 +15,15 @@ Exercise shown(WidgetTester tester) {
   final screen = find.byType(ExerciseScreen);
   final sort = find.byType(ExerciseSortWidget);
   final marks = find.byType(ExerciseTapWidget);
+  final ticks = find.byType(ExerciseTicksWidget);
   return screen.evaluate().isNotEmpty
       ? tester.widget<ExerciseScreen>(screen).exercise
       : sort.evaluate().isNotEmpty
       ? tester.widget<ExerciseSortWidget>(sort).exercise
       : marks.evaluate().isNotEmpty
       ? tester.widget<ExerciseTapWidget>(marks).exercise
+      : ticks.evaluate().isNotEmpty
+      ? tester.widget<ExerciseTicksWidget>(ticks).exercise
       : tester
             .widget<ExerciseMatchWidget>(find.byType(ExerciseMatchWidget))
             .exercise;
@@ -136,6 +140,12 @@ Future<void> answer(
       for (final (p, w) in given.indexed) {
         await tap(tester, 'exercise.tap.pill.$p');
         await tap(tester, 'exercise.tap.word.$w');
+      }
+      await tap(tester, 'exercise.check.button');
+    case final TickAnswer answer:
+      final ticks = right ? rightTicks(answer) : wrongTicks(answer);
+      for (final i in ticks.ticked) {
+        await tap(tester, 'exercise.ticks.option.$i');
       }
       await tap(tester, 'exercise.check.button');
   }

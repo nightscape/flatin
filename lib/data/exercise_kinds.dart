@@ -182,6 +182,13 @@ const kindSpecs = [
       ),
     }),
   ),
+  KindSpec(
+    kind: ExerciseKind.satzAnkreuzen,
+    questionKey: 'exercise.ticks.question',
+    select: OneSentence(),
+    params: {'sentence': SentenceText()},
+    answer: TickMany(count: 4),
+  ),
 ];
 
 /// How the translation kinds ask a vocab item: its meaning, with the other
