@@ -365,5 +365,10 @@
     "next": "Weiter zu Lektion {lesson}",
     "pick": "Andere Lektion",
     "lesson": "Lektion {lesson}"
+  },
+  "lernziel": {
+    "title": "Was üben?",
+    "words": "Wörter",
+    "grammar": "Grammatik"
   }
 }

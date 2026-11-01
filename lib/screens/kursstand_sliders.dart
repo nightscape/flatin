@@ -198,8 +198,13 @@ class _KursstandSlidersState extends State<KursstandSliders>
     ];
   }
 
-  BookScale get _scale =>
-      BookScale(widget.bookStarts, _expansion, shelfInset, _trackWidth);
+  BookScale get _scale => BookScale(
+    widget.bookStarts,
+    _expansion,
+    shelfInset,
+    _trackWidth,
+    kursstand: _settings.kursstand,
+  );
 
   /// Changes the widths only when the dragged ribbon entered another book.
   void _retarget() {

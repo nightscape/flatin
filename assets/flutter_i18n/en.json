@@ -365,5 +365,10 @@
     "next": "Continue to lesson {lesson}",
     "pick": "Other lesson",
     "lesson": "Lesson {lesson}"
+  },
+  "lernziel": {
+    "title": "What to practise?",
+    "words": "Words",
+    "grammar": "Grammar"
   }
 }

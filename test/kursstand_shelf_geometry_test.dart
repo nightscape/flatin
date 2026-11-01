@@ -60,12 +60,13 @@ void main() {
         seen.add(state);
         final first = scale.bookStarts[b], n = scale.lessonsIn(b);
         final ys = [for (var i = 0; i < n; i++) tops[first - 1 + i].dy];
-        // The outer lessons sit half a lesson inside the covers, which
-        // stand in line with the closed books.
+        // The outer lessons sit half a page inside the covers, which stand
+        // in line with the closed books; the reached pages of a book whose
+        // later lessons are squeezed are the widest.
         for (final y in [ys.first, ys.last]) {
           expect(
             y - closedTop,
-            inInclusiveRange(0, 2),
+            inInclusiveRange(0, 3),
             reason: '$when: book ${b + 1} covers in line',
           );
         }
@@ -74,13 +75,18 @@ void main() {
           expect(rise, lessThan(0.5), reason: '$when: book ${b + 1} is flat');
           continue;
         }
-        for (var i = 1; i < n ~/ 2; i++) {
-          expect(ys[i], greaterThan(ys[i - 1]), reason: '$when: book ${b + 1}');
-          expect(
-            ys[n - 1 - i],
-            greaterThan(ys[n - i]),
-            reason: '$when: book ${b + 1}',
-          );
+        final centre = scale.starts[b] + w / 2;
+        for (var i = 1; i < n; i++) {
+          final (a, c) = (scale.x(first + i - 1), scale.x(first + i));
+          if (c <= centre) {
+            expect(
+              ys[i],
+              greaterThan(ys[i - 1]),
+              reason: '$when: L${first + i}',
+            );
+          } else if (a >= centre) {
+            expect(ys[i], lessThan(ys[i - 1]), reason: '$when: L${first + i}');
+          }
         }
         expect(rise, lessThan(w / 4), reason: '$when: book ${b + 1} shallow');
         if (state == 'open') {

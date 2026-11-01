@@ -9,6 +9,7 @@ import '../models/reward.dart';
 import '../widgets/app_drawer.dart';
 import '../widgets/focus_picker.dart';
 import '../widgets/kursstand_chip.dart';
+import '../widgets/lernziel_chips.dart';
 import '../models/practice_item.dart';
 import '../providers/curriculum_provider.dart';
 import '../providers/fsrs_provider.dart';
@@ -83,6 +84,8 @@ class HomeScreen extends ConsumerWidget {
                         ),
                       ),
                     ),
+                    const SizedBox(height: 14),
+                    const LernzielEntry(),
                   ],
                 );
                 if (!showTown) return menu;

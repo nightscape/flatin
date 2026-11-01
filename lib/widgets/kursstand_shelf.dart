@@ -64,20 +64,42 @@ int bookIndex(List<int> bookStarts, int lesson) => lesson == laterLesson
 /// fan of pages.
 const shelfMaxCell = 14.0;
 
+/// A page of a lesson after the Kursstand is this share of a page of a
+/// reached lesson in the same book, but at least [shelfMinPage] wide, so a
+/// finger can still drag a ribbon onto it.
+const shelfSqueeze = 0.25, shelfMinPage = 4.0;
+
 /// Lesson ↔ x on a track where book b is [_squeezed] wide plus its share,
 /// by its expansion in 0..1, of what the squeezed books leave free, up to
 /// [shelfMaxCell] per lesson. Room a full book cannot take goes to the
 /// others, then to the closed ones by their lessons; what is left centres
-/// the row. "Später" is a squeezed segment after the last book.
+/// the row. "Später" is a squeezed segment after the last book. Within a
+/// book, the lessons after [kursstand] have squeezed pages; a book with no
+/// reached lesson opens to at most [shelfMinPage] per lesson.
 class BookScale {
-  BookScale(this.bookStarts, List<double> expansion, this.left, double width) {
+  BookScale(
+    this.bookStarts,
+    List<double> expansion,
+    this.left,
+    double width, {
+    required this.kursstand,
+  }) {
     assert(bookStarts.first == 1, 'the first book starts at lesson 1');
     assert(expansion.length == bookStarts.length);
+    assert(kursstand >= 1 && kursstand < laterLesson);
     final free = width - (bookStarts.length + 1) * _squeezed;
     assert(free > 0, 'the track is too short for the books');
     final room = [
       for (var b = 0; b < bookStarts.length; b++)
-        min(free, lessonsIn(b) * shelfMaxCell - _squeezed),
+        max(
+          0.0,
+          min(
+            free,
+            lessonsIn(b) *
+                    (kursstand >= bookStarts[b] ? shelfMaxCell : shelfMinPage) -
+                _squeezed,
+          ),
+        ),
     ];
     final extra = [for (final _ in expansion) 0.0];
     final open = {for (var b = 0; b < expansion.length; b++) b};
@@ -114,6 +136,7 @@ class BookScale {
   }
 
   final List<int> bookStarts;
+  final int kursstand;
 
   /// The left end of the track.
   final double left;
@@ -127,17 +150,50 @@ class BookScale {
       bookStarts[book];
 
   /// 0 for a closed book, 1 for one as wide as it can open on this track.
-  double fan(int book) => (widths[book] - _squeezed) / _room[book];
+  double fan(int book) =>
+      _room[book] == 0 ? 0 : (widths[book] - _squeezed) / _room[book];
+
+  /// The pages of [book]: how many lessons it has up to the Kursstand, and
+  /// the width of such a reached page and of a page after it. A book too
+  /// narrow for [shelfMinPage] per lesson has even pages.
+  ({int reached, double page, double squeezed}) _pages(int book) {
+    final n = lessonsIn(book), w = widths[book];
+    final reached = (kursstand - bookStarts[book] + 1).clamp(0, n);
+    final later = n - reached;
+    final squeezed = max(
+      shelfSqueeze * w / (reached + later * shelfSqueeze),
+      min(shelfMinPage, w / n),
+    );
+    return (
+      reached: reached,
+      page: reached == 0 ? squeezed : (w - later * squeezed) / reached,
+      squeezed: squeezed,
+    );
+  }
+
+  /// The x of each page edge of [book], left to right.
+  List<double> pageEdges(int book) {
+    final (:reached, :page, :squeezed) = _pages(book);
+    return [
+      for (var i = 0; i <= lessonsIn(book); i++)
+        starts[book] + min(i, reached) * page + max(0, i - reached) * squeezed,
+    ];
+  }
 
   double cell(int lesson) {
     final b = bookOf(lesson);
-    return lesson == laterLesson ? _squeezed : widths[b] / lessonsIn(b);
+    if (lesson == laterLesson) return _squeezed;
+    final edges = pageEdges(b);
+    final i = lesson - bookStarts[b];
+    return edges[i + 1] - edges[i];
   }
 
   double x(int lesson) {
     final b = bookOf(lesson);
     if (lesson == laterLesson) return starts[b] + _squeezed / 2;
-    return starts[b] + (lesson - bookStarts[b] + 0.5) * cell(lesson);
+    final edges = pageEdges(b);
+    final i = lesson - bookStarts[b];
+    return (edges[i] + edges[i + 1]) / 2;
   }
 
   int lessonAt(double x) {
@@ -146,8 +202,12 @@ class BookScale {
       b++;
     }
     if (b == bookStarts.length) return laterLesson;
-    final i = ((x - starts[b]) / widths[b] * lessonsIn(b)).floor();
-    return bookStarts[b] + i.clamp(0, lessonsIn(b) - 1);
+    final edges = pageEdges(b);
+    var i = 0;
+    while (i < lessonsIn(b) - 1 && x >= edges[i + 1]) {
+      i++;
+    }
+    return bookStarts[b] + i;
   }
 }
 
@@ -342,14 +402,18 @@ class ShelfPainter extends CustomPainter {
   }
 
   void _book(Canvas canvas, _ShelfBook book) {
-    final pages = book.later ? 8 : scale.lessonsIn(book.index);
-    final edges = [
-      for (var k = 0; k <= pages; k++) book.left + k * book.width / pages,
-    ];
-    final cell = book.width / pages;
-    final perCell = cell > 6 ? 4 : 1;
+    final edges = book.later
+        ? [for (var k = 0; k <= 8; k++) book.left + k * book.width / 8]
+        : scale.pageEdges(book.index);
+    final pages = edges.length - 1;
+    List<double> split(double a, double b) {
+      final n = b - a > 6 ? 4 : 1;
+      return [for (var j = 1; j <= n; j++) a + j * (b - a) / n];
+    }
+
     final lines = [
-      for (var k = 0; k <= pages * perCell; k++) book.left + k * cell / perCell,
+      book.left,
+      for (var k = 0; k < pages; k++) ...split(edges[k], edges[k + 1]),
     ];
     final line = Paint()
       ..color = outlineColor.withAlpha(150)

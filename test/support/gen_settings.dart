@@ -4,6 +4,7 @@ import 'package:latin_practice/data/lesson_data.dart';
 import 'package:latin_practice/data/rewards.dart';
 import 'package:latin_practice/models/distractor_strategy.dart';
 import 'package:latin_practice/models/input_strategy.dart';
+import 'package:latin_practice/models/lernziel_chips.dart';
 import 'package:latin_practice/models/lesson_range.dart';
 import 'package:latin_practice/models/settings.dart';
 
@@ -167,4 +168,56 @@ Json drawStoredSettings(
   ).toJson();
   if (rng.nextDouble() < withoutKursstand) json.remove('kursstand');
   return json;
+}
+
+/// [drawSettings] whose word and grammar ranges, each with chance [atPreset],
+/// equal one of the Lernziel presets of its Kursstand on the volumes
+/// starting at [bookStarts]; the link rule of [Settings] still applies.
+Settings drawLernzielSettings(
+  Random rng,
+  List<int> bookStarts, {
+  double atPreset = 0.5,
+}) {
+  final drawn = drawSettings(rng);
+  final presets = chipsFor(drawn.kursstand, bookStarts);
+  LessonRange pick(LessonRange range) => rng.nextDouble() < atPreset
+      ? presets[rng.nextInt(presets.length)]
+      : range;
+  return drawn.copyWith(
+    courseWords: pick(drawn.courseWords),
+    courseGrammar: pick(drawn.courseGrammar),
+  );
+}
+
+/// A book scale: its volume starts, expansions, left end, track width and
+/// Kursstand.
+typedef BookScaleCase = ({
+  List<int> starts,
+  List<double> expansion,
+  double left,
+  double width,
+  int kursstand,
+});
+
+/// A course of 1 to 4 volumes with any starts, each volume closed, open, at
+/// rest or anywhere between, on a track from just wider than the closed
+/// books to 1400 px more, and any Kursstand.
+BookScaleCase drawBookScaleCase(Random rng) {
+  final starts = {
+    1,
+    for (var i = rng.nextInt(4); i > 0; i--) 2 + rng.nextInt(lastLesson - 1),
+  }.toList()..sort();
+  double weight() => switch (rng.nextInt(4)) {
+    0 => 0.0,
+    1 => 1.0,
+    2 => 0.3,
+    _ => rng.nextDouble(),
+  };
+  return (
+    starts: starts,
+    expansion: [for (final _ in starts) weight()],
+    left: rng.nextDouble() * 30,
+    width: (starts.length + 1) * 22 + 1 + rng.nextDouble() * 1400,
+    kursstand: 1 + rng.nextInt(lastLesson),
+  );
 }

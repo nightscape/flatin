@@ -13,6 +13,7 @@ import '../providers/locale_provider.dart';
 import '../providers/settings_provider.dart';
 import '../theme.dart';
 import '../widgets/kursstand_shelf.dart';
+import '../widgets/lernziel_chips.dart';
 import 'course_scope.dart';
 import 'kursstand_sliders.dart';
 
@@ -143,6 +144,16 @@ class _KursstandCardState extends ConsumerState<KursstandCard> {
       style: (words ? _wordsLabel : _grammarLabel).copyWith(fontSize: 14),
     );
   }
+
+  Widget _lernziel({required bool words}) => Padding(
+    padding: const EdgeInsets.symmetric(vertical: 4),
+    child: LernzielChipRow(
+      settings: _filter.settings,
+      bookStarts: _filter.lessons.bookStarts,
+      words: words,
+      onCourse: _onCourse,
+    ),
+  );
 
   Widget _wordChip(String lemma, int lesson) {
     final inRange = _filter.settings.courseWords.contains(lesson);
@@ -286,6 +297,7 @@ class _KursstandCardState extends ConsumerState<KursstandCard> {
             ),
             const SizedBox(height: 8),
             _summary(topics, words: true),
+            _lernziel(words: true),
             // The shelf lays out and paints every frame of a drag; tight
             // constraints and its own layer keep the rest of the page still.
             SizedBox(
@@ -300,6 +312,7 @@ class _KursstandCardState extends ConsumerState<KursstandCard> {
                 ),
               ),
             ),
+            _lernziel(words: false),
             Padding(
               padding: const EdgeInsets.only(bottom: 8),
               child: _summary(topics, words: false),
