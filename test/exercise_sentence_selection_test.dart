@@ -11,6 +11,7 @@ import 'package:latin_practice/models/lesson_range.dart';
 import 'package:latin_practice/models/practice_item.dart';
 
 import 'support/exercise_fakes.dart';
+import 'support/gen_sentence_learner.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -240,54 +241,30 @@ void main() {
 
   test('the selection equals the filters applied one by one', () {
     final names = [for (final k in ConstructionKind.values) k.name];
-    final corpusItems = {
-      for (final s in corpus.sentences)
-        for (final t in s.tokens.whereType<FormToken>()) itemOf(t),
-    };
-    final corpusBundles = {for (final s in corpus.sentences) ...bundlesOf(s)};
     final rng = Random(349);
     final outcomes = <String, int>{};
     for (var run = 0; run < 400; run++) {
-      final reached = rng.nextInt(laterLesson + 2);
-      final dropBundles = rng.nextInt(4);
-      final thin = rng.nextInt(3) == 0;
-      final unlocked = {
-        ...everyBundle.where((_) => !thin || rng.nextInt(10) > 0),
-      }..removeAll((corpusBundles.toList()..shuffle(rng)).take(dropBundles));
-      final dropItems = rng.nextInt(3);
-      final dropped = (corpusItems.toList()..shuffle(rng))
-          .take(dropItems)
-          .toSet();
-      final pool = [
-        for (final w in items)
-          if (!dropped.contains(w)) w,
-      ];
+      final learner = drawSentenceLearner(rng, corpus, items);
+      final (:reached, :unlocked, :pool, practised: _) = learner;
       final constructions = rng.nextBool()
           ? null
           : {
               for (final n in names)
                 if (rng.nextInt(3) == 0) n,
             };
-
-      bool placed(FormToken t) {
-        final w = pool.where((w) => w.lemma == t.lemma).firstOrNull;
-        return w != null &&
-            w.formOrder.contains(t.key) &&
-            unlocked.contains(bundleOf(w, t.key));
-      }
-
       final expected = [
-        for (final s in corpus.sentences)
-          if (s.lesson <= reached &&
-              (constructions?.contains(s.construction.kind.name) ?? true) &&
-              s.tokens.whereType<FormToken>().every(placed))
-            s.id,
+        for (final s in visibleSentences(
+          corpus,
+          learner,
+          constructions: constructions,
+        ))
+          s.id,
       ];
       final ctx = context(reached: reached, unlocked: unlocked, pool: pool);
       final select = OneSentence(constructions: constructions);
       final why =
           'reached $reached, kinds $constructions, '
-          'dropped ${dropped.map((w) => w.id)}';
+          'pool ${pool.length}, unlocked ${unlocked.length}';
       if (expected.isEmpty) {
         expect(
           () => selected(ctx, select),

@@ -29,7 +29,22 @@ import 'package:latin_practice/models/practice_item.dart';
     ]),
   ),
   final SortingAnswer answer => (rightSorting(answer), wrongSorting(answer)),
+  final MarksAnswer answer => (rightMarks(answer), wrongMarks(answer)),
 };
+
+MarksResponse rightMarks(MarksAnswer answer) =>
+    MarksResponse([for (final p in answer.pills) p.word]);
+
+/// The first pill on a word no pill marks, the others on their own.
+MarksResponse wrongMarks(MarksAnswer answer) {
+  final unmarked = [
+    for (var w = 0; w < answer.words.length; w++)
+      if (answer.pills.every((p) => p.word != w)) w,
+  ].first;
+  return MarksResponse([
+    for (final (i, p) in answer.pills.indexed) i == 0 ? unmarked : p.word,
+  ]);
+}
 
 SortedForms rightSorting(SortingAnswer answer) =>
     SortedForms({for (final (o, g) in answer.forms) o: g});

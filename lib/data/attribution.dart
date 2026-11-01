@@ -41,6 +41,10 @@ Attribution attribute(
     groupOf,
   ),
   (final PartsAnswer answer, TypedTexts(:final texts)) => _parts(answer, texts),
+  (final MarksAnswer answer, MarksResponse(:final wordOf)) => _marked(
+    answer,
+    wordOf,
+  ),
   _ => throw ArgumentError(
     '${response.runtimeType} does not answer ${exercise.answer.runtimeType}',
   ),
@@ -113,6 +117,24 @@ Attribution _parts(PartsAnswer answer, List<String> texts) {
   return answer.slots.indexed.every((e) => typedRight(e.$2.answer, texts[e.$1]))
       ? _good
       : (word: Rating.good, grammar: Rating.again);
+}
+
+/// A pill on another word counts 0: the share of right pills rates the
+/// grammar.
+Attribution _marked(MarksAnswer answer, List<int> wordOf) {
+  assert(wordOf.length == answer.pills.length, 'a pill is not placed');
+  final right = answer.pills.indexed
+      .where((e) => wordOf[e.$1] == e.$2.word)
+      .length;
+  return (word: Rating.good, grammar: marksRating(right, answer.pills.length));
+}
+
+/// Good when every pill is right, Hard from half of them, Again below; never
+/// Easy.
+Rating marksRating(int right, int all) {
+  assert(0 <= right && right <= all, '$right of $all');
+  if (right == all) return Rating.good;
+  return 2 * right >= all ? Rating.hard : Rating.again;
 }
 
 /// Whether [text] is a spelling of [answer], read without macrons.

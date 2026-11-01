@@ -86,7 +86,8 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
     TypedAnswer(:final accepted) => accepted.join(' / '),
     MatchingAnswer() ||
     SortingAnswer() ||
-    PartsAnswer() => throw UnsupportedError('own widget'),
+    PartsAnswer() ||
+    MarksAnswer() => throw UnsupportedError('own widget'),
   };
 
   void _respond(ExerciseResponse response) =>
@@ -117,7 +118,8 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                 TypedAnswer() => _typed(),
                 MatchingAnswer() ||
                 SortingAnswer() ||
-                PartsAnswer() => throw UnsupportedError('own widget'),
+                PartsAnswer() ||
+                MarksAnswer() => throw UnsupportedError('own widget'),
               },
               if (_response != null) ..._feedback(),
             ],

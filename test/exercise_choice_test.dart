@@ -90,6 +90,7 @@ void main() {
         ExerciseKind.zuordnen,
         ExerciseKind.ankreuzen,
         ExerciseKind.sortieren,
+        ExerciseKind.markieren,
       },
     );
   });

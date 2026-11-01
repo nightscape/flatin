@@ -18,7 +18,8 @@ KindClass classOf(ExerciseKind kind) => switch (kind) {
   ExerciseKind.irrlaeufer ||
   ExerciseKind.zuordnen ||
   ExerciseKind.ankreuzen ||
-  ExerciseKind.sortieren => KindClass.recognition,
+  ExerciseKind.sortieren ||
+  ExerciseKind.markieren => KindClass.recognition,
   ExerciseKind.formBilden ||
   ExerciseKind.deLatTippen ||
   ExerciseKind.umformen ||

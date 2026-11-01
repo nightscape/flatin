@@ -6,6 +6,7 @@ library;
 import '../models/exercise.dart';
 import '../models/form_label.dart' show FormKey;
 import 'exercise_cube.dart';
+import 'sentences.dart' show ConstructionKind;
 
 /// One kind of exercise.
 /// Produced in `exercise_kinds.dart`; read by the interpreter.
@@ -211,6 +212,14 @@ final class Sort extends AnswerSpec {
   final bool tick;
 
   const Sort(this.view, {required this.tick});
+}
+
+/// The learner puts one pill on each marked word of a [OneSentence]'s
+/// construction: per kind the roles of its head and its reference word.
+final class Marks extends AnswerSpec {
+  final Map<ConstructionKind, ({String head, String reference})> roles;
+
+  const Marks(this.roles);
 }
 
 /// Where the wrong options of a [Choose] come from.

@@ -93,6 +93,18 @@ List<ExplanationLine> feedbackLines(
               },
             ),
   ],
+  (MarksAnswer(:final words, :final pills), MarksResponse(:final wordOf)) => [
+    for (final (i, pill) in pills.indexed)
+      wordOf[i] == pill.word
+          ? ExplanationLine(
+              'exercise.tap.feedback.${pill.role}.right',
+              params: {'word': words[pill.word]},
+            )
+          : ExplanationLine(
+              'exercise.tap.feedback.${pill.role}.wrong',
+              params: {'word': words[pill.word], 'chosen': words[wordOf[i]]},
+            ),
+  ],
   _ => throw ArgumentError(
     '${response.runtimeType} does not answer ${exercise.answer.runtimeType}',
   ),

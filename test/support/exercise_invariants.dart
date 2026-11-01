@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart' show listEquals;
 import 'package:latin_practice/data/exercise_choice.dart' show knowsWell;
 import 'package:latin_practice/data/exercise_cube.dart';
 import 'package:latin_practice/data/exercise_spec.dart';
+import 'package:latin_practice/data/sentences.dart';
 import 'package:latin_practice/models/derivation.dart' show norm;
 import 'package:latin_practice/models/exercise.dart';
 import 'package:latin_practice/models/practice_item.dart';
@@ -286,6 +287,39 @@ List<String> violations(
             !listEquals(answer.accepted, cube.view(view).accepted(c))) {
           found.add('slot ${answer.expected.text} is not the text of $c');
         }
+      }
+    case (
+      Marks(:final roles),
+      MarksAnswer(:final sentenceId, :final words, :final pills, :final target),
+    ):
+      final s = ctx.sentences!.sentences.singleWhere((s) => s.id == sentenceId);
+      final c = s.construction;
+      if (s.lesson > ctx.reachedLesson!) {
+        found.add('$sentenceId is not reached');
+      }
+      if (!listEquals(words, [for (final t in s.tokens) t.text])) {
+        found.add('words $words are not those of $sentenceId');
+      }
+      final role = roles[c.kind];
+      if (role == null ||
+          !listEquals(pills, [
+            (role: role.head, word: c.head),
+            (role: role.reference, word: c.reference!),
+          ])) {
+        found.add('pills $pills are not the marks of $sentenceId');
+      }
+      final marked = [
+        for (final p in pills)
+          if (s.tokens[p.word] case FormToken(
+            :final lemma,
+            :final key,
+          ) when lemma == word.lemma && key == target.formKey)
+            p,
+      ];
+      if (marked.isEmpty) found.add('no pill marks ${target.text}');
+      final cell = cellOf(target);
+      if (cell is! FormCell || cell.bundle != bundle) {
+        found.add('target $cell is not in $bundle');
       }
     default:
       found.add('answer ${e.answer.runtimeType} for ${spec.answer}');

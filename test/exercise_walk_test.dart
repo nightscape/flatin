@@ -6,10 +6,13 @@ import 'package:fsrs/fsrs.dart' show Rating;
 import 'package:latin_practice/data/attribution.dart';
 import 'package:latin_practice/data/curriculum.dart';
 import 'package:latin_practice/data/exercise_choice.dart';
+import 'package:latin_practice/data/exercise_interpreter.dart';
 import 'package:latin_practice/data/exercise_kinds.dart';
+import 'package:latin_practice/data/exercise_spec.dart' show OneSentence;
 import 'package:latin_practice/data/german_forms.dart';
 import 'package:latin_practice/data/lesson_data.dart';
 import 'package:latin_practice/data/practice_data.dart';
+import 'package:latin_practice/data/sentences.dart';
 import 'package:latin_practice/models/course_filter.dart';
 import 'package:latin_practice/models/exercise.dart';
 import 'package:latin_practice/models/lesson_range.dart';
@@ -30,11 +33,34 @@ void _answer(PracticeItem word, Exercise exercise) {
     grammar: Rating.good,
   ), reason: '${exercise.kind} of ${word.id}');
   final rating = attribute(word, exercise, wrong);
+  // A marking with one of its pills wrong rates Hard, not Again.
   expect(
-    rating.word == Rating.again || rating.grammar == Rating.again,
+    exercise.answer is MarksAnswer
+        ? !isRight(rating)
+        : rating.word == Rating.again || rating.grammar == Rating.again,
     isTrue,
     reason: 'a wrong ${exercise.kind} of ${word.id} blames no card',
   );
+}
+
+/// Asks [inner] in [ctx], whatever context the caller passes, as the round
+/// asks a sentence kind in the context over every file.
+final class _InContext implements ExerciseGenerator {
+  const _InContext(this.inner, this.ctx);
+
+  final ExerciseGenerator inner;
+  final ExerciseContext ctx;
+
+  @override
+  ExerciseKind get kind => inner.kind;
+
+  @override
+  Exercise build(
+    PracticeItem word,
+    GrammarBundle bundle,
+    ExerciseContext _,
+    Random rng,
+  ) => inner.build(word, bundle, ctx, rng);
 }
 
 void main() {
@@ -42,10 +68,12 @@ void main() {
   late Curriculum curriculum;
   late LessonData lessons;
   late GermanForms german;
+  late SentenceCorpus corpus;
 
   setUpAll(() async {
     TestWidgetsFlutterBinding.ensureInitialized();
     items = await loadAllPracticeItems();
+    corpus = await loadSentenceCorpus();
     curriculum = await loadCurriculum(bookAssets);
     lessons = await loadLessonData(bookAssets);
     final container = ProviderContainer(
@@ -77,6 +105,18 @@ void main() {
           pool: pool,
           german: german,
         );
+        final everyFile = items.where(filter.reachesPractice).toList();
+        final acrossFiles = ExerciseContext(
+          unlocked: unlockedBundles(filter, everyFile),
+          pool: everyFile,
+          german: german,
+          sentences: corpus,
+          reachedLesson: reachedLesson(filter.settings),
+        );
+        ExerciseContext contextOf(ExerciseGenerator g) =>
+            g is SpecGenerator && g.spec.select is OneSentence
+            ? acrossFiles
+            : ctx;
         for (final bundle in unlocked.difference(seen)) {
           final words = pool.where(
             (w) => unlockedBundles(filter, [w]).contains(bundle),
@@ -102,14 +142,22 @@ void main() {
                   ctx,
                   stability,
                   rng,
-                  registry: exerciseGenerators,
+                  registry: [
+                    for (final g in exerciseGenerators)
+                      _InContext(g, contextOf(g)),
+                  ],
                 ),
               );
             }
             for (final generator in exerciseGenerators) {
               final Exercise exercise;
               try {
-                exercise = generator.build(word, bundle, ctx, rng);
+                exercise = generator.build(
+                  word,
+                  bundle,
+                  contextOf(generator),
+                  rng,
+                );
               } on CannotBuild {
                 continue;
               }

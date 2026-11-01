@@ -3,8 +3,11 @@ import 'dart:math';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/data/exercise_kinds.dart';
+import 'package:latin_practice/data/exercise_spec.dart' show OneSentence;
 import 'package:latin_practice/data/german_forms.dart';
 import 'package:latin_practice/data/practice_data.dart';
+import 'package:latin_practice/data/sentences.dart';
+import 'package:latin_practice/models/lesson_range.dart';
 import 'package:latin_practice/models/exercise.dart';
 import 'package:latin_practice/models/practice_item.dart';
 import 'package:latin_practice/providers/fsrs_provider.dart';
@@ -19,10 +22,17 @@ const _seeds = 3;
 void main() {
   late List<PracticeItem> items;
   late GermanForms german;
+  late SentenceCorpus corpus;
+  late Set<GrammarBundle> everyBundle;
 
   setUpAll(() async {
     TestWidgetsFlutterBinding.ensureInitialized();
     items = await loadAllPracticeItems();
+    corpus = await loadSentenceCorpus();
+    everyBundle = {
+      for (final w in items)
+        for (final k in w.formOrder) bundleOf(w, k),
+    };
     final container = ProviderContainer(
       overrides: [dataLanguageProvider.overrideWith((ref) => 'de')],
     );
@@ -41,11 +51,19 @@ void main() {
           for (final k in word.formOrder) bundleOf(word, k),
         }) {
           for (final g in exerciseGenerators) {
-            final ctx = ExerciseContext(
-              unlocked: unlockedFor(g.spec, word, bundle),
-              pool: [word],
-              german: forms,
-            );
+            final ctx = g.spec.select is OneSentence
+                ? ExerciseContext(
+                    unlocked: everyBundle,
+                    pool: items,
+                    german: forms,
+                    sentences: corpus,
+                    reachedLesson: laterLesson,
+                  )
+                : ExerciseContext(
+                    unlocked: unlockedFor(g.spec, word, bundle),
+                    pool: [word],
+                    german: forms,
+                  );
             for (var seed = 0; seed < _seeds; seed++) {
               final Exercise e;
               try {

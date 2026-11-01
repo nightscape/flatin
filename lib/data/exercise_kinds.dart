@@ -5,6 +5,7 @@ import '../models/exercise.dart';
 import 'exercise_cube.dart';
 import 'exercise_interpreter.dart';
 import 'exercise_spec.dart';
+import 'sentences.dart' show ConstructionKind;
 
 const kindSpecs = [
   KindSpec(
@@ -162,6 +163,24 @@ const kindSpecs = [
     ),
     params: {'form': Show(Ref.target, View.latin)},
     answer: Parts(View.latin),
+  ),
+  KindSpec(
+    kind: ExerciseKind.markieren,
+    questionKey: 'exercise.tap.question',
+    // A question marks only its particle, so it has no second word to tell.
+    select: OneSentence(
+      constructions: {'pcPpa', 'pcPpp', 'aciPassiv', 'doppelterAkkusativ'},
+    ),
+    params: {},
+    answer: Marks({
+      ConstructionKind.pcPpa: (head: 'participle', reference: 'reference'),
+      ConstructionKind.pcPpp: (head: 'participle', reference: 'reference'),
+      ConstructionKind.aciPassiv: (head: 'participle', reference: 'subject'),
+      ConstructionKind.doppelterAkkusativ: (
+        head: 'predicative',
+        reference: 'object',
+      ),
+    }),
   ),
 ];
 

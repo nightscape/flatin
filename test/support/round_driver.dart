@@ -5,15 +5,21 @@ import 'package:latin_practice/models/exercise.dart';
 import 'package:latin_practice/screens/exercise_match_widget.dart';
 import 'package:latin_practice/screens/exercise_screen.dart';
 import 'package:latin_practice/screens/exercise_sort_widget.dart';
+import 'package:latin_practice/screens/exercise_tap_widget.dart';
+
+import 'grammar_exercise_harness.dart';
 
 /// The task on screen, whether a single task or a matching one.
 Exercise shown(WidgetTester tester) {
   final screen = find.byType(ExerciseScreen);
   final sort = find.byType(ExerciseSortWidget);
+  final marks = find.byType(ExerciseTapWidget);
   return screen.evaluate().isNotEmpty
       ? tester.widget<ExerciseScreen>(screen).exercise
       : sort.evaluate().isNotEmpty
       ? tester.widget<ExerciseSortWidget>(sort).exercise
+      : marks.evaluate().isNotEmpty
+      ? tester.widget<ExerciseTapWidget>(marks).exercise
       : tester
             .widget<ExerciseMatchWidget>(find.byType(ExerciseMatchWidget))
             .exercise;
@@ -123,6 +129,13 @@ Future<void> answer(
           await tester.dragFrom(from, to - from);
           await tester.pumpAndSettle();
         }
+      }
+      await tap(tester, 'exercise.check.button');
+    case final MarksAnswer marks:
+      final given = (right ? rightMarks(marks) : wrongMarks(marks)).wordOf;
+      for (final (p, w) in given.indexed) {
+        await tap(tester, 'exercise.tap.pill.$p');
+        await tap(tester, 'exercise.tap.word.$w');
       }
       await tap(tester, 'exercise.check.button');
   }

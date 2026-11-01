@@ -4,6 +4,8 @@ import 'dart:math';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:latin_practice/data/exercise_kinds.dart';
+import 'package:latin_practice/data/exercise_spec.dart' show OneSentence;
 import 'package:latin_practice/main.dart' show noRetry;
 import 'package:latin_practice/models/exercise.dart';
 import 'package:latin_practice/models/lesson_range.dart';
@@ -40,6 +42,7 @@ Object _answerOf(ExerciseAnswer a) => switch (a) {
     'forms': [for (final (f, g) in forms) '${f.text} $g'],
     'tick': tick,
   },
+  MarksAnswer() => throw StateError('a per-file round asks no sentence'),
 };
 
 /// Every task a mixed round shows when the learner answers its first three
@@ -51,6 +54,10 @@ Future<List<Object>> _tasksOf(Settings settings, int seed) async {
     overrides: [
       dataLanguageProvider.overrideWith((ref) => 'de'),
       exerciseRandomProvider.overrideWithValue(Random(seed)),
+      exerciseRegistryProvider.overrideWithValue([
+        for (final g in exerciseGenerators)
+          if (g.spec.select is! OneSentence) g,
+      ]),
     ],
   );
   final provider = roundProvider(const MixedRound());

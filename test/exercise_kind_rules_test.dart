@@ -301,6 +301,8 @@ void main() {
             expect(slots.map((s) => s.answer.expected.lexemeId).toSet(), {
               word.id,
             });
+          case MarksAnswer(:final pills):
+            expect(pills, hasLength(2));
         }
       });
     }

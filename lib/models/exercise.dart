@@ -61,6 +61,7 @@ enum ExerciseKind {
   ankreuzen,
   sortieren,
   stammformen,
+  markieren,
 }
 
 /// One text the learner sees as an option, with the form it stands for, so a
@@ -174,6 +175,26 @@ final class SortingAnswer extends ExerciseAnswer {
   }
 }
 
+/// The words of a sentence and the pills the learner places on them; each
+/// pill has a role and the index of its right word in [words].
+final class MarksAnswer extends ExerciseAnswer {
+  final String sentenceId;
+  final List<String> words;
+  final List<({String role, int word})> pills;
+
+  /// The form of the rated word and bundle that a pill marks.
+  final FormOption target;
+
+  MarksAnswer(this.sentenceId, this.words, this.pills, this.target) {
+    assert(pills.isNotEmpty);
+    assert(pills.every((p) => p.word >= 0 && p.word < words.length));
+    assert(
+      pills.map((p) => p.word).toSet().length == pills.length,
+      'two pills mark one word',
+    );
+  }
+}
+
 /// What the learner gave.
 /// Produced by the screen; read by `attribute`.
 sealed class ExerciseResponse {
@@ -206,6 +227,13 @@ final class MatchedPairs extends ExerciseResponse {
 final class SortedForms extends ExerciseResponse {
   final Map<FormOption, int> groupOf;
   const SortedForms(this.groupOf);
+}
+
+/// The word index the learner put each pill of a [MarksAnswer] on, in pill
+/// order.
+final class MarksResponse extends ExerciseResponse {
+  final List<int> wordOf;
+  const MarksResponse(this.wordOf);
 }
 
 /// One exercise: a word card and a grammar card asked through one kind.

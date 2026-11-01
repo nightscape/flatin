@@ -3,9 +3,13 @@ import 'dart:math';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/data/exercise_feedback.dart';
+import 'package:latin_practice/data/exercise_interpreter.dart';
 import 'package:latin_practice/data/exercise_kinds.dart';
+import 'package:latin_practice/data/exercise_spec.dart' show OneSentence;
 import 'package:latin_practice/data/german_forms.dart';
 import 'package:latin_practice/data/practice_data.dart';
+import 'package:latin_practice/data/sentences.dart';
+import 'package:latin_practice/models/lesson_range.dart';
 import 'package:latin_practice/models/exercise.dart';
 import 'package:latin_practice/models/practice_item.dart';
 import 'package:latin_practice/providers/fsrs_provider.dart';
@@ -18,14 +22,16 @@ final _everyBundle = Expando<Set<GrammarBundle>>();
 
 /// Builds, on the first call for a word, every kind that fits it, also with
 /// every bundle of the pool unlocked, so that the sweep reaches kinds and
-/// modes the selection would only ask later.
+/// modes the selection would only ask later; a sentence kind in [_sentences],
+/// the context over every file with the corpus, as the round asks it.
 class _Recording implements ExerciseGenerator {
-  _Recording(this._inner, this._all, this._built, this._teed);
+  _Recording(this._inner, this._all, this._built, this._teed, this._sentences);
 
   final ExerciseGenerator _inner;
   final List<ExerciseGenerator> _all;
   final List<(PracticeItem, Exercise)> _built;
   final Set<String> _teed;
+  final ExerciseContext _sentences;
 
   @override
   ExerciseKind get kind => _inner.kind;
@@ -47,7 +53,14 @@ class _Recording implements ExerciseGenerator {
         german: ctx.german,
       );
       for (final g in _all) {
-        for (final c in [ctx, everyBundle]) {
+        for (final c in [
+          if (g is SpecGenerator && g.spec.select is OneSentence)
+            _sentences
+          else ...[
+            ctx,
+            everyBundle,
+          ],
+        ]) {
           try {
             _built.add((word, g.build(word, bundle, c, Random(0))));
           } on CannotBuild {
@@ -85,15 +98,18 @@ List<ExerciseResponse> _responses(Exercise exercise) =>
         TypedTexts([for (final s in slots) s.answer.expected.text]),
         TypedTexts([for (final _ in slots) 'xyz']),
       ],
+      final MarksAnswer answer => [rightMarks(answer), wrongMarks(answer)],
     };
 
 void main() {
   late List<PracticeItem> items;
   late GermanForms german;
+  late SentenceCorpus corpus;
 
   setUpAll(() async {
     TestWidgetsFlutterBinding.ensureInitialized();
     items = await loadAllPracticeItems();
+    corpus = await loadSentenceCorpus();
     final container = ProviderContainer(
       overrides: [dataLanguageProvider.overrideWith((ref) => 'de')],
     );
@@ -104,13 +120,23 @@ void main() {
   void expectFeedback(GermanForms forms, String locale) {
     final built = <(PracticeItem, Exercise)>[];
     final teed = <String>{};
+    final sentences = ExerciseContext(
+      unlocked: {
+        for (final w in items)
+          for (final k in w.formOrder) bundleOf(w, k),
+      },
+      pool: items,
+      german: forms,
+      sentences: corpus,
+      reachedLesson: laterLesson,
+    );
     sweep(
       items,
       forms,
       locale,
       registry: [
         for (final g in exerciseGenerators)
-          _Recording(g, exerciseGenerators, built, teed),
+          _Recording(g, exerciseGenerators, built, teed, sentences),
       ],
     );
     expect(built, isNotEmpty);
@@ -128,6 +154,11 @@ void main() {
       built.where((b) => b.$2.kind == ExerciseKind.stammformen),
       isNotEmpty,
       reason: 'the sweep builds a principal-parts exercise',
+    );
+    expect(
+      built.where((b) => b.$2.kind == ExerciseKind.markieren),
+      isNotEmpty,
+      reason: 'the sweep builds a marking exercise',
     );
     for (final (word, exercise) in built) {
       for (final response in _responses(exercise)) {

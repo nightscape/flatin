@@ -324,6 +324,39 @@
     "sort": {
       "question": "Put each form into its group",
       "hint": "Drag each form into its group."
+    },
+    "tap": {
+      "question": "Put each label on its word",
+      "hint": "Tap a label, then its word.",
+      "pill": {
+        "participle": "Participle",
+        "reference": "Reference word",
+        "subject": "Subject accusative",
+        "object": "Object accusative",
+        "predicative": "Predicative accusative"
+      },
+      "feedback": {
+        "participle": {
+          "right": "{word} is the participle.",
+          "wrong": "The participle is {word}, not {chosen}."
+        },
+        "reference": {
+          "right": "{word} is the reference word.",
+          "wrong": "The reference word is {word}, not {chosen}."
+        },
+        "subject": {
+          "right": "{word} is the subject accusative.",
+          "wrong": "The subject accusative is {word}, not {chosen}."
+        },
+        "object": {
+          "right": "{word} is the object accusative.",
+          "wrong": "The object accusative is {word}, not {chosen}."
+        },
+        "predicative": {
+          "right": "{word} is the predicative accusative.",
+          "wrong": "The predicative accusative is {word}, not {chosen}."
+        }
+      }
     }
   },
   "round": {

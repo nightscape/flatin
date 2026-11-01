@@ -29,6 +29,9 @@ Set<FormKey> _keysOf(Exercise e) => switch (e.answer) {
     for (final (name: _, :answer) in slots) answer.expected.formKey,
     for (final g in given) g.form.formKey,
   },
+  // The corpus holds no degree; exercise_tap_test pins the marking's practised
+  // forms.
+  MarksAnswer(:final target) => {target.formKey},
 };
 
 void main() {

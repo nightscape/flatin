@@ -97,7 +97,12 @@ final class SpecGenerator implements ExerciseGenerator {
         }
         final answer = _answerOf(spec, slice, cube, rng);
         if (answer == null) {
-          reasons.add('too few options for ${slice.target.key}');
+          reasons.add(switch (spec.answer) {
+            Marks() =>
+              'the construction of ${slice.sentence!.id} marks no '
+                  '${slice.target}',
+            _ => 'too few options for ${slice.target.key}',
+          });
           continue;
         }
         return Exercise(
@@ -148,6 +153,7 @@ final class SpecGenerator implements ExerciseGenerator {
             .$1
             .formKey,
       PartsAnswer(:final prompt) => prompt.formKey,
+      MarksAnswer(:final target) => target.formKey,
     });
     final objections = <String>[];
     for (final slice in _slicesInto(spec, cube, target, bundle, exercise)) {
@@ -212,7 +218,12 @@ Iterable<Slice> _slices(
         ).map((path) => Slice(target, path: path)),
       ),
     ),
-  OneSentence() => sentenceSlicesAsking(select, cube, word, bundle),
+  OneSentence() => sentenceSlicesAsking(
+    select,
+    cube,
+    word,
+    bundle,
+  )..shuffle(rng),
 };
 
 /// The slices of [sentenceSlices] whose sentence holds a cell of [word] in
@@ -245,7 +256,9 @@ List<Slice> sentenceSlicesAsking(
 /// target; throws [CannotBuild] naming the filter that leaves none.
 @visibleForTesting
 List<Slice> sentenceSlices(OneSentence select, Cube cube) {
-  final corpus = cube.ctx.sentences!;
+  final corpus =
+      cube.ctx.sentences ??
+      (throw const CannotBuild('the context holds no sentences'));
   final reached = cube.ctx.reachedLesson!;
   var left = [
     for (final s in corpus.sentences)
@@ -372,7 +385,12 @@ Iterable<Slice> _slicesInto(
         for (final path in _routes(cube, target, n, axes, null))
           Slice(target, path: path),
   ],
-  OneSentence() => throw UnimplementedError('no kind asks a sentence'),
+  OneSentence select => [
+    if (exercise.answer case MarksAnswer(:final sentenceId))
+      for (final s in sentenceSlices(select, cube))
+        if (s.sentence!.id == sentenceId && s.group.contains(target))
+          Slice(target, group: s.group, sentence: s.sentence),
+  ],
 };
 
 /// The slices of [select] for [word] in [bundle]: the prompt is the target,
@@ -714,7 +732,7 @@ String? _uncovered(KindSpec spec, Slice slice, Cube cube) {
     Typed(:final view) ||
     Sort(:final view) => (view, [slice.target]),
     Parts(:final view) => (view, slice.group),
-    Match() => (null, const <FormCell>[]),
+    Match() || Marks() => (null, const <FormCell>[]),
   };
   for (final c in asked) {
     if (!cube.view(view!).covers(c)) return '$view does not cover $c';
@@ -778,7 +796,46 @@ ExerciseAnswer? _answerOf(KindSpec spec, Slice slice, Cube cube, Random rng) =>
             : _matchAgreeing(spec, match, slice, cube, rng),
       final Sort sort => _sort(sort, slice, cube),
       Parts(:final view) => _parts(spec, view, slice, cube),
+      final Marks marks => _marks(marks, slice, cube),
     };
+
+/// One pill on the head and one on the reference word of the slice's
+/// construction; null when neither is a practised cell of the target's word
+/// in its bundle, as the exercise would then rate a card the learner does not
+/// mark or a form the learner switched off.
+MarksAnswer? _marks(Marks marks, Slice slice, Cube cube) {
+  final s = slice.sentence!;
+  final c = s.construction;
+  final roles =
+      marks.roles[c.kind] ?? (throw StateError('${c.kind.name} has no pills'));
+  final formAt = [
+    for (final (i, t) in s.tokens.indexed)
+      if (t is FormToken) i,
+  ];
+  final pills = [
+    (role: roles.head, word: c.head),
+    (role: roles.reference, word: c.reference!),
+  ];
+  for (final p in pills) {
+    assert(formAt.contains(p.word), '${s.id}: token ${p.word} is no form');
+    final cell = slice.group[formAt.indexOf(p.word)];
+    if (cell.word.id == slice.target.word.id &&
+        cell.bundle == slice.target.bundle &&
+        cube.practised(cell)) {
+      return MarksAnswer(
+        s.id,
+        [for (final t in s.tokens) t.text],
+        pills,
+        FormOption(
+          text: s.tokens[p.word].text,
+          formKey: cell.key,
+          lexemeId: cell.word.id,
+        ),
+      );
+    }
+  }
+  return null;
+}
 
 /// The prompt and one slot per part of the row, named by
 /// [PrincipalParts.row]; a part spelt like the prompt is given, not asked.
@@ -1028,7 +1085,7 @@ Set<FormCell> _readings(KindSpec spec, Slice slice, Cube cube) {
     case PrincipalParts():
       throw ArgumentError('principal parts have a typed answer per slot');
     case OneSentence():
-      throw UnimplementedError('no kind asks a sentence');
+      throw ArgumentError('a sentence has no typed answer');
   }
 }
 
@@ -1164,6 +1221,19 @@ String? _answerObjection(
             return '$other clashes with $c';
           }
         }
+      }
+      return null;
+    case (final Marks marks, final MarksAnswer given):
+      final ours = _marks(marks, slice, cube);
+      if (ours == null) return 'the construction marks no ${slice.target}';
+      if (given.sentenceId != ours.sentenceId ||
+          !listEquals(given.words, ours.words)) {
+        return 'sentence ${given.sentenceId}';
+      }
+      if (!listEquals(given.pills, ours.pills)) return 'pills ${given.pills}';
+      if (given.target.formKey != ours.target.formKey ||
+          given.target.text != ours.target.text) {
+        return 'target ${given.target.text}';
       }
       return null;
     default:
