@@ -1,5 +1,5 @@
 Start
-E Erkennen | open | Welcher Typ ist amāre, amō, amātum? | Optionen: A-Konjugation ; E-Konjugation ; I-Konjugation | [Zeigen]
+E Erkennen | open | Welcher Typ ist amāre, amō, amāvī, amātum? | Optionen: A-Konjugation ; E-Konjugation ; I-Konjugation | [Zeigen]
 S Stamm | done (gestrichelt) | entfällt / kein eigener Stamm
 E Endung | done (gestrichelt) | entfällt / keine eigene Endung
 L Lautregel | pending | [Zeigen]

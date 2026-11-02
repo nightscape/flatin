@@ -540,13 +540,13 @@ types:
 
 items:
   - translation: {de: "lieben, gern haben", en: "love, like"}
-    parts: {infinitiv: "amāre", praesens_1sg: "amō", supinum: "amātum"}
+    parts: {infinitiv: "amāre", praesens_1sg: "amō", perfekt_1sg: "amāvī", supinum: "amātum"}
     de_verb: "lieben"
   - translation: {de: "haben, halten", en: "have, hold"}
-    parts: {infinitiv: "habēre", praesens_1sg: "habeō", supinum: "habitum"}
+    parts: {infinitiv: "habēre", praesens_1sg: "habeō", perfekt_1sg: "habuī", supinum: "habitum"}
     de_verb: "haben vollverb"
   - translation: {de: hören, en: hear}
-    parts: {infinitiv: "audīre", praesens_1sg: "audiō", supinum: "audītum"}
+    parts: {infinitiv: "audīre", praesens_1sg: "audiō", perfekt_1sg: "audīvī", supinum: "audītum"}
     de_verb: "hören"
   - type: Mischkonjugation
     translation: {de: "nehmen; erobern", en: "take, seize"}
@@ -562,173 +562,173 @@ items:
     de_verb: "kommen"
     passiv: unpersönlich
   - translation: {de: "eintreten, betreten", en: enter}
-    parts: {infinitiv: "intrāre", praesens_1sg: "intrō", supinum: "intrātum"}
+    parts: {infinitiv: "intrāre", praesens_1sg: "intrō", perfekt_1sg: "intrāvī", supinum: "intrātum"}
     de_verb: "betreten"
   - translation: {de: "erscheinen, auftauchen, sich zeigen", en: "appear, show oneself"}
-    parts: {infinitiv: "appārēre", praesens_1sg: "appāreō", supinum: "appāritum"}
+    parts: {infinitiv: "appārēre", praesens_1sg: "appāreō", perfekt_1sg: "appāruī", supinum: "appāritum"}
     de_verb: "erscheinen"
     passiv: unpersönlich
   - translation: {de: "bauen, erbauen", en: build}
-    parts: {infinitiv: "aedificāre", praesens_1sg: "aedificō", supinum: "aedificātum"}
+    parts: {infinitiv: "aedificāre", praesens_1sg: "aedificō", perfekt_1sg: "aedificāvī", supinum: "aedificātum"}
     de_verb: "bauen"
   - translation: {de: "gehen, spazieren gehen", en: "walk, go for a walk"}
-    parts: {infinitiv: "ambulāre", praesens_1sg: "ambulō", supinum: "ambulātum"}
+    parts: {infinitiv: "ambulāre", praesens_1sg: "ambulō", perfekt_1sg: "ambulāvī", supinum: "ambulātum"}
     de_verb: "gehen"
     passiv: unpersönlich
   - translation: {de: "herbeibringen, hintragen", en: "bring, carry (to)"}
-    parts: {infinitiv: "apportāre", praesens_1sg: "apportō", supinum: "apportātum"}
+    parts: {infinitiv: "apportāre", praesens_1sg: "apportō", perfekt_1sg: "apportāvī", supinum: "apportātum"}
     de_verb: "herbeibringen"
   - translation: {de: "sich nähern, herankommen", en: "approach, come near"}
-    parts: {infinitiv: "appropinquāre", praesens_1sg: "appropinquō", supinum: "appropinquātum"}
+    parts: {infinitiv: "appropinquāre", praesens_1sg: "appropinquō", perfekt_1sg: "appropinquāvī", supinum: "appropinquātum"}
     de_verb: "sich nähern"
     passiv: unpersönlich
   - translation: {de: "zögern, sich nicht beeilen", en: "hesitate, delay"}
-    parts: {infinitiv: "cessāre", praesens_1sg: "cessō", supinum: "cessātum"}
+    parts: {infinitiv: "cessāre", praesens_1sg: "cessō", perfekt_1sg: "cessāvī", supinum: "cessātum"}
     de_verb: "zögern"
     passiv: unpersönlich
   - translation: {de: "rufen, schreien", en: "shout, call out"}
-    parts: {infinitiv: "clāmāre", praesens_1sg: "clāmō", supinum: "clāmātum"}
+    parts: {infinitiv: "clāmāre", praesens_1sg: "clāmō", perfekt_1sg: "clāmāvī", supinum: "clāmātum"}
     de_verb: "rufen"
   - translation: {de: "zusammenkommen, sich versammeln", en: "come together, meet"}
     parts: {infinitiv: "convenīre", praesens_1sg: "conveniō", perfekt_1sg: "convēnī", supinum: "conventum"}
     de_verb: "zusammenkommen"
     passiv: unpersönlich
   - translation: {de: "speisen, essen", en: "dine, eat"}
-    parts: {infinitiv: "cēnāre", praesens_1sg: "cēnō", supinum: "cēnātum"}
+    parts: {infinitiv: "cēnāre", praesens_1sg: "cēnō", perfekt_1sg: "cēnāvī", supinum: "cēnātum"}
     de_verb: "speisen"
   - translation: {de: "sorgen (für), sich kümmern (um)", en: "care (for), look after"}
-    parts: {infinitiv: "cūrāre", praesens_1sg: "cūrō", supinum: "cūrātum"}
+    parts: {infinitiv: "cūrāre", praesens_1sg: "cūrō", perfekt_1sg: "cūrāvī", supinum: "cūrātum"}
     de_verb: "sorgen"
   - type: A-Konjugation
     translation: {de: "geben, schenken", en: give}
     parts: {infinitiv: "dare", praesens_1sg: "dō", perfekt_1sg: "dedī", supinum: "datum", praesens_stamm: "da"}
     de_verb: "geben"
   - translation: {de: schlafen, en: sleep}
-    parts: {infinitiv: "dormīre", praesens_1sg: "dormiō", supinum: "dormītum"}
+    parts: {infinitiv: "dormīre", praesens_1sg: "dormiō", perfekt_1sg: "dormīvī", supinum: "dormītum"}
     de_verb: "schlafen"
     passiv: unpersönlich
   - translation: {de: "(jmd.) erfreuen, unterhalten", en: "delight, entertain"}
-    parts: {infinitiv: "dēlectāre", praesens_1sg: "dēlectō", supinum: "dēlectātum"}
+    parts: {infinitiv: "dēlectāre", praesens_1sg: "dēlectō", perfekt_1sg: "dēlectāvī", supinum: "dēlectātum"}
     de_verb: "erfreuen"
   - translation: {de: "wünschen, verlangen; vermissen", en: "long for, desire; miss"}
-    parts: {infinitiv: "dēsīderāre", praesens_1sg: "dēsīderō", supinum: "dēsīderātum"}
+    parts: {infinitiv: "dēsīderāre", praesens_1sg: "dēsīderō", perfekt_1sg: "dēsīderāvī", supinum: "dēsīderātum"}
     de_verb: "wünschen"
   - translation: {de: "erklären, darlegen", en: "explain, set out"}
-    parts: {infinitiv: "explicāre", praesens_1sg: "explicō", supinum: "explicātum"}
+    parts: {infinitiv: "explicāre", praesens_1sg: "explicō", perfekt_1sg: "explicāvī", supinum: "explicātum"}
     de_verb: "erklären"
   - translation: {de: "warten, erwarten", en: "wait (for), expect"}
-    parts: {infinitiv: "exspectāre", praesens_1sg: "exspectō", supinum: "exspectātum"}
+    parts: {infinitiv: "exspectāre", praesens_1sg: "exspectō", perfekt_1sg: "exspectāvī", supinum: "exspectātum"}
     de_verb: "erwarten"
   - translation: {de: "in die Flucht schlagen, vertreiben", en: "put to flight, drive away"}
-    parts: {infinitiv: "fugāre", praesens_1sg: "fugō", supinum: "fugātum"}
+    parts: {infinitiv: "fugāre", praesens_1sg: "fugō", perfekt_1sg: "fugāvī", supinum: "fugātum"}
     de_verb: "in die flucht schlagen"
   - translation: {de: sich freuen, en: "be glad, rejoice"}
     parts: {infinitiv: "gaudēre", praesens_1sg: "gaudeō", supinum: "gāvīsum"}
     de_verb: "sich freuen"
     deponent: ["perf", "plusq", "fut2"]
   - translation: {de: "befehlen, (be)herrschen", en: "command, order; rule"}
-    parts: {infinitiv: "imperāre", praesens_1sg: "imperō", supinum: "imperātum"}
+    parts: {infinitiv: "imperāre", praesens_1sg: "imperō", perfekt_1sg: "imperāvī", supinum: "imperātum"}
     de_verb: "befehlen"
   - translation: {de: "arbeiten, sich anstrengen", en: "work, toil"}
-    parts: {infinitiv: "labōrāre", praesens_1sg: "labōrō", supinum: "labōrātum"}
+    parts: {infinitiv: "labōrāre", praesens_1sg: "labōrō", perfekt_1sg: "labōrāvī", supinum: "labōrātum"}
     de_verb: "arbeiten"
     passiv: unpersönlich
   - translation: {de: "bleiben, warten; erwarten", en: "stay, remain; wait for"}
     parts: {infinitiv: "manēre", praesens_1sg: "maneō", perfekt_1sg: "mānsī", supinum: "mānsum"}
     de_verb: "bleiben"
   - translation: {de: töten, en: kill}
-    parts: {infinitiv: "necāre", praesens_1sg: "necō", supinum: "necātum"}
+    parts: {infinitiv: "necāre", praesens_1sg: "necō", perfekt_1sg: "necāvī", supinum: "necātum"}
     de_verb: "töten"
   - translation: {de: "bereiten, vorbereiten, zubereiten", en: "prepare, get ready"}
-    parts: {infinitiv: "parāre", praesens_1sg: "parō", supinum: "parātum"}
+    parts: {infinitiv: "parāre", praesens_1sg: "parō", perfekt_1sg: "parāvī", supinum: "parātum"}
     de_verb: "bereiten"
   - translation: {de: gefallen, en: please}
-    parts: {infinitiv: "placēre", praesens_1sg: "placeō", supinum: "placitum"}
+    parts: {infinitiv: "placēre", praesens_1sg: "placeō", perfekt_1sg: "placuī", supinum: "placitum"}
     de_verb: "gefallen"
   - translation: {de: "tragen, bringen", en: "carry, bring"}
-    parts: {infinitiv: "portāre", praesens_1sg: "portō", supinum: "portātum"}
+    parts: {infinitiv: "portāre", praesens_1sg: "portō", perfekt_1sg: "portāvī", supinum: "portātum"}
     de_verb: "tragen"
   - translation: {de: "(etwas) für gut befinden; prüfen, beweisen", en: "approve; test, prove"}
-    parts: {infinitiv: "probāre", praesens_1sg: "probō", supinum: "probātum"}
+    parts: {infinitiv: "probāre", praesens_1sg: "probō", perfekt_1sg: "probāvī", supinum: "probātum"}
     de_verb: "für gut befinden"
   - translation: {de: "verhindern, hindern; abhalten", en: "prevent, hinder; keep away"}
-    parts: {infinitiv: "prohibēre", praesens_1sg: "prohibeō", supinum: "prohibitum"}
+    parts: {infinitiv: "prohibēre", praesens_1sg: "prohibeō", perfekt_1sg: "prohibuī", supinum: "prohibitum"}
     de_verb: "verhindern"
   - translation: {de: "eilen, sich beeilen", en: hurry}
-    parts: {infinitiv: "properāre", praesens_1sg: "properō", supinum: "properātum"}
+    parts: {infinitiv: "properāre", praesens_1sg: "properō", perfekt_1sg: "properāvī", supinum: "properātum"}
     de_verb: "eilen"
     passiv: unpersönlich
   - translation: {de: gehorchen, en: obey}
-    parts: {infinitiv: "pārēre", praesens_1sg: "pāreō", supinum: "pāritum"}
+    parts: {infinitiv: "pārēre", praesens_1sg: "pāreō", perfekt_1sg: "pāruī", supinum: "pāritum"}
     de_verb: "gehorchen"
     passiv: unpersönlich
   - translation: {de: "kämpfen, streiten", en: fight}
-    parts: {infinitiv: "pūgnāre", praesens_1sg: "pūgnō", supinum: "pūgnātum"}
+    parts: {infinitiv: "pūgnāre", praesens_1sg: "pūgnō", perfekt_1sg: "pūgnāvī", supinum: "pūgnātum"}
     de_verb: "kämpfen"
     passiv: unpersönlich
   - translation: {de: "antworten, erwidern", en: "answer, reply"}
     parts: {infinitiv: "respondēre", praesens_1sg: "respondeō", perfekt_1sg: "respondī", supinum: "respōnsum"}
     de_verb: "erwidern"
   - translation: {de: "fragen; bitten", en: "ask; request"}
-    parts: {infinitiv: "rogāre", praesens_1sg: "rogō", supinum: "rogātum"}
+    parts: {infinitiv: "rogāre", praesens_1sg: "rogō", perfekt_1sg: "rogāvī", supinum: "rogātum"}
     de_verb: "fragen"
   - translation: {de: "König sein, herrschen", en: "be king, reign"}
-    parts: {infinitiv: "rēgnāre", praesens_1sg: "rēgnō", supinum: "rēgnātum"}
+    parts: {infinitiv: "rēgnāre", praesens_1sg: "rēgnō", perfekt_1sg: "rēgnāvī", supinum: "rēgnātum"}
     de_verb: "könig sein"
     passiv: unpersönlich
   - translation: {de: "lachen; über etw. lachen", en: "laugh; laugh at"}
     parts: {infinitiv: "rīdēre", praesens_1sg: "rīdeō", perfekt_1sg: "rīsī", supinum: "rīsum"}
     de_verb: "lachen"
   - translation: {de: opfern, en: sacrifice}
-    parts: {infinitiv: "sacrificāre", praesens_1sg: "sacrificō", supinum: "sacrificātum"}
+    parts: {infinitiv: "sacrificāre", praesens_1sg: "sacrificō", perfekt_1sg: "sacrificāvī", supinum: "sacrificātum"}
     de_verb: "opfern"
   - translation: {de: "grüßen, begrüßen", en: greet}
-    parts: {infinitiv: "salūtāre", praesens_1sg: "salūtō", supinum: "salūtātum"}
+    parts: {infinitiv: "salūtāre", praesens_1sg: "salūtō", perfekt_1sg: "salūtāvī", supinum: "salūtātum"}
     de_verb: "grüßen"
   - translation: {de: "wissen, kennen, verstehen", en: "know, understand"}
-    parts: {infinitiv: "scīre", praesens_1sg: "sciō", supinum: "scītum"}
+    parts: {infinitiv: "scīre", praesens_1sg: "sciō", perfekt_1sg: "scīvī", supinum: "scītum"}
     de_verb: "wissen"
   - translation: {de: sitzen, en: sit}
     parts: {infinitiv: "sedēre", praesens_1sg: "sedeō", perfekt_1sg: "sēdī", supinum: "sessum"}
     de_verb: "sitzen"
     passiv: unpersönlich
   - translation: {de: "schützen, retten, bewahren", en: "save, protect, keep"}
-    parts: {infinitiv: "servāre", praesens_1sg: "servō", supinum: "servātum"}
+    parts: {infinitiv: "servāre", praesens_1sg: "servō", perfekt_1sg: "servāvī", supinum: "servātum"}
     de_verb: "schützen"
   - translation: {de: dienen, en: "serve, be a slave"}
-    parts: {infinitiv: "servīre", praesens_1sg: "serviō", supinum: "servītum"}
+    parts: {infinitiv: "servīre", praesens_1sg: "serviō", perfekt_1sg: "servīvī", supinum: "servītum"}
     de_verb: "dienen"
     passiv: unpersönlich
   - translation: {de: "anschauen, betrachten", en: "look at, watch"}
-    parts: {infinitiv: "spectāre", praesens_1sg: "spectō", supinum: "spectātum"}
+    parts: {infinitiv: "spectāre", praesens_1sg: "spectō", perfekt_1sg: "spectāvī", supinum: "spectātum"}
     de_verb: "anschauen"
   - translation: {de: "staunen, verblüfft sein", en: "be amazed, be stunned"}
-    parts: {infinitiv: "stupēre", praesens_1sg: "stupeō"}
+    parts: {infinitiv: "stupēre", praesens_1sg: "stupeō", perfekt_1sg: "stupuī"}
     de_verb: "staunen"
     absent: &ohne_supinum [{genus_verbi: pass, tempus: perf}, {genus_verbi: pass, tempus: plusq}, {genus_verbi: pass, tempus: fut2}, {modus: inf, tempus: fut}, {modus: part, tempus: fut}, {modus: sup}]
     passiv: unpersönlich
   - translation: {de: "übertreffen, überwinden, besiegen", en: "surpass, overcome, defeat"}
-    parts: {infinitiv: "superāre", praesens_1sg: "superō", supinum: "superātum"}
+    parts: {infinitiv: "superāre", praesens_1sg: "superō", perfekt_1sg: "superāvī", supinum: "superātum"}
     de_verb: "übertreffen"
   - translation: {de: "schweigen, still sein", en: be silent}
-    parts: {infinitiv: "tacēre", praesens_1sg: "taceō", supinum: "tacitum"}
+    parts: {infinitiv: "tacēre", praesens_1sg: "taceō", perfekt_1sg: "tacuī", supinum: "tacitum"}
     de_verb: "schweigen"
     passiv: unpersönlich
   - translation: {de: "angreifen; versuchen, prüfen", en: "attack; try, test"}
-    parts: {infinitiv: "temptāre", praesens_1sg: "temptō", supinum: "temptātum"}
+    parts: {infinitiv: "temptāre", praesens_1sg: "temptō", perfekt_1sg: "temptāvī", supinum: "temptātum"}
     de_verb: "angreifen"
   - translation: {de: "(sich) fürchten, Angst haben", en: "fear, be afraid"}
-    parts: {infinitiv: "timēre", praesens_1sg: "timeō"}
+    parts: {infinitiv: "timēre", praesens_1sg: "timeō", perfekt_1sg: "timuī"}
     de_verb: "fürchten"
     absent: *ohne_supinum
   - translation: {de: sehen, en: see}
     parts: {infinitiv: "vidēre", praesens_1sg: "videō", perfekt_1sg: "vīdī", supinum: "vīsum"}
     de_verb: "sehen"
   - translation: {de: "rufen, nennen", en: "call, name"}
-    parts: {infinitiv: "vocāre", praesens_1sg: "vocō", supinum: "vocātum"}
+    parts: {infinitiv: "vocāre", praesens_1sg: "vocō", perfekt_1sg: "vocāvī", supinum: "vocātum"}
     de_verb: "rufen"
   - translation: {de: besuchen, en: visit}
-    parts: {infinitiv: "vīsitāre", praesens_1sg: "vīsitō", supinum: "vīsitātum"}
+    parts: {infinitiv: "vīsitāre", praesens_1sg: "vīsitō", perfekt_1sg: "vīsitāvī", supinum: "vīsitātum"}
     de_verb: "besuchen"
   - type: Konsonantische
     translation: {de: "treiben, handeln, tun", en: "drive, do, act"}

@@ -1,12 +1,12 @@
 Start
-E Erkennen | open | Welcher Typ ist amāre, amō, amātum? | Optionen: A-Konjugation ; E-Konjugation ; I-Konjugation | [Zeigen]
+E Erkennen | open | Welcher Typ ist amāre, amō, amāvī, amātum? | Optionen: A-Konjugation ; E-Konjugation ; I-Konjugation | [Zeigen]
 S Stamm | pending | [Zeigen]
 E Endung | pending | [Zeigen]
 L Lautregel | pending | [Zeigen]
 
 Zeigen erkennen
 E Erkennen | done | A-Konjugation
-S Stamm | open | Von welchem Stamm wird die Form von amāre, amō, amātum gebildet? | Optionen: am- ; amā- ; amār- | [Zeigen]
+S Stamm | open | Von welchem Stamm wird die Form von amāre, amō, amāvī, amātum gebildet? | Optionen: amā- ; amār- ; amāv- | [Zeigen]
 E Endung | pending | [Zeigen]
 L Lautregel | pending | [Zeigen]
 

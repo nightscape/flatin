@@ -411,7 +411,7 @@ void main() {
     });
 
     test(
-      'the zero-ending forms split 174 dictionary forms / 2293 questions',
+      'the zero-ending forms split 175 dictionary forms / 2294 questions',
       () async {
         var zeroEnding = 0;
         final dictionaryForms = <String>[];
@@ -429,9 +429,9 @@ void main() {
             }
           }
         }
-        expect(zeroEnding, 2467);
-        expect(dictionaryForms, hasLength(174));
-        expect(withQuestion, hasLength(2293));
+        expect(zeroEnding, 2469);
+        expect(dictionaryForms, hasLength(175));
+        expect(withQuestion, hasLength(2294));
         expect(
           dictionaryForms.map((e) => e.split(' ').first).toSet().toList()
             ..sort(),
@@ -529,6 +529,7 @@ const _dictionaryFormItems = [
   'nouns:acer',
   'nouns:aedis',
   'nouns:aetas',
+  'nouns:ager',
   'nouns:amor',
   'nouns:animal',
   'nouns:arbor',

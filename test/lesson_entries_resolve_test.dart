@@ -112,7 +112,6 @@ const _unresolved = {
   'Lektion 13: nēmō': _noType,
   'Lektion 13: dum': _uninflected,
   'Lektion 13: domī': _formOf,
-  'Lektion 13: ager': _noType,
   'Lektion 13: tam': _uninflected,
   'Lektion 13: postquam': _uninflected,
   'Lektion 14: appāret': _formOf,

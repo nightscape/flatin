@@ -464,6 +464,8 @@ lessons:
       - "adesse"
       - "posse"
     grammar:
+      nouns:
+        types: [O-Deklination-er]
       verbs:
         forms:
           - {name: Perfekt, modus: ind, tempus: perf, genus_verbi: akt}

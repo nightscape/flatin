@@ -263,6 +263,17 @@ types:
       abl.pl: "{stamm}īs"
       vok.pl: "{stamm}ī"
 
+  O-Deklination-er:
+    class: deklination
+    display: {de: O-Deklination-er, en: "2nd declension in -er"}
+    inherits_from: O-Deklination-maskulinum
+    stems:
+      stamm: {from: gen, remove: "ī", display: {de: Stamm, en: Stem}}
+      nom:   {from: nom, remove: "", display: {de: Nominativ, en: Nominative}}
+    forms:
+      nom.sg: "{nom}"
+      vok.sg: "{nom}"
+
   O-Deklination-neutrum:
     class: deklination
     genus: n
@@ -1143,6 +1154,9 @@ items:
   - translation: {de: der Stier, en: bull}
     parts: {nom: "taurus", gen: "taurī"}
     de_noun: "stier"
+  - type: O-Deklination-er
+    translation: {de: "der Acker, das Feld", en: "field, land"}
+    parts: {nom: "ager", gen: "agrī"}
   - translation: {de: "die Form, die Gestalt, die Schönheit", en: "shape, form; beauty"}
     parts: {nom: "fōrma", gen: "fōrmae"}
     genus: f
@@ -2165,7 +2179,7 @@ items:
     de_noun: "zeit"
   - type: Konsonantische-Deklination-n
     translation: {de: die Küste, en: "shore, coast"}
-    parts: {nom: "lītus", gen: "litoris"}
+    parts: {nom: "lītus", gen: "lītoris"}
     de_noun: "küste"
   - type: Konsonantische-Deklination-n
     translation: {de: das Vieh, en: "cattle, livestock"}
@@ -2360,7 +2374,7 @@ items:
     forms: {adv.pos: "ingenter"}
   - type: Adjektiv-einendig-i
     translation: {de: unglücklich, en: "unhappy, unlucky"}
-    parts: {nom: "īnfēlix", gen: "īnfēlīcis"}
+    parts: {nom: "īnfēlīx", gen: "īnfēlīcis"}
   - type: Adjektiv-einendig-i
     translation: {de: "klug, umsichtig", en: "wise, prudent"}
     parts: {nom: "prūdēns", gen: "prūdentis"}
