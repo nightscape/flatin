@@ -5,6 +5,7 @@ import '../data/rewards.dart' show switchableRewardIds;
 import '../data/settings_conversion.dart'
     show settingsVersion, settingsVersionField;
 import 'distractor_strategy.dart';
+import 'exam_units.dart' show Uebersetzungseinheit;
 import 'form_label.dart';
 import 'lesson_range.dart';
 
@@ -97,6 +98,12 @@ class Settings {
   /// Data file id -> form keys practised ahead of the course.
   final Map<String, Set<String>> forcedOnForms;
 
+  /// What one self-check unit of an exam translation is.
+  final Uebersetzungseinheit uebersetzungseinheit;
+
+  /// Whether the exam screen shows the points gained.
+  final bool punkteAnzeige;
+
   Settings({
     Map<String, Set<String>>? disabledForms,
     Map<String, Map<String, Set<String>>>? disabledFeatures,
@@ -117,6 +124,8 @@ class Settings {
     Set<String>? disabledRewards,
     this.rewardAnimation = true,
     this.avoidMacronTwins = true,
+    this.uebersetzungseinheit = Uebersetzungseinheit.teilsatz,
+    this.punkteAnzeige = false,
   }) : disabledForms = disabledForms ?? {},
        disabledFeatures = disabledFeatures ?? {},
        disabledTypes = disabledTypes ?? {},
@@ -183,6 +192,8 @@ class Settings {
     Set<String>? disabledRewards,
     bool? rewardAnimation,
     bool? avoidMacronTwins,
+    Uebersetzungseinheit? uebersetzungseinheit,
+    bool? punkteAnzeige,
   }) {
     return Settings(
       disabledForms: disabledForms ?? this.disabledForms,
@@ -204,6 +215,8 @@ class Settings {
       disabledRewards: disabledRewards ?? this.disabledRewards,
       rewardAnimation: rewardAnimation ?? this.rewardAnimation,
       avoidMacronTwins: avoidMacronTwins ?? this.avoidMacronTwins,
+      uebersetzungseinheit: uebersetzungseinheit ?? this.uebersetzungseinheit,
+      punkteAnzeige: punkteAnzeige ?? this.punkteAnzeige,
     );
   }
 
@@ -436,6 +449,8 @@ class Settings {
       'disabledRewards': disabledRewards.toList(),
       'rewardAnimation': rewardAnimation,
       'avoidMacronTwins': avoidMacronTwins,
+      'uebersetzungseinheit': uebersetzungseinheit.name,
+      'punkteAnzeige': punkteAnzeige,
     };
   }
 
@@ -540,6 +555,10 @@ class Settings {
       ),
       rewardAnimation: json['rewardAnimation'] as bool? ?? true,
       avoidMacronTwins: json['avoidMacronTwins'] as bool? ?? true,
+      uebersetzungseinheit: Uebersetzungseinheit.values.byName(
+        json['uebersetzungseinheit'] as String? ?? 'teilsatz',
+      ),
+      punkteAnzeige: json['punkteAnzeige'] as bool? ?? false,
     );
   }
 }

@@ -421,5 +421,115 @@
     "title": "What to practise?",
     "words": "Words",
     "grammar": "Grammar"
+  },
+  "exam": {
+    "home": "Practise an exam",
+    "list": {
+      "title": "Exams",
+      "import": "Import an exam",
+      "empty": "No exam imported yet.",
+      "delete": "Delete",
+      "not_text": "This file is not UTF-8 text and cannot be read as an exam. Save the exam as UTF-8.",
+      "refused": "This file cannot be read as an exam. First place: {path} ({rule}): {detail}",
+      "unit": "Translate in units of:",
+      "points": "Show points"
+    },
+    "unit": {
+      "teilsatz": "clause",
+      "satz": "sentence",
+      "text": "whole text"
+    },
+    "screen": {
+      "translation": "Translation",
+      "yourTranslation": "Your translation (just for you)",
+      "showModel": "Show the model translation",
+      "moreVariants": "More variants",
+      "habIch": "got it",
+      "anders": "different",
+      "done": "done",
+      "open": "still open",
+      "tasks": "Tasks",
+      "showSolution": "Show the solution",
+      "points": "Points: {n} of {total}",
+      "taskPoints": "{n} pts",
+      "finish": "Finish the exam",
+      "finished": "{n} words come back tomorrow."
+    },
+    "sheet": {
+      "lemma": "Dictionary form: {lemma}",
+      "meaning": "Meaning: {meaning}",
+      "entry": "Dictionary entry: {angabe}",
+      "analysis": "Analysis: {analysis}"
+    },
+    "solution": {
+      "bezug": "refers to: {word}"
+    },
+    "analyse": {
+      "wortart": {
+        "subst": "noun",
+        "adj": "adjective",
+        "verb": "verb",
+        "pron": "pronoun",
+        "adv": "adverb",
+        "praep": "preposition",
+        "konjunktion": "conjunction",
+        "subjunktion": "subordinating conjunction",
+        "partikel": "particle"
+      },
+      "kasus": {
+        "nom": "nominative",
+        "gen": "genitive",
+        "dat": "dative",
+        "akk": "accusative",
+        "abl": "ablative",
+        "vok": "vocative"
+      },
+      "numerus": {
+        "sg": "singular",
+        "pl": "plural"
+      },
+      "genus": {
+        "m": "masculine",
+        "f": "feminine",
+        "n": "neuter"
+      },
+      "person": {
+        "1": "1st person",
+        "2": "2nd person",
+        "3": "3rd person"
+      },
+      "tempus": {
+        "praes": "present",
+        "impf": "imperfect",
+        "perf": "perfect",
+        "plusq": "pluperfect",
+        "fut": "future",
+        "fut2": "future perfect"
+      },
+      "modus": {
+        "ind": "indicative",
+        "konj": "subjunctive",
+        "imp": "imperative",
+        "inf": "infinitive",
+        "part": "participle"
+      },
+      "genus_verbi": {
+        "akt": "active",
+        "pass": "passive"
+      },
+      "pronomen": {
+        "personal": "personal pronoun",
+        "relativ": "relative pronoun",
+        "interrogativ_subst": "interrogative pronoun",
+        "interrogativ_adj": "interrogative adjective",
+        "demonstrativ": "demonstrative pronoun",
+        "possessiv": "possessive pronoun",
+        "reflexiv": "reflexive pronoun"
+      },
+      "funktion": {
+        "gen_subj": "subjective genitive",
+        "gen_obj": "objective genitive"
+      }
+    }
   }
 }

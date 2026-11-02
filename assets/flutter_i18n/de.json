@@ -421,5 +421,115 @@
     "title": "Was üben?",
     "words": "Wörter",
     "grammar": "Grammatik"
+  },
+  "exam": {
+    "home": "Prüfung üben",
+    "list": {
+      "title": "Prüfungen",
+      "import": "Prüfung importieren",
+      "empty": "Noch keine Prüfung importiert.",
+      "delete": "Löschen",
+      "not_text": "Diese Datei ist kein Text in UTF-8 und lässt sich nicht als Prüfung lesen. Speichere die Prüfung als UTF-8.",
+      "refused": "Diese Datei lässt sich nicht als Prüfung lesen. Erste Stelle: {path} ({rule}): {detail}",
+      "unit": "Übersetzen in Einheiten:",
+      "points": "Punkte anzeigen"
+    },
+    "unit": {
+      "teilsatz": "Teilsatz",
+      "satz": "Satz",
+      "text": "ganzer Text"
+    },
+    "screen": {
+      "translation": "Übersetzung",
+      "yourTranslation": "Deine Übersetzung (nur für dich)",
+      "showModel": "Musterübersetzung zeigen",
+      "moreVariants": "Weitere Varianten",
+      "habIch": "hab ich",
+      "anders": "anders",
+      "done": "geschafft",
+      "open": "noch offen",
+      "tasks": "Aufgaben",
+      "showSolution": "Lösung zeigen",
+      "points": "Punkte: {n} von {total}",
+      "taskPoints": "{n} P.",
+      "finish": "Prüfung beenden",
+      "finished": "{n} Wörter kommen morgen wieder."
+    },
+    "sheet": {
+      "lemma": "Grundform: {lemma}",
+      "meaning": "Bedeutung: {meaning}",
+      "entry": "Wörterbuch: {angabe}",
+      "analysis": "Bestimmung: {analysis}"
+    },
+    "solution": {
+      "bezug": "Bezugswort: {word}"
+    },
+    "analyse": {
+      "wortart": {
+        "subst": "Substantiv",
+        "adj": "Adjektiv",
+        "verb": "Verb",
+        "pron": "Pronomen",
+        "adv": "Adverb",
+        "praep": "Präposition",
+        "konjunktion": "Konjunktion",
+        "subjunktion": "Subjunktion",
+        "partikel": "Partikel"
+      },
+      "kasus": {
+        "nom": "Nominativ",
+        "gen": "Genitiv",
+        "dat": "Dativ",
+        "akk": "Akkusativ",
+        "abl": "Ablativ",
+        "vok": "Vokativ"
+      },
+      "numerus": {
+        "sg": "Singular",
+        "pl": "Plural"
+      },
+      "genus": {
+        "m": "maskulin",
+        "f": "feminin",
+        "n": "neutrum"
+      },
+      "person": {
+        "1": "1. Person",
+        "2": "2. Person",
+        "3": "3. Person"
+      },
+      "tempus": {
+        "praes": "Präsens",
+        "impf": "Imperfekt",
+        "perf": "Perfekt",
+        "plusq": "Plusquamperfekt",
+        "fut": "Futur I",
+        "fut2": "Futur II"
+      },
+      "modus": {
+        "ind": "Indikativ",
+        "konj": "Konjunktiv",
+        "imp": "Imperativ",
+        "inf": "Infinitiv",
+        "part": "Partizip"
+      },
+      "genus_verbi": {
+        "akt": "Aktiv",
+        "pass": "Passiv"
+      },
+      "pronomen": {
+        "personal": "Personalpronomen",
+        "relativ": "Relativpronomen",
+        "interrogativ_subst": "Interrogativpronomen",
+        "interrogativ_adj": "adjektivisches Interrogativpronomen",
+        "demonstrativ": "Demonstrativpronomen",
+        "possessiv": "Possessivpronomen",
+        "reflexiv": "Reflexivpronomen"
+      },
+      "funktion": {
+        "gen_subj": "Genitivus subiectivus",
+        "gen_obj": "Genitivus obiectivus"
+      }
+    }
   }
 }

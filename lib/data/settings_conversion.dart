@@ -73,9 +73,9 @@ class MigrationMap {
   static String _word(String itemId) => itemId.split(':').last;
 }
 
-/// The format `Settings.toJson` writes and `convertSettingsV4` produces.
+/// The format `Settings.toJson` writes and `convertSettingsV5` produces.
 const settingsVersionField = 'settingsVersion';
-const settingsVersion = 4;
+const settingsVersion = 5;
 
 /// Reads stored settings of any older format against the v2 data.
 ///
@@ -167,6 +167,18 @@ Map<String, dynamic> convertSettingsV3(
 Map<String, dynamic> convertSettingsV4(Map<String, dynamic> json) {
   if (_versionOf(json) >= 4) return json;
   return {...json, settingsVersionField: 4};
+}
+
+/// The v5 format adds the exam settings, at their defaults: the clause as
+/// the translation unit, and no points shown.
+Map<String, dynamic> convertSettingsV5(Map<String, dynamic> json) {
+  if (_versionOf(json) >= 5) return json;
+  return {
+    ...json,
+    settingsVersionField: 5,
+    'uebersetzungseinheit': 'teilsatz',
+    'punkteAnzeige': false,
+  };
 }
 
 int _versionOf(Map<String, dynamic> json) =>

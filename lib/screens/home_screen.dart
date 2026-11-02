@@ -18,6 +18,7 @@ import '../providers/settings_provider.dart';
 import '../theme.dart';
 import '../widgets/town_view.dart';
 import 'town_screen.dart';
+import 'exam_list_screen.dart';
 import 'grammar_start_screen.dart';
 import 'word_classification_screen.dart';
 import 'practice_screen.dart';
@@ -81,6 +82,17 @@ class HomeScreen extends ConsumerWidget {
                         MaterialPageRoute(
                           builder: (context) =>
                               const WordClassificationScreen(),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 14),
+                    _MenuButton(
+                      buttonKey: const Key('home.exam.button'),
+                      icon: Icons.assignment,
+                      label: FlutterI18n.translate(context, 'exam.home'),
+                      onPressed: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const ExamListScreen(),
                         ),
                       ),
                     ),

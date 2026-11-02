@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:latin_practice/data/lesson_data.dart';
 import 'package:latin_practice/data/rewards.dart';
 import 'package:latin_practice/models/distractor_strategy.dart';
+import 'package:latin_practice/models/exam_units.dart';
 import 'package:latin_practice/models/input_strategy.dart';
 import 'package:latin_practice/models/lernziel_chips.dart';
 import 'package:latin_practice/models/lesson_range.dart';
@@ -23,7 +24,8 @@ typedef Json = Map<String, dynamic>;
 /// chance [off], so `off: 1` empties the pool; [formsOff], [featuresOff],
 /// [wordsOff] and [topicsOff] replace [off] for their universe. A type, form,
 /// word or topic that is not off is forced on with chance [forced]. Each data
-/// file the universes name gets any input strategy or none.
+/// file the universes name gets any input strategy or none. With [exam], the
+/// exam settings are drawn too: any translation unit, points on or off.
 Settings drawSettings(
   Random rng, {
   double openEnd = 0.25,
@@ -42,6 +44,7 @@ Settings drawSettings(
   double? wordsOff,
   double? topicsOff,
   double forced = 0.25,
+  bool exam = false,
 }) {
   LessonRange range() {
     // Drawn only when asked for, so the other callers keep their draws.
@@ -88,7 +91,7 @@ Settings drawSettings(
   final (wordOffs, wordOns) = offAndOn(words, wordsOff ?? off);
   final (topicOffs, topicOns) = offAndOn(topics, topicsOff ?? off);
   final files = {...types.keys, ...forms.keys, ...features.keys};
-  return Settings(
+  final settings = Settings(
     courseWords: wordRange,
     courseGrammar: grammarRange,
     grammarFromLinked: rng.nextBool(),
@@ -134,6 +137,13 @@ Settings drawSettings(
         distractorStrategies[rng.nextInt(distractorStrategies.length)].id,
     rewardAnimation: rng.nextBool(),
     avoidMacronTwins: rng.nextBool(),
+  );
+  // Drawn only when asked for, so the other callers keep their draws.
+  if (!exam) return settings;
+  return settings.copyWith(
+    uebersetzungseinheit: Uebersetzungseinheit
+        .values[rng.nextInt(Uebersetzungseinheit.values.length)],
+    punkteAnzeige: rng.nextBool(),
   );
 }
 

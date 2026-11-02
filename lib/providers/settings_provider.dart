@@ -2,6 +2,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import '../models/lesson_range.dart';
+import '../models/exam_units.dart' show Uebersetzungseinheit;
 import '../models/settings.dart';
 import '../data/asset_text.dart';
 import '../data/lesson_data.dart';
@@ -50,10 +51,12 @@ class SettingsNotifier extends _$SettingsNotifier {
         lessons,
       );
     }
-    return convertSettingsV4(
-      convertSettingsV3(
-        converted,
-        lessons.lessonWords.values.expand((words) => words),
+    return convertSettingsV5(
+      convertSettingsV4(
+        convertSettingsV3(
+          converted,
+          lessons.lessonWords.values.expand((words) => words),
+        ),
       ),
     );
   }
@@ -173,6 +176,12 @@ class SettingsNotifier extends _$SettingsNotifier {
 
   Future<void> setAvoidMacronTwins(bool on) =>
       _update((s) => s.copyWith(avoidMacronTwins: on));
+
+  Future<void> setUebersetzungseinheit(Uebersetzungseinheit einheit) =>
+      _update((s) => s.copyWith(uebersetzungseinheit: einheit));
+
+  Future<void> setPunkteAnzeige(bool on) =>
+      _update((s) => s.copyWith(punkteAnzeige: on));
 
   /// Drops every manual choice; the course ranges stay.
   Future<void> clearOverrides() => _update((s) => s.clearOverrides());

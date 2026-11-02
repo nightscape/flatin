@@ -47,6 +47,7 @@ dependencies:
   flutter_i18n: ^0.37.0
   flutter_localizations:
     sdk: flutter
+  file_selector: 1.0.3
 
 dev_dependencies:
   flutter_test:
