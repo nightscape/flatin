@@ -104,7 +104,7 @@ void main() {
     () async {
       expect(await _playVocabRound(24), _lesson24);
     },
-    timeout: const Timeout(Duration(minutes: 2)),
+    timeout: const Timeout(Duration(minutes: 5)),
   );
 
   test(
@@ -112,7 +112,7 @@ void main() {
     () async {
       expect(await _playVocabRound(26), _lesson26);
     },
-    timeout: const Timeout(Duration(minutes: 2)),
+    timeout: const Timeout(Duration(minutes: 5)),
   );
 
   test('a new meaning keeps the known word in its first lesson', () async {

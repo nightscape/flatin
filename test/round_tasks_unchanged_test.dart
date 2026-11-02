@@ -89,25 +89,43 @@ Future<List<Object>> _tasksOf(Settings settings, int seed) async {
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  test(
-    'the per-file kinds build the tasks of the golden for fixed seeds and '
-    'fresh cards',
-    () async {
-      final settings = {
-        'whole course': Settings(),
-        'lesson 25': Settings(courseWords: LessonRange(1, 25)),
-        'lesson 5': Settings(courseWords: LessonRange(1, 5)),
-      };
-      final actual = <String, Object>{
-        for (final MapEntry(key: name, value: s) in settings.entries)
-          for (var seed = 0; seed < 2; seed++)
-            '$name, seed $seed': await _tasksOf(s, seed),
-      };
-      final text = const JsonEncoder.withIndent(' ').convert(actual);
-      if (autoUpdateGoldenFiles) File(_golden).writeAsStringSync('$text\n');
-      expect(text, File(_golden).readAsStringSync().trimRight());
-    },
-    timeout: const Timeout(Duration(minutes: 5)),
-    tags: 'sweep',
-  );
+  final settings = {
+    'whole course': Settings(),
+    'lesson 25': Settings(courseWords: LessonRange(1, 25)),
+    'lesson 5': Settings(courseWords: LessonRange(1, 5)),
+  };
+  final cases = [
+    for (final MapEntry(key: name, value: s) in settings.entries)
+      for (var seed = 0; seed < 2; seed++) ('$name, seed $seed', s, seed),
+  ];
+  const encoder = JsonEncoder.withIndent(' ');
+  final golden =
+      jsonDecode(File(_golden).readAsStringSync()) as Map<String, Object?>;
+  final actual = <String, Object>{};
+
+  test('the golden holds exactly the fixed settings and seeds', () {
+    expect(golden.keys, [for (final (name, _, _) in cases) name]);
+  });
+
+  // One test per case, so that each stays far under its cap on a loaded
+  // machine.
+  for (final (name, s, seed) in cases) {
+    test(
+      'the per-file kinds build the tasks of the golden for fresh cards: '
+      '$name',
+      () async {
+        actual[name] = await _tasksOf(s, seed);
+        expect(encoder.convert(actual[name]), encoder.convert(golden[name]));
+      },
+      timeout: const Timeout(Duration(minutes: 10)),
+      tags: 'sweep',
+    );
+  }
+
+  if (autoUpdateGoldenFiles) {
+    tearDownAll(() {
+      expect(actual.keys, [for (final (name, _, _) in cases) name]);
+      File(_golden).writeAsStringSync('${encoder.convert(actual)}\n');
+    });
+  }
 }

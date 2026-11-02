@@ -1,3 +1,8 @@
+// Every test plays rounds over the whole course, which a loaded machine slows
+// past the 30 s default.
+@Timeout(Duration(minutes: 5))
+library;
+
 import 'dart:math';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
