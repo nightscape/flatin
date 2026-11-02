@@ -1,0 +1,4 @@
+* Neu: „Was üben?“ auf dem Startbildschirm zeigt, welche Lektionen du gerade übst. Ein Tipp öffnet die Bücher.
+* In den Büchern sind die Lektionen nach deinem Kursstand schmal. Chips über und unter den Büchern stellen den Bereich mit einem Tipp ein.
+* Neue Übung: Lege Schilder wie „Partizip“ und „Bezugswort“ auf die passenden Wörter eines Satzes.
+* Neue Übung: Kreuze alle richtigen Übersetzungen eines lateinischen Satzes an.

@@ -1,0 +1,4 @@
+* New: "What to practise?" on the home screen shows the lessons you practise now. One tap opens the books.
+* In the books, the lessons after your course position are narrow. Chips above and below the books set the range with one tap.
+* New exercise: put labels such as "participle" and "reference word" on the right words of a sentence.
+* New exercise: tick all correct translations of a Latin sentence.
