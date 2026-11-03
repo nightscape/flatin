@@ -14,6 +14,7 @@ import 'package:latin_practice/screens/exam_screen.dart';
 import 'package:latin_practice/services/fsrs_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'support/exercise_invariants.dart';
 import 'support/gen_exam.dart';
 import 'support/gen_settings.dart';
 import 'support/word_classification_harness.dart';
@@ -135,12 +136,6 @@ Iterable<String> _keys(String prefix) => find
 
 final _segmentKey = RegExp(r'^exam\.model\.\d+\.\d+$');
 
-/// Words that say an attempt failed, in both UI languages.
-final _failure = RegExp(
-  r'falsch|fehler|leider|nicht richtig|wrong|incorrect|error|mistake|fail',
-  caseSensitive: false,
-);
-
 /// Every text on screen.
 Iterable<String> _texts() sync* {
   for (final e in find.byType(RichText).evaluate()) {
@@ -243,7 +238,7 @@ void main() {
   ) async {
     for (final code in ['de', 'en']) {
       for (final s in _strings(code, ['exam'])) {
-        expect(_failure.hasMatch(s), isFalse, reason: '$code: "$s"');
+        expect(failureWord.hasMatch(s), isFalse, reason: '$code: "$s"');
       }
     }
     var seed = 0;
@@ -275,7 +270,7 @@ void main() {
           reason: why,
         );
         for (final text in _texts()) {
-          expect(_failure.hasMatch(text), isFalse, reason: '$why: "$text"');
+          expect(failureWord.hasMatch(text), isFalse, reason: '$why: "$text"');
         }
         final words = _keys('exam.token.').where((k) {
           final id = k.substring('exam.token.'.length);
@@ -290,7 +285,7 @@ void main() {
         await letItLoad(tester);
         expect(find.byKey(const Key('exam.sheet')), findsOneWidget);
         for (final text in _texts()) {
-          expect(_failure.hasMatch(text), isFalse, reason: '$why: "$text"');
+          expect(failureWord.hasMatch(text), isFalse, reason: '$why: "$text"');
         }
       }
     }
