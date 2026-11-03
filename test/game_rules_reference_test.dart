@@ -71,6 +71,7 @@ int _times(String buildings) {
         (wordDifficulty != null && wordDifficulty >= 7 ? 2 : 1),
     wordDifficulty != null && wordDifficulty >= 7 ? (firstAttempt ? 10 : 5) : 0,
   ),
+  Answered(right: false, firstAttempt: true, :final partial) => (partial, 0),
   ChoicesChecked(:final right) => (3 * right, 0),
   _ => (0, 0),
 };
@@ -100,6 +101,7 @@ List<_Step> _sequence(Random random) {
           at = at.add(Duration(hours: random.nextInt(30) - 2));
           final right = random.nextBool();
           final first = random.nextBool();
+          final partial = right ? 0 : random.nextInt(4);
           final difficulty = switch (random.nextInt(4)) {
             0 => null,
             1 => random.nextDouble() * 7,
@@ -110,6 +112,7 @@ List<_Step> _sequence(Random random) {
             event: Answered(
               right: right,
               firstAttempt: first,
+              partial: partial,
               wordDifficulty: difficulty,
               kind: 'deLatWahl',
               dataFile: 'latin_nouns',
@@ -158,6 +161,7 @@ void main() {
     final richStart = rules.buildings.fold(0, (s, b) => s + b.price[coins]!);
     final bought = <String>{};
     final multipliers = <int>{};
+    final partialFirstTimes = <int>{};
     for (var seed = 0; seed < 600; seed++) {
       // Odd seeds start rich enough to buy every building.
       final start = seed.isOdd ? richStart : 0;
@@ -200,6 +204,13 @@ void main() {
           final (gained, bonus) = _reference(event);
           final times = _times(expected.buildings);
           if (gained > 0) multipliers.add(times);
+          if (event case Answered(
+            right: false,
+            firstAttempt: true,
+            partial: > 0,
+          )) {
+            partialFirstTimes.add(times);
+          }
           expected = (
             balance: expected.balance + gained * times,
             earned: expected.earned + gained * times,
@@ -213,5 +224,6 @@ void main() {
     expect(steps, 600 * 120);
     expect(bought, {for (final b in rules.buildings) b.id});
     expect(multipliers, {1, 2, 10});
+    expect(partialFirstTimes, {1, 2, 10});
   });
 }
