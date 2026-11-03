@@ -18,6 +18,12 @@ earn:
   - on: answered
     when: {right: true, firstAttempt: false}
     gain: {coins: 5}
+  # A coin per quarter of a sentence answer that was right; with the right
+  # retry it stays below a right first attempt.
+  - on: answered
+    when: {right: false, firstAttempt: true, partialAtLeast: 1}
+    gain: {coins: 1}
+    per: partial
   # The base coins again for a word whose card was hard before this round.
   - on: answered
     when: {right: true, firstAttempt: true, wordDifficultyAtLeast: 7}

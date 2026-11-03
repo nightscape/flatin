@@ -127,20 +127,23 @@ Attribution _parts(PartsAnswer answer, List<String> texts) {
 
 /// A pill on another word counts 0: the share of right pills rates the
 /// grammar.
-Attribution _marked(MarksAnswer answer, List<int> wordOf) {
+Attribution _marked(MarksAnswer answer, List<int> wordOf) =>
+    (word: Rating.good, grammar: shareRating(marksShare(answer, wordOf)));
+
+/// The share of the pills on their right word.
+double marksShare(MarksAnswer answer, List<int> wordOf) {
   assert(wordOf.length == answer.pills.length, 'a pill is not placed');
   final right = answer.pills.indexed
       .where((e) => wordOf[e.$1] == e.$2.word)
       .length;
-  return (word: Rating.good, grammar: marksRating(right, answer.pills.length));
+  return right / answer.pills.length;
 }
 
-/// Good when every pill is right, Hard from half of them, Again below; never
-/// Easy.
-Rating marksRating(int right, int all) {
-  assert(0 <= right && right <= all, '$right of $all');
-  if (right == all) return Rating.good;
-  return 2 * right >= all ? Rating.hard : Rating.again;
+/// Good for the full share, Hard from half of it, Again below; never Easy.
+Rating shareRating(double share) {
+  assert(0 <= share && share <= 1, 'share $share');
+  if (share == 1) return Rating.good;
+  return share >= 0.5 ? Rating.hard : Rating.again;
 }
 
 /// The score of ticking [c] right and [w] wrong of [n] options, [k] of them
@@ -158,23 +161,31 @@ double tickScore({
   return c * pow(rho, w).toDouble();
 }
 
-/// Good for the best score `k`, Hard from half of it, Again below.
-Rating tickRating(TickAnswer answer, Set<int> ticked) {
+Rating tickRating(TickAnswer answer, Set<int> ticked) =>
+    shareRating(tickShare(answer, ticked));
+
+/// The tick score of [ticked] in points of the best score `k`.
+double tickShare(TickAnswer answer, Set<int> ticked) {
   final right = answer.right;
-  final share =
-      tickScore(
+  return tickScore(
         n: answer.options.length,
         k: right.length,
         c: ticked.intersection(right).length,
         w: ticked.difference(right).length,
       ) /
       right.length;
-  return share == 1
-      ? Rating.good
-      : share >= 0.5
-      ? Rating.hard
-      : Rating.again;
 }
+
+/// Quarters of a right answer that [response] earns, 0..4; 0 for an answer
+/// that rates no share.
+int partialOf(ExerciseAnswer answer, ExerciseResponse response) =>
+    switch ((answer, response)) {
+      (final MarksAnswer a, MarksResponse(:final wordOf)) =>
+        (4 * marksShare(a, wordOf)).floor(),
+      (final TickAnswer a, TickedOptions(:final ticked)) =>
+        (4 * tickShare(a, ticked)).floor(),
+      _ => 0,
+    };
 
 /// Whether [text] is a spelling of [answer], read without macrons.
 bool typedRight(TypedAnswer answer, String text) =>

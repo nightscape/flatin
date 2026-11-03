@@ -26,6 +26,7 @@ import 'package:latin_practice/services/fsrs_storage.dart';
 
 import 'support/course_providers.dart';
 import 'support/grammar_exercise_harness.dart';
+import 'support/recording_rewards.dart';
 
 ProviderContainer _container() => ProviderContainer(
   retry: noRetry,
@@ -232,7 +233,7 @@ void main() {
       overrides: [
         dataLanguageProvider.overrideWith((ref) => 'de'),
         exerciseRandomProvider.overrideWithValue(Random(17)),
-        rewardsProvider.overrideWith(() => _RecordingRewards(sent)),
+        rewardsProvider.overrideWith(() => RecordingRewards(sent)),
       ],
     );
     addTearDown(c.dispose);
@@ -304,16 +305,4 @@ void main() {
       expect(changed.where((id) => id.startsWith('grammar:')), isEmpty);
     },
   );
-}
-
-final class _RecordingRewards extends Rewards {
-  _RecordingRewards(this.sent);
-
-  final List<RewardEvent> sent;
-
-  @override
-  Future<List<RewardEffect>> send(RewardEvent event) {
-    sent.add(event);
-    return super.send(event);
-  }
 }

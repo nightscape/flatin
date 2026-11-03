@@ -21,6 +21,10 @@ final class Answered extends RewardEvent {
   /// The [ExerciseKind] name.
   final String kind;
   final String dataFile;
+
+  /// Quarters of a right answer a not fully right sentence answer got, 0..3;
+  /// 0 for a right answer and for the other kinds.
+  final int partial;
   final DateTime at;
 
   const Answered({
@@ -29,8 +33,9 @@ final class Answered extends RewardEvent {
     required this.wordDifficulty,
     required this.kind,
     required this.dataFile,
+    this.partial = 0,
     required this.at,
-  });
+  }) : assert(0 <= partial && partial < 4 && !(right && partial > 0));
 
   @override
   Map<String, Object?> get facts => {
@@ -39,6 +44,7 @@ final class Answered extends RewardEvent {
     'wordDifficulty': wordDifficulty,
     'kind': kind,
     'dataFile': dataFile,
+    'partial': partial,
   };
 }
 
@@ -68,6 +74,7 @@ const Map<String, Map<String, Type>> rewardEventFields = {
     'wordDifficulty': double,
     'kind': String,
     'dataFile': String,
+    'partial': int,
   },
   'choicesChecked': {'right': int},
   'roundFinished': {},

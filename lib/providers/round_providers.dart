@@ -336,6 +336,7 @@ class Round extends _$Round {
         wordDifficulty: wordDifficulty,
         kind: task.exercise.kind.name,
         dataFile: task.word.dataFileId,
+        partial: outcome.right ? 0 : partialOf(task.exercise.answer, response),
         at: DateTime.now(),
       ),
     );

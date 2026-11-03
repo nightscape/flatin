@@ -306,14 +306,14 @@ void main() {
       drawn.add((rng.nextInt(all + 1), all));
     }
     for (final (right, all) in [...fixed, ...drawn]) {
-      final rating = marksRating(right, all);
+      final rating = shareRating(right / all);
       expect(rating, _ratingOf(right, all), reason: '$right of $all');
       expect(rating, isNot(Rating.easy));
     }
-    expect(marksRating(1, 2), Rating.hard);
-    expect(marksRating(3, 4), Rating.hard);
-    expect(marksRating(1, 3), Rating.again);
-    expect(marksRating(2, 2), Rating.good);
+    expect(shareRating(1 / 2), Rating.hard);
+    expect(shareRating(3 / 4), Rating.hard);
+    expect(shareRating(1 / 3), Rating.again);
+    expect(shareRating(2 / 2), Rating.good);
   });
 
   test('a placement rates the grammar by its share of right pills and names '
