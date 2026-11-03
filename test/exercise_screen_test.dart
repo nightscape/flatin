@@ -13,6 +13,7 @@ import 'package:latin_practice/screens/exercise_screen.dart';
 
 import 'support/exercise_fakes.dart';
 import 'support/i18n_keys.dart';
+import 'support/key_echo_i18n.dart';
 import 'support/round_driver.dart';
 import 'support/word_classification_harness.dart';
 
@@ -87,25 +88,25 @@ Future<List<ExerciseResponse>> _pump(
   WidgetTester tester,
   Exercise exercise,
   String size, {
-  String language = 'de',
+  String? language,
   String strategyId = 'text_field',
 }) async {
   tester.view.physicalSize = size == 'narrow' ? _narrow : _sizes[size]!;
   tester.view.devicePixelRatio = 1.0;
   addTearDown(tester.view.reset);
   final responses = <ExerciseResponse>[];
-  final vocare = await _vocare(language: language);
+  final vocare = await _vocare(language: language ?? 'de');
+  final screen = ExerciseScreen(
+    word: vocare,
+    exercise: exercise,
+    inputStrategy: InputStrategy.byId(strategyId),
+    optionForms: vocare.formOrder.toSet(),
+    onResponse: responses.add,
+  );
   await tester.pumpWidget(
-    wrapInApp(
-      ExerciseScreen(
-        word: vocare,
-        exercise: exercise,
-        inputStrategy: InputStrategy.byId(strategyId),
-        optionForms: vocare.formOrder.toSet(),
-        onResponse: responses.add,
-      ),
-      forcedLocale: Locale(language),
-    ),
+    language == null
+        ? wrapInKeyEchoApp(screen)
+        : wrapInApp(screen, forcedLocale: Locale(language)),
   );
   await tester.pumpAndSettle();
   return responses;
@@ -137,7 +138,7 @@ void main() {
         );
         await tester.pumpAndSettle();
 
-        expect(find.text('Richtig'), findsOneWidget);
+        expect(find.text('exercise.screen.right'), findsOneWidget);
         expect(responses, isEmpty);
         await tester.scrollUntilVisible(
           find.byKey(const Key('exercise.next.button')),
@@ -183,7 +184,12 @@ void main() {
         await tester.tap(find.byKey(Key('exercise.option.$wrong')));
         await tester.pumpAndSettle();
 
-        expect(find.text('So heißt es: ${answer.right.text}'), findsOneWidget);
+        expect(
+          find.text(
+            keyEcho('exercise.screen.wrong', {'answer': answer.right.text}),
+          ),
+          findsOneWidget,
+        );
         final feedback = find.byKey(const Key('exercise.feedback'));
         expect(
           tester.widget<Text>(feedback).style!.color,
@@ -216,7 +222,7 @@ void main() {
         await tester.tap(find.byKey(const Key('exercise.check.button')));
         await tester.pumpAndSettle();
 
-        expect(find.text('Richtig'), findsOneWidget);
+        expect(find.text('exercise.screen.right'), findsOneWidget);
         await tester.scrollUntilVisible(
           find.byKey(const Key('exercise.next.button')),
           200,
@@ -238,9 +244,13 @@ void main() {
         await tester.tap(find.byKey(const Key('exercise.check.button')));
         await tester.pumpAndSettle();
 
-        expect(find.text('So heißt es: vocāre'), findsOneWidget);
+        expect(
+          find.text(keyEcho('exercise.screen.wrong', {'answer': 'vocāre'})),
+          findsOneWidget,
+        );
       });
 
+      // Real translations on purpose: the subject is the text language shown.
       for (final language in ['de', 'en']) {
         testWidgets('shows $language text and no key or other language', (
           tester,
@@ -303,7 +313,10 @@ void main() {
     await tester.pumpAndSettle();
     expect(
       find.text(
-        'vocātī essētis – Konjunktiv Plusquamperfekt Passiv: 2. Person Plural (richtig, deine Wahl)',
+        keyEcho('exercise.feedback.optionRightChosen', {
+          'form': 'vocātī essētis',
+          'label': 'Konjunktiv Plusquamperfekt Passiv: 2. Person Plural',
+        }),
       ),
       findsOneWidget,
     );
@@ -316,16 +329,15 @@ void main() {
     tester.view.devicePixelRatio = 1.0;
     addTearDown(tester.view.reset);
     await tester.pumpWidget(
-      wrapInApp(
+      wrapInKeyEchoApp(
         ExerciseScreen(
           word: await _vocare(),
           exercise: exercise,
-          title: 'Aufgabe 3 von 10',
+          title: 'custom title',
           inputStrategy: TextFieldStrategy(),
           optionForms: const {},
           onResponse: (_) {},
         ),
-        forcedLocale: const Locale('de'),
       ),
     );
     await tester.pumpAndSettle();
@@ -333,7 +345,7 @@ void main() {
     expect(
       find.descendant(
         of: find.byType(AppBar),
-        matching: find.text('Aufgabe 3 von 10'),
+        matching: find.text('custom title'),
       ),
       findsOneWidget,
     );
@@ -345,7 +357,7 @@ void main() {
     tester.view.devicePixelRatio = 1.0;
     addTearDown(tester.view.reset);
     await tester.pumpWidget(
-      wrapInApp(
+      wrapInKeyEchoApp(
         ExerciseScreen(
           word: await _vocare(),
           exercise: exercise,
@@ -353,13 +365,15 @@ void main() {
           optionForms: const {},
           onResponse: (_) {},
         ),
-        forcedLocale: const Locale('de'),
       ),
     );
     await tester.pumpAndSettle();
 
     expect(
-      find.descendant(of: find.byType(AppBar), matching: find.text('Aufgabe')),
+      find.descendant(
+        of: find.byType(AppBar),
+        matching: find.text('exercise.screen.title'),
+      ),
       findsOneWidget,
     );
   });
@@ -400,8 +414,10 @@ void main() {
             expect(
               find.text(
                 right
-                    ? 'Richtig'
-                    : 'So heißt es: ${typed.accepted.join(' / ')}',
+                    ? 'exercise.screen.right'
+                    : keyEcho('exercise.screen.wrong', {
+                        'answer': typed.accepted.join(' / '),
+                      }),
               ),
               findsOneWidget,
             );

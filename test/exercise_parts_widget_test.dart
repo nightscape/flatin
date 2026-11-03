@@ -13,6 +13,7 @@ import 'package:latin_practice/providers/fsrs_provider.dart';
 import 'package:latin_practice/screens/exercise_parts_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'support/key_echo_i18n.dart';
 import 'support/round_driver.dart';
 import 'support/word_classification_harness.dart';
 
@@ -64,7 +65,7 @@ void main() {
   Future<List<TypedTexts>> pump(
     WidgetTester tester,
     Exercise e,
-    String language, {
+    String? language, {
     String strategyId = 'text_field',
     PracticeItem? word,
   }) async {
@@ -73,17 +74,17 @@ void main() {
     tester.view.devicePixelRatio = 1.0;
     tester.view.viewInsets = const FakeViewPadding(bottom: 280);
     addTearDown(tester.view.reset);
+    final parts = ExercisePartsWidget(
+      word: word ?? cognoscere,
+      exercise: e,
+      inputStrategy: InputStrategy.byId(strategyId),
+      optionForms: const {},
+      onResponse: responses.add,
+    );
     await tester.pumpWidget(
-      wrapInApp(
-        ExercisePartsWidget(
-          word: word ?? cognoscere,
-          exercise: e,
-          inputStrategy: InputStrategy.byId(strategyId),
-          optionForms: const {},
-          onResponse: responses.add,
-        ),
-        forcedLocale: Locale(language),
-      ),
+      language == null
+          ? wrapInKeyEchoApp(parts)
+          : wrapInApp(parts, forcedLocale: Locale(language)),
     );
     await tester.pumpAndSettle();
     return responses;
@@ -101,7 +102,7 @@ void main() {
       final e = _build(cognoscere, [cognoscere], known: true);
       final slots = (e.answer as PartsAnswer).slots;
       expect(slots, hasLength(4));
-      final responses = await pump(tester, e, 'de', strategyId: strategyId);
+      final responses = await pump(tester, e, null, strategyId: strategyId);
       for (var i = 0; i < slots.length; i++) {
         await reveal(tester, find.byKey(Key('exercise.slot.$i')));
         expect(
@@ -116,7 +117,7 @@ void main() {
           findsOneWidget,
         );
       }
-      expect(find.text('Supinum'), findsOneWidget);
+      expect(find.text('exercise.stammformen.part.supine'), findsOneWidget);
       await tester.drag(find.byType(ListView), const Offset(0, 1000));
       await tester.pumpAndSettle();
       await answer(tester, e, right: false);
@@ -133,7 +134,7 @@ void main() {
   testWidgets('a right row says so', (tester) async {
     await load(tester, 'de');
     final e = _build(cognoscere, [cognoscere], known: false);
-    final responses = await pump(tester, e, 'de');
+    final responses = await pump(tester, e, null);
     for (final (i, s) in (e.answer as PartsAnswer).slots.indexed) {
       await reveal(tester, find.byKey(Key('exercise.slot.$i')));
       final field = find.descendant(
@@ -145,12 +146,16 @@ void main() {
     }
     final check = find.byKey(const Key('exercise.check.button'));
     await reveal(tester, check);
+    await tester.ensureVisible(check);
+    await tester.pumpAndSettle();
     await tester.tap(check);
     await tester.pumpAndSettle();
+    await reveal(tester, find.byKey(const Key('exercise.feedback')));
     expect(
       tester.widget<Text>(find.byKey(const Key('exercise.feedback'))).data,
-      'Richtig',
+      'exercise.screen.right',
     );
+    await reveal(tester, find.byKey(const Key('exercise.feedback.lines')));
     expect(find.byKey(const Key('exercise.feedback.lines')), findsOneWidget);
     expect(responses, isEmpty);
   });
@@ -158,11 +163,11 @@ void main() {
   testWidgets('the next exercise starts with empty slots', (tester) async {
     await load(tester, 'de');
     final first = _build(cognoscere, [cognoscere], known: false);
-    final responses = await pump(tester, first, 'de');
+    final responses = await pump(tester, first, null);
     await answer(tester, first, right: false);
     expect(responses, hasLength(1));
     final next = _build(cognoscere, [cognoscere], known: false, seed: 1);
-    await pump(tester, next, 'de');
+    await pump(tester, next, null);
     for (var i = 0; i < (next.answer as PartsAnswer).slots.length; i++) {
       final field = find.descendant(
         of: find.byKey(Key('exercise.slot.$i')),
@@ -188,7 +193,7 @@ void main() {
       [for (final s in parts.slots) s.answer.expected.text],
       ['esse', 'sum'],
     );
-    final responses = await pump(tester, e, 'de', word: esse);
+    final responses = await pump(tester, e, null, word: esse);
     await reveal(tester, find.byKey(const Key('exercise.given.2')));
     expect(
       tester.widget<Text>(find.byKey(const Key('exercise.given.2'))).data,
@@ -197,9 +202,10 @@ void main() {
     expect(find.byKey(const Key('exercise.slot.2')), findsNothing);
     await answer(tester, e, right: true);
     expect(responses.single.texts, ['esse', 'sum']);
+    await reveal(tester, find.byKey(const Key('exercise.feedback')));
     expect(
       tester.widget<Text>(find.byKey(const Key('exercise.feedback'))).data,
-      'Richtig',
+      'exercise.screen.right',
     );
   });
 

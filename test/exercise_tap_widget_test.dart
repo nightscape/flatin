@@ -24,6 +24,7 @@ import 'package:latin_practice/screens/exercise_tap_widget.dart';
 import 'support/course_providers.dart';
 import 'support/exercise_fakes.dart';
 import 'support/gen_sentence_learner.dart';
+import 'support/key_echo_i18n.dart';
 import 'support/word_classification_harness.dart';
 
 // Finger travel is a physical size, so the bound is absolute, not a screen fraction.
@@ -115,27 +116,32 @@ void main() {
   Future<List<MarksResponse>> pump(
     WidgetTester tester,
     ({PracticeItem word, Exercise exercise}) task, {
-    String language = 'de',
+    String? language,
   }) async {
     tester.view.physicalSize = const Size(360, 640);
     tester.view.devicePixelRatio = 1.0;
     addTearDown(tester.view.reset);
     final responses = <MarksResponse>[];
+    final tapWidget = ExerciseTapWidget(
+      word: task.word,
+      exercise: task.exercise,
+      onResponse: responses.add,
+    );
     await tester.pumpWidget(
-      wrapInApp(
-        ExerciseTapWidget(
-          word: task.word,
-          exercise: task.exercise,
-          onResponse: responses.add,
-        ),
-        forcedLocale: Locale(language),
-      ),
+      language == null
+          ? wrapInKeyEchoApp(tapWidget)
+          : wrapInApp(tapWidget, forcedLocale: Locale(language)),
     );
     await tester.pumpAndSettle();
     return responses;
   }
 
   Future<void> tap(WidgetTester tester, String key) async {
+    await tester.scrollUntilVisible(
+      find.byKey(Key(key)),
+      100,
+      scrollable: find.byType(Scrollable).first,
+    );
     await tester.tap(find.byKey(Key(key)));
     await tester.pumpAndSettle();
   }
@@ -200,8 +206,7 @@ void main() {
     }
     expect(checkEnabled(tester), isTrue);
     await tap(tester, 'exercise.check.button');
-    expect(find.text('Richtig'), findsOneWidget);
-    await tester.ensureVisible(find.byKey(const Key('exercise.next.button')));
+    expect(find.text('exercise.screen.right'), findsOneWidget);
     await tap(tester, 'exercise.next.button');
     expect(responses.single.wordOf, [for (final p in answer.pills) p.word]);
     expect(attribute(task.word, task.exercise, responses.single), (
@@ -226,10 +231,11 @@ void main() {
     await tap(tester, 'exercise.tap.word.${answer.pills[1].word}');
     await tap(tester, 'exercise.check.button');
     expect(
-      find.textContaining('So heißt es: ${answer.words[answer.pills[0].word]}'),
+      find.textContaining(
+        'exercise.screen.wrong{answer=${answer.words[answer.pills[0].word]}',
+      ),
       findsOneWidget,
     );
-    await tester.ensureVisible(find.byKey(const Key('exercise.next.button')));
     await tap(tester, 'exercise.next.button');
     expect(
       attribute(task.word, task.exercise, responses.single).grammar,
@@ -248,13 +254,12 @@ void main() {
     await tap(tester, 'exercise.tap.word.${first.word}');
     await tap(tester, 'exercise.tap.pill.1');
     await tester.pumpWidget(
-      wrapInApp(
+      wrapInKeyEchoApp(
         ExerciseTapWidget(
           word: next.word,
           exercise: next.exercise,
           onResponse: responses.add,
         ),
-        forcedLocale: const Locale('de'),
       ),
     );
     await tester.pumpAndSettle();
@@ -323,6 +328,7 @@ void main() {
     }
   });
 
+  // Real translations on purpose: the subject is which language's text shows.
   testWidgets('the English page shows no German text of the tap block', (
     tester,
   ) async {

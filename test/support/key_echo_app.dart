@@ -10,16 +10,17 @@ import 'package:latin_practice/widgets/explanation_lines.dart';
 import 'key_echo_i18n.dart';
 
 /// [wrapInKeyEchoApp] with an [explainer] and more provider [overrides];
-/// the data language is German, as in [wrapInKeyEchoApp].
+/// the data language is [dataLanguage].
 Widget wrapInKeyEchoAppWith(
   Widget home, {
   Explainer? explainer,
   List<Override> overrides = const [],
+  String dataLanguage = 'de',
 }) => ProviderScope(
   retry: noRetry,
   overrides: [
     if (explainer != null) explainerProvider.overrideWithValue(explainer),
-    dataLanguageProvider.overrideWith((ref) => 'de'),
+    dataLanguageProvider.overrideWith((ref) => dataLanguage),
     ...overrides,
   ],
   child: MaterialApp(

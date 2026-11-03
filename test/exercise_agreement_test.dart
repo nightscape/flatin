@@ -14,7 +14,8 @@ import 'package:latin_practice/models/practice_item.dart';
 import 'package:latin_practice/screens/exercise_match_widget.dart';
 
 import 'support/exercise_fakes.dart';
-import 'support/word_classification_harness.dart';
+import 'support/key_echo_app.dart';
+import 'support/key_echo_i18n.dart';
 
 final _zuordnen =
     generatorFor(ExerciseKind.zuordnen, exerciseGenerators) as SpecGenerator;
@@ -291,18 +292,23 @@ void main() {
     addTearDown(tester.view.reset);
     final responses = <MatchedPairs>[];
     await tester.pumpWidget(
-      wrapInApp(
+      wrapInKeyEchoAppWith(
         ExerciseMatchWidget(
           word: enHic,
           exercise: e,
           onResponse: responses.add,
         ),
-        forcedLocale: const Locale('en'),
+        dataLanguage: 'en',
       ),
     );
     await tester.pumpAndSettle();
     Future<void> tapKey(String key) async {
       final button = find.byKey(Key(key));
+      await tester.scrollUntilVisible(
+        button,
+        200,
+        scrollable: find.byType(Scrollable).first,
+      );
       await tester.ensureVisible(button);
       await tester.pump();
       await tester.tap(button);
@@ -315,16 +321,8 @@ void main() {
       scrollable: find.byType(Scrollable).first,
     );
 
-    expect(
-      find.text('Match the forms that agree in case, number and gender'),
-      findsOneWidget,
-    );
-    expect(
-      find.text(
-        'Tap a form on the left first, then the noun form that agrees with it.',
-      ),
-      findsOneWidget,
-    );
+    expect(find.text('exercise.agree.question'), findsOneWidget);
+    expect(find.text('exercise.agree.hint'), findsOneWidget);
     await tapKey('exercise.match.left.0');
     await tapKey('exercise.match.right.1');
     expect(find.textContaining('1 · '), findsNWidgets(2));
@@ -336,8 +334,15 @@ void main() {
     }
     await tapKey('exercise.check.button');
     await tester.pumpAndSettle();
-    expect(find.text('Correct'), findsOneWidget);
-    final line = find.text('hae rosae – feminine: Nominative Plural');
+    expect(find.text('exercise.screen.right'), findsOneWidget);
+    // Form and label are YAML data (English axis values), not UI text.
+    final line = find.text(
+      keyEcho('exercise.feedback.agrees', {
+        'form': 'hae',
+        'partner': 'rosae',
+        'label': 'feminine: Nominative Plural',
+      }),
+    );
     await scrollTo(line);
     expect(line, findsOneWidget);
     final next = find.byKey(const Key('exercise.next.button'));

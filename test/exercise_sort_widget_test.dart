@@ -13,6 +13,7 @@ import 'package:latin_practice/screens/exercise_sort_widget.dart';
 
 import 'support/exercise_fakes.dart';
 import 'support/grammar_exercise_harness.dart';
+import 'support/key_echo_i18n.dart';
 import 'support/word_classification_harness.dart';
 
 const _perfect = ['ind.perf.akt', 'ind.plusq.akt', 'ind.fut2.akt'];
@@ -156,22 +157,22 @@ void main() {
       WidgetTester tester,
       Exercise e, {
       PracticeItem? word,
-      String language = 'de',
+      String? language,
       Size size = const Size(390, 800),
     }) async {
       tester.view.physicalSize = size;
       tester.view.devicePixelRatio = 1.0;
       addTearDown(tester.view.reset);
       final responses = <SortedForms>[];
+      final sortWidget = ExerciseSortWidget(
+        word: word ?? vocare,
+        exercise: e,
+        onResponse: responses.add,
+      );
       await tester.pumpWidget(
-        wrapInApp(
-          ExerciseSortWidget(
-            word: word ?? vocare,
-            exercise: e,
-            onResponse: responses.add,
-          ),
-          forcedLocale: Locale(language),
-        ),
+        language == null
+            ? wrapInKeyEchoApp(sortWidget)
+            : wrapInApp(sortWidget, forcedLocale: Locale(language)),
       );
       await tester.pumpAndSettle();
       return responses;
@@ -198,14 +199,18 @@ void main() {
       );
       final responses = await pump(tester, e);
       expect(
-        find.text('Kreuze alle Formen im ${answerOf(e).groups.first} an'),
+        find.text(
+          keyEcho('exercise.tick.question', {
+            'group': answerOf(e).groups.first,
+          }),
+        ),
         findsOneWidget,
       );
       for (final (i, (_, group)) in answerOf(e).forms.indexed) {
         if (group == 0) await tap(tester, 'exercise.sort.form.$i');
       }
       await tap(tester, 'exercise.check.button');
-      expect(find.text('Richtig'), findsOneWidget);
+      expect(find.text('exercise.screen.right'), findsOneWidget);
       await tap(tester, 'exercise.next.button');
       expect(attribute(vocare, e, responses.single), (
         word: Rating.good,
@@ -222,7 +227,10 @@ void main() {
       final responses = await pump(tester, e);
       await tap(tester, 'exercise.check.button');
       final missed = answerOf(e).forms.firstWhere((f) => f.$2 == 0).$1.text;
-      expect(find.textContaining('So heißt es: $missed'), findsOneWidget);
+      expect(
+        find.textContaining('exercise.screen.wrong{answer=$missed'),
+        findsOneWidget,
+      );
       await tap(tester, 'exercise.next.button');
       expect(attribute(vocare, e, responses.single).grammar, Rating.again);
     });
@@ -273,13 +281,12 @@ void main() {
       final responses = await pump(tester, first);
       await dragToGroup(tester, 0, answerOf(first).forms.first.$2);
       await tester.pumpWidget(
-        wrapInApp(
+        wrapInKeyEchoApp(
           ExerciseSortWidget(
             word: vocare,
             exercise: next,
             onResponse: responses.add,
           ),
-          forcedLocale: const Locale('de'),
         ),
       );
       await tester.pumpAndSettle();
@@ -294,7 +301,7 @@ void main() {
         await dragToGroup(tester, i, group);
       }
       await tap(tester, 'exercise.check.button');
-      expect(find.text('Richtig'), findsOneWidget);
+      expect(find.text('exercise.screen.right'), findsOneWidget);
       await tap(tester, 'exercise.next.button');
       expect(responses.single.groupOf, {for (final (o, g) in forms) o: g});
     });
@@ -326,7 +333,7 @@ void main() {
         await dragToGroup(tester, i, group);
       }
       await tap(tester, 'exercise.check.button');
-      expect(find.text('Richtig'), findsOneWidget);
+      expect(find.text('exercise.screen.right'), findsOneWidget);
       await tap(tester, 'exercise.next.button');
       expect(responses.single.groupOf, {for (final (o, g) in forms) o: g});
     });
@@ -340,7 +347,9 @@ void main() {
       }
       await tap(tester, 'exercise.check.button');
       expect(
-        find.textContaining('So heißt es: ${forms.first.$1.text}'),
+        find.textContaining(
+          'exercise.screen.wrong{answer=${forms.first.$1.text}',
+        ),
         findsOneWidget,
       );
       await tap(tester, 'exercise.next.button');
@@ -415,6 +424,7 @@ void main() {
       handle.dispose();
     });
 
+    // Real translations on purpose: the subject is the data language of group names.
     for (final language in ['de', 'en']) {
       testWidgets('group names are in the UI language ($language)', (
         tester,

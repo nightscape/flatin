@@ -1,5 +1,3 @@
-import 'dart:convert';
-import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -14,6 +12,7 @@ import 'package:latin_practice/screens/exercise_match_widget.dart';
 
 import 'support/exercise_fakes.dart';
 import 'support/i18n_keys.dart';
+import 'support/key_echo_i18n.dart';
 import 'support/word_classification_harness.dart';
 
 const _bundle = 'ind.praes.akt';
@@ -80,10 +79,15 @@ void main() {
   });
 
   group('widget', () {
+    /// Key-echo texts, or the real texts of [language].
+    Widget pumped(Widget home, String? language) => language == null
+        ? wrapInKeyEchoApp(home)
+        : wrapInApp(home, forcedLocale: Locale(language));
+
     Future<List<MatchedPairs>> pump(
       WidgetTester tester,
       Exercise exercise, {
-      String language = 'de',
+      String? language,
       String? title,
     }) async {
       tester.view.physicalSize = const Size(390, 800);
@@ -91,14 +95,14 @@ void main() {
       addTearDown(tester.view.reset);
       final responses = <MatchedPairs>[];
       await tester.pumpWidget(
-        wrapInApp(
+        pumped(
           ExerciseMatchWidget(
             word: vocare,
             exercise: exercise,
             title: title,
             onResponse: responses.add,
           ),
-          forcedLocale: Locale(language),
+          language,
         ),
       );
       await tester.pumpAndSettle();
@@ -112,6 +116,8 @@ void main() {
         200,
         scrollable: find.byType(Scrollable).first,
       );
+      await tester.ensureVisible(next);
+      await tester.pumpAndSettle();
       await tester.tap(next);
     }
 
@@ -123,30 +129,25 @@ void main() {
     }
 
     testWidgets('a given title replaces the standard one', (tester) async {
-      await pump(tester, build(vocare, _bundle), title: 'Aufgabe 3 von 10');
+      await pump(tester, build(vocare, _bundle), title: 'custom title');
 
       expect(
         find.descendant(
           of: find.byType(AppBar),
-          matching: find.text('Aufgabe 3 von 10'),
+          matching: find.text('custom title'),
         ),
         findsOneWidget,
       );
     });
 
-    testWidgets('no title shows the standard title of the locale', (
-      tester,
-    ) async {
+    testWidgets('no title shows the standard title', (tester) async {
       await pump(tester, build(vocare, _bundle));
 
-      final standard =
-          (jsonDecode(
-                File('assets/flutter_i18n/de.json').readAsStringSync(),
-              )['exercise']['screen']['title']
-              as String);
-      expect(standard, isNotEmpty);
       expect(
-        find.descendant(of: find.byType(AppBar), matching: find.text(standard)),
+        find.descendant(
+          of: find.byType(AppBar),
+          matching: find.text('exercise.screen.title'),
+        ),
         findsOneWidget,
       );
     });
@@ -165,7 +166,7 @@ void main() {
       await tester.tap(find.byKey(const Key('exercise.check.button')));
       await tester.pumpAndSettle();
 
-      expect(find.text('Richtig'), findsOneWidget);
+      expect(find.text('exercise.screen.right'), findsOneWidget);
       await tapNext(tester);
       await tapNext(tester);
       expect(responses, hasLength(1));
@@ -198,7 +199,13 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(
-        find.textContaining('So heißt es: ${right[0].$1.text} = '),
+        find.text(
+          keyEcho('exercise.screen.wrong', {
+            'answer': [
+              for (final (l, g) in right) '${l.text} = ${g.text}',
+            ].join(', '),
+          }),
+        ),
         findsOneWidget,
       );
       final feedback = find.byKey(const Key('exercise.feedback'));
@@ -239,7 +246,10 @@ void main() {
       for (final (latin, _) in right) {
         await seenLine(
           tester,
-          '${latin.text} – ${labelOf(vocare, latin.formKey)}',
+          keyEcho('exercise.feedback.option', {
+            'form': latin.text,
+            'label': labelOf(vocare, latin.formKey),
+          }),
         );
       }
     });
@@ -265,13 +275,12 @@ void main() {
         await pair(tester, i, i);
       }
       await tester.pumpWidget(
-        wrapInApp(
+        wrapInKeyEchoApp(
           ExerciseMatchWidget(
             word: vocare,
             exercise: next,
             onResponse: responses.add,
           ),
-          forcedLocale: const Locale('de'),
         ),
       );
       await tester.pumpAndSettle();
@@ -282,7 +291,7 @@ void main() {
       }
       await tester.tap(find.byKey(const Key('exercise.check.button')));
       await tester.pumpAndSettle();
-      expect(find.text('Richtig'), findsOneWidget);
+      expect(find.text('exercise.screen.right'), findsOneWidget);
       await tapNext(tester);
       expect(attribute(vocare, next, responses.single), (
         word: Rating.good,
@@ -290,6 +299,7 @@ void main() {
       ));
     });
 
+    // Real translations on purpose: the subject is that no raw key shows.
     for (final language in ['de', 'en']) {
       testWidgets('shows $language text and no key', (tester) async {
         await pump(tester, build(vocare, _bundle), language: language);

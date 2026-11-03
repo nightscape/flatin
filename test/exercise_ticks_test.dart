@@ -25,7 +25,7 @@ import 'package:latin_practice/screens/exercise_ticks_widget.dart';
 import 'support/exercise_invariants.dart';
 import 'support/gen_sentence_learner.dart';
 import 'support/i18n_keys.dart';
-import 'support/word_classification_harness.dart';
+import 'support/key_echo_i18n.dart';
 
 const _kind = ExerciseKind.satzAnkreuzen;
 
@@ -400,8 +400,6 @@ void main() {
   });
 
   group('widget', () {
-    final de = _translations('de');
-
     /// Scrolls to the top, then down until [target] is on screen.
     Future<void> reveal(WidgetTester tester, Finder target) async {
       await tester.drag(find.byType(Scrollable).first, const Offset(0, 5000));
@@ -491,13 +489,12 @@ void main() {
         final (word, e) = exercises[i];
         final answer = e.answer as TickAnswer;
         final responses = <TickedOptions>[];
-        Widget widgetOf(Exercise e) => wrapInApp(
+        Widget widgetOf(Exercise e) => wrapInKeyEchoApp(
           ExerciseTicksWidget(
             word: word,
             exercise: e,
             onResponse: responses.add,
           ),
-          forcedLocale: const Locale('de'),
         );
         await tester.pumpWidget(widgetOf(e));
         await tester.pumpAndSettle();
@@ -519,11 +516,9 @@ void main() {
         await tap(tester, 'exercise.check.button');
         await reveal(tester, find.byKey(const Key('exercise.feedback.lines')));
         for (final (j, o) in answer.options.indexed) {
-          final line = _translate(
-            de,
-            _feedbackKey(o, model.contains(j)),
-            o.text,
-          );
+          final line = keyEcho(_feedbackKey(o, model.contains(j)), {
+            'text': o.text,
+          });
           expect(
             find.text(line, skipOffstage: false),
             findsOneWidget,
