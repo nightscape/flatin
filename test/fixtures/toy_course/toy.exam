@@ -1,0 +1,31 @@
+schema: 1
+id: toy-pack
+titel: Toy pack
+lektionen:
+  von: 1
+  bis: 2
+schwerpunkte: [L1.1]
+schwerpunkt: Rolle und Zahl
+thema: Der Stein im Fluss
+zeit_min: 10
+punkte_uebersetzung: 4
+punkte_gesamt: 4
+uebersetzung:
+  hilfen: []
+  saetze:
+  - id: s1
+    tokens:
+    - {id: s1_1, la: trovka, lemma: trovka, analyse: {wortart: wortklasse, ruf: tu, zal: ein}, rolle: tu}
+    - {id: s1_2, la: zelkom, lemma: zelka, analyse: {wortart: wortklasse, ruf: ze, zal: ein}, rolle: ze}
+    - {id: s1_3, la: .}
+    teilsaetze:
+    - id: s1a
+      art: haupt
+      tokens: [s1_1, s1_2, s1_3]
+      de:
+      - Der Stein (sucht | findet) den Fluss.
+      ausrichtung:
+      - {tokens: [s1_1], de: Der Stein}
+      - {tokens: [s1_2], de: den Fluss}
+    de:
+    - Der Stein (sucht | findet) den Fluss.

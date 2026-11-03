@@ -1,0 +1,11 @@
+book: "Toybook 1"
+lessons:
+  - lesson: 1
+    words:
+      - "trovka"
+      - "zelka"
+    grammar:
+      toy_words:
+        forms:
+          - {name: Grundformen}
+        types: [Klasse-Ka]

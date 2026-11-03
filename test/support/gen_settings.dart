@@ -7,6 +7,7 @@ import 'package:latin_practice/models/exam_units.dart';
 import 'package:latin_practice/models/input_strategy.dart';
 import 'package:latin_practice/models/lernziel_chips.dart';
 import 'package:latin_practice/models/lesson_range.dart';
+import 'package:latin_practice/models/practice_item.dart';
 import 'package:latin_practice/models/settings.dart';
 
 typedef Json = Map<String, dynamic>;
@@ -229,5 +230,64 @@ BookScaleCase drawBookScaleCase(Random rng) {
     left: rng.nextDouble() * 30,
     width: (starts.length + 1) * 22 + 1 + rng.nextDouble() * 1400,
     kursstand: 1 + rng.nextInt(lastLesson),
+  );
+}
+
+/// The override universes of [drawSettings] over the items of a course:
+/// each data file's types, forms and axis values, every lemma, and the
+/// course's topic keys.
+typedef Universes = ({
+  Map<String, Set<String>> types,
+  Map<String, Set<String>> forms,
+  Map<String, Map<String, Set<String>>> features,
+  Set<String> words,
+  Set<String> topics,
+});
+
+Universes universesOf(List<PracticeItem> items, Set<String> topics) {
+  final features = <String, Map<String, Set<String>>>{};
+  for (final item in items) {
+    for (final label in item.formLabels) {
+      for (final MapEntry(:key, :value) in label.features.entries) {
+        features
+            .putIfAbsent(item.dataFileId, () => {})
+            .putIfAbsent(key, () => {})
+            .add(value);
+      }
+    }
+  }
+  Map<String, Set<String>> byFile(Iterable<String> Function(PracticeItem) of) {
+    final byFile = <String, Set<String>>{};
+    for (final item in items) {
+      byFile.putIfAbsent(item.dataFileId, () => {}).addAll(of(item));
+    }
+    return byFile;
+  }
+
+  return (
+    types: byFile((item) => [item.type]),
+    forms: byFile((item) => item.formOrder),
+    features: features,
+    words: {for (final item in items) item.lemma},
+    topics: topics,
+  );
+}
+
+/// [u] with one more word, topic, and type, form and axis value per data
+/// file that the course does not have, as in settings saved before they were
+/// renamed or removed.
+Universes withOrphans(Universes u) {
+  Map<String, Set<String>> plus(Map<String, Set<String>> m, String entry) => {
+    for (final MapEntry(:key, :value) in m.entries) key: {...value, entry},
+  };
+  return (
+    types: plus(u.types, 'Orphan-Typ'),
+    forms: plus(u.forms, 'orphan.key'),
+    features: {
+      for (final MapEntry(key: file, value: axes) in u.features.entries)
+        file: plus(axes, 'orphan'),
+    },
+    words: {...u.words, 'orphanwort'},
+    topics: {...u.topics, 'orphan-topic'},
   );
 }

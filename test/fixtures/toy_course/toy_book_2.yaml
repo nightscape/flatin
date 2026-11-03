@@ -1,0 +1,10 @@
+book: "Toybook 2"
+lessons:
+  - lesson: 2
+    words:
+      - "gumka"
+      - "drelka"
+    grammar:
+      toy_words:
+        forms:
+          - {name: Vielzahl, zal: fil}

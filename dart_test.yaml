@@ -15,3 +15,9 @@ tags:
   # Needs a private paradigm file: see test/printed/README.md. The group
   # skips itself unless PRINTED_PARADIGMS is set.
   printed: {}
+
+  # Boots the app with only the toy course; it fails until the code reads
+  # every course fact from data (test/tracer/KNOWN_RED.md). Run with
+  #   flutter test --tags tracer --run-skipped
+  tracer:
+    skip: "run flutter test --tags tracer --run-skipped"

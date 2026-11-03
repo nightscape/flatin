@@ -1,0 +1,55 @@
+# A made-up language with one word class: the course the boot test loads
+# in place of the real data files.
+data_file_id: toy_words
+
+axes:
+  ruf:
+    name: {de: Rolle, en: Role}
+    values:
+      tu: {de: Täter, en: Doer}
+      ze: {de: Ziel, en: Target}
+  zal:
+    name: {de: Zahl, en: Count}
+    values:
+      ein: {de: Einzahl, en: One}
+      fil: {de: Vielzahl, en: Many}
+
+label:
+  head: []
+  tail: [ruf, zal]
+  merge_axis: ruf
+
+parts:
+  grund: {label: {de: Grundform, en: Base form}, key: tu.ein}
+
+defaults:
+  given_part: grund
+  lemma_part: grund
+
+classes: [wortklasse]
+
+types:
+  Klasse-Ka:
+    class: wortklasse
+    display: {de: Klasse Ka, en: Class Ka}
+    stems:
+      stem: {from: grund, remove: "ka", display: {de: Stamm, en: Stem}}
+    forms:
+      tu.ein: "{stem}ka"
+      ze.ein: "{stem}kom"
+      tu.fil: "{stem}kel"
+      ze.fil: "{stem}kemi"
+
+items:
+  - parts: {grund: "trovka"}
+    type: Klasse-Ka
+    translation: {de: der Stein, en: stone}
+  - parts: {grund: "zelka"}
+    type: Klasse-Ka
+    translation: {de: der Fluss, en: river}
+  - parts: {grund: "gumka"}
+    type: Klasse-Ka
+    translation: {de: der Vogel, en: bird}
+  - parts: {grund: "drelka"}
+    type: Klasse-Ka
+    translation: {de: das Feuer, en: fire}
