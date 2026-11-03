@@ -21,6 +21,8 @@ import 'package:latin_practice/screens/practice_screen.dart';
 import 'package:latin_practice/screens/round_screen.dart';
 
 import 'support/course_providers.dart';
+import 'support/key_echo_app.dart';
+import 'support/key_echo_i18n.dart';
 import 'support/word_classification_harness.dart';
 
 /// Every verb whose type is one of [irregularVerbTypes], read off the data.
@@ -66,7 +68,7 @@ Future<void> _pumpLarge(WidgetTester tester, Widget screen) async {
   tester.view.physicalSize = const Size(1200, 2400);
   tester.view.devicePixelRatio = 1.0;
   addTearDown(tester.view.reset);
-  await tester.pumpWidget(wrapInApp(screen, forcedLocale: const Locale('de')));
+  await tester.pumpWidget(wrapInKeyEchoAppWith(screen));
   await letItLoad(tester);
 }
 
@@ -221,16 +223,19 @@ void main() {
       find.byKey(const Key('focus.picker')),
     );
     expect(picker.value, const AllWords());
-    expect(find.text('Fokus'), findsOneWidget);
+    expect(find.text(keyEcho('focus.label')), findsOneWidget);
     for (final id in ['all', 'nouns', 'verbs', 'nouns:A-Deklination']) {
       expect(_option(tester, id).enabled, isTrue, reason: id);
     }
     expect(_option(tester, 'irregular').enabled, isFalse);
     expect(
       (_option(tester, 'irregular').child as Text).data,
-      'Unregelmäßige Verben – keine Wörter im Kursstand',
+      '${keyEcho('focus.irregular')} – ${keyEcho('focus.empty')}',
     );
-    expect((_option(tester, 'verbs').child as Text).data, 'Verben');
+    expect(
+      (_option(tester, 'verbs').child as Text).data,
+      keyEcho('focus.verbs'),
+    );
 
     await _pick(tester, 'nouns');
     await tester.tap(find.byKey(const Key('round.start.go')));
@@ -291,7 +296,8 @@ void main() {
     expect(held.enabled, isFalse);
     expect(
       (held.child as Text).data,
-      'Unregelmäßig – keine Wörter im Kursstand',
+      // The type name is vocabulary data, not UI text.
+      'Unregelmäßig – ${keyEcho('focus.empty')}',
     );
     expect(
       tester

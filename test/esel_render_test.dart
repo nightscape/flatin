@@ -5,10 +5,20 @@ import 'package:latin_practice/models/practice_item.dart';
 import 'package:latin_practice/widgets/esel_panel.dart';
 
 import 'support/esel_render.dart';
+import 'support/key_echo_i18n.dart';
 import 'support/trace_fixtures.dart';
 
 const _nouns = 'lib/data/latin_nouns.yaml';
 const _verbs = 'lib/data/latin_verbs.yaml';
+
+String _row(String kind, String status, String shown) =>
+    '${keyEcho('esel.kind.$kind.letter')} ${keyEcho('esel.kind.$kind.name')} '
+    '| $status | $shown';
+
+const _show = '[esel.show]';
+final _noRule = keyEcho('esel.noRule');
+final _absent = keyEcho('esel.absentLabel');
+String _absentOf(String kind) => '$_absent / ${keyEcho('esel.absent.$kind')}';
 
 typedef _Case = ({
   String name,
@@ -25,11 +35,16 @@ final _dominorum = (
   formKey: 'gen.pl',
   wrong: 'dominis',
   pinned: [
-    'S Stamm | done | domin-',
-    'E Endung | done | -ōrum',
-    'L Lautregel | pending | [Zeigen]',
-    'L Lautregel | open | Ändert sich bei Genitiv Plural ein Laut? | Optionen: ein Laut ändert sich ; keine Lautregel | [Zeigen]',
-    'L Lautregel | done | keine Lautregel',
+    _row('stamm', 'done', 'domin-'),
+    _row('endung', 'done', '-ōrum'),
+    _row('lautregel', 'pending', _show),
+    _row(
+      'lautregel',
+      'open',
+      '${keyEcho('esel.question.lautregel', {'label': 'Genitiv Plural'})}'
+          ' | Optionen: $_noRule ; ${keyEcho('esel.soundChanges')} | $_show',
+    ),
+    _row('lautregel', 'done', _noRule),
   ],
   missing: <String>[],
 );
@@ -39,9 +54,14 @@ final _amo = (
   formKey: 'ind.praes.akt.1.sg',
   wrong: 'amat',
   pinned: [
-    'L Lautregel | pending | [Zeigen]',
-    'L Lautregel | open | Ändert sich bei Präsens: 1. Person Singular ein Laut? | Optionen: keine Lautregel ; ā fällt vor Vokal aus | [Zeigen]',
-    'L Lautregel | done | ā fällt vor Vokal aus',
+    _row('lautregel', 'pending', _show),
+    _row(
+      'lautregel',
+      'open',
+      '${keyEcho('esel.question.lautregel', {'label': 'Präsens: 1. Person Singular'})}'
+          ' | Optionen: $_noRule ; ā fällt vor Vokal aus | $_show',
+    ),
+    _row('lautregel', 'done', 'ā fällt vor Vokal aus'),
   ],
   missing: <String>[],
 );
@@ -51,11 +71,16 @@ final _amatusEssem = (
   formKey: 'konj.plusq.pass.1.sg',
   wrong: 'zzz',
   pinned: [
-    'S Stamm | done (gestrichelt) | entfällt / kein eigener Stamm',
-    'E Endung | done (gestrichelt) | entfällt / keine eigene Endung',
-    'V Verbinden | pending | [Zeigen]',
-    'V Verbinden | open | Woraus ist Konjunktiv Plusquamperfekt Passiv: 1. Person Singular zusammengesetzt? | Optionen: amātus + eram ; amātus + essem ; amātus + sim | [Zeigen]',
-    'V Verbinden | done | amātus + essem',
+    _row('stamm', 'done (gestrichelt)', _absentOf('stamm')),
+    _row('endung', 'done (gestrichelt)', _absentOf('endung')),
+    _row('verbinden', 'pending', _show),
+    _row(
+      'verbinden',
+      'open',
+      '${keyEcho('esel.question.verbinden', {'label': 'Konjunktiv Plusquamperfekt Passiv: 1. Person Singular'})}'
+          ' | Optionen: amātus + eram ; amātus + essem ; amātus + sim | $_show',
+    ),
+    _row('verbinden', 'done', 'amātus + essem'),
   ],
   missing: <String>[],
 );
@@ -64,8 +89,8 @@ final _possem = (
   item: () => loadItem(_verbs, 'posse'),
   formKey: 'konj.impf.akt.1.sg',
   wrong: 'zzz',
-  pinned: ['S Stamm | done | pos-', 'E Endung | done | -sem'],
-  missing: ['M Merken'],
+  pinned: [_row('stamm', 'done', 'pos-'), _row('endung', 'done', '-sem')],
+  missing: [keyEcho('esel.kind.merken.name')],
 );
 final _dic = (
   name: 'dic',
@@ -73,7 +98,12 @@ final _dic = (
   formKey: 'imp.praes.akt.2.sg',
   wrong: 'zzz',
   pinned: [
-    'M Merken | done | Wie lautet Imperativ Präsens: 2. Person Singular? / unregelmäßig – merken: dīc / ~dīce~',
+    _row(
+      'merken',
+      'done',
+      '${keyEcho('esel.question.merken', {'label': 'Imperativ Präsens: 2. Person Singular'})}'
+          ' / ${keyEcho('esel.answer.merken', {'form': 'dīc'})} / ~dīce~',
+    ),
   ],
   missing: <String>[],
 );
@@ -83,7 +113,12 @@ final _issem = (
   formKey: 'konj.plusq.akt.1.sg',
   wrong: 'zzz',
   pinned: [
-    'M Merken | done | Wie lautet Konjunktiv Plusquamperfekt: 1. Person Singular? / unregelmäßig – merken: īssem / ~iissem~',
+    _row(
+      'merken',
+      'done',
+      '${keyEcho('esel.question.merken', {'label': 'Konjunktiv Plusquamperfekt: 1. Person Singular'})}'
+          ' / ${keyEcho('esel.answer.merken', {'form': 'īssem'})} / ~iissem~',
+    ),
   ],
   missing: <String>[],
 );
@@ -93,8 +128,8 @@ final _fortioris = (
   formKey: 'gen.sg.m.komp',
   wrong: 'zzz',
   pinned: [
-    'S Stamm | done | forti-',
-    'E Endung | done | -ōris (Komparativendung)',
+    _row('stamm', 'done', 'forti-'),
+    _row('endung', 'done', '-ōris (Komparativendung)'),
   ],
   missing: <String>[],
 );
@@ -104,10 +139,14 @@ final _given = (
   formKey: 'ind.perf.akt.1.sg',
   wrong: 'zzz',
   pinned: [
-    'S Stamm | done (gestrichelt) | entfällt / kein eigener Stamm',
-    'E Endung | done (gestrichelt) | entfällt / keine eigene Endung',
-    'L Lautregel | done (gestrichelt) | entfällt / keine Lautregel',
-    'M Merken | done | abiī ist die Wörterbuchform (Perfekt: 1. Person Singular) / abiī',
+    _row('stamm', 'done (gestrichelt)', _absentOf('stamm')),
+    _row('endung', 'done (gestrichelt)', _absentOf('endung')),
+    _row('lautregel', 'done (gestrichelt)', _absentOf('lautregel')),
+    _row(
+      'merken',
+      'done',
+      '${keyEcho('esel.question.given', {'label': 'Perfekt: 1. Person Singular', 'result': 'abiī'})} / abiī',
+    ),
   ],
   missing: <String>[],
 );
@@ -117,8 +156,13 @@ final _dictionaryForm = (
   formKey: 'nom.sg',
   wrong: 'zzz',
   pinned: [
-    'S Stamm | done (gestrichelt) | entfällt / kein eigener Stamm',
-    'M Merken | done | rēx ist die Wörterbuchform (Nominativ Singular) / Wörterbuchform',
+    _row('stamm', 'done (gestrichelt)', _absentOf('stamm')),
+    _row(
+      'merken',
+      'done',
+      '${keyEcho('esel.question.given', {'label': 'Nominativ Singular', 'result': 'rēx'})}'
+          ' / ${keyEcho('esel.dictionaryForm')}',
+    ),
   ],
   missing: <String>[],
 );
@@ -220,7 +264,7 @@ void main() {
       );
       final rendered = renderSteps(tester, 'esel.classification');
       expect(rendered, isNot(contains('Optionen')));
-      expect(rendered, isNot(contains('[Zeigen]')));
+      expect(rendered, isNot(contains(_show)));
       expectGolden('classification_${c.name}', rendered);
     });
   }
@@ -230,10 +274,15 @@ void main() {
   ) async {
     await pumpClassified(tester, await _dic.item(), _dic.formKey);
     final rendered = renderSteps(tester, 'esel.classification');
+    // The form and its regular twin are vocabulary data, not UI text.
     expect(
       rendered,
-      contains('M Merken | done | unregelmäßig – merken: dīc / ~dīce~'),
+      contains(
+        '${keyEcho('esel.kind.merken.letter')} '
+        '${keyEcho('esel.kind.merken.name')} | done | '
+        '${keyEcho('esel.answer.merken', {'form': 'dīc'})} / ~dīce~',
+      ),
     );
-    expect(rendered, isNot(contains('Wie lautet')));
+    expect(rendered, isNot(contains('esel.question.')));
   });
 }

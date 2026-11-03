@@ -3,25 +3,33 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/widgets/explanation_lines.dart';
 
 import 'support/explanation_harness.dart';
+import 'support/key_echo_app.dart';
+import 'support/key_echo_i18n.dart';
 import 'support/trace_fixtures.dart';
-import 'support/word_classification_harness.dart';
 
 void main() {
+  // Subject is de.json itself: its explain keys, each with exactly the
+  // placeholders its sample line fills.
   test('sampleLines has an entry for every explain key of de.json', () async {
-    final explainKeys = (await germanTexts()).keys
+    final texts = await germanTexts();
+    final explainKeys = texts.keys
         .where((key) => key.startsWith('explain.'))
         .toSet();
     expect(sampleLines.map((line) => line.key).toSet(), explainKeys);
+    for (final line in sampleLines) {
+      final placeholders = {
+        for (final m in RegExp(r'\{(\w+)\}').allMatches(texts[line.key]!))
+          m[1]!,
+      };
+      expect(line.params.keys.toSet(), placeholders, reason: line.key);
+    }
   });
 
-  testWidgets('every explain key renders German text with its params', (
+  testWidgets('every explain line renders its key with its params', (
     tester,
   ) async {
     await tester.pumpWidget(
-      wrapInApp(
-        const Scaffold(body: ExplanationLines(sampleLines)),
-        forcedLocale: const Locale('de'),
-      ),
+      wrapInKeyEchoAppWith(const Scaffold(body: ExplanationLines(sampleLines))),
     );
     await tester.pumpAndSettle();
 
@@ -35,25 +43,8 @@ void main() {
         .map((t) => t.data!)
         .toList();
 
-    expect(rendered, hasLength(sampleLines.length));
-    for (var i = 0; i < sampleLines.length; i++) {
-      final line = sampleLines[i];
-      final text = rendered[i];
-      expect(
-        text,
-        isNot(line.key),
-        reason: '${line.key} is missing in de.json',
-      );
-      expect(
-        text,
-        isNot(contains('{')),
-        reason: '${line.key} left a parameter unsubstituted',
-      );
-      for (final value in line.params.values) {
-        expect(text, contains(value), reason: '${line.key} dropped $value');
-      }
-    }
-
-    expect(rendered.last, endsWith('das passt zu keiner bekannten Form'));
+    expect(rendered, [
+      for (final line in sampleLines) keyEcho(line.key, line.params),
+    ]);
   });
 }

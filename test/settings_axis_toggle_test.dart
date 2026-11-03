@@ -122,6 +122,7 @@ void main() {
     );
     await letItLoad(tester);
 
+    // The rows are form labels from the YAML data, not UI text.
     expect(find.text('Präsens: 3. Person Singular'), findsOneWidget);
     expect(find.text('Perfekt: 3. Person Singular'), findsOneWidget);
     expect(find.text('Präsens Passiv: 3. Person Singular'), findsNothing);

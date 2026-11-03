@@ -1,13 +1,13 @@
 Start
-E Erkennen | open | Welcher Typ ist dīcere, dīcō, dīxī, dictum? | Optionen: E-Konjugation ; Konsonantische ; Mischkonjugation | [Zeigen]
-S Stamm | done (gestrichelt) | entfällt / kein eigener Stamm
-E Endung | done (gestrichelt) | entfällt / keine eigene Endung
-L Lautregel | done (gestrichelt) | entfällt / keine Lautregel
-M Merken | done | Wie lautet Imperativ Präsens: 2. Person Singular? / unregelmäßig – merken: dīc / ~dīce~
+esel.kind.erkennen.letter esel.kind.erkennen.name | open | esel.question.erkennen{word=dīcere, dīcō, dīxī, dictum} | Optionen: E-Konjugation ; Konsonantische ; Mischkonjugation | [esel.show]
+esel.kind.stamm.letter esel.kind.stamm.name | done (gestrichelt) | esel.absentLabel / esel.absent.stamm
+esel.kind.endung.letter esel.kind.endung.name | done (gestrichelt) | esel.absentLabel / esel.absent.endung
+esel.kind.lautregel.letter esel.kind.lautregel.name | done (gestrichelt) | esel.absentLabel / esel.absent.lautregel
+esel.kind.merken.letter esel.kind.merken.name | done | esel.question.merken{label=Imperativ Präsens: 2. Person Singular} / esel.answer.merken{form=dīc} / ~dīce~
 
 Zeigen erkennen
-E Erkennen | done | Konsonantische
-S Stamm | done (gestrichelt) | entfällt / kein eigener Stamm
-E Endung | done (gestrichelt) | entfällt / keine eigene Endung
-L Lautregel | done (gestrichelt) | entfällt / keine Lautregel
-M Merken | done | Wie lautet Imperativ Präsens: 2. Person Singular? / unregelmäßig – merken: dīc / ~dīce~
+esel.kind.erkennen.letter esel.kind.erkennen.name | done | Konsonantische
+esel.kind.stamm.letter esel.kind.stamm.name | done (gestrichelt) | esel.absentLabel / esel.absent.stamm
+esel.kind.endung.letter esel.kind.endung.name | done (gestrichelt) | esel.absentLabel / esel.absent.endung
+esel.kind.lautregel.letter esel.kind.lautregel.name | done (gestrichelt) | esel.absentLabel / esel.absent.lautregel
+esel.kind.merken.letter esel.kind.merken.name | done | esel.question.merken{label=Imperativ Präsens: 2. Person Singular} / esel.answer.merken{form=dīc} / ~dīce~

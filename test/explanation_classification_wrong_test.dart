@@ -4,7 +4,10 @@ import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/screens/word_classification_screen.dart';
 
 import 'support/explanation_harness.dart';
-import 'support/word_classification_harness.dart';
+import 'support/key_echo_app.dart';
+import 'support/key_echo_i18n.dart';
+import 'support/word_classification_harness.dart'
+    show seedNothingDue, letItLoad;
 
 void main() {
   testWidgets('every wrong pick gets its own explanation line', (tester) async {
@@ -27,10 +30,9 @@ void main() {
     addTearDown(tester.view.reset);
 
     await tester.pumpWidget(
-      wrapInApp(
+      wrapInKeyEchoAppWith(
         WordClassificationScreen(item: item, formKey: shownKey),
         explainer: spy.explainer,
-        forcedLocale: const Locale('de'),
       ),
     );
     await letItLoad(tester);
@@ -75,7 +77,9 @@ void main() {
     expect(spy.pickedCalls[1].$2, 'Imperativ Präsens Aktiv 1. Person Singular');
     expect(
       find.text(
-        'Imperativ Präsens Aktiv 1. Person Singular gibt es bei diesem Wort nicht',
+        keyEcho('explain.pickedMissing', {
+          'picked': 'Imperativ Präsens Aktiv 1. Person Singular',
+        }),
       ),
       findsOneWidget,
     );

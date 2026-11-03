@@ -4,7 +4,10 @@ import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/screens/word_classification_screen.dart';
 
 import 'support/explanation_harness.dart';
-import 'support/word_classification_harness.dart';
+import 'support/key_echo_app.dart';
+import 'support/key_echo_i18n.dart';
+import 'support/word_classification_harness.dart'
+    show seedNothingDue, letItLoad;
 
 void main() {
   testWidgets('the real explainer explains a fixed classification item', (
@@ -18,9 +21,8 @@ void main() {
     addTearDown(tester.view.reset);
 
     await tester.pumpWidget(
-      wrapInApp(
+      wrapInKeyEchoAppWith(
         WordClassificationScreen(item: dominus, formKey: 'gen.pl'),
-        forcedLocale: const Locale('de'),
       ),
     );
     await letItLoad(tester);
@@ -38,14 +40,13 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byKey(const Key('explanation.classification')), findsOneWidget);
-    expect(
-      find.text('dominōrum = domin + ōrum → Genitiv Plural'),
-      findsNothing,
-    );
+    // Picked label and form are vocabulary data, not UI text.
     expect(
       find.text(
-        'Du hast Genitiv Singular gewählt – das wäre dominī '
-        '(domin + ī)',
+        keyEcho('explain.pickedWouldBe', {
+          'picked': 'Genitiv Singular',
+          'form': 'dominī (domin + ī)',
+        }),
       ),
       findsOneWidget,
     );

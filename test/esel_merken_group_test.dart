@@ -18,6 +18,7 @@ void main() {
       ))
         p.title: renderSteps(tester, p.scope),
     };
+    // Panel titles are case labels from the YAML data, not UI text.
     final ablative = rendered.entries.firstWhere(
       (e) => e.key.contains('Ablativ'),
       orElse: () => const MapEntry('<no Ablativ panel>', ''),

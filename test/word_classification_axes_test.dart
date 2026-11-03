@@ -127,6 +127,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byKey(const Key('explanation.classification')), findsNothing);
+    // The chip shows a form label from the YAML data, not UI text.
     expect(find.text('Infinitiv Futur I Aktiv'), findsOneWidget);
   });
 }

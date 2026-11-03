@@ -5,7 +5,9 @@ import 'package:latin_practice/models/practice_item.dart';
 import 'package:latin_practice/screens/word_classification_screen.dart';
 import 'package:latin_practice/widgets/esel_panel.dart';
 
-import 'support/word_classification_harness.dart';
+import 'support/key_echo_app.dart';
+import 'support/word_classification_harness.dart'
+    show seedNothingDue, letItLoad;
 import 'support/explanation_harness.dart' show pickOption;
 
 Future<PracticeItem> _item(String asset, String lemma) async =>
@@ -21,9 +23,8 @@ Future<void> _pumpChecked(
   tester.view.devicePixelRatio = 1.0;
   addTearDown(tester.view.reset);
   await tester.pumpWidget(
-    wrapInApp(
+    wrapInKeyEchoAppWith(
       WordClassificationScreen(item: item, formKey: formKey),
-      forcedLocale: const Locale('de'),
     ),
   );
   await letItLoad(tester);
@@ -53,6 +54,7 @@ void main() {
         isNot(contains(',')),
         reason: 'labels of one group must be joined with " / ", not ", "',
       );
+      // The title is the form labels from the YAML data, not UI text.
       expect(
         titles.single,
         'Nominativ Plural / Genitiv Singular / Vokativ Plural',

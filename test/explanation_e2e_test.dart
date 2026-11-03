@@ -4,7 +4,9 @@ import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/screens/practice_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'support/word_classification_harness.dart';
+import 'support/key_echo_app.dart';
+import 'support/key_echo_i18n.dart';
+import 'support/word_classification_harness.dart' show letItLoad;
 
 void main() {
   testWidgets('the real explainer explains a wrong genitive plural', (
@@ -16,10 +18,7 @@ void main() {
     final row = dominus.formOrder.indexOf('gen.pl');
 
     await tester.pumpWidget(
-      wrapInApp(
-        PracticeScreen(item: dominus),
-        forcedLocale: const Locale('de'),
-      ),
+      wrapInKeyEchoAppWith(PracticeScreen(item: dominus)),
     );
     await letItLoad(tester);
 
@@ -28,9 +27,13 @@ void main() {
     await tester.pump();
 
     expect(find.byKey(const Key('explanation.gen.pl')), findsOneWidget);
-    expect(find.text('Stamm domin-'), findsNothing);
     expect(
-      find.text('Du hast dominis geschrieben – das ist Dativ/Ablativ Plural'),
+      find.text(
+        keyEcho('explain.diag.otherForm', {
+          'answer': 'dominis',
+          'labels': 'Dativ/Ablativ Plural',
+        }),
+      ),
       findsOneWidget,
     );
   });

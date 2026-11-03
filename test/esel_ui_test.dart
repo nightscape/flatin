@@ -17,6 +17,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'support/esel_render.dart' show isDashed;
 import 'support/trace_fixtures.dart';
 import 'support/explanation_harness.dart' show pickOption;
+import 'support/key_echo_app.dart';
+import 'support/key_echo_i18n.dart';
 import 'support/word_classification_harness.dart';
 
 const _gen = 'gen.pl';
@@ -40,9 +42,7 @@ Future<void> _pumpChecked(
   tester.view.physicalSize = const Size(1200, 12000);
   tester.view.devicePixelRatio = 1.0;
   addTearDown(tester.view.reset);
-  await tester.pumpWidget(
-    wrapInApp(PracticeScreen(item: item), forcedLocale: const Locale('de')),
-  );
+  await tester.pumpWidget(wrapInKeyEchoAppWith(PracticeScreen(item: item)));
   await letItLoad(tester);
   for (final entry in wrong.entries) {
     await tester.enterText(
@@ -176,7 +176,7 @@ void main() {
       }
     });
 
-    testWidgets('an absent step is done, dashed and says entfällt', (
+    testWidgets('an absent step is done, dashed and says the absent label', (
       tester,
     ) async {
       final (item, key) = [
@@ -199,7 +199,10 @@ void main() {
         if (!row.step.absent) continue;
         expect(row.status, EselStepStatus.done);
         expect(
-          find.descendant(of: finder, matching: find.text('entfällt')),
+          find.descendant(
+            of: finder,
+            matching: find.text(keyEcho('esel.absentLabel')),
+          ),
           findsOneWidget,
         );
       }
@@ -233,7 +236,6 @@ void main() {
   group('(f) legend', () {
     testWidgets('the info button lists all six names', (tester) async {
       final item = await _dominus();
-      final texts = await germanTexts();
       await _pumpChecked(tester, item, {_gen: 'dominis'});
 
       await tester.tap(find.byKey(Key('${_scope(_gen)}.info')));
@@ -245,14 +247,14 @@ void main() {
         expect(
           find.descendant(
             of: row,
-            matching: find.text(texts['esel.kind.${kind.name}.name']!),
+            matching: find.text(keyEcho('esel.kind.${kind.name}.name')),
           ),
           findsOneWidget,
         );
         expect(
           find.descendant(
             of: row,
-            matching: find.text(texts['esel.legend.meaning.${kind.name}']!),
+            matching: find.text(keyEcho('esel.legend.meaning.${kind.name}')),
           ),
           findsOneWidget,
         );
@@ -268,9 +270,8 @@ void main() {
       tester.view.devicePixelRatio = 1.0;
       addTearDown(tester.view.reset);
       await tester.pumpWidget(
-        wrapInApp(
+        wrapInKeyEchoAppWith(
           WordClassificationScreen(item: item, formKey: _gen),
-          forcedLocale: const Locale('de'),
         ),
       );
       await letItLoad(tester);
@@ -306,7 +307,6 @@ void main() {
     testWidgets('every badge reads "<letter> <name>"', (tester) async {
       final handle = tester.ensureSemantics();
       final item = await _dominus();
-      final texts = await germanTexts();
       await _pumpChecked(tester, item, {_gen: 'dominis'});
 
       final badges = find.descendant(
@@ -319,7 +319,7 @@ void main() {
         final kind = rows[i].step.kind.name;
         expect(
           tester.getSemantics(badges.at(i)).label,
-          '${texts['esel.kind.$kind.letter']} ${texts['esel.kind.$kind.name']}',
+          '${keyEcho('esel.kind.$kind.letter')} ${keyEcho('esel.kind.$kind.name')}',
         );
       }
       handle.dispose();
@@ -410,6 +410,7 @@ void main() {
     });
   });
 
+  // Subject is the translation files: every key the screen sources use.
   test(
     'every esel key the screens use exists in de.json and en.json',
     () async {

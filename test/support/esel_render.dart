@@ -15,6 +15,7 @@ import 'package:latin_practice/screens/word_classification_screen.dart';
 import 'package:latin_practice/widgets/esel_panel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'key_echo_app.dart';
 import 'word_classification_harness.dart';
 
 Future<PracticeItem> loadItem(String asset, String lemma) async =>
@@ -31,9 +32,7 @@ Future<void> pumpChecked(
   tester.view.physicalSize = const Size(1200, 12000);
   tester.view.devicePixelRatio = 1.0;
   addTearDown(tester.view.reset);
-  await tester.pumpWidget(
-    wrapInApp(PracticeScreen(item: item), forcedLocale: const Locale('de')),
-  );
+  await tester.pumpWidget(wrapInKeyEchoAppWith(PracticeScreen(item: item)));
   await letItLoad(tester);
   for (final entry in wrong.entries) {
     await tester.enterText(
@@ -48,7 +47,8 @@ Future<void> pumpChecked(
 /// Pumps the classification screen on [formKey] and answers every selector
 /// with the value of the form's label, except the last one the label names,
 /// which gets another value, and the axes it does not name, which get their
-/// first value: the explanation box shows after a wrong answer only.
+/// first value: the explanation box shows after a wrong answer only. The UI texts
+/// are their keys (key-echo).
 Future<void> pumpClassified(
   WidgetTester tester,
   PracticeItem item,
@@ -58,12 +58,8 @@ Future<void> pumpClassified(
   tester.view.physicalSize = const Size(1200, 4800);
   tester.view.devicePixelRatio = 1.0;
   addTearDown(tester.view.reset);
-  await tester.pumpWidget(
-    wrapInApp(
-      WordClassificationScreen(item: item, formKey: formKey),
-      forcedLocale: const Locale('de'),
-    ),
-  );
+  final screen = WordClassificationScreen(item: item, formKey: formKey);
+  await tester.pumpWidget(wrapInKeyEchoAppWith(screen));
   await letItLoad(tester);
 
   final label = item.formLabels[item.formOrder.indexOf(formKey)];

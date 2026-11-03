@@ -6,7 +6,9 @@ import 'package:latin_practice/widgets/explanation_lines.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'support/explanation_harness.dart';
-import 'support/word_classification_harness.dart';
+import 'support/key_echo_app.dart';
+import 'support/key_echo_i18n.dart';
+import 'support/word_classification_harness.dart' show letItLoad;
 
 void main() {
   testWidgets('the practice screen explains only the wrong rows', (
@@ -20,10 +22,9 @@ void main() {
     final genRow = dominus.formOrder.indexOf('gen.sg');
 
     await tester.pumpWidget(
-      wrapInApp(
+      wrapInKeyEchoAppWith(
         PracticeScreen(item: dominus),
         explainer: spy.explainer,
-        forcedLocale: const Locale('de'),
       ),
     );
     await letItLoad(tester);
@@ -48,10 +49,7 @@ void main() {
     expect(spy.wrongAnswerCalls, [('gen.sg', 'dominis')]);
     expect(spy.correctAnswerCalls, [('nom.sg', 'dominus')]);
     expect(
-      find.text(
-        'Du hast dominis geschrieben – das passt zu keiner '
-        'bekannten Form',
-      ),
+      find.text(keyEcho('explain.diag.noMatch', {'answer': 'dominis'})),
       findsOneWidget,
     );
   });

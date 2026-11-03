@@ -52,6 +52,7 @@ void main() {
     await tester.tap(find.byKey(const Key('wordClassification.check.button')));
     await tester.pumpAndSettle();
 
+    // The chip shows a form label from the YAML data, not UI text.
     expect(
       find.text('Partizip Futur I Aktiv Singular Nominativ feminin'),
       findsOneWidget,

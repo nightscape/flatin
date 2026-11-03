@@ -3,8 +3,6 @@ import 'package:latin_practice/data/explanation.dart';
 import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/models/practice_item.dart';
 
-import 'support/trace_fixtures.dart';
-
 Future<List<PracticeItem>> _allItems() async => [
   ...await loadPracticeItems('lib/data/latin_nouns.yaml'),
   ...await loadPracticeItems('lib/data/latin_verbs.yaml'),
@@ -50,9 +48,8 @@ void main() {
   });
 
   test(
-    'no rendered diagnosis line names a type by its internal name',
+    'no diagnosis line names a type by its internal name',
     () async {
-      final texts = await germanTexts();
       final items = await _allItems();
       final types = {
         for (final item in items)
@@ -71,10 +68,7 @@ void main() {
             for (final line in explainWrongAnswer(item, key, answer)) {
               if (line.key != 'explain.diag.otherType') continue;
               lines++;
-              var rest = renderDe(
-                texts,
-                line,
-              ).replaceFirst('Du hast $answer geschrieben – ', '');
+              var rest = line.params['types']!;
               for (final phrase in phrases) {
                 rest = rest.replaceAll(phrase, '');
               }

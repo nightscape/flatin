@@ -1,4 +1,4 @@
-E Erkennen | done | O-Deklination-maskulinum
-S Stamm | done | domin-
-E Endung | done | -ōrum
-L Lautregel | done | keine Lautregel
+esel.kind.erkennen.letter esel.kind.erkennen.name | done | O-Deklination-maskulinum
+esel.kind.stamm.letter esel.kind.stamm.name | done | domin-
+esel.kind.endung.letter esel.kind.endung.name | done | -ōrum
+esel.kind.lautregel.letter esel.kind.lautregel.name | done | esel.noRule

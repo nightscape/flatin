@@ -7,26 +7,23 @@ import 'package:latin_practice/models/derivation.dart' show norm;
 import 'package:latin_practice/models/practice_item.dart';
 import 'package:latin_practice/widgets/esel_panel.dart';
 
-import 'support/trace_fixtures.dart' show germanTexts;
+import 'support/key_echo_app.dart';
+import 'support/key_echo_i18n.dart';
 import 'support/word_classification_harness.dart';
 import 'support/explanation_harness.dart' show pickOption;
 import 'package:latin_practice/screens/word_classification_screen.dart';
 
-/// What the rows of a static panel read, built from de.json like the widget
-/// does — never from the identity of `groupReadings`, which is the code under
-/// test here.
-String _rendered(Map<String, String> de, PracticeItem item, String key) =>
-    eselSteps(item, key).map((s) => _row(de, s)).join('\n');
+/// What the rows of a static panel read, as key-echo text — never from the
+/// identity of `groupReadings`, which is the code under test here.
+String _rendered(PracticeItem item, String key) =>
+    eselSteps(item, key).map(_row).join('\n');
 
-String _row(Map<String, String> de, EselStep step) => [
-  de['esel.kind.${step.kind.name}.name']!,
-  if (step.absent) de['esel.absentLabel']!,
+String _row(EselStep step) => [
+  keyEcho('esel.kind.${step.kind.name}.name'),
+  if (step.absent) keyEcho('esel.absentLabel'),
   step.answerKey == null
       ? step.answer
-      : de[step.answerKey]!.replaceAllMapped(
-          RegExp(r'\{(\w+)\}'),
-          (match) => step.answerParams[match.group(1)]!,
-        ),
+      : keyEcho(step.answerKey!, step.answerParams),
   if (step.regular != null) step.regular!,
 ].join(' | ');
 
@@ -44,9 +41,8 @@ Future<void> _pumpChecked(
   tester.view.devicePixelRatio = 1.0;
   addTearDown(tester.view.reset);
   await tester.pumpWidget(
-    wrapInApp(
+    wrapInKeyEchoAppWith(
       WordClassificationScreen(item: item, formKey: formKey),
-      forcedLocale: const Locale('de'),
     ),
   );
   await letItLoad(tester);
@@ -67,7 +63,6 @@ void main() {
   test(
     'groups partition the readings of every spelling by equal steps',
     () async {
-      final de = await germanTexts();
       var checked = 0;
       for (final asset in [
         'lib/data/latin_nouns.yaml',
@@ -75,7 +70,7 @@ void main() {
       ]) {
         for (final item in await loadPracticeItems(asset)) {
           final answers = {
-            for (final k in item.formOrder) k: _rendered(de, item, k),
+            for (final k in item.formOrder) k: _rendered(item, k),
           };
           final seen = <String>{};
           for (final accepted in item.acceptedForms) {
@@ -144,6 +139,7 @@ void main() {
       final item = await _item('lib/data/latin_nouns.yaml', 'templum');
       await _pumpChecked(tester, item, 'nom.pl');
 
+      // Panel titles are form labels from the YAML data, not UI text.
       expect(_titles(tester), [
         'Nominativ Plural / Akkusativ Plural / Vokativ Plural',
       ]);
@@ -190,8 +186,8 @@ void main() {
       final item = await _item('lib/data/latin_nouns.yaml', 'rēx');
       await _pumpChecked(tester, item, 'nom.sg');
 
-      expect(find.text('Wörterbuchform'), findsOneWidget);
-      expect(find.textContaining('ist die Wörterbuchform'), findsNothing);
+      expect(find.text(keyEcho('esel.dictionaryForm')), findsOneWidget);
+      expect(find.textContaining('esel.question.'), findsNothing);
     });
 
     testWidgets('a spelling with one reading: one panel, one label', (

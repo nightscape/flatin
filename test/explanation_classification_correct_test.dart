@@ -4,7 +4,9 @@ import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/screens/word_classification_screen.dart';
 
 import 'support/explanation_harness.dart';
-import 'support/word_classification_harness.dart';
+import 'support/key_echo_app.dart';
+import 'support/word_classification_harness.dart'
+    show seedNothingDue, letItLoad;
 
 void main() {
   testWidgets('a correct pick gets no explanation box', (tester) async {
@@ -23,10 +25,9 @@ void main() {
     addTearDown(tester.view.reset);
 
     await tester.pumpWidget(
-      wrapInApp(
+      wrapInKeyEchoAppWith(
         const WordClassificationScreen(),
         explainer: spy.explainer,
-        forcedLocale: const Locale('de'),
       ),
     );
     await letItLoad(tester);

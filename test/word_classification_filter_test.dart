@@ -5,7 +5,10 @@ import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/providers/fsrs_provider.dart';
 import 'package:latin_practice/screens/word_classification_screen.dart';
 
-import 'support/word_classification_harness.dart';
+import 'support/key_echo_app.dart';
+import 'support/key_echo_i18n.dart';
+import 'support/word_classification_harness.dart'
+    show seedNothingDue, letItLoad;
 
 void main() {
   testWidgets('with nothing due the shown word belongs to an enabled type', (
@@ -29,7 +32,9 @@ void main() {
     final allowed = practicable['nouns']!.expand((item) => item.forms).toSet();
     container.dispose();
 
-    await tester.pumpWidget(wrapInApp(const WordClassificationScreen()));
+    await tester.pumpWidget(
+      wrapInKeyEchoAppWith(const WordClassificationScreen()),
+    );
     await letItLoad(tester);
 
     final shown = tester
@@ -48,10 +53,15 @@ void main() {
       'verbs': verbs.availableTypes.toSet(),
     });
 
-    await tester.pumpWidget(wrapInApp(const WordClassificationScreen()));
+    await tester.pumpWidget(
+      wrapInKeyEchoAppWith(const WordClassificationScreen()),
+    );
     await letItLoad(tester);
 
     expect(find.byKey(const Key('wordClassification.word')), findsNothing);
-    expect(find.text('No words available'), findsOneWidget);
+    expect(
+      find.text(keyEcho('wordClassification.noWordsAvailable')),
+      findsOneWidget,
+    );
   });
 }

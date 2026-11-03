@@ -1,29 +1,29 @@
 Start
-E Erkennen | open | Welcher Typ ist posse, possum, potuī? | Optionen: A-Konjugation ; E-Konjugation ; Unregelmäßig | [Zeigen]
-S Stamm | pending | [Zeigen]
-E Endung | pending | [Zeigen]
-L Lautregel | pending | [Zeigen]
+esel.kind.erkennen.letter esel.kind.erkennen.name | open | esel.question.erkennen{word=posse, possum, potuī} | Optionen: A-Konjugation ; E-Konjugation ; Unregelmäßig | [esel.show]
+esel.kind.stamm.letter esel.kind.stamm.name | pending | [esel.show]
+esel.kind.endung.letter esel.kind.endung.name | pending | [esel.show]
+esel.kind.lautregel.letter esel.kind.lautregel.name | pending | [esel.show]
 
 Zeigen erkennen
-E Erkennen | done | Unregelmäßig
-S Stamm | open | Von welchem Stamm wird die Form von posse, possum, potuī gebildet? | Optionen: pos- ; pot- ; potu- | [Zeigen]
-E Endung | pending | [Zeigen]
-L Lautregel | pending | [Zeigen]
+esel.kind.erkennen.letter esel.kind.erkennen.name | done | Unregelmäßig
+esel.kind.stamm.letter esel.kind.stamm.name | open | esel.question.stamm{word=posse, possum, potuī} | Optionen: pos- ; pot- ; potu- | [esel.show]
+esel.kind.endung.letter esel.kind.endung.name | pending | [esel.show]
+esel.kind.lautregel.letter esel.kind.lautregel.name | pending | [esel.show]
 
 Zeigen stamm
-E Erkennen | done | Unregelmäßig
-S Stamm | done | pos-
-E Endung | open | Welche Endung hat Konjunktiv Imperfekt: 1. Person Singular? | Optionen: -sem ; -set ; -sēs | [Zeigen]
-L Lautregel | pending | [Zeigen]
+esel.kind.erkennen.letter esel.kind.erkennen.name | done | Unregelmäßig
+esel.kind.stamm.letter esel.kind.stamm.name | done | pos-
+esel.kind.endung.letter esel.kind.endung.name | open | esel.question.endung{label=Konjunktiv Imperfekt: 1. Person Singular} | Optionen: -sem ; -set ; -sēs | [esel.show]
+esel.kind.lautregel.letter esel.kind.lautregel.name | pending | [esel.show]
 
 Zeigen endung
-E Erkennen | done | Unregelmäßig
-S Stamm | done | pos-
-E Endung | done | -sem
-L Lautregel | open | Ändert sich bei Konjunktiv Imperfekt: 1. Person Singular ein Laut? | Optionen: ein Laut ändert sich ; keine Lautregel | [Zeigen]
+esel.kind.erkennen.letter esel.kind.erkennen.name | done | Unregelmäßig
+esel.kind.stamm.letter esel.kind.stamm.name | done | pos-
+esel.kind.endung.letter esel.kind.endung.name | done | -sem
+esel.kind.lautregel.letter esel.kind.lautregel.name | open | esel.question.lautregel{label=Konjunktiv Imperfekt: 1. Person Singular} | Optionen: esel.noRule ; esel.soundChanges | [esel.show]
 
 Zeigen lautregel
-E Erkennen | done | Unregelmäßig
-S Stamm | done | pos-
-E Endung | done | -sem
-L Lautregel | done | keine Lautregel
+esel.kind.erkennen.letter esel.kind.erkennen.name | done | Unregelmäßig
+esel.kind.stamm.letter esel.kind.stamm.name | done | pos-
+esel.kind.endung.letter esel.kind.endung.name | done | -sem
+esel.kind.lautregel.letter esel.kind.lautregel.name | done | esel.noRule

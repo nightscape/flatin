@@ -34,6 +34,7 @@ void main() {
     await tester.tap(find.byType(DropdownButtonFormField<String>).first);
     await tester.pumpAndSettle();
 
+    // The dropdown options are case names from the YAML data, not UI text.
     expect(find.text('Nominativ'), findsWidgets);
     expect(find.text('Genitiv'), findsNothing);
   });

@@ -560,7 +560,7 @@ void main() {
     await _pumpLarge(tester, const HomeScreen());
     await tester.tap(find.byKey(const Key('focus.picker')));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Nur Stammformen').last);
+    await tester.tap(find.byKey(const Key('focus.option.baseForms')).last);
     await tester.pumpAndSettle();
     return find.byKey(const Key('home.verbs.button'));
   }
@@ -587,7 +587,7 @@ void main() {
     await _pumpLarge(tester, const HomeScreen());
     await tester.tap(find.byKey(const Key('focus.picker')));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Nur Stammformen').last);
+    await tester.tap(find.byKey(const Key('focus.option.baseForms')).last);
     await tester.pumpAndSettle();
     await tester.tap(find.byKey(const Key('home.verbs.button')));
     await letItLoad(tester);
@@ -606,6 +606,7 @@ void main() {
       PracticeScreen(item: rex, focus: const BaseForms()),
     );
 
+    // Lemma and meaning are vocabulary data, not UI text.
     expect(find.text('rēx'), findsOneWidget);
     expect(find.byKey(const Key('practice.translation.shown')), findsOneWidget);
     expect(find.text('der König'), findsOneWidget);

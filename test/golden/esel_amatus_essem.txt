@@ -1,27 +1,27 @@
 Start
-E Erkennen | open | Welcher Typ ist amāre, amō, amāvī, amātum? | Optionen: A-Konjugation ; E-Konjugation ; I-Konjugation | [Zeigen]
-S Stamm | done (gestrichelt) | entfällt / kein eigener Stamm
-E Endung | done (gestrichelt) | entfällt / keine eigene Endung
-L Lautregel | pending | [Zeigen]
-V Verbinden | pending | [Zeigen]
+esel.kind.erkennen.letter esel.kind.erkennen.name | open | esel.question.erkennen{word=amāre, amō, amāvī, amātum} | Optionen: A-Konjugation ; E-Konjugation ; I-Konjugation | [esel.show]
+esel.kind.stamm.letter esel.kind.stamm.name | done (gestrichelt) | esel.absentLabel / esel.absent.stamm
+esel.kind.endung.letter esel.kind.endung.name | done (gestrichelt) | esel.absentLabel / esel.absent.endung
+esel.kind.lautregel.letter esel.kind.lautregel.name | pending | [esel.show]
+esel.kind.verbinden.letter esel.kind.verbinden.name | pending | [esel.show]
 
 Zeigen erkennen
-E Erkennen | done | A-Konjugation
-S Stamm | done (gestrichelt) | entfällt / kein eigener Stamm
-E Endung | done (gestrichelt) | entfällt / keine eigene Endung
-L Lautregel | open | Ändert sich bei Konjunktiv Plusquamperfekt Passiv: 1. Person Singular ein Laut? | Optionen: ein Laut ändert sich ; keine Lautregel | [Zeigen]
-V Verbinden | pending | [Zeigen]
+esel.kind.erkennen.letter esel.kind.erkennen.name | done | A-Konjugation
+esel.kind.stamm.letter esel.kind.stamm.name | done (gestrichelt) | esel.absentLabel / esel.absent.stamm
+esel.kind.endung.letter esel.kind.endung.name | done (gestrichelt) | esel.absentLabel / esel.absent.endung
+esel.kind.lautregel.letter esel.kind.lautregel.name | open | esel.question.lautregel{label=Konjunktiv Plusquamperfekt Passiv: 1. Person Singular} | Optionen: esel.noRule ; esel.soundChanges | [esel.show]
+esel.kind.verbinden.letter esel.kind.verbinden.name | pending | [esel.show]
 
 Zeigen lautregel
-E Erkennen | done | A-Konjugation
-S Stamm | done (gestrichelt) | entfällt / kein eigener Stamm
-E Endung | done (gestrichelt) | entfällt / keine eigene Endung
-L Lautregel | done | keine Lautregel
-V Verbinden | open | Woraus ist Konjunktiv Plusquamperfekt Passiv: 1. Person Singular zusammengesetzt? | Optionen: amātus + eram ; amātus + essem ; amātus + sim | [Zeigen]
+esel.kind.erkennen.letter esel.kind.erkennen.name | done | A-Konjugation
+esel.kind.stamm.letter esel.kind.stamm.name | done (gestrichelt) | esel.absentLabel / esel.absent.stamm
+esel.kind.endung.letter esel.kind.endung.name | done (gestrichelt) | esel.absentLabel / esel.absent.endung
+esel.kind.lautregel.letter esel.kind.lautregel.name | done | esel.noRule
+esel.kind.verbinden.letter esel.kind.verbinden.name | open | esel.question.verbinden{label=Konjunktiv Plusquamperfekt Passiv: 1. Person Singular} | Optionen: amātus + eram ; amātus + essem ; amātus + sim | [esel.show]
 
 Zeigen verbinden
-E Erkennen | done | A-Konjugation
-S Stamm | done (gestrichelt) | entfällt / kein eigener Stamm
-E Endung | done (gestrichelt) | entfällt / keine eigene Endung
-L Lautregel | done | keine Lautregel
-V Verbinden | done | amātus + essem
+esel.kind.erkennen.letter esel.kind.erkennen.name | done | A-Konjugation
+esel.kind.stamm.letter esel.kind.stamm.name | done (gestrichelt) | esel.absentLabel / esel.absent.stamm
+esel.kind.endung.letter esel.kind.endung.name | done (gestrichelt) | esel.absentLabel / esel.absent.endung
+esel.kind.lautregel.letter esel.kind.lautregel.name | done | esel.noRule
+esel.kind.verbinden.letter esel.kind.verbinden.name | done | amātus + essem
