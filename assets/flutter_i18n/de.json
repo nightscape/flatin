@@ -363,16 +363,16 @@
       "feedback": {
         "rightTicked": "„{text}“ – richtig",
         "rightLeft": "„{text}“ – richtig, nicht angekreuzt",
-        "wrongLeft": "„{text}“ – falsch",
+        "wrongLeft": "„{text}“ – nicht ganz",
         "wrongTicked": {
-          "tempus": "„{text}“ – falsch: Tempus oder Zeitverhältnis",
-          "genusVerbi": "„{text}“ – falsch: Aktiv und Passiv vertauscht",
-          "bezugswort": "„{text}“ – falsch: falsches Bezugswort",
-          "sinnrichtung": "„{text}“ – falsch: falsche Sinnrichtung",
-          "frageart": "„{text}“ – falsch: erwartet eine andere Antwort",
-          "aussage": "„{text}“ – falsch: Aussage statt Frage",
-          "rollen": "„{text}“ – falsch: Subjekt, Objekt oder Prädikat vertauscht",
-          "praedikativum": "„{text}“ – falsch: zweiter Akkusativ nicht als Prädikativum gelesen"
+          "tempus": "„{text}“ – nicht ganz: Tempus oder Zeitverhältnis",
+          "genusVerbi": "„{text}“ – nicht ganz: Aktiv und Passiv vertauscht",
+          "bezugswort": "„{text}“ – nicht ganz: anderes Bezugswort",
+          "sinnrichtung": "„{text}“ – nicht ganz: andere Sinnrichtung",
+          "frageart": "„{text}“ – nicht ganz: erwartet eine andere Antwort",
+          "aussage": "„{text}“ – nicht ganz: Aussage statt Frage",
+          "rollen": "„{text}“ – nicht ganz: Subjekt, Objekt oder Prädikat vertauscht",
+          "praedikativum": "„{text}“ – nicht ganz: zweiter Akkusativ nicht als Prädikativum gelesen"
         }
       }
     }

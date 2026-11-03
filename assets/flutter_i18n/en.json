@@ -363,16 +363,16 @@
       "feedback": {
         "rightTicked": "“{text}” – right",
         "rightLeft": "“{text}” – right, not ticked",
-        "wrongLeft": "“{text}” – wrong",
+        "wrongLeft": "“{text}” – not quite",
         "wrongTicked": {
-          "tempus": "“{text}” – wrong: tense or time relation",
-          "genusVerbi": "“{text}” – wrong: active and passive swapped",
-          "bezugswort": "“{text}” – wrong: wrong reference word",
-          "sinnrichtung": "“{text}” – wrong: wrong sense of the participle",
-          "frageart": "“{text}” – wrong: expects another answer",
-          "aussage": "“{text}” – wrong: a statement, not a question",
-          "rollen": "“{text}” – wrong: subject, object or predicate swapped",
-          "praedikativum": "“{text}” – wrong: second accusative not read as predicate"
+          "tempus": "“{text}” – not quite: tense or time relation",
+          "genusVerbi": "“{text}” – not quite: active and passive swapped",
+          "bezugswort": "“{text}” – not quite: another reference word",
+          "sinnrichtung": "“{text}” – not quite: another sense of the participle",
+          "frageart": "“{text}” – not quite: expects another answer",
+          "aussage": "“{text}” – not quite: a statement, not a question",
+          "rollen": "“{text}” – not quite: subject, object or predicate swapped",
+          "praedikativum": "“{text}” – not quite: second accusative not read as predicate"
         }
       }
     }

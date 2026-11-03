@@ -7,6 +7,12 @@ import 'package:latin_practice/models/derivation.dart' show norm;
 import 'package:latin_practice/models/exercise.dart';
 import 'package:latin_practice/models/practice_item.dart';
 
+/// Words that say an attempt failed, in both UI languages.
+final failureWord = RegExp(
+  r'falsch|fehler|leider|nicht richtig|wrong|incorrect|error|mistake|fail',
+  caseSensitive: false,
+);
+
 /// The bundles a context unlocks so that [spec] can build in [bundle]: a chain
 /// of several steps starts outside the asked bundle.
 Set<GrammarBundle> unlockedFor(
