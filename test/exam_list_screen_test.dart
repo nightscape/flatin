@@ -64,7 +64,7 @@ Pick _broken(Map<String, Object> pack, Random rng) {
       continue;
     }
     try {
-      parseExam(source);
+      parseExam(source, latin);
     } on ExamRejected catch (e) {
       return (
         bytes: utf8.encode(source),
@@ -154,7 +154,7 @@ void main() {
           case null:
             expect(refused, findsNothing, reason: 'seed $seed');
             final source = utf8.decode(pick.bytes);
-            final exam = parseExam(source);
+            final exam = parseExam(source, latin);
             want
               ..remove(exam.id)
               ..[exam.id] = source;

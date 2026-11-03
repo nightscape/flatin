@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/data/exam.dart';
 
+import 'support/gen_exam.dart' show latin;
+
 String _synthetic(String from, String to) {
   final source = File('test/fixtures/exam/synthetic.exam').readAsStringSync();
   expect(source, contains(from));
@@ -17,7 +19,7 @@ void main() {
       'tempus: praes, modus: ind, genus_verbi: pass}, rolle: praedikat, '
           'verbform: [s2_4, s2_5]}',
     );
-    expect(() => parseExam(source), throwsA(isA<ExamRejected>()));
+    expect(() => parseExam(source, latin), throwsA(isA<ExamRejected>()));
   });
 
   test('the PPP of a compound passive without kasus and genus is refused', () {
@@ -26,12 +28,12 @@ void main() {
           'tempus: perf',
       '{wortart: verb, numerus: pl, person: 3, tempus: perf',
     );
-    expect(() => parseExam(source), throwsA(isA<ExamRejected>()));
+    expect(() => parseExam(source, latin), throwsA(isA<ExamRejected>()));
   });
 
   test('a bilden form of a compound passive in one word is refused', () {
     final source = _synthetic('form: spectātae sunt', 'form: spectātae');
-    expect(() => parseExam(source), throwsA(isA<ExamRejected>()));
+    expect(() => parseExam(source, latin), throwsA(isA<ExamRejected>()));
   });
 
   test('EXAM_SCHEMA.md states no rule that the parser does not check', () {

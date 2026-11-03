@@ -1,0 +1,16 @@
+id: toy
+name: {de: Spielsprache, en: Toy language}
+analyse:
+  wortart: [wortklasse]
+  ruf: [tu, ze]
+  zal: [ein]
+word_class: wortart
+form: [ruf, zal]
+rolle: [tu, ze]
+clause:
+  art: [haupt]
+  sinnrichtung: []
+rules:
+  main_clause: haupt
+  no_role: []
+  needs_bezug: []

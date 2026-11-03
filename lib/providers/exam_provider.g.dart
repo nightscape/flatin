@@ -8,6 +8,45 @@ part of 'exam_provider.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
+/// The language whose codes and rules the exam packs use.
+
+@ProviderFor(examLanguage)
+final examLanguageProvider = ExamLanguageProvider._();
+
+/// The language whose codes and rules the exam packs use.
+
+final class ExamLanguageProvider
+    extends
+        $FunctionalProvider<AsyncValue<Language>, Language, FutureOr<Language>>
+    with $FutureModifier<Language>, $FutureProvider<Language> {
+  /// The language whose codes and rules the exam packs use.
+  ExamLanguageProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'examLanguageProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$examLanguageHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<Language> $createElement($ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<Language> create(Ref ref) {
+    return examLanguage(ref);
+  }
+}
+
+String _$examLanguageHash() => r'ec80b558c10d0d27b546513c70d4bfd7cdd889bc';
+
 /// The imported exam packs.
 
 @ProviderFor(ExamPacks)
@@ -36,7 +75,7 @@ final class ExamPacksProvider
   ExamPacks create() => ExamPacks();
 }
 
-String _$examPacksHash() => r'813cc4417d33d3fa2e40eac0787a8ba59db042c8';
+String _$examPacksHash() => r'5a0866c6aba750aaa1c42cf988b132bf3d1b1ac9';
 
 /// The imported exam packs.
 

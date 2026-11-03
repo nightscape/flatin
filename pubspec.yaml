@@ -91,6 +91,7 @@ flutter:
     - lib/data/agite_2.yaml
     - lib/data/sentences.yaml
     - lib/data/game_rules.yaml
+    - lib/data/languages/la.yaml
     - assets/flutter_i18n/
     - assets/town/
 

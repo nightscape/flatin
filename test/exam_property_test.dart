@@ -12,7 +12,10 @@ const _variants = 3000;
 
 /// The fixed packs the seeded loops run first.
 Map<String, Object> _synthetic() => examToYaml(
-  parseExam(File('test/fixtures/exam/synthetic.exam').readAsStringSync()),
+  parseExam(
+    File('test/fixtures/exam/synthetic.exam').readAsStringSync(),
+    latin,
+  ),
 );
 
 /// The synthetic pack with one more task: a `bilden` item of a PPP.
@@ -84,19 +87,19 @@ void main() {
       final withNull = _copy(yaml);
       nullKeys.add(nullOptional(withNull, Random(seed++)));
       expect(
-        examToYaml(parseExam(jsonEncode(withNull))),
+        examToYaml(parseExam(jsonEncode(withNull), latin)),
         equals(yaml),
         reason: name,
       );
-      final exam = parseExam(jsonEncode(yaml));
+      final exam = parseExam(jsonEncode(yaml), latin);
       expect(examToYaml(exam), equals(yaml), reason: name);
       expect(
-        examToYaml(parseExam(serializeExam(exam))),
+        examToYaml(parseExam(serializeExam(exam), latin)),
         equals(yaml),
         reason: name,
       );
       expect(
-        examToYaml(parseExam(blockYaml(yaml))),
+        examToYaml(parseExam(blockYaml(yaml), latin)),
         equals(yaml),
         reason: name,
       );
@@ -107,7 +110,7 @@ void main() {
       for (final a in ItemArt.values) 'task ${a.code}',
       'task ordnen',
       'task frei',
-      for (final a in ClauseArt.values) 'clause ${a.code}',
+      for (final a in latin.clauseArt) 'clause $a',
     ];
     expect([
       for (final k in wanted)
@@ -142,7 +145,7 @@ void main() {
         final (source, path) = broken;
         reached[rule] = (reached[rule] ?? 0) + 1;
         expect(
-          () => parseExam(source),
+          () => parseExam(source, latin),
           throwsA(
             isA<ExamRejected>().having(
               (e) => [for (final x in e.errors) '${x.rule.id} ${x.path}'],

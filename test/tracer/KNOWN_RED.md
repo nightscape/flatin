@@ -24,4 +24,4 @@ step's own failure after it.
 - home: the data ends at lesson 2, lastLesson says 40; then the due words fail with Unable to load asset: "lib/data/latin_verbs.yaml" (the app reads its three data files by fixed path)
 - round: the data ends at lesson 2, lastLesson says 40; then no round.start.go button, the round start screen shows Unable to load asset: "lib/data/latin_verbs.yaml" (the app reads its three data files by fixed path)
 - settings: the data ends at lesson 2, lastLesson says 40; then no settings.tile.toy_words tile, the settings screen offers only the fixed tiles Words, Nouns, Verbs and Input
-- exam-import: the data ends at lesson 2, lastLesson says 40; then the pack is refused: exam.uebersetzung.saetze[0].tokens[0].analyse.wortart (E-code): "wortklasse" is not one of [Wortart.subst, ...] (the exam analysis codes are Dart enums)
+- exam-import: the data ends at lesson 2, lastLesson says 40; then the pack imports and is listed with the toy language, so only the boot error is left

@@ -5,8 +5,12 @@ Latin text to translate, its annotation, and the companion tasks. The app
 imports a pack from a file; packs are never bundled. `test/fixtures/exam/synthetic.exam`
 uses every feature.
 
-The sections up to Tasks describe the fields. `lib/data/exam.dart` reads a
-pack and checks every statement of the section Rules, one rule id per
+The sections up to Tasks describe the fields. The codes of `analyse`,
+`rolle`, `art` and `sinnrichtung`, and the values the rules name (`haupt`,
+`pc`, `esse`, the tense pairs), are data of the language file
+`lib/data/languages/la.yaml`; this document gives the Latin ones.
+`lib/data/exam.dart` reads a pack and checks every statement of the section
+Rules, one rule id per
 statement; a pack that breaks one is refused as a whole with an `ExamError`
 per break: the rule id and the path, e.g.
 `E-token-twice exam.uebersetzung.saetze[3].teilsaetze[1]`. Paths count list
@@ -54,18 +58,11 @@ A word token is `{id, la, lemma, analyse, rolle (optional), bezug
 (optional), verbform (optional)}`. A token without `lemma` is a punctuation
 mark.
 
-- `analyse` uses the codes of the app: `wortart` (`subst`, `adj`, `verb`,
-  `pron`, `adv`, `praep`, `konjunktion`, `subjunktion`, `partikel`), and
-  optional `kasus` (`nom`, `gen`, `dat`, `akk`, `abl`, `vok`), `numerus`
-  (`sg`, `pl`), `genus` (`m`, `f`, `n`), `person` (the number 1, 2 or 3),
-  `tempus` (`praes`, `impf`, `perf`, `plusq`, `fut`, `fut2`), `modus` (`ind`,
-  `konj`, `imp`, `inf`, `part`), `genus_verbi` (`akt`, `pass`), `pronomen`
-  (`personal`, `relativ`, `interrogativ_subst`, `interrogativ_adj`,
-  `demonstrativ`, `possessiv`, `reflexiv`) and `funktion` (`gen_subj`,
-  `gen_obj`).
-- `rolle`: `praedikat`, `subjekt`, `objekt`, `adverbiale`, `attribut` (also
-  an apposition, a genitive attribute, an adjectival `is`),
-  `praedikatsnomen`, `praedikativum`, `anrede`.
+- `analyse` has the keys and codes of `analyse` in the language file:
+  `wortart` is required, the others are optional; the codes of `person` are
+  numbers.
+- `rolle`: a code of `rolle` in the language file. `attribut` is also an
+  apposition, a genitive attribute, an adjectival `is`.
 - `bezug`: the id of the token a word refers to.
 - `verbform: [ppp id, esse id]`: a compound passive form (`portātus est`,
   `portātum esse`) is two tokens, the PPP and the `esse` token.
@@ -77,13 +74,12 @@ mark.
 `{id, art, tokens, uebergeordnet (optional), sinnrichtung (optional), de,
 ausrichtung}`.
 
-- `art`: `haupt`, `temporal`, `kausal`, `kondizional`, `konzessiv`,
-  `relativ`, `aci`, `pc`. `uebergeordnet` is the id of the superordinate
-  clause.
+- `art`: a code of `clause.art` in the language file. `uebergeordnet` is
+  the id of the superordinate clause.
 - `tokens`: the tokens of the clause. A clause need not be contiguous (an
   embedded clause).
-- `art: pc` is the participle with its complements. `sinnrichtung`:
-  `temporal`, `kausal`, `konzessiv`, `kondizional`, `attributiv`.
+- `art: pc` is the participle with its complements. `sinnrichtung`: a code
+  of `clause.sinnrichtung` in the language file.
 - `de`: variant strings that translate the clause alone (a main clause in
   normal word order). For a pc clause they give the subordinate clause and,
   where it reads well, the prepositional phrase; `satz.de` adds the
@@ -108,7 +104,7 @@ list `items`, and every item has the int `punkte`. The items of each `art`:
 |---|---|
 | `bestimmen` | `{token, merkmale}`: a token id and a list of strings; the answer comes from the token |
 | `stammformen` | `{lemma, stammformen}`: `stammformen` exactly four strings |
-| `bilden` | `{lemma, merkmale, form}`: `merkmale` holds the features of `analyse` except `wortart`, `pronomen`, `funktion` |
+| `bilden` | `{lemma, merkmale, form}`: `merkmale` holds the `analyse` keys that `form` of the language file names |
 | `umformen` | `{vorgabe, ziel}`: `ziel` a non-empty list of variant strings |
 | `vokabel` | `{la, de}`: `de` a non-empty list of variant strings |
 | `ableitung` | `{fremdwort, la}` |
@@ -130,7 +126,7 @@ shuffles them. `frei` has no `items`; the student checks it against
   field without a value counts as absent.
 - [E-key] A field the sections above do not name is refused.
 - [E-type] Every value has the type the sections above give it.
-- [E-code] A code is one of its list, and `person` is 1, 2 or 3.
+- [E-code] A code is one of its list in the language file.
 - [E-empty] A list marked non-empty has at least one entry.
 - [E-id-shape] Every id has the shape of its kind (section General).
 - [E-id-twice] Sentence, token, clause and task ids are unique together.

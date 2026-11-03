@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/exam.dart';
+import '../data/languages/language.dart';
 
 /// The imported exam packs, stored as their source text by pack id.
 class ExamStorage {
@@ -21,14 +22,14 @@ class ExamStorage {
   }
 
   /// Every stored pack, in import order.
-  static Future<List<Exam>> load() async => [
-    for (final source in (await _sources()).values) parseExam(source),
+  static Future<List<Exam>> load(Language language) async => [
+    for (final source in (await _sources()).values) parseExam(source, language),
   ];
 
   /// Stores [source] under its pack id, in place of a pack of the same id.
   /// Throws [ExamRejected] and stores nothing when the pack breaks a rule.
-  static Future<Exam> add(String source) async {
-    final exam = parseExam(source);
+  static Future<Exam> add(String source, Language language) async {
+    final exam = parseExam(source, language);
     final sources = await _sources()
       ..remove(exam.id);
     await _save({...sources, exam.id: source});

@@ -18,6 +18,7 @@ const toyAssets = {
   'lib/data/agite_1.yaml': '$toyDir/toy_book_1.yaml',
   'lib/data/agite_2.yaml': '$toyDir/toy_book_2.yaml',
   'lib/data/sentences.yaml': '$toyDir/toy_sentences.yaml',
+  'lib/data/languages/la.yaml': '$toyDir/toy_language.yaml',
 };
 
 /// Makes the asset bundle answer the course paths of [toyAssets] with the

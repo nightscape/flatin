@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/data/curriculum.dart';
+import 'package:latin_practice/data/exam.dart';
+import 'package:latin_practice/data/languages/language.dart';
 import 'package:latin_practice/data/lesson_data.dart';
 import 'package:latin_practice/data/sentences.dart';
 import 'package:latin_practice/grammar/engine.dart';
@@ -56,6 +58,10 @@ void main() {
         File('$toyDir/toy_sentences.yaml').readAsStringSync(),
       ).sentences,
       isEmpty,
+    );
+    parseExam(
+      File('$toyDir/toy.exam').readAsStringSync(),
+      Language.parse(File('$toyDir/toy_language.yaml').readAsStringSync()),
     );
   });
 

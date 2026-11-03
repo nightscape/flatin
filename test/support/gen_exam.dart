@@ -1,7 +1,15 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:latin_practice/data/exam.dart';
+import 'package:latin_practice/data/languages/language.dart';
+
+/// The language of the exam packs the tests draw and read.
+final latin = Language.parse(File(latinAsset).readAsStringSync());
+
+/// The codes of the `analyse` key [key] of [latin].
+List<Object> codes(String key) => latin.analyse[key]!;
 
 /// Draws valid `.exam` packs as the YAML data model of [examToYaml], and
 /// counts in [reach] which features it drew.
@@ -109,16 +117,19 @@ final class ExamGen {
   Map<String, Object> features({bool verb = false}) {
     final f = <String, Object>{};
     if (!verb || chance(0.3)) {
-      f['kasus'] = pick(Kasus.values).code;
-      f['numerus'] = pick(Numerus.values).code;
-      if (chance(0.8)) f['genus'] = pick(Genus.values).code;
+      f['kasus'] = pick(codes('kasus'));
+      f['numerus'] = pick(codes('numerus'));
+      if (chance(0.8)) f['genus'] = pick(codes('genus'));
     }
     if (verb) {
       if (chance(0.8)) f['person'] = 1 + r.nextInt(3);
-      f['numerus'] = pick(Numerus.values).code;
-      f['tempus'] = pick(Tempus.values).code;
-      f['modus'] = pick([Modus.ind, Modus.konj, Modus.imp, Modus.inf]).code;
-      f['genus_verbi'] = pick(GenusVerbi.values).code;
+      f['numerus'] = pick(codes('numerus'));
+      f['tempus'] = pick(codes('tempus'));
+      f['modus'] = pick([
+        for (final m in codes('modus'))
+          if (m != 'part') m,
+      ]);
+      f['genus_verbi'] = pick(codes('genus_verbi'));
     }
     return f;
   }
@@ -180,34 +191,34 @@ final class ExamGen {
     final letters = ('abcdefgh'.split('')..shuffle(r)).take(clauseCount);
     final clauseIds = [for (final l in letters) '$sid$l'];
     final arts = [
-      ClauseArt.haupt,
-      for (var i = 1; i < clauseCount; i++) pick(ClauseArt.values),
+      'haupt',
+      for (var i = 1; i < clauseCount; i++) pick(latin.clauseArt),
     ];
     var pcCount = 0;
     for (var i = 0; i < arts.length; i++) {
-      if (arts[i] != ClauseArt.pc) continue;
+      if (arts[i] != 'pc') continue;
       if (2 * (pcCount + 1) > n) {
-        arts[i] = ClauseArt.relativ;
+        arts[i] = 'relativ';
       } else {
         pcCount++;
       }
     }
     final superordinate = [
       for (var c = 0; c < clauseCount; c++)
-        arts[c] != ClauseArt.haupt || (clauseCount > 1 && chance(0.2)),
+        arts[c] != 'haupt' || (clauseCount > 1 && chance(0.2)),
     ];
     final ids = [for (final x in distinct(n, 30)) '${sid}_$x'];
     final kinds = <_Kind>[];
     final pcClauses = [
       for (var i = 0; i < arts.length; i++)
-        if (arts[i] == ClauseArt.pc) i,
+        if (arts[i] == 'pc') i,
     ];
     final sinnrichtung = {
-      for (final c in pcClauses) c: pick(Sinnrichtung.values),
+      for (final c in pcClauses) c: pick(latin.sinnrichtung),
     };
     final plainClauses = [
       for (var i = 0; i < arts.length; i++)
-        if (arts[i] != ClauseArt.pc) i,
+        if (arts[i] != 'pc') i,
     ];
     for (final c in pcClauses) {
       final noun = _Kind('noun', pick(plainClauses))..participleBezug = true;
@@ -291,14 +302,14 @@ final class ExamGen {
         for (final id in clauseIds)
           if (id != clauseIds[c]) id,
       ];
-      hit('clause ${arts[c].code}');
+      hit('clause ${arts[c]}');
       teilsaetze.add({
         'id': clauseIds[c],
-        'art': arts[c].code,
+        'art': arts[c],
         'tokens': members,
         if (superordinate[c])
           'uebergeordnet': others.isEmpty ? clauseIds[c] : pick(others),
-        if (arts[c] == ClauseArt.pc) 'sinnrichtung': sinnrichtung[c]!.code,
+        if (arts[c] == 'pc') 'sinnrichtung': sinnrichtung[c]!,
         'de': variants(0, 2),
         'ausrichtung': ausrichtung,
       });
@@ -314,7 +325,7 @@ final class ExamGen {
   Map<String, Object> _token(
     _Kind k,
     List<_Kind> wordKinds,
-    Sinnrichtung? sinnrichtung,
+    String? sinnrichtung,
     bool subordinate,
   ) {
     if (k.name == 'punct') {
@@ -327,78 +338,74 @@ final class ExamGen {
     String other() =>
         (wordKinds.length > 1 ? pick([...wordKinds]..remove(k)) : k).id;
     final t = <String, Object>{'id': k.id, 'la': pick(_latin)};
-    void word(String lemma, Wortart wortart, Map<String, Object> f) {
+    void word(String lemma, String wortart, Map<String, Object> f) {
       t['lemma'] = lemma;
-      t['analyse'] = {'wortart': wortart.code, ...f};
+      t['analyse'] = {'wortart': wortart, ...f};
     }
 
     switch (k.name) {
       case 'noun':
         final f = features();
-        if (k.participleBezug) f['genus'] ??= pick(Genus.values).code;
-        if (chance(0.1)) f['funktion'] = pick(Funktion.values).code;
-        word(pick(['lupus', 'silva', 'iter']), Wortart.subst, f);
+        if (k.participleBezug) f['genus'] ??= pick(codes('genus'));
+        if (chance(0.1)) f['funktion'] = pick(codes('funktion'));
+        word(pick(['lupus', 'silva', 'iter']), 'subst', f);
         k.features = f;
         if (chance(0.7)) {
           t['rolle'] = pick([
-            Rolle.subjekt,
-            Rolle.objekt,
-            Rolle.adverbiale,
-            Rolle.praedikatsnomen,
-            Rolle.anrede,
-          ]).code;
+            'subjekt',
+            'objekt',
+            'adverbiale',
+            'praedikatsnomen',
+            'anrede',
+          ]);
         }
         if (chance(0.1)) t['bezug'] = other();
       case 'adj':
-        word('magnus', Wortart.adj, features());
-        t['rolle'] = pick([Rolle.attribut, Rolle.praedikativum]).code;
+        word('magnus', 'adj', features());
+        t['rolle'] = pick(['attribut', 'praedikativum']);
         t['bezug'] = other();
       case 'relpron':
         hit('relative pronoun');
-        word('quī', Wortart.pron, {...features(), 'pronomen': 'relativ'});
-        t['rolle'] = pick([Rolle.subjekt, Rolle.objekt]).code;
+        word('quī', 'pron', {...features(), 'pronomen': 'relativ'});
+        t['rolle'] = pick(['subjekt', 'objekt']);
         t['bezug'] = other();
       case 'pron':
         final pronomen = pick([
-          for (final p in Pronomen.values)
-            if (p != Pronomen.relativ) p,
+          for (final p in codes('pronomen'))
+            if (p != 'relativ') p,
         ]);
-        word('is', Wortart.pron, {
+        word('is', 'pron', {
           ...features(),
-          if (pronomen == Pronomen.personal) 'person': 1 + r.nextInt(3),
-          'pronomen': pronomen.code,
+          if (pronomen == 'personal') 'person': 1 + r.nextInt(3),
+          'pronomen': pronomen,
         });
       case 'verb':
         final f = features(verb: true);
         if (f['genus_verbi'] == 'pass') {
           f['tempus'] = pick(['praes', 'impf', 'fut']);
         }
-        word(pick(['vidēre', 'ire']), Wortart.verb, f);
-        t['rolle'] = Rolle.praedikat.code;
+        word(pick(['vidēre', 'ire']), 'verb', f);
+        t['rolle'] = 'praedikat';
       case 'enclitic':
         hit('enclitic');
         t['la'] = '-ne';
-        word('-ne', Wortart.partikel, {});
+        word('-ne', 'partikel', {});
       case 'conj':
-        word('et', pick([Wortart.konjunktion, Wortart.subjunktion]), {});
+        word('et', pick(['konjunktion', 'subjunktion']), {});
       case 'adv':
-        word('saepe', pick([Wortart.adv, Wortart.praep]), {});
-        if (chance(0.5)) t['rolle'] = Rolle.adverbiale.code;
+        word('saepe', pick(['adv', 'praep']), {});
+        if (chance(0.5)) t['rolle'] = 'adverbiale';
       case 'participle':
         hit('participium coniunctum');
         final b = k.bezug!;
-        word('laudāre', Wortart.verb, {
+        word('laudāre', 'verb', {
           for (final key in ['kasus', 'numerus', 'genus'])
             if (b.features.containsKey(key)) key: b.features[key]!,
           'tempus': 'perf',
           'modus': 'part',
           'genus_verbi': 'pass',
         });
-        t['rolle'] =
-            (sinnrichtung == Sinnrichtung.attributiv
-                    ? Rolle.attribut
-                    : Rolle.adverbiale)
-                .code;
+        t['rolle'] = sinnrichtung == 'attributiv' ? 'attribut' : 'adverbiale';
         t['bezug'] = b.id;
       case 'ppp' || 'esse':
         final ppp = k.name == 'ppp' ? k : k.pair!;
@@ -407,21 +414,19 @@ final class ExamGen {
           final infinitive = chance(0.25);
           if (infinitive) hit('infinitive passive');
           k.features = {
-            'kasus': pick(Kasus.values).code,
-            'numerus': pick(Numerus.values).code,
-            'genus': pick(Genus.values).code,
+            'kasus': pick(codes('kasus')),
+            'numerus': pick(codes('numerus')),
+            'genus': pick(codes('genus')),
             if (!infinitive) 'person': 1 + r.nextInt(3),
-            'tempus': infinitive
-                ? 'perf'
-                : pick([Tempus.perf, Tempus.plusq, Tempus.fut2]).code,
-            'modus': infinitive ? 'inf' : pick([Modus.ind, Modus.konj]).code,
+            'tempus': infinitive ? 'perf' : pick(['perf', 'plusq', 'fut2']),
+            'modus': infinitive ? 'inf' : pick(['ind', 'konj']),
             'genus_verbi': 'pass',
           };
-          word('portāre', Wortart.verb, k.features);
+          word('portāre', 'verb', k.features);
         } else {
-          word('esse', Wortart.verb, _esseFeatures(ppp));
+          word('esse', 'verb', _esseFeatures(ppp));
         }
-        t['rolle'] = Rolle.praedikat.code;
+        t['rolle'] = 'praedikat';
         t['verbform'] = [ppp.id, ppp.pair!.id];
     }
     return t;
@@ -733,9 +738,26 @@ String? breakRule(ExamRule rule, Map<String, dynamic> exam, Random r) {
       final (list, path) = pick(lists);
       return '$path${add(list, null)}';
     case ExamRule.code:
-      final c = pick(clauses);
-      c.node['art'] = 'nebensatz';
-      return '${c.path}.art';
+      final sites = <(Map, String, String, List<Object>)>[
+        for (final c in clauses) ...[
+          (c.node, 'art', c.path, latin.clauseArt),
+          if (c.node.containsKey('sinnrichtung'))
+            (c.node, 'sinnrichtung', c.path, latin.sinnrichtung),
+        ],
+        for (final t in words) ...[
+          if (t.node.containsKey('rolle'))
+            (t.node, 'rolle', t.path, latin.rolle),
+          for (final key in (t.node['analyse'] as Map).keys)
+            (t.node['analyse'], key, '${t.path}.analyse', codes(key)),
+        ],
+        for (final i in items('bilden'))
+          for (final key in (i.node['merkmale'] as Map).keys)
+            (i.node['merkmale'], key, '${i.path}.merkmale', codes(key)),
+      ];
+      final (node, key, path, valid) = pick(sites);
+      node[key] = valid.first is int ? valid.length + 1 : '${node[key]}_x';
+      assert(!valid.contains(node[key]));
+      return '$path.$key';
     case ExamRule.empty:
       final s = pick(saetze);
       s.node['de'] = [];
@@ -1111,9 +1133,7 @@ String? breakRule(ExamRule rule, Map<String, dynamic> exam, Random r) {
             case 'modus':
               a['modus'] = a['modus'] == 'ind' ? 'konj' : 'ind';
             case 'tempus':
-              a['tempus'] = other(a['tempus'], [
-                for (final t in Tempus.values) t.code,
-              ]);
+              a['tempus'] = other(a['tempus'], codes('tempus'));
             case 'numerus':
               a['numerus'] = a['numerus'] == 'sg' ? 'pl' : 'sg';
             case 'person':
@@ -1212,8 +1232,8 @@ String? breakRule(ExamRule rule, Map<String, dynamic> exam, Random r) {
       return from(items('wissen_mc'), (i) {
         final c = pick(pcs);
         final wrong = pick([
-          for (final s in Sinnrichtung.values)
-            if (s.code != c.node['sinnrichtung']) s.code,
+          for (final s in latin.sinnrichtung)
+            if (s != c.node['sinnrichtung']) s,
         ]);
         i.node['teilsatz'] = c.node['id'];
         i.node['richtig'] = wrong;

@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:yaml/yaml.dart';
 
+import 'languages/language.dart';
+
 /// The rules of lib/data/EXAM_SCHEMA.md, by the id an [ExamError] names.
 enum ExamRule {
   yaml('E-yaml'),
@@ -86,111 +88,11 @@ extension ExamCode on Enum {
       name.replaceAllMapped(RegExp('[A-Z]'), (m) => '_${m[0]!.toLowerCase()}');
 }
 
-enum Wortart {
-  subst,
-  adj,
-  verb,
-  pron,
-  adv,
-  praep,
-  konjunktion,
-  subjunktion,
-  partikel,
-}
-
-enum Kasus { nom, gen, dat, akk, abl, vok }
-
-enum Numerus { sg, pl }
-
-enum Genus { m, f, n }
-
-enum Tempus { praes, impf, perf, plusq, fut, fut2 }
-
-enum Modus { ind, konj, imp, inf, part }
-
-enum GenusVerbi { akt, pass }
-
-enum Pronomen {
-  personal,
-  relativ,
-  interrogativSubst,
-  interrogativAdj,
-  demonstrativ,
-  possessiv,
-  reflexiv,
-}
-
-enum Funktion { genSubj, genObj }
-
-enum Rolle {
-  praedikat,
-  subjekt,
-  objekt,
-  adverbiale,
-  attribut,
-  praedikatsnomen,
-  praedikativum,
-  anrede,
-}
-
-enum ClauseArt {
-  haupt,
-  temporal,
-  kausal,
-  kondizional,
-  konzessiv,
-  relativ,
-  aci,
-  pc,
-}
-
-enum Sinnrichtung { temporal, kausal, konzessiv, kondizional, attributiv }
-
-/// The grammatical features of a form; a feature the form lacks is null.
-final class Features {
-  final Kasus? kasus;
-  final Numerus? numerus;
-  final Genus? genus;
-  final int? person;
-  final Tempus? tempus;
-  final Modus? modus;
-  final GenusVerbi? genusVerbi;
-
-  const Features({
-    this.kasus,
-    this.numerus,
-    this.genus,
-    this.person,
-    this.tempus,
-    this.modus,
-    this.genusVerbi,
-  });
-
-  /// The YAML keys of the features that are set.
-  Map<String, Object> get codes => {
-    'kasus': ?kasus?.code,
-    'numerus': ?numerus?.code,
-    'genus': ?genus?.code,
-    'person': ?person,
-    'tempus': ?tempus?.code,
-    'modus': ?modus?.code,
-    'genus_verbi': ?genusVerbi?.code,
-  };
-}
-
+/// The `analyse` of a word token: a code per key of the language, in the
+/// language's order.
 final class Analyse {
-  final Wortart wortart;
-  final Features features;
-  final Pronomen? pronomen;
-  final Funktion? funktion;
-  const Analyse(this.wortart, this.features, {this.pronomen, this.funktion});
-
-  Map<String, Object> get codes => {
-    'wortart': wortart.code,
-    ...features.codes,
-    'pronomen': ?pronomen?.code,
-    'funktion': ?funktion?.code,
-  };
+  final Codes codes;
+  const Analyse(this.codes);
 }
 
 sealed class ExamToken {
@@ -207,7 +109,7 @@ final class PunctuationToken extends ExamToken {
 final class WordToken extends ExamToken {
   final String lemma;
   final Analyse analyse;
-  final Rolle? rolle;
+  final String? rolle;
   final String? bezug;
 
   /// The PPP and the `esse` token of a compound passive form.
@@ -232,10 +134,10 @@ final class Alignment {
 
 final class Clause {
   final String id;
-  final ClauseArt art;
+  final String art;
   final List<String> tokens;
   final String? uebergeordnet;
-  final Sinnrichtung? sinnrichtung;
+  final String? sinnrichtung;
   final List<String> de;
   final List<Alignment> ausrichtung;
 
@@ -298,7 +200,7 @@ final class StammformenItem extends TaskItem {
 
 final class BildenItem extends TaskItem {
   final String lemma;
-  final Features merkmale;
+  final Codes merkmale;
   final String form;
   const BildenItem(this.lemma, this.merkmale, this.form, super.punkte);
 }
@@ -427,9 +329,10 @@ final class Exam {
   });
 }
 
-/// Parses a `.exam` pack and checks every rule of EXAM_SCHEMA.md; throws
-/// [ExamRejected] when the pack breaks one.
-Exam parseExam(String source) {
+/// Parses a `.exam` pack and checks every rule of EXAM_SCHEMA.md with the
+/// codes and rule parameters of [language]; throws [ExamRejected] when the
+/// pack breaks one.
+Exam parseExam(String source, Language language) {
   final Object? yaml;
   try {
     yaml = loadYaml(source);
@@ -440,11 +343,11 @@ Exam parseExam(String source) {
   }
   final Exam exam;
   try {
-    exam = _whole(_Map(yaml, 'exam'), _exam);
+    exam = _whole(_Map(yaml, 'exam', language), _exam);
   } on ExamError catch (e) {
     throw ExamRejected([e]);
   }
-  final errors = _Checker(exam).run();
+  final errors = _Checker(exam, language).run();
   if (errors.isNotEmpty) throw ExamRejected(errors);
   return exam;
 }
@@ -487,7 +390,7 @@ Map<String, Object> _sentenceToYaml(ExamSentence s) => {
           'la': t.la,
           'lemma': t.lemma,
           'analyse': t.analyse.codes,
-          'rolle': ?t.rolle?.code,
+          'rolle': ?t.rolle,
           'bezug': ?t.bezug,
           'verbform': ?t.verbform,
         },
@@ -497,10 +400,10 @@ Map<String, Object> _sentenceToYaml(ExamSentence s) => {
     for (final c in s.teilsaetze)
       {
         'id': c.id,
-        'art': c.art.code,
+        'art': c.art,
         'tokens': c.tokens,
         'uebergeordnet': ?c.uebergeordnet,
-        'sinnrichtung': ?c.sinnrichtung?.code,
+        'sinnrichtung': ?c.sinnrichtung,
         'de': c.de,
         'ausrichtung': [
           for (final a in c.ausrichtung) {'tokens': a.tokens, 'de': a.de},
@@ -529,11 +432,7 @@ Map<String, Object> _itemToYaml(TaskItem i) => {
   ...switch (i) {
     BestimmenItem() => {'token': i.token, 'merkmale': i.merkmale},
     StammformenItem() => {'lemma': i.lemma, 'stammformen': i.stammformen},
-    BildenItem() => {
-      'lemma': i.lemma,
-      'merkmale': i.merkmale.codes,
-      'form': i.form,
-    },
+    BildenItem() => {'lemma': i.lemma, 'merkmale': i.merkmale, 'form': i.form},
     UmformenItem() => {'vorgabe': i.vorgabe, 'ziel': i.ziel},
     VokabelItem() => {'la': i.la, 'de': i.de},
     AbleitungItem() => {'fremdwort': i.fremdwort, 'la': i.la},
@@ -601,9 +500,11 @@ String _normalize(String s) => s.replaceAll(RegExp(r'\s+'), ' ').trim();
 final class _Map {
   final YamlMap _map;
   final String path;
+  final Language language;
   final _read = <String>{};
 
-  _Map(Object? node, this.path) : _map = _cast<YamlMap>(node, path);
+  _Map(Object? node, this.path, this.language)
+    : _map = _cast<YamlMap>(node, path);
 
   bool has(String key) => _map.containsKey(key);
 
@@ -623,11 +524,11 @@ final class _Map {
   }
 
   T map<T>(String key, T Function(_Map) build) =>
-      _whole(_Map(req<YamlMap>(key), '$path.$key'), build);
+      _whole(_Map(req<YamlMap>(key), '$path.$key', language), build);
 
   List<T> maps<T>(String key, T Function(_Map) build) => [
     for (final (i, m) in req<YamlList>(key).indexed)
-      _whole(_Map(m, '$path.$key[$i]'), build),
+      _whole(_Map(m, '$path.$key[$i]', language), build),
   ];
 
   List<T> list<T>(String key) => [
@@ -643,12 +544,22 @@ final class _Map {
     return values;
   }
 
-  E code<E extends Enum>(String key, List<E> values) =>
-      _code(req<String>(key), values, '$path.$key');
+  Object code(String key, List<Object> codes) =>
+      optCode(key, codes) ?? req<Object>(key);
 
-  E? optCode<E extends Enum>(String key, List<E> values) {
-    final name = opt<String>(key);
-    return name == null ? null : _code(name, values, '$path.$key');
+  /// A value of the type of [codes] that is one of them.
+  Object? optCode(String key, List<Object> codes) {
+    final Object? value = codes.firstOrNull is int
+        ? opt<int>(key)
+        : opt<String>(key);
+    if (value != null && !codes.contains(value)) {
+      throw ExamError(
+        ExamRule.code,
+        '$path.$key',
+        '$value is not one of $codes',
+      );
+    }
+    return value;
   }
 }
 
@@ -667,13 +578,6 @@ T _cast<T>(Object? value, String path) {
     throw ExamError(ExamRule.type, path, '${value.runtimeType} is not $T');
   }
   return value;
-}
-
-E _code<E extends Enum>(String name, List<E> values, String path) {
-  for (final v in values) {
-    if (v.code == name) return v;
-  }
-  throw ExamError(ExamRule.code, path, '"$name" is not one of $values');
 }
 
 Exam _exam(_Map m) {
@@ -734,43 +638,34 @@ ExamToken _token(_Map m) {
     id,
     la,
     m.req('lemma'),
-    m.map(
-      'analyse',
-      (a) => Analyse(
-        a.code('wortart', Wortart.values),
-        _features(a),
-        pronomen: a.optCode('pronomen', Pronomen.values),
-        funktion: a.optCode('funktion', Funktion.values),
-      ),
-    ),
-    rolle: m.optCode('rolle', Rolle.values),
+    m.map('analyse', _analyse),
+    rolle: m.optCode('rolle', m.language.rolle) as String?,
     bezug: m.opt('bezug'),
     verbform: m.opt<YamlList>('verbform') == null ? null : m.list('verbform'),
   );
 }
 
-Features _features(_Map m) {
-  final person = m.opt<int>('person');
-  if (person != null && (person < 1 || person > 3)) {
-    throw ExamError(ExamRule.code, '${m.path}.person', '$person is not 1-3');
-  }
-  return Features(
-    kasus: m.optCode('kasus', Kasus.values),
-    numerus: m.optCode('numerus', Numerus.values),
-    genus: m.optCode('genus', Genus.values),
-    person: person,
-    tempus: m.optCode('tempus', Tempus.values),
-    modus: m.optCode('modus', Modus.values),
-    genusVerbi: m.optCode('genus_verbi', GenusVerbi.values),
-  );
+Analyse _analyse(_Map m) {
+  final language = m.language;
+  return Analyse({
+    for (final MapEntry(:key, :value) in language.analyse.entries)
+      key: ?(key == language.wordClass
+          ? m.code(key, value)
+          : m.optCode(key, value)),
+  });
 }
+
+Codes _features(_Map m) => {
+  for (final key in m.language.form)
+    key: ?m.optCode(key, m.language.analyse[key]!),
+};
 
 Clause _clause(_Map m) => Clause(
   id: m.req('id'),
-  art: m.code('art', ClauseArt.values),
+  art: m.code('art', m.language.clauseArt) as String,
   tokens: m.list('tokens'),
   uebergeordnet: m.opt('uebergeordnet'),
-  sinnrichtung: m.optCode('sinnrichtung', Sinnrichtung.values),
+  sinnrichtung: m.optCode('sinnrichtung', m.language.sinnrichtung) as String?,
   de: m.list('de'),
   ausrichtung: m.maps(
     'ausrichtung',
@@ -789,7 +684,13 @@ ExamTask _task(_Map m) {
     return OrdnenTask(id, titel, punkte, frage, loesung, m.list('elemente'));
   }
   if (art == 'frei') return FreiTask(id, titel, punkte, frage, loesung);
-  final itemArt = _code(art, ItemArt.values, '${m.path}.art');
+  final itemArt =
+      ItemArt.values.where((a) => a.code == art).firstOrNull ??
+      (throw ExamError(
+        ExamRule.code,
+        '${m.path}.art',
+        '$art is not one of ${ItemArt.values}',
+      ));
   final items = m.maps('items', (i) => _item(i, itemArt));
   if (items.isEmpty) {
     throw ExamError(ExamRule.empty, '${m.path}.items', 'the list is empty');
@@ -862,34 +763,20 @@ final _taskId = RegExp(r'^[a-z]\d+$');
 
 final _space = RegExp(r'\s');
 const _sentenceEnds = {'.', '?', '!'};
-const _withoutRolle = {
-  Wortart.partikel,
-  Wortart.konjunktion,
-  Wortart.subjunktion,
-};
-
-const _esseTempus = {
-  Tempus.perf: Tempus.praes,
-  Tempus.plusq: Tempus.impf,
-  Tempus.fut2: Tempus.fut,
-};
-
-/// A passive form of the perfect stem written with `esse`.
-bool _compoundPassive(Features f) =>
-    f.genusVerbi == GenusVerbi.pass &&
-    _esseTempus.containsKey(f.tempus) &&
-    f.modus != Modus.part;
-
 final _word = RegExp(r'\S+');
 
 final class _Checker {
   final Exam exam;
+  final ExamRules rules;
+  final String wordClass;
   final errors = <ExamError>[];
   final tokens = <String, ExamToken>{};
   final clauseOf = <String, Clause>{};
   final clauses = <String, Clause>{};
 
-  _Checker(this.exam) {
+  _Checker(this.exam, Language language)
+    : rules = language.rules,
+      wordClass = language.wordClass {
     for (final s in exam.saetze) {
       for (final t in s.tokens) {
         tokens[t.id] = t;
@@ -905,6 +792,15 @@ final class _Checker {
 
   void error(ExamRule rule, String path, String detail) =>
       errors.add(ExamError(rule, path, detail));
+
+  bool isParticiple(Codes f) =>
+      rules.participle != null && matches(f, rules.participle!.isA);
+
+  /// A compound form: a perfect passive that is not a participle.
+  bool isCompound(Codes f) =>
+      rules.compound != null &&
+      rules.compound!.perfectPassive(f) &&
+      !isParticiple(f);
 
   void variant(String s, String path) {
     try {
@@ -1034,12 +930,10 @@ final class _Checker {
   }
 
   void clause(Clause c, String path, Set<String> siblings) {
-    if (c.art == ClauseArt.pc) {
+    if (rules.participle case final p? when c.art == p.clause) {
       final participles = [
         for (final id in c.tokens)
-          if (tokens[id] case WordToken t
-              when t.analyse.features.modus == Modus.part)
-            t,
+          if (tokens[id] case WordToken t when isParticiple(t.analyse.codes)) t,
       ];
       if (c.sinnrichtung == null ||
           c.uebergeordnet == null ||
@@ -1050,9 +944,7 @@ final class _Checker {
           'needs sinnrichtung, uebergeordnet and one participle',
         );
       } else if (participles.single.rolle !=
-          (c.sinnrichtung == Sinnrichtung.attributiv
-              ? Rolle.attribut
-              : Rolle.adverbiale)) {
+          (p.rolleBySinnrichtung[c.sinnrichtung] ?? p.otherRolle)) {
         error(
           ExamRule.pcRolle,
           path,
@@ -1073,7 +965,7 @@ final class _Checker {
         'no clause "$u" in the sentence',
       );
     }
-    if (c.art != ClauseArt.haupt && c.uebergeordnet == null) {
+    if (c.art != rules.mainClause && c.uebergeordnet == null) {
       error(ExamRule.uebergeordnet, path, 'a subordinate clause needs one');
     }
     for (final (j, v) in c.de.indexed) {
@@ -1119,10 +1011,9 @@ final class _Checker {
         );
       }
     }
-    final a = t.analyse;
-    if ((t.rolle == Rolle.attribut ||
-            t.rolle == Rolle.praedikativum ||
-            a.pronomen == Pronomen.relativ) &&
+    final f = t.analyse.codes;
+    final withRolle = {...f, 'rolle': ?t.rolle};
+    if (rules.needsBezug.any((want) => matches(withRolle, want)) &&
         t.bezug == null) {
       error(
         ExamRule.bezugMissing,
@@ -1130,46 +1021,49 @@ final class _Checker {
         'an attribute, praedikativum or relative pronoun needs bezug',
       );
     }
-    if (_withoutRolle.contains(a.wortart) && t.rolle != null) {
-      error(ExamRule.rolleNone, path, '${a.wortart.code} has no rolle');
+    if (rules.noRole.contains(f[wordClass]) && t.rolle != null) {
+      error(ExamRule.rolleNone, path, '${f[wordClass]} has no rolle');
     }
-    final f = a.features;
-    if (a.wortart == Wortart.verb &&
-        _compoundPassive(f) &&
-        t.verbform == null) {
-      error(
-        ExamRule.verbformMissing,
-        path,
-        'a compound passive needs verbform',
-      );
+    if (rules.compound case final c?) {
+      if (matches(f, c.verb) && isCompound(f) && t.verbform == null) {
+        error(
+          ExamRule.verbformMissing,
+          path,
+          'a compound passive needs verbform',
+        );
+      }
+      if (c.perfectPassive(f) && !c.marks.every(f.containsKey)) {
+        error(ExamRule.pppKasusGenus, path, 'a PPP has kasus and genus');
+      }
     }
-    if (f.genusVerbi == GenusVerbi.pass &&
-        _esseTempus.containsKey(f.tempus) &&
-        (f.kasus == null || f.genus == null)) {
-      error(ExamRule.pppKasusGenus, path, 'a PPP has kasus and genus');
-    }
-    if (a.pronomen == Pronomen.personal && f.person == null ||
-        f.modus == Modus.part && f.person != null) {
+    if (rules.person case final p?
+        when matches(f, p.neededBy) && !f.containsKey(p.key) ||
+            isParticiple(f) && f.containsKey(p.key)) {
       error(
         ExamRule.person,
         path,
         'a personal pronoun has person, a participle has none',
       );
     }
-    if (t.verbform case final pair? when pair.every(own.contains)) {
-      verbform(t, pair, '$path.verbform');
+    if ((rules.compound, t.verbform) case (
+      final c?,
+      final pair?,
+    ) when pair.every(own.contains)) {
+      verbform(c, t, pair, '$path.verbform');
     }
-    if (a.features.modus == Modus.part) participle(t, path);
+    if (rules.participle case final p? when isParticiple(f)) {
+      participle(p, t, path);
+    }
   }
 
-  void verbform(WordToken t, List<String> pair, String path) {
+  void verbform(CompoundRule c, WordToken t, List<String> pair, String path) {
     final members = [for (final id in pair) tokens[id]!];
     if (pair.length != 2 ||
         !pair.contains(t.id) ||
         members.any(
           (m) =>
               m is! WordToken ||
-              m.rolle != Rolle.praedikat ||
+              m.rolle != c.rolle ||
               !_sameList(m.verbform, pair),
         )) {
       error(
@@ -1179,32 +1073,30 @@ final class _Checker {
       );
       return;
     }
-    final [ppp as WordToken, esse as WordToken] = members;
-    if (esse.lemma != 'esse' ||
-        ppp.lemma == 'esse' ||
-        ppp.analyse.features.genusVerbi != GenusVerbi.pass) {
+    final [ppp as WordToken, aux as WordToken] = members;
+    if (aux.lemma != c.aux ||
+        ppp.lemma == c.aux ||
+        !matches(ppp.analyse.codes, c.passive)) {
       error(ExamRule.verbformPair, path, 'not a PPP and an esse token');
       return;
     }
-    final p = ppp.analyse.features;
-    final e = esse.analyse.features;
-    if (e.genusVerbi != GenusVerbi.akt) {
+    final p = ppp.analyse.codes;
+    final e = aux.analyse.codes;
+    if (!matches(e, c.auxForm)) {
       error(ExamRule.verbformEsse, path, 'the esse token is not active');
     }
-    final agrees = p.modus == Modus.inf
-        ? e.modus == Modus.inf && e.tempus == Tempus.praes
-        : e.tempus == _esseTempus[p.tempus] &&
-              e.person == p.person &&
-              e.numerus == p.numerus &&
-              e.modus == p.modus;
+    final agrees = matches(p, c.infinitive)
+        ? matches(e, c.infinitiveAux)
+        : e[c.tense] == c.tenseMap[p[c.tense]] &&
+              c.agrees.every((key) => e[key] == p[key]);
     if (!agrees) {
       error(ExamRule.verbformAgree, path, 'the PPP and esse do not agree');
     }
   }
 
-  void participle(WordToken t, String path) {
-    final p = t.analyse.features;
-    if (p.tempus != Tempus.perf || p.genusVerbi != GenusVerbi.pass) {
+  void participle(ParticipleRule rule, WordToken t, String path) {
+    final p = t.analyse.codes;
+    if (!matches(p, rule.form)) {
       error(ExamRule.participlePpp, path, 'a participle is perf pass');
     }
     final c = clauseOf[t.id];
@@ -1212,7 +1104,7 @@ final class _Checker {
     final b = tokens[t.bezug];
     if (t.verbform != null ||
         b == null ||
-        c.art != ClauseArt.pc ||
+        c.art != rule.clause ||
         c.tokens.contains(b.id)) {
       error(
         ExamRule.participle,
@@ -1221,8 +1113,8 @@ final class _Checker {
       );
       return;
     }
-    final f = b is WordToken ? b.analyse.features : const Features();
-    if (p.kasus != f.kasus || p.numerus != f.numerus || p.genus != f.genus) {
+    final f = b is WordToken ? b.analyse.codes : const <String, Object>{};
+    if (rule.agrees.any((key) => p[key] != f[key])) {
       error(ExamRule.participleKng, path, 'KNG differs from its bezug');
     }
   }
@@ -1283,7 +1175,7 @@ final class _Checker {
               '$path.teilsatz',
               'no clause "$teilsatz"',
             );
-          } else if (c.sinnrichtung?.code != richtig) {
+          } else if (c.sinnrichtung != richtig) {
             error(
               ExamRule.mcSinnrichtung,
               '$path.richtig',
@@ -1300,7 +1192,7 @@ final class _Checker {
           variant(v, '$path.de[$j]');
         }
       case BildenItem(:final merkmale, :final form):
-        if (_compoundPassive(merkmale) && _word.allMatches(form).length != 2) {
+        if (isCompound(merkmale) && _word.allMatches(form).length != 2) {
           error(
             ExamRule.bildenForm,
             '$path.form',

@@ -1,0 +1,49 @@
+# The Latin language: the analysis codes of `.exam` packs
+# (lib/data/EXAM_SCHEMA.md) and the parameters of the exam rules.
+id: la
+name: {de: Latein, en: Latin}
+
+# The keys of a word token's `analyse` and their codes, in display order.
+analyse:
+  wortart: [subst, adj, verb, pron, adv, praep, konjunktion, subjunktion, partikel]
+  kasus: [nom, gen, dat, akk, abl, vok]
+  numerus: [sg, pl]
+  genus: [m, f, n]
+  person: [1, 2, 3]
+  tempus: [praes, impf, perf, plusq, fut, fut2]
+  modus: [ind, konj, imp, inf, part]
+  genus_verbi: [akt, pass]
+  pronomen: [personal, relativ, interrogativ_subst, interrogativ_adj, demonstrativ, possessiv, reflexiv]
+  funktion: [gen_subj, gen_obj]
+# The one key every `analyse` has.
+word_class: wortart
+# The keys of the `merkmale` of a `bilden` item.
+form: [kasus, numerus, genus, person, tempus, modus, genus_verbi]
+rolle: [praedikat, subjekt, objekt, adverbiale, attribut, praedikatsnomen, praedikativum, anrede]
+clause:
+  art: [haupt, temporal, kausal, kondizional, konzessiv, relativ, aci, pc]
+  sinnrichtung: [temporal, kausal, konzessiv, kondizional, attributiv]
+
+# A constraint `{key: code}` matches a word token whose `analyse` (or
+# `rolle`) has each code.
+rules:
+  main_clause: haupt
+  no_role: [partikel, konjunktion, subjunktion]
+  needs_bezug: [{rolle: attribut}, {rolle: praedikativum}, {pronomen: relativ}]
+  person: {key: person, needed_by: {pronomen: personal}}
+  participle:
+    is: {modus: part}
+    form: {tempus: perf, genus_verbi: pass}
+    agrees: [kasus, numerus, genus]
+    clause: pc
+    rolle: {by_sinnrichtung: {attributiv: attribut}, otherwise: adverbiale}
+  compound:
+    verb: {wortart: verb}
+    passive: {genus_verbi: pass}
+    tense: tempus
+    tense_map: {perf: praes, plusq: impf, fut2: fut}
+    marks: [kasus, genus]
+    aux: {lemma: esse, form: {genus_verbi: akt}}
+    rolle: praedikat
+    agrees: [person, numerus, modus]
+    infinitive: {is: {modus: inf}, aux: {modus: inf, tempus: praes}}

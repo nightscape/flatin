@@ -3,11 +3,13 @@
 import 'dart:io';
 
 import 'package:latin_practice/data/exam.dart';
+import 'package:latin_practice/data/languages/language.dart';
 
 void main(List<String> paths) {
+  final latin = Language.parse(File(latinAsset).readAsStringSync());
   for (final (i, path) in paths.indexed) {
     try {
-      parseExam(File(path).readAsStringSync());
+      parseExam(File(path).readAsStringSync(), latin);
       stdout.writeln('$i OK');
     } on ExamRejected catch (e) {
       for (final error in e.errors) {

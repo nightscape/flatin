@@ -1,7 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart' show WidgetRef;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../data/asset_text.dart';
 import '../data/exam.dart';
+import '../data/languages/language.dart';
 import '../data/practice_data.dart';
 import '../models/fsrs_card.dart';
 import '../services/exam_storage.dart';
@@ -11,21 +13,30 @@ import 'locale_provider.dart';
 
 part 'exam_provider.g.dart';
 
+/// The language whose codes and rules the exam packs use.
+@riverpod
+Future<Language> examLanguage(Ref ref) async =>
+    Language.parse(await loadAssetText(latinAsset));
+
 /// The imported exam packs.
 @riverpod
 class ExamPacks extends _$ExamPacks {
   @override
-  Future<List<Exam>> build() => ExamStorage.load();
+  Future<List<Exam>> build() async =>
+      ExamStorage.load(await ref.watch(examLanguageProvider.future));
 
   /// Throws [ExamRejected] and keeps the list when the pack breaks a rule.
   Future<void> import(String source) async {
-    await ExamStorage.add(source);
-    state = AsyncValue.data(await ExamStorage.load());
+    final language = await ref.read(examLanguageProvider.future);
+    await ExamStorage.add(source, language);
+    state = AsyncValue.data(await ExamStorage.load(language));
   }
 
   Future<void> delete(String id) async {
     await ExamStorage.delete(id);
-    state = AsyncValue.data(await ExamStorage.load());
+    state = AsyncValue.data(
+      await ExamStorage.load(await ref.read(examLanguageProvider.future)),
+    );
   }
 }
 
