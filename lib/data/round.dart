@@ -103,14 +103,15 @@ RoundState startRound(List<RoundTask> tasks) {
   );
 }
 
-/// n = counted first attempts of a bundle, e = those rated Again. All right is
-/// Good; half or more Again is Again; anything between is Hard.
+/// n = counted first attempts of a bundle, e = those rated Again. Half or more
+/// Again is Again; all Good is Good; anything between is Hard, so a Hard first
+/// attempt never ends better than Hard.
 Rating aggregate(List<Rating> firstAttempts) {
   assert(firstAttempts.isNotEmpty);
   final e = firstAttempts.where((r) => r == Rating.again).length;
-  if (e == 0) return Rating.good;
   if (2 * e >= firstAttempts.length) return Rating.again;
-  return Rating.hard;
+  if (e > 0 || firstAttempts.contains(Rating.hard)) return Rating.hard;
+  return Rating.good;
 }
 
 /// One rating per grammar card with a counted first attempt.

@@ -6,12 +6,19 @@ import 'package:latin_practice/data/attribution.dart';
 import 'package:latin_practice/data/round.dart';
 import 'package:latin_practice/models/exercise.dart';
 
+import 'support/gen_round.dart';
 import 'support/hand_items.dart';
 
 const _right = (word: Rating.good, grammar: Rating.good);
 const _wrong = (word: Rating.again, grammar: Rating.again);
 const _wordOnly = (word: Rating.again, grammar: null);
 const _grammarOnly = (word: Rating.good, grammar: Rating.again);
+const _grammarHard = (word: Rating.good, grammar: Rating.hard);
+const _notRight = [_wrong, _wordOnly, _grammarOnly, _grammarHard];
+
+const _g = Rating.good;
+const _h = Rating.hard;
+const _a = Rating.again;
 
 final _word = handItem(
   dataFileId: 'verbs',
@@ -160,14 +167,23 @@ void main() {
   });
 
   group('aggregate', () {
-    const g = Rating.good;
-    const a = Rating.again;
-    test('table', () {
-      expect(aggregate([g]), Rating.good);
-      expect(aggregate([a]), Rating.again);
-      expect(aggregate([g, g, g, a]), Rating.hard);
-      expect(aggregate([g, a]), Rating.again);
-      expect(aggregate([g, g, a, a]), Rating.again);
+    test('follows the round rule on first-attempt lists', () {
+      final random = Random(364);
+      final cases = [
+        [_g],
+        [_a],
+        [_g, _g, _g, _a],
+        [_g, _a],
+        [_g, _g, _a, _a],
+        [_g, _h],
+        [_h],
+        [_a, _h],
+        [_g, _g, _h, _a],
+        for (var i = 0; i < 2000; i++) genFirstAttempts(random),
+      ];
+      for (final c in cases) {
+        expect(aggregate(c), _roundRule(c), reason: '$c');
+      }
     });
 
     test('an empty list asserts', () {
@@ -177,37 +193,69 @@ void main() {
 
   test('random answer sequences', () {
     final random = Random(230);
+    final examples = [
+      (n: 2, bundles: 1, answers: [_grammarHard, _right, _right]),
+      (n: 2, bundles: 2, answers: [_grammarHard, _right, _right]),
+    ];
+    for (final e in examples) {
+      final answers = e.answers.iterator;
+      _checkRound(e.n, e.bundles, () {
+        expect(answers.moveNext(), isTrue);
+        return answers.current;
+      });
+      expect(answers.moveNext(), isFalse);
+    }
     for (var run = 0; run < 1000; run++) {
       final n = 1 + random.nextInt(10);
       final bundles = 1 + random.nextInt(3);
-      var state = startRound(_tasks(n, bundles));
       final pRight = 0.3 + random.nextDouble() * 0.7;
-      var rights = 0;
-      var wordRatings = 0;
-      final counted = <String, List<Rating>>{};
-      while (!state.isOver) {
-        expect(state.shownNumber, lessThanOrEqualTo(state.total));
-        expect(rights < n, isTrue);
-        final task = state.queue.first;
-        final attribution = random.nextDouble() < pRight
+      _checkRound(
+        n,
+        bundles,
+        () => random.nextDouble() < pRight
             ? _right
-            : [_wrong, _wordOnly, _grammarOnly][random.nextInt(3)];
-        final (next, outcome) = _answer(state, attribution);
-        if (outcome.right) rights++;
-        if (outcome.wordRating != null) wordRatings++;
-        final grammar = attribution.grammar;
-        if (!task.isRetry && grammar != null) {
-          counted.putIfAbsent(task.bundle, () => []).add(grammar);
-        }
-        state = next;
-      }
-      expect(rights, n);
-      expect(wordRatings, n);
-      final ratings = bundleRatings(state);
-      expect(ratings.length, counted.length);
-      for (final e in counted.entries) {
-        expect(ratings['grammar:verbs:${e.key}'], aggregate(e.value));
-      }
+            : _notRight[random.nextInt(_notRight.length)],
+      );
     }
   });
+}
+
+/// The bundle rating of [firstAttempts]: half or more Again is Again, else all
+/// Good is Good, else Hard.
+Rating _roundRule(List<Rating> firstAttempts) {
+  final e = firstAttempts.where((r) => r == _a).length;
+  if (2 * e >= firstAttempts.length) return _a;
+  return firstAttempts.every((r) => r == _g) ? _g : _h;
+}
+
+/// Plays a round of [n] tasks over [bundles] bundles with the answers [next]
+/// draws, and checks the round's counts and bundle ratings.
+void _checkRound(int n, int bundles, Attribution Function() next) {
+  var state = startRound(_tasks(n, bundles));
+  var rights = 0;
+  var wordRatings = 0;
+  final counted = <String, List<Rating>>{};
+  while (!state.isOver) {
+    expect(state.shownNumber, lessThanOrEqualTo(state.total));
+    expect(rights < n, isTrue);
+    final task = state.queue.first;
+    final attribution = next();
+    final (after, outcome) = _answer(state, attribution);
+    if (outcome.right) rights++;
+    if (outcome.wordRating != null) wordRatings++;
+    final grammar = attribution.grammar;
+    if (!task.isRetry && grammar != null) {
+      counted.putIfAbsent(task.bundle, () => []).add(grammar);
+    }
+    state = after;
+  }
+  expect(rights, n);
+  expect(wordRatings, n);
+  final ratings = bundleRatings(state);
+  expect(ratings.length, counted.length);
+  for (final e in counted.entries) {
+    final rating = ratings['grammar:verbs:${e.key}'];
+    expect(rating, _roundRule(e.value), reason: '${e.value}');
+    if (e.value.contains(_h)) expect(rating, isNot(_g), reason: '${e.value}');
+  }
 }
