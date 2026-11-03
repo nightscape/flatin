@@ -1,0 +1,2 @@
+* Sanftere Rückmeldungen beim Ankreuzen und Markieren.
+* Wörter, die du im ersten Versuch richtig hattest, kommen nicht mehr zu früh wieder.
