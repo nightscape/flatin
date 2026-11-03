@@ -1,4 +1,4 @@
-// The schema 3.2 parser: the fixture loads, keys round-trip, labels read as
+// The schema 3.3 parser: the fixture loads, keys round-trip, labels read as
 // they should, and every rule of lib/data/SCHEMA.md rejects its own mistake.
 //
 // Must-fail proof: swapping `kasus` and `numerus` in the `axes:` list of the
@@ -386,10 +386,10 @@ void main() {
       );
     });
 
-    test('S10: deponent in a file without a genus_verbi axis', () {
+    test('S10: deponent in a file without a voice.deponent block', () {
       _expectRejected(
         'S10',
-        'has no genus_verbi axis',
+        'has no voice.deponent block',
         _fixtureWith(
           '    translation: {de: Turm, en: tower}\n',
           '    translation: {de: Turm, en: tower}\n    deponent: all\n',
@@ -574,6 +574,20 @@ void main() {
       expect(derivation.forms['ind.perf.pass.1.sg'], isNull);
       expect(derivation.forms['part.perf.pass.sg.nom.m'], isNull);
       expect(derivation.internal['part.perf.pass.sg.nom.m'], isNotNull);
+    });
+
+    test('S25: an impersonal passive plans only the keys its neuter '
+        'delegate form composes', () {
+      final derivation = GrammarEngine(
+        parseGrammarFiles(
+          _fixtureWithAll([
+            (agereParts, '$agereParts\n    passiv: unpersönlich'),
+            ('      nom.sg.n: "{stamm}um"\n', ''),
+          ]),
+        ),
+      ).of('verbs', 'agere');
+      expect(derivation.forms['ind.perf.pass.3.sg'], isNull);
+      expect(derivation.forms['ind.praes.pass.3.sg'], isNotNull);
     });
 
     test('S25: a passiv value other than unpersönlich', () {

@@ -42,6 +42,11 @@ void main() {
   late GrammarEngine engine;
   late GrammarFile verbsFile;
   late Map<String, List<EndingSet>> endings;
+  late List<FollowRule> followRules;
+  late FollowRule followByFirstPerson,
+      followByImperfectSubjunctive,
+      followByPluperfectSubjunctive,
+      followByImpersonalPassive;
   PracticeItem word(String id) => all.singleWhere((i) => i.id == id);
 
   setUpAll(() async {
@@ -54,11 +59,19 @@ void main() {
     );
     verbsFile = await loadGrammarFile('verbs');
     endings = endingSetsOf(engine, verbsFile);
+    followRules = followRulesOf(verbsFile);
+    [
+      followByFirstPerson,
+      followByImperfectSubjunctive,
+      followByPluperfectSubjunctive,
+      followByImpersonalPassive,
+    ] = followRules;
   });
 
   FollowContext contextOf(String id, [Set<FormKey>? available]) {
     final forms = engine.of('verbs', id).forms;
     return FollowContext(
+      followRules,
       forms,
       engine.regularOf('verbs', id)?.forms ?? const {},
       verbsFile.item(id).impersonalPassive,
@@ -75,6 +88,7 @@ void main() {
     Map<FormKey, String> regular,
     Map<String, List<EndingSet>> sets,
   ) => FollowContext(
+    followRules,
     {for (final e in forms.entries) e.key: given(e.key, e.value)},
     {for (final e in regular.entries) e.key: given(e.key, e.value)},
     true,
@@ -313,8 +327,8 @@ void main() {
         {'ind.fut.akt.3.sg': 'it', 'ind.fut.pass.3.sg': 'ītur'},
         {},
         {
-          'ind.fut.impersonal': [
-            {'3.sg': ('', 'ur')},
+          'ind.fut.3.sg': [
+            {'pass': ('', 'ur')},
           ],
         },
       );
@@ -368,6 +382,7 @@ void main() {
       while (changed) {
         changed = false;
         final context = FollowContext(
+          followRules,
           derivation.forms,
           regular?.forms ?? const {},
           item.impersonalPassive,

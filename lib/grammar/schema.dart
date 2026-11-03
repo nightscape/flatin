@@ -1,4 +1,4 @@
-/// Parser and Dart model of the grammar data schema 3.2 (`lib/data/SCHEMA.md`).
+/// Parser and Dart model of the grammar data schema 3.3 (`lib/data/SCHEMA.md`).
 ///
 /// This library reads and checks data; it generates no forms. It resolves type
 /// inheritance (S6), the type of every item (S11) and the set of keys every
@@ -347,6 +347,108 @@ final class DeponentSpec {
   bool contains(String tempus) => all || tempora.contains(tempus);
 }
 
+/// S29: the axis that carries voice, and what a deponent or an impersonal
+/// passive does to the keys on it.
+final class Voice {
+  final String axis;
+  final String active;
+  final String passive;
+  final VoiceDeponent? deponent;
+  final VoiceImpersonal? impersonal;
+
+  Voice({
+    required this.axis,
+    required this.active,
+    required this.passive,
+    this.deponent,
+    this.impersonal,
+  });
+
+  /// S10: [features] under the deponent [spec]: a passive key that moves
+  /// takes its active key, an active key that one moves onto and a passive
+  /// key that does not move go (null), every other key stays.
+  Map<String, String>? underDeponent(
+    Map<String, String> features,
+    DeponentSpec spec,
+  ) {
+    final code = features[deponent!.by];
+    final moves =
+        code != null &&
+        spec.contains(code) &&
+        deponent!.moves.any((pattern) => _patternMatches(features, pattern));
+    final voice = features[axis];
+    if (voice == passive) return moves ? {...features, axis: active} : null;
+    if (voice == active && moves) return null;
+    return features;
+  }
+
+  Map<String, String> asPassive(Map<String, String> features) => {
+    ...features,
+    axis: passive,
+  };
+}
+
+/// S10: the deponent list names codes of [by]; a passive key matching one of
+/// [moves] moves onto its active key.
+final class VoiceDeponent {
+  final String by;
+  final List<Map<String, String>> moves;
+
+  VoiceDeponent({required this.by, required this.moves});
+}
+
+/// S25: the passive keys with a person as subject, which an impersonal
+/// passive lacks, and the codes its participle agrees with.
+final class VoiceImpersonal {
+  final List<Map<String, String>> personal;
+  final Map<String, String> agrees;
+
+  VoiceImpersonal({required this.personal, required this.agrees});
+}
+
+/// S30: how a learner gets one form from another.
+enum FollowBy {
+  /// The one ending set of the file that fits the source swaps its ending.
+  endings,
+
+  /// The source's ending is swapped the way the regular reading swaps it.
+  regular,
+}
+
+/// S30: a key matching [when] follows from the key that has the codes of
+/// [from] and lacks the axes of [drop].
+final class FollowSpec {
+  final List<Map<String, String>> when;
+  final Map<String, String> from;
+  final List<String> drop;
+  final FollowBy by;
+
+  /// Applies only to an item with an impersonal passive (S25).
+  final bool impersonal;
+
+  FollowSpec({
+    required this.when,
+    required this.from,
+    required this.drop,
+    required this.by,
+    required this.impersonal,
+  });
+
+  /// The features of the key [features] follows from, or null when the rule
+  /// does not reach [features].
+  Map<String, String>? sourceOf(Map<String, String> features) {
+    if (!when.any((pattern) => _patternMatches(features, pattern)) ||
+        ![...from.keys, ...drop].every(features.containsKey)) {
+      return null;
+    }
+    final source = {...features, ...from}
+      ..removeWhere((axis, _) => drop.contains(axis));
+    return source.length == features.length && _patternMatches(features, source)
+        ? null
+        : source;
+  }
+}
+
 /// A declension or conjugation type, as written or after inheritance (S6).
 final class GrammarType {
   final String name;
@@ -490,20 +592,6 @@ final class GrammarItem {
 
   /// The first spelling of [part], or null.
   String? part(String name) => parts[name]?.first;
-
-  /// S8, S25: whether the keys of [delegate] are practised.
-  bool emits(DelegateSpec delegate) =>
-      delegate.emit &&
-      !(impersonalPassive && delegate.set['genus_verbi'] == 'pass');
-
-  /// S25: the key a `self` part looks up, given the [genusVerbi] of the
-  /// composed key.
-  Map<String, String> selfLookup(
-    Map<String, String> wanted,
-    String? genusVerbi,
-  ) => impersonalPassive && genusVerbi == 'pass' && wanted.containsKey('genus')
-      ? {...wanted, 'genus': 'n'}
-      : wanted;
 }
 
 /// The keys one item has, after S4, S10, S13 and S15.
@@ -569,12 +657,39 @@ final class GrammarFile {
   /// [keysByItem] under its own id.
   final Map<String, GrammarItem> regularItems = {};
 
+  /// S29: null in a file without voice.
+  final Voice? voice;
+
+  /// S30.
+  final List<FollowSpec> follows;
+
   /// S26: the genus codes of [item]; empty for an item of a class without one.
   List<String> genusOf(GrammarItem item) =>
       switch (types[item.typeName]!.genus) {
         final genus? => [genus],
         null => item.genus,
       };
+
+  /// S8, S25: whether the keys of [delegate] are practised for [item].
+  bool emits(GrammarItem item, DelegateSpec delegate) =>
+      delegate.emit &&
+      !(item.impersonalPassive && delegate.set[voice!.axis] == voice!.passive);
+
+  /// S25: the codes a `self` part of [item] looks up for the composed
+  /// [features].
+  Map<String, String> selfLookup(
+    GrammarItem item,
+    Map<String, String> wanted,
+    Map<String, String> features,
+  ) {
+    if (!item.impersonalPassive || features[voice!.axis] != voice!.passive) {
+      return wanted;
+    }
+    final agrees = voice!.impersonal!.agrees;
+    return agrees.keys.every(wanted.containsKey)
+        ? {...wanted, ...agrees}
+        : wanted;
+  }
 
   GrammarFile({
     required this.path,
@@ -589,6 +704,8 @@ final class GrammarFile {
     this.givenPart,
     this.lemmaPart,
     this.baseForms = const [],
+    this.voice,
+    this.follows = const [],
   });
 
   GrammarItem item(String id) => items.firstWhere(
@@ -703,6 +820,8 @@ class _FileParser {
     'types',
     'items',
     'shared',
+    'voice',
+    'follows',
   };
 
   static const _itemKeys = {
@@ -731,6 +850,7 @@ class _FileParser {
     final parts = _parts();
     final defaults = root['defaults'] as YamlMap?;
     final classes = _classes();
+    final voice = _voice(axes);
     final file = GrammarFile(
       path: path,
       language: language,
@@ -744,6 +864,8 @@ class _FileParser {
       sandhi: _sandhi(),
       classes: classes,
       declaredTypes: _types(axes, classes),
+      voice: voice,
+      follows: _follows(axes, voice),
     );
     file.items.addAll(_items(file));
     return file;
@@ -1390,6 +1512,181 @@ class _FileParser {
     return codes;
   }
 
+  Voice? _voice(Axes axes) {
+    final node = root['voice'];
+    if (node == null) return null;
+    const keys = {'axis', 'active', 'passive', 'deponent', 'impersonal'};
+    final spec = _block(node, 'voice', keys, 'S29');
+    final axis = _axisId(spec['axis'], 'voice.axis', axes, 'S29');
+    final active = _code(spec['active'], axis, 'voice.active', axes, 'S29');
+    final passive = _code(spec['passive'], axis, 'voice.passive', axes, 'S29');
+    if (active == passive) {
+      _bad('S29', 'voice: active and passive are both "$active"');
+    }
+
+    VoiceDeponent? deponent;
+    if (spec['deponent'] case final node?) {
+      const where = 'voice.deponent';
+      final spec = _block(node, where, const {'by', 'moves'}, 'S29');
+      deponent = VoiceDeponent(
+        by: _axisId(spec['by'], '$where.by', axes, 'S29'),
+        moves: _patternList(spec['moves'], '$where.moves', axes, 'S29'),
+      );
+    }
+
+    VoiceImpersonal? impersonal;
+    if (spec['impersonal'] case final node?) {
+      const where = 'voice.impersonal';
+      final spec = _block(node, where, const {'personal', 'agrees'}, 'S29');
+      final personal = _patternList(
+        spec['personal'],
+        '$where.personal',
+        axes,
+        'S29',
+      );
+      impersonal = VoiceImpersonal(
+        personal: [
+          for (final pattern in personal) {axis: passive, ...pattern},
+        ],
+        agrees: _pattern(spec['agrees'], '$where.agrees', axes, 'S29'),
+      );
+    }
+
+    return Voice(
+      axis: axis,
+      active: active,
+      passive: passive,
+      deponent: deponent,
+      impersonal: impersonal,
+    );
+  }
+
+  List<FollowSpec> _follows(Axes axes, Voice? voice) {
+    final node = root['follows'];
+    if (node == null) return const [];
+    if (node is! YamlList) _bad('S30', 'follows must be a list');
+    final follows = <FollowSpec>[];
+    final endingAxes = <String>{};
+    for (final (index, entry) in node.indexed) {
+      final where = 'follows[$index]';
+      const keys = {'when', 'from', 'drop', 'by', 'impersonal'};
+      final spec = _block(entry, where, keys, 'S30');
+      final from = _pattern(spec['from'], '$where.from', axes, 'S30');
+      final drop = [
+        if (spec['drop'] case final node?)
+          for (final axis in _asList(node))
+            _axisId(axis, '$where.drop', axes, 'S30'),
+      ];
+      if (drop.any(from.containsKey)) {
+        _bad('S30', '$where: an axis is both in from and in drop');
+      }
+      final by =
+          FollowBy.values.where((b) => b.name == spec['by']).firstOrNull ??
+          _bad('S30', '$where.by: "${spec['by']}" is not endings or regular');
+      if (by == FollowBy.endings && drop.isNotEmpty) {
+        _bad('S30', '$where: an endings rule has drop');
+      }
+      if (by == FollowBy.endings &&
+          !endingAxes.add((from.keys.toList()..sort()).join('.'))) {
+        _bad('S30', '$where: another endings rule swaps the same axes');
+      }
+      final impersonal = switch (spec['impersonal']) {
+        null || false => false,
+        true when voice?.impersonal != null => true,
+        true => _bad('S30', '$where: the file has no voice.impersonal block'),
+        final other => _bad('S30', '$where.impersonal: "$other" is no bool'),
+      };
+      follows.add(
+        FollowSpec(
+          when: _patterns(spec['when'], '$where.when', axes, 'S30'),
+          from: from,
+          drop: drop,
+          by: by,
+          impersonal: impersonal,
+        ),
+      );
+    }
+    return follows;
+  }
+
+  YamlMap _block(Object? node, String where, Set<String> keys, String rule) {
+    if (node is! YamlMap) _bad(rule, '$where must be a map');
+    for (final key in node.keys) {
+      if (!keys.contains(key)) _bad(rule, '$where: unknown key "$key"');
+    }
+    return node;
+  }
+
+  String _axisId(Object? node, String where, Axes axes, String rule) {
+    if (node == null || !axes.axes.any((a) => a.id == '$node')) {
+      _bad(rule, '$where: "$node" is no axis');
+    }
+    return '$node';
+  }
+
+  String _code(
+    Object? node,
+    String axis,
+    String where,
+    Axes axes,
+    String rule,
+  ) {
+    if (node == null || axes.byId(axis).indexOf('$node') < 0) {
+      _bad(rule, '$where: "$node" is no $axis code');
+    }
+    return '$node';
+  }
+
+  /// A map of axis → code or code list, as one pattern per combination.
+  List<Map<String, String>> _patterns(
+    Object? node,
+    String where,
+    Axes axes,
+    String rule,
+  ) {
+    if (node is! YamlMap || node.isEmpty) {
+      _bad(rule, '$where must be a map of axis codes');
+    }
+    var patterns = [<String, String>{}];
+    for (final entry in node.entries) {
+      final axis = _axisId(entry.key, where, axes, rule);
+      final codes = [
+        for (final code in _asList(entry.value))
+          _code(code, axis, '$where.$axis', axes, rule),
+      ];
+      patterns = [
+        for (final pattern in patterns)
+          for (final code in codes) {...pattern, axis: code},
+      ];
+    }
+    return patterns;
+  }
+
+  Map<String, String> _pattern(
+    Object? node,
+    String where,
+    Axes axes,
+    String rule,
+  ) => switch (_patterns(node, where, axes, rule)) {
+    [final single] => single,
+    _ => _bad(rule, '$where names one code per axis'),
+  };
+
+  List<Map<String, String>> _patternList(
+    Object? node,
+    String where,
+    Axes axes,
+    String rule,
+  ) {
+    if (node is! YamlList || node.isEmpty) {
+      _bad(rule, '$where must be a list of axis code maps');
+    }
+    return [
+      for (final (index, pattern) in node.indexed)
+        ..._patterns(pattern, '$where[$index]', axes, rule),
+    ];
+  }
+
   DeponentSpec? _deponent(Object? node, String where) {
     if (node == null) return null;
     if (node is String && node == 'all') return DeponentSpec.all();
@@ -1450,10 +1747,18 @@ class _FileParser {
       if (impersonal && spec['deponent'] != null) {
         _bad('S25', 'a deponent has no impersonal passive', item: id);
       }
+      final personalPassive = impersonal
+          ? file.voice?.impersonal?.personal ??
+                _bad(
+                  'S25',
+                  '${file.dataFileId} has no voice.impersonal block',
+                  item: id,
+                )
+          : const <Map<String, String>>[];
       if (impersonal) {
         for (final key in forms.keys) {
           final features = file.axes.parseKey(key);
-          if (_personalPassive.any((p) => _patternMatches(features, p))) {
+          if (personalPassive.any((p) => _patternMatches(features, p))) {
             _bad(
               'S25',
               'a marked item lists the personal passive "$key"',
@@ -1465,7 +1770,7 @@ class _FileParser {
       final absent = <Map<String, String>>[];
       for (final pattern in [
         ...(spec['absent'] as YamlList?) ?? const [],
-        if (impersonal) ..._personalPassive,
+        ...personalPassive,
       ]) {
         final features = <String, String>{};
         for (final a in (pattern as Map).entries) {
@@ -1510,13 +1815,6 @@ class _FileParser {
     return items;
   }
 }
-
-/// S25: the passive keys with a person as subject.
-const _personalPassive = [
-  {'genus_verbi': 'pass', 'person': '1'},
-  {'genus_verbi': 'pass', 'person': '2'},
-  {'genus_verbi': 'pass', 'person': '3', 'numerus': 'pl'},
-];
 
 bool _patternMatches(
   Map<String, String> features,
@@ -1946,31 +2244,23 @@ class _Linker {
     return available;
   }
 
-  /// S10: `deponent` is all or a list of tempus codes of the file.
+  /// S10: `deponent` is all or a list of codes of the file's
+  /// `voice.deponent.by` axis.
   void _checkDeponent(GrammarFile file, GrammarItem item, GrammarType type) {
     final deponent = item.deponent ?? type.deponent;
     if (deponent == null) return;
-    if (!file.axes.axes.any((a) => a.id == 'genus_verbi')) {
+    final by = file.voice?.deponent?.by;
+    if (by == null) {
       _fail(
         'S10',
         file.path,
-        '${file.dataFileId} has no genus_verbi axis',
-        item: item.id,
-      );
-    }
-    if (deponent.all) return;
-    final tempus = file.axes.axes.where((a) => a.id == 'tempus').firstOrNull;
-    if (tempus == null) {
-      _fail(
-        'S10',
-        file.path,
-        '${file.dataFileId} has no tempus axis',
+        '${file.dataFileId} has no voice.deponent block',
         item: item.id,
       );
     }
     for (final code in deponent.tempora) {
-      if (tempus.indexOf(code) < 0) {
-        _fail('S10', file.path, '"$code" is no tempus code', item: item.id);
+      if (file.axes.byId(by).indexOf(code) < 0) {
+        _fail('S10', file.path, '"$code" is no $by code', item: item.id);
       }
     }
   }
@@ -2079,7 +2369,7 @@ class _Linker {
           ...targetAxes.parseKey(entry.key),
           ...delegate.set,
         });
-        if (item.emits(delegate)) {
+        if (file.emits(item, delegate)) {
           add(key, 'delegate ${delegate.name}');
         } else {
           internal.add(key);
@@ -2119,17 +2409,11 @@ class _Linker {
       final moved = <FormKey, String>{};
       for (final entry in emitted.entries) {
         final features = axes.parseKey(entry.key);
-        final genus = features['genus_verbi'];
-        if (genus == 'pass') {
-          if (!_deponentMoves(features, deponentSpec)) continue;
-          final key = axes.formatKey({...features, 'genus_verbi': 'akt'});
-          moved[key] = entry.value;
-          deponent.add(key);
-        } else if (genus == 'akt' && _deponentDrops(features, deponentSpec)) {
-          continue; // the passive form takes this key, or nothing does
-        } else {
-          moved[entry.key] = entry.value;
-        }
+        final after = file.voice!.underDeponent(features, deponentSpec);
+        if (after == null) continue;
+        final key = axes.formatKey(after);
+        moved[key] = entry.value;
+        if (key != entry.key) deponent.add(key);
       }
       emitted
         ..clear()
@@ -2172,22 +2456,6 @@ class _Linker {
       deponent: deponent,
       stems: stems,
     );
-  }
-
-  /// S10: the passive key moves onto its active key.
-  bool _deponentMoves(Map<String, String> features, DeponentSpec deponent) =>
-      _deponentDrops(features, deponent) ||
-      (features['modus'] == 'part' &&
-          features['tempus'] == 'perf' &&
-          deponent.contains('perf'));
-
-  /// S10: the active key goes, whether or not a passive form takes it.
-  bool _deponentDrops(Map<String, String> features, DeponentSpec deponent) {
-    final modus = features['modus'];
-    final tempus = features['tempus'];
-    if (tempus == null || !deponent.contains(tempus)) return false;
-    if (modus == 'ind' || modus == 'konj' || modus == 'imp') return true;
-    return modus == 'inf' && (tempus == 'praes' || tempus == 'perf');
   }
 
   /// Whether [features] has one of the listed codes on every named axis.
@@ -2288,7 +2556,7 @@ class _Linker {
       }
       final target = _typeByName[delegate.type]!;
       final targetAxes = _fileOfType[delegate.type]!.axes;
-      final wanted = {...item.selfLookup(features, bundle['genus_verbi'])}
+      final wanted = {...file.selfLookup(item, features, bundle)}
         ..removeWhere((axis, value) => delegate.set[axis] == value);
       return target.forms.entries.any((entry) {
         final targetStem = entry.value.first.stemName;

@@ -1,4 +1,4 @@
-# Grammar data schema 3.2
+# Grammar data schema 3.3
 
 A data file describes one word class: its feature axes, how a label reads, the
 principal parts an item gives, the declension or conjugation types, and the
@@ -53,6 +53,29 @@ sandhi:                              # S16; the file's rule library
 
 classes: [konjugation]               # S19; the word classes types may name
 
+voice:                               # S29
+  axis: genus_verbi
+  active: akt
+  passive: pass
+  deponent:                          # S10
+    by: tempus                       # the axis a deponent list names codes of
+    moves:                           # a code list means any of its codes
+      - {modus: [ind, konj, imp]}
+      - {modus: inf, tempus: [praes, perf]}
+      - {modus: part, tempus: perf}
+  impersonal:                        # S25
+    personal:                        # passive keys with a person as subject
+      - {person: "1"}
+      - {person: "3", numerus: pl}
+    agrees: {genus: n}               # what its participle agrees with
+
+follows:                             # S28, S30
+  - {when: {modus: [ind, konj]}, from: {person: "1", numerus: sg}, by: endings}
+  - {when: {modus: konj, tempus: impf, genus_verbi: akt},
+     from: {modus: inf, tempus: praes}, drop: [person, numerus], by: regular}
+  - {when: {genus_verbi: pass, person: "3", numerus: sg},
+     from: {genus_verbi: akt}, by: endings, impersonal: true}
+
 types:
   Verb-Basis:
     abstract: true                   # no item uses it, so no class or display
@@ -90,7 +113,7 @@ types:
           - {self: roh, pass: [person, numerus]}
     slots: {hilfsverb: hv_haben}     # S23: default item of a slot
     sandhi: [a_ausfall, kurz_nt]     # rule ids of this file, in this order
-    deponent: all                    # S10; or a list of tempus codes
+    deponent: all                    # S10; or a list of voice.deponent.by codes
 
 shared:                              # YAML anchors items alias; nothing reads it
   ohne_steigerung: &ohne_steigerung [{grad: komp}, {grad: sup}]
@@ -110,8 +133,8 @@ items:
 One file is exactly one YAML document; a `---` separated second document throws.
 
 The top-level keys above are the whole set: `data_file_id`, `axes`, `label`,
-`parts`, `defaults`, `type_inference`, `sandhi`, `classes`, `types`, `items`,
-`shared`.
+`parts`, `defaults`, `type_inference`, `sandhi`, `classes`, `voice`,
+`follows`, `types`, `items`, `shared`.
 Any other one throws, so a typo such as `itemss:` fails the load instead of
 silently dropping the section. `shared:` is the one key the loader only
 accepts: it holds anchors that items alias (`absent: *ohne_steigerung`), and it
@@ -171,16 +194,14 @@ product of its parts' variants), a `variant: true` compose rule (S24) or a
 override list replaces the whole list.
 
 **S10. Deponents.** Let D be the item's `deponent`, else the type's; `all` means
-every tempus. A key with `genus_verbi: pass` moves to the same key with
-`genus_verbi: akt` if
-
-- `modus` is `ind`, `konj` or `imp` and `tempus` is in D, or
-- `modus: inf` and `tempus` is `praes` or `perf` and in D, or
-- `modus: part`, `tempus: perf` and `perf` is in D.
-
-Every other passive key is dropped. An active key is dropped under the first two
-conditions, also when no passive form takes its place. Keys without
-`genus_verbi` and `inf.fut.akt` stay. The move happens as soon as a key is made
+every code of the axis `voice.deponent.by`, a list names codes of it. A key
+*moves* when its code on that axis is in D and it matches one of
+`voice.deponent.moves`. A passive key (S29) that moves goes to the same key with
+the active code; every other passive key is dropped. An active key that moves
+is dropped, also when no passive form takes its place. Every other key stays
+(in the verbs file: keys without `genus_verbi`, and `inf.fut.akt`). A
+`deponent` in a file without `voice.deponent`, or a code that is not one of
+the axis, throws. The move happens as soon as a key is made
 and before item overrides, so an override names the key the learner sees
 (`ind.praes.akt.1.sg` for `hortor`).
 
@@ -304,10 +325,12 @@ the key, and the shown text, the parts and the trace stay those of that rule. A
 variant rule that would make a key no other rule of the type makes throws.
 
 **S25. Impersonal passive.** An item with `passiv: unpersönlich` has only the
-impersonal passive: its passive keys with `person: 1`, `person: 2` or
-`person: 3, numerus: pl` are absent (S15). A `self` part of a composed passive
-key that sets `genus` reads the neuter (`ventum est`), and its delegated passive
-keys are internal (S8). Any other value, and the key on a deponent, throws.
+impersonal passive: its passive keys (S29) matching a pattern of
+`voice.impersonal.personal` are absent (S15). A `self` part of a composed
+passive key that sets every axis of `voice.impersonal.agrees` reads those codes
+(`ventum est`), and its delegated passive keys are internal (S8). Any other
+value, the key on a deponent, and the key in a file without
+`voice.impersonal` throw.
 A marked item lists none of these keys; listing one throws.
 A verb that has no object has only this passive: `īre` (`itum est`), but not
 its transitive compound `inīre` (`initus sum`).
@@ -335,10 +358,10 @@ A gerund form spelled like the neuter singular of the gerundive in its case
 follows from the gerundive and is not irregular (`abeundī`).
 
 **S28. Forms that follow by a rule.** The base-forms focus does not ask a form
-that a rule gives from a form that is asked, shown or itself dropped this way;
-the root of every chain is an asked or shown form. A rule counts only when its
-spelling equals the data's spelling of the form. Every other exercise still
-practises all forms.
+that a rule of `follows:` (S30) gives from a form that is asked, shown or
+itself dropped this way; the root of every chain is an asked or shown form. A
+rule counts only when its spelling equals the data's spelling of the form.
+Every other exercise still practises all forms. The verbs file has these rules:
 - Other persons: a person of a tense, voice and mood follows from its first
   person singular when exactly one ending set of the file fits the ending of
   that form (`ībam` gives `ībās`). The sets are read from the generated forms
@@ -351,6 +374,25 @@ practises all forms.
   (`īssent` from `īsse`).
 - The impersonal passive 3 sg of a verb with `passiv: unpersönlich` follows
   from the active 3 sg of the same tense and mood (`ībātur` from `ībat`, which follows from `ībam`).
+
+**S29. Voice.** `voice:` names the `axis` that carries voice and its `active`
+and `passive` codes; a *passive key* has the passive code. `deponent:` (S10)
+and `impersonal:` (S25) are optional; a file without them has no deponent or
+no impersonal passive. A pattern is a map of axis to a code or a code list.
+An unknown key, axis or code throws.
+
+**S30. Follow rules.** Each entry of `follows:` reaches a key that matches
+`when` and has every axis of `from` and `drop`. The key follows from its
+*source*: the key with the codes of `from` and without the axes of `drop`; a
+key that is its own source is not reached. `by: regular` swaps the source's
+ending the way the regular reading (S27) swaps it into the key. `by: endings`
+reads the ending sets of the regular conjugation types: for each source form,
+the endings it swaps for every key the rule reaches from it, filed under the
+source without the axes of `from`; the rule gives a form only when exactly one
+set fits the source. `impersonal: true` limits the rule to items with
+`passiv: unpersönlich`. An unknown key, axis or code, an axis in both `from`
+and `drop`, an `endings` rule with `drop`, and two `endings` rules with the
+same `from` axes throw.
 
 **Collisions.** A key produced twice — by own forms, by delegation or by
 composition other than a variant rule (S24) — throws. There is no precedence between them; inheritance (S6) is

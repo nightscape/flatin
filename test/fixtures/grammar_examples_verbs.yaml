@@ -106,6 +106,23 @@ sandhi:
 
 classes: [konjugation]
 
+voice:
+  axis: genus_verbi
+  active: akt
+  passive: pass
+  deponent:
+    by: tempus
+    moves:
+      - {modus: [ind, konj, imp]}
+      - {modus: inf, tempus: [praes, perf]}
+      - {modus: part, tempus: perf}
+  impersonal:
+    personal:
+      - {person: "1"}
+      - {person: "2"}
+      - {person: "3", numerus: pl}
+    agrees: {genus: n}
+
 types:
   Perfekt-System:
     abstract: true

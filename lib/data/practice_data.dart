@@ -271,6 +271,7 @@ List<FormKey> _baseFormKeys(
     file.lemmaPart ?? file.givenPart!,
   );
   return dropFollowing(
+    followRulesOf(file),
     asked,
     {lemmaKey},
     derivation.forms,
@@ -315,10 +316,12 @@ List<FormKey> baseFormKeysBeforeRules(
       .toList();
 }
 
-/// What a rule reads: the item's [forms], its [regular] reading (empty without
-/// one), whether it has the [impersonalPassive], the [endings] of the file and
-/// the forms [available], asked or shown.
+/// What a rule reads: the [rules] of the file, the item's [forms], its
+/// [regular] reading (empty without one), whether it has the
+/// [impersonalPassive], the [endings] of the file and the forms [available],
+/// asked or shown.
 class FollowContext {
+  final List<FollowRule> rules;
   final Map<FormKey, FormDerivation> forms;
   final Map<FormKey, FormDerivation> regular;
   final bool impersonalPassive;
@@ -326,6 +329,7 @@ class FollowContext {
   final Set<FormKey> available;
 
   const FollowContext(
+    this.rules,
     this.forms,
     this.regular,
     this.impersonalPassive,
@@ -349,21 +353,43 @@ class Follow {
 /// not apply to `key`.
 typedef FollowRule = Follow? Function(FormKey key, FollowContext context);
 
-/// S28: the rules.
-const followRules = <FollowRule>[
-  followByFirstPerson,
-  followByImperfectSubjunctive,
-  followByPluperfectSubjunctive,
-  followByImpersonalPassive,
+/// S28, S30: the `follows:` rules of [file], in file order.
+List<FollowRule> followRulesOf(GrammarFile file) => [
+  for (final spec in file.follows)
+    (key, context) => _follow(spec, file.axes, key, context),
 ];
 
-/// The form `key` follows from by some rule that gives the data's spelling.
-FormKey? followedFrom(
+Follow? _follow(
+  FollowSpec spec,
+  Axes axes,
   FormKey key,
-  FollowContext context, [
-  List<FollowRule> rules = followRules,
-]) {
-  for (final rule in rules) {
+  FollowContext context,
+) {
+  if (spec.impersonal && !context.impersonalPassive) return null;
+  final features = axes.parseKey(key);
+  final source = spec.sourceOf(features);
+  if (source == null) return null;
+  final sourceKey = axes.formatKey(source);
+  return switch (spec.by) {
+    FollowBy.endings => _followByEndings(
+      sourceKey,
+      axes.formatKey(_endingGroup(spec, source)),
+      axes.formatKey({
+        for (final axis in spec.from.keys) axis: features[axis]!,
+      }),
+      context,
+    ),
+    FollowBy.regular => _followByRegularSwap(sourceKey, key, context),
+  };
+}
+
+/// The features an `endings` rule files the ending sets of [source] under.
+Map<String, String> _endingGroup(FollowSpec spec, Map<String, String> source) =>
+    {...source}..removeWhere((axis, _) => spec.from.containsKey(axis));
+
+/// The form `key` follows from by some rule that gives the data's spelling.
+FormKey? followedFrom(FormKey key, FollowContext context) {
+  for (final rule in context.rules) {
     final follow = rule(key, context);
     if (follow != null && follow.writes(context.forms[key]!)) {
       return follow.source;
@@ -376,6 +402,7 @@ FormKey? followedFrom(
 /// [shown]; a source that is dropped itself leads back to an asked or shown
 /// form, because no rule reads a form that depends on its own target.
 List<FormKey> dropFollowing(
+  List<FollowRule> rules,
   List<FormKey> asked,
   Set<FormKey> shown,
   Map<FormKey, FormDerivation> forms,
@@ -384,6 +411,7 @@ List<FormKey> dropFollowing(
   Map<String, List<EndingSet>> endings,
 ) {
   final context = FollowContext(
+    rules,
     forms,
     regular ?? const {},
     impersonalPassive,
@@ -396,66 +424,70 @@ List<FormKey> dropFollowing(
   ];
 }
 
-/// The endings one tense, voice and mood swaps for another person, by person
-/// (`2.sg`): the ending the 1 sg spelling loses and the ending it takes.
+/// The endings a source form swaps for each target form, by the target's
+/// codes on the rule's `from` axes (`2.sg`, `pass`): the ending the source
+/// spelling loses and the ending it takes.
 typedef EndingSet = Map<String, (String, String)>;
 
-/// The ending sets of the impersonal passive are filed under this tense voice.
-const impersonal = 'impersonal';
-
-const _persons = ['2.sg', '3.sg', '1.pl', '2.pl', '3.pl'];
-
-/// S28: the [EndingSet]s of each tense, voice and mood (`ind.fut.akt`) that
-/// the generated forms of the regular conjugation types show, never those of
-/// an irregular type, whose paradigm is the verb's own; the impersonal passive's sets
-/// are filed under `mood.tense.impersonal`.
+/// S28, S30: for each `endings` rule, the [EndingSet]s of each group
+/// (`ind.fut.akt`) that the generated forms of the regular conjugation types
+/// show, never those of an irregular type, whose paradigm is the verb's own.
 Map<String, List<EndingSet>> endingSetsOf(
   GrammarEngine engine,
   GrammarFile file,
 ) {
-  final byFamily = <String, Map<String, EndingSet>>{};
-  final doneTypes = <String>{};
+  final axes = file.axes;
+  final byGroup = <String, Map<String, EndingSet>>{};
+  final done = <String>{};
   for (final item in file.items.where(
     (i) => !irregularVerbTypes.contains(i.typeName),
   )) {
     final forms = engine.of(file.dataFileId, item.id).forms;
-    for (final key in forms.keys.where((k) => k.endsWith('.1.sg'))) {
-      final family = key.substring(0, key.length - 5);
-      final generated = [
-        for (final person in ['1.sg', ..._persons]) forms['$family.$person'],
-      ];
-      if (generated.any((f) => f == null || f is IrregularForm) ||
-          !doneTypes.add('${item.typeName}/$family')) {
-        continue;
+    for (final (index, spec) in file.follows.indexed) {
+      if (spec.by != FollowBy.endings) continue;
+      for (final MapEntry(key: sourceKey, value: source) in forms.entries) {
+        final features = axes.parseKey(sourceKey);
+        if (!spec.from.entries.every((e) => features[e.key] == e.value)) {
+          continue;
+        }
+        final group = _endingGroup(spec, features);
+        final targets = {
+          for (final codes in _combinations(axes, spec.from.keys.toList()))
+            if (spec.sourceOf({...group, ...codes}) case final s?
+                when axes.formatKey(s) == sourceKey)
+              axes.formatKey(codes):
+                  forms[axes.formatKey({...group, ...codes})],
+        };
+        if (targets.isEmpty ||
+            source is IrregularForm ||
+            targets.values.any((f) => f == null || f is IrregularForm) ||
+            !done.add('${item.typeName}/$index/$sourceKey')) {
+          continue;
+        }
+        byGroup.putIfAbsent(axes.formatKey(group), () => {})[item.typeName] = {
+          for (final MapEntry(:key, :value) in targets.entries)
+            key: _swap(source.result, value!.result),
+        };
       }
-      final one = generated.first!.result;
-      byFamily.putIfAbsent(family, () => {})[item.typeName] = {
-        for (var i = 0; i < _persons.length; i++)
-          _persons[i]: _swap(one, generated[i + 1]!.result),
-      };
-    }
-    for (final key in forms.keys.where((k) => k.endsWith('.akt.3.sg'))) {
-      final active = forms[key]!;
-      final passive = forms[key.replaceFirst('.akt.', '.pass.')];
-      final family = '${key.substring(0, key.length - 9)}.$impersonal';
-      if (passive == null ||
-          active is IrregularForm ||
-          passive is IrregularForm ||
-          !doneTypes.add('${item.typeName}/$family')) {
-        continue;
-      }
-      byFamily.putIfAbsent(family, () => {})[item.typeName] = {
-        '3.sg': _swap(active.result, passive.result),
-      };
     }
   }
   return {
-    for (final MapEntry(:key, :value) in byFamily.entries)
+    for (final MapEntry(:key, :value) in byGroup.entries)
       key: {
         for (final set in value.values) set.toString(): set,
       }.values.toList(),
   };
 }
+
+/// Every combination of codes on [axisIds].
+Iterable<Map<String, String>> _combinations(Axes axes, List<String> axisIds) =>
+    axisIds.fold(
+      [<String, String>{}],
+      (combinations, id) => [
+        for (final combination in combinations)
+          for (final code in axes.byId(id).codes) {...combination, id: code},
+      ],
+    );
 
 (String, String) _swap(String from, String to) {
   var common = 0;
@@ -465,57 +497,6 @@ Map<String, List<EndingSet>> endingSetsOf(
     common++;
   }
   return (from.substring(common), to.substring(common));
-}
-
-/// S28: another person of a tense follows from the first person singular
-/// when exactly one ending set of the file fits that form's ending
-/// (`ībās` from `ībam`, not `īs` from `eō`).
-Follow? followByFirstPerson(FormKey key, FollowContext context) {
-  final parts = key.split('.');
-  if (parts.length != 5 ||
-      !const {'ind', 'konj'}.contains(parts[0]) ||
-      (parts[3] == '1' && parts[4] == 'sg')) {
-    return null;
-  }
-  final family = parts.take(3).join('.');
-  return _followByEndings(
-    '$family.1.sg',
-    family,
-    '${parts[3]}.${parts[4]}',
-    context,
-  );
-}
-
-/// S28: the active imperfect subjunctive is the present infinitive plus an
-/// ending (`ferrēs` from `ferre`).
-Follow? followByImperfectSubjunctive(FormKey key, FollowContext context) =>
-    key.startsWith('konj.impf.akt.')
-    ? _followByRegularSwap('inf.praes.akt', key, context)
-    : null;
-
-/// S28: the active pluperfect subjunctive is the perfect infinitive plus an
-/// ending (`īssem` from `īsse`).
-Follow? followByPluperfectSubjunctive(FormKey key, FollowContext context) =>
-    key.startsWith('konj.plusq.akt.')
-    ? _followByRegularSwap('inf.perf.akt', key, context)
-    : null;
-
-/// S28: the impersonal passive follows from the active third person singular
-/// of the same tense and mood (`ībātur` from `ībat`).
-Follow? followByImpersonalPassive(FormKey key, FollowContext context) {
-  final parts = key.split('.');
-  return context.impersonalPassive &&
-          parts.length == 5 &&
-          parts[2] == 'pass' &&
-          parts[3] == '3' &&
-          parts[4] == 'sg'
-      ? _followByEndings(
-          '${parts[0]}.${parts[1]}.akt.3.sg',
-          '${parts[0]}.${parts[1]}.$impersonal',
-          '3.sg',
-          context,
-        )
-      : null;
 }
 
 /// The spelling of `source` with the swap's ending replaced, or null when
@@ -528,22 +509,22 @@ List<String>? _swapped(Iterable<String> source, (String, String) swap) =>
       ]
     : null;
 
-/// The spellings `source` gives for `person` when exactly one ending set under
-/// `setsKey` fits it.
+/// The spellings `source` gives for `target` when exactly one ending set
+/// under `group` fits it.
 Follow? _followByEndings(
   FormKey source,
-  String setsKey,
-  String person,
+  String group,
+  String target,
   FollowContext context,
 ) {
   if (!context.available.contains(source)) return null;
   final one = context.forms[source]!.variants;
   final fitting = [
-    for (final set in context.endings[setsKey] ?? const <EndingSet>[])
+    for (final set in context.endings[group] ?? const <EndingSet>[])
       if (set.values.every((swap) => _swapped(one, swap) != null)) set,
   ];
   return fitting.length == 1
-      ? Follow(source, _swapped(one, fitting.single[person]!)!)
+      ? Follow(source, _swapped(one, fitting.single[target]!)!)
       : null;
 }
 

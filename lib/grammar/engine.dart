@@ -1,4 +1,4 @@
-/// Fills the key plan of `schema.dart` with forms and their trace (3.2).
+/// Fills the key plan of `schema.dart` with forms and their trace (3.3).
 ///
 /// `GrammarFile.keysByItem` is the key plan: the engine never decides which
 /// keys an item has, only what stands under them. A key the plan names and the
@@ -405,7 +405,7 @@ final class _ItemBuilder {
           engine._endingType(delegate.type, entry.key),
         );
         output[key] = form.build(key);
-        (item.emits(delegate) ? made : internal)[key] = form;
+        (file.emits(item, delegate) ? made : internal)[key] = form;
       }
     }
   }
@@ -460,42 +460,17 @@ final class _ItemBuilder {
   void _deponent(Map<FormKey, _Made> forms) {
     final spec = item.deponent ?? type.deponent;
     if (spec == null) return;
-    assert(
-      axes.axes.any((axis) => axis.id == 'genus_verbi'),
-      'S10 is checked at load',
-    );
     final moved = <FormKey, _Made>{};
     for (final entry in forms.entries) {
-      final features = axes.parseKey(entry.key);
-      final genus = features['genus_verbi'];
-      if (genus == 'pass') {
-        if (!_moves(features, spec)) continue;
-        final key = axes.formatKey({...features, 'genus_verbi': 'akt'});
-        moved[key] = entry.value;
-        deponentKeys.add(key);
-      } else if (genus == 'akt' && _drops(features, spec)) {
-        continue; // the passive form takes this key, or nothing does
-      } else {
-        moved[entry.key] = entry.value;
-      }
+      final after = file.voice!.underDeponent(axes.parseKey(entry.key), spec);
+      if (after == null) continue;
+      final key = axes.formatKey(after);
+      moved[key] = entry.value;
+      if (key != entry.key) deponentKeys.add(key);
     }
     forms
       ..clear()
       ..addAll(moved);
-  }
-
-  bool _moves(Map<String, String> features, DeponentSpec spec) =>
-      _drops(features, spec) ||
-      (features['modus'] == 'part' &&
-          features['tempus'] == 'perf' &&
-          spec.contains('perf'));
-
-  bool _drops(Map<String, String> features, DeponentSpec spec) {
-    final modus = features['modus'];
-    final tempus = features['tempus'];
-    if (tempus == null || !spec.contains(tempus)) return false;
-    if (modus == 'ind' || modus == 'konj' || modus == 'imp') return true;
-    return modus == 'inf' && (tempus == 'praes' || tempus == 'perf');
   }
 
   // ---------------------------------------------------------- overrides
@@ -526,7 +501,7 @@ final class _ItemBuilder {
     for (final key in plan.emitted) {
       if (made.containsKey(key)) continue;
       final source = plan.deponent.contains(key)
-          ? axes.formatKey({...axes.parseKey(key), 'genus_verbi': 'pass'})
+          ? axes.formatKey(file.voice!.asPassive(axes.parseKey(key)))
           : key;
       final features = axes.parseKey(source);
       for (final spec in type.composes.where((c) => !c.variant)) {
@@ -673,7 +648,7 @@ final class _ItemBuilder {
       lexemeId = item.id;
       lookup = axes.formatKey({
         ...delegate.set,
-        ...item.selfLookup(wanted, features['genus_verbi']),
+        ...file.selfLookup(item, wanted, features),
       });
       form = delegated[part.delegate]![lookup];
     } else {
