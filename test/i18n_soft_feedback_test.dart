@@ -194,11 +194,15 @@ void main() {
       ))
         t.text.toPlainText(),
     ];
+    final options = (e.answer as TickAnswer).options;
     expect(lines, [
-      'exercise.ticks.feedback.rightTicked',
-      'exercise.ticks.feedback.wrongLeft',
-      'exercise.ticks.feedback.rightTicked',
-      'exercise.ticks.feedback.wrongLeft',
+      for (final (i, key) in [
+        'exercise.ticks.feedback.rightTicked',
+        'exercise.ticks.feedback.wrongLeft',
+        'exercise.ticks.feedback.rightTicked',
+        'exercise.ticks.feedback.wrongLeft',
+      ].indexed)
+        keyEcho(key, {'text': options[i].text}),
     ]);
   });
 

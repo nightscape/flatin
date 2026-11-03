@@ -11,6 +11,7 @@ import 'package:latin_practice/screens/exam_list_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'support/gen_exam.dart';
+import 'support/key_echo_i18n.dart';
 import 'support/word_classification_harness.dart';
 
 const _cases = 15;
@@ -90,14 +91,6 @@ void main() {
     final synthetic = File(
       'test/fixtures/exam/synthetic.exam',
     ).readAsStringSync();
-    // Real German text: this test also checks the refusal of a broken pack,
-    // which interpolates path and rule, so one app shows real texts for both
-    // refusals.
-    final notText =
-        ((jsonDecode(File('assets/flutter_i18n/de.json').readAsStringSync())
-                    as Map<String, dynamic>)['exam']
-                as Map<String, dynamic>)['list']['not_text']
-            as String;
     for (var seed = 0; seed <= _cases; seed++) {
       final rng = Random(seed);
       final picks = <Pick>[
@@ -131,9 +124,8 @@ void main() {
       addTearDown(tester.view.reset);
       var next = 0;
       await tester.pumpWidget(
-        wrapInApp(
+        wrapInKeyEchoApp(
           ExamListScreen(pickBytes: () async => picks[next++].bytes),
-          forcedLocale: const Locale('de'),
         ),
       );
       await letItLoad(tester);
@@ -144,13 +136,19 @@ void main() {
         final refused = find.byKey(const Key('exam.import.refused'));
         switch (pick.refused) {
           case PackRejected(:final error):
-            final text = tester.widget<Text>(refused).data!;
-            expect(text, contains(error.path), reason: 'seed $seed');
-            expect(text, contains(error.rule.id), reason: 'seed $seed');
+            expect(
+              tester.widget<Text>(refused).data,
+              keyEcho('exam.list.refused', {
+                'path': error.path,
+                'rule': error.rule.id,
+                'detail': error.detail,
+              }),
+              reason: 'seed $seed',
+            );
           case NotUtf8Text():
             expect(
               tester.widget<Text>(refused).data,
-              notText,
+              'exam.list.not_text',
               reason: 'seed $seed',
             );
           case null:
