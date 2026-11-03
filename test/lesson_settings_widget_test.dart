@@ -9,6 +9,8 @@ void main() {
   ) async {
     await openSettingsWith(tester, {}, page: 'words');
 
+    // Real German text: the section title interpolates the lesson number,
+    // which key-echo texts do not show.
     for (final lesson in ['Lektion 21', 'Lektion 40']) {
       var scrolls = 0;
       while (find.text(lesson).evaluate().isEmpty) {

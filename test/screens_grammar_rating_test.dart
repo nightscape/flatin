@@ -257,6 +257,8 @@ void main() {
   });
 }
 
+// Real German text: the error line interpolates the error message, which key-echo
+// texts do not show.
 void _expectSaveErrorFor(WidgetTester tester, String cardId) => expect(
   find.textContaining(
     'Fortschritt nicht gespeichert: Bad state: no card '

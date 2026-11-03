@@ -5,6 +5,7 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
+import 'package:flutter/widgets.dart' show Key;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/main.dart';
 
@@ -21,7 +22,7 @@ void main() {
     await tester.pumpAndSettle();
 
     // Verify that the home screen buttons are displayed.
-    expect(find.text('Nouns (declension)'), findsOneWidget);
-    expect(find.text('Verbs (conjugation)'), findsOneWidget);
+    expect(find.byKey(const Key('home.nouns.button')), findsOneWidget);
+    expect(find.byKey(const Key('home.verbs.button')), findsOneWidget);
   });
 }

@@ -52,6 +52,8 @@ void main() {
     expect(shelfPainter(tester).scale.bookStarts, isNotEmpty);
     expect(_text('kursstand.words.slider'), findsOneWidget);
     expect(_text('kursstand.grammar.slider'), findsOneWidget);
+    // Real German text: the summaries interpolate counts, and the shelf
+    // asserts that its labels fit a book cover, which key-echo texts do not.
     expect(
       _plain(tester, 'kursstand.summary.words'),
       matches(r'^Vokabeln: L1 – Später \(\d+ Wörter\)$'),
@@ -60,7 +62,7 @@ void main() {
       _plain(tester, 'kursstand.summary.grammar'),
       matches(r'^Grammatik: L1 – Später \(\d+ Themen\)$'),
     );
-    expect(find.text('Auf Kursstand zurücksetzen'), findsOneWidget);
+    expect(_text('kursstand.reset'), findsOneWidget);
   });
 
   testWidgets('the words reach Später, the linked grammar with them', (
@@ -191,6 +193,7 @@ void main() {
       expect(
         find.descendant(
           of: _text('word.rosa'),
+          // Real German text: key-echo labels do not fit the shelf covers.
           matching: find.text('außerhalb des Bereichs'),
         ),
         findsOneWidget,
@@ -231,6 +234,9 @@ void main() {
       curriculum: curriculum,
     );
 
+    // Real German text: 'fromLesson' interpolates the lesson number, and the
+    // shelf asserts that its labels fit a book cover, which key-echo texts
+    // do not.
     final tile = _text('word.${normalizeDiacritics(item.lemma)}');
     expect(
       find.descendant(of: tile, matching: find.text('ab Lektion 32')),
@@ -296,6 +302,7 @@ void main() {
     expect(
       find.descendant(
         of: _text('word.rosa'),
+        // Real German text: key-echo labels do not fit the shelf covers.
         matching: find.text('außerhalb des Bereichs'),
       ),
       findsNothing,
@@ -318,6 +325,7 @@ void main() {
         curriculum: curriculum,
       );
 
+      // Real German text: 'fromLesson' interpolates the lesson number.
       final tile = _text('word.${normalizeDiacritics(item.lemma)}');
       expect(
         find.descendant(of: tile, matching: find.text('ab Lektion 30')),
@@ -355,6 +363,7 @@ void main() {
     expect(
       find.descendant(
         of: tile,
+        // Real German text: key-echo labels do not fit the shelf covers.
         matching: find.text('Grammatik außerhalb des Bereichs'),
       ),
       findsOneWidget,

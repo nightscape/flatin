@@ -25,6 +25,8 @@ void main() {
 
     final tile = formTile('verbs', 'ind.perf.akt.1.sg');
     expect(tester.widget<CheckboxListTile>(tile).onChanged, isNull);
+    // Real German text: 'featureOff' interpolates the feature name, which
+    // key-echo texts do not show.
     expect(
       find.descendant(
         of: tile,

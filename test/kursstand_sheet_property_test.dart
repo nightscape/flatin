@@ -260,6 +260,8 @@ void main() {
               as Json)['kursstand']
           as Json;
 
+  // Real texts: 'next' and 'lesson' interpolate the lesson, and the test
+  // checks that each language shows its own wording.
   // The rule does not depend on the language, so English draws fewer cases.
   const deCases = 100;
   for (final (locale, firstSeed, cases, nextText, lessonText) in [

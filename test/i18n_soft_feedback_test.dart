@@ -107,6 +107,7 @@ void main() {
     return (word, e, ticked.isEmpty ? {rng.nextInt(n)} : ticked);
   }
 
+  // Real texts: the wording rule applies to the words each language shows.
   testWidgets('no feedback text of the tick exercise says an attempt failed, '
       'for every mistake in both languages and for drawn settings, '
       'exercises and ticks', (tester) async {

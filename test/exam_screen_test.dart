@@ -232,6 +232,7 @@ void main() {
     }
   });
 
+  // Real texts: the wording rule applies to the words each language shows.
   testWidgets('[E] no text of the exam screen says an attempt failed, for '
       'any pack, settings, marks and language, with points off and on', (
     tester,

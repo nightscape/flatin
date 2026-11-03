@@ -22,6 +22,8 @@ void main() {
       );
       await letItLoad(tester);
 
+      // The error line interpolates the message, which key-echo texts do not
+      // show.
       expect(find.textContaining('broken store'), findsWidgets);
     },
   );

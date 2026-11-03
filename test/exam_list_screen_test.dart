@@ -90,6 +90,9 @@ void main() {
     final synthetic = File(
       'test/fixtures/exam/synthetic.exam',
     ).readAsStringSync();
+    // Real German text: this test also checks the refusal of a broken pack,
+    // which interpolates path and rule, so one app shows real texts for both
+    // refusals.
     final notText =
         ((jsonDecode(File('assets/flutter_i18n/de.json').readAsStringSync())
                     as Map<String, dynamic>)['exam']

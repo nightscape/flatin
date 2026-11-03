@@ -31,6 +31,8 @@ Future<void> _tap(WidgetTester tester, Finder row) async {
   await letItLoad(tester);
 }
 
+// Real German text: 'fromLesson' interpolates the lesson number, which
+// key-echo texts do not show.
 Finder _gapText(Finder row, String text) =>
     find.descendant(of: row, matching: find.text(text));
 
