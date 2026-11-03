@@ -1,2 +1,3 @@
 * Sanftere Rückmeldungen beim Ankreuzen und Markieren.
 * Wörter, die du im ersten Versuch richtig hattest, kommen nicht mehr zu früh wieder.
+* Auch für teilweise richtige Antworten gibt es jetzt ein paar Münzen.

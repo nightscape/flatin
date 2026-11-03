@@ -1,2 +1,3 @@
 * Gentler feedback in the tick and mark exercises.
 * Words you got right on the first try no longer come back too soon.
+* Partly right answers now earn a few coins too.
