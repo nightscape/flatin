@@ -80,6 +80,28 @@ final class ExamGen {
     return parts.join(' ');
   }
 
+  /// [reading] changed by [m] at a drawn word, or null when [reading] has
+  /// too few words for [m].
+  String? mutate(String reading, ReadingMutation m) {
+    final words = reading.isEmpty ? <String>[] : reading.split(' ');
+    switch (m) {
+      case ReadingMutation.drop when words.isNotEmpty:
+        words.removeAt(r.nextInt(words.length));
+      case ReadingMutation.add:
+        words.insert(r.nextInt(words.length + 1), pick(_german));
+      case ReadingMutation.swap when words.length >= 2:
+        final [i, j] = [for (final x in distinct(2, words.length)) x - 1];
+        final first = words[i];
+        words[i] = words[j];
+        words[j] = first;
+      case ReadingMutation.replace when words.isNotEmpty:
+        words[r.nextInt(words.length)] = outsideWord;
+      default:
+        return null;
+    }
+    return words.join(' ');
+  }
+
   List<String> variants(int least, int most) => [
     for (var i = 0; i < least + r.nextInt(most - least + 1); i++) variant(),
   ];
@@ -533,6 +555,12 @@ final class ExamGen {
     }(),
   };
 }
+
+/// The ways [ExamGen.mutate] turns a reading into a nearby text.
+enum ReadingMutation { drop, add, swap, replace }
+
+/// A word [ExamGen.variant] never draws.
+const outsideWord = 'Fuchs';
 
 /// A `bilden` item of a PPP: `modus: part`, so its form is one word.
 Map<String, Object> pppBilden(String form) => {

@@ -192,6 +192,58 @@ void main() {
     expect(malformed, greaterThan(0));
     expect(gen.reach['nested variant'], greaterThan(0));
   });
+
+  test('P5: the matcher refuses a reading changed by one word', () {
+    final gen = ExamGen(Random(11));
+    final texts = <(String, String, String)>[
+      ('(der | Wolf) sieht', 'sieht', 'static drop'),
+      ('der [Wolf] sieht', 'der Wolf Wald sieht', 'static add'),
+      ('(der Wolf | im Wald) sieht', 'Wolf der sieht', 'static swap'),
+      ('[der] Wolf', 'der $outsideWord', 'static replace'),
+      ('(der (Wolf | Wald) | im) [sieht]', 'Wald der sieht', 'static swap'),
+      ('(a | b)', 'a b', 'static both'),
+      ('[x]', 'x x', 'static twice'),
+    ];
+    for (var i = 0; i < _variants; i++) {
+      final s = gen.variant(3);
+      final reading = gen.pick(_Oracle(s).readings()!);
+      for (final m in ReadingMutation.values) {
+        final text = gen.mutate(reading, m);
+        if (text != null) texts.add((s, text, m.name));
+      }
+    }
+    final reach = <String, int>{};
+    for (final (s, text, kind) in texts) {
+      expect(s, isNot(contains(outsideWord)));
+      if (_Oracle(s).readings()!.contains(text)) continue;
+      expect(variantAccepts(s, text), isFalse, reason: '$kind: "$s" "$text"');
+      if (kind.startsWith('static')) continue;
+      for (final k in [
+        kind,
+        if (s.contains('[')) 'optional',
+        if (_depth(s) > 1) 'nested',
+      ]) {
+        reach[k] = (reach[k] ?? 0) + 1;
+      }
+    }
+    expect([
+      for (final k in [
+        for (final m in ReadingMutation.values) m.name,
+        'optional',
+        'nested',
+      ])
+        if ((reach[k] ?? 0) == 0) k,
+    ], isEmpty);
+  });
+}
+
+int _depth(String s) {
+  var depth = 0, most = 0;
+  for (final c in s.split('')) {
+    if ('(['.contains(c)) most = max(most, ++depth);
+    if (')]'.contains(c)) depth--;
+  }
+  return most;
 }
 
 /// A recursive-descent reading of the variant grammar:
