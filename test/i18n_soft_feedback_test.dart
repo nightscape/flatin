@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -17,6 +19,7 @@ import 'package:latin_practice/screens/exercise_ticks_widget.dart';
 
 import 'support/exercise_invariants.dart';
 import 'support/gen_sentence_learner.dart';
+import 'support/key_echo_i18n.dart';
 import 'support/word_classification_harness.dart';
 
 void main() {
@@ -155,6 +158,69 @@ void main() {
           failureWord.hasMatch(own),
           isFalse,
           reason: '$code ${e.questionParams} $ticked: "$text"',
+        );
+      }
+    }
+  });
+
+  // Static example: one fixed exercise and one fixed tick set, so there is no
+  // input space to draw from.
+  testWidgets('a wrong option rightly left unticked shows the wrongLeft line', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(1000, 4000);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+    final (word, e, _) = staticExamples().first;
+    await tester.pumpWidget(
+      wrapInKeyEchoApp(
+        ExerciseTicksWidget(word: word, exercise: e, onResponse: (_) {}),
+      ),
+    );
+    await tester.pumpAndSettle();
+    for (final i in [0, 2]) {
+      await tester.tap(find.byKey(Key('exercise.ticks.option.$i')));
+      await tester.pump();
+    }
+    await tester.tap(find.byKey(const Key('exercise.check.button')));
+    await tester.pumpAndSettle();
+    final lines = [
+      for (final t in tester.widgetList<RichText>(
+        find.descendant(
+          of: find.byKey(const Key('exercise.feedback.lines')),
+          matching: find.byType(RichText),
+        ),
+      ))
+        t.text.toPlainText(),
+    ];
+    expect(lines, [
+      'exercise.ticks.feedback.rightTicked',
+      'exercise.ticks.feedback.wrongLeft',
+      'exercise.ticks.feedback.rightTicked',
+      'exercise.ticks.feedback.wrongLeft',
+    ]);
+  });
+
+  // Wording rule over the JSON values: no fixed input space beyond the files.
+  test('"not quite" never words a line shown for a right action', () {
+    for (final code in ['de', 'en']) {
+      final tree = jsonDecode(
+        File('assets/flutter_i18n/$code.json').readAsStringSync(),
+      );
+      final feedback = tree['exercise']['ticks']['feedback'] as Map;
+      final tap = tree['exercise']['tap']['feedback'] as Map;
+      final rightActions = {
+        'rightTicked': feedback['rightTicked'],
+        'rightLeft': feedback['rightLeft'],
+        'wrongLeft': feedback['wrongLeft'],
+        for (final MapEntry(:key, :value) in tap.entries)
+          'tap.$key.right': value['right'],
+      };
+      for (final MapEntry(:key, :value) in rightActions.entries) {
+        expect(
+          value,
+          isNot(matches(RegExp('nicht ganz|not quite'))),
+          reason: '$code $key',
         );
       }
     }

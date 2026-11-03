@@ -363,7 +363,7 @@
       "feedback": {
         "rightTicked": "“{text}” – right",
         "rightLeft": "“{text}” – right, not ticked",
-        "wrongLeft": "“{text}” – not quite",
+        "wrongLeft": "“{text}” – does not fit, rightly left unticked",
         "wrongTicked": {
           "tempus": "“{text}” – not quite: tense or time relation",
           "genusVerbi": "“{text}” – not quite: active and passive swapped",

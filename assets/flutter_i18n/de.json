@@ -363,7 +363,7 @@
       "feedback": {
         "rightTicked": "„{text}“ – richtig",
         "rightLeft": "„{text}“ – richtig, nicht angekreuzt",
-        "wrongLeft": "„{text}“ – nicht ganz",
+        "wrongLeft": "„{text}“ – passt nicht, zu Recht nicht angekreuzt",
         "wrongTicked": {
           "tempus": "„{text}“ – nicht ganz: Tempus oder Zeitverhältnis",
           "genusVerbi": "„{text}“ – nicht ganz: Aktiv und Passiv vertauscht",
