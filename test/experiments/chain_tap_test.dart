@@ -4,12 +4,10 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/experiments/kursstand_chain.dart';
-import 'package:latin_practice/theme.dart';
 
-import '../support/preloaded_i18n.dart';
+import '../support/key_echo_i18n.dart';
 
 Future<void> _loadIcons() async {
   final loader = FontLoader('MaterialIcons')
@@ -30,10 +28,8 @@ Future<(List<(Offset, Offset)> Function(), Offset)> _pumpOpenChains(
   var ends = <(Offset, Offset)>[];
   final key = GlobalKey();
   await tester.pumpWidget(
-    MaterialApp(
-      localizationsDelegates: [_i18n],
-      theme: romanTheme,
-      home: Material(
+    wrapInKeyEchoApp(
+      Material(
         child: Align(
           alignment: Alignment.topLeft,
           child: SizedBox(
@@ -56,10 +52,7 @@ Future<(List<(Offset, Offset)> Function(), Offset)> _pumpOpenChains(
   return (() => ends, tester.getTopLeft(find.byKey(key)));
 }
 
-late final LocalizationsDelegate<FlutterI18n> _i18n;
-
 void main() {
-  setUpAll(() async => _i18n = await preloadedI18n());
   setUpAll(_loadIcons);
 
   for (final (left, shelf) in [
@@ -87,6 +80,7 @@ void main() {
 
       final (closedWord, closedGrammar) = ends()[left ? 0 : 1];
       expect(closedGrammar.dx, moreOrLessEquals(closedWord.dx));
+      // The range label is a literal of the experiment widget, not an i18n text.
       expect(
         find.textContaining(
           left ? 'Grammatik L30–L90' : 'Grammatik L2–L45',
@@ -98,6 +92,7 @@ void main() {
 
     testWidgets('a mouse over the $side symbol shows the click cursor, a ring '
         'and what a click does$look', (tester) async {
+      final semantics = tester.ensureSemantics();
       final (ends, origin) = await _pumpOpenChains(tester, shelf: shelf);
       final (word, grammar) = ends()[left ? 0 : 1];
       final mouse = await tester.createGesture(
@@ -114,12 +109,19 @@ void main() {
       await tester.pumpAndSettle();
       expect(cursor(), SystemMouseCursors.click);
       expect(ring, findsOneWidget);
+      // The visible hint is a literal of the experiment widget, not an i18n
+      // text; its translated twin is the semantics hint.
       expect(find.text('Grenzen verbinden'), findsOneWidget);
+      expect(
+        tester.getSemantics(find.byKey(Key('chain.$side'))).hint,
+        'settings.kursstand.chainLink',
+      );
 
       await mouse.moveTo(origin + Offset(word.dx, word.dy - 40));
       await tester.pumpAndSettle(const Duration(seconds: 1));
       expect(cursor(), isNot(SystemMouseCursors.click));
       expect(ring, findsNothing);
+      semantics.dispose();
     });
   }
 }

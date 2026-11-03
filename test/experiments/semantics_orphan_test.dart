@@ -91,6 +91,7 @@ void main() {
     );
     for (final name in variants.keys) {
       _phase = 'tab $name';
+      // The tab titles are the variant names of the experiment, not i18n texts.
       await tester.tap(find.text(name));
       await tester.pumpAndSettle();
       _phase = 'scroll $name';

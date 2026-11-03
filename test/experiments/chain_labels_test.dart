@@ -148,6 +148,7 @@ void main() {
         await tester.pumpAndSettle();
 
         expect(labels, hasLength(2));
+        // The range labels are literals of the experiment widget, not i18n texts.
         String stop(int l) => l == _later ? 'Später' : 'L$l';
         expect(
           find.textContaining(
@@ -279,6 +280,7 @@ void main() {
           await tester.pump(const Duration(milliseconds: 16));
         }
         await tester.pumpAndSettle();
+        // Literal of the experiment widget, not an i18n text.
         expect(
           find.descendant(
             of: find.byKey(Key(card)),

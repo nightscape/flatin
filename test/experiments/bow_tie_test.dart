@@ -79,6 +79,7 @@ class _Shelf {
     await tester.pumpAndSettle();
   }
 
+  // The range labels are literals of the experiment widget, not i18n texts.
   void expectRanges(String words, String grammar) {
     expect(find.text('Wörter $words'), findsOneWidget);
     expect(find.text('Grammatik $grammar'), findsOneWidget);
