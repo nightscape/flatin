@@ -1,0 +1,4 @@
+* New: "Practise an exam" on the home screen. Import an exam file (.exam) and practise it sentence by sentence.
+* Tap a word to see its dictionary form, meaning and analysis.
+* Translate by clause, by sentence or the whole text. Then the app shows the model translation, and you mark "got it" or "different".
+* Words you needed help with come back for practice the next day.

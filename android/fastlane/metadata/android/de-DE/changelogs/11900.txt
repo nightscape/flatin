@@ -1,0 +1,4 @@
+* Neu: „Prüfung üben“ auf dem Startbildschirm. Importiere eine Prüfungsdatei (.exam) und übe sie Satz für Satz.
+* Tippe auf ein Wort: du siehst Grundform, Bedeutung und Bestimmung.
+* Übersetze in Teilsätzen, Sätzen oder dem ganzen Text. Danach zeigt die App die Musterübersetzung, und du markierst „hab ich“ oder „anders“.
+* Wörter, bei denen du Hilfe gebraucht hast, kommen am nächsten Tag zum Üben wieder.
