@@ -26,6 +26,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../support/round_driver.dart';
 import '../support/store_picture.dart';
 import '../support/word_classification_harness.dart' show letItLoad;
+import 'glossary.dart';
 
 /// A widget that can be found again by key after a rebuild.
 bool _isKeyed(Widget widget) => widget.key is ValueKey<String>;
@@ -104,16 +105,11 @@ class AppSteps {
       finder = find.byKey(Key(keyName));
     }
 
-    // If still not found and it's not a key-based identifier (no dots), fall back to text
-    if (finder.evaluate().isEmpty && !text.contains('.')) {
-      finder = find.text(text);
-    }
-
     // Ensure finder is valid before tapping
     expect(
       finder,
       findsAtLeastNWidgets(1),
-      reason: 'Could not find widget with key or text: $text',
+      reason: 'Could not find widget with key: $text',
     );
 
     await _waitUntilEnabled(tester, finder);
@@ -163,11 +159,6 @@ class AppSteps {
       finder = find.byKey(Key(keyName));
     }
 
-    // If still not found and it's not a key-based identifier (no dots), fall back to text
-    if (finder.evaluate().isEmpty && !text.contains('.')) {
-      finder = find.text(text);
-    }
-
     // Try to scroll if scrollable exists, otherwise just tap
     final scrollable = find.ancestor(
       of: finder,
@@ -188,8 +179,7 @@ class AppSteps {
   @Then('I should see {string}')
   @And('I should see {string}')
   Future<void> iShouldSee(WidgetTester tester, String text) async {
-    final finder = find.text(text);
-    expect(finder, findsAtLeastNWidgets(1));
+    expect(findPhrase(tester, text), findsAtLeastNWidgets(1));
   }
 
   @Then('I should see {string} in the app bar')
@@ -218,11 +208,6 @@ class AppSteps {
       finder = find.byKey(Key(keyName));
     }
 
-    // If still not found and it's not a key-based identifier (no dots), fall back to text
-    if (finder.evaluate().isEmpty && !text.contains('.')) {
-      finder = find.text(text);
-    }
-
     expect(finder, findsAtLeastNWidgets(1));
   }
 
@@ -247,11 +232,6 @@ class AppSteps {
       }
       await tester.pumpAndSettle(const Duration(seconds: 1));
       finder = find.byKey(Key(keyName));
-    }
-
-    // If still not found and it's not a key-based identifier (no dots), fall back to text
-    if (finder.evaluate().isEmpty && !text.contains('.')) {
-      finder = find.text(text);
     }
 
     expect(finder, findsAtLeastNWidgets(1));
@@ -370,11 +350,6 @@ class AppSteps {
       finder = find.byKey(Key(keyName));
     }
 
-    // If still not found and it's not a key-based identifier (no dots), fall back to text
-    if (finder.evaluate().isEmpty && !text.contains('.')) {
-      finder = find.text(text);
-    }
-
     expect(finder, findsAtLeastNWidgets(1));
   }
 
@@ -466,6 +441,7 @@ class AppSteps {
         .data!;
     final item = [...byType['nouns']!, ...byType['verbs']!].firstWhere(
       (i) =>
+          // vocabulary data, not a UI translation
           find.text(i.translation).evaluate().isNotEmpty &&
           i.acceptedForms.any((fs) => fs.any((f) => norm(f) == norm(word))),
     );
@@ -484,6 +460,7 @@ class AppSteps {
       await tester.pumpAndSettle();
       await tester.tap(dropdown);
       await tester.pumpAndSettle();
+      // axis value comes from the data, not from a translation file
       final option = find
           .text(
             selectors.optionText(
@@ -617,7 +594,7 @@ class AppSteps {
   @When('I tap on the {string} button')
   @And('I tap on the {string} button')
   Future<void> iTapOnButton(WidgetTester tester, String buttonText) async {
-    final button = find.text(buttonText);
+    final button = findPhrase(tester, buttonText);
     expect(button, findsAtLeastNWidgets(1));
     await tester.tap(button.first);
     await tester.pumpAndSettle(const Duration(seconds: 2));
@@ -711,7 +688,7 @@ class AppSteps {
     await letItLoad(tester);
     await tester.tap(find.byKey(const Key('focus.picker')));
     await tester.pumpAndSettle();
-    await tester.tap(find.text(focus).last);
+    await tester.tap(findPhrase(tester, focus).last);
     await tester.pumpAndSettle();
     await tap(tester, 'round.start.go');
     await letItLoad(tester);
