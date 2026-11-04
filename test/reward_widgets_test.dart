@@ -15,6 +15,7 @@ import 'package:latin_practice/widgets/town_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'support/key_echo_app.dart';
+import 'support/key_echo_i18n.dart';
 import 'support/word_classification_harness.dart';
 import 'support/latin_course.dart';
 
@@ -79,28 +80,24 @@ void main() {
 
     testWidgets('the settings screen offers the three switches and stores a '
         'flip', (tester) async {
-      // Real en texts: the screen's painted shelf asserts the label width, so
-      // key-echo keys do not fit.
       SharedPreferences.setMockInitialValues({});
       tester.view.physicalSize = const Size(800, 3000);
       tester.view.devicePixelRatio = 1;
       addTearDown(tester.view.reset);
-      await tester.pumpWidget(wrapInApp(const SettingsScreen()));
+      await tester.pumpWidget(wrapInKeyEchoAppWith(const SettingsScreen()));
       await letItLoad(tester);
 
-      const labels = {
-        'points': 'Points',
-        'town': 'Roman town',
-        'animation': 'Animation',
-      };
-      for (final MapEntry(key: id, value: label) in labels.entries) {
+      for (final id in ['points', 'town', 'animation']) {
         final tile = find.byKey(
           Key('settings.reward.$id'),
           skipOffstage: false,
         );
         final switchTile = tester.widget<SwitchListTile>(tile);
         expect(switchTile.value, isTrue);
-        expect((switchTile.title! as Text).data, label);
+        expect(
+          (switchTile.title! as Text).data,
+          keyEcho('settings.reward.$id'),
+        );
       }
 
       final town = find.byKey(const Key('settings.reward.town'));

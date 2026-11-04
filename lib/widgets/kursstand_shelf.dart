@@ -311,11 +311,9 @@ class ShelfNames {
             ),
           ),
           textDirection: TextDirection.ltr,
-        )..layout();
-        assert(
-          text.width <= _coverLine - shelfPageTop,
-          '"${texts[index]}" is too long for the front of a book',
-        );
+          maxLines: 1,
+          ellipsis: '…',
+        )..layout(maxWidth: _coverLine - shelfPageTop);
         return text;
       });
 
