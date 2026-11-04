@@ -172,7 +172,7 @@ void main() {
       ...fixed,
       for (var i = 0; i < _variants; i++)
         i.isEven
-            ? gen.variant(3)
+            ? gen.variant(3, true)
             : String.fromCharCodes([
                 for (var j = 0; j < r.nextInt(12); j++)
                   ' ab()[]|'.codeUnitAt(r.nextInt(8)),
@@ -194,6 +194,20 @@ void main() {
     expect(fixed, isNotEmpty);
     expect(malformed, greaterThan(0));
     expect(gen.reach['nested variant'], greaterThan(0));
+    expect(gen.reach['mark in variant'], greaterThan(0));
+    expect(gen.reach['quote around variant'], greaterThan(0));
+  });
+
+  test('P4b: a group next to punctuation or a German quote leaves no '
+      'gap', () {
+    final gen = ExamGen(Random(13));
+    for (final mark in [',', '.', ';', ':', '!', '?']) {
+      for (var i = 0; i < 100; i++) {
+        final (s, want) = gen.groupBeforeMark(mark);
+        expect(expand(s), want, reason: s);
+        expect(variantAccepts(s, want.first), isTrue, reason: s);
+      }
+    }
   });
 
   test('P5: the matcher refuses a reading changed by one word', () {
@@ -208,7 +222,7 @@ void main() {
       ('[x]', 'x x', 'static twice'),
     ];
     for (var i = 0; i < _variants; i++) {
-      final s = gen.variant(3);
+      final s = gen.variant(3, true);
       final reading = gen.pick(_Oracle(s).readings()!);
       for (final m in ReadingMutation.values) {
         final text = gen.mutate(reading, m);
@@ -218,7 +232,9 @@ void main() {
     final reach = <String, int>{};
     for (final (s, text, kind) in texts) {
       expect(s, isNot(contains(outsideWord)));
-      if (_Oracle(s).readings()!.contains(text)) continue;
+      if (_Oracle(s).readings()!.contains(_Oracle(text).readings()!.single)) {
+        continue;
+      }
       expect(variantAccepts(s, text), isFalse, reason: '$kind: "$s" "$text"');
       if (kind.startsWith('static')) continue;
       for (final k in [
@@ -260,7 +276,14 @@ final class _Oracle {
   List<String>? readings() {
     final text = _text();
     if (text == null || i != s.length) return null;
-    return [for (final t in text) t.replaceAll(RegExp(r'\s+'), ' ').trim()];
+    return [
+      for (final t in text)
+        t
+            .replaceAll(RegExp(r'\s+'), ' ')
+            .replaceAllMapped(RegExp(r' +([,.;:!?“])'), (m) => m[1]!)
+            .replaceAllMapped(RegExp(r'„ +'), (_) => '„')
+            .trim(),
+    ];
   }
 
   List<String>? _text() {

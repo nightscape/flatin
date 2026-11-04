@@ -460,7 +460,11 @@ List<String> expand(String variant) {
 bool variantAccepts(String variant, String answer) =>
     expand(variant).contains(_normalize(answer));
 
-String _normalize(String s) => s.replaceAll(RegExp(r'\s+'), ' ').trim();
+String _normalize(String s) => s
+    .replaceAll(RegExp(r'\s+'), ' ')
+    .replaceAll(RegExp(r' (?=[,.;:!?“])'), '')
+    .replaceAll('„ ', '„')
+    .trim();
 
 (List<String>, int) _sequence(String s, int start, String? close) {
   final done = <String>[];

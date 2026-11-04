@@ -52,15 +52,43 @@ final class ExamGen {
   static const _latin = ['lupus', 'ventus', 'aqua', 'silva', 'lūx', 'iter'];
   static const _german = ['der', 'Wolf', 'sieht', 'im', 'Wald', 'Licht'];
   static const _marks = [',', ':', '„', '“', '–'];
+  static const _sentenceMarks = [',', '.', ';', ':', '!', '?'];
   static const _ends = ['.', '?', '!'];
 
   String phrase(List<String> pool) =>
       [for (var i = 0; i <= r.nextInt(3); i++) pick(pool)].join(' ');
 
   /// A well-formed variant string of nesting [depth] at most.
-  String variant([int depth = 2]) => _seq(depth, 0);
+  String variant([int depth = 2, bool marks = false]) => _seq(depth, 0, marks);
 
-  String _seq(int depth, int level) {
+  /// A variant string with a group (choice, with or without an empty
+  /// alternative, or optional) directly before [mark], with or without a
+  /// word after the mark, and the readings it must expand to.
+  (String, List<String>) groupBeforeMark(String mark) {
+    final lead = pick(_german);
+    final alternatives = [
+      for (var j = 0; j <= 1 + r.nextInt(2); j++) phrase(_german),
+    ];
+    final shape = r.nextInt(3);
+    if (shape == 1) alternatives.insert(r.nextInt(alternatives.length + 1), '');
+    final group = shape == 2
+        ? '[${alternatives.join(' | ')}]'
+        : '(${alternatives.join(' | ')})';
+    final readings = [...alternatives, if (shape == 2) ''];
+    final quoted = chance(0.3);
+    final tail = chance(0.5) ? pick(_german) : null;
+    final after = tail == null ? '' : ' $tail';
+    String wrap(String a) => quoted ? '„$a“' : a;
+    return (
+      '$lead ${wrap(group)}$mark$after',
+      [
+        for (final a in readings)
+          '${wrap(a).isEmpty ? lead : '$lead ${wrap(a)}'}$mark$after',
+      ],
+    );
+  }
+
+  String _seq(int depth, int level, bool marks) {
     final parts = <String>[];
     final count = 1 + r.nextInt(level == 0 ? 3 : 2);
     for (var i = 0; i < count; i++) {
@@ -73,18 +101,26 @@ final class ExamGen {
         hit('optional variant');
         final inner = [
           for (var j = 0; j < (chance(0.2) ? 2 : 1); j++)
-            _seq(depth, level + 1),
+            _seq(depth, level + 1, marks),
         ];
         if (inner.length > 1) hit('choice in brackets');
         parts.add('[${inner.join(' | ')}]');
       } else {
         final alternatives = [
           for (var j = 0; j <= 1 + r.nextInt(2); j++)
-            chance(0.15) ? '' : _seq(depth, level + 1),
+            chance(0.15) ? '' : _seq(depth, level + 1, marks),
         ];
         if (alternatives.contains('')) hit('empty alternative');
         parts.add('(${alternatives.join(' | ')})');
       }
+    }
+    if (marks && chance(0.15)) {
+      hit('quote around variant');
+      parts.last = '„${parts.last}“';
+    }
+    if (marks && chance(0.4)) {
+      hit('mark in variant');
+      parts.last += '${chance(0.3) ? ' ' : ''}${pick(_sentenceMarks)}';
     }
     return parts.join(' ');
   }

@@ -43,7 +43,8 @@ entries from 0.
 `(a | b)` is a choice, `[x]` is optional, and groups nest: `(a | b [c])`. An
 alternative may be empty: `(gern | oft |)`. Alternatives at the top level are
 separate list entries. A reading has its runs of white space collapsed to one
-space and is trimmed. Variant strings are `teilsatz.de`, `satz.de`,
+space and is trimmed; a space before `, . ; : ! ? “` and a space after `„`
+is removed, so a group next to such a mark leaves no gap. Variant strings are `teilsatz.de`, `satz.de`,
 `ausrichtung[].de`, and `ziel` and `de` in tasks.
 
 ## Sentences: `uebersetzung.saetze[]`
