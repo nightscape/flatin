@@ -86,6 +86,36 @@ void main() {
     }
   });
 
+  test('an impersonal item read as a deponent type is refused, naming the '
+      'item', () {
+    for (var seed = 0; seed < 50; seed++) {
+      final r = Random(seed);
+      final skeleton = drawVerbsFile(r);
+      final type = r.nextBool() ? 'T' : 'T2';
+      final drawn = skeleton.withItems([
+        ...skeleton.items,
+        (
+          id: 'imp',
+          type: type,
+          stem: 'sty',
+          deponent: null,
+          impersonal: true,
+          regularType: 'TD',
+          overrides: <String, String>{},
+        ),
+      ]);
+      expect(
+        () => parseGrammarFiles({'gen.yaml': grammarSource(drawn.tree)}),
+        throwsA(
+          isA<SchemaError>()
+              .having((e) => e.rule, 'rule', 'S15')
+              .having((e) => e.item, 'item', 'imp~TD'),
+        ),
+        reason: 'seed $seed, own type $type',
+      );
+    }
+  });
+
   test('drawn files derive the S10/S25 forms, and dropFollowing drops '
       'exactly the asked forms an S30 rule gives', () {
     final counts = <String, int>{};
@@ -93,7 +123,11 @@ void main() {
 
     for (var seed = 0; seed < 200; seed++) {
       final r = Random(seed);
-      final drawn = drawVerbsFile(r);
+      final skeleton = drawVerbsFile(r);
+      final drawn = skeleton.withItems([
+        ...skeleton.items,
+        _impersonalAsRegular,
+      ]);
       final file = parseGrammarFiles({
         'gen.yaml': grammarSource(drawn.tree),
       }).single;
@@ -124,16 +158,9 @@ void main() {
           reason: reason,
         );
         final regularDerivation = engine.regularOf('synthetic', item.id);
-        // The regular reading of an impersonal item also has its personal
-        // passive keys; nothing reads them.
         expect(
           regularDerivation == null
               ? null
-              : item.impersonal
-              ? {
-                  for (final key in regular[item.id]!.keys)
-                    key: regularDerivation.forms[key]?.variants,
-                }
               : _spellings(regularDerivation.forms),
           regular[item.id]?.map((key, form) => MapEntry(key, [form])),
           reason: reason,
@@ -178,6 +205,36 @@ void main() {
         if (item.overrides.isNotEmpty) count('item with overrides');
       }
     }
+    final realFiles = parseGrammarFiles({
+      'lib/data/latin_nouns.yaml': File(
+        'lib/data/latin_nouns.yaml',
+      ).readAsStringSync(),
+      'lib/data/latin_verbs.yaml': File(
+        'lib/data/latin_verbs.yaml',
+      ).readAsStringSync(),
+    });
+    final verbs = realFiles.last;
+    final realRegular = GrammarEngine(realFiles).regularOf('verbs', 'ire')!;
+    // The oracle of the real item: the same word, impersonal, as an item
+    // of its regular type read by its own reading.
+    final twinTree = grammarTree(
+      File('lib/data/latin_verbs.yaml').readAsStringSync(),
+    );
+    final twin = (twinTree['items'] as List).cast<Map>().singleWhere(
+      (item) => item['id'] == 'ire',
+    );
+    twin
+      ..['type'] = twin.remove('regular_type')
+      ..remove('forms');
+    final twinFiles = parseGrammarFiles({
+      'lib/data/latin_nouns.yaml': File(
+        'lib/data/latin_nouns.yaml',
+      ).readAsStringSync(),
+      'lib/data/latin_verbs.yaml': grammarSource(twinTree),
+    });
+    final twinForms = GrammarEngine(twinFiles).of('verbs', 'ire').forms;
+    expect(verbs.item('ire').impersonalPassive, isTrue);
+    expect(_spellings(realRegular.forms), _spellings(twinForms));
     for (final what in [
       'by endings',
       'by regular',
@@ -192,6 +249,18 @@ void main() {
     }
   });
 }
+
+/// A fixed state kept in every drawn file: an impersonal item read as another
+/// type, as `ire` is in the verbs file.
+const DrawnItem _impersonalAsRegular = (
+  id: 'static',
+  type: 'T2',
+  stem: 'stz',
+  deponent: null,
+  impersonal: true,
+  regularType: 'T',
+  overrides: <String, String>{},
+);
 
 Map<String, List<String>> _spellings(Map<String, FormDerivation> forms) =>
     forms.map((key, form) => MapEntry(key, form.variants));

@@ -56,6 +56,21 @@ final class DrawnVerbsFile {
     this.items,
   );
 
+  DrawnVerbsFile withItems(List<DrawnItem> items) => DrawnVerbsFile._(
+    axes,
+    voiceAxis,
+    active,
+    passive,
+    deponentBy,
+    moves,
+    personal,
+    typeDeponent,
+    rules,
+    keys,
+    endingByType,
+    items,
+  );
+
   String keyOf(Map<String, String> features) =>
       [for (final axis in axes.keys) ?features[axis]].join('.');
 
@@ -288,9 +303,11 @@ DrawnVerbsFile drawVerbsFile(Random r) {
     // A deponent has no impersonal passive: S25 refuses the item (S15 for a
     // deponent type).
     final impersonal = type != 'TD' && r.nextInt(3) == 0;
+    // The regular reading of an impersonal item is refused on a deponent type
+    // like the item's own (S15).
     final regular = [
       for (final t in ['T', 'TD', 'T2'])
-        if (t != type) t,
+        if (t != type && !(impersonal && t == 'TD')) t,
     ];
     final item = (
       id: 'i$i',

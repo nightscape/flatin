@@ -2113,7 +2113,9 @@ class _Linker {
       translation: item.translation,
       parts: item.parts,
       forms: const {},
-      absent: const [],
+      absent: item.impersonalPassive
+          ? file.voice!.impersonal!.personal
+          : const [],
       typeName: name,
       lemma: item.lemma,
       deponent: item.deponent,
