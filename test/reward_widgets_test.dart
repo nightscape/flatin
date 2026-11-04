@@ -14,6 +14,7 @@ import 'package:latin_practice/widgets/reward_burst.dart';
 import 'package:latin_practice/widgets/town_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'support/key_echo_app.dart';
 import 'support/word_classification_harness.dart';
 
 const _storeKey = 'practice_settings';
@@ -77,6 +78,8 @@ void main() {
 
     testWidgets('the settings screen offers the three switches and stores a '
         'flip', (tester) async {
+      // Real en texts: the screen's painted shelf asserts the label width, so
+      // key-echo keys do not fit.
       SharedPreferences.setMockInitialValues({});
       tester.view.physicalSize = const Size(800, 3000);
       tester.view.devicePixelRatio = 1;
@@ -117,7 +120,7 @@ void main() {
   group('TownView', () {
     Future<void> pumpTown(WidgetTester tester, List<String> ids) async {
       await tester.pumpWidget(
-        wrapInApp(
+        wrapInKeyEchoAppWith(
           TownView(
             RewardLedger(buildings: ids),
             GameRules.parse(
@@ -125,24 +128,26 @@ void main() {
               gameRulesAsset,
             ),
           ),
-          forcedLocale: const Locale('de'),
         ),
       );
       await letItLoad(tester);
     }
 
-    testWidgets('shows the built buildings back to front, named in German', (
-      tester,
-    ) async {
-      await pumpTown(tester, ['fons', 'domus']);
+    testWidgets(
+      'shows the built buildings back to front, named by their keys',
+      (tester) async {
+        await pumpTown(tester, ['fons', 'domus']);
 
-      expect(
-        tester.widgetList<Tooltip>(find.byType(Tooltip)).map((t) => t.message),
-        ['Brunnen', 'Haus'],
-      );
-      expect(find.byKey(const Key('town.building.domus')), findsOneWidget);
-      expect(find.byKey(const Key('town.building.fons')), findsOneWidget);
-    });
+        expect(
+          tester
+              .widgetList<Tooltip>(find.byType(Tooltip))
+              .map((t) => t.message),
+          ['reward.building.fons', 'reward.building.domus'],
+        );
+        expect(find.byKey(const Key('town.building.domus')), findsOneWidget);
+        expect(find.byKey(const Key('town.building.fons')), findsOneWidget);
+      },
+    );
 
     testWidgets('names the effect of a building that has modifiers', (
       tester,
@@ -151,7 +156,10 @@ void main() {
 
       expect(
         tester.widgetList<Tooltip>(find.byType(Tooltip)).map((t) => t.message),
-        ['Wechselstube\nVerdoppelt alle Münzen', 'Haus'],
+        [
+          'reward.building.argentaria\nreward.effect.argentaria',
+          'reward.building.domus',
+        ],
       );
     });
 

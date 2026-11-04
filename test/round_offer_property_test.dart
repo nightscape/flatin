@@ -33,6 +33,7 @@ import 'package:latin_practice/services/fsrs_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'support/course_providers.dart';
+import 'support/key_echo_app.dart';
 import 'support/gen_card_store.dart';
 import 'support/gen_settings.dart';
 import 'support/word_classification_harness.dart';
@@ -481,7 +482,7 @@ void main() {
       await tester.tap(button);
       await letItLoad(tester);
       expect(
-        find.textContaining('Aufgabe 1 von'),
+        find.textContaining('round.task{n=1,'),
         findsOneWidget,
         reason:
             'on screen: '
@@ -501,11 +502,7 @@ void main() {
         seedSettings(s.settings);
         await tester.pumpWidget(const SizedBox());
         await tester.pumpWidget(
-          wrapInApp(
-            home,
-            forcedLocale: const Locale('de'),
-            overrides: _overridesOf(s, seed),
-          ),
+          wrapInKeyEchoAppWith(home, overrides: _overridesOf(s, seed)),
         );
         await letItLoad(tester);
       }
@@ -513,7 +510,7 @@ void main() {
       try {
         await pump(const GrammarStartScreen());
         expect(
-          find.text('Heute ist alles geübt. Du kannst ein Thema wählen.'),
+          find.text('round.start.nothingDue'),
           s.pool.cards.any((id) => !s.store.cards[id]!.due.isAfter(now))
               ? findsNothing
               : findsOneWidget,

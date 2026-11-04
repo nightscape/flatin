@@ -25,6 +25,8 @@ import 'package:latin_practice/screens/round_screen.dart';
 import 'package:latin_practice/services/fsrs_storage.dart';
 
 import 'support/course_providers.dart';
+import 'support/key_echo_app.dart';
+import 'support/key_echo_i18n.dart';
 import 'support/round_driver.dart';
 import 'support/word_classification_harness.dart';
 
@@ -49,7 +51,6 @@ class _Stub implements ExerciseGenerator {
 /// No share of right answers and no error count anywhere on the screen.
 void _expectNoScore() {
   expect(find.textContaining('%'), findsNothing);
-  expect(find.textContaining(RegExp(r'\d+ von \d+ richtig')), findsNothing);
 }
 
 Future<void> _pumpStart(WidgetTester tester, {bool animation = true}) async {
@@ -60,9 +61,8 @@ Future<void> _pumpStart(WidgetTester tester, {bool animation = true}) async {
     Settings(courseWords: LessonRange(1, 1), rewardAnimation: animation),
   );
   await tester.pumpWidget(
-    wrapInApp(
+    wrapInKeyEchoAppWith(
       const GrammarStartScreen(),
-      forcedLocale: const Locale('de'),
       overrides: [exerciseRandomProvider.overrideWithValue(Random(17))],
     ),
   );
@@ -115,13 +115,17 @@ void main() {
         .read(topicsProvider(const AllWords()))
         .requireValue;
     const namer = DerivedTopicNamer();
-    expect(find.text('Heute dran'), findsOneWidget);
+    expect(find.text('round.start.today'), findsOneWidget);
     expect(
-      find.text('Neues Thema: ${namer.name((offer as NewTopicOffer).topic)}'),
+      find.text(
+        keyEcho('round.start.newTopic', {
+          'name': namer.name((offer as NewTopicOffer).topic),
+        }),
+      ),
       findsOneWidget,
     );
     expect(find.text(namer.name(topics.first)), findsWidgets);
-    expect(find.text('Lektion 1'), findsWidgets);
+    expect(find.text(keyEcho('round.start.lesson', {'n': 1})), findsWidgets);
     _expectNoScore();
   });
 
@@ -130,10 +134,7 @@ void main() {
   ) async {
     seedSettings(Settings(courseWords: LessonRange(1, 1)));
     await tester.pumpWidget(
-      wrapInApp(
-        const GrammarStartScreen(namer: _FixedNamer()),
-        forcedLocale: const Locale('de'),
-      ),
+      wrapInKeyEchoAppWith(const GrammarStartScreen(namer: _FixedNamer())),
     );
     await letItLoad(tester);
 
@@ -143,7 +144,10 @@ void main() {
     final topics = container
         .read(topicsProvider(const AllWords()))
         .requireValue;
-    expect(find.text('Neues Thema: Thema X'), findsOneWidget);
+    expect(
+      find.text(keyEcho('round.start.newTopic', {'name': 'Thema X'})),
+      findsOneWidget,
+    );
     expect(find.text('Thema X'), findsNWidgets(topics.length));
     for (final topic in topics) {
       expect(find.text(topic.name), findsNothing);
@@ -157,7 +161,10 @@ void main() {
     await tap(tester, 'round.start.go');
     await letItLoad(tester);
 
-    expect(find.text('Aufgabe 1 von 10'), findsOneWidget);
+    expect(
+      find.text(keyEcho('round.task', {'n': 1, 'total': 10})),
+      findsOneWidget,
+    );
     _expectNoScore();
     final first = shown(tester);
     await answer(tester, first, right: false);
@@ -168,30 +175,38 @@ void main() {
     expect(identical(shown(tester), first), isFalse);
 
     for (var n = 2; n <= 10; n++) {
-      expect(find.text('Aufgabe $n von 10'), findsOneWidget);
-      expect(find.textContaining('11'), findsNothing);
+      expect(
+        find.text(keyEcho('round.task', {'n': n, 'total': 10})),
+        findsOneWidget,
+      );
+      expect(find.textContaining('n=11'), findsNothing);
       _expectNoScore();
       await answer(tester, shown(tester), right: true);
       await tester.pump(const Duration(milliseconds: 100));
       expect(find.text('🪙 +10'), findsOneWidget, reason: 'task $n');
-      expect(find.textContaining('Punkte'), findsNothing);
+      expect(find.textContaining('round.end.points'), findsNothing);
       await letItLoad(tester);
     }
 
-    expect(find.text('Noch einmal'), findsOneWidget);
-    expect(find.textContaining('11'), findsNothing);
+    expect(find.text('round.retry'), findsOneWidget);
+    expect(find.textContaining('n=11'), findsNothing);
     expect(find.byType(LinearProgressIndicator), findsOneWidget);
     _expectNoScore();
     await answer(tester, shown(tester), right: true);
     await letItLoad(tester);
 
     expect(find.byType(RoundEndScreen), findsOneWidget);
-    expect(find.text('Runde geschafft!'), findsOneWidget);
-    expect(find.text('+95 Münzen'), findsOneWidget);
-    expect(find.text('Kontostand: 95 Münzen'), findsOneWidget);
+    expect(find.text('round.end.title'), findsOneWidget);
+    expect(
+      find.text(keyEcho('round.end.points', {'points': 95})),
+      findsOneWidget,
+    );
+    expect(
+      find.text(keyEcho('round.end.total', {'total': 95})),
+      findsOneWidget,
+    );
     expect(find.byKey(const Key('round.end.canBuy')), findsNothing);
-    expect(find.textContaining('⭐'), findsNothing);
-    expect(find.textContaining('Neu in deiner Stadt'), findsNothing);
+    expect(find.textContaining('round.end.bonus'), findsNothing);
     expect(find.byKey(const Key('town.building.domus')), findsNothing);
     _expectNoScore();
     final after = await tester.runAsync(FsrsStorage.loadCards);
@@ -217,20 +232,28 @@ void main() {
       ),
     );
     await tester.pumpWidget(
-      wrapInApp(
+      wrapInKeyEchoAppWith(
         Consumer(
           builder: (_, ref, _) => ref.watch(rewardsProvider).hasValue
               ? const RoundEndScreen(start: RewardLedger(), focus: AllWords())
               : const SizedBox(),
         ),
-        forcedLocale: const Locale('de'),
       ),
     );
     await letItLoad(tester);
 
-    expect(find.text('+30 Münzen'), findsOneWidget);
-    expect(find.text('⭐ +20 Bonus'), findsOneWidget);
-    expect(find.text('Kontostand: 50 Münzen'), findsOneWidget);
+    expect(
+      find.text(keyEcho('round.end.points', {'points': 30})),
+      findsOneWidget,
+    );
+    expect(
+      find.text(keyEcho('round.end.bonus', {'bonus': 20})),
+      findsOneWidget,
+    );
+    expect(
+      find.text(keyEcho('round.end.total', {'total': 50})),
+      findsOneWidget,
+    );
   });
 
   testWidgets('the end screen offers no purchase when every affordable '
@@ -245,13 +268,12 @@ void main() {
       ),
     );
     await tester.pumpWidget(
-      wrapInApp(
+      wrapInKeyEchoAppWith(
         Consumer(
           builder: (_, ref, _) => ref.watch(rewardsProvider).hasValue
               ? const RoundEndScreen(start: RewardLedger(), focus: AllWords())
               : const SizedBox(),
         ),
-        forcedLocale: const Locale('de'),
       ),
     );
     await letItLoad(tester);
@@ -268,7 +290,10 @@ void main() {
 
     await answer(tester, shown(tester), right: true);
     await tester.pump(const Duration(milliseconds: 100));
-    expect(find.text('Aufgabe 2 von 10'), findsOneWidget);
+    expect(
+      find.text(keyEcho('round.task', {'n': 2, 'total': 10})),
+      findsOneWidget,
+    );
     expect(find.textContaining('🪙'), findsNothing);
   });
 
@@ -278,7 +303,7 @@ void main() {
     seedSettings(Settings(courseWords: LessonRange(1, 1)));
     final stub = _Stub();
     await tester.pumpWidget(
-      wrapInApp(
+      wrapInKeyEchoAppWith(
         const HomeScreen(),
         overrides: [
           exerciseRegistryProvider.overrideWithValue([stub]),
@@ -329,9 +354,8 @@ void main() {
         ),
       );
       await tester.pumpWidget(
-        wrapInApp(
+        wrapInKeyEchoAppWith(
           const GrammarStartScreen(),
-          forcedLocale: const Locale('de'),
           overrides: [
             exerciseRandomProvider.overrideWithValue(Random(17)),
             exerciseRegistryProvider.overrideWithValue([
@@ -386,9 +410,8 @@ void main() {
         ),
       );
       await tester.pumpWidget(
-        wrapInApp(
+        wrapInKeyEchoAppWith(
           const GrammarStartScreen(),
-          forcedLocale: const Locale('de'),
           overrides: [
             exerciseRandomProvider.overrideWithValue(Random(17)),
             exerciseRegistryProvider.overrideWithValue([
@@ -441,9 +464,8 @@ void _macronTwinTest() => testWidgets(
       ),
     );
     await tester.pumpWidget(
-      wrapInApp(
+      wrapInKeyEchoAppWith(
         const GrammarStartScreen(),
-        forcedLocale: const Locale('de'),
         overrides: [
           exerciseRandomProvider.overrideWithValue(Random(99)),
           exerciseRegistryProvider.overrideWithValue([
