@@ -121,13 +121,7 @@ void main() {
     final counts = <String, int>{};
     void count(String what) => counts[what] = (counts[what] ?? 0) + 1;
 
-    for (var seed = 0; seed < 200; seed++) {
-      final r = Random(seed);
-      final skeleton = drawVerbsFile(r);
-      final drawn = skeleton.withItems([
-        ...skeleton.items,
-        _impersonalAsRegular,
-      ]);
+    for (final (label, drawn, r) in _voiceStates()) {
       final file = parseGrammarFiles({
         'gen.yaml': grammarSource(drawn.tree),
       }).single;
@@ -147,9 +141,10 @@ void main() {
       final sets = _endingSets(drawn, forms);
       final rules = followRulesOf(file);
       final endings = endingSetsOf(engine, file);
+      expect(_canonical(endings), _canonical(sets), reason: label);
 
       for (final item in drawn.items) {
-        final reason = 'seed $seed, item ${item.id}';
+        final reason = '$label, item ${item.id}';
         final own = forms[item.id]!;
         final derivation = engine.of('synthetic', item.id);
         expect(
@@ -248,7 +243,201 @@ void main() {
       expect(counts[what], greaterThan(30), reason: '$what in $counts');
     }
   });
+
+  test('item order changes neither the ending sets, nor the generated forms, '
+      'nor what dropFollowing drops', () {
+    for (final (label, drawn, r) in _voiceStates()) {
+      final orders = [
+        drawn.items.reversed.toList(),
+        [...drawn.items]..shuffle(r),
+      ];
+      final reference = _orderObservables(drawn);
+      for (final order in orders) {
+        expect(
+          _orderObservables(drawn.withItems(order)),
+          reference,
+          reason: '$label, order ${order.map((i) => i.id).toList()}',
+        );
+      }
+    }
+  });
+
+  test('the real verbs file: item order changes neither the ending sets '
+      'nor what dropFollowing drops', () {
+    const path = 'lib/data/latin_verbs.yaml';
+    const nounsPath = 'lib/data/latin_nouns.yaml';
+    final nouns = File(nounsPath).readAsStringSync();
+    Map<String, dynamic> observables(
+      List<dynamic> Function(List<dynamic>) reorder,
+    ) {
+      final tree = grammarTree(File(path).readAsStringSync());
+      tree['items'] = reorder(tree['items'] as List);
+      final files = parseGrammarFiles({
+        nounsPath: nouns,
+        path: grammarSource(tree),
+      });
+      final file = files.last;
+      final engine = GrammarEngine(files);
+      final endings = endingSetsOf(engine, file);
+      final rules = followRulesOf(file);
+      return {
+        'sets': _canonical(endings),
+        for (final item in file.items)
+          item.id: () {
+            final derivation = engine.of(file.dataFileId, item.id);
+            return dropFollowing(
+              rules,
+              derivation.forms.keys.toList(),
+              <String>{},
+              derivation.forms,
+              engine.regularOf(file.dataFileId, item.id)?.forms,
+              item.impersonalPassive,
+              endings,
+            );
+          }(),
+      };
+    }
+
+    final reference = observables((items) => items);
+    expect(observables((items) => items.reversed.toList()), reference);
+    expect(observables((items) => [...items]..shuffle(Random(1))), reference);
+  });
 }
+
+/// The drawn state of a voice property: a label, a drawn file and the source of
+/// the property's own draws.
+typedef _VoiceState = (String, DrawnVerbsFile, Random);
+
+/// The written states of [_staticExamples], then the drawn ones. The impersonal item
+/// of [_impersonalAsRegular] sits at a drawn position among the drawn items.
+Iterable<_VoiceState> _voiceStates() sync* {
+  for (final (name, drawn) in _staticExamples) {
+    yield ('example $name', drawn, Random(0));
+  }
+  for (var seed = 0; seed < 200; seed++) {
+    final r = Random(seed);
+    final skeleton = drawVerbsFile(r);
+    yield (
+      'seed $seed',
+      skeleton.withItems(
+        [...skeleton.items]
+          ..insert(r.nextInt(skeleton.items.length + 1), _impersonalAsRegular),
+      ),
+      r,
+    );
+  }
+}
+
+/// Everything about a drawn file that a reader of the follow rules sees, as
+/// values that equal each other exactly when the reading is the same.
+Map<String, Object> _orderObservables(DrawnVerbsFile drawn) {
+  final file = parseGrammarFiles({
+    'gen.yaml': grammarSource(drawn.tree),
+  }).single;
+  final engine = GrammarEngine([file]);
+  final forms = {
+    for (final item in drawn.items)
+      item.id: drawn.formsOf(item, item.type, overrides: true),
+  };
+  return {
+    'engine sets': _canonical(endingSetsOf(engine, file)),
+    'oracle sets': _canonical(_endingSets(drawn, forms)),
+    for (final item in drawn.items)
+      item.id: _spellings(engine.of('synthetic', item.id).forms),
+  };
+}
+
+String _canonical(Map<String, List<Map<String, (String, String)>>> sets) => ([
+  for (final MapEntry(:key, :value) in sets.entries)
+    '$key: ${([
+      for (final s in value) ([for (final e in s.entries) '${e.key}=${e.value}']..sort()).join(';'),
+    ]..sort()).join(' | ')}',
+]..sort()).join('\n');
+
+/// 'impersonal item first': two `endings` rules whose sources land in the
+/// group `a1c0`, an impersonal item first, and overrides that keep `i0` and
+/// `i1` from giving the same sets.
+final _staticExamples = <(String, DrawnVerbsFile)>[
+  (
+    'impersonal item first',
+    DrawnVerbsFile.fromFacts(
+      axes: {
+        'ax0': ['a0c0', 'a0c1', 'a0c2'],
+        'ax1': ['a1c0', 'a1c1', 'a1c2'],
+        'ax2': ['a2c0', 'a2c1', 'a2c2'],
+      },
+      voiceAxis: 'ax2',
+      active: 'a2c2',
+      passive: 'a2c1',
+      deponentBy: 'ax1',
+      moves: [
+        {
+          'ax1': ['a1c0', 'a1c2'],
+        },
+      ],
+      personal: [
+        {
+          'ax0': ['a0c2'],
+        },
+        {
+          'ax0': ['a0c1', 'a0c0'],
+          'ax1': ['a1c2'],
+        },
+      ],
+      typeDeponent: null,
+      rules: [
+        (
+          when: {
+            'ax1': ['a1c0', 'a1c1'],
+          },
+          from: {'ax0': 'a0c0', 'ax2': 'a2c2'},
+          drop: [],
+          endings: true,
+          impersonal: false,
+        ),
+        (
+          when: {
+            'ax1': ['a1c0'],
+          },
+          from: {'ax2': 'a2c1'},
+          drop: [],
+          endings: true,
+          impersonal: true,
+        ),
+      ],
+      dropped: ['ax0'],
+    ).withItems([
+      _impersonalAsRegular,
+      (
+        id: 'i0',
+        type: 'T2',
+        stem: 'sta',
+        deponent: null,
+        impersonal: false,
+        regularType: 'TD',
+        overrides: {'a0c0.a1c2.a2c2': 'staq\u5E08'},
+      ),
+      (
+        id: 'i1',
+        type: 'T2',
+        stem: 'stb',
+        deponent: null,
+        impersonal: false,
+        regularType: 'TD',
+        overrides: {'a1c0.a2c1': 'stbq\u5E1C', 'a0c0.a1c2.a2c2': 'stbq\u5E08'},
+      ),
+      (
+        id: 'i2',
+        type: 'T',
+        stem: 'stc',
+        deponent: null,
+        impersonal: true,
+        regularType: null,
+        overrides: <String, String>{},
+      ),
+    ]),
+  ),
+];
 
 /// A fixed state kept in every drawn file: an impersonal item read as another
 /// type, as `ire` is in the verbs file.
@@ -305,22 +494,21 @@ String _target(DrawnRule rule, Map<String, String> features) => [
   for (final axis in [...rule.from.keys, ...rule.drop]) features[axis],
 ].join('.');
 
-/// S30 `by: endings` read from the drawn forms: under each group (a source
-/// without the `from` axes), the distinct swap sets that each type's first
-/// item gives whose source and every key reached from it are generated forms.
+/// S30 `by: endings` read from the drawn forms: for each source form of each
+/// item whose source and every key reached from it are generated forms, the
+/// swaps to every reached key, filed under the source without the `from` axes.
+/// A group holds each distinct swap map once, whatever item gave it.
 Map<String, List<Map<String, (String, String)>>> _endingSets(
   DrawnVerbsFile drawn,
   Map<String, Map<String, String>> forms,
 ) {
   final byGroup = <String, Map<String, Map<String, (String, String)>>>{};
-  final done = <String>{};
-  for (final (index, rule) in drawn.rules.indexed) {
-    if (!rule.endings) continue;
+  for (final rule in drawn.rules.where((rule) => rule.endings)) {
     for (final item in drawn.items) {
       final own = forms[item.id]!;
       bool generated(String key) =>
           own.containsKey(key) && !item.overrides.containsKey(key);
-      for (final sourceKey in own.keys) {
+      for (final sourceKey in own.keys.where(generated)) {
         final source = _features(drawn, sourceKey);
         if (!rule.from.entries.every((e) => source[e.key] == e.value)) continue;
         final reached = [
@@ -330,30 +518,26 @@ Map<String, List<Map<String, (String, String)>>> _endingSets(
               features,
         ];
         if (reached.isEmpty ||
-            !generated(sourceKey) ||
-            !reached.every((f) => generated(drawn.keyOf(f))) ||
-            !done.add('${item.type}/$index/$sourceKey')) {
+            !reached.every((f) => generated(drawn.keyOf(f)))) {
           continue;
         }
         final group = {...source}
           ..removeWhere((axis, _) => rule.from.containsKey(axis));
-        byGroup.putIfAbsent(drawn.keyOf(group), () => {})[item.type] = {
+        final swaps = {
           for (final features in reached)
             _target(rule, features): _swap(
               own[sourceKey]!,
               own[drawn.keyOf(features)]!,
             ),
         };
+        byGroup.putIfAbsent(drawn.keyOf(group), () => {})[swaps.toString()] =
+            swaps;
       }
     }
   }
-  String canonical(Map<String, (String, String)> set) =>
-      ([for (final e in set.entries) '${e.key}=${e.value}']..sort()).join(';');
   return {
     for (final MapEntry(:key, :value) in byGroup.entries)
-      key: {
-        for (final set in value.values) canonical(set): set,
-      }.values.toList(),
+      key: value.values.toList(),
   };
 }
 

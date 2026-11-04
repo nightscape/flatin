@@ -447,12 +447,11 @@ Map<String, List<EndingSet>> endingSetsOf(
 ) {
   final axes = file.axes;
   final byGroup = <String, Map<String, EndingSet>>{};
-  final done = <String>{};
   for (final item in file.items.where(
     (i) => !irregularVerbTypes.contains(i.typeName),
   )) {
     final forms = engine.of(file.dataFileId, item.id).forms;
-    for (final (index, spec) in file.follows.indexed) {
+    for (final spec in file.follows) {
       if (spec.by != FollowBy.endings) continue;
       for (final MapEntry(key: sourceKey, value: source) in forms.entries) {
         final features = axes.parseKey(sourceKey);
@@ -469,22 +468,21 @@ Map<String, List<EndingSet>> endingSetsOf(
         };
         if (targets.isEmpty ||
             source is IrregularForm ||
-            targets.values.any((f) => f == null || f is IrregularForm) ||
-            !done.add('${item.typeName}/$index/$sourceKey')) {
+            targets.values.any((f) => f == null || f is IrregularForm)) {
           continue;
         }
-        byGroup.putIfAbsent(axes.formatKey(group), () => {})[item.typeName] = {
+        final swaps = <String, (String, String)>{
           for (final MapEntry(:key, :value) in targets.entries)
             key: _swap(source.result, value!.result),
         };
+        byGroup.putIfAbsent(axes.formatKey(group), () => {})[swaps.toString()] =
+            swaps;
       }
     }
   }
   return {
     for (final MapEntry(:key, :value) in byGroup.entries)
-      key: {
-        for (final set in value.values) set.toString(): set,
-      }.values.toList(),
+      key: value.values.toList(),
   };
 }
 

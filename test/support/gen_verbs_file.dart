@@ -41,6 +41,57 @@ final class DrawnVerbsFile {
   final Map<String, Map<String, String>> endingByType;
   final List<DrawnItem> items;
 
+  /// The file of the given facts: every key of [axes] plus, when [dropped]
+  /// is not empty, every key without the [dropped] axes. The types `T` and
+  /// `TD` share their endings; `T2` has endings of its own.
+  factory DrawnVerbsFile.fromFacts({
+    required Map<String, List<String>> axes,
+    required String voiceAxis,
+    required String active,
+    required String passive,
+    required String deponentBy,
+    required List<RawPattern> moves,
+    required List<RawPattern> personal,
+    required List<String>? typeDeponent,
+    required List<DrawnRule> rules,
+    required List<String> dropped,
+  }) {
+    Iterable<Map<String, String>> combinations(List<String> ids) => ids.fold(
+      [<String, String>{}],
+      (all, id) => [
+        for (final c in all)
+          for (final code in axes[id]!) {...c, id: code},
+      ],
+    );
+
+    final names = [...axes.keys];
+    final keys = [
+      ...combinations(names),
+      if (dropped.isNotEmpty)
+        ...combinations([...names.where((a) => !dropped.contains(a))]),
+    ];
+    Map<String, String> endings(int type) => {
+      for (final (i, features) in keys.indexed)
+        [...features.values].join('.'): String.fromCharCode(
+          0x4E00 + 0x1000 * type + i,
+        ),
+    };
+    return DrawnVerbsFile._(
+      axes,
+      voiceAxis,
+      active,
+      passive,
+      deponentBy,
+      moves,
+      personal,
+      typeDeponent,
+      rules,
+      keys,
+      {'T': endings(0), 'TD': endings(0), 'T2': endings(1)},
+      [],
+    );
+  }
+
   DrawnVerbsFile._(
     this.axes,
     this.voiceAxis,
@@ -242,36 +293,17 @@ DrawnVerbsFile drawVerbsFile(Random r) {
     ];
   }
 
-  Iterable<Map<String, String>> combinations(List<String> ids) => ids.fold(
-    [<String, String>{}],
-    (all, id) => [
-      for (final c in all)
-        for (final code in axes[id]!) {...c, id: code},
-    ],
-  );
-
-  final keys = [
-    ...combinations(names),
-    if (dropped.isNotEmpty)
-      ...combinations([...names.where((a) => !dropped.contains(a))]),
-  ];
-  Map<String, String> endings(int type) => {
-    for (final (i, features) in keys.indexed)
-      [...features.values].join('.'): String.fromCharCode(
-        0x4E00 + 0x1000 * type + i,
-      ),
-  };
   final endingAxes = <String>{};
-  final file = DrawnVerbsFile._(
-    axes,
-    voiceAxis,
-    active,
-    passive,
-    deponentBy,
-    patterns(others),
-    personal(),
-    r.nextBool() ? null : subset(axes[deponentBy]!),
-    [
+  final file = DrawnVerbsFile.fromFacts(
+    axes: axes,
+    voiceAxis: voiceAxis,
+    active: active,
+    passive: passive,
+    deponentBy: deponentBy,
+    moves: patterns(others),
+    personal: personal(),
+    typeDeponent: r.nextBool() ? null : subset(axes[deponentBy]!),
+    rules: [
       for (var i = 0; i <= r.nextInt(3); i++)
         () {
           final drop = i > 0 && dropped.isNotEmpty && r.nextBool()
@@ -293,9 +325,7 @@ DrawnVerbsFile drawVerbsFile(Random r) {
           );
         }(),
     ],
-    keys,
-    {'T': endings(0), 'TD': endings(0), 'T2': endings(1)},
-    [],
+    dropped: dropped,
   );
 
   for (var i = 0; i < 3 + r.nextInt(4); i++) {
@@ -327,5 +357,6 @@ DrawnVerbsFile drawVerbsFile(Random r) {
     }
     file.items.add(item);
   }
+  file.items.shuffle(r);
   return file;
 }
