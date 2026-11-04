@@ -39,7 +39,7 @@ post_install do |installer|
   app_target = installer.podfile.root_target_definitions.first.platform.deployment_target
   installer.pods_project.targets.each do |target|
     flutter_additional_ios_build_settings(target)
-    # Xcode refuses the plugins' own lower minimums for the simulator.
+    # Xcode refuses the plugins' own lower minimums.
     target.build_configurations.each do |config|
       if Pod::Version.new(config.build_settings['IPHONEOS_DEPLOYMENT_TARGET']) < app_target
         config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = app_target.to_s

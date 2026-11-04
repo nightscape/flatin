@@ -30,6 +30,6 @@ SPEC CHECKSUMS:
   integration_test: 4a889634ef21a45d28d50d622cf412dc6d9f586e
   shared_preferences_foundation: 7036424c3d8ec98dfe75ff1667cb0cd531ec82bb
 
-PODFILE CHECKSUM: d02c5f0e10c9bae59b76309820d89a3c224a1b46
+PODFILE CHECKSUM: eed298a8878b9efeb3f0fb1b769dc66ebf93df6b
 
 COCOAPODS: 1.17.0
