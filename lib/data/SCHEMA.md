@@ -14,7 +14,7 @@ axis names, because a code names only one axis (S1).
 ## File structure
 
 ```yaml
-data_file_id: verbs                  # 'nouns' | 'verbs'; part of a card id
+data_file_id: verbs                  # the course manifest's id of the file; part of a card id
 
 axes:                                # declaration order = key order = label order
   modus:                             # S20: every learner text is {de, en}
@@ -453,3 +453,33 @@ names a word the engine has an item for, when the tokens do not spell
 number and gender (a noun's gender is its `genus`, S26), when a passive AcI's
 participle has no accusative subject or no `esse` after it, when a question's
 head is not its particle, or when a double accusative has no two accusatives.
+
+# Course manifest
+
+`lib/data/courses.yaml` lists the course manifests the app reads; the app
+reads exactly one, and a list of another length throws at load. A manifest
+(`lib/data/course.yaml`, read by `lib/models/course.dart`) names every file of
+one course:
+
+```yaml
+language: lib/data/languages/la.yaml       # the codes and rules of the exam packs
+data_files:                                # load order = display order
+  - {id: nouns, path: lib/data/latin_nouns.yaml, role: noun}
+gloss_files: {verb: lib/data/german_verbs.yaml}   # translation files by role
+books: [lib/data/agite_1.yaml]             # in reading order
+sentences: lib/data/sentences.yaml
+game_rules: lib/data/game_rules.yaml
+```
+
+The keys above are the whole set, all required; an entry of `data_files` has
+exactly `id`, `path` and `role`. `role` is `noun`, `verb` or `vocab` and says
+what the app does with the items: a `vocab` file has no grammar progression
+and no screen of its own.
+
+Each `id` equals the `data_file_id` of the file at `path`, and is unique
+across every manifest of the list, because a card id is
+`<data_file_id>:<item>`. So the data files of a new course carry the course as
+a prefix (`en_vocab`), and an id never changes once cards use it. A game
+rule's `when.dataFile` names an `id` of its course and `when.kind` an exercise
+kind. Each of these checks throws at load and names the file it found the
+error in.

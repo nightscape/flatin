@@ -29,6 +29,7 @@ import 'support/course_providers.dart';
 import 'support/gen_sentence_answers.dart';
 import 'support/grammar_exercise_harness.dart';
 import 'support/recording_rewards.dart';
+import 'support/latin_course.dart';
 
 typedef _Fraction = ({int top, int bottom});
 
@@ -128,8 +129,8 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   final rules = GameRules.parse(
-    File(gameRulesAsset).readAsStringSync(),
-    gameRulesAsset,
+    File(latinCourse.gameRules).readAsStringSync(),
+    latinCourse.gameRules,
   );
 
   test('through the round, a first attempt of a sentence kind pays 10 when '

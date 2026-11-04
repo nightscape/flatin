@@ -22,6 +22,7 @@ import 'package:latin_practice/providers/fsrs_provider.dart';
 import 'package:latin_practice/providers/locale_provider.dart';
 
 import 'support/grammar_exercise_harness.dart';
+import 'support/latin_course.dart';
 
 const _firstLesson = 21;
 const _wordsPerBundle = 2;
@@ -75,8 +76,8 @@ void main() {
     TestWidgetsFlutterBinding.ensureInitialized();
     items = await loadAllPracticeItems();
     corpus = await loadSentenceCorpus();
-    curriculum = await loadCurriculum(bookAssets);
-    lessons = await loadLessonData(bookAssets);
+    curriculum = await loadCurriculum(latinCourse.books);
+    lessons = await loadLessonData(latinCourse.books);
     final container = ProviderContainer(
       overrides: [dataLanguageProvider.overrideWith((ref) => 'de')],
     );

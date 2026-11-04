@@ -16,6 +16,7 @@ import 'package:yaml/yaml.dart';
 
 import 'support/i18n_keys.dart';
 import 'support/locale_harness.dart';
+import 'support/latin_course.dart';
 
 final _keyShape = RegExp(r'^[a-z][A-Za-z]*(\.[A-Za-z]+)+$');
 final _word = RegExp(r'[A-Za-zÄÖÜäöüß]+');
@@ -67,14 +68,16 @@ void main() {
           : _words('de').difference(_words(language));
       final latin = {
         for (final words in (await loadLessonData(
-          bookAssets,
+          latinCourse.books,
         )).lessonWords.values)
           for (final word in words)
             ..._word.allMatches(word).map((m) => m[0]!.toLowerCase()),
       };
       // Grammar topic names are German course data, not UI text.
       final topicWords = {
-        for (final topic in (await loadCurriculum(bookAssets)).courseTopics)
+        for (final topic in (await loadCurriculum(
+          latinCourse.books,
+        )).courseTopics)
           if (topic.typeName == null)
             ..._word
                 .allMatches(topic.formsName!)

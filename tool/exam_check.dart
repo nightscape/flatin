@@ -4,9 +4,16 @@ import 'dart:io';
 
 import 'package:latin_practice/data/exam.dart';
 import 'package:latin_practice/data/languages/language.dart';
+import 'package:yaml/yaml.dart';
 
 void main(List<String> paths) {
-  final latin = Language.parse(File(latinAsset).readAsStringSync());
+  final course =
+      (loadYaml(File('lib/data/courses.yaml').readAsStringSync()) as YamlList)
+              .single
+          as String;
+  final language =
+      (loadYaml(File(course).readAsStringSync()) as YamlMap)['language'];
+  final latin = Language.parse(File(language as String).readAsStringSync());
   for (final (i, path) in paths.indexed) {
     try {
       parseExam(File(path).readAsStringSync(), latin);

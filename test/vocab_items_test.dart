@@ -18,6 +18,7 @@ import 'package:latin_practice/providers/round_providers.dart';
 
 import 'support/course_providers.dart';
 import 'support/grammar_exercise_harness.dart';
+import 'support/latin_course.dart';
 
 const _lesson24 = {
   'nōnne',
@@ -116,7 +117,7 @@ void main() {
   );
 
   test('a new meaning keeps the known word in its first lesson', () async {
-    final lessons = await loadLessonData(bookAssets);
+    final lessons = await loadLessonData(latinCourse.books);
     final items = await loadAllPracticeItems();
     int lessonOf(String lemma) =>
         lessons.lessonNumberOf(items.singleWhere((i) => i.lemma == lemma));

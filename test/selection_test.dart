@@ -12,6 +12,7 @@ import 'package:latin_practice/models/practice_item.dart';
 import 'package:latin_practice/models/settings.dart';
 import 'package:latin_practice/services/fsrs_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'support/latin_course.dart';
 
 final _now = DateTime.utc(2026, 10, 20);
 
@@ -72,8 +73,8 @@ void main() {
       for (final i in await loadAllPracticeItems())
         if (!i.isVocab) i,
     ];
-    _curriculum = await loadCurriculum(bookAssets);
-    _lessons = await loadLessonData(bookAssets);
+    _curriculum = await loadCurriculum(latinCourse.books);
+    _lessons = await loadLessonData(latinCourse.books);
     await FsrsStorage.syncCards(_items);
     all = await FsrsStorage.syncGrammarCards(_items);
     filter = _filter(laterLesson);

@@ -15,6 +15,7 @@ import 'package:latin_practice/models/practice_item.dart';
 import 'package:latin_practice/models/settings.dart';
 import 'package:latin_practice/services/fsrs_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'support/latin_course.dart';
 
 final _now = DateTime.utc(2026, 10, 20);
 
@@ -74,8 +75,8 @@ void main() {
     TestWidgetsFlutterBinding.ensureInitialized();
     SharedPreferences.setMockInitialValues({});
     final all = await loadAllPracticeItems();
-    final curriculum = await loadCurriculum(bookAssets);
-    final lessons = await loadLessonData(bookAssets);
+    final curriculum = await loadCurriculum(latinCourse.books);
+    final lessons = await loadLessonData(latinCourse.books);
     filter = CourseFilter(
       Settings(courseWords: LessonRange.full),
       curriculum,

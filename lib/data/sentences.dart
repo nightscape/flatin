@@ -1,8 +1,7 @@
 import 'package:yaml/yaml.dart';
 
+import '../models/course.dart';
 import 'asset_text.dart';
-
-const sentencesAsset = 'lib/data/sentences.yaml';
 
 /// One word of a sentence, as the sentence spells it.
 sealed class SentenceToken {
@@ -102,7 +101,7 @@ final class SentenceCorpus {
 }
 
 Future<SentenceCorpus> loadSentenceCorpus() async =>
-    parseSentenceCorpus(await loadAssetText(sentencesAsset));
+    parseSentenceCorpus(await loadAssetText((await loadCourse()).sentences));
 
 SentenceCorpus parseSentenceCorpus(String source) {
   final yaml = loadYaml(source) as YamlMap;

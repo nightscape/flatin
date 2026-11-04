@@ -6,6 +6,7 @@ import 'package:latin_practice/models/course_filter.dart';
 import 'package:latin_practice/models/settings.dart';
 
 import 'support/legacy_selection.dart';
+import 'support/latin_course.dart';
 
 /// With the default course position the filter must answer exactly what the
 /// settings answered before it existed, for every item of the real data.
@@ -16,8 +17,8 @@ void main() {
     'the default course practises what the settings alone practised',
     () async {
       final settings = Settings();
-      final lessons = await loadLessonData(bookAssets);
-      final curriculum = await loadCurriculum(bookAssets);
+      final lessons = await loadLessonData(latinCourse.books);
+      final curriculum = await loadCurriculum(latinCourse.books);
       final filter = CourseFilter(settings, curriculum, lessons);
       final items = await loadAllPracticeItems();
 
@@ -46,8 +47,8 @@ void main() {
     'the default course card counts what the settings alone counted',
     () async {
       final settings = Settings();
-      final lessons = await loadLessonData(bookAssets);
-      final curriculum = await loadCurriculum(bookAssets);
+      final lessons = await loadLessonData(latinCourse.books);
+      final curriculum = await loadCurriculum(latinCourse.books);
       final filter = CourseFilter(settings, curriculum, lessons);
       final items = await loadAllPracticeItems();
 

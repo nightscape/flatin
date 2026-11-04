@@ -6,6 +6,7 @@ import 'package:latin_practice/models/lesson_range.dart';
 import 'package:latin_practice/models/settings.dart';
 
 import 'support/stored_settings.dart';
+import 'support/latin_course.dart';
 
 FilterChip _chip(WidgetTester tester, String key) =>
     tester.widget<FilterChip>(find.byKey(Key(key)));
@@ -28,7 +29,7 @@ void main() {
   });
 
   testWidgets('a topic chip that is on is not crossed out', (tester) async {
-    final topic = (await loadCurriculum(bookAssets)).courseTopics.first;
+    final topic = (await loadCurriculum(latinCourse.books)).courseTopics.first;
     await openSettingsWith(
       tester,
       Settings(forcedOnTopics: {topic.key}).toJson(),
@@ -58,7 +59,7 @@ void main() {
   testWidgets('a topic chip that is off inside the range is crossed out', (
     tester,
   ) async {
-    final topic = (await loadCurriculum(bookAssets)).courseTopics.first;
+    final topic = (await loadCurriculum(latinCourse.books)).courseTopics.first;
     await openSettingsWith(
       tester,
       Settings(deselectedTopics: {topic.key}).toJson(),

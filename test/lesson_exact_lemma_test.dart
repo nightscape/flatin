@@ -3,12 +3,13 @@ import 'package:latin_practice/data/lesson_data.dart';
 import 'package:latin_practice/data/practice_data.dart';
 
 import 'support/hand_items.dart';
+import 'support/latin_course.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   test('words that differ only in quantity keep their own lesson', () async {
-    final lessons = await loadLessonData(bookAssets);
+    final lessons = await loadLessonData(latinCourse.books);
 
     expect(lessons.wordToLesson['hīc'], 2);
     expect(lessons.wordToLesson['hic'], 28);
@@ -17,7 +18,7 @@ void main() {
   });
 
   test('an item is looked up by its own spelling', () async {
-    final lessons = await loadLessonData(bookAssets);
+    final lessons = await loadLessonData(latinCourse.books);
     final items = await loadAllPracticeItems();
 
     int lessonOf(String lemma) =>

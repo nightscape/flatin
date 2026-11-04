@@ -3,6 +3,7 @@ import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/rewards.dart';
+import '../providers/course_provider.dart';
 import '../providers/settings_provider.dart';
 import 'course_scope.dart';
 import 'kursstand_card.dart';
@@ -71,11 +72,11 @@ class _RewardSection extends ConsumerWidget {
   }
 }
 
-class SettingsScreen extends StatelessWidget {
+class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return SettingsPage(
       titleKey: const Key('settings.title'),
       title: FlutterI18n.translate(context, 'settings.title'),
@@ -100,18 +101,16 @@ class SettingsScreen extends StatelessWidget {
               'settings.wordsPage',
               const SettingsWordsPage(),
             ),
-            _tile(
-              context,
-              'nouns',
-              'settings.nouns',
-              const SettingsGrammarPage(dataFileId: 'nouns'),
-            ),
-            _tile(
-              context,
-              'verbs',
-              'settings.verbs',
-              const SettingsGrammarPage(dataFileId: 'verbs'),
-            ),
+            // CourseScope above shows a course load error.
+            for (final file in [
+              ...?ref.watch(courseProvider).value?.grammarFiles,
+            ])
+              _tile(
+                context,
+                file.id,
+                'settings.${file.id}',
+                SettingsGrammarPage(dataFileId: file.id),
+              ),
             _tile(
               context,
               'input',

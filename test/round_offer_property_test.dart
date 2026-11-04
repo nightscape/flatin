@@ -37,6 +37,7 @@ import 'support/key_echo_app.dart';
 import 'support/gen_card_store.dart';
 import 'support/gen_settings.dart';
 import 'support/word_classification_harness.dart';
+import 'support/latin_course.dart';
 
 /// Builds a task for every pair: which exercise fits a pair is the sweep's
 /// property, not the offer's.
@@ -95,8 +96,8 @@ late SentenceCorpus _corpus;
 Future<void> _load() async {
   SharedPreferences.setMockInitialValues({});
   _items = await loadAllPracticeItems();
-  _curriculum = await loadCurriculum(bookAssets);
-  _lessons = await loadLessonData(bookAssets);
+  _curriculum = await loadCurriculum(latinCourse.books);
+  _lessons = await loadLessonData(latinCourse.books);
   await FsrsStorage.syncCards(_items);
   _fresh = await FsrsStorage.syncGrammarCards(_items);
   final grammar = [

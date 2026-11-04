@@ -540,10 +540,10 @@ final class GrammarItem {
 
   final DeponentSpec? deponent;
 
-  /// The id of the item in german_verbs.yaml that translates this verb.
+  /// The id of the item in the verb gloss file that translates this verb.
   final String? deVerb;
 
-  /// The id of the item in german_nouns.yaml that translates this noun.
+  /// The id of the item in the noun gloss file that translates this noun.
   final String? deNoun;
 
   /// S23: slot name → item id of the same file.

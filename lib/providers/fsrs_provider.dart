@@ -9,12 +9,15 @@ import '../data/asset_text.dart';
 import '../data/exercise_kinds.dart';
 import '../data/german_forms.dart';
 import '../data/word_focus.dart';
+import '../grammar/schema.dart' show GrammarFile;
+import '../models/course.dart';
 import '../models/distractor_strategy.dart';
 import '../models/exercise.dart';
 import '../models/practice_item.dart';
 import '../models/fsrs_card.dart';
 import '../services/fsrs_storage.dart';
 import '../data/practice_data.dart';
+import 'course_provider.dart';
 import 'curriculum_provider.dart';
 import 'locale_provider.dart';
 import 'settings_provider.dart';
@@ -57,10 +60,9 @@ Future<List<PracticeItemCard>> dueCards(Ref ref) async {
 Future<Map<String, List<PracticeItem>>> practicableItemsByType(Ref ref) async {
   final filter = await ref.watch(courseFilterProvider.future);
 
+  final course = await ref.watch(courseProvider.future);
   final itemsByType = <String, List<PracticeItem>>{
-    'nouns': [],
-    'verbs': [],
-    'vocab': [],
+    for (final file in course.dataFiles) file.id: [],
   };
   final language = await ref.watch(dataLanguageProvider.future);
   for (final item in await loadAllPracticeItems(language: language)) {
@@ -84,10 +86,9 @@ Future<Map<String, List<PracticeItem>>> dueItemsByType(Ref ref) async {
     }
   }
 
+  final course = await ref.watch(courseProvider.future);
   final dueItemsByType = <String, List<PracticeItem>>{
-    'nouns': [],
-    'verbs': [],
-    'vocab': [],
+    for (final file in course.dataFiles) file.id: [],
   };
   for (final card in dueCardsList) {
     // Cards exist for items the current selection filters out, too.
@@ -118,10 +119,11 @@ Future<PracticeItem?> nextDueItem(
 Future<List<WordFocus>> wordFocuses(Ref ref) async {
   final practicable = await ref.watch(practicableItemsByTypeProvider.future);
   final language = await ref.watch(dataLanguageProvider.future);
+  final course = await ref.watch(courseProvider.future);
   return focusesOf(practicable, {
-    for (final file in practicable.keys)
-      file: (await getFormMetadata(
-        'lib/data/latin_$file.yaml',
+    for (final file in course.grammarFiles)
+      file.id: (await getFormMetadata(
+        file.path,
         language: language,
       )).displayByType,
   });
@@ -178,17 +180,22 @@ PracticeItemCard _reviewed(
 /// The German texts of the Latin verbs and nouns; none for a UI language
 /// other than German, so the kinds that show them are not built.
 @riverpod
-Future<GermanForms> germanForms(Ref ref) async =>
-    await ref.watch(dataLanguageProvider.future) == 'de'
-    ? GrammarGermanForms(
-        await loadAssetText('lib/data/german_verbs.yaml'),
-        await loadGrammarFile('verbs'),
-        nouns: (
-          yaml: await loadAssetText('lib/data/german_nouns.yaml'),
-          latin: await loadGrammarFile('nouns'),
-        ),
-      )
-    : const NoForms();
+Future<GermanForms> germanForms(Ref ref) async {
+  if (await ref.watch(dataLanguageProvider.future) != 'de') {
+    return const NoForms();
+  }
+  final course = await ref.watch(courseProvider.future);
+  Future<GrammarFile> latin(DataFileRole role) =>
+      loadGrammarFile(course.ofRole(role).id);
+  return GrammarGermanForms(
+    await loadAssetText(course.glossFiles[DataFileRole.verb]!),
+    await latin(DataFileRole.verb),
+    nouns: (
+      yaml: await loadAssetText(course.glossFiles[DataFileRole.noun]!),
+      latin: await latin(DataFileRole.noun),
+    ),
+  );
+}
 
 /// The randomness of the grammar exercises; a test overrides it with a seed.
 @riverpod
@@ -267,7 +274,9 @@ Future<bool> reviewCardReportingErrors(
 /// the correct translation plus 3 distractors from the chosen strategy.
 @riverpod
 Future<List<String>> translationChoices(Ref ref, PracticeItem item) async {
-  final yamlPath = 'lib/data/latin_${item.dataFileId}.yaml';
+  final yamlPath = (await ref.watch(
+    courseProvider.future,
+  )).dataFile(item.dataFileId).path;
   final allItems = await loadPracticeItems(
     yamlPath,
     language: item.derivation.grammar.language,

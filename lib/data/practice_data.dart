@@ -3,17 +3,10 @@ import 'dart:async';
 import 'asset_text.dart';
 import '../grammar/engine.dart';
 import '../grammar/schema.dart';
+import '../models/course.dart';
 import '../models/derivation.dart';
 import '../models/practice_item.dart';
 import 'word_focus.dart' show irregularVerbTypes;
-
-/// The data files, by data file id. Nouns and verbs are parsed together
-/// because the verbs delegate their participles to noun ending tables.
-const _assets = {
-  'nouns': 'lib/data/latin_nouns.yaml',
-  'verbs': 'lib/data/latin_verbs.yaml',
-  'vocab': 'lib/data/latin_vocab.yaml',
-};
 
 /// What the settings screen offers for one data file.
 class FormMetadata {
@@ -52,14 +45,20 @@ class _Parsed {
       engine.files.singleWhere((f) => f.dataFileId == dataFileId);
 }
 
-/// The texts of the data files, parsed once per language on first use. The
-/// course language is parsed at once, so a broken file fails the first load.
+/// The texts of the course's data files, parsed together (the verbs delegate
+/// their participles to noun ending tables) once per language on first use.
+/// The course language is parsed at once, so a broken file fails the first
+/// load.
 class _Loaded {
+  final Course course;
   final Map<String, String> sources;
   final Map<String, _Parsed> _byLanguage = {};
 
-  _Loaded(this.sources) {
-    parsed(courseLanguage);
+  _Loaded(this.course, this.sources) {
+    checkDataFileIds(course, {
+      for (final file in parsed(courseLanguage).engine.files)
+        file.path: file.dataFileId,
+    });
   }
 
   _Parsed parsed(String language) => _byLanguage[language] ??= _Parsed(
@@ -120,21 +119,21 @@ void _release(void Function(Completer<_Loaded>) finish) {
 
 Future<_Loaded> _parse() async {
   await parseGate();
+  final course = await loadCourse();
   final sources = {
-    for (final path in _assets.values) path: await loadAssetText(path),
+    for (final file in course.dataFiles)
+      file.path: await loadAssetText(file.path),
   };
-  return _Loaded(sources);
+  return _Loaded(course, sources);
 }
-
-String _dataFileIdOf(String assetPath) =>
-    _assets.entries.singleWhere((e) => e.value == assetPath).key;
 
 Future<FormMetadata> getFormMetadata(
   String assetPath, {
   String language = courseLanguage,
 }) async {
-  final loaded = (await _load()).parsed(language);
-  final dataFileId = _dataFileIdOf(assetPath);
+  final all = await _load();
+  final loaded = all.parsed(language);
+  final dataFileId = all.course.dataFileAt(assetPath).id;
   return loaded.metadataByFile[dataFileId] ??= _metadata(
     loaded.file(dataFileId),
   );
@@ -167,7 +166,8 @@ Future<List<PracticeItem>> loadPracticeItems(
 }) async {
   final all = await _load();
   final loaded = all.parsed(language);
-  final file = loaded.file(_dataFileIdOf(assetPath));
+  final dataFile = all.course.dataFileAt(assetPath);
+  final file = loaded.file(dataFile.id);
   final book = {
     for (final item in all.parsed(courseLanguage).file(file.dataFileId).items)
       item.id: item.translation,
@@ -177,16 +177,23 @@ Future<List<PracticeItem>> loadPracticeItems(
   final endings = endingSetsOf(loaded.engine, file);
   return loaded.itemsByFile[file.dataFileId] = [
     for (final item in file.items)
-      _practiceItem(loaded.engine, file, item, book[item.id]!, endings),
+      _practiceItem(
+        loaded.engine,
+        file,
+        dataFile.role,
+        item,
+        book[item.id]!,
+        endings,
+      ),
   ];
 }
 
-/// The items of every data file, nouns first.
+/// The items of every data file, in course order.
 Future<List<PracticeItem>> loadAllPracticeItems({
   String language = courseLanguage,
 }) async => [
-  for (final path in _assets.values)
-    ...await loadPracticeItems(path, language: language),
+  for (final file in (await _load()).course.dataFiles)
+    ...await loadPracticeItems(file.path, language: language),
 ];
 
 /// The parsed data file [dataFileId] in the course language.
@@ -196,6 +203,7 @@ Future<GrammarFile> loadGrammarFile(String dataFileId) async =>
 PracticeItem _practiceItem(
   GrammarEngine engine,
   GrammarFile file,
+  DataFileRole role,
   GrammarItem item,
   String bookTranslation,
   Map<String, List<EndingSet>> endings,
@@ -230,10 +238,11 @@ PracticeItem _practiceItem(
     formLabels: [for (final key in keys) FormLabel.fromKey(key, file.axes)],
     possibleTypes: item.typeRule?.types,
     dataFileId: file.dataFileId,
+    role: role,
     formOrder: keys,
     derivation: derivation,
     // A vocab item is asked only for its meaning.
-    baseFormKeys: file.dataFileId == 'vocab'
+    baseFormKeys: role == DataFileRole.vocab
         ? const []
         : _baseFormKeys(
             file,

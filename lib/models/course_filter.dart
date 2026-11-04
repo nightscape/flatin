@@ -2,6 +2,7 @@ import 'dart:math';
 
 import '../data/curriculum.dart';
 import '../data/lesson_data.dart';
+import 'course.dart';
 import 'practice_item.dart';
 import 'settings.dart';
 
@@ -33,9 +34,12 @@ final class FromLesson extends CourseGap {
 /// The last lesson whose words and grammar the learner knows.
 int reachedLesson(Settings settings) => settings.kursstand;
 
-/// Per data file, the feature of a word's basic form: its first form with
-/// it spells the lemma.
-const basicFormFeature = {'nouns': ('kasus', 'nom'), 'verbs': ('modus', 'inf')};
+/// Per role, the feature of a word's basic form: its first form with it
+/// spells the lemma.
+const basicFormFeature = {
+  DataFileRole.noun: ('kasus', 'nom'),
+  DataFileRole.verb: ('modus', 'inf'),
+};
 
 final class CourseFilter {
   final Settings settings;
@@ -75,10 +79,10 @@ final class CourseFilter {
         Override.none => wordInRange(item),
       };
 
-  /// Vocab items have no grammar: their type and their one form are always
-  /// practised, so only the word decides.
+  /// A file without grammar has its types and forms always practised, so only
+  /// the word decides.
   bool typePracticed(String dataFileId, String typeName) =>
-      dataFileId == 'vocab' ||
+      !curriculum.hasGrammar(dataFileId) ||
       switch (settings.overrideOfType(dataFileId, typeName)) {
         Override.forcedOff => false,
         Override.forcedOn => true,
@@ -97,7 +101,7 @@ final class CourseFilter {
   /// A switched-off axis value hides every form that names it, whatever the
   /// form's own override says.
   bool formPracticed(String dataFileId, FormLabel label) =>
-      dataFileId == 'vocab' ||
+      !curriculum.hasGrammar(dataFileId) ||
       settings.offFeaturesOf(dataFileId, label).isEmpty &&
           formSelected(dataFileId, label);
 
@@ -114,7 +118,7 @@ final class CourseFilter {
   }
 
   FormLabel _basicForm(String dataFileId, List<FormLabel> labels) {
-    final (axis, value) = basicFormFeature[dataFileId]!;
+    final (axis, value) = basicFormFeature[curriculum.roleOf(dataFileId)]!;
     return labels.firstWhere(
       (l) => l.features[axis] == value,
       orElse: () => throw StateError(
@@ -134,7 +138,7 @@ final class CourseFilter {
 
   /// Taught up to the grammar range's end and not switched off.
   bool _formTaught(String dataFileId, FormLabel label) =>
-      dataFileId == 'vocab' ||
+      !curriculum.hasGrammar(dataFileId) ||
       curriculum.formLesson(dataFileId, label.key) <=
               settings.courseGrammar.to &&
           settings.offFeaturesOf(dataFileId, label).isEmpty &&
@@ -180,7 +184,7 @@ final class CourseFilter {
 
   /// [wordLesson] lifts the lesson a type is first practised with its words.
   CourseGap? typeGap(String dataFileId, String typeName, [int wordLesson = 1]) {
-    if (dataFileId == 'vocab' ||
+    if (!curriculum.hasGrammar(dataFileId) ||
         settings.overrideOfType(dataFileId, typeName) == Override.forcedOn ||
         _topicSwitchedOff(curriculum.typeTopic(dataFileId, typeName)) ||
         typeInRange(dataFileId, typeName)) {
@@ -190,7 +194,7 @@ final class CourseFilter {
   }
 
   CourseGap? formGap(String dataFileId, FormLabel label) {
-    if (dataFileId == 'vocab' ||
+    if (!curriculum.hasGrammar(dataFileId) ||
         settings.overrideOfForm(dataFileId, label.key) == Override.forcedOn ||
         _topicSwitchedOff(curriculum.formTopic(dataFileId, label.key)) ||
         formInRange(dataFileId, label)) {

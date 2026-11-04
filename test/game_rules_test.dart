@@ -6,6 +6,7 @@ import 'package:latin_practice/data/rewards.dart';
 import 'package:latin_practice/models/reward.dart';
 
 import 'support/i18n_keys.dart';
+import 'support/latin_course.dart';
 
 const _file = 'rules.yaml';
 
@@ -237,8 +238,8 @@ void main() {
 
   test('every building has a unique id, an image and a name in de and en', () {
     final rules = GameRules.parse(
-      File(gameRulesAsset).readAsStringSync(),
-      gameRulesAsset,
+      File(latinCourse.gameRules).readAsStringSync(),
+      latinCourse.gameRules,
     );
     expect(rules.buildings, hasLength(22));
     for (final b in rules.buildings) {
@@ -261,8 +262,8 @@ void main() {
 
   test('every building has a town slot and every slot a building', () {
     final rules = GameRules.parse(
-      File(gameRulesAsset).readAsStringSync(),
-      gameRulesAsset,
+      File(latinCourse.gameRules).readAsStringSync(),
+      latinCourse.gameRules,
     );
     final ids = {for (final b in rules.buildings) b.id};
     final slotted = {for (final s in townSprites) s.building};

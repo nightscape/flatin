@@ -26,6 +26,7 @@ import 'support/exercise_invariants.dart';
 import 'support/gen_sentence_learner.dart';
 import 'support/i18n_keys.dart';
 import 'support/key_echo_i18n.dart';
+import 'support/latin_course.dart';
 
 const _kind = ExerciseKind.satzAnkreuzen;
 
@@ -81,8 +82,8 @@ void main() {
     );
     world = (
       items: await loadAllPracticeItems(),
-      curriculum: await loadCurriculum(bookAssets),
-      lessons: await loadLessonData(bookAssets),
+      curriculum: await loadCurriculum(latinCourse.books),
+      lessons: await loadLessonData(latinCourse.books),
       corpus: await loadSentenceCorpus(),
       german: await container.read(germanFormsProvider.future),
     );

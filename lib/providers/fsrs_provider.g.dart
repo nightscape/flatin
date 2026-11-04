@@ -203,7 +203,7 @@ final class PracticableItemsByTypeProvider
 }
 
 String _$practicableItemsByTypeHash() =>
-    r'3fcffb3126ab32814dc2a1e836ad7ad7e622671c';
+    r'a0614d520e6008864c4b8e6a49ca2d457405a6d1';
 
 /// Provider for due items by exercise type
 
@@ -249,7 +249,7 @@ final class DueItemsByTypeProvider
   }
 }
 
-String _$dueItemsByTypeHash() => r'93caf40a62766c3a19d2f7b1cf460b1db405be12';
+String _$dueItemsByTypeHash() => r'ef47deaac61e53f3cacd0056057be49d08de1a8a';
 
 /// The next due item of [dataFileId] that [focus] includes.
 
@@ -381,7 +381,7 @@ final class WordFocusesProvider
   }
 }
 
-String _$wordFocusesHash() => r'b7a2a0b776a01bf47f2832238992163bd8cafc5a';
+String _$wordFocusesHash() => r'f107200a678cae1546f909cdedf2b8c23d8c56aa';
 
 /// The German texts of the Latin verbs and nouns; none for a UI language
 /// other than German, so the kinds that show them are not built.
@@ -428,7 +428,7 @@ final class GermanFormsProvider
   }
 }
 
-String _$germanFormsHash() => r'719a6fc60883319f2863106ad8808352398b3ea9';
+String _$germanFormsHash() => r'92e58062202e26ed10083ecfcccdfeabe6a4d260';
 
 /// The randomness of the grammar exercises; a test overrides it with a seed.
 
@@ -592,7 +592,7 @@ final class TranslationChoicesProvider
 }
 
 String _$translationChoicesHash() =>
-    r'50cfd3b0eced1c41f679ec323bf54e58bdad5b34';
+    r'7aaf974971edf3e22b06561e6f015c4c0a67ecf6';
 
 /// Provides shuffled translation choices for a practice item:
 /// the correct translation plus 3 distractors from the chosen strategy.

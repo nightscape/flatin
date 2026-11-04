@@ -24,6 +24,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'support/gen_settings.dart';
 import 'support/kursstand_shelf_driver.dart';
 import 'support/word_classification_harness.dart';
+import 'support/latin_course.dart';
 
 const _later = 'Später';
 
@@ -89,7 +90,7 @@ void main() {
   testWidgets('the chip rows select one chip, set the bookmarks and follow '
       'the Kursstand at 360x640', (tester) async {
     final starts = (await tester.runAsync(
-      () => loadLessonData(bookAssets),
+      () => loadLessonData(latinCourse.books),
     ))!.bookStarts;
     final container = await _pump(tester, const SettingsScreen());
     final fixed = [

@@ -5,10 +5,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/curriculum.dart';
 import '../data/practice_data.dart';
+import '../models/course.dart';
 import '../models/course_filter.dart';
 import '../models/lesson_range.dart';
 import '../models/settings.dart';
 import '../models/practice_item.dart';
+import '../providers/course_provider.dart';
 import '../providers/locale_provider.dart';
 import '../providers/settings_provider.dart';
 import '../theme.dart';
@@ -44,17 +46,13 @@ class _KursstandCardState extends ConsumerState<KursstandCard> {
   final _scroll = ScrollController();
   late final _lessons = [...widget.filter.lessons.lessonNumbers, laterLesson];
   late final _blocks = {for (final l in _lessons) l: GlobalKey()};
-  late final Future<Map<String, FormMetadata>> _metadata = ref
-      .read(dataLanguageProvider.future)
-      .then(
-        (language) async => {
-          for (final id in ['nouns', 'verbs'])
-            id: await getFormMetadata(
-              'lib/data/latin_$id.yaml',
-              language: language,
-            ),
-        },
-      );
+  late final Future<Map<String, FormMetadata>> _metadata = () async {
+    final language = await ref.read(dataLanguageProvider.future);
+    return {
+      for (final file in (await ref.read(courseProvider.future)).grammarFiles)
+        file.id: await getFormMetadata(file.path, language: language),
+    };
+  }();
 
   /// Each lesson block with the inputs it was built from, so a course change
   /// rebuilds only the blocks whose chips change.
@@ -182,7 +180,11 @@ class _KursstandCardState extends ConsumerState<KursstandCard> {
     return FilterChip(
       key: Key('kursstand.topic.${t.key}'),
       avatar: Icon(
-        t.dataFileId == 'nouns' ? Icons.account_balance : Icons.directions_run,
+        switch (_filter.curriculum.roleOf(t.dataFileId)) {
+          DataFileRole.noun => Icons.account_balance,
+          DataFileRole.verb => Icons.directions_run,
+          DataFileRole.vocab => throw StateError('vocab has no topic'),
+        },
         size: 16,
         color: inRange || on ? terracottaDark : mutedText,
       ),

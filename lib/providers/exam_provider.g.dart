@@ -45,7 +45,7 @@ final class ExamLanguageProvider
   }
 }
 
-String _$examLanguageHash() => r'ec80b558c10d0d27b546513c70d4bfd7cdd889bc';
+String _$examLanguageHash() => r'8cc96d7c2c94a11b0e0c5c36eb238f024474c824';
 
 /// The imported exam packs.
 

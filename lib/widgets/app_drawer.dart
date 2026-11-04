@@ -7,7 +7,9 @@ import '../screens/practice_screen.dart';
 import '../screens/word_classification_screen.dart';
 import '../screens/settings_screen.dart';
 import '../screens/language_screen.dart';
+import '../models/course.dart';
 import '../models/practice_item.dart';
+import '../providers/course_provider.dart';
 import '../providers/fsrs_provider.dart';
 
 Widget buildAppDrawer(BuildContext context) {
@@ -33,19 +35,25 @@ Widget buildAppDrawer(BuildContext context) {
             ),
           ),
         ),
-        _practiceTile(
-          tileKey: const Key('drawer.nouns'),
-          dataFileId: 'nouns',
-          labelKey: 'drawer.nouns',
-          icon: Icons.book,
-          fontSize: itemFontSize,
-        ),
-        _practiceTile(
-          tileKey: const Key('drawer.verbs'),
-          dataFileId: 'verbs',
-          labelKey: 'drawer.verbs',
-          icon: Icons.auto_stories,
-          fontSize: itemFontSize,
+        Consumer(
+          builder: (context, ref, child) => Column(
+            children: [
+              for (final file in [
+                ...?ref.watch(courseProvider).value?.grammarFiles,
+              ])
+                _practiceTile(
+                  tileKey: Key('drawer.${file.id}'),
+                  dataFileId: file.id,
+                  labelKey: 'drawer.${file.id}',
+                  icon: switch (file.role) {
+                    DataFileRole.noun => Icons.book,
+                    DataFileRole.verb => Icons.auto_stories,
+                    DataFileRole.vocab => throw StateError('vocab has no tile'),
+                  },
+                  fontSize: itemFontSize,
+                ),
+            ],
+          ),
         ),
         ListTile(
           key: const Key('drawer.grammar'),

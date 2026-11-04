@@ -10,6 +10,7 @@ import 'package:latin_practice/providers/curriculum_provider.dart';
 
 import 'support/course_providers.dart';
 import 'support/stored_settings.dart';
+import 'support/latin_course.dart';
 
 /// The word sets of the stored v2 format dropped the macrons, so one stored
 /// word stood for every lemma that spells it the same without them.
@@ -33,7 +34,7 @@ void main() {
   test(
     'a stored word switches off every lemma that shares its letters',
     () async {
-      final lessons = await loadLessonData(bookAssets);
+      final lessons = await loadLessonData(latinCourse.books);
       final lemmas = lessons.lessonWords.values.expand((words) => words);
 
       final converted = convertSettingsV3(
@@ -56,7 +57,7 @@ void main() {
   );
 
   test('converting an already converted store changes nothing', () async {
-    final lessons = await loadLessonData(bookAssets);
+    final lessons = await loadLessonData(latinCourse.books);
     final lemmas = lessons.lessonWords.values.expand((words) => words);
 
     final once = convertSettingsV3(_v2(deselected: ['hic']), lemmas);

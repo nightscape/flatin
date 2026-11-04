@@ -9,13 +9,14 @@ import 'package:latin_practice/data/settings_conversion.dart';
 import 'package:latin_practice/models/lesson_range.dart';
 import 'package:latin_practice/models/settings.dart';
 import 'package:latin_practice/providers/settings_provider.dart';
+import 'support/latin_course.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   test('deselected forms, types and words stay off after a reload', () async {
     SharedPreferences.setMockInitialValues({});
-    final lessons = await loadLessonData(bookAssets);
+    final lessons = await loadLessonData(latinCourse.books);
     final word = lessons.lessonWords.values
         .expand((words) => words)
         .firstWhere((w) => w != normalizeDiacritics(w));
@@ -79,7 +80,7 @@ void main() {
     final otherType = map.types['nouns']!.values.firstWhere(
       (t) => t != newType,
     );
-    final lessons = await loadLessonData(bookAssets);
+    final lessons = await loadLessonData(latinCourse.books);
     final allWords = lessons.lessonWords.values
         .expand((words) => words)
         .map(normalizeDiacritics)
@@ -122,7 +123,7 @@ void main() {
   test(
     'conversion deselects every lesson word the old format left out',
     () async {
-      final lessons = await loadLessonData(bookAssets);
+      final lessons = await loadLessonData(latinCourse.books);
       final lessonWords = lessons.lessonWords.values.expand((words) => words);
 
       // The old format stored the words without their macrons; what comes back

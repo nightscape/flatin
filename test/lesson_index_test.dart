@@ -1,14 +1,15 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/data/lesson_data.dart';
+import 'support/latin_course.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   test('the lessons of both volumes are loaded in reading order', () async {
-    final first = await loadLessonData([bookAssets.first]);
-    final both = await loadLessonData(bookAssets);
+    final first = await loadLessonData([latinCourse.books.first]);
+    final both = await loadLessonData(latinCourse.books);
 
-    expect(bookAssets.length, 2);
+    expect(latinCourse.books.length, 2);
     expect(first.lessonWords.keys, [for (var l = 1; l <= 20; l++) l]);
     expect(both.lessonWords.keys, [for (var l = 1; l <= 40; l++) l]);
     expect(both.books, ['Agite 1', 'Agite 2']);
@@ -19,8 +20,8 @@ void main() {
   });
 
   test('a word stays with the lesson that introduces it first', () async {
-    final both = await loadLessonData(bookAssets);
-    final firstVolume = await loadLessonData([bookAssets.first]);
+    final both = await loadLessonData(latinCourse.books);
+    final firstVolume = await loadLessonData([latinCourse.books.first]);
 
     for (final entry in firstVolume.wordToLesson.entries) {
       expect(both.wordToLesson[entry.key], entry.value, reason: entry.key);
@@ -29,7 +30,7 @@ void main() {
 
   test('a lesson listed by two books is rejected', () async {
     expect(
-      loadLessonData([bookAssets.first, bookAssets.first]),
+      loadLessonData([latinCourse.books.first, latinCourse.books.first]),
       throwsStateError,
     );
   });

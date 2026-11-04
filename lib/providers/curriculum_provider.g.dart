@@ -49,7 +49,7 @@ final class CurriculumProvider
   }
 }
 
-String _$curriculumHash() => r'2d9ee439ebfb49d093cb76ee0e5a5d7ae9da26fc';
+String _$curriculumHash() => r'1474656c9952d7dbb6f44471be88a052a560aa8e';
 
 /// What the learner practises at the current course position.
 

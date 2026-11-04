@@ -5,7 +5,6 @@ import 'dart:math';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/data/curriculum.dart';
-import 'package:latin_practice/data/lesson_data.dart';
 import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/main.dart' show noRetry;
 import 'package:latin_practice/models/fsrs_card.dart';
@@ -16,6 +15,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'support/gen_card_store.dart';
 import 'support/gen_settings.dart';
+import 'support/latin_course.dart';
 
 const _dir = 'test/fixtures/guard';
 const _cases = 20;
@@ -135,7 +135,8 @@ void main() {
     addTearDown(c.dispose);
     final fresh = await c.read(fsrsCardsProvider.future);
     final universes = universesOf(await loadAllPracticeItems(), {
-      for (final t in (await loadCurriculum(bookAssets)).courseTopics) t.key,
+      for (final t in (await loadCurriculum(latinCourse.books)).courseTopics)
+        t.key,
     });
     final now = DateTime.now().toUtc();
 

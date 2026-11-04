@@ -1,0 +1,10 @@
+# The toy course: one word class and no gloss files.
+language: test/fixtures/toy_course/toy_language.yaml
+data_files:
+  - {id: toy_words, path: test/fixtures/toy_course/toy_words.yaml, role: noun}
+gloss_files: {}
+books:
+  - test/fixtures/toy_course/toy_book_1.yaml
+  - test/fixtures/toy_course/toy_book_2.yaml
+sentences: test/fixtures/toy_course/toy_sentences.yaml
+game_rules: lib/data/game_rules.yaml

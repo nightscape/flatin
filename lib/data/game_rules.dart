@@ -1,13 +1,14 @@
 import 'package:yaml/yaml.dart';
 
+import '../models/course.dart';
 import '../models/reward.dart';
 import 'asset_text.dart';
 import 'unlock_graph.dart';
 
-const String gameRulesAsset = 'lib/data/game_rules.yaml';
-
-Future<GameRules> loadGameRules() async =>
-    GameRules.parse(await loadAssetText(gameRulesAsset), gameRulesAsset);
+Future<GameRules> loadGameRules() async {
+  final path = (await loadCourse()).gameRules;
+  return GameRules.parse(await loadAssetText(path), path);
+}
 
 /// Gains [gain] per resource, times the fact [per], for an event named [on]
 /// whose facts satisfy every entry of [when]: a key `<field>AtLeast` needs a

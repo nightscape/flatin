@@ -4,6 +4,7 @@ library;
 
 import 'package:latin_practice/models/derivation.dart';
 import 'package:latin_practice/models/practice_item.dart';
+import 'latin_course.dart';
 
 /// Verb axes with every axis the engine knows, so a test can span them.
 final fullVerbAxes = Axes(
@@ -84,6 +85,7 @@ PracticeItem handItem({
     bookTranslation: translation,
     principalParts: [('', lemma)],
     dataFileId: dataFileId,
+    role: latinCourse.dataFile(dataFileId).role,
     formOrder: keys,
     forms: [for (final key in keys) forms[key]!.first],
     acceptedForms: [for (final key in keys) forms[key]!],

@@ -16,6 +16,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'support/key_echo_app.dart';
 import 'support/word_classification_harness.dart';
+import 'support/latin_course.dart';
 
 const _storeKey = 'practice_settings';
 
@@ -124,8 +125,8 @@ void main() {
           TownView(
             RewardLedger(buildings: ids),
             GameRules.parse(
-              File(gameRulesAsset).readAsStringSync(),
-              gameRulesAsset,
+              File(latinCourse.gameRules).readAsStringSync(),
+              latinCourse.gameRules,
             ),
           ),
         ),

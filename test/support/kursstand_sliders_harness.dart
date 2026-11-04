@@ -9,6 +9,7 @@ import 'package:latin_practice/widgets/kursstand_shelf.dart';
 
 import 'kursstand_shelf_driver.dart';
 import 'word_classification_harness.dart';
+import 'latin_course.dart';
 
 /// What a [KursstandSliders] under test reports: the settings it last
 /// passed on, its scale, and what it painted, all in its own coordinates.
@@ -57,7 +58,9 @@ Future<SlidersProbe> pumpSliders(
   Key? boundary,
   double width = 366,
 }) async {
-  final lessons = (await tester.runAsync(() => loadLessonData(bookAssets)))!;
+  final lessons = (await tester.runAsync(
+    () => loadLessonData(latinCourse.books),
+  ))!;
   final probe = SlidersProbe(
     Settings(
       courseWords: words,

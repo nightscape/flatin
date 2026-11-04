@@ -11,6 +11,8 @@ import '../models/exercise.dart' show bundleOf;
 import '../models/practice_item.dart';
 import '../models/course_filter.dart';
 import '../providers/curriculum_provider.dart';
+import '../models/course.dart';
+import '../providers/course_provider.dart';
 import '../providers/fsrs_provider.dart';
 import '../widgets/app_drawer.dart';
 import '../models/reward.dart';
@@ -208,15 +210,17 @@ class _WordClassificationScreenState
 
     try {
       // Try to get due items from FSRS first
+      final grammarFiles = (await ref.read(courseProvider.future)).grammarFiles;
       final dueItemsByType = await ref.read(dueItemsByTypeProvider.future);
       final allDueItems = [
-        ...(dueItemsByType['nouns'] ?? []),
-        ...(dueItemsByType['verbs'] ?? []),
+        for (final file in grammarFiles) ...dueItemsByType[file.id]!,
       ];
 
       // Fall back to the same filtered items the due list is drawn from
       final practicable = await ref.read(practicableItemsByTypeProvider.future);
-      final allItems = [...practicable['nouns']!, ...practicable['verbs']!];
+      final allItems = [
+        for (final file in grammarFiles) ...practicable[file.id]!,
+      ];
 
       if (allItems.isEmpty) {
         setState(() {
@@ -234,7 +238,7 @@ class _WordClassificationScreenState
           (allDueItems.isNotEmpty
               ? allDueItems[random.nextInt(allDueItems.length)]
               : allItems[random.nextInt(allItems.length)]);
-      _isNoun = item.dataFileId == 'nouns';
+      _isNoun = item.role == DataFileRole.noun;
 
       final enabledForms = filter.practicedForms(
         item.dataFileId,

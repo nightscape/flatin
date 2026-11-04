@@ -15,6 +15,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'support/kursstand_shelf_driver.dart';
 import 'support/stored_settings.dart';
 import 'support/word_classification_harness.dart' show letItLoad;
+import 'support/latin_course.dart';
 
 Finder _key(String key) => find.byKey(Key(key));
 
@@ -123,8 +124,8 @@ Future<void> _expectTaughtUpTo(
 
 Future<_Expected> _expected() async => _Expected(
   await loadAllPracticeItems(),
-  await loadLessonData(bookAssets),
-  await loadCurriculum(bookAssets),
+  await loadLessonData(latinCourse.books),
+  await loadCurriculum(latinCourse.books),
 );
 
 Future<Map<String, dynamic>> _stored() => storedSettings();

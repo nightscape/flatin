@@ -1,11 +1,12 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/data/lesson_data.dart';
 import 'package:latin_practice/data/practice_data.dart';
+import 'support/latin_course.dart';
 
 void main() {
   test('the nouns of the lessons are found by their dictionary form', () async {
     TestWidgetsFlutterBinding.ensureInitialized();
-    final lessons = await loadLessonData(bookAssets);
+    final lessons = await loadLessonData(latinCourse.books);
     final items = await loadAllPracticeItems();
 
     for (final lemma in ['rēx', 'uxor', 'corpus', 'urbs', 'mare']) {

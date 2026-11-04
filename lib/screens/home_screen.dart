@@ -5,12 +5,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import '../data/rewards.dart';
 import '../data/word_focus.dart';
+import '../models/course.dart';
 import '../models/reward.dart';
 import '../widgets/app_drawer.dart';
 import '../widgets/focus_picker.dart';
 import '../widgets/kursstand_chip.dart';
 import '../widgets/lernziel_chips.dart';
 import '../models/practice_item.dart';
+import '../providers/course_provider.dart';
 import '../providers/curriculum_provider.dart';
 import '../providers/fsrs_provider.dart';
 import '../providers/reward_provider.dart';
@@ -249,44 +251,53 @@ class _TownPanel extends ConsumerWidget {
   }
 }
 
-/// The focus of the noun and verb practice, then their two buttons. The
-/// focus starts at "Alles" whenever the home screen is built anew.
-class _PracticeStart extends StatefulWidget {
+/// The focus of the grammar file practice, then a button per grammar file.
+/// The focus starts at "Alles" whenever the home screen is built anew.
+class _PracticeStart extends ConsumerStatefulWidget {
   const _PracticeStart();
 
   @override
-  State<_PracticeStart> createState() => _PracticeStartState();
+  ConsumerState<_PracticeStart> createState() => _PracticeStartState();
 }
 
-class _PracticeStartState extends State<_PracticeStart> {
+class _PracticeStartState extends ConsumerState<_PracticeStart> {
   WordFocus _focus = const AllWords();
 
   @override
-  Widget build(BuildContext context) => Column(
-    children: [
-      FocusPicker(
-        value: _focus,
-        onChanged: (focus) => setState(() => _focus = focus),
-        offersBaseForms: true,
-      ),
-      const SizedBox(height: 8),
-      _PracticeTypeButton(
-        dataFileId: 'nouns',
-        labelKey: 'home.nouns',
-        icon: Icons.account_balance,
-        buttonKey: const Key('home.nouns.button'),
-        focus: _focus,
-      ),
-      const SizedBox(height: 14),
-      _PracticeTypeButton(
-        dataFileId: 'verbs',
-        labelKey: 'home.verbs',
-        icon: Icons.directions_run,
-        buttonKey: const Key('home.verbs.button'),
-        focus: _focus,
-      ),
-    ],
-  );
+  Widget build(BuildContext context) {
+    final course = ref.watch(courseProvider);
+    return Column(
+      children: [
+        FocusPicker(
+          value: _focus,
+          onChanged: (focus) => setState(() => _focus = focus),
+          offersBaseForms: true,
+        ),
+        if (course.error case final error?)
+          Text(
+            FlutterI18n.translate(
+              context,
+              'home.error',
+              translationParams: {'error': error.toString()},
+            ),
+          ),
+        for (final (i, file) in [...?course.value?.grammarFiles].indexed) ...[
+          SizedBox(height: i == 0 ? 8 : 14),
+          _PracticeTypeButton(
+            dataFileId: file.id,
+            labelKey: 'home.${file.id}',
+            icon: switch (file.role) {
+              DataFileRole.noun => Icons.account_balance,
+              DataFileRole.verb => Icons.directions_run,
+              DataFileRole.vocab => throw StateError('vocab has no button'),
+            },
+            buttonKey: Key('home.${file.id}.button'),
+            focus: _focus,
+          ),
+        ],
+      ],
+    );
+  }
 }
 
 /// Entry point for one exercise type: opens the next due item of [focus], or

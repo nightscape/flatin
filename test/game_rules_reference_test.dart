@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/data/game_rules.dart';
 import 'package:latin_practice/models/reward.dart';
+import 'support/latin_course.dart';
 
 /// The rules the rule file encodes, written out by hand.
 const _prices = {
@@ -127,8 +128,8 @@ List<_Step> _sequence(Random random) {
 
 void main() {
   final rules = GameRules.parse(
-    File(gameRulesAsset).readAsStringSync(),
-    gameRulesAsset,
+    File(latinCourse.gameRules).readAsStringSync(),
+    latinCourse.gameRules,
   );
 
   test('the rule file lists the buildings with their prices in order', () {

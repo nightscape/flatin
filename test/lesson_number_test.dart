@@ -4,12 +4,13 @@ import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/models/lesson_range.dart';
 
 import 'support/hand_items.dart';
+import 'support/latin_course.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   test('the lesson scale runs 1..lastLesson, split over two volumes', () async {
-    final lessons = await loadLessonData(bookAssets);
+    final lessons = await loadLessonData(latinCourse.books);
 
     expect(lessons.lessonNumbers, [for (var i = 1; i <= lastLesson; i++) i]);
     expect(lessons.bookOf(20), 1);
@@ -17,7 +18,7 @@ void main() {
   });
 
   test('every practice item belongs to a lesson', () async {
-    final lessons = await loadLessonData(bookAssets);
+    final lessons = await loadLessonData(latinCourse.books);
     final items = await loadAllPracticeItems();
 
     assertLessonsCoverItems(lessons, items);

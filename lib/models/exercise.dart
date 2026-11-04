@@ -7,6 +7,7 @@ import 'dart:math';
 import '../data/diagnosis.dart';
 import '../data/german_forms.dart';
 import '../data/sentences.dart';
+import 'course.dart';
 import 'practice_item.dart';
 
 /// A form bundle of one data file: for verbs the codes of Modus, Tempus and
@@ -22,13 +23,12 @@ const _bundleAxes = {'modus', 'tempus', 'genus_verbi'};
 GrammarBundle bundleOf(PracticeItem item, FormKey key) {
   final index = item.formOrder.indexOf(key);
   assert(index >= 0, '"$key" is not a form of ${item.id}');
-  return switch (item.dataFileId) {
-    'verbs' => item.formLabels[index].axes.formatKey({
+  return switch (item.role) {
+    DataFileRole.verb => item.formLabels[index].axes.formatKey({
       for (final e in item.formLabels[index].features.entries)
         if (_bundleAxes.contains(e.key)) e.key: e.value,
     }),
-    'nouns' || 'vocab' => item.type,
-    _ => throw ArgumentError('no bundle rule for data file ${item.dataFileId}'),
+    DataFileRole.noun || DataFileRole.vocab => item.type,
   };
 }
 

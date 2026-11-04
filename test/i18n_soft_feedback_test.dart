@@ -21,6 +21,7 @@ import 'support/exercise_invariants.dart';
 import 'support/gen_sentence_learner.dart';
 import 'support/key_echo_i18n.dart';
 import 'support/word_classification_harness.dart';
+import 'support/latin_course.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -37,8 +38,8 @@ void main() {
     );
     world = (
       items: await loadAllPracticeItems(),
-      curriculum: await loadCurriculum(bookAssets),
-      lessons: await loadLessonData(bookAssets),
+      curriculum: await loadCurriculum(latinCourse.books),
+      lessons: await loadLessonData(latinCourse.books),
       corpus: await loadSentenceCorpus(),
       german: await container.read(germanFormsProvider.future),
     );

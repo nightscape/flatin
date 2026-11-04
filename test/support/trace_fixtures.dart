@@ -11,6 +11,7 @@ import 'package:latin_practice/data/explanation.dart';
 import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/models/derivation.dart';
 import 'package:latin_practice/models/practice_item.dart';
+import 'package:latin_practice/models/course.dart';
 
 final verbAxes = Axes(
   axes: [
@@ -127,6 +128,7 @@ PracticeItem traceItem({
   required Axes axes,
   required Derivation derivation,
   String dataFileId = 'verbs',
+  DataFileRole role = DataFileRole.verb,
 }) {
   final keys = derivation.forms.keys.toList();
   return PracticeItem(
@@ -141,6 +143,7 @@ PracticeItem traceItem({
     acceptedForms: [for (final key in keys) derivation.forms[key]!.variants],
     formLabels: [for (final key in keys) FormLabel.fromKey(key, axes)],
     dataFileId: dataFileId,
+    role: role,
     derivation: derivation,
     baseFormKeys: const [],
   );
@@ -479,6 +482,7 @@ PracticeItem fortis() {
     principalParts: const [('', 'fortis'), ('', 'forte')],
     axes: adjectiveAxes,
     dataFileId: 'nouns',
+    role: DataFileRole.noun,
     derivation: Derivation(
       type: 'I-Deklination-mf',
       recognition: const TypeDeclared(),

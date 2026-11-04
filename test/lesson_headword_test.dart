@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/data/lesson_data.dart';
+import 'support/latin_course.dart';
 
 /// Serves [yaml] under [path] so a malformed index can be loaded at all.
 void _serve(String path, String yaml) {
@@ -58,7 +59,7 @@ lessons:
   });
 
   test('the shipped index lists headwords only', () async {
-    final lessons = await loadLessonData(bookAssets);
+    final lessons = await loadLessonData(latinCourse.books);
 
     for (final entry in lessons.lessonWords.entries) {
       for (final word in entry.value) {

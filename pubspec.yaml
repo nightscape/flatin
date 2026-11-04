@@ -81,6 +81,8 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
+    - lib/data/courses.yaml
+    - lib/data/course.yaml
     - lib/data/latin_nouns.yaml
     - lib/data/latin_verbs.yaml
     - lib/data/latin_vocab.yaml

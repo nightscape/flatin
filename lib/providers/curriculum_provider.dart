@@ -4,6 +4,7 @@ import '../data/curriculum.dart';
 import '../data/lesson_data.dart';
 import '../data/practice_data.dart';
 import '../models/course_filter.dart';
+import 'course_provider.dart';
 import 'lesson_provider.dart';
 import 'settings_provider.dart';
 
@@ -12,7 +13,7 @@ part 'curriculum_provider.g.dart';
 /// The grammar progression of the configured volumes.
 @riverpod
 Future<Curriculum> curriculum(Ref ref) async {
-  return loadCurriculum(bookAssets);
+  return loadCurriculum((await ref.watch(courseProvider.future)).books);
 }
 
 /// What the learner practises at the current course position.

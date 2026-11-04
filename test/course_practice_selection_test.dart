@@ -12,6 +12,7 @@ import 'package:latin_practice/screens/practice_screen.dart';
 
 import 'support/course_providers.dart';
 import 'support/word_classification_harness.dart';
+import 'support/latin_course.dart';
 
 /// The course position of a learner in the middle of the first volume.
 final _upToFive = Settings(courseWords: LessonRange(1, 5));
@@ -34,7 +35,7 @@ void main() {
     'a narrowed course hides the later lessons and the later forms',
     () async {
       seedSettings(_upToFive);
-      final lessons = await loadLessonData(bookAssets);
+      final lessons = await loadLessonData(latinCourse.books);
       final container = await _containerWithLateGenitive();
       addTearDown(container.dispose);
 
@@ -103,7 +104,7 @@ void main() {
   });
 
   test('a word forced on outside the range is practised', () async {
-    final lessons = await loadLessonData(bookAssets);
+    final lessons = await loadLessonData(latinCourse.books);
     seedSettings(_upToFive.copyWith(forcedOnWords: {'animus'}));
     final container = ProviderContainer();
     addTearDown(container.dispose);
@@ -117,7 +118,7 @@ void main() {
   });
 
   test('a word forced off inside the range is not practised', () async {
-    final lessons = await loadLessonData(bookAssets);
+    final lessons = await loadLessonData(latinCourse.books);
     seedSettings(_upToFive.copyWith(deselectedWords: {'rosa'}));
     final container = ProviderContainer();
     addTearDown(container.dispose);

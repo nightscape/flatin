@@ -1,6 +1,7 @@
 /// The word group one round asks, chosen at its start and never stored.
 library;
 
+import '../models/course.dart';
 import '../models/course_filter.dart';
 import '../models/practice_item.dart';
 
@@ -63,7 +64,7 @@ final class IrregularVerbs extends WordFocus {
 
   @override
   bool includes(PracticeItem word) =>
-      word.dataFileId == 'verbs' && irregularVerbTypes.contains(word.type);
+      word.role == DataFileRole.verb && irregularVerbTypes.contains(word.type);
 }
 
 /// Every noun and verb, asked only for its base forms
@@ -103,22 +104,20 @@ final class TypeFocus extends WordFocus {
       word.dataFileId == dataFileId && word.type == type;
 }
 
-/// The fixed groups, then one [TypeFocus] per type that has words in
-/// [practicable], file by file, each file's types sorted by name. Vocab has
-/// no grammar to focus on, so it gets no focus of its own.
-/// [displayByType] names the types of each file.
+/// The fixed groups with a [FileFocus] per grammar file, then one
+/// [TypeFocus] per type that has words in [practicable], file by file, each
+/// file's types sorted by name. [displayByType] names the types of each
+/// grammar file; vocab has no grammar to focus on, so it is not among them.
 List<WordFocus> focusesOf(
   Map<String, List<PracticeItem>> practicable,
   Map<String, Map<String, String>> displayByType,
 ) => [
   const AllWords(),
-  const FileFocus('nouns'),
-  const FileFocus('verbs'),
+  for (final file in displayByType.keys) FileFocus(file),
   const IrregularVerbs(),
-  for (final MapEntry(key: file, value: words) in practicable.entries)
-    if (file != 'vocab')
-      ...<TypeFocus>[
-        for (final type in {for (final w in words) w.type})
-          TypeFocus(file, type, displayByType[file]![type]!),
-      ]..sort((a, b) => a.display.compareTo(b.display)),
+  for (final MapEntry(key: file, value: display) in displayByType.entries)
+    ...<TypeFocus>[
+      for (final type in {for (final w in practicable[file]!) w.type})
+        TypeFocus(file, type, display[type]!),
+    ]..sort((a, b) => a.display.compareTo(b.display)),
 ];

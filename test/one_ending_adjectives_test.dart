@@ -2,10 +2,10 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/data/curriculum.dart';
-import 'package:latin_practice/data/lesson_data.dart';
 import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/models/lesson_range.dart';
 import 'package:latin_practice/models/practice_item.dart';
+import 'support/latin_course.dart';
 
 const _iStem = 'Adjektiv-einendig-i';
 const _consonantStem = 'Adjektiv-einendig-Konsonantstamm';
@@ -164,7 +164,7 @@ void main() {
   );
 
   test('each pattern is taught in its lesson', () async {
-    final curriculum = await loadCurriculum(bookAssets);
+    final curriculum = await loadCurriculum(latinCourse.books);
     expect(curriculum.taughtType('nouns', _iStem, LessonRange(1, 17)), isFalse);
     expect(curriculum.taughtType('nouns', _iStem, LessonRange(1, 18)), isTrue);
     expect(

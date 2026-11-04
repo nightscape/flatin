@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/data/lesson_data.dart';
 import 'package:latin_practice/data/practice_data.dart';
+import 'support/latin_course.dart';
 
 const _phrase = 'phrase without an item (#315)';
 const _uninflected = 'uninflected word without an item (#315)';
@@ -293,7 +294,7 @@ void main() {
   test(
     'every entry of every lesson list resolves to a practice item',
     () async {
-      final lessons = await loadLessonData(bookAssets);
+      final lessons = await loadLessonData(latinCourse.books);
       final lemmas = {for (final i in await loadAllPracticeItems()) i.lemma};
 
       final unresolved = {

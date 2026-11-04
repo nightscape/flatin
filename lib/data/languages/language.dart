@@ -1,7 +1,5 @@
 import 'package:yaml/yaml.dart';
 
-const latinAsset = 'lib/data/languages/la.yaml';
-
 /// Codes by key: an `analyse` map, or a constraint on one.
 typedef Codes = Map<String, Object>;
 

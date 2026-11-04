@@ -8,6 +8,7 @@ import 'package:latin_practice/data/languages/language.dart';
 import 'package:yaml/yaml.dart';
 
 import 'support/gen_exam.dart';
+import 'support/latin_course.dart';
 
 const _golden = 'test/fixtures/guard/exam_codes.txt';
 const _packs = 300;
@@ -49,7 +50,9 @@ Iterable<(Map, String)> _clauses(Map exam) sync* {
 
 /// The code lists of la.yaml as a mutable copy of plain maps and lists.
 Map<String, dynamic> _latinData() =>
-    jsonDecode(jsonEncode(loadYaml(File(latinAsset).readAsStringSync())))
+    jsonDecode(
+          jsonEncode(loadYaml(File(latinCourse.language).readAsStringSync())),
+        )
         as Map<String, dynamic>;
 
 /// A rule parameter of la.yaml changed, and the errors a pack gets for it.

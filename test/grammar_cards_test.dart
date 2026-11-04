@@ -1,12 +1,12 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/data/asset_text.dart';
-import 'package:latin_practice/data/lesson_data.dart';
 import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/models/exercise.dart';
 import 'package:latin_practice/models/fsrs_card.dart';
 import 'package:latin_practice/services/fsrs_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yaml/yaml.dart';
+import 'support/latin_course.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -56,7 +56,7 @@ void main() {
         for (final key in item.formOrder) GrammarCardId.of(item, key),
     };
     final named = <GrammarCardId>{};
-    for (final asset in bookAssets) {
+    for (final asset in latinCourse.books) {
       final book = loadYaml(await loadAssetText(asset)) as YamlMap;
       for (final entry in [
         for (final lesson in book['lessons'] as YamlList)

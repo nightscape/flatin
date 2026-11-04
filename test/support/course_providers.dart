@@ -7,11 +7,7 @@ import 'package:latin_practice/data/curriculum.dart';
 import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/models/settings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-const practiceAssets = [
-  'lib/data/latin_nouns.yaml',
-  'lib/data/latin_verbs.yaml',
-];
+import 'latin_course.dart';
 
 /// Starts the app's storage with [settings] as the stored settings.
 void seedSettings(Settings settings) {
@@ -28,9 +24,10 @@ Future<void> storeSettings(Settings settings) async {
 
 Future<Map<String, DataFileShape>> _shapes() async {
   final shapes = <String, DataFileShape>{};
-  for (final path in practiceAssets) {
-    final metadata = await getFormMetadata(path);
+  for (final file in latinCourse.grammarFiles) {
+    final metadata = await getFormMetadata(file.path);
     shapes[metadata.dataFileId] = (
+      role: file.role,
       labels: [
         for (final key in metadata.formOrder) metadata.formLabelsByKey[key]!,
       ],

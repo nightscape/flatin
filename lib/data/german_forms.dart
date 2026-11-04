@@ -14,8 +14,8 @@ abstract interface class GermanForms {
   List<String> accepted(PracticeItem item, FormKey key);
 }
 
-/// Renders a Latin form from `german_verbs.yaml` for the Latin items with a
-/// `de_verb`, and from `german_nouns.yaml` for those with a `de_noun`. A noun
+/// Renders a Latin form from the verb gloss file for the Latin items with a
+/// `de_verb`, and from the noun gloss file for those with a `de_noun`. A noun
 /// form reads the German key that is its Latin key; a verb form reads the
 /// Latin key cut to modus, tempus and genus verbi for an infinitive or a
 /// participle.
@@ -24,23 +24,39 @@ class GrammarGermanForms implements GermanForms {
     String germanVerbsYaml,
     GrammarFile latinVerbs, {
     ({String yaml, GrammarFile latin})? nouns,
-  }) : _engine = GrammarEngine(
+  }) : this._(
          parseGrammarFiles({
-           'lib/data/german_verbs.yaml': germanVerbsYaml,
-           if (nouns != null) 'lib/data/german_nouns.yaml': nouns.yaml,
+           _verbSource: germanVerbsYaml,
+           if (nouns != null) _nounSource: nouns.yaml,
          }),
-       ),
-       germanVerbOf = _germanOf(latinVerbs, (item) => item.deVerb),
-       germanNounOf = nouns == null
-           ? const {}
-           : _germanOf(nouns.latin, (item) => item.deNoun) {
+         latinVerbs,
+         nouns?.latin,
+       );
+
+  GrammarGermanForms._(
+    List<GrammarFile> files,
+    GrammarFile latinVerbs,
+    GrammarFile? latinNouns,
+  ) : _engine = GrammarEngine(files),
+      _verbsId = _idOf(files, _verbSource),
+      _nounsId = latinNouns == null ? null : _idOf(files, _nounSource),
+      germanVerbOf = _germanOf(latinVerbs, (item) => item.deVerb),
+      germanNounOf = latinNouns == null
+          ? const {}
+          : _germanOf(latinNouns, (item) => item.deNoun) {
     for (final germanId in germanVerbOf.values) {
-      _engine.of('german_verbs', germanId);
+      _engine.of(_verbsId, germanId);
     }
     for (final germanId in germanNounOf.values) {
-      _engine.of('german_nouns', germanId);
+      _engine.of(_nounsId!, germanId);
     }
   }
+
+  static const _verbSource = 'verb gloss file';
+  static const _nounSource = 'noun gloss file';
+
+  static String _idOf(List<GrammarFile> files, String source) =>
+      files.singleWhere((f) => f.path == source).dataFileId;
 
   static Map<String, String> _germanOf(
     GrammarFile latin,
@@ -52,6 +68,8 @@ class GrammarGermanForms implements GermanForms {
   };
 
   final GrammarEngine _engine;
+  final String _verbsId;
+  final String? _nounsId;
 
   /// Practice item id → id of its German verb.
   final Map<String, String> germanVerbOf;
@@ -84,11 +102,11 @@ class GrammarGermanForms implements GermanForms {
   List<String>? _variants(PracticeItem item, FormKey key) {
     final nounId = germanNounOf[item.id];
     if (nounId != null) {
-      return _engine.of('german_nouns', nounId).forms[key]?.variants;
+      return _engine.of(_nounsId!, nounId).forms[key]?.variants;
     }
     final verbId = germanVerbOf[item.id];
     if (verbId == null) return null;
-    return _engine.of('german_verbs', verbId).forms[germanKeyOf(key)]?.variants;
+    return _engine.of(_verbsId, verbId).forms[germanKeyOf(key)]?.variants;
   }
 
   static FormKey germanKeyOf(FormKey latinKey) {

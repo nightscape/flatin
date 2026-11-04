@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/data/lesson_data.dart';
 import 'package:latin_practice/data/practice_data.dart';
+import 'support/latin_course.dart';
 
 /// Lesson words whose forms belong to the item of another lemma.
 const _formOf = {
@@ -171,7 +172,7 @@ void main() {
   test(
     'every inflectable word of volume 1 has an item or a listed reason',
     () async {
-      final lessons = await loadLessonData([bookAssets.first]);
+      final lessons = await loadLessonData([latinCourse.books.first]);
       final items = await loadAllPracticeItems();
       final lemmas = {for (final i in items) normalizeDiacritics(i.lemma)};
 
@@ -191,7 +192,7 @@ void main() {
   test(
     'index words sharing a normalized head each have their own item',
     () async {
-      final lessons = await loadLessonData([bookAssets.first]);
+      final lessons = await loadLessonData([latinCourse.books.first]);
       final items = await loadAllPracticeItems();
       final words = {for (final ws in lessons.lessonWords.values) ...ws};
 

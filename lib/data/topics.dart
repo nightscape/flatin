@@ -3,12 +3,12 @@ library;
 
 import 'dart:math';
 
+import '../models/course.dart';
 import '../models/exercise.dart';
 import '../models/practice_item.dart';
 import 'curriculum.dart';
 import 'selection.dart';
 
-const _fileOrder = ['nouns', 'verbs'];
 const _verbBundleAxes = ['modus', 'tempus', 'genus_verbi'];
 
 final class Topic {
@@ -66,7 +66,7 @@ List<Topic> topicsOf(
       formIndexOf.update(key, (j) => min(j, i), ifAbsent: () => i);
       nameOf.putIfAbsent(
         key,
-        () => item.dataFileId == 'nouns'
+        () => item.role == DataFileRole.noun
             ? nounTypeDisplays[key.$2]!
             : [
                 for (final axis in _verbBundleAxes)
@@ -80,6 +80,7 @@ List<Topic> topicsOf(
   for (final key in lessonOf.keys) {
     grouped.putIfAbsent((key.$1, lessonOf[key]!), () => []).add(key);
   }
+  final fileOrder = curriculum.grammarFileIds;
   return [
     for (final entry in grouped.entries)
       () {
@@ -99,9 +100,9 @@ List<Topic> topicsOf(
     final byLesson = a.lesson.compareTo(b.lesson);
     return byLesson != 0
         ? byLesson
-        : _fileOrder
+        : fileOrder
               .indexOf(a.dataFileId)
-              .compareTo(_fileOrder.indexOf(b.dataFileId));
+              .compareTo(fileOrder.indexOf(b.dataFileId));
   });
 }
 

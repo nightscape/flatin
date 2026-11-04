@@ -3,6 +3,7 @@ import 'package:latin_practice/data/curriculum.dart';
 import 'package:latin_practice/data/lesson_data.dart';
 import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/models/lesson_range.dart';
+import 'support/latin_course.dart';
 
 /// The real progression, pinned against the real practice data: one point per
 /// lesson that introduces a form or a type, and the laws the whole table obeys.
@@ -13,7 +14,7 @@ void main() {
   late Map<String, FormMetadata> metadata;
 
   setUpAll(() async {
-    curriculum = await loadCurriculum(bookAssets);
+    curriculum = await loadCurriculum(latinCourse.books);
     metadata = {
       for (final path in [
         'lib/data/latin_nouns.yaml',

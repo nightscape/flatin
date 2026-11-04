@@ -6,6 +6,7 @@ import '../models/exam_units.dart' show Uebersetzungseinheit;
 import '../models/settings.dart';
 import '../data/asset_text.dart';
 import '../data/lesson_data.dart';
+import '../models/course.dart';
 import '../data/settings_conversion.dart';
 
 part 'settings_provider.g.dart';
@@ -41,7 +42,7 @@ class SettingsNotifier extends _$SettingsNotifier {
     final map = MigrationMap.parse(
       await loadAssetText('lib/data/migration_v2.yaml'),
     );
-    final lessons = await loadLessonData(bookAssets);
+    final lessons = await loadLessonData((await loadCourse()).books);
     final converted = convertSettingsV2(json, map);
     final isV0 = !json.containsKey('disabledForms');
     if (isV0) {

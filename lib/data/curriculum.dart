@@ -1,14 +1,19 @@
 import 'package:yaml/yaml.dart';
 
+import '../models/course.dart';
 import '../models/form_label.dart';
 import '../models/lesson_range.dart';
 import 'asset_text.dart';
 import 'lesson_data.dart' show lastLesson;
 import 'practice_data.dart';
 
-/// What a curriculum is checked against: the form labels and the types one
-/// data file has.
-typedef DataFileShape = ({List<FormLabel> labels, List<String> types});
+/// What a curriculum is checked against: the role, the form labels and the
+/// types one data file has.
+typedef DataFileShape = ({
+  DataFileRole role,
+  List<FormLabel> labels,
+  List<String> types,
+});
 
 /// One `forms:` entry: axis id -> the codes it accepts. A form matches when
 /// every named axis carries one of them; `{}` matches every form of the file.
@@ -65,7 +70,15 @@ final class Curriculum {
   /// Every topic in the order of the volume files.
   final List<CourseTopic> courseTopics;
 
-  const Curriculum._(this._formTopics, this._typeTopics, this.courseTopics);
+  /// The role of each data file that has a grammar progression.
+  final Map<String, DataFileRole> _roles;
+
+  const Curriculum._(
+    this._formTopics,
+    this._typeTopics,
+    this.courseTopics,
+    this._roles,
+  );
 
   static Curriculum parse(
     List<String> yamlSources,
@@ -158,7 +171,9 @@ final class Curriculum {
       );
     }
 
-    return Curriculum._(formTopics, typeTopics, topics);
+    return Curriculum._(formTopics, typeTopics, topics, {
+      for (final MapEntry(:key, :value) in shapes.entries) key: value.role,
+    });
   }
 
   CourseTopic formTopic(String dataFileId, FormKey key) {
@@ -178,6 +193,15 @@ final class Curriculum {
     }
     return topic;
   }
+
+  /// Whether the lessons teach the types and forms of [dataFileId]; a file
+  /// without is practised by its words alone.
+  bool hasGrammar(String dataFileId) => _roles.containsKey(dataFileId);
+
+  DataFileRole roleOf(String dataFileId) => _roles[dataFileId]!;
+
+  /// The files with a grammar progression, in course order.
+  List<String> get grammarFileIds => [..._roles.keys];
 
   int formLesson(String dataFileId, FormKey key) =>
       formTopic(dataFileId, key).lesson;
@@ -269,14 +293,11 @@ bool _matches(_Selector selector, FormLabel label) => selector.axes.entries
 
 /// Reads the volume files and checks them against the loaded practice data.
 Future<Curriculum> loadCurriculum(List<String> assets) async {
-  const practiceAssets = [
-    'lib/data/latin_nouns.yaml',
-    'lib/data/latin_verbs.yaml',
-  ];
   final shapes = <String, DataFileShape>{};
-  for (final path in practiceAssets) {
-    final metadata = await getFormMetadata(path);
+  for (final file in (await loadCourse()).grammarFiles) {
+    final metadata = await getFormMetadata(file.path);
     shapes[metadata.dataFileId] = (
+      role: file.role,
       labels: [
         for (final key in metadata.formOrder) metadata.formLabelsByKey[key]!,
       ],

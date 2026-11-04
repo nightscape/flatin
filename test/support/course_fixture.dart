@@ -9,6 +9,7 @@ import 'package:latin_practice/models/practice_item.dart';
 import 'package:latin_practice/models/settings.dart';
 
 import 'test_axes.dart';
+import 'package:latin_practice/models/course.dart';
 
 final fixtureLabels = [
   nounLabel('nom', 'sg'),
@@ -19,8 +20,11 @@ final fixtureLabels = [
 
 const fixtureTypes = ['A-Deklination', 'O-Deklination'];
 
-DataFileShape nounShape({List<FormLabel>? labels, List<String>? types}) =>
-    (labels: labels ?? fixtureLabels, types: types ?? fixtureTypes);
+DataFileShape nounShape({List<FormLabel>? labels, List<String>? types}) => (
+  role: DataFileRole.noun,
+  labels: labels ?? fixtureLabels,
+  types: types ?? fixtureTypes,
+);
 
 Curriculum parseNouns(String yaml, {DataFileShape? shape}) =>
     Curriculum.parse([yaml], {'nouns': shape ?? nounShape()});
@@ -67,7 +71,11 @@ CourseFilter filterTeachingAll(Settings settings, PracticeItem item) =>
               '        types: [${item.type}]\n',
         ],
         {
-          item.dataFileId: (labels: item.formLabels, types: [item.type]),
+          item.dataFileId: (
+            role: item.role,
+            labels: item.formLabels,
+            types: [item.type],
+          ),
         },
       ),
       LessonData(

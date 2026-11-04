@@ -1,13 +1,7 @@
 import 'package:yaml/yaml.dart';
 import 'asset_text.dart';
+import '../models/course.dart';
 import '../models/practice_item.dart';
-
-/// The course books, in reading order: each lists its lessons' words and
-/// grammar.
-const List<String> bookAssets = [
-  'lib/data/agite_1.yaml',
-  'lib/data/agite_2.yaml',
-];
 
 /// The highest lesson number of the configured volumes.
 const int lastLesson = 40;
@@ -137,7 +131,7 @@ Future<LessonData> loadLessonData(List<String> assetPaths) async {
   // A test loads one volume on its own, so only the configured course is
   // pinned to [lastLesson]; a lesson above it breaks the scale either way.
   final highest = bookByLesson.keys.reduce((a, b) => a > b ? a : b);
-  final wholeCourse = assetPaths.join() == bookAssets.join();
+  final wholeCourse = assetPaths.join() == (await loadCourse()).books.join();
   assert(
     wholeCourse ? highest == lastLesson : highest <= lastLesson,
     'the data ends at lesson $highest, lastLesson says $lastLesson',

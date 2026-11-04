@@ -18,6 +18,7 @@ import 'package:latin_practice/models/settings.dart';
 import 'package:latin_practice/providers/round_providers.dart';
 import 'package:latin_practice/services/fsrs_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'support/latin_course.dart';
 
 final _now = DateTime.utc(2026, 10, 20);
 
@@ -34,8 +35,8 @@ void main() {
       for (final i in await loadAllPracticeItems())
         if (!i.isVocab) i,
     ];
-    curriculum = await loadCurriculum(bookAssets);
-    lessons = await loadLessonData(bookAssets);
+    curriculum = await loadCurriculum(latinCourse.books);
+    lessons = await loadLessonData(latinCourse.books);
     final nouns = await getFormMetadata('lib/data/latin_nouns.yaml');
     topics = topicsOf(items, curriculum, nounTypeDisplays: nouns.displayByType);
   });

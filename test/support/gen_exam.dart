@@ -4,9 +4,10 @@ import 'dart:math';
 
 import 'package:latin_practice/data/exam.dart';
 import 'package:latin_practice/data/languages/language.dart';
+import 'latin_course.dart';
 
 /// The language of the exam packs the tests draw and read.
-final latin = Language.parse(File(latinAsset).readAsStringSync());
+final latin = Language.parse(File(latinCourse.language).readAsStringSync());
 
 /// The codes of the `analyse` key [key] of [latin].
 List<Object> codes(String key) => latin.analyse[key]!;

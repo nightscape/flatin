@@ -1,0 +1,10 @@
+# The files of one course; SCHEMA.md "Course manifest".
+language: lib/data/languages/la.yaml
+data_files:
+  - {id: nouns, path: lib/data/latin_nouns.yaml, role: noun}
+  - {id: verbs, path: lib/data/latin_verbs.yaml, role: verb}
+  - {id: vocab, path: lib/data/latin_vocab.yaml, role: vocab}
+gloss_files: {noun: lib/data/german_nouns.yaml, verb: lib/data/german_verbs.yaml}
+books: [lib/data/agite_1.yaml, lib/data/agite_2.yaml]
+sentences: lib/data/sentences.yaml
+game_rules: lib/data/game_rules.yaml

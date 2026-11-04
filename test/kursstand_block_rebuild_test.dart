@@ -6,6 +6,7 @@ import 'package:latin_practice/models/settings.dart';
 
 import 'support/kursstand_shelf_driver.dart';
 import 'support/stored_settings.dart';
+import 'support/latin_course.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -13,7 +14,7 @@ void main() {
   testWidgets('a range change rebuilds only the lesson blocks it changes', (
     tester,
   ) async {
-    final lessons = await loadLessonData(bookAssets);
+    final lessons = await loadLessonData(latinCourse.books);
     String firstWordOf(int lesson) =>
         lessons.wordToLesson.entries.firstWhere((e) => e.value == lesson).key;
     final kept = firstWordOf(2), changed = firstWordOf(20);

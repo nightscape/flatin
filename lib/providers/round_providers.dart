@@ -14,11 +14,13 @@ import '../data/selection.dart';
 import '../data/sentences.dart';
 import '../data/topics.dart';
 import '../data/word_focus.dart';
+import '../models/course.dart';
 import '../models/course_filter.dart';
 import '../models/exercise.dart';
 import '../models/fsrs_card.dart';
 import '../models/practice_item.dart';
 import '../models/reward.dart';
+import 'course_provider.dart';
 import 'curriculum_provider.dart';
 import 'fsrs_provider.dart';
 import 'locale_provider.dart';
@@ -39,8 +41,9 @@ Future<List<Topic>> topics(Ref ref, WordFocus focus) async {
   final filter = await ref.watch(courseFilterProvider.future);
   final curriculum = await ref.watch(curriculumProvider.future);
   final language = await ref.watch(dataLanguageProvider.future);
+  final course = await ref.watch(courseProvider.future);
   final nouns = await getFormMetadata(
-    'lib/data/latin_nouns.yaml',
+    course.ofRole(DataFileRole.noun).path,
     language: language,
   );
   final all = topicsOf(

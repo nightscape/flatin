@@ -4,12 +4,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/practice_data.dart';
 import '../models/course_filter.dart';
+import '../providers/course_provider.dart';
 import '../providers/locale_provider.dart';
 import '../providers/settings_provider.dart';
 import 'course_scope.dart';
 import 'settings_widgets.dart';
 
-/// The types, features and forms of one data file ('nouns' or 'verbs'). What
+/// The types, features and forms of one grammar file of the course. What
 /// the course has not taught yet is greyed and a tap practises it anyway.
 class SettingsGrammarPage extends ConsumerStatefulWidget {
   const SettingsGrammarPage({super.key, required this.dataFileId});
@@ -22,14 +23,15 @@ class SettingsGrammarPage extends ConsumerStatefulWidget {
 }
 
 class _SettingsGrammarPageState extends ConsumerState<SettingsGrammarPage> {
-  late final Future<FormMetadata> _metadata = ref
-      .read(dataLanguageProvider.future)
-      .then(
-        (language) => getFormMetadata(
-          'lib/data/latin_${widget.dataFileId}.yaml',
-          language: language,
-        ),
-      );
+  late final Future<FormMetadata> _metadata = () async {
+    final file = (await ref.read(
+      courseProvider.future,
+    )).dataFile(widget.dataFileId);
+    return getFormMetadata(
+      file.path,
+      language: await ref.read(dataLanguageProvider.future),
+    );
+  }();
 
   @override
   Widget build(BuildContext context) {

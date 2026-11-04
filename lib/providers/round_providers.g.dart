@@ -112,7 +112,7 @@ final class TopicsProvider
   }
 }
 
-String _$topicsHash() => r'5c1c819419d516216d624e38125c7d0eec888ea9';
+String _$topicsHash() => r'a772dd65db08875e5318b4fb326e4e487a7d1e40';
 
 /// The topics the course offers now with words of [focus], in course order.
 

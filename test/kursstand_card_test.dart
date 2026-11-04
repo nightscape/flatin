@@ -12,6 +12,7 @@ import 'support/course_providers.dart';
 import 'support/kursstand_shelf_driver.dart';
 import 'support/stored_settings.dart';
 import 'support/word_classification_harness.dart' show letItLoad;
+import 'support/latin_course.dart';
 
 Finder _text(String key) => find.byKey(Key(key));
 
@@ -150,7 +151,7 @@ void main() {
     await _tapChip(tester, 'kursstand.word.rosa');
     expect((await storedSettings())['forcedOnWords'], ['rosa']);
 
-    final lessons = await loadLessonData(bookAssets);
+    final lessons = await loadLessonData(latinCourse.books);
     final inside = lessons.lessonWords[21]!.first;
     await _tapChip(tester, 'kursstand.word.$inside');
     expect((await storedSettings())['deselectedWords'], [inside]);
@@ -162,7 +163,7 @@ void main() {
   testWidgets('a topic chip flips the topic against the grammar range', (
     tester,
   ) async {
-    final topics = (await loadCurriculum(bookAssets)).courseTopics;
+    final topics = (await loadCurriculum(latinCourse.books)).courseTopics;
     final earlier = topics.firstWhere((t) => t.lesson <= 3);
     final later = topics.firstWhere((t) => t.lesson > 3 && t.lesson < 40);
     await _open(tester, Settings(courseWords: LessonRange(1, 3)));
@@ -178,7 +179,7 @@ void main() {
   testWidgets(
     'a word outside the word range is greyed and a tap forces it on',
     (tester) async {
-      final lessons = await loadLessonData(bookAssets);
+      final lessons = await loadLessonData(latinCourse.books);
       final inRange = (await loadAllPracticeItems()).firstWhere(
         (i) => lessons.lessonNumberOf(i) == 21,
       );
@@ -221,7 +222,7 @@ void main() {
   testWidgets('a word whose type is taught later says from which lesson', (
     tester,
   ) async {
-    final lessons = await loadLessonData(bookAssets);
+    final lessons = await loadLessonData(latinCourse.books);
     final item = (await loadAllPracticeItems()).firstWhere(
       (i) => lessons.lessonNumberOf(i) == 21,
     );
@@ -262,7 +263,7 @@ void main() {
   });
 
   testWidgets('a type forced on clears the gap of its word', (tester) async {
-    final lessons = await loadLessonData(bookAssets);
+    final lessons = await loadLessonData(latinCourse.books);
     final item = (await loadAllPracticeItems()).firstWhere(
       (i) => lessons.lessonNumberOf(i) == 21,
     );
@@ -312,7 +313,7 @@ void main() {
   testWidgets(
     'a word whose forms are all taught later says from which lesson',
     (tester) async {
-      final lessons = await loadLessonData(bookAssets);
+      final lessons = await loadLessonData(latinCourse.books);
       final item = (await loadAllPracticeItems()).firstWhere(
         (i) => lessons.lessonNumberOf(i) == 21,
       );
@@ -338,12 +339,12 @@ void main() {
   testWidgets('a grammar gap below the grammar range names the grammar', (
     tester,
   ) async {
-    final lessons = await loadLessonData(bookAssets);
+    final lessons = await loadLessonData(latinCourse.books);
     final item = (await loadAllPracticeItems()).firstWhere(
       (i) => lessons.lessonNumberOf(i) == 21,
     );
     final curriculum = await lateFormsCurriculum(item.dataFileId, 2);
-    final (axis, value) = basicFormFeature[item.dataFileId]!;
+    final (axis, value) = basicFormFeature[item.role]!;
     final basic = item.formLabels.firstWhere((l) => l.features[axis] == value);
 
     await _open(

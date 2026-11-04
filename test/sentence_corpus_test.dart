@@ -5,6 +5,7 @@ import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/data/selection.dart' show grammarLesson;
 import 'package:latin_practice/data/sentences.dart';
 import 'package:latin_practice/models/practice_item.dart';
+import 'support/latin_course.dart';
 
 /// Every sentence of the corpus, run through the grammar engine and the
 /// course: each token is a known form or a lesson headword, inside the
@@ -22,8 +23,8 @@ void main() {
     itemByLemma = {
       for (final item in await loadAllPracticeItems()) item.lemma: item,
     };
-    lessons = await loadLessonData(bookAssets);
-    curriculum = await loadCurriculum(bookAssets);
+    lessons = await loadLessonData(latinCourse.books);
+    curriculum = await loadCurriculum(latinCourse.books);
   });
 
   test('every sentence is placed by the engine and its lesson', () {

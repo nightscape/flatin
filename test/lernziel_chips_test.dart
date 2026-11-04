@@ -13,6 +13,7 @@ import 'package:latin_practice/models/lesson_range.dart';
 import 'package:latin_practice/models/settings.dart';
 
 import 'support/gen_settings.dart';
+import 'support/latin_course.dart';
 
 const _later = 'Später';
 
@@ -80,7 +81,7 @@ void main() {
   late List<int> bookStarts;
 
   setUpAll(() async {
-    bookStarts = (await loadLessonData(bookAssets)).bookStarts;
+    bookStarts = (await loadLessonData(latinCourse.books)).bookStarts;
     expect(bookStarts.length, greaterThan(1), reason: 'the course has volumes');
   });
 

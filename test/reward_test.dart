@@ -10,10 +10,11 @@ import 'package:latin_practice/data/rewards.dart';
 import 'package:latin_practice/models/reward.dart';
 import 'package:latin_practice/services/reward_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'support/latin_course.dart';
 
 final _rules = GameRules.parse(
-  File(gameRulesAsset).readAsStringSync(),
-  gameRulesAsset,
+  File(latinCourse.gameRules).readAsStringSync(),
+  latinCourse.gameRules,
 );
 
 RewardLedger _send(RewardLedger ledger, RewardEvent event) => [

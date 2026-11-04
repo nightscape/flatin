@@ -6,6 +6,7 @@ import 'package:latin_practice/models/fsrs_card.dart';
 import 'package:latin_practice/models/practice_item.dart';
 
 import 'support/test_axes.dart';
+import 'support/latin_course.dart';
 
 PracticeItem _item(String dataFileId, String lemma, String translation) =>
     PracticeItem(
@@ -21,6 +22,7 @@ PracticeItem _item(String dataFileId, String lemma, String translation) =>
       ],
       formLabels: [nounLabel('nom', 'sg')],
       dataFileId: dataFileId,
+      role: latinCourse.dataFile(dataFileId).role,
       formOrder: const ['nominative_singular'],
       baseFormKeys: const [],
       derivation: Derivation(

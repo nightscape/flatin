@@ -4,7 +4,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/data/curriculum.dart';
 import 'package:latin_practice/data/exam.dart';
 import 'package:latin_practice/data/languages/language.dart';
-import 'package:latin_practice/data/lesson_data.dart';
 import 'package:latin_practice/data/sentences.dart';
 import 'package:latin_practice/grammar/engine.dart';
 import 'package:latin_practice/grammar/schema.dart';
@@ -12,6 +11,7 @@ import 'package:latin_practice/models/practice_item.dart';
 
 import 'toy_assets.dart';
 import 'toy_course_boot_test.dart' show tracerSteps;
+import 'package:latin_practice/models/course.dart';
 
 final _latin = RegExp(r'[āēīōūȳĀĒĪŌŪȲăĕĭŏŭ]|latin_|\b(nouns|verbs|vocab)\b');
 final _knownRed = RegExp(r'^- ([a-z-]+): (\S.*)$');
@@ -45,11 +45,12 @@ void main() {
       keys.addAll(forms.keys);
     }
     final shape = (
+      role: DataFileRole.noun,
       labels: [for (final k in keys) FormLabel.fromKey(k, words.axes)],
       types: {for (final item in words.items) item.typeName}.toList(),
     );
     final books = [
-      for (final path in bookAssets) File(toyAssets[path]!).readAsStringSync(),
+      for (final path in toyCourse.books) File(path).readAsStringSync(),
     ];
     Curriculum.parse(books, {words.dataFileId: shape});
 

@@ -5,6 +5,7 @@ import '../data/asset_text.dart';
 import '../data/exam.dart';
 import '../data/languages/language.dart';
 import '../data/practice_data.dart';
+import '../models/course.dart';
 import '../models/fsrs_card.dart';
 import '../services/exam_storage.dart';
 import '../services/fsrs_storage.dart';
@@ -16,7 +17,7 @@ part 'exam_provider.g.dart';
 /// The language whose codes and rules the exam packs use.
 @riverpod
 Future<Language> examLanguage(Ref ref) async =>
-    Language.parse(await loadAssetText(latinAsset));
+    Language.parse(await loadAssetText((await loadCourse()).language));
 
 /// The imported exam packs.
 @riverpod
