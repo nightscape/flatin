@@ -111,6 +111,12 @@ final class SpecGenerator implements ExerciseGenerator {
           kind: spec.kind,
           questionKey: spec.questionKey,
           questionParams: _paramsOf(spec, slice, cube),
+          formParams: {
+            for (final MapEntry(:key, :value) in spec.params.entries)
+              if (value is SentenceText ||
+                  (value is Show && value.view == View.latin))
+                key,
+          },
           answer: answer,
         );
       }

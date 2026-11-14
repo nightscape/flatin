@@ -5,6 +5,7 @@ import '../data/exercise_feedback.dart';
 import '../models/exercise.dart';
 import '../models/input_strategy.dart';
 import '../models/practice_item.dart';
+import '../widgets/exercise_question.dart';
 import '../widgets/explanation_lines.dart';
 
 /// Shows one multiple-choice or typed [Exercise]; after the feedback, the
@@ -107,11 +108,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
           child: ListView(
             padding: const EdgeInsets.all(16),
             children: [
-              Text(
-                _t(exercise.questionKey, exercise.questionParams),
-                key: const Key('exercise.question'),
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
+              ExerciseQuestion(exercise),
               const SizedBox(height: 16),
               switch (exercise.answer) {
                 ChoiceAnswer() => _choices(exercise.answer as ChoiceAnswer),

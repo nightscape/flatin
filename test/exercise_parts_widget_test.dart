@@ -3,8 +3,10 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:latin_practice/widgets/form_text.dart';
 import 'package:latin_practice/data/exercise_kinds.dart';
 import 'package:latin_practice/data/german_forms.dart';
+import 'package:latin_practice/data/sentences.dart';
 import 'package:latin_practice/main.dart' show noRetry;
 import 'package:latin_practice/models/exercise.dart';
 import 'package:latin_practice/models/input_strategy.dart';
@@ -13,6 +15,7 @@ import 'package:latin_practice/providers/fsrs_provider.dart';
 import 'package:latin_practice/screens/exercise_parts_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'support/gen_prompt_exercises.dart';
 import 'support/key_echo_i18n.dart';
 import 'support/round_driver.dart';
 import 'support/word_classification_harness.dart';
@@ -182,6 +185,45 @@ void main() {
     }
   });
 
+  testWidgets('a long given form stays inside the screen at 320 px and text '
+      'scale 2.0', (tester) async {
+    await load(tester, 'de');
+    final corpus = (await tester.runAsync(loadSentenceCorpus))!;
+    final built = [
+      for (final (w, e) in drawExercises(
+        verbs,
+        const FakeGermanForms(),
+        corpus,
+        stride: 1,
+        stabilityOf: (_) => 30,
+      ))
+        if (e.kind == ExerciseKind.stammformen) (w, e),
+    ];
+    int longest(Exercise e) => (e.answer as PartsAnswer).given.fold(
+      0,
+      (m, g) => max(m, g.form.text.characters.length),
+    );
+    final (word, e) = built.reduce(
+      (a, b) => longest(a.$2) >= longest(b.$2) ? a : b,
+    );
+    await pump(tester, e, null, word: word);
+    tester.view.physicalSize = const Size(320, 640);
+    tester.platformDispatcher.textScaleFactorTestValue = 2.0;
+    addTearDown(tester.platformDispatcher.clearAllTestValues);
+    await tester.pumpAndSettle();
+    final given = find.byType(FormText);
+    expect(given, findsWidgets);
+    for (final el in given.evaluate()) {
+      final letters = tester.getRect(
+        find.descendant(
+          of: find.byWidget(el.widget),
+          matching: find.byKey(FormText.textKey),
+        ),
+      );
+      expect(letters.right, lessThanOrEqualTo(320), reason: '$letters');
+    }
+  });
+
   testWidgets('the prompt fuī shows the perfect as given text and asks the '
       'other parts', (tester) async {
     await load(tester, 'de');
@@ -196,7 +238,7 @@ void main() {
     final responses = await pump(tester, e, null, word: esse);
     await reveal(tester, find.byKey(const Key('exercise.given.2')));
     expect(
-      tester.widget<Text>(find.byKey(const Key('exercise.given.2'))).data,
+      tester.widget<FormText>(find.byKey(const Key('exercise.given.2'))).text,
       'fuī',
     );
     expect(find.byKey(const Key('exercise.slot.2')), findsNothing);

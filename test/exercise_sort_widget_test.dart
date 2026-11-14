@@ -447,7 +447,7 @@ void main() {
           await pump(tester, e, word: word, language: language);
           final text = [
             for (final t in tester.widgetList<Text>(find.byType(Text)))
-              t.data ?? '',
+              t.data ?? t.textSpan?.toPlainText() ?? '',
           ].join(' ');
           const german = ['Indikativ', 'Futur I', 'Perfekt', 'Aktiv'];
           for (final name in answerOf(

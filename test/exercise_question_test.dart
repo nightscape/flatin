@@ -1,0 +1,161 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:latin_practice/data/practice_data.dart';
+import 'package:latin_practice/data/sentences.dart';
+import 'package:latin_practice/models/exercise.dart';
+import 'package:latin_practice/models/input_strategy.dart';
+import 'package:latin_practice/models/practice_item.dart';
+import 'package:latin_practice/providers/fsrs_provider.dart';
+import 'package:latin_practice/providers/locale_provider.dart';
+import 'package:latin_practice/screens/exercise_screen.dart';
+import 'package:latin_practice/widgets/exercise_question.dart';
+import 'package:latin_practice/widgets/form_text.dart';
+
+import 'support/gen_prompt_exercises.dart';
+import 'support/round_driver.dart';
+import 'support/word_classification_harness.dart';
+
+// Generators: drawExercises (new, test/support/gen_prompt_exercises.dart):
+// every 17th real word x all its bundles x every shipped generator, built
+// with the fake German texts. The tap sequences reuse drawGapTaps.
+
+void main() {
+  late List<PracticeItem> items;
+  late List<(PracticeItem, Exercise)> drawn;
+
+  setUpAll(() async {
+    TestWidgetsFlutterBinding.ensureInitialized();
+    items = await loadAllPracticeItems();
+    final container = ProviderContainer(
+      overrides: [dataLanguageProvider.overrideWith((ref) => 'de')],
+    );
+    final german = await container.read(germanFormsProvider.future);
+    container.dispose();
+    drawn = drawExercises(
+      items,
+      german,
+      await loadSentenceCorpus(),
+      stride: 17,
+    );
+  });
+
+  test('a form in a question is never a text the learner has to give, and '
+      'every kind that asks about a form shows one', () {
+    final leaks = [
+      for (final (word, e) in drawn)
+        for (final p in e.formParams)
+          if (expectedLatin(e).contains(e.questionParams[p]))
+            '${e.kind.name} ${word.id}: $p = ${e.questionParams[p]}',
+    ];
+    expect(leaks, isEmpty);
+    expect(
+      {
+        for (final (_, e) in drawn)
+          if (e.formParams.isNotEmpty) e.kind,
+      },
+      {
+        ExerciseKind.latDeWahl,
+        ExerciseKind.umformen,
+        ExerciseKind.fehlerFinden,
+        ExerciseKind.bestimmen,
+        ExerciseKind.formenKette,
+        ExerciseKind.satzAnkreuzen,
+        ExerciseKind.stammformen,
+      },
+    );
+  });
+
+  testWidgets('the question shows exactly its form params as free-marking '
+      'form texts', (tester) async {
+    final byKind = <ExerciseKind, (PracticeItem, Exercise)>{};
+    for (final d in drawn) {
+      byKind.putIfAbsent(d.$2.kind, () => d);
+    }
+    for (final (word, e) in byKind.values) {
+      await tester.pumpWidget(
+        wrapInApp(
+          Scaffold(body: ExerciseQuestion(e)),
+          forcedLocale: const Locale('de'),
+        ),
+      );
+      await tester.pumpAndSettle();
+      final forms = tester.widgetList<FormText>(find.byType(FormText));
+      expect(
+        forms.map((f) => f.mode).toSet().difference({StemMarking.frei}),
+        isEmpty,
+      );
+      expect(
+        [for (final f in forms) f.text]..sort(),
+        [
+          for (final p in e.formParams)
+            ...RegExp(
+              r'[\p{L}\p{M}]{2,}',
+              unicode: true,
+            ).allMatches(e.questionParams[p]!).map((m) => m[0]!),
+        ]..sort(),
+        reason: '${e.kind.name} ${word.id}',
+      );
+      expect(find.byKey(ExerciseQuestion.questionKey), findsOneWidget);
+    }
+  });
+
+  testWidgets('tapping gaps in the question changes neither the response nor '
+      'its wording', (tester) async {
+    final cases = [
+      for (final d in drawn)
+        if (d.$2.formParams.isNotEmpty &&
+            (d.$2.answer is TypedAnswer || d.$2.answer is ChoiceAnswer))
+          d,
+    ].take(12);
+    expect(cases, isNotEmpty);
+    for (final (word, e) in cases) {
+      final responses = <List<ExerciseResponse>>[];
+      for (final tapGaps in [false, true]) {
+        final got = <ExerciseResponse>[];
+        await tester.pumpWidget(const SizedBox());
+        await tester.pumpWidget(
+          wrapInApp(
+            ExerciseScreen(
+              word: word,
+              exercise: e,
+              inputStrategy: InputStrategy.byId('text_field'),
+              optionForms: word.formOrder.toSet(),
+              onResponse: got.add,
+            ),
+            forcedLocale: const Locale('de'),
+          ),
+        );
+        await tester.pumpAndSettle();
+        if (tapGaps) {
+          for (final f in find.byType(FormText).evaluate()) {
+            final box = tester.getRect(find.byWidget(f.widget));
+            if ((f.widget as FormText).text.length >= 2) {
+              await tester.tapAt(box.center);
+              await tester.pump();
+            }
+          }
+          expect(find.byKey(FormText.separatorKey), findsWidgets);
+        }
+        await answer(tester, e, right: true);
+        responses.add(got);
+      }
+      expect(responses[1].length, responses[0].length, reason: e.kind.name);
+      expect(
+        [for (final r in responses[1]) r.runtimeType],
+        [for (final r in responses[0]) r.runtimeType],
+      );
+      expect(
+        [for (final r in responses[1]) '${_texts(r)}'],
+        [for (final r in responses[0]) '${_texts(r)}'],
+        reason: e.kind.name,
+      );
+    }
+  });
+}
+
+Object? _texts(ExerciseResponse r) => switch (r) {
+  TypedText(:final text) => text,
+  ChosenOption(:final chosen) => chosen.text,
+  _ => r,
+};

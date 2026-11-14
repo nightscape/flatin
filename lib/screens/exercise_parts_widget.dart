@@ -6,7 +6,9 @@ import '../data/exercise_feedback.dart';
 import '../models/exercise.dart';
 import '../models/input_strategy.dart';
 import '../models/practice_item.dart';
+import '../widgets/exercise_question.dart';
 import '../widgets/explanation_lines.dart';
+import '../widgets/form_text.dart';
 
 /// Shows one principal-parts [Exercise]: one input per part, each following
 /// [inputStrategy]; after the feedback, "next" hands the texts to
@@ -74,11 +76,7 @@ class _ExercisePartsWidgetState extends State<ExercisePartsWidget> {
             key: ValueKey(exercise),
             padding: const EdgeInsets.all(12),
             children: [
-              Text(
-                _t(exercise.questionKey, exercise.questionParams),
-                key: const Key('exercise.question'),
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
+              ExerciseQuestion(exercise),
               const SizedBox(height: 12),
               ..._row(),
               if (!_checked)
@@ -106,9 +104,11 @@ class _ExercisePartsWidgetState extends State<ExercisePartsWidget> {
         widgets.addAll([
           Text(_t(name)),
           const SizedBox(height: 4),
-          Text(
-            form.text,
+          FormText(
             key: Key('exercise.given.$at'),
+            text: form.text,
+            split: null,
+            mode: StemMarking.frei,
             style: Theme.of(context).textTheme.titleMedium,
           ),
         ]);

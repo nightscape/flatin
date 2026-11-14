@@ -4,6 +4,7 @@ import 'package:flutter_i18n/flutter_i18n.dart';
 import '../data/exercise_feedback.dart';
 import '../models/exercise.dart';
 import '../models/practice_item.dart';
+import '../widgets/exercise_question.dart';
 import '../widgets/explanation_lines.dart';
 
 /// Shows one marking [Exercise]: the learner taps a pill of the tray, then
@@ -83,11 +84,7 @@ class _ExerciseTapWidgetState extends State<ExerciseTapWidget> {
           child: ListView(
             padding: const EdgeInsets.all(12),
             children: [
-              Text(
-                _t(exercise.questionKey, exercise.questionParams),
-                key: const Key('exercise.question'),
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
+              ExerciseQuestion(exercise),
               const SizedBox(height: 4),
               Text(_t('exercise.tap.hint')),
               const SizedBox(height: 16),

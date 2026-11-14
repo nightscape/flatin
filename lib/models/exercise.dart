@@ -279,6 +279,10 @@ final class Exercise {
   final ExerciseKind kind;
   final String questionKey;
   final Map<String, String> questionParams;
+
+  /// The keys of [questionParams] whose value is Latin text (a form or a
+  /// sentence) shown in the question; never the form the learner is asked to give.
+  final Set<String> formParams;
   final ExerciseAnswer answer;
 
   Exercise({
@@ -287,8 +291,10 @@ final class Exercise {
     required this.kind,
     required this.questionKey,
     this.questionParams = const {},
+    this.formParams = const {},
     required this.answer,
   }) {
+    assert(formParams.every(questionParams.containsKey));
     assert(
       grammarCardId.startsWith('grammar:${wordCardId.split(':').first}:'),
       'word $wordCardId and $grammarCardId come from two data files',

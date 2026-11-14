@@ -5,6 +5,7 @@ import '../data/attribution.dart';
 import '../data/exercise_feedback.dart';
 import '../models/exercise.dart';
 import '../models/practice_item.dart';
+import '../widgets/exercise_question.dart';
 import '../widgets/explanation_lines.dart';
 
 /// Shows one [TickAnswer] exercise: the learner ticks every right rendering
@@ -67,11 +68,7 @@ class _ExerciseTicksWidgetState extends State<ExerciseTicksWidget> {
             key: ObjectKey(exercise),
             padding: const EdgeInsets.all(12),
             children: [
-              Text(
-                _t(exercise.questionKey, exercise.questionParams),
-                key: const Key('exercise.question'),
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
+              ExerciseQuestion(exercise),
               const SizedBox(height: 16),
               for (final (i, (:text, :mistake)) in _answer.options.indexed)
                 _tickRow(i, text, right: mistake == null),
