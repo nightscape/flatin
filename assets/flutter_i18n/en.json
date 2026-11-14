@@ -459,10 +459,28 @@
       "lemma": "Dictionary form: {lemma}",
       "meaning": "Meaning: {meaning}",
       "entry": "Dictionary entry: {angabe}",
-      "analysis": "Analysis: {analysis}"
+      "analysis": "Analysis: {analysis}",
+      "lesson": {
+        "word": "Word: lesson {lesson}",
+        "type": "Declension/conjugation: lesson {lesson}",
+        "form": "Form: lesson {lesson}",
+        "typeAndForm": "Declension/conjugation and form: lesson {lesson}",
+        "syntax": "{topic}: lesson {lesson}"
+      }
     },
     "solution": {
       "bezug": "refers to: {word}"
+    },
+    "clause": {
+      "art": {
+        "temporal": "temporal clause",
+        "kausal": "causal clause",
+        "kondizional": "conditional clause",
+        "konzessiv": "concessive clause",
+        "relativ": "relative clause",
+        "aci": "accusative with infinitive",
+        "pc": "participium coniunctum"
+      }
     },
     "analyse": {
       "wortart": {

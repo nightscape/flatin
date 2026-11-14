@@ -4,11 +4,14 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../data/exam.dart';
 import '../data/languages/language.dart' show Language;
 import '../data/practice_data.dart';
+import '../data/token_lessons.dart';
 import '../models/course.dart';
 import '../models/fsrs_card.dart';
 import '../services/exam_storage.dart';
 import '../services/fsrs_storage.dart';
+import 'curriculum_provider.dart';
 import 'fsrs_provider.dart';
+import 'lesson_provider.dart';
 import 'locale_provider.dart';
 
 part 'exam_provider.g.dart';
@@ -39,22 +42,39 @@ class ExamPacks extends _$ExamPacks {
   }
 }
 
-/// The app's words by lemma: the meaning in the UI language and the word
-/// card ids, one per data file that lists the lemma.
+typedef ExamWord = ({
+  String meaning,
+  List<String> cardIds,
+  List<WordFile> files,
+});
+
+/// The app's words by lemma: the meaning in the UI language, and the word
+/// card id and data file, one per data file that lists the lemma.
 @riverpod
-Future<Map<String, ({String meaning, List<String> cardIds})>> examWords(
-  Ref ref,
-) async {
+Future<Map<String, ExamWord>> examWords(Ref ref) async {
   final language = await ref.watch(dataLanguageProvider.future);
-  final words = <String, ({String meaning, List<String> cardIds})>{};
+  final words = <String, ExamWord>{};
   for (final item in await loadAllPracticeItems(language: language)) {
     final known = words[item.lemma];
     words[item.lemma] = (
       meaning: known?.meaning ?? item.translation,
       cardIds: [...?known?.cardIds, PracticeItemCard.generateItemId(item)],
+      files: [...?known?.files, (dataFileId: item.dataFileId, type: item.type)],
     );
   }
   return words;
+}
+
+/// Where the course teaches the words of the exam sheet.
+@riverpod
+Future<LessonLookup> lessonLookup(Ref ref) async {
+  final words = await ref.watch(examWordsProvider.future);
+  return LessonLookup(
+    await ref.watch(examLanguageProvider.future),
+    await ref.watch(lessonDataProvider.future),
+    await ref.watch(curriculumProvider.future),
+    {for (final MapEntry(:key, :value) in words.entries) key: value.files},
+  );
 }
 
 /// [cards] with each word card of [wordCardIds] due by the start of the day

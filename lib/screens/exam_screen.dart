@@ -5,6 +5,7 @@ import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/exam.dart';
+import '../data/token_lessons.dart';
 import '../models/exam_units.dart';
 import '../models/settings.dart';
 import '../providers/exam_provider.dart';
@@ -34,6 +35,12 @@ class _ExamScreenState extends ConsumerState<ExamScreen> {
 
   String _t(String key, [Map<String, String>? params]) =>
       FlutterI18n.translate(context, key, translationParams: params);
+
+  late final _clauseOf = {
+    for (final s in exam.saetze)
+      for (final c in s.teilsaetze)
+        for (final id in c.tokens) id: c,
+  };
 
   late final _tokens = {
     for (final s in exam.saetze)
@@ -263,6 +270,11 @@ class _ExamScreenState extends ConsumerState<ExamScreen> {
           final meaning =
               hilfe?.de ??
               ref.watch(examWordsProvider).value?[t.lemma]?.meaning;
+          final lessons = switch (ref.watch(lessonLookupProvider)) {
+            AsyncData(:final value) => value.of(t, _clauseOf[t.id]!),
+            AsyncError(:final error) => throw error,
+            _ => null,
+          };
           return Padding(
             key: const Key('exam.sheet'),
             padding: const EdgeInsets.all(16),
@@ -279,12 +291,32 @@ class _ExamScreenState extends ConsumerState<ExamScreen> {
                 Text(
                   _t('exam.sheet.analysis', {'analysis': _analysis(t.analyse)}),
                 ),
+                if (lessons != null) ..._lessonLines(lessons),
               ],
             ),
           );
         },
       ),
     );
+  }
+
+  /// One line per fact; its key names the fact and the lesson.
+  List<Widget> _lessonLines(TokenLessons l) {
+    Widget line(String kind, int lesson, {String? topic}) => Text(
+      _t('exam.sheet.lesson.$kind', {
+        'lesson': '$lesson',
+        if (topic != null) 'topic': _t('exam.$topic'),
+      }),
+      key: Key('exam.sheet.lesson.${topic ?? kind}.$lesson'),
+    );
+    return [
+      for (final n in l.word) line('word', n),
+      for (final n in l.typeAndForm) line('typeAndForm', n),
+      for (final n in l.type) line('type', n),
+      for (final n in l.form) line('form', n),
+      for (final MapEntry(:key, :value) in l.syntax.entries)
+        line('syntax', value, topic: key),
+    ];
   }
 
   String _code(String field, Object code) => _t('exam.analyse.$field.$code');

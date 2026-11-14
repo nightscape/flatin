@@ -4,6 +4,7 @@ import '../models/course.dart';
 import '../models/form_label.dart';
 import '../models/lesson_range.dart';
 import 'asset_text.dart';
+import 'languages/language.dart' show Language;
 import 'lesson_data.dart' show lastLesson;
 import 'practice_data.dart';
 
@@ -14,6 +15,14 @@ typedef DataFileShape = ({
   List<FormLabel> labels,
   List<String> types,
 });
+
+/// The syntax topics a book's `syntax:` entry can name: each code of
+/// `analyse.funktion` and `clause.art` as `<language file path>.<code>`. The
+/// main clause is no topic.
+Set<String> syntaxTopicIds(Language language) => {
+  for (final path in ['analyse.funktion', 'clause.art'])
+    for (final code in language.axes[path] ?? const <Object>[]) '$path.$code',
+}..remove('clause.art.${language.rules.mainClause}');
 
 /// One `forms:` entry: axis id -> the codes it accepts. A form matches when
 /// every named axis carries one of them; `{}` matches every form of the file.
@@ -73,17 +82,29 @@ final class Curriculum {
   /// The role of each data file that has a grammar progression.
   final Map<String, DataFileRole> _roles;
 
+  /// data file id -> its form labels, in file order.
+  final Map<String, List<FormLabel>> _labels;
+
+  /// syntax topic id -> the lesson that teaches it.
+  final Map<String, int> _syntaxLessons;
+
   const Curriculum._(
     this._formTopics,
     this._typeTopics,
     this.courseTopics,
     this._roles,
+    this._labels,
+    this._syntaxLessons,
   );
 
+  /// [syntaxTopics] are the ids a `syntax:` entry may name (see
+  /// [syntaxTopicIds]).
   static Curriculum parse(
     List<String> yamlSources,
-    Map<String, DataFileShape> shapes,
-  ) {
+    Map<String, DataFileShape> shapes, {
+    Set<String> syntaxTopics = const {},
+  }) {
+    final syntaxLessons = <String, int>{};
     final selectors = {for (final id in shapes.keys) id: <_Selector>[]};
     final typeTopics = {
       for (final id in shapes.keys) id: <String, CourseTopic>{},
@@ -115,7 +136,22 @@ final class Curriculum {
         grammars.add((laterLesson, book['later'] as YamlMap));
       }
       for (final (lesson, grammar) in grammars) {
-        for (final fileId in grammar.keys.cast<String>()) {
+        for (final topic in (grammar['syntax'] as YamlList? ?? const [])) {
+          if (!syntaxTopics.contains(topic)) {
+            throw StateError(
+              '$where, lesson $lesson: unknown syntax topic "$topic"',
+            );
+          }
+          if (syntaxLessons.containsKey(topic)) {
+            throw StateError(
+              '$where, lesson $lesson: syntax topic "$topic" is listed twice',
+            );
+          }
+          syntaxLessons[topic as String] = lesson;
+        }
+        for (final fileId in grammar.keys.cast<String>().where(
+          (key) => key != 'syntax',
+        )) {
           final shape = shapes[fileId];
           if (shape == null) {
             throw StateError('$where, lesson $lesson: no data file "$fileId"');
@@ -171,9 +207,14 @@ final class Curriculum {
       );
     }
 
-    return Curriculum._(formTopics, typeTopics, topics, {
-      for (final MapEntry(:key, :value) in shapes.entries) key: value.role,
-    });
+    return Curriculum._(
+      formTopics,
+      typeTopics,
+      topics,
+      {for (final MapEntry(:key, :value) in shapes.entries) key: value.role},
+      {for (final MapEntry(:key, :value) in shapes.entries) key: value.labels},
+      syntaxLessons,
+    );
   }
 
   CourseTopic formTopic(String dataFileId, FormKey key) {
@@ -209,12 +250,30 @@ final class Curriculum {
   int typeLesson(String dataFileId, String typeName) =>
       typeTopic(dataFileId, typeName).lesson;
 
+  /// The course lesson of [dataFileId]'s form [key]; null when no topic names
+  /// it or only `later:` does.
+  int? formLessonOrNull(String dataFileId, FormKey key) =>
+      _courseLesson(_formTopics[dataFileId]?[key]?.lesson);
+
+  /// The course lesson of [dataFileId]'s type; null when no topic names it or
+  /// only `later:` does.
+  int? typeLessonOrNull(String dataFileId, String typeName) =>
+      _courseLesson(_typeTopics[dataFileId]?[typeName]?.lesson);
+
+  /// The course lesson of the syntax topic [id]; null when no book lists it.
+  int? syntaxLessonOrNull(String id) => _courseLesson(_syntaxLessons[id]);
+
+  /// The form labels of a file with a grammar progression, in file order.
+  List<FormLabel> labelsOf(String dataFileId) => _labels[dataFileId]!;
+
   bool taughtForm(String dataFileId, FormKey key, LessonRange range) =>
       range.contains(formLesson(dataFileId, key));
 
   bool taughtType(String dataFileId, String typeName, LessonRange range) =>
       range.contains(typeLesson(dataFileId, typeName));
 }
+
+int? _courseLesson(int? lesson) => lesson == laterLesson ? null : lesson;
 
 Map<String, Set<String>> _parseSelector(
   YamlMap selector,
@@ -304,7 +363,9 @@ Future<Curriculum> loadCurriculum(List<String> assets) async {
       types: metadata.availableTypes,
     );
   }
-  return Curriculum.parse([
-    for (final asset in assets) await loadAssetText(asset),
-  ], shapes);
+  return Curriculum.parse(
+    [for (final asset in assets) await loadAssetText(asset)],
+    shapes,
+    syntaxTopics: syntaxTopicIds(await loadLanguage()),
+  );
 }

@@ -37,6 +37,13 @@ Future<Map<String, DataFileShape>> _shapes() async {
   return shapes;
 }
 
+/// The curriculum of the book texts [books] over the real data files.
+Future<Curriculum> curriculumOf(List<String> books) async => Curriculum.parse(
+  books,
+  await _shapes(),
+  syntaxTopics: syntaxTopicIds(latinLang),
+);
+
 /// A curriculum over the real data that teaches everything in lesson 1 except
 /// the Genitive, which it teaches in lesson 30: a narrowed range then has
 /// forms on both sides of it.

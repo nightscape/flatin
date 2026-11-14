@@ -464,6 +464,7 @@ lessons:
       - "adesse"
       - "posse"
     grammar:
+      syntax: [clause.art.temporal, clause.art.kausal, clause.art.konzessiv]
       nouns:
         types: [O-Deklination-er]
       verbs:
@@ -507,6 +508,7 @@ lessons:
       - "dolēre"
       - "dīcere"
     grammar:
+      syntax: [clause.art.aci]
       nouns:
         types: [Konsonantische-Deklination-n]
       verbs:
@@ -593,6 +595,7 @@ lessons:
       - "respondēre"
       - "contendere"
     grammar:
+      syntax: [clause.art.relativ]
       nouns:
         types:
           - Konsonantische-Deklination-i-mf
@@ -705,6 +708,7 @@ lessons:
       - "duo"
       - "lūdere"
     grammar:
+      syntax: [clause.art.kondizional]
       nouns:
         types: [Numerale-unus, Numerale-duo, Numerale-tres]
       verbs:

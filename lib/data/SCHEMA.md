@@ -499,3 +499,26 @@ a prefix (`en_vocab`), and an id never changes once cards use it. A game
 rule's `when.dataFile` names an `id` of its course and `when.kind` an exercise
 kind. Each of these checks throws at load and names the file it found the
 error in.
+
+# Course books
+
+A book file (`books:` of the manifest, read by `lib/data/curriculum.dart`) is
+a `book:` title and a list of `lessons:`. A lesson has a `lesson:` number
+(1..`lastLesson`), its `words:` and an optional `grammar:`. The last entry
+`later:` has no number: it collects what the data can build but no lesson
+teaches, and counts as the lesson after the last.
+
+`grammar:` has one section per data file id (`nouns`, `verbs`; `forms:` and
+`types:`) and the optional entry `syntax`, a list of syntax topic ids the
+lesson teaches:
+
+```yaml
+grammar:
+  syntax: [clause.art.aci, analyse.funktion.gen_subj]
+```
+
+A topic id is a path in the language file: `analyse.funktion.<code>` or
+`clause.art.<code>`, where `<code>` is a code of that key and not the main
+clause art (`rules.main_clause`). The parse refuses an id that is no topic, or
+that two entries list, with `book file N, lesson L` in the error. A topic that
+no lesson lists has no lesson, and the app shows nothing for it.

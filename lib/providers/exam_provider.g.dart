@@ -97,27 +97,27 @@ abstract class _$ExamPacks extends $AsyncNotifier<List<Exam>> {
   }
 }
 
-/// The app's words by lemma: the meaning in the UI language and the word
-/// card ids, one per data file that lists the lemma.
+/// The app's words by lemma: the meaning in the UI language, and the word
+/// card id and data file, one per data file that lists the lemma.
 
 @ProviderFor(examWords)
 final examWordsProvider = ExamWordsProvider._();
 
-/// The app's words by lemma: the meaning in the UI language and the word
-/// card ids, one per data file that lists the lemma.
+/// The app's words by lemma: the meaning in the UI language, and the word
+/// card id and data file, one per data file that lists the lemma.
 
 final class ExamWordsProvider
     extends
         $FunctionalProvider<
-          AsyncValue<Map<String, ({List<String> cardIds, String meaning})>>,
-          Map<String, ({List<String> cardIds, String meaning})>,
-          FutureOr<Map<String, ({List<String> cardIds, String meaning})>>
+          AsyncValue<Map<String, ExamWord>>,
+          Map<String, ExamWord>,
+          FutureOr<Map<String, ExamWord>>
         >
     with
-        $FutureModifier<Map<String, ({List<String> cardIds, String meaning})>>,
-        $FutureProvider<Map<String, ({List<String> cardIds, String meaning})>> {
-  /// The app's words by lemma: the meaning in the UI language and the word
-  /// card ids, one per data file that lists the lemma.
+        $FutureModifier<Map<String, ExamWord>>,
+        $FutureProvider<Map<String, ExamWord>> {
+  /// The app's words by lemma: the meaning in the UI language, and the word
+  /// card id and data file, one per data file that lists the lemma.
   ExamWordsProvider._()
     : super(
         from: null,
@@ -134,15 +134,58 @@ final class ExamWordsProvider
 
   @$internal
   @override
-  $FutureProviderElement<Map<String, ({List<String> cardIds, String meaning})>>
-  $createElement($ProviderPointer pointer) => $FutureProviderElement(pointer);
+  $FutureProviderElement<Map<String, ExamWord>> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
 
   @override
-  FutureOr<Map<String, ({List<String> cardIds, String meaning})>> create(
-    Ref ref,
-  ) {
+  FutureOr<Map<String, ExamWord>> create(Ref ref) {
     return examWords(ref);
   }
 }
 
-String _$examWordsHash() => r'976e608abc2eb2d05fb955418c83586cfd521ad3';
+String _$examWordsHash() => r'a9cf6e6fa1dc32ed0e3b17cb12c6c22d73b7580b';
+
+/// Where the course teaches the words of the exam sheet.
+
+@ProviderFor(lessonLookup)
+final lessonLookupProvider = LessonLookupProvider._();
+
+/// Where the course teaches the words of the exam sheet.
+
+final class LessonLookupProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<LessonLookup>,
+          LessonLookup,
+          FutureOr<LessonLookup>
+        >
+    with $FutureModifier<LessonLookup>, $FutureProvider<LessonLookup> {
+  /// Where the course teaches the words of the exam sheet.
+  LessonLookupProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'lessonLookupProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$lessonLookupHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<LessonLookup> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<LessonLookup> create(Ref ref) {
+    return lessonLookup(ref);
+  }
+}
+
+String _$lessonLookupHash() => r'0c2d74f03dfc150202b1c6b7740b708ca037c180';

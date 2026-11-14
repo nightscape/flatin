@@ -31,6 +31,8 @@ lessons:
       - "īnsula"
       - "dolor"
       - "perferre"
+    grammar:
+      syntax: [analyse.funktion.gen_subj, analyse.funktion.gen_obj]
   - lesson: 22
     words:
       - "vocāre"
@@ -180,6 +182,8 @@ lessons:
       - "capere"
       - "accipere"
       - "incipere"
+    grammar:
+      syntax: [clause.art.pc]
   - lesson: 26
     words:
       - "negōtia agere"

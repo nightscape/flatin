@@ -459,10 +459,28 @@
       "lemma": "Grundform: {lemma}",
       "meaning": "Bedeutung: {meaning}",
       "entry": "Wörterbuch: {angabe}",
-      "analysis": "Bestimmung: {analysis}"
+      "analysis": "Bestimmung: {analysis}",
+      "lesson": {
+        "word": "Wort: Lektion {lesson}",
+        "type": "Deklination/Konjugation: Lektion {lesson}",
+        "form": "Form: Lektion {lesson}",
+        "typeAndForm": "Deklination/Konjugation und Form: Lektion {lesson}",
+        "syntax": "{topic}: Lektion {lesson}"
+      }
     },
     "solution": {
       "bezug": "Bezugswort: {word}"
+    },
+    "clause": {
+      "art": {
+        "temporal": "Temporalsatz",
+        "kausal": "Kausalsatz",
+        "kondizional": "Konditionalsatz",
+        "konzessiv": "Konzessivsatz",
+        "relativ": "Relativsatz",
+        "aci": "AcI",
+        "pc": "Participium coniunctum"
+      }
     },
     "analyse": {
       "wortart": {

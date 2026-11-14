@@ -18,7 +18,21 @@ List<Object> codes(String key) => latinLang.analyse[key]!;
 final class ExamGen {
   final Random r;
   final reach = <String, int>{};
-  ExamGen(this.r);
+
+  /// The lemmas the drawn word tokens use; the defaults are fixed words.
+  final List<String> nouns, adjectives, verbs, participles;
+
+  /// How often a drawn noun token carries a `funktion`.
+  final double funktionChance;
+
+  ExamGen(
+    this.r, {
+    this.nouns = const ['lupus', 'silva', 'iter'],
+    this.adjectives = const ['magnus'],
+    this.verbs = const ['vidēre', 'ire'],
+    this.participles = const ['laudāre'],
+    this.funktionChance = 0.1,
+  });
 
   static const reachKeys = [
     'empty hilfen',
@@ -385,8 +399,8 @@ final class ExamGen {
       case 'noun':
         final f = features();
         if (k.participleBezug) f['genus'] ??= pick(codes('genus'));
-        if (chance(0.1)) f['funktion'] = pick(codes('funktion'));
-        word(pick(['lupus', 'silva', 'iter']), 'subst', f);
+        if (chance(funktionChance)) f['funktion'] = pick(codes('funktion'));
+        word(pick(nouns), 'subst', f);
         k.features = f;
         if (chance(0.7)) {
           t['rolle'] = pick([
@@ -399,7 +413,7 @@ final class ExamGen {
         }
         if (chance(0.1)) t['bezug'] = other();
       case 'adj':
-        word('magnus', 'adj', features());
+        word(pick(adjectives), 'adj', features());
         t['rolle'] = pick(['attribut', 'praedikativum']);
         t['bezug'] = other();
       case 'relpron':
@@ -422,7 +436,7 @@ final class ExamGen {
         if (f['genus_verbi'] == 'pass') {
           f['tempus'] = pick(['praes', 'impf', 'fut']);
         }
-        word(pick(['vidēre', 'ire']), 'verb', f);
+        word(pick(verbs), 'verb', f);
         t['rolle'] = 'praedikat';
       case 'enclitic':
         hit('enclitic');
@@ -436,7 +450,7 @@ final class ExamGen {
       case 'participle':
         hit('participium coniunctum');
         final b = k.bezug!;
-        word('laudāre', 'verb', {
+        word(pick(participles), 'verb', {
           for (final key in ['kasus', 'numerus', 'genus'])
             if (b.features.containsKey(key)) key: b.features[key]!,
           'tempus': 'perf',
