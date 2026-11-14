@@ -6,6 +6,7 @@ import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/models/derivation.dart';
 import 'package:latin_practice/models/practice_item.dart';
 import 'package:yaml/yaml.dart';
+import 'support/latin_course.dart' show latinLang;
 
 const _assets = ['lib/data/latin_nouns.yaml', 'lib/data/latin_verbs.yaml'];
 
@@ -79,7 +80,7 @@ void main() {
               if (asked is IrregularForm &&
                   asked.regular != null &&
                   asked.regular!.variants.any(
-                    (v) => norm(v) == norm(candidate),
+                    (v) => latinLang.norm(v) == latinLang.norm(candidate),
                   )) {
                 continue;
               }

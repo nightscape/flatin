@@ -21,7 +21,7 @@ final List<(String, Map<String, Object>)> _cases = [
     examToYaml(
       parseExam(
         File('test/fixtures/exam/synthetic.exam').readAsStringSync(),
-        latin,
+        latinLang,
       ),
     ),
   ),
@@ -81,7 +81,7 @@ List<_Mutation> _mutations(Random r) {
   final tense = pick(['perf', 'plusq', 'fut2']);
   final tempusCodes = codes('tempus').cast<String>();
   final main = pick([
-    for (final a in latin.clauseArt)
+    for (final a in latinLang.clauseArt)
       if (a != 'haupt') a,
   ]);
   Set<String> pairs(Map exam, bool Function(Map ppp) hit) {
@@ -165,7 +165,7 @@ void main() {
   // unreadable.
   test('la.yaml has exactly the exam codes of the golden', () {
     final codes = [
-      for (final MapEntry(:key, :value) in latin.axes.entries)
+      for (final MapEntry(:key, :value) in latinLang.axes.entries)
         for (final code in value) '$key\t$code',
     ]..sort();
     if (autoUpdateGoldenFiles) {
@@ -198,7 +198,7 @@ void main() {
       }
     }
     expect(drawn, {
-      for (final MapEntry(:key, :value) in latin.axes.entries)
+      for (final MapEntry(:key, :value) in latinLang.axes.entries)
         key: value.toSet(),
     });
   });
@@ -207,7 +207,7 @@ void main() {
       'exactly at the sites of that rule', () {
     final reached = <String, int>{};
     for (final (i, (name, exam)) in _cases.indexed) {
-      expect(_errors(exam, latin), isEmpty, reason: name);
+      expect(_errors(exam, latinLang), isEmpty, reason: name);
       for (final m in _mutations(Random(i))) {
         final want = m.errors(exam);
         if (want.isNotEmpty) {

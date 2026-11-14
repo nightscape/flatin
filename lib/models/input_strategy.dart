@@ -2,21 +2,22 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-import 'derivation.dart' show norm;
+import '../data/languages/language.dart' show Language;
 
 /// The spellings of [forms] in order, dropping every one that only differs
 /// from an earlier one in its macrons: the dropdown must not ask the learner
 /// to tell two spellings of the same word apart.
-List<String> _firstSpellings(Iterable<String> forms) {
+List<String> _firstSpellings(Language lang, Iterable<String> forms) {
   final seen = <String>{};
   return [
     for (final form in forms)
-      if (seen.add(norm(form))) form,
+      if (seen.add(lang.norm(form))) form,
   ];
 }
 
 /// All data a strategy might need to render its input widget.
 class InputContext {
+  final Language lang;
   final int index;
   final String correctAnswer;
   final List<String> allForms;
@@ -31,6 +32,7 @@ class InputContext {
   final ValueChanged<String> onChanged;
 
   const InputContext({
+    required this.lang,
     required this.index,
     required this.correctAnswer,
     required this.allForms,
@@ -91,7 +93,7 @@ class AllFormsDropdownStrategy extends InputStrategy {
 
   @override
   Widget buildInput(InputContext ctx) {
-    final options = _firstSpellings(ctx.allForms)..sort();
+    final options = _firstSpellings(ctx.lang, ctx.allForms)..sort();
     return _DropdownInput(
       options: options,
       currentValue: ctx.currentValue,
@@ -112,7 +114,10 @@ class DistractorDropdownStrategy extends InputStrategy {
   @override
   Widget buildInput(InputContext ctx) {
     final distractors = _firstSpellings(
-      ctx.allForms.where((f) => norm(f) != norm(ctx.correctAnswer)),
+      ctx.lang,
+      ctx.allForms.where(
+        (f) => ctx.lang.norm(f) != ctx.lang.norm(ctx.correctAnswer),
+      ),
     );
     distractors.shuffle(Random(ctx.correctAnswer.hashCode ^ ctx.index));
     final options = [ctx.correctAnswer, ...distractors.take(3)];
@@ -142,14 +147,15 @@ class RegularFormDistractorStrategy extends InputStrategy {
 
     // Add the inferred (regular) form if it differs from the correct answer
     final inferredForm = ctx.inferredForms[ctx.index];
-    if (norm(inferredForm) != norm(ctx.correctAnswer)) {
+    if (ctx.lang.norm(inferredForm) != ctx.lang.norm(ctx.correctAnswer)) {
       options.add(inferredForm);
     }
 
     // Fill up to 4 options with other forms
-    final taken = options.map(norm).toSet();
+    final taken = options.map(ctx.lang.norm).toSet();
     final others = _firstSpellings(
-      ctx.allForms.where((f) => !taken.contains(norm(f))),
+      ctx.lang,
+      ctx.allForms.where((f) => !taken.contains(ctx.lang.norm(f))),
     );
     others.shuffle(Random(ctx.correctAnswer.hashCode ^ ctx.index));
     for (final o in others) {

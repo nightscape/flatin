@@ -10,11 +10,11 @@ import 'package:latin_practice/data/exercise_kinds.dart';
 import 'package:latin_practice/data/exercise_spec.dart';
 import 'package:latin_practice/data/german_forms.dart';
 import 'package:latin_practice/data/practice_data.dart';
-import 'package:latin_practice/models/derivation.dart' show norm;
 import 'package:latin_practice/models/exercise.dart';
 import 'package:latin_practice/models/practice_item.dart';
 
 import 'support/exercise_invariants.dart';
+import 'support/latin_course.dart' show latinLang;
 
 final _threshold = buildingChanceFrom.last.stability;
 
@@ -159,7 +159,9 @@ void main() {
       final clashing = {
         for (final (i, k) in habere.formOrder.indexed)
           if (habitare.acceptedForms.any(
-            (fs) => fs.any((f) => norm(f) == norm(habere.forms[i])),
+            (fs) => fs.any(
+              (f) => latinLang.norm(f) == latinLang.norm(habere.forms[i]),
+            ),
           ))
             k,
       };
@@ -244,12 +246,15 @@ void main() {
 
     test('accepts the exact row and the row without macrons', () {
       expect(isRight(rate(right())), isTrue);
-      expect(isRight(rate([for (final t in right()) norm(t)])), isTrue);
+      expect(
+        isRight(rate([for (final t in right()) latinLang.norm(t)])),
+        isTrue,
+      );
     });
 
     test('reads macrons as the typed kinds do', () {
       for (final (i, s) in parts(e).slots.indexed) {
-        final text = norm(right()[i]);
+        final text = latinLang.norm(right()[i]);
         expect(
           isRight(rate([...right()]..[i] = text)),
           isRight(
@@ -329,12 +334,12 @@ void main() {
     for (final v in verbs) {
       for (final spellings in v.acceptedForms) {
         for (final s in spellings) {
-          (owners[norm(s)] ??= {}).add(v.id);
+          (owners[latinLang.norm(s)] ??= {}).add(v.id);
         }
       }
     }
     Set<String> othersWriting(PracticeItem word, String text) =>
-        owners[norm(text)]!.difference({word.id});
+        owners[latinLang.norm(text)]!.difference({word.id});
     // Few pools, as the spelling index is built once per pool.
     final pools = [
       for (final share in [0.25, 0.5, 0.75, 0.9])

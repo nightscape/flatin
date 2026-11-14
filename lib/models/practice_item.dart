@@ -1,3 +1,4 @@
+import '../data/languages/language.dart' show Language;
 import 'course.dart';
 import 'derivation.dart';
 import 'form_label.dart';
@@ -48,6 +49,9 @@ class PracticeItem {
   /// How every form of this item follows from its principal parts.
   final Derivation derivation;
 
+  /// The spelling of the course the item belongs to.
+  Language get lang => derivation.grammar.lang;
+
   /// The keys the base-forms focus asks, in the order it asks them.
   final List<FormKey> baseFormKeys;
 
@@ -89,7 +93,7 @@ class PracticeItem {
 
   /// Whether [answer] is one of the accepted spellings of row [index].
   bool accepts(int index, String answer) =>
-      acceptedForms[index].any((form) => norm(form) == norm(answer));
+      acceptedForms[index].any((form) => lang.norm(form) == lang.norm(answer));
 
   /// Filter forms and labels based on enabled form keys
   ({

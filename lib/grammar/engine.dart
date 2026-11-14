@@ -5,7 +5,7 @@
 /// engine cannot fill is a contract defect and throws.
 library;
 
-import '../data/lesson_data.dart' show normalizeDiacritics;
+import '../data/languages/language.dart' show Language;
 import '../models/derivation.dart';
 import '../models/form_label.dart';
 import 'schema.dart';
@@ -31,10 +31,11 @@ List<String> letters(String word) {
 }
 
 /// [letter] without its quantity mark.
-String _short(String letter) =>
-    normalizeDiacritics(letter.replaceAll(_combining, ''));
+String _short(Language lang, String letter) =>
+    lang.fold(letter.replaceAll(_combining, ''));
 
-bool _isVowel(String letter) => _vowels.contains(_short(letter).toLowerCase());
+bool _isVowel(Language lang, String letter) =>
+    _vowels.contains(_short(lang, letter).toLowerCase());
 
 // ---------------------------------------------------------------- sandhi
 
@@ -47,6 +48,7 @@ typedef Seam = ({String text, String right, SandhiRule? rule});
 /// The first entry is the spelling that is shown; a `variant: true` rule adds
 /// the other one, ordered by how [lemma] writes it.
 List<Seam> sandhiSeam(
+  Language lang,
   List<SandhiRuleSpec> rules,
   String left,
   String right, {
@@ -58,11 +60,11 @@ List<Seam> sandhiSeam(
   if (leftLetters.isEmpty) return [plain];
 
   for (final spec in rules) {
-    final cut = _endMatch(spec, leftLetters);
+    final cut = _endMatch(lang, spec, leftLetters);
     if (cut == 0) continue;
-    final matched = _beforeMatch(spec, right, wordFinal: wordFinal);
+    final matched = _beforeMatch(lang, spec, right, wordFinal: wordFinal);
     if (matched == null) continue;
-    final text = _replace(spec, leftLetters, cut, right);
+    final text = _replace(lang, spec, leftLetters, cut, right);
     final rest = spec.replace == SandhiReplace.dropNext
         ? letters(right).sublist(letters(matched).length).join()
         : right;
@@ -74,8 +76,9 @@ List<Seam> sandhiSeam(
       rule: SandhiRule(id: spec.id, explain: spec.explain),
     );
     if (!spec.variant) return [applied];
-    final written = norm(lemma);
-    if (written.startsWith(norm(left)) && !written.startsWith(norm(text))) {
+    final written = lang.norm(lemma);
+    if (written.startsWith(lang.norm(left)) &&
+        !written.startsWith(lang.norm(text))) {
       return [plain, applied];
     }
     return [applied, plain];
@@ -85,23 +88,31 @@ List<Seam> sandhiSeam(
 
 /// The shown side of the seam (I2).
 Seam sandhi(
+  Language lang,
   List<SandhiRuleSpec> rules,
   String left,
   String right, {
   required bool wordFinal,
   String lemma = '',
-}) => sandhiSeam(rules, left, right, wordFinal: wordFinal, lemma: lemma).first;
+}) => sandhiSeam(
+  lang,
+  rules,
+  left,
+  right,
+  wordFinal: wordFinal,
+  lemma: lemma,
+).first;
 
 /// How many letters of the left side the rule replaces, 0 if it does not
 /// match.
-int _endMatch(SandhiRuleSpec spec, List<String> left) {
-  if (spec.end == 'vowel') return _isVowel(left.last) ? 1 : 0;
-  if (spec.end == 'consonant') return _isVowel(left.last) ? 0 : 1;
+int _endMatch(Language lang, SandhiRuleSpec spec, List<String> left) {
+  if (spec.end == 'vowel') return _isVowel(lang, left.last) ? 1 : 0;
+  if (spec.end == 'consonant') return _isVowel(lang, left.last) ? 0 : 1;
   final want = letters(spec.end);
   if (want.length > left.length) return 0;
   final start = left.length - want.length;
   for (var i = 0; i < want.length; i++) {
-    if (norm(left[start + i]) != norm(want[i])) return 0;
+    if (lang.norm(left[start + i]) != lang.norm(want[i])) return 0;
   }
   return want.length;
 }
@@ -109,6 +120,7 @@ int _endMatch(SandhiRuleSpec spec, List<String> left) {
 /// The prefix of the right side that the rule's `before` matched, null if it
 /// does not match.
 String? _beforeMatch(
+  Language lang,
   SandhiRuleSpec spec,
   String right, {
   required bool wordFinal,
@@ -117,7 +129,7 @@ String? _beforeMatch(
   final beforeClass = spec.beforeClass;
   if (beforeClass != null) {
     if (rightLetters.isEmpty) return null;
-    return _isVowel(rightLetters.first) == (beforeClass == 'vowel')
+    return _isVowel(lang, rightLetters.first) == (beforeClass == 'vowel')
         ? rightLetters.first
         : null;
   }
@@ -126,20 +138,27 @@ String? _beforeMatch(
       if (wordFinal && right.isEmpty) return '';
     } else if (start.endsWith(r'$')) {
       final want = start.substring(0, start.length - 1);
-      if (wordFinal && norm(right) == norm(want)) return right;
-    } else if (norm(right).startsWith(norm(start))) {
+      if (wordFinal && lang.norm(right) == lang.norm(want)) return right;
+    } else if (lang.norm(right).startsWith(lang.norm(start))) {
       return start;
     }
   }
   return null;
 }
 
-String _replace(SandhiRuleSpec spec, List<String> left, int cut, String right) {
+String _replace(
+  Language lang,
+  SandhiRuleSpec spec,
+  List<String> left,
+  int cut,
+  String right,
+) {
   final kept = left.sublist(0, left.length - cut).join();
   final replaced = left.sublist(left.length - cut);
   return switch (spec.replace) {
     SandhiReplace.literal => kept + spec.replaceText,
-    SandhiReplace.short => kept + replaced.map(_short).join(),
+    SandhiReplace.short =>
+      kept + replaced.map((letter) => _short(lang, letter)).join(),
     SandhiReplace.doubleNext => kept + letters(right).first,
     SandhiReplace.dropNext => left.join(),
   };
@@ -188,6 +207,7 @@ final class GrammarEngine {
             type.key: ?type.value.display,
       },
       files.first.language,
+      files.first.lang,
     );
     assert(
       files.every((file) => file.language == grammar.language),
@@ -339,6 +359,7 @@ final class _ItemBuilder {
     SandhiRule? rule;
     for (final spelling in base.variants) {
       final seams = sandhiSeam(
+        file.lang,
         rules,
         spelling,
         template.ending,
@@ -353,7 +374,7 @@ final class _ItemBuilder {
     return stems[name] = StemFromDefault(
       name: name,
       display: display,
-      variants: _distinct(variants),
+      variants: _distinct(file.lang, variants),
       template: template.toString(),
       base: base,
       sandhiRule: rule,
@@ -365,7 +386,7 @@ final class _ItemBuilder {
   (String, String) _cut(StemSpec spec, String spelling) {
     if (spec.remove.isEmpty) return (spelling, '');
     final suffix = spec.remove.firstWhere(
-      (suffix) => norm(spelling).endsWith(norm(suffix)),
+      (suffix) => file.lang.norm(spelling).endsWith(file.lang.norm(suffix)),
     );
     final written = letters(spelling);
     final keep = written.length - letters(suffix).length;
@@ -428,6 +449,7 @@ final class _ItemBuilder {
     for (final spelling in stems[stemName]!.variants) {
       for (final template in templates) {
         final seams = sandhiSeam(
+          file.lang,
           rules,
           spelling,
           template.ending,
@@ -440,7 +462,7 @@ final class _ItemBuilder {
         }
       }
     }
-    final all = _distinct(variants);
+    final all = _distinct(file.lang, variants);
     final ending = templates.first.ending;
     return _Made(
       all,
@@ -525,7 +547,7 @@ final class _ItemBuilder {
         ...?_composed(spec, features, key)?.variants,
     ];
     if (extra.isEmpty) return main;
-    final variants = _distinct([...main.variants, ...extra]);
+    final variants = _distinct(file.lang, [...main.variants, ...extra]);
     return _Made(variants, (formKey) {
       final shown = main.build(formKey) as ComposedForm;
       return ComposedForm(
@@ -592,7 +614,7 @@ final class _ItemBuilder {
     ])) {
       for (final rendering in _render(sources, joins, combination)) {
         final text = _joined(rendering.texts, joins);
-        if (!seen.add(norm(text))) continue;
+        if (!seen.add(file.lang.norm(text))) continue;
         variants.add(text);
         shown ??= rendering.parts;
       }
@@ -697,6 +719,7 @@ final class _ItemBuilder {
       final last = i == sources.length - 1 || joins[i].isNotEmpty;
       final right = last ? '' : texts[i + 1];
       final seams = sandhiSeam(
+        file.lang,
         rules,
         texts[i],
         right,
@@ -763,11 +786,11 @@ bool _sameWriting(List<String> a, List<String> b) {
 }
 
 /// S9: norm-equal spellings are one variant.
-List<String> _distinct(List<String> values) {
+List<String> _distinct(Language lang, List<String> values) {
   final seen = <String>{};
   return [
     for (final value in values)
-      if (seen.add(norm(value))) value,
+      if (seen.add(lang.norm(value))) value,
   ];
 }
 

@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/grammar/engine.dart';
 import 'package:latin_practice/grammar/schema.dart';
+import 'support/latin_course.dart' show latinLang;
 
 const _path = 'lib/data/latin_nouns.yaml';
 const _erType = 'O-Deklination-er';
@@ -11,12 +12,12 @@ const _erType = 'O-Deklination-er';
 /// A 2nd-declension noun in -er: the nominative and the genitive singular.
 typedef ErNoun = ({String nom, String gen});
 
-const _letters = ['a', 'ā', 'e', 'ē', 'i', 'ī', 'o', 'u', 'l', 'm', 'n', 's'];
+const _alphabet = ['a', 'ā', 'e', 'ē', 'i', 'ī', 'o', 'u', 'l', 'm', 'n', 's'];
 const _consonants = ['b', 'c', 'd', 'f', 'g', 'p', 't'];
 
 String _prefix(Random rng) => [
   for (var i = 0; i < 1 + rng.nextInt(3); i++)
-    _letters[rng.nextInt(_letters.length)],
+    _alphabet[rng.nextInt(_alphabet.length)],
 ].join();
 
 /// Both kinds: the e drops before the r (ager, agrī) or stays (puer, puerī).
@@ -40,7 +41,7 @@ String _item(String id, String? type, Map<String, String> parts) => [
 ].join('\n');
 
 GrammarEngine _engineWith(List<String> items) => GrammarEngine(
-  parseGrammarFiles({
+  parseGrammarFiles(lang: latinLang, {
     _path: '${File(_path).readAsStringSync()}\n${items.join('\n')}\n',
   }),
 );
@@ -81,7 +82,7 @@ void main() {
             '${_item('probe', null, {'nom': n.nom, 'gen': n.gen})}\n',
       };
       expect(
-        () => parseGrammarFiles(source),
+        () => parseGrammarFiles(lang: latinLang, source),
         throwsA(
           predicate(
             (e) => '$e'.contains('no type_inference rule matches'),

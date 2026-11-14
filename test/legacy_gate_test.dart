@@ -6,7 +6,7 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/data/settings_conversion.dart';
-import 'package:latin_practice/models/derivation.dart';
+import 'support/latin_course.dart' show latinLang;
 
 const _goldenPath = 'test/golden/legacy_v1.json';
 
@@ -102,7 +102,8 @@ void main() {
             }
             compared++;
 
-            if (norm(item.forms[index]) != norm(oldForms[i])) {
+            if (latinLang.norm(item.forms[index]) !=
+                latinLang.norm(oldForms[i])) {
               failures.add(
                 '$oldId $key: ${item.forms[index]}, '
                 'wanted ${oldForms[i]}',

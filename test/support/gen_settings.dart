@@ -137,7 +137,7 @@ Settings drawSettings(
     distractorStrategyId:
         distractorStrategies[rng.nextInt(distractorStrategies.length)].id,
     rewardAnimation: rng.nextBool(),
-    avoidMacronTwins: rng.nextBool(),
+    avoidFoldTwins: rng.nextBool(),
   );
   // Drawn only when asked for, so the other callers keep their draws.
   if (!exam) return settings;

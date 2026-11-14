@@ -14,14 +14,14 @@ const _storeKey = 'practice_settings';
 
 void main() {
   test('macron twins are avoided unless stored settings say otherwise', () {
-    expect(Settings().avoidMacronTwins, isTrue);
+    expect(Settings().avoidFoldTwins, isTrue);
     final json = Settings().toJson()..remove('avoidMacronTwins');
-    expect(Settings.fromJson(json).avoidMacronTwins, isTrue);
+    expect(Settings.fromJson(json).avoidFoldTwins, isTrue);
     final back = Settings.fromJson(
-      jsonDecode(jsonEncode(Settings(avoidMacronTwins: false).toJson()))
+      jsonDecode(jsonEncode(Settings(avoidFoldTwins: false).toJson()))
           as Map<String, dynamic>,
     );
-    expect(back.avoidMacronTwins, isFalse);
+    expect(back.avoidFoldTwins, isFalse);
   });
 
   test('the notifier persists the macron switch across a reload', () async {
@@ -33,7 +33,7 @@ void main() {
 
     final second = ProviderContainer();
     expect(
-      (await second.read(settingsProvider.future)).avoidMacronTwins,
+      (await second.read(settingsProvider.future)).avoidFoldTwins,
       isFalse,
     );
     second.dispose();
@@ -67,7 +67,7 @@ void main() {
             )
             as Map<String, dynamic>,
       );
-      expect(stored.avoidMacronTwins, isFalse);
+      expect(stored.avoidFoldTwins, isFalse);
     },
   );
 }

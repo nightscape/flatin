@@ -7,7 +7,7 @@
 /// because the print is partial.
 library;
 
-import 'package:latin_practice/data/lesson_data.dart' show normalizeDiacritics;
+import '../support/latin_course.dart' show latinLang;
 import 'package:latin_practice/models/form_label.dart';
 import 'package:latin_practice/grammar/schema.dart';
 import 'package:yaml/yaml.dart';
@@ -74,7 +74,7 @@ const shapeRules = <String, ShapeRule>{
 };
 
 /// The id an item has for a printed lemma: no macrons, lower case.
-String itemIdOf(String lemma) => normalizeDiacritics(lemma.toLowerCase());
+String itemIdOf(String lemma) => latinLang.fold(lemma.toLowerCase());
 
 /// The dot-joined codes of [features] in the fixed [_featureOrder].
 String featureString(Map<String, String> features) {
@@ -287,7 +287,7 @@ const _dataFiles = ['lib/data/latin_nouns.yaml', 'lib/data/latin_verbs.yaml'];
   String Function(String path) read,
 ) {
   final sources = {for (final path in _dataFiles) path: read(path)};
-  final files = parseGrammarFiles(sources);
+  final files = parseGrammarFiles(lang: latinLang, sources);
   final entries = <SampleEntry>[];
   for (final id in ids) {
     final owners = [

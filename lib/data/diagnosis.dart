@@ -52,13 +52,15 @@ Diagnosis diagnose(PracticeItem item, FormKey formKey, String answer) {
   assert(answer.trim().isNotEmpty);
   assert(!item.accepts(index, answer), 'a correct answer has no diagnosis');
 
-  final String given = norm(answer);
+  final String given = item.lang.norm(answer);
   final derivation = item.derivation;
   final asked = derivation.forms[formKey]!;
 
   if (asked is IrregularForm &&
       asked.regular != null &&
-      asked.regular!.variants.any((spelling) => norm(spelling) == given)) {
+      asked.regular!.variants.any(
+        (spelling) => item.lang.norm(spelling) == given,
+      )) {
     return const RegularInsteadOfIrregular();
   }
 
@@ -77,11 +79,11 @@ Diagnosis diagnose(PracticeItem item, FormKey formKey, String answer) {
   if (types.isNotEmpty) return EndingOfOtherType(types);
 
   if (asked is GeneratedForm) {
-    final String ending = norm(asked.ending);
+    final String ending = item.lang.norm(asked.ending);
     if (given.endsWith(ending)) {
       final usedStem = given.substring(0, given.length - ending.length);
       final stem = derivation.stems[asked.stemName]!;
-      if (usedStem.isNotEmpty && usedStem != norm(stem.stem)) {
+      if (usedStem.isNotEmpty && usedStem != item.lang.norm(stem.stem)) {
         return WrongStem(usedStem, asked.stemName);
       }
     }
@@ -95,8 +97,9 @@ Diagnosis diagnose(PracticeItem item, FormKey formKey, String answer) {
 String? _otherTypeForm(Derivation derivation, Template? template) {
   if (template == null) return null;
   final String? stemName = template.stemName;
-  if (stemName == null) return norm(template.endings.first);
+  final lang = derivation.grammar.lang;
+  if (stemName == null) return lang.norm(template.endings.first);
   final stem = derivation.stems[stemName];
   if (stem == null) return null;
-  return norm(stem.stem + template.endings.first);
+  return lang.norm(stem.stem + template.endings.first);
 }

@@ -8,7 +8,7 @@ library;
 
 import 'package:yaml/yaml.dart';
 
-import '../data/lesson_data.dart' show normalizeDiacritics;
+import '../data/languages/language.dart' show Language;
 import '../models/form_label.dart';
 
 /// A violation of one of the schema rules S1-S20.
@@ -32,17 +32,12 @@ class SchemaError implements Exception {
   }
 }
 
-String _norm(String text) => normalizeDiacritics(text).toLowerCase();
-
 /// S20: every text shown to the learner is given in each of these languages.
 const dataLanguages = ['de', 'en'];
 
 /// The language the course is written in: what a learner reads when no other
 /// data language is asked for.
 const courseLanguage = 'de';
-
-final _letters = RegExp(r'^[a-zāēīōūȳăĕĭŏŭäöüß]+$', caseSensitive: false);
-final _macron = RegExp(r'[āēīōūȳĀĒĪŌŪȲ]');
 
 // ---------------------------------------------------------------- model
 
@@ -83,11 +78,11 @@ final class InferenceRule {
   bool get isAmbiguous => types.length > 1;
 
   /// S11: a macronized suffix matches only an equally macronized spelling.
-  bool matches(String spelling) {
+  bool matches(Language lang, String spelling) {
     if (minLength != null && spelling.length < minLength!) return false;
-    return _macron.hasMatch(suffix)
+    return lang.hasQuantityMark(suffix)
         ? spelling.toLowerCase().endsWith(suffix.toLowerCase())
-        : _norm(spelling).endsWith(_norm(suffix));
+        : lang.foldLower(spelling).endsWith(lang.foldLower(suffix));
   }
 
   @override
@@ -624,6 +619,9 @@ final class GrammarFile {
 
   /// The language of every text of this parse (S20).
   final String language;
+
+  /// The spelling of the course the file belongs to.
+  final Language lang;
   final String dataFileId;
   final Axes axes;
   final Map<String, PartSpec> parts;
@@ -694,6 +692,7 @@ final class GrammarFile {
   GrammarFile({
     required this.path,
     required this.language,
+    required this.lang,
     required this.dataFileId,
     required this.axes,
     required this.parts,
@@ -727,21 +726,24 @@ final class GrammarFile {
 Axes parseAxes(
   YamlMap root, {
   required String path,
+  required Language lang,
   String language = courseLanguage,
-}) => _FileParser(path, root, language)._axes();
+}) => _FileParser(path, root, language, lang)._axes();
 
 /// Parses one data file. Use [parseGrammarFiles] when types cross file
 /// borders (S12).
 GrammarFile parseGrammarFile(
   String source, {
   required String path,
+  required Language lang,
   String language = courseLanguage,
-}) => parseGrammarFiles({path: source}, language: language).single;
+}) => parseGrammarFiles({path: source}, lang: lang, language: language).single;
 
 /// Parses all data files together and runs the cross-file checks (S12). The
 /// texts come in [language]; S20 checks every language on every parse.
 List<GrammarFile> parseGrammarFiles(
   Map<String, String> sourceByPath, {
+  required Language lang,
   String language = courseLanguage,
 }) {
   assert(dataLanguages.contains(language), 'no data language "$language"');
@@ -761,6 +763,7 @@ List<GrammarFile> parseGrammarFiles(
         entry.key,
         documents.single.contents as YamlMap,
         language,
+        lang,
       ).parse(),
     );
   }
@@ -782,8 +785,11 @@ class _FileParser {
   final String path;
   final YamlMap root;
   final String language;
+  final Language lang;
 
-  _FileParser(this.path, this.root, this.language);
+  _FileParser(this.path, this.root, this.language, this.lang);
+
+  String _norm(String text) => lang.foldLower(text);
 
   Never _bad(String rule, String message, {String? item, FormKey? key}) =>
       _fail(rule, path, message, item: item, key: key);
@@ -854,6 +860,7 @@ class _FileParser {
     final file = GrammarFile(
       path: path,
       language: language,
+      lang: lang,
       dataFileId: root['data_file_id'] as String,
       axes: axes,
       parts: parts,
@@ -1014,7 +1021,7 @@ class _FileParser {
       final spec = entry.value as YamlMap;
 
       final end = '${spec['end']}';
-      if (end != 'vowel' && end != 'consonant' && !_letters.hasMatch(end)) {
+      if (end != 'vowel' && end != 'consonant' && !lang.letters.hasMatch(end)) {
         _bad('S16', 'rule $id: "end" must be letters, vowel or consonant');
       }
 
@@ -1030,7 +1037,7 @@ class _FileParser {
           final letters = start.endsWith(r'$')
               ? start.substring(0, start.length - 1)
               : start;
-          if (letters.isNotEmpty && !_letters.hasMatch(letters)) {
+          if (letters.isNotEmpty && !lang.letters.hasMatch(letters)) {
             _bad('S16', 'rule $id: "before" entry "$start" is not letters');
           }
           if (letters.isEmpty && start != r'$') {
@@ -1055,7 +1062,7 @@ class _FileParser {
       };
       if (replace == SandhiReplace.literal &&
           replaceText.isNotEmpty &&
-          !_letters.hasMatch(replaceText)) {
+          !lang.letters.hasMatch(replaceText)) {
         _bad(
           'S16',
           'rule $id: "replace" must be letters, short, double_next or '
@@ -1991,7 +1998,7 @@ class _Linker {
     for (final rule in file.typeInference) {
       final spelling = item.part(rule.part);
       if (spelling == null) continue;
-      if (rule.matches(spelling)) {
+      if (rule.matches(file.lang, spelling)) {
         matched = rule;
         break;
       }
@@ -2145,7 +2152,9 @@ class _Linker {
       if (stem.remove.isEmpty) continue;
       for (final spelling in spellings) {
         final matched = stem.remove.any(
-          (suffix) => _norm(spelling).endsWith(_norm(suffix)),
+          (suffix) => file.lang
+              .foldLower(spelling)
+              .endsWith(file.lang.foldLower(suffix)),
         );
         if (!matched) {
           _fail(

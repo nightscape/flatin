@@ -10,12 +10,13 @@ import 'package:latin_practice/grammar/schema.dart';
 import 'package:latin_practice/models/derivation.dart';
 import 'package:latin_practice/models/exercise.dart';
 import 'package:latin_practice/models/practice_item.dart';
+import 'support/latin_course.dart' show latinLang;
 
 const _path = 'lib/data/german_nouns.yaml';
 final _yaml = File(_path).readAsStringSync();
 
 GrammarEngine _engineOf(String yaml) =>
-    GrammarEngine(parseGrammarFiles({_path: yaml}));
+    GrammarEngine(parseGrammarFiles(lang: latinLang, {_path: yaml}));
 
 const _cases = ['nom', 'gen', 'dat', 'akk', 'abl', 'vok'];
 final _keys = [
@@ -351,7 +352,7 @@ void main() {
             r'^\((?:der|die|das) (\S+)\)$',
           ).firstMatch(frames[key]!.variants.single)!.group(1)!,
       };
-      final file = parseGrammarFile(_yaml, path: _path);
+      final file = parseGrammarFile(lang: latinLang, _yaml, path: _path);
       expect([
         for (final item in file.items)
           if (item.parts['nominativ']!.any(frameNouns.contains)) item.id,

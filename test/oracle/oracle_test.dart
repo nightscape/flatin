@@ -14,6 +14,7 @@ import 'package:latin_practice/models/form_label.dart';
 import 'collatinus.dart';
 import 'oracle.dart';
 import 'sample.dart';
+import '../support/latin_course.dart' show latinLang;
 
 const _fixtures = [
   'test/fixtures/grammar_examples.yaml',
@@ -174,7 +175,7 @@ void main() {
 
   test('the engine and the oracle agree on which items are fully deponent', () {
     for (final c in corpora) {
-      final files = parseGrammarFiles(c.sample.sources);
+      final files = parseGrammarFiles(lang: latinLang, c.sample.sources);
       for (final item in c.items) {
         final file = files.singleWhere((f) => f.dataFileId == item.dataFileId);
         final own = file.item(item.id);
@@ -191,12 +192,15 @@ void main() {
 
   test('the shipped data is sampled for every type the fixtures share', () {
     final fixtureTypes = {
-      for (final f in parseGrammarFiles(fixtures.sample.sources))
+      for (final f in parseGrammarFiles(
+        lang: latinLang,
+        fixtures.sample.sources,
+      ))
         ...f.declaredTypes.keys,
     };
     final sampledTypes = {for (final i in real.items) i.type};
     final shared = {
-      for (final f in parseGrammarFiles(real.sample.sources))
+      for (final f in parseGrammarFiles(lang: latinLang, real.sample.sources))
         ...f.items.map((i) => i.typeName).where(fixtureTypes.contains),
     };
     expect(shared, contains('Adjektiv-a-o'));

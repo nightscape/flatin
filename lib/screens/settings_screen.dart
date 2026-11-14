@@ -28,7 +28,7 @@ class _MacronSwitch extends ConsumerWidget {
             title: Text(
               FlutterI18n.translate(context, 'settings.avoidMacronTwins'),
             ),
-            value: settings.avoidMacronTwins,
+            value: settings.avoidFoldTwins,
             onChanged: ref.read(settingsProvider.notifier).setAvoidMacronTwins,
           ),
         );

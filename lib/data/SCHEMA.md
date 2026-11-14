@@ -471,6 +471,22 @@ sentences: lib/data/sentences.yaml
 game_rules: lib/data/game_rules.yaml
 ```
 
+The language file (`lib/data/languages/la.yaml`, read by
+`lib/data/languages/language.dart`) also gives the spelling of the course:
+
+- `fold`: a map from a character to the character that spells the same word
+  without its quantity mark (`ā: a`). Both are one code unit, so a folded text
+  keeps its length. A key is none of `^ ] \ - [`, which the parse refuses with
+  the key in the error. Card ids, the comparison of two spellings and the search
+  of the word list go through it, and a suffix that holds a key of `fold`
+  counts as marked (S11).
+- `letters`: the body of a character class, the letters a stem or an ending
+  is made of (`a-zāēīōūȳăĕĭŏŭäöüß`). The case does not matter.
+
+The parsed grammar file carries its language (`GrammarFile.lang`), and a
+`Grammar`, a `Derivation` and a `PracticeItem` reach it from there; nothing
+holds a language outside the data that uses it.
+
 The keys above are the whole set, all required; an entry of `data_files` has
 exactly `id`, `path` and `role`. `role` is `noun`, `verb` or `vocab` and says
 what the app does with the items: a `vocab` file has no grammar progression

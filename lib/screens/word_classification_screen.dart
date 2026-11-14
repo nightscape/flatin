@@ -6,7 +6,6 @@ import 'package:fsrs/fsrs.dart';
 import '../data/attribution.dart' show attributeParadigm;
 import '../data/esel_groups.dart';
 import '../data/esel_steps.dart';
-import '../models/derivation.dart' show norm;
 import '../models/exercise.dart' show bundleOf;
 import '../models/practice_item.dart';
 import '../models/course_filter.dart';
@@ -269,7 +268,7 @@ class _WordClassificationScreenState
         final formKey = item.formOrder[i];
         if (!enabledForms.contains(formKey)) continue;
         if (item.acceptedForms[i].any(
-          (f) => norm(f) == norm(_displayedWord!),
+          (f) => item.lang.norm(f) == item.lang.norm(_displayedWord!),
         )) {
           _correctFormIndices.add(i);
           _correctAnswers.add(item.formLabels[i]);

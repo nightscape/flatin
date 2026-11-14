@@ -5,6 +5,7 @@ import 'package:latin_practice/grammar/schema.dart';
 import 'package:latin_practice/models/practice_item.dart';
 
 import 'trace_fixtures.dart';
+import 'latin_course.dart' show latinLang;
 
 const _path = 'lib/data/german_verbs.yaml';
 
@@ -16,8 +17,9 @@ const _item = '''
 ''';
 
 /// The German verb file with the test verb "mitteilen" appended to its items.
-List<GrammarFile> mitteilenFiles() =>
-    parseGrammarFiles({_path: File(_path).readAsStringSync() + _item});
+List<GrammarFile> mitteilenFiles() => parseGrammarFiles(lang: latinLang, {
+  _path: File(_path).readAsStringSync() + _item,
+});
 
 PracticeItem mitteilen() {
   final files = mitteilenFiles();

@@ -11,7 +11,6 @@ import 'package:latin_practice/data/exercise_kinds.dart';
 import 'package:latin_practice/data/exercise_spec.dart';
 import 'package:latin_practice/data/german_forms.dart';
 import 'package:latin_practice/data/practice_data.dart';
-import 'package:latin_practice/models/derivation.dart' show norm;
 import 'package:latin_practice/models/exercise.dart';
 import 'package:latin_practice/models/practice_item.dart';
 import 'package:latin_practice/providers/fsrs_provider.dart';
@@ -21,6 +20,7 @@ import 'support/exercise_fakes.dart';
 import 'support/exercise_invariants.dart';
 import 'support/hand_items.dart';
 import 'support/i18n_keys.dart';
+import 'support/latin_course.dart' show latinLang;
 
 class _GermanByKey implements GermanForms {
   const _GermanByKey(this.byKey, {this.covered});
@@ -603,8 +603,8 @@ void main() {
           forms: const FakeGermanForms(),
         )) {
           expect(
-            (e.answer as TypedAnswer).accepted.map(norm),
-            isNot(contains(norm(e.questionParams['start']!))),
+            (e.answer as TypedAnswer).accepted.map(latinLang.norm),
+            isNot(contains(latinLang.norm(e.questionParams['start']!))),
             reason: '${word.id} ${e.questionParams}',
           );
         }
@@ -1319,7 +1319,8 @@ void main() {
         }
         expect(reply('qqqq'), neither);
         final other = audire.forms.firstWhere(
-          (f) => !answer.accepted.map(norm).contains(norm(f)),
+          (f) =>
+              !answer.accepted.map(latinLang.norm).contains(latinLang.norm(f)),
         );
         expect(reply(other), grammarOnly);
       });

@@ -5,6 +5,7 @@ import '../models/lesson_range.dart';
 import '../models/exam_units.dart' show Uebersetzungseinheit;
 import '../models/settings.dart';
 import '../data/asset_text.dart';
+import '../data/languages/language.dart' show Language;
 import '../data/lesson_data.dart';
 import '../models/course.dart';
 import '../data/settings_conversion.dart';
@@ -43,6 +44,7 @@ class SettingsNotifier extends _$SettingsNotifier {
       await loadAssetText('lib/data/migration_v2.yaml'),
     );
     final lessons = await loadLessonData((await loadCourse()).books);
+    final lang = await loadLanguage();
     final converted = convertSettingsV2(json, map);
     final isV0 = !json.containsKey('disabledForms');
     if (isV0) {
@@ -50,6 +52,7 @@ class SettingsNotifier extends _$SettingsNotifier {
         json['selectedWords'] as List<dynamic>? ?? const [],
         map,
         lessons,
+        lang,
       );
     }
     return convertSettingsV5(
@@ -57,6 +60,7 @@ class SettingsNotifier extends _$SettingsNotifier {
         convertSettingsV3(
           converted,
           lessons.lessonWords.values.expand((words) => words),
+          lang,
         ),
       ),
     );
@@ -68,6 +72,7 @@ class SettingsNotifier extends _$SettingsNotifier {
     List<dynamic> selectedWords,
     MigrationMap map,
     LessonData lessons,
+    Language lang,
   ) {
     if (selectedWords.isEmpty) return [];
     final selected = {
@@ -76,7 +81,7 @@ class SettingsNotifier extends _$SettingsNotifier {
     return {
       for (final words in lessons.lessonWords.values)
         for (final word in words)
-          if (!selected.contains(normalizeDiacritics(word))) word,
+          if (!selected.contains(lang.fold(word))) word,
     }.toList();
   }
 
@@ -176,7 +181,7 @@ class SettingsNotifier extends _$SettingsNotifier {
       _update((s) => s.copyWith(rewardAnimation: on));
 
   Future<void> setAvoidMacronTwins(bool on) =>
-      _update((s) => s.copyWith(avoidMacronTwins: on));
+      _update((s) => s.copyWith(avoidFoldTwins: on));
 
   Future<void> setUebersetzungseinheit(Uebersetzungseinheit einheit) =>
       _update((s) => s.copyWith(uebersetzungseinheit: einheit));

@@ -14,7 +14,7 @@ const _variants = 3000;
 Map<String, Object> _synthetic() => examToYaml(
   parseExam(
     File('test/fixtures/exam/synthetic.exam').readAsStringSync(),
-    latin,
+    latinLang,
   ),
 );
 
@@ -87,19 +87,19 @@ void main() {
       final withNull = _copy(yaml);
       nullKeys.add(nullOptional(withNull, Random(seed++)));
       expect(
-        examToYaml(parseExam(jsonEncode(withNull), latin)),
+        examToYaml(parseExam(jsonEncode(withNull), latinLang)),
         equals(yaml),
         reason: name,
       );
-      final exam = parseExam(jsonEncode(yaml), latin);
+      final exam = parseExam(jsonEncode(yaml), latinLang);
       expect(examToYaml(exam), equals(yaml), reason: name);
       expect(
-        examToYaml(parseExam(serializeExam(exam), latin)),
+        examToYaml(parseExam(serializeExam(exam), latinLang)),
         equals(yaml),
         reason: name,
       );
       expect(
-        examToYaml(parseExam(blockYaml(yaml), latin)),
+        examToYaml(parseExam(blockYaml(yaml), latinLang)),
         equals(yaml),
         reason: name,
       );
@@ -110,7 +110,7 @@ void main() {
       for (final a in ItemArt.values) 'task ${a.code}',
       'task ordnen',
       'task frei',
-      for (final a in latin.clauseArt) 'clause $a',
+      for (final a in latinLang.clauseArt) 'clause $a',
     ];
     expect([
       for (final k in wanted)
@@ -145,7 +145,7 @@ void main() {
         final (source, path) = broken;
         reached[rule] = (reached[rule] ?? 0) + 1;
         expect(
-          () => parseExam(source, latin),
+          () => parseExam(source, latinLang),
           throwsA(
             isA<ExamRejected>().having(
               (e) => [for (final x in e.errors) '${x.rule.id} ${x.path}'],

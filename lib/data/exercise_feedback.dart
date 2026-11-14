@@ -1,4 +1,3 @@
-import '../models/derivation.dart' show norm;
 import '../models/exercise.dart';
 import '../models/practice_item.dart';
 import 'attribution.dart' show typedRight;
@@ -62,7 +61,7 @@ List<ExplanationLine> feedbackLines(
     ],
   (PartsAnswer(:final slots), TypedTexts(:final texts)) => [
     for (final (i, (name: _, :answer)) in slots.indexed)
-      if (typedRight(answer, texts[i]))
+      if (typedRight(word.lang, answer, texts[i]))
         _optionLine(
           word,
           answer.expected,
@@ -188,7 +187,9 @@ List<ExplanationLine> _typed(
   String text,
 ) {
   final key = answer.expected.formKey;
-  final accepted = answer.accepted.any((s) => norm(s) == norm(text));
+  final accepted = answer.accepted.any(
+    (s) => word.lang.norm(s) == word.lang.norm(text),
+  );
   return [
     _optionLine(word, answer.expected, answer.expected.text, right: true),
     if (!accepted && text.trim().isNotEmpty)

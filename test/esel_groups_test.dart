@@ -3,7 +3,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/data/esel_groups.dart';
 import 'package:latin_practice/data/esel_steps.dart';
 import 'package:latin_practice/data/practice_data.dart';
-import 'package:latin_practice/models/derivation.dart' show norm;
 import 'package:latin_practice/models/practice_item.dart';
 import 'package:latin_practice/widgets/esel_panel.dart';
 
@@ -12,6 +11,7 @@ import 'support/key_echo_i18n.dart';
 import 'support/word_classification_harness.dart';
 import 'support/explanation_harness.dart' show pickOption;
 import 'package:latin_practice/screens/word_classification_screen.dart';
+import 'support/latin_course.dart' show latinLang;
 
 /// What the rows of a static panel read, as key-echo text — never from the
 /// identity of `groupReadings`, which is the code under test here.
@@ -75,11 +75,11 @@ void main() {
           final seen = <String>{};
           for (final accepted in item.acceptedForms) {
             for (final spelling in accepted) {
-              if (!seen.add(norm(spelling))) continue;
+              if (!seen.add(latinLang.norm(spelling))) continue;
               final keys = [
                 for (var i = 0; i < item.formOrder.length; i++)
                   if (item.acceptedForms[i].any(
-                    (f) => norm(f) == norm(spelling),
+                    (f) => latinLang.norm(f) == latinLang.norm(spelling),
                   ))
                     item.formOrder[i],
               ];

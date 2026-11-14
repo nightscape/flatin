@@ -8,6 +8,7 @@ import 'package:latin_practice/models/form_label.dart';
 import 'package:latin_practice/models/practice_item.dart';
 
 import 'support/test_axes.dart';
+import 'support/latin_course.dart' show latinLang;
 
 const _yamlFiles = ['lib/data/latin_nouns.yaml', 'lib/data/latin_verbs.yaml'];
 
@@ -134,7 +135,7 @@ void main() {
       recognition: const TypeDeclared(),
       stems: {praesensStem.name: praesensStem},
       forms: forms,
-      grammar: const Grammar({}, {}, {}, 'de'),
+      grammar: Grammar({}, {}, {}, 'de', latinLang),
     );
 
     test('an ending may be empty', () {

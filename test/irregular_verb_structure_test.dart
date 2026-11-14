@@ -7,6 +7,7 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/grammar/engine.dart';
 import 'package:latin_practice/grammar/schema.dart';
+import 'support/latin_course.dart' show latinLang;
 
 const _verbs = 'lib/data/latin_verbs.yaml';
 
@@ -43,7 +44,7 @@ const _perfectEndings = {
 final _finiteActive = RegExp(r'^(ind|konj)\.\w+\.akt\.[123]\.(sg|pl)$');
 
 final GrammarEngine _engine = GrammarEngine(
-  parseGrammarFiles({
+  parseGrammarFiles(lang: latinLang, {
     for (final path in _paths) path: File(path).readAsStringSync(),
   }),
 );

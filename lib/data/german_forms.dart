@@ -28,7 +28,7 @@ class GrammarGermanForms implements GermanForms {
          parseGrammarFiles({
            _verbSource: germanVerbsYaml,
            if (nouns != null) _nounSource: nouns.yaml,
-         }),
+         }, lang: latinVerbs.lang),
          latinVerbs,
          nouns?.latin,
        );

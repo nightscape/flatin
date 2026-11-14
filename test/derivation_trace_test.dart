@@ -7,13 +7,14 @@ import 'package:latin_practice/models/derivation.dart';
 import 'package:latin_practice/models/practice_item.dart';
 
 import 'support/german_particle_verb.dart';
+import 'support/latin_course.dart' show latinLang;
 
 const _assets = ['lib/data/latin_nouns.yaml', 'lib/data/latin_verbs.yaml'];
 
 /// The sandhi library of each data file, by data file id. The engine keeps
 /// its rules to itself, so the recompute reads them from a second parse.
 Future<Map<String, GrammarFile>> _grammarFiles() async => {
-  for (final file in parseGrammarFiles({
+  for (final file in parseGrammarFiles(lang: latinLang, {
     for (final asset in _assets) asset: await loadAssetText(asset),
   }))
     file.dataFileId: file,
@@ -107,19 +108,20 @@ void _expectAffixSeam(
   final stem = derivation.stems[part.stemName];
   expect(stem, isNotNull, reason: '$at: no stem ${part.stemName}');
   if (!part.sandhi) {
-    expect(norm(part.text), norm(stem!.stem), reason: at);
+    expect(latinLang.norm(part.text), latinLang.norm(stem!.stem), reason: at);
     expect(part.sandhiRule, isNull, reason: at);
     return;
   }
   final last = p == parts.length - 1;
   final seam = sandhiSeam(
+    latinLang,
     rules,
     stem!.stem,
     last ? '' : _beforeSeam(derivation, parts[p + 1]),
     wordFinal: last,
     lemma: lemma,
   ).first;
-  expect(norm(part.text), norm(seam.text), reason: at);
+  expect(latinLang.norm(part.text), latinLang.norm(seam.text), reason: at);
   expect(part.sandhiRule?.id, seam.rule?.id, reason: at);
 }
 
@@ -181,6 +183,7 @@ void main() {
               final Seam seam = form.sandhiRule == null
                   ? (text: stem, right: ending, rule: null)
                   : sandhiSeam(
+                      latinLang,
                       rules,
                       stem,
                       ending,
@@ -188,8 +191,8 @@ void main() {
                       lemma: item.lemma,
                     ).first;
               expect(
-                norm(seam.text + seam.right),
-                norm(form.result),
+                latinLang.norm(seam.text + seam.right),
+                latinLang.norm(form.result),
                 reason: where,
               );
               expect(
@@ -198,7 +201,11 @@ void main() {
                 reason: where,
               );
             case ComposedForm(:final parts):
-              expect(norm(form.joinedText), norm(form.result), reason: where);
+              expect(
+                latinLang.norm(form.joinedText),
+                latinLang.norm(form.result),
+                reason: where,
+              );
               for (int p = 0; p < parts.length; p++) {
                 final part = parts[p];
                 final at = '$where part $p';
@@ -325,7 +332,9 @@ void main() {
             reason: item.translation,
           );
           expect(
-            norm(recognition.sourceWord).endsWith(norm(recognition.suffix)),
+            latinLang
+                .norm(recognition.sourceWord)
+                .endsWith(latinLang.norm(recognition.suffix)),
             isTrue,
             reason:
                 '${item.translation}: ${recognition.sourceWord} '
@@ -352,13 +361,13 @@ void main() {
             reason: where,
           );
           expect(
-            norm(
+            latinLang.norm(
               stem.sourceWord.substring(
                 0,
                 stem.sourceWord.length - stem.removedSuffix.length,
               ),
             ),
-            norm(stem.stem),
+            latinLang.norm(stem.stem),
             reason: where,
           );
         }

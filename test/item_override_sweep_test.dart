@@ -8,11 +8,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/grammar/engine.dart';
 import 'package:latin_practice/grammar/schema.dart';
 import 'package:latin_practice/models/derivation.dart';
+import 'support/latin_course.dart' show latinLang;
 
 const _paths = ['lib/data/latin_nouns.yaml', 'lib/data/latin_verbs.yaml'];
 
 final GrammarEngine _engine = GrammarEngine(
-  parseGrammarFiles({
+  parseGrammarFiles(lang: latinLang, {
     for (final path in _paths) path: File(path).readAsStringSync(),
   }),
 );

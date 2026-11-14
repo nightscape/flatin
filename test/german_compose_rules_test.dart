@@ -8,6 +8,7 @@ import 'package:latin_practice/grammar/schema.dart';
 import 'package:latin_practice/models/derivation.dart';
 import 'package:latin_practice/models/form_label.dart';
 import 'package:yaml/yaml.dart';
+import 'support/latin_course.dart' show latinLang;
 
 const _path = 'lib/data/german_verbs.yaml';
 
@@ -59,7 +60,7 @@ final _course = File(_path).readAsStringSync();
 String _withTestItems(String yaml) => '$yaml$_testItems';
 
 GrammarEngine _engine(String yaml) =>
-    GrammarEngine(parseGrammarFiles({_path: yaml}));
+    GrammarEngine(parseGrammarFiles(lang: latinLang, {_path: yaml}));
 
 List<String>? _accepted(GrammarEngine engine, String id, FormKey key) =>
     engine.of('german_verbs', id).forms[key]?.variants;
@@ -174,7 +175,10 @@ void main() {
         '          - {self: roh, set: {modus: ind}, pass: [tempus, person, numerus]}\n',
         '          - {self: roh, set: {modus: ind}, pass: [tempus, person, numerus], join: " "}\n',
       );
-      expect(() => parseGrammarFiles({_path: yaml}), _schemaError('S21'));
+      expect(
+        () => parseGrammarFiles(lang: latinLang, {_path: yaml}),
+        _schemaError('S21'),
+      );
     });
   });
 
@@ -205,7 +209,10 @@ void main() {
         '          - {self: roh, set: {modus: part, tempus: praes}}\n',
         '          - {self: roh, set: {modus: part, tempus: praes}, sandhi: false}\n',
       );
-      expect(() => parseGrammarFiles({_path: yaml}), _schemaError('S13'));
+      expect(
+        () => parseGrammarFiles(lang: latinLang, {_path: yaml}),
+        _schemaError('S13'),
+      );
     });
 
     test(
@@ -219,7 +226,7 @@ void main() {
     );
 
     test('every glued stem part of the German verbs skips sandhi', () {
-      final file = parseGrammarFiles({_path: _course}).single;
+      final file = parseGrammarFiles(lang: latinLang, {_path: _course}).single;
       final glued = [
         for (final type in file.types.values)
           for (final compose in type.composes)
@@ -242,7 +249,7 @@ void main() {
               '          - {self: roh, set: {modus: ind}',
         );
         expect(
-          () => parseGrammarFiles({_path: yaml}),
+          () => parseGrammarFiles(lang: latinLang, {_path: yaml}),
           _schemaError('S21'),
           reason: target,
         );
@@ -257,7 +264,10 @@ void main() {
         '          - {stem: partikel, optional: true, glue_before: wortgruppe}\n'
             '      - match: {modus: ind, tempus: fut, genus_verbi: akt}',
       );
-      expect(() => parseGrammarFiles({_path: yaml}), _schemaError('S21'));
+      expect(
+        () => parseGrammarFiles(lang: latinLang, {_path: yaml}),
+        _schemaError('S21'),
+      );
     });
 
     test('a non-string "glue_before" throws', () {
@@ -266,7 +276,10 @@ void main() {
         'glue_before: partikel}\n          - {stem: partikel, optional: true, join: "", sandhi: false}\n          - {self: roh, set: {modus: ind}',
         'glue_before: 5}\n          - {stem: partikel, optional: true, join: "", sandhi: false}\n          - {self: roh, set: {modus: ind}',
       );
-      expect(() => parseGrammarFiles({_path: yaml}), _schemaError('S21'));
+      expect(
+        () => parseGrammarFiles(lang: latinLang, {_path: yaml}),
+        _schemaError('S21'),
+      );
     });
 
     test('a word group glued to a particle takes no sandhi at the seam', () {
@@ -301,7 +314,10 @@ void main() {
         '          - {stem: partikel, optional: true, join: "", sandhi: "no"}\n'
             '          - {self: roh, set: {modus: ind}',
       );
-      expect(() => parseGrammarFiles({_path: yaml}), _schemaError('S13'));
+      expect(
+        () => parseGrammarFiles(lang: latinLang, {_path: yaml}),
+        _schemaError('S13'),
+      );
     });
 
     test('the seam between verb stem and ending keeps its sandhi', () {
@@ -344,7 +360,10 @@ void main() {
         '          - {self: roh, set: {modus: part, tempus: praes}}\n',
         '          - {self: roh, set: {modus: part, tempus: praes}, optional: true}\n',
       );
-      expect(() => parseGrammarFiles({_path: yaml}), _schemaError('S22'));
+      expect(
+        () => parseGrammarFiles(lang: latinLang, {_path: yaml}),
+        _schemaError('S22'),
+      );
     });
   });
 
@@ -371,7 +390,10 @@ void main() {
         '    slots: {hilfsverb: hv_sein}\n    absent: *ohne_passiv\n  - type: unregelmäßig',
         '    slots: {hilfsverb: hv_sein, objekt: refl}\n    absent: *ohne_passiv\n  - type: unregelmäßig',
       );
-      expect(() => parseGrammarFiles({_path: yaml}), _schemaError('S23'));
+      expect(
+        () => parseGrammarFiles(lang: latinLang, {_path: yaml}),
+        _schemaError('S23'),
+      );
     });
 
     test('a slot naming an unknown item throws', () {
@@ -380,7 +402,10 @@ void main() {
         '    slots: {hilfsverb: hv_sein}\n    absent: *ohne_passiv\n  - type: unregelmäßig',
         '    slots: {hilfsverb: hv_bleiben}\n    absent: *ohne_passiv\n  - type: unregelmäßig',
       );
-      expect(() => parseGrammarFiles({_path: yaml}), _schemaError('S5'));
+      expect(
+        () => parseGrammarFiles(lang: latinLang, {_path: yaml}),
+        _schemaError('S5'),
+      );
     });
   });
 
@@ -433,7 +458,10 @@ void main() {
             '          - {lexeme: pron, pass: [person, numerus]}\n'
             '          - {self: roh, set: {modus: ind, tempus: impf}',
       );
-      expect(() => parseGrammarFiles({_path: yaml}), _schemaError('S24'));
+      expect(
+        () => parseGrammarFiles(lang: latinLang, {_path: yaml}),
+        _schemaError('S24'),
+      );
     });
   });
 
@@ -476,6 +504,9 @@ void main() {
       '          - {self: roh, set: {modus: part, tempus: praes}}\n',
       '          - {self: roh, set: {modus: part, tempus: praes}, optinal: true}\n',
     );
-    expect(() => parseGrammarFiles({_path: yaml}), _schemaError('S13'));
+    expect(
+      () => parseGrammarFiles(lang: latinLang, {_path: yaml}),
+      _schemaError('S13'),
+    );
   });
 }

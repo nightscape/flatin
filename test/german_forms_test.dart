@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/data/german_forms.dart';
 import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/grammar/schema.dart';
+import 'support/latin_course.dart' show latinLang;
 
 /// Run with GERMAN_GOLDEN_UPDATE=1 to rewrite the golden tables.
 const _goldenDir = 'test/golden';
@@ -11,7 +12,7 @@ const _goldenDir = 'test/golden';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  final latinVerbs = parseGrammarFiles({
+  final latinVerbs = parseGrammarFiles(lang: latinLang, {
     for (final path in [
       'lib/data/latin_nouns.yaml',
       'lib/data/latin_verbs.yaml',
@@ -67,7 +68,7 @@ void main() {
     }
   });
 
-  final germanItems = parseGrammarFiles({
+  final germanItems = parseGrammarFiles(lang: latinLang, {
     'lib/data/german_verbs.yaml': File(
       'lib/data/german_verbs.yaml',
     ).readAsStringSync(),

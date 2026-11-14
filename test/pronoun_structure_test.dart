@@ -7,6 +7,7 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/grammar/engine.dart';
 import 'package:latin_practice/grammar/schema.dart';
+import 'support/latin_course.dart' show latinLang;
 
 const _path = 'lib/data/latin_nouns.yaml';
 
@@ -26,7 +27,7 @@ const _sharedNominativePlural = <String>{};
 /// Plural cases that the feminine spells like the masculine.
 const _genderSharedPluralCases = {'dat', 'abl'};
 final GrammarEngine _engine = GrammarEngine(
-  parseGrammarFiles({_path: File(_path).readAsStringSync()}),
+  parseGrammarFiles(lang: latinLang, {_path: File(_path).readAsStringSync()}),
 );
 
 void main() {

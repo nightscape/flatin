@@ -5,7 +5,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/data/practice_data.dart';
-import 'package:latin_practice/models/derivation.dart' show norm;
 import 'package:latin_practice/models/exercise.dart';
 import 'package:latin_practice/models/input_strategy.dart';
 import 'package:latin_practice/models/practice_item.dart';
@@ -16,6 +15,7 @@ import 'support/i18n_keys.dart';
 import 'support/key_echo_i18n.dart';
 import 'support/round_driver.dart';
 import 'support/word_classification_harness.dart';
+import 'support/latin_course.dart' show latinLang;
 
 const _sizes = {'phone': Size(390, 800), 'wide': Size(1400, 800)};
 const _narrow = Size(320, 800);
@@ -404,8 +404,8 @@ void main() {
             expect(tester.widget(input) is TextField, isText);
             if (!isText) {
               expect(
-                dropdownOptions(tester).map(norm),
-                contains(norm(typed.expected.text)),
+                dropdownOptions(tester).map(latinLang.norm),
+                contains(latinLang.norm(typed.expected.text)),
               );
             }
 

@@ -1,9 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart' show WidgetRef;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../data/asset_text.dart';
 import '../data/exam.dart';
-import '../data/languages/language.dart';
+import '../data/languages/language.dart' show Language;
 import '../data/practice_data.dart';
 import '../models/course.dart';
 import '../models/fsrs_card.dart';
@@ -16,8 +15,7 @@ part 'exam_provider.g.dart';
 
 /// The language whose codes and rules the exam packs use.
 @riverpod
-Future<Language> examLanguage(Ref ref) async =>
-    Language.parse(await loadAssetText((await loadCourse()).language));
+Future<Language> examLanguage(Ref ref) => loadLanguage();
 
 /// The imported exam packs.
 @riverpod

@@ -1,5 +1,7 @@
 id: toy
 name: {de: Spielsprache, en: Toy language}
+fold: {á: a, Á: A}
+letters: "a-zá"
 analyse:
   wortart: [wortklasse]
   ruf: [tu, ze]

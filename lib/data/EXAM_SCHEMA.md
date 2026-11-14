@@ -8,7 +8,8 @@ uses every feature.
 The sections up to Tasks describe the fields. The codes of `analyse`,
 `rolle`, `art` and `sinnrichtung`, and the values the rules name (`haupt`,
 `pc`, `esse`, the tense pairs), are data of the language file
-`lib/data/languages/la.yaml`; this document gives the Latin ones.
+`lib/data/languages/la.yaml`; this document gives the Latin ones. The same
+file holds the `fold` and `letters` of the spelling (SCHEMA.md, Course manifest).
 `lib/data/exam.dart` reads a pack and checks every statement of the section
 Rules, one rule id per
 statement; a pack that breaks one is refused as a whole with an `ExamError`

@@ -41,7 +41,7 @@ List<ExplanationLine> explainCorrectAnswer(
   assert(item.accepts(index, answer), 'a wrong answer gets a diagnosis');
 
   final String accepted = item.acceptedForms[index].firstWhere(
-    (spelling) => norm(spelling) == norm(answer),
+    (spelling) => item.lang.norm(spelling) == item.lang.norm(answer),
   );
   if (accepted.toLowerCase() == answer.trim().toLowerCase()) return const [];
   return [

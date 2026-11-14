@@ -124,7 +124,7 @@ void main() {
         ),
       );
       count('no reward animation', s.rewardAnimation != fresh.rewardAnimation);
-      count('macron twins kept', s.avoidMacronTwins != fresh.avoidMacronTwins);
+      count('macron twins kept', s.avoidFoldTwins != fresh.avoidFoldTwins);
     }
     for (final MapEntry(:key, :value) in reach.entries) {
       expect(value, greaterThan(0), reason: 'never drawn: $key');

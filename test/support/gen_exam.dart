@@ -4,13 +4,14 @@ import 'dart:math';
 
 import 'package:latin_practice/data/exam.dart';
 import 'package:latin_practice/data/languages/language.dart';
+import 'package:yaml/yaml.dart';
+
 import 'latin_course.dart';
 
-/// The language of the exam packs the tests draw and read.
-final latin = Language.parse(File(latinCourse.language).readAsStringSync());
+export 'latin_course.dart' show latinLang;
 
-/// The codes of the `analyse` key [key] of [latin].
-List<Object> codes(String key) => latin.analyse[key]!;
+/// The codes of the `analyse` key [key] of [latinLang].
+List<Object> codes(String key) => latinLang.analyse[key]!;
 
 /// Draws valid `.exam` packs as the YAML data model of [examToYaml], and
 /// counts in [reach] which features it drew.
@@ -229,7 +230,7 @@ final class ExamGen {
     final clauseIds = [for (final l in letters) '$sid$l'];
     final arts = [
       'haupt',
-      for (var i = 1; i < clauseCount; i++) pick(latin.clauseArt),
+      for (var i = 1; i < clauseCount; i++) pick(latinLang.clauseArt),
     ];
     var pcCount = 0;
     for (var i = 0; i < arts.length; i++) {
@@ -251,7 +252,7 @@ final class ExamGen {
         if (arts[i] == 'pc') i,
     ];
     final sinnrichtung = {
-      for (final c in pcClauses) c: pick(latin.sinnrichtung),
+      for (final c in pcClauses) c: pick(latinLang.sinnrichtung),
     };
     final plainClauses = [
       for (var i = 0; i < arts.length; i++)
@@ -777,13 +778,13 @@ String? breakRule(ExamRule rule, Map<String, dynamic> exam, Random r) {
     case ExamRule.code:
       final sites = <(Map, String, String, List<Object>)>[
         for (final c in clauses) ...[
-          (c.node, 'art', c.path, latin.clauseArt),
+          (c.node, 'art', c.path, latinLang.clauseArt),
           if (c.node.containsKey('sinnrichtung'))
-            (c.node, 'sinnrichtung', c.path, latin.sinnrichtung),
+            (c.node, 'sinnrichtung', c.path, latinLang.sinnrichtung),
         ],
         for (final t in words) ...[
           if (t.node.containsKey('rolle'))
-            (t.node, 'rolle', t.path, latin.rolle),
+            (t.node, 'rolle', t.path, latinLang.rolle),
           for (final key in (t.node['analyse'] as Map).keys)
             (t.node['analyse'], key, '${t.path}.analyse', codes(key)),
         ],
@@ -1269,7 +1270,7 @@ String? breakRule(ExamRule rule, Map<String, dynamic> exam, Random r) {
       return from(items('wissen_mc'), (i) {
         final c = pick(pcs);
         final wrong = pick([
-          for (final s in latin.sinnrichtung)
+          for (final s in latinLang.sinnrichtung)
             if (s != c.node['sinnrichtung']) s,
         ]);
         i.node['teilsatz'] = c.node['id'];
@@ -1399,4 +1400,79 @@ List<String> _block(Object? data, String indent) {
       lines[i] = '\t${lines[i].substring(indent.length)}';
       return (lines.join('\n'), 'line ${i + 1}');
   }
+}
+
+/// A string over the letters of a language file, their quantity-marked and
+/// upper-case forms, the Latin-1 letters, combining marks and a few
+/// separators: for the properties of its spelling rules.
+String spelling(Random r, Map<String, String> fold) {
+  final pool = [
+    ...fold.keys,
+    ...fold.values,
+    ...'abcdefghijklmnopqrstuvwxyzăĕĭŏŭäöüß'.split(''),
+    ...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split(''),
+    ...' -.,1ł'.split(''),
+    ...[for (var c = 0xC0; c <= 0xFF; c++) String.fromCharCode(c)],
+    ...[for (var c = 0x300; c <= 0x36F; c++) String.fromCharCode(c)],
+  ];
+  return String.fromCharCodes([
+    for (var i = r.nextInt(9); i > 0; i--)
+      pool[r.nextInt(pool.length)].codeUnitAt(0),
+  ]);
+}
+
+/// A language file source like [latinLang]'s with the `fold` mapping [key] to
+/// `x`, whatever [key] is.
+String languageSourceWithFoldKey(String key) {
+  final data =
+      jsonDecode(
+            jsonEncode(loadYaml(File(latinCourse.language).readAsStringSync())),
+          )
+          as Map<String, dynamic>;
+  data['fold'] = {key: 'x'};
+  return jsonEncode(data);
+}
+
+/// A fold value a language must refuse: empty, or two code units (a letter
+/// with a combining mark, a pair of letters, or a letter outside the BMP).
+String invalidFoldValue(Random r) => switch (r.nextInt(4)) {
+  0 => '',
+  1 => 'a${String.fromCharCode(0x300 + r.nextInt(0x70))}',
+  2 => String.fromCharCodes([0x61 + r.nextInt(26), 0x61 + r.nextInt(26)]),
+  _ => String.fromCharCode(0x1D44E + r.nextInt(26)),
+};
+
+/// A fold key a language must refuse: two code units (a base letter with a
+/// combining mark, or a pair of letters) or a regex class character.
+String invalidFoldKey(Random r) {
+  const classChars = ['^', ']', '\\', '-', '['];
+  return switch (r.nextInt(3)) {
+    0 => 'a${String.fromCharCode(0x300 + r.nextInt(0x70))}',
+    1 => String.fromCharCodes([0x61 + r.nextInt(26), 0x61 + r.nextInt(26)]),
+    _ => classChars[r.nextInt(classChars.length)],
+  };
+}
+
+/// A language shaped like [latinLang] with a drawn id and a drawn fold: every
+/// macron vowel folds to a breve vowel, by a drawn rotation, so no two
+/// spellings of the grammar files collide.
+Language drawnLanguage(Random r) {
+  final data =
+      jsonDecode(
+            jsonEncode(loadYaml(File(latinCourse.language).readAsStringSync())),
+          )
+          as Map<String, dynamic>;
+  const plain = ['ă', 'ĕ', 'ĭ', 'ŏ', 'ŭ'];
+  const marked = ['ā', 'ē', 'ī', 'ō', 'ū'];
+  final step = r.nextInt(plain.length);
+  data['id'] = 'x${r.nextInt(1 << 30)}';
+  data['fold'] = {
+    for (var i = 0; i < plain.length; i++) ...{
+      marked[i]: plain[(i + step) % plain.length],
+      marked[i].toUpperCase(): plain[(i + step) % plain.length].toUpperCase(),
+    },
+    'ȳ': 'y',
+    'Ȳ': 'Y',
+  };
+  return Language.parse(jsonEncode(data));
 }

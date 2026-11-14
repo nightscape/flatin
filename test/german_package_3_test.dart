@@ -5,6 +5,7 @@ import 'package:latin_practice/data/german_forms.dart';
 import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/grammar/schema.dart';
 import 'package:latin_practice/models/practice_item.dart';
+import 'support/latin_course.dart' show latinLang;
 
 /// German verbs without a personal passive; their passive keys are absent.
 const _withoutGermanPassive = {'herabsteigen', 'zurückblicken'};
@@ -22,7 +23,7 @@ bool _inCourse(List<String> codes) => switch (codes.first) {
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  final latinVerbs = parseGrammarFiles({
+  final latinVerbs = parseGrammarFiles(lang: latinLang, {
     for (final path in [
       'lib/data/latin_nouns.yaml',
       'lib/data/latin_verbs.yaml',

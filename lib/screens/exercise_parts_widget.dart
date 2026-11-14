@@ -134,6 +134,7 @@ class _ExercisePartsWidgetState extends State<ExercisePartsWidget> {
       key: Key('exercise.slot.$i'),
       child: widget.inputStrategy.buildInput(
         InputContext(
+          lang: widget.word.lang,
           index: offered.keys.indexOf(answer.expected.formKey),
           correctAnswer: answer.expected.text,
           allForms: offered.forms,

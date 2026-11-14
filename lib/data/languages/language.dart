@@ -13,6 +13,14 @@ final class Language {
   final String id;
   final Map<String, String> name;
 
+  /// The spellings the language writes the same word without a quantity mark
+  /// for: each key is one code unit that [fold] replaces by its value.
+  final Map<String, String> _fold;
+  final RegExp _foldKeys;
+
+  /// Matches a word made of the letters of the language and nothing else.
+  final RegExp letters;
+
   /// The codes of each `analyse` key, in display order.
   final Map<String, List<Object>> analyse;
   final String wordClass;
@@ -27,6 +35,9 @@ final class Language {
   Language._(
     this.id,
     this.name,
+    this._fold,
+    this._foldKeys,
+    this.letters,
     this.analyse,
     this.wordClass,
     this.form,
@@ -44,8 +55,33 @@ final class Language {
     'clause.sinnrichtung': sinnrichtung,
   };
 
+  /// [text] with every [_fold] key replaced.
+  String fold(String text) =>
+      text.replaceAllMapped(_foldKeys, (m) => _fold[m[0]]!);
+
+  /// [fold] of [text] in lower case.
+  String foldLower(String text) => fold(text).toLowerCase();
+
+  /// The comparison form of a spelling: trimmed, lower case, without quantity
+  /// marks.
+  String norm(String text) => fold(text.trim().toLowerCase());
+
+  /// Whether [text] holds a character that [fold] changes.
+  bool hasQuantityMark(String text) => _foldKeys.hasMatch(text);
+
   factory Language.parse(String source) {
     final y = loadYaml(source) as YamlMap;
+    final fold = Map<String, String>.unmodifiable(
+      (y['fold'] as YamlMap).cast(),
+    );
+    for (final MapEntry(:key, :value) in fold.entries) {
+      if (key.length != 1 || value.length != 1 || r'^]\-['.contains(key)) {
+        throw FormatException(
+          'language ${y['id']}: fold "$key" must map one code unit, not a '
+          'regex class character, to one code unit',
+        );
+      }
+    }
     final analyse = {
       for (final MapEntry(:key, :value) in (y['analyse'] as YamlMap).entries)
         key as String: List<Object>.unmodifiable(value as YamlList),
@@ -54,6 +90,9 @@ final class Language {
     final language = Language._(
       y['id'] as String,
       Map<String, String>.unmodifiable(y['name'] as YamlMap),
+      fold,
+      RegExp('[${fold.keys.join()}]'),
+      RegExp('^[${y['letters'] as String}]+\$', caseSensitive: false),
       analyse,
       y['word_class'] as String,
       _strings(y['form']),

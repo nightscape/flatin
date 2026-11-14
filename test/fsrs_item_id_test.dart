@@ -1,5 +1,4 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:latin_practice/data/lesson_data.dart' show normalizeDiacritics;
 import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/models/derivation.dart';
 import 'package:latin_practice/models/fsrs_card.dart';
@@ -10,7 +9,7 @@ import 'support/latin_course.dart';
 
 PracticeItem _item(String dataFileId, String lemma, String translation) =>
     PracticeItem(
-      id: '$dataFileId:${normalizeDiacritics(lemma).toLowerCase()}',
+      id: '$dataFileId:${latinLang.fold(lemma).toLowerCase()}',
       lemma: lemma,
       type: 'A-Deklination',
       translation: translation,
@@ -29,7 +28,7 @@ PracticeItem _item(String dataFileId, String lemma, String translation) =>
         type: 'A-Deklination',
         recognition: const TypeDeclared(),
         forms: const {},
-        grammar: const Grammar({}, {}, {}, 'de'),
+        grammar: Grammar({}, {}, {}, 'de', latinLang),
       ),
     );
 

@@ -2,6 +2,7 @@ import 'package:yaml/yaml.dart';
 
 import '../data/asset_text.dart';
 import '../data/game_rules.dart';
+import '../data/languages/language.dart' show Language;
 import 'exercise.dart' show ExerciseKind;
 
 /// The list of course manifests the app reads.
@@ -212,3 +213,7 @@ Future<List<Course>> loadCourses() async {
 
 /// The one course of [coursesAsset].
 Future<Course> loadCourse() async => (await loadCourses()).single;
+
+/// The language file of the one course.
+Future<Language> loadLanguage() async =>
+    Language.parse(await loadAssetText((await loadCourse()).language));

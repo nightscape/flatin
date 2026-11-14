@@ -6,7 +6,6 @@ import 'package:latin_practice/data/word_focus.dart';
 import 'package:latin_practice/data/exercise_kinds.dart';
 import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/main.dart' show noRetry;
-import 'package:latin_practice/models/derivation.dart' show norm;
 import 'package:latin_practice/models/exercise.dart';
 import 'package:latin_practice/models/lesson_range.dart';
 import 'package:latin_practice/models/practice_item.dart';
@@ -17,6 +16,7 @@ import 'package:latin_practice/providers/round_providers.dart';
 import 'package:latin_practice/providers/settings_provider.dart';
 
 import 'support/course_providers.dart';
+import 'support/latin_course.dart' show latinLang;
 
 /// Records the macron switch of every context a round builds with.
 class _Recording implements ExerciseGenerator {
@@ -35,7 +35,7 @@ class _Recording implements ExerciseGenerator {
     ExerciseContext ctx,
     Random rng,
   ) {
-    seen.add(ctx.avoidMacronTwins);
+    seen.add(ctx.avoidFoldTwins);
     return inner.build(word, bundle, ctx, rng);
   }
 }
@@ -64,14 +64,14 @@ class _Pinned implements ExerciseGenerator {
 
 bool _isTwinPairing(Exercise e) =>
     (e.answer as MatchingAnswer).pairs
-        .map((p) => norm(p.$1.text))
+        .map((p) => latinLang.norm(p.$1.text))
         .toSet()
         .length <
     4;
 
 bool _isTwinChain(Exercise e) => (e.answer as TypedAnswer).accepted
-    .map(norm)
-    .contains(norm(e.questionParams['start']!));
+    .map(latinLang.norm)
+    .contains(latinLang.norm(e.questionParams['start']!));
 
 ProviderContainer _container(List<ExerciseGenerator> registry) {
   seedSettings(
@@ -151,7 +151,7 @@ void main() {
         unlocked: {for (final k in word.formOrder) bundleOf(word, k)},
         pool: [word],
         german: german,
-        avoidMacronTwins: false,
+        avoidFoldTwins: false,
       );
       final seed = Iterable<int>.generate(2000).firstWhere((seed) {
         try {
@@ -189,7 +189,7 @@ void main() {
         expect(
           exercises.map(isTwin).toSet(),
           {!avoid},
-          reason: '$file round with avoidMacronTwins $avoid',
+          reason: '$file round with avoidFoldTwins $avoid',
         );
       }
     }

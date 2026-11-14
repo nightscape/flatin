@@ -3,7 +3,6 @@
 /// two texts can be taken for each other and how a cell becomes an option.
 library;
 
-import '../models/derivation.dart' show norm;
 import '../models/exercise.dart';
 import '../models/practice_item.dart';
 import 'diagnosis.dart';
@@ -231,7 +230,7 @@ final class Cube {
 
   /// Whether [text], read without macrons, is a spelling of a form of [word].
   bool isFormOf(PracticeItem word, String text) => word.acceptedForms.any(
-    (forms) => forms.any((f) => norm(f) == norm(text)),
+    (forms) => forms.any((f) => word.lang.norm(f) == word.lang.norm(text)),
   );
 
   /// The wrong texts that swap the participle or the auxiliary of [c] for the
@@ -280,10 +279,11 @@ final class Cube {
   /// as a typed answer and a plain reading of the text do.
   bool lookAlike(Cell a, Cell b) {
     final latin = view(View.latin);
+    final lang = a.word.lang;
     bool fitsPlain(Cell target, Cell c) => latin
         .accepted(c)
-        .map(norm)
-        .contains(norm(latin.accepted(target).first));
+        .map(lang.norm)
+        .contains(lang.norm(latin.accepted(target).first));
     return fitsPlain(a, b) || fitsPlain(b, a);
   }
 

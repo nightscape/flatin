@@ -33,7 +33,7 @@ Iterable<(String, Pack)> _cases() sync* {
             examToYaml(
               parseExam(
                 File('test/fixtures/exam/synthetic.exam').readAsStringSync(),
-                latin,
+                latinLang,
               ),
             ),
           ),
@@ -102,7 +102,7 @@ Future<void> _open(
   addTearDown(tester.view.reset);
   await tester.pumpWidget(
     wrapInApp(
-      ExamScreen(exam: parseExam(jsonEncode(pack), latin)),
+      ExamScreen(exam: parseExam(jsonEncode(pack), latinLang)),
       forcedLocale: locale,
     ),
   );

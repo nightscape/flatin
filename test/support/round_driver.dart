@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:latin_practice/models/derivation.dart' show norm;
 import 'package:latin_practice/models/exercise.dart';
 import 'package:latin_practice/screens/exercise_match_widget.dart';
 import 'package:latin_practice/screens/exercise_screen.dart';
@@ -9,6 +8,7 @@ import 'package:latin_practice/screens/exercise_tap_widget.dart';
 import 'package:latin_practice/screens/exercise_ticks_widget.dart';
 
 import 'grammar_exercise_harness.dart';
+import 'latin_course.dart' show latinLang;
 
 /// The task on screen, whether a single task or a matching one.
 Exercise shown(WidgetTester tester) {
@@ -71,9 +71,13 @@ Future<void> answer(
         await choose(
           tester,
           right
-              ? options.singleWhere((o) => norm(o) == norm(expected.text))
+              ? options.singleWhere(
+                  (o) => latinLang.norm(o) == latinLang.norm(expected.text),
+                )
               : options.firstWhere(
-                  (o) => !accepted.any((a) => norm(a) == norm(o)),
+                  (o) => !accepted.any(
+                    (a) => latinLang.norm(a) == latinLang.norm(o),
+                  ),
                 ),
         );
       }
@@ -95,10 +99,13 @@ Future<void> answer(
             tester,
             wrong
                 ? options.firstWhere(
-                    (o) => !slot.accepted.any((a) => norm(a) == norm(o)),
+                    (o) => !slot.accepted.any(
+                      (a) => latinLang.norm(a) == latinLang.norm(o),
+                    ),
                   )
                 : options.singleWhere(
-                    (o) => norm(o) == norm(slot.expected.text),
+                    (o) =>
+                        latinLang.norm(o) == latinLang.norm(slot.expected.text),
                   ),
             key,
           );

@@ -9,6 +9,7 @@ import 'package:latin_practice/models/derivation.dart';
 
 import 'support/gen_verbs_file.dart';
 import 'support/grammar_breaker.dart';
+import 'support/latin_course.dart' show latinLang;
 
 /// Each verbs file with the nouns file its types link to (S12).
 const _sources = {
@@ -19,7 +20,9 @@ const _sources = {
 
 void _expectRejected(Map<String, dynamic> tree, GrammarBroken broken) {
   expect(
-    () => parseGrammarFiles({'broken.yaml': grammarSource(tree)}),
+    () => parseGrammarFiles(lang: latinLang, {
+      'broken.yaml': grammarSource(tree),
+    }),
     throwsA(
       isA<SchemaError>()
           .having((e) => e.rule, 'rule', broken.rule)
@@ -35,8 +38,11 @@ void main() {
 
       test('$path: the plain tree parses as the file does', () {
         final nouns = {nounsPath: File(nounsPath).readAsStringSync()};
-        final [_, file] = parseGrammarFiles({...nouns, path: source});
-        final [_, plain] = parseGrammarFiles({
+        final [_, file] = parseGrammarFiles(lang: latinLang, {
+          ...nouns,
+          path: source,
+        });
+        final [_, plain] = parseGrammarFiles(lang: latinLang, {
           ...nouns,
           'plain.yaml': grammarSource(grammarTree(source)),
         });
@@ -105,7 +111,9 @@ void main() {
         ),
       ]);
       expect(
-        () => parseGrammarFiles({'gen.yaml': grammarSource(drawn.tree)}),
+        () => parseGrammarFiles(lang: latinLang, {
+          'gen.yaml': grammarSource(drawn.tree),
+        }),
         throwsA(
           isA<SchemaError>()
               .having((e) => e.rule, 'rule', 'S15')
@@ -122,7 +130,7 @@ void main() {
     void count(String what) => counts[what] = (counts[what] ?? 0) + 1;
 
     for (final (label, drawn, r) in _voiceStates()) {
-      final file = parseGrammarFiles({
+      final file = parseGrammarFiles(lang: latinLang, {
         'gen.yaml': grammarSource(drawn.tree),
       }).single;
       final engine = GrammarEngine([file]);
@@ -200,7 +208,7 @@ void main() {
         if (item.overrides.isNotEmpty) count('item with overrides');
       }
     }
-    final realFiles = parseGrammarFiles({
+    final realFiles = parseGrammarFiles(lang: latinLang, {
       'lib/data/latin_nouns.yaml': File(
         'lib/data/latin_nouns.yaml',
       ).readAsStringSync(),
@@ -221,7 +229,7 @@ void main() {
     twin
       ..['type'] = twin.remove('regular_type')
       ..remove('forms');
-    final twinFiles = parseGrammarFiles({
+    final twinFiles = parseGrammarFiles(lang: latinLang, {
       'lib/data/latin_nouns.yaml': File(
         'lib/data/latin_nouns.yaml',
       ).readAsStringSync(),
@@ -272,7 +280,7 @@ void main() {
     ) {
       final tree = grammarTree(File(path).readAsStringSync());
       tree['items'] = reorder(tree['items'] as List);
-      final files = parseGrammarFiles({
+      final files = parseGrammarFiles(lang: latinLang, {
         nounsPath: nouns,
         path: grammarSource(tree),
       });
@@ -331,7 +339,7 @@ Iterable<_VoiceState> _voiceStates() sync* {
 /// Everything about a drawn file that a reader of the follow rules sees, as
 /// values that equal each other exactly when the reading is the same.
 Map<String, Object> _orderObservables(DrawnVerbsFile drawn) {
-  final file = parseGrammarFiles({
+  final file = parseGrammarFiles(lang: latinLang, {
     'gen.yaml': grammarSource(drawn.tree),
   }).single;
   final engine = GrammarEngine([file]);

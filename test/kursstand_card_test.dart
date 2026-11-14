@@ -200,7 +200,7 @@ void main() {
         findsOneWidget,
       );
       expect(
-        titleColor(tester, _text('word.${normalizeDiacritics(inRange.lemma)}')),
+        titleColor(tester, _text('word.${latinLang.fold(inRange.lemma)}')),
         Colors.black,
         reason: 'a word the course has reached must not look greyed',
       );
@@ -238,7 +238,7 @@ void main() {
     // Real German text: 'fromLesson' interpolates the lesson number, and the
     // shelf asserts that its labels fit a book cover, which key-echo texts
     // do not.
-    final tile = _text('word.${normalizeDiacritics(item.lemma)}');
+    final tile = _text('word.${latinLang.fold(item.lemma)}');
     expect(
       find.descendant(of: tile, matching: find.text('ab Lektion 32')),
       findsOneWidget,
@@ -281,7 +281,7 @@ void main() {
       curriculum: curriculum,
     );
 
-    final tile = _text('word.${normalizeDiacritics(item.lemma)}');
+    final tile = _text('word.${latinLang.fold(item.lemma)}');
     expect(
       find.descendant(of: tile, matching: find.byType(Text)),
       findsOneWidget,
@@ -327,7 +327,7 @@ void main() {
       );
 
       // Real German text: 'fromLesson' interpolates the lesson number.
-      final tile = _text('word.${normalizeDiacritics(item.lemma)}');
+      final tile = _text('word.${latinLang.fold(item.lemma)}');
       expect(
         find.descendant(of: tile, matching: find.text('ab Lektion 30')),
         findsOneWidget,
@@ -360,7 +360,7 @@ void main() {
       curriculum: curriculum,
     );
 
-    final tile = _text('word.${normalizeDiacritics(item.lemma)}');
+    final tile = _text('word.${latinLang.fold(item.lemma)}');
     expect(
       find.descendant(
         of: tile,

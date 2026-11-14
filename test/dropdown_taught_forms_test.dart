@@ -6,7 +6,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/data/exercise_kinds.dart';
 import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/models/course_filter.dart';
-import 'package:latin_practice/models/derivation.dart' show norm;
 import 'package:latin_practice/models/lesson_range.dart';
 import 'package:latin_practice/models/practice_item.dart';
 import 'package:latin_practice/models/settings.dart';
@@ -19,6 +18,7 @@ import 'package:latin_practice/screens/practice_screen.dart';
 import 'support/course_providers.dart';
 import 'support/round_driver.dart';
 import 'support/word_classification_harness.dart';
+import 'support/latin_course.dart' show latinLang;
 
 /// Words and grammar both narrowed to [lesson], every data file on
 /// [strategyId].
@@ -47,7 +47,7 @@ Future<CourseFilter> _filter() async {
         filter.curriculum.formLesson(item.dataFileId, label.key) <=
             filter.settings.courseGrammar.to &&
         filter.settings.offFeaturesOf(item.dataFileId, label).isEmpty;
-    (isTaught ? taught : later).add(norm(item.forms[i]));
+    (isTaught ? taught : later).add(latinLang.norm(item.forms[i]));
   }
   return (taught: taught, later: later.difference(taught));
 }
@@ -89,7 +89,7 @@ void main() {
         final input = find.byKey(const Key('exercise.input'));
         if (tester.widget(input) is! TextField) {
           dropdowns++;
-          final options = dropdownOptions(tester).map(norm).toSet();
+          final options = dropdownOptions(tester).map(latinLang.norm).toSet();
           final reason = '${screen.word.lemma} ${screen.exercise.kind.name}';
           final taught = _split(filter, screen.word).taught;
           expect(options.length, greaterThan(1), reason: reason);
@@ -139,7 +139,7 @@ void main() {
         filter.practicedForms(item.dataFileId, item.formLabels).length,
       );
       for (final row in rows) {
-        final options = {for (final o in row.items!) norm(o.value!)};
+        final options = {for (final o in row.items!) latinLang.norm(o.value!)};
         expect(options.length, greaterThan(1), reason: item.lemma);
         if (strategyId == 'dropdown_all_forms') {
           expect(options, split.taught, reason: item.lemma);

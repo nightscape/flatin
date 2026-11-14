@@ -13,7 +13,7 @@ import 'dart:math';
 import 'package:latin_practice/grammar/engine.dart';
 import 'package:latin_practice/grammar/schema.dart';
 import 'package:latin_practice/models/form_label.dart';
-import 'package:latin_practice/data/lesson_data.dart' show normalizeDiacritics;
+import '../support/latin_course.dart' show latinLang;
 
 import 'collatinus.dart';
 import 'oracle.dart';
@@ -223,7 +223,7 @@ Sample buildSample({
   required Map<String, Map<String, List<String>>> curated,
 }) {
   final declared = {
-    for (final file in parseGrammarFiles(sources))
+    for (final file in parseGrammarFiles(lang: latinLang, sources))
       file.dataFileId: (file.path, file.declaredTypes.keys.toSet(), file),
   };
 
@@ -296,7 +296,7 @@ Sample buildSample({
         _ => throw StateError('type_map.yaml: kind ${spec.kind}'),
       };
       if (built == null) continue;
-      if (!seen.add(normalizeDiacritics(built.idSpelling))) continue;
+      if (!seen.add(latinLang.fold(built.idSpelling))) continue;
       (extra[owner.value.$1] ??= StringBuffer()).write(built.text);
       entries.add(
         SampleEntry(dataFileId, null, [candidate.key], synthetic: true),
@@ -319,7 +319,7 @@ Sample buildSample({
 
 /// Our forms of every entry, as the engine derives them.
 List<ItemForms> engineForms(Sample sample) {
-  final files = parseGrammarFiles(sample.sources);
+  final files = parseGrammarFiles(lang: latinLang, sample.sources);
   final engine = GrammarEngine(files);
 
   return [
@@ -354,5 +354,6 @@ List<ItemForms> engineForms(Sample sample) {
 
 /// The axes of every data file of [sources].
 Map<String, Axes> axesOf(Map<String, String> sources) => {
-  for (final file in parseGrammarFiles(sources)) file.dataFileId: file.axes,
+  for (final file in parseGrammarFiles(lang: latinLang, sources))
+    file.dataFileId: file.axes,
 };

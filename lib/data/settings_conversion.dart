@@ -1,6 +1,6 @@
 import 'package:yaml/yaml.dart';
 
-import 'lesson_data.dart' show normalizeDiacritics;
+import 'languages/language.dart' show Language;
 
 /// The tables of `lib/data/migration_v2.yaml`.
 ///
@@ -144,11 +144,12 @@ Map<String, dynamic> convertSettingsV2(
 Map<String, dynamic> convertSettingsV3(
   Map<String, dynamic> json,
   Iterable<String> lemmas,
+  Language lang,
 ) {
   if (_versionOf(json) >= 3) return json;
   final byNormalized = <String, Set<String>>{};
   for (final lemma in lemmas) {
-    byNormalized.putIfAbsent(normalizeDiacritics(lemma), () => {}).add(lemma);
+    byNormalized.putIfAbsent(lang.fold(lemma), () => {}).add(lemma);
   }
   List<String> exact(dynamic stored) => [
     for (final word in _words(stored)) ...byNormalized[word] ?? {word},

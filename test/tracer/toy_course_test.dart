@@ -34,9 +34,14 @@ void main() {
   // The books' lesson range is checked against lastLesson by loadLessonData,
   // which the tracer's home step lists; Curriculum.parse reads their schema.
   test('the toy course parses with the app parsers', () {
-    final words = parseGrammarFiles({
+    final words = parseGrammarFiles(lang: courseLanguage(toyCourse), {
       'toy_words.yaml': File('$toyDir/toy_words.yaml').readAsStringSync(),
     }).single;
+    expect(
+      words.lang.id,
+      courseLanguage(toyCourse).id,
+      reason: 'a course parses with the language its manifest names',
+    );
     final engine = GrammarEngine([words]);
     final keys = <String>{};
     for (final item in words.items) {
@@ -81,3 +86,7 @@ void main() {
     );
   });
 }
+
+/// The language file that [course] names.
+Language courseLanguage(Course course) =>
+    Language.parse(File(course.language).readAsStringSync());

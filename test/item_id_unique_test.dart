@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:latin_practice/data/lesson_data.dart' show normalizeDiacritics;
+import 'support/latin_course.dart' show latinLang;
 import 'package:latin_practice/data/practice_data.dart';
 import 'package:yaml/yaml.dart';
 
@@ -495,7 +495,7 @@ const _existingIds = [
   'verbs:vocare',
 ];
 
-String _norm(String text) => normalizeDiacritics(text).toLowerCase();
+String _norm(String text) => latinLang.fold(text).toLowerCase();
 
 String _lemma(YamlMap item, String lemmaPart) {
   final spelling = (item['parts'] as YamlMap)[lemmaPart];

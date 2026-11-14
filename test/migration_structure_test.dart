@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/data/settings_conversion.dart';
 import 'package:latin_practice/grammar/schema.dart';
+import 'support/latin_course.dart' show latinLang;
 
 const _oldPaths = {
   'nouns': 'lib/data/latin_nouns.yaml',
@@ -46,7 +47,7 @@ void main() {
     File('lib/data/migration_v2.yaml').readAsStringSync(),
   );
   final files = {
-    for (final file in parseGrammarFiles({
+    for (final file in parseGrammarFiles(lang: latinLang, {
       for (final path in _oldPaths.values) path: File(path).readAsStringSync(),
     }))
       file.dataFileId: file,

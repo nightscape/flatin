@@ -72,11 +72,6 @@ final class EselStep {
          options.map((option) => option.identity).toSet().length ==
              options.length,
          'two options are the same text',
-       ),
-       assert(
-         options.map((option) => norm(option.identity)).toSet().length ==
-             options.length,
-         'two options differ only in quantity marks',
        );
 
   /// Everything a done step row shows, so two steps with the same value render
@@ -171,12 +166,14 @@ List<EselStep> eselSteps(
 bool _isDictionaryForm(PracticeItem item, FormKey formKey, GeneratedForm form) {
   if (form.ending.isNotEmpty) return false;
   final dictionary = {
-    for (final part in item.principalParts) norm(part.$2),
-    norm(item.lemma),
+    for (final part in item.principalParts) item.lang.norm(part.$2),
+    item.lang.norm(item.lemma),
   };
-  if (!dictionary.contains(norm(form.result))) return false;
+  if (!dictionary.contains(item.lang.norm(form.result))) return false;
   return item.formOrder.firstWhere(
-        (key) => norm(item.derivation.forms[key]!.result) == norm(form.result),
+        (key) =>
+            item.lang.norm(item.derivation.forms[key]!.result) ==
+            item.lang.norm(form.result),
       ) ==
       formKey;
 }
@@ -249,7 +246,7 @@ EselStep _stamm(
   // One letter later than the stem, and still short of the whole word: the
   // dictionary form is not a stem and is never an option.
   final bool cuts =
-      norm(source).startsWith(norm(stem.stem)) &&
+      item.lang.norm(source).startsWith(item.lang.norm(stem.stem)) &&
       source.length > stem.stem.length + 1;
   final dictionary = {
     '${item.lemma}-',
@@ -260,7 +257,8 @@ EselStep _stamm(
   // even where that is the dictionary form.
   if (diagnosis is WrongStem) {
     dictionary.removeWhere(
-      (word) => norm(word) == norm('${diagnosis.usedStem}-'),
+      (word) =>
+          item.lang.norm(word) == item.lang.norm('${diagnosis.usedStem}-'),
     );
   }
 
@@ -365,7 +363,7 @@ Set<String> _acceptedEndings(
 ) {
   final stems = item.derivation.stems.values
       .expand((stem) => stem.variants)
-      .map(norm)
+      .map(item.lang.norm)
       .toList();
   return {
     form.ending,
@@ -376,8 +374,8 @@ Set<String> _acceptedEndings(
         ?.endings,
     for (final variant in form.variants)
       for (final stem in stems)
-        if (norm(variant).startsWith(stem))
-          norm(variant).substring(stem.length),
+        if (item.lang.norm(variant).startsWith(stem))
+          item.lang.norm(variant).substring(stem.length),
   }.map((ending) => '-$ending').toSet();
 }
 
@@ -511,11 +509,11 @@ List<EselOption> _options({
   String? rightKey,
   Set<String> forbidden = const {},
 }) {
-  final taken = {norm(right), ...forbidden.map(norm)};
+  final taken = {item.lang.norm(right), ...forbidden.map(item.lang.norm)};
   final distractors = <String>[];
   for (final candidate in candidates) {
     if (candidate.isEmpty || candidate == '-') continue;
-    if (!taken.add(norm(candidate))) continue;
+    if (!taken.add(item.lang.norm(candidate))) continue;
     distractors.add(candidate);
     if (distractors.length == 2) break;
   }
@@ -533,6 +531,11 @@ List<EselOption> _options({
     for (final distractor in distractors)
       EselOption(distractor, isRight: false),
   ];
+  assert(
+    options.map((option) => item.lang.norm(option.identity)).toSet().length ==
+        options.length,
+    'two options differ only in quantity marks',
+  );
   return options..shuffle(_seeded(item.id, formKey, kind));
 }
 

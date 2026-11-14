@@ -3,11 +3,8 @@
 /// the answer.
 library;
 
-import '../data/lesson_data.dart' show normalizeDiacritics;
+import '../data/languages/language.dart' show Language;
 import 'form_label.dart' show FormKey;
-
-/// The comparison form of a Latin word: trimmed, lower case, macron-free.
-String norm(String text) => normalizeDiacritics(text.trim().toLowerCase());
 
 /// How the item's type was established.
 sealed class TypeRecognition {
@@ -66,11 +63,7 @@ sealed class StemDerivation {
     required this.display,
     required this.variants,
   }) : stem = variants.first,
-       assert(variants.isNotEmpty),
-       assert(
-         variants.map(norm).toSet().length == variants.length,
-         'stem $name: two variants differ only in quantity marks',
-       );
+       assert(variants.isNotEmpty);
 }
 
 /// Cut from a principal part the item gives (S3).
@@ -123,11 +116,7 @@ sealed class FormDerivation {
 
   FormDerivation({required this.formKey, required this.variants})
     : result = variants.first,
-      assert(variants.isNotEmpty),
-      assert(
-        variants.map(norm).toSet().length == variants.length,
-        'form $formKey: two variants differ only in quantity marks',
-      );
+      assert(variants.isNotEmpty);
 }
 
 /// A principal part the item gives, shown as it stands.
@@ -267,11 +256,15 @@ final class Grammar {
 
   final String language;
 
-  const Grammar(
+  /// The spelling of the course the file belongs to.
+  final Language lang;
+
+  Grammar(
     this.templatesByType,
     this.classByType,
     this.displayByType,
     this.language,
+    this.lang,
   );
 }
 
@@ -328,9 +321,22 @@ final class Derivation {
            (f) => switch (f) {
              GeneratedForm(sandhiRule: final rule) when rule != null => true,
              GeneratedForm(:final stemName, :final ending, :final result) =>
-               norm(stems[stemName]!.stem + ending) == norm(result),
+               grammar.lang.norm(stems[stemName]!.stem + ending) ==
+                   grammar.lang.norm(result),
              _ => true,
            },
          ),
+       ),
+       assert(
+         [
+           for (final stem in stems.values) stem.variants,
+           for (final form in [...forms.values, ...internal.values])
+             form.variants,
+         ].every(
+           (variants) =>
+               variants.map(grammar.lang.norm).toSet().length ==
+               variants.length,
+         ),
+         'two variants differ only in quantity marks',
        );
 }

@@ -7,6 +7,7 @@ import 'package:latin_practice/models/practice_item.dart';
 
 import 'support/german_particle_verb.dart';
 import 'support/trace_fixtures.dart';
+import 'support/latin_course.dart' show latinLang;
 
 const _nouns = 'lib/data/latin_nouns.yaml';
 const _verbs = 'lib/data/latin_verbs.yaml';
@@ -317,13 +318,13 @@ void main() {
             for (final option in rest) {
               expect(option.identity, isNot(right.identity), reason: where);
               expect(
-                norm(option.identity),
-                isNot(norm(right.identity)),
+                latinLang.norm(option.identity),
+                isNot(latinLang.norm(right.identity)),
                 reason: where,
               );
             }
             expect(
-              step.options.map((o) => norm(o.identity)).toSet(),
+              step.options.map((o) => latinLang.norm(o.identity)).toSet(),
               hasLength(step.options.length),
               reason: where,
             );
@@ -384,8 +385,8 @@ void main() {
       final offenders = <String>[];
       for (final item in await _grammarItems()) {
         final dictionary = {
-          for (final part in item.principalParts) norm(part.$2),
-          norm(item.lemma),
+          for (final part in item.principalParts) latinLang.norm(part.$2),
+          latinLang.norm(item.lemma),
         };
         for (final formKey in item.formOrder) {
           final form = item.derivation.forms[formKey]!;
@@ -393,12 +394,12 @@ void main() {
             ...dictionary,
             if (form is GeneratedForm)
               if (item.derivation.stems[form.stemName] case StemFromPart source)
-                norm(source.sourceWord),
+                latinLang.norm(source.sourceWord),
           };
           final step = eselSteps(item, formKey)[1];
           for (final option in step.options.where((o) => !o.isRight)) {
             final bare = option.text.replaceFirst(RegExp(r'-$'), '');
-            if (words.contains(norm(bare))) {
+            if (words.contains(latinLang.norm(bare))) {
               offenders.add(
                 '${item.id} $formKey: ${option.text} '
                 '(right ${step.answer})',

@@ -3,9 +3,9 @@ import 'package:latin_practice/data/exercise_choice.dart' show knowsWell;
 import 'package:latin_practice/data/exercise_cube.dart';
 import 'package:latin_practice/data/exercise_spec.dart';
 import 'package:latin_practice/data/sentences.dart';
-import 'package:latin_practice/models/derivation.dart' show norm;
 import 'package:latin_practice/models/exercise.dart';
 import 'package:latin_practice/models/practice_item.dart';
+import 'latin_course.dart' show latinLang;
 
 /// Words that say an attempt failed, in both UI languages.
 final failureWord = RegExp(
@@ -117,8 +117,9 @@ List<String> violations(
         }
       }
       if (spec.select is AxisPath &&
-          (ctx.avoidMacronTwins
-              ? norm(e.questionParams['start']!) == norm(expected.text)
+          (ctx.avoidFoldTwins
+              ? latinLang.norm(e.questionParams['start']!) ==
+                    latinLang.norm(expected.text)
               : e.questionParams['start'] == expected.text)) {
         found.add('the start ${expected.text} is the answer');
       }
@@ -144,7 +145,7 @@ List<String> violations(
           }
         }
         for (final other in cells) {
-          if ((left == View.latin && ctx.avoidMacronTwins
+          if ((left == View.latin && ctx.avoidFoldTwins
                   ? cube.lookAlike(other, c)
                   : cube.clash(left, other, c)) ||
               cube.clash(right, other, c)) {
@@ -252,13 +253,15 @@ List<String> violations(
         if (!cube.practised(promptCell)) {
           found.add('prompt $promptCell is not practised');
         }
-        final plain = norm(prompt.text);
+        final plain = latinLang.norm(prompt.text);
         for (final other in ctx.pool) {
           // The length test only skips the slow norm of most forms.
           if (other.id != word.id &&
               other.acceptedForms.any(
                 (fs) => fs.any(
-                  (f) => f.length == prompt.text.length && norm(f) == plain,
+                  (f) =>
+                      f.length == prompt.text.length &&
+                      latinLang.norm(f) == plain,
                 ),
               )) {
             found.add('prompt ${prompt.text} is also a form of ${other.id}');
@@ -276,7 +279,8 @@ List<String> violations(
         found.add('parts $shown are not the row $row');
       }
       if ({
-            for (final k in row) norm(word.forms[word.formOrder.indexOf(k)]),
+            for (final k in row)
+              latinLang.norm(word.forms[word.formOrder.indexOf(k)]),
           }.length <
           select.minParts) {
         found.add('the row $row has too few distinct parts');

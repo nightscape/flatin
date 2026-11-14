@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:latin_practice/data/languages/language.dart';
 import 'package:latin_practice/models/course.dart';
 import 'package:yaml/yaml.dart';
 
@@ -11,3 +12,8 @@ final Course latinCourse = () {
           as String;
   return Course.parse(path, File(path).readAsStringSync());
 }();
+
+/// The language file of [latinCourse].
+final Language latinLang = Language.parse(
+  File(latinCourse.language).readAsStringSync(),
+);

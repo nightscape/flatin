@@ -3,13 +3,14 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/grammar/engine.dart';
 import 'package:latin_practice/grammar/schema.dart';
+import 'support/latin_course.dart' show latinLang;
 
 final _path =
     Platform.environment['GERMAN_VERBS_YAML'] ?? 'lib/data/german_verbs.yaml';
 
 void main() {
   final engine = GrammarEngine(
-    parseGrammarFiles({_path: File(_path).readAsStringSync()}),
+    parseGrammarFiles(lang: latinLang, {_path: File(_path).readAsStringSync()}),
   );
   ({String? shown, List<String>? variants}) form(String id, String key) {
     final f = engine.of('german_verbs', id).forms[key]!;

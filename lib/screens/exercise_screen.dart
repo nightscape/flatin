@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 
-import '../models/derivation.dart' show norm;
 import '../data/exercise_feedback.dart';
 import '../models/exercise.dart';
 import '../models/input_strategy.dart';
@@ -76,7 +75,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
       right,
     ),
     (TypedAnswer(:final accepted), TypedText(:final text)) => accepted.any(
-      (form) => norm(form) == norm(text),
+      (form) => widget.word.lang.norm(form) == widget.word.lang.norm(text),
     ),
     _ => throw StateError('response does not fit the answer'),
   };
@@ -201,6 +200,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
     final index = offered.keys.indexOf(expected.formKey);
     assert(index >= 0, '${expected.formKey} is not offered');
     return InputContext(
+      lang: widget.word.lang,
       index: index,
       correctAnswer: expected.text,
       allForms: offered.forms,

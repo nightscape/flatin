@@ -8,6 +8,7 @@ import 'package:latin_practice/models/derivation.dart';
 import 'package:latin_practice/models/practice_item.dart';
 
 import 'support/trace_fixtures.dart';
+import 'support/latin_course.dart' show latinLang;
 
 const _nouns = 'lib/data/latin_nouns.yaml';
 const _verbs = 'lib/data/latin_verbs.yaml';
@@ -197,7 +198,7 @@ List<String> _wrongAnswers(PracticeItem item, int index) {
   final answers = <String>['zzz'];
 
   final other = item.forms.firstWhere(
-    (f) => norm(f) != norm(correct),
+    (f) => latinLang.norm(f) != latinLang.norm(correct),
     orElse: () => '',
   );
   if (other.isNotEmpty) answers.add(other);
@@ -211,7 +212,9 @@ List<String> _wrongAnswers(PracticeItem item, int index) {
       final template = entry.value[item.formOrder[index]];
       if (entry.key == item.type || template == null) continue;
       final candidate = stem.stem + template.endings.first;
-      if (norm(candidate) != norm(correct)) answers.add(candidate);
+      if (latinLang.norm(candidate) != latinLang.norm(correct)) {
+        answers.add(candidate);
+      }
     }
   }
 

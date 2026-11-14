@@ -11,7 +11,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:latin_practice/data/game_rules.dart';
 import 'package:latin_practice/data/round_plan.dart' show roundLength;
 import 'package:latin_practice/data/word_focus.dart';
-import 'package:latin_practice/models/derivation.dart' show norm;
 import 'package:latin_practice/models/reward.dart';
 import 'package:latin_practice/models/settings.dart';
 import 'package:latin_practice/providers/curriculum_provider.dart';
@@ -27,6 +26,7 @@ import '../support/round_driver.dart';
 import '../support/store_picture.dart';
 import '../support/word_classification_harness.dart' show letItLoad;
 import 'glossary.dart';
+import '../support/latin_course.dart' show latinLang;
 
 /// A widget that can be found again by key after a rebuild.
 bool _isKeyed(Widget widget) => widget.key is ValueKey<String>;
@@ -443,14 +443,18 @@ class AppSteps {
       (i) =>
           // vocabulary data, not a UI translation
           find.text(i.translation).evaluate().isNotEmpty &&
-          i.acceptedForms.any((fs) => fs.any((f) => norm(f) == norm(word))),
+          i.acceptedForms.any(
+            (fs) => fs.any((f) => latinLang.norm(f) == latinLang.norm(word)),
+          ),
     );
     final enabled = filter.practicedForms(item.dataFileId, item.formLabels);
     final label =
         item.formLabels[[
           for (var i = 0; i < item.forms.length; i++)
             enabled.contains(item.formOrder[i]) &&
-                item.acceptedForms[i].any((f) => norm(f) == norm(word)),
+                item.acceptedForms[i].any(
+                  (f) => latinLang.norm(f) == latinLang.norm(word),
+                ),
         ].indexOf(true)];
     final selectors = selectorsFor(item.filterForms(enabled).labels);
     _payingChoices = selectors.sections.length;

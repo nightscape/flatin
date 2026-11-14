@@ -3,6 +3,26 @@
 id: la
 name: {de: Latein, en: Latin}
 
+# Letters that spell the same word without their quantity mark; a card id and
+# every comparison of two spellings go through this. Both sides are one code
+# unit.
+fold:
+  ā: a
+  ē: e
+  ī: i
+  ō: o
+  ū: u
+  ȳ: y
+  Ā: A
+  Ē: E
+  Ī: I
+  Ō: O
+  Ū: U
+  Ȳ: Y
+
+# The body of a character class: the letters a stem or an ending is made of.
+letters: "a-zāēīōūȳăĕĭŏŭäöüß"
+
 # The keys of a word token's `analyse` and their codes, in display order.
 analyse:
   wortart: [subst, adj, verb, pron, adv, praep, konjunktion, subjunktion, partikel]

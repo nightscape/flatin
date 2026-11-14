@@ -9,6 +9,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/grammar/engine.dart';
 import 'package:latin_practice/grammar/schema.dart';
 import 'package:latin_practice/models/form_label.dart';
+import 'support/latin_course.dart' show latinLang;
 
 const _nounsPath = 'test/fixtures/grammar_examples.yaml';
 const _verbsPath = 'test/fixtures/grammar_examples_verbs.yaml';
@@ -54,7 +55,7 @@ Map<String, String> _fixtureWithAll(List<(String, String)> edits) {
 /// holding [clause], the one clause of the rule that must bite.
 void _expectRejected(String rule, String clause, Map<String, String> sources) {
   expect(
-    () => parseGrammarFiles(sources),
+    () => parseGrammarFiles(lang: latinLang, sources),
     throwsA(
       isA<SchemaError>()
           .having((e) => e.rule, 'rule', rule)
@@ -118,7 +119,7 @@ void main() {
     late GrammarFile verbs;
 
     setUpAll(() {
-      files = parseGrammarFiles(_fixture);
+      files = parseGrammarFiles(lang: latinLang, _fixture);
       nouns = files.firstWhere((f) => f.dataFileId == 'nouns');
       verbs = files.firstWhere((f) => f.dataFileId == 'verbs');
     });
@@ -193,6 +194,7 @@ void main() {
 
     test('ä, ö, ü and ß are letters in a sandhi rule (S16)', () {
       final verbs = parseGrammarFiles(
+        lang: latinLang,
         _fixtureWith(
           '{end: t, before: [s], replace: s,',
           '{end: äöüß, before: [äöüß], replace: äöüß,',
@@ -209,7 +211,7 @@ void main() {
     late GrammarFile verbs;
 
     setUpAll(() {
-      final files = parseGrammarFiles(_fixture);
+      final files = parseGrammarFiles(lang: latinLang, _fixture);
       nouns = files.firstWhere((f) => f.dataFileId == 'nouns');
       verbs = files.firstWhere((f) => f.dataFileId == 'verbs');
     });
@@ -480,6 +482,7 @@ void main() {
     test('a top-level key outside the closed set', () {
       expect(
         () => parseGrammarFile(
+          lang: latinLang,
           _oneItemSource.replaceFirst('items:', 'itemz:'),
           path: 'mini.yaml',
         ),
@@ -494,6 +497,7 @@ void main() {
 
     test('shared: is a top-level key the loader accepts', () {
       final file = parseGrammarFile(
+        lang: latinLang,
         _oneItemSource.replaceFirst(
           'items:',
           'shared:\n  ohne_pl: &ohne_pl [{numerus: pl}]\n\nitems:',
@@ -528,6 +532,7 @@ void main() {
     test('S15: an absent pattern removes the keys it names', () {
       final engine = GrammarEngine(
         parseGrammarFiles(
+          lang: latinLang,
           _fixtureWith(
             _posseParts,
             '    absent: [{modus: konj, tempus: praes}]\n$_posseParts',
@@ -565,6 +570,7 @@ void main() {
     test('S25: an impersonal passive is neuter and has no person', () {
       final derivation = GrammarEngine(
         parseGrammarFiles(
+          lang: latinLang,
           _fixtureWith(agereParts, '$agereParts\n    passiv: unpersönlich'),
         ),
       ).of('verbs', 'agere');
@@ -580,6 +586,7 @@ void main() {
         'delegate form composes', () {
       final derivation = GrammarEngine(
         parseGrammarFiles(
+          lang: latinLang,
           _fixtureWithAll([
             (agereParts, '$agereParts\n    passiv: unpersönlich'),
             ('      nom.sg.n: "{stamm}um"\n', ''),
@@ -634,7 +641,10 @@ void main() {
         '    passiv: unpersönlich\n    forms: {ind.praes.pass.3.sg: x}',
       ]) {
         final derivation = GrammarEngine(
-          parseGrammarFiles(_fixtureWith(agereParts, '$agereParts\n$extra')),
+          parseGrammarFiles(
+            lang: latinLang,
+            _fixtureWith(agereParts, '$agereParts\n$extra'),
+          ),
         ).of('verbs', 'agere');
         expect(derivation.forms, isNotEmpty);
       }
@@ -844,7 +854,10 @@ void main() {
     ]);
 
     test('a type inheriting the declension with another genus', () {
-      final nouns = parseGrammarFiles(withFeminineHumus()).single;
+      final nouns = parseGrammarFiles(
+        lang: latinLang,
+        withFeminineHumus(),
+      ).single;
       final engine = GrammarEngine([nouns]);
       final item = nouns.items.singleWhere((i) => i.id == 'humus');
       expect(nouns.genusOf(item), ['f']);
@@ -856,6 +869,7 @@ void main() {
 
     test('a noun keeps its id when it moves to another type', () {
       final moved = parseGrammarFiles(
+        lang: latinLang,
         nounsWith([
           (anchor, '$feminine$anchor'),
           (
@@ -864,7 +878,7 @@ void main() {
           ),
         ]),
       ).single;
-      final original = parseGrammarFiles(nounsWith([])).single;
+      final original = parseGrammarFiles(lang: latinLang, nounsWith([])).single;
       final before = original.items.singleWhere((i) => i.id == 'servus');
       final after = moved.items.singleWhere((i) => i.id == 'servus');
       expect(before.typeName, 'O-Deklination-maskulinum');

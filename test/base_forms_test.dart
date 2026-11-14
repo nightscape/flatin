@@ -22,6 +22,7 @@ import 'package:latin_practice/services/reward_storage.dart';
 
 import 'support/course_providers.dart';
 import 'support/word_classification_harness.dart';
+import 'support/latin_course.dart' show latinLang;
 
 List<String> _baseForms(PracticeItem item) => [
   for (final key in item.baseFormKeys) item.forms[item.formOrder.indexOf(key)],
@@ -52,7 +53,7 @@ void main() {
   setUpAll(() async {
     all = await loadAllPracticeItems();
     engine = GrammarEngine(
-      parseGrammarFiles({
+      parseGrammarFiles(lang: latinLang, {
         for (final f in ['latin_nouns', 'latin_verbs'])
           'lib/data/$f.yaml': File('lib/data/$f.yaml').readAsStringSync(),
       }),
@@ -177,7 +178,7 @@ void main() {
 
   test('the regular reading of an impersonal verb is impersonal too', () {
     final engine = GrammarEngine(
-      parseGrammarFiles({
+      parseGrammarFiles(lang: latinLang, {
         for (final f in ['latin_nouns', 'latin_verbs'])
           'lib/data/$f.yaml': File('lib/data/$f.yaml').readAsStringSync(),
       }),
@@ -189,7 +190,7 @@ void main() {
   test('regular_passiv is no item key', () {
     final verbs = File('lib/data/latin_verbs.yaml').readAsStringSync();
     expect(
-      () => parseGrammarFiles({
+      () => parseGrammarFiles(lang: latinLang, {
         'lib/data/latin_nouns.yaml': File(
           'lib/data/latin_nouns.yaml',
         ).readAsStringSync(),
@@ -504,7 +505,7 @@ void main() {
   test('a noun without a genus, or with two sources of it, fails the load', () {
     final nouns = File('lib/data/latin_nouns.yaml').readAsStringSync();
     final verbs = File('lib/data/latin_verbs.yaml').readAsStringSync();
-    void loads(String nounSource) => parseGrammarFiles({
+    void loads(String nounSource) => parseGrammarFiles(lang: latinLang, {
       'lib/data/latin_nouns.yaml': nounSource,
       'lib/data/latin_verbs.yaml': verbs,
     });

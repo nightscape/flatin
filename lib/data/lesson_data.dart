@@ -58,25 +58,6 @@ class LessonData {
   }
 }
 
-/// Strips Latin macrons so words can be compared across data files.
-String normalizeDiacritics(String text) {
-  const map = {
-    'ā': 'a',
-    'ē': 'e',
-    'ī': 'i',
-    'ō': 'o',
-    'ū': 'u',
-    'Ā': 'A',
-    'Ē': 'E',
-    'Ī': 'I',
-    'Ō': 'O',
-    'Ū': 'U',
-  };
-  var result = text;
-  map.forEach((from, to) => result = result.replaceAll(from, to));
-  return result;
-}
-
 /// Load the books' lessons from YAML assets, concatenated in the given
 /// order.
 ///
@@ -148,14 +129,16 @@ Future<LessonData> loadLessonData(List<String> assetPaths) async {
 /// Throws naming every practice item that no lesson introduces. An item a
 /// lesson lists in another spelling is named with that spelling.
 void assertLessonsCoverItems(LessonData lessons, List<PracticeItem> items) {
+  if (items.isEmpty) return;
+  final lang = items.first.lang;
   final byLetters = {
     for (final words in lessons.lessonWords.values)
-      for (final word in words) normalizeDiacritics(word): word,
+      for (final word in words) lang.fold(word): word,
   };
   final orphans = <String>[];
   for (final item in items) {
     if (lessons.wordToLesson.containsKey(item.lemma)) continue;
-    final otherSpelling = byLetters[normalizeDiacritics(item.lemma)];
+    final otherSpelling = byLetters[lang.fold(item.lemma)];
     final hint = otherSpelling == null
         ? ''
         : ', the lessons spell it "$otherSpelling"';

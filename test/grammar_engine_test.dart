@@ -12,6 +12,7 @@ import 'package:latin_practice/grammar/schema.dart';
 import 'package:latin_practice/grammar/type_inference.dart';
 import 'package:latin_practice/models/derivation.dart';
 import 'package:latin_practice/models/form_label.dart';
+import 'support/latin_course.dart' show latinLang;
 
 const _nounsPath = 'test/fixtures/grammar_examples.yaml';
 const _verbsPath = 'test/fixtures/grammar_examples_verbs.yaml';
@@ -22,7 +23,7 @@ final _sources = {
   _verbsPath: File(_verbsPath).readAsStringSync(),
 };
 
-final List<GrammarFile> _files = parseGrammarFiles(_sources);
+final List<GrammarFile> _files = parseGrammarFiles(lang: latinLang, _sources);
 final GrammarEngine _engine = GrammarEngine(_files);
 
 GrammarFile _fileOf(String itemId) =>
@@ -212,7 +213,7 @@ void main() {
     });
 
     test('the fixture derives posse as the shipped data does', () {
-      final shipped = parseGrammarFiles({
+      final shipped = parseGrammarFiles(lang: latinLang, {
         'lib/data/latin_verbs.yaml': File(
           'lib/data/latin_verbs.yaml',
         ).readAsStringSync(),
@@ -596,7 +597,11 @@ void main() {
     });
 
     test('capiō: a rule on another part', () {
-      final file = parseGrammarFile(_miniSource, path: 'mini.yaml');
+      final file = parseGrammarFile(
+        lang: latinLang,
+        _miniSource,
+        path: 'mini.yaml',
+      );
       final derivation = GrammarEngine([file]).of('mini', 'capio');
       final recognition = derivation.recognition as TypeByRule;
       expect(recognition.sourceWord, 'capiō');
@@ -637,7 +642,7 @@ void main() {
     test('the fixtures fifty times', () {
       final watch = Stopwatch()..start();
       for (var run = 0; run < 50; run++) {
-        final files = parseGrammarFiles(_sources);
+        final files = parseGrammarFiles(lang: latinLang, _sources);
         final engine = GrammarEngine(files);
         for (final file in files) {
           for (final item in file.items) {
@@ -673,7 +678,10 @@ GrammarEngine _patched(Map<String, String> edits) {
     source = source.replaceFirst(edit.key, edit.value);
   }
   return GrammarEngine(
-    parseGrammarFiles({_nounsPath: _sources[_nounsPath]!, _verbsPath: source}),
+    parseGrammarFiles(lang: latinLang, {
+      _nounsPath: _sources[_nounsPath]!,
+      _verbsPath: source,
+    }),
   );
 }
 
@@ -749,7 +757,7 @@ void _checkInvariants(GrammarFile file, GrammarItem item, Derivation d) {
     // I6.
     expect(form.variants.first, form.result, reason: '$where $key');
     expect(
-      form.variants.map(norm).toSet().length,
+      form.variants.map(latinLang.norm).toSet().length,
       form.variants.length,
       reason: '$where $key: two variants are norm-equal',
     );
@@ -760,6 +768,7 @@ void _checkInvariants(GrammarFile file, GrammarItem item, Derivation d) {
         final stem = d.stems[stemName];
         expect(stem, isNotNull, reason: '$where $key: stem $stemName');
         final seam = sandhi(
+          latinLang,
           rules,
           stem!.stem,
           ending,
@@ -783,8 +792,8 @@ void _checkInvariants(GrammarFile file, GrammarItem item, Derivation d) {
         if (regular != null) {
           expect(regular.formKey, key, reason: '$where $key');
           expect(
-            norm(regular.result),
-            isNot(norm(form.result)),
+            latinLang.norm(regular.result),
+            isNot(latinLang.norm(form.result)),
             reason: '$where $key',
           );
         }
@@ -799,6 +808,7 @@ void _checkInvariants(GrammarFile file, GrammarItem item, Derivation d) {
     if (stem is! StemFromDefault) continue;
     final rest = stem.template.substring(stem.template.indexOf('}') + 1);
     final seam = sandhi(
+      latinLang,
       rules,
       stem.base.stem,
       rest,

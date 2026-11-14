@@ -79,7 +79,7 @@ class Settings {
   final bool rewardAnimation;
 
   /// Whether exercises leave out forms that differ only in macrons.
-  final bool avoidMacronTwins;
+  final bool avoidFoldTwins;
 
   /// Words the learner practises although the course has not reached them,
   /// in the exact spelling of their lemma.
@@ -123,7 +123,7 @@ class Settings {
     Set<String>? forcedOnTopics,
     Set<String>? disabledRewards,
     this.rewardAnimation = true,
-    this.avoidMacronTwins = true,
+    this.avoidFoldTwins = true,
     this.uebersetzungseinheit = Uebersetzungseinheit.teilsatz,
     this.punkteAnzeige = false,
   }) : disabledForms = disabledForms ?? {},
@@ -191,7 +191,7 @@ class Settings {
     Set<String>? forcedOnTopics,
     Set<String>? disabledRewards,
     bool? rewardAnimation,
-    bool? avoidMacronTwins,
+    bool? avoidFoldTwins,
     Uebersetzungseinheit? uebersetzungseinheit,
     bool? punkteAnzeige,
   }) {
@@ -214,7 +214,7 @@ class Settings {
       forcedOnTopics: forcedOnTopics ?? this.forcedOnTopics,
       disabledRewards: disabledRewards ?? this.disabledRewards,
       rewardAnimation: rewardAnimation ?? this.rewardAnimation,
-      avoidMacronTwins: avoidMacronTwins ?? this.avoidMacronTwins,
+      avoidFoldTwins: avoidFoldTwins ?? this.avoidFoldTwins,
       uebersetzungseinheit: uebersetzungseinheit ?? this.uebersetzungseinheit,
       punkteAnzeige: punkteAnzeige ?? this.punkteAnzeige,
     );
@@ -448,7 +448,7 @@ class Settings {
       'forcedOnTopics': forcedOnTopics.toList(),
       'disabledRewards': disabledRewards.toList(),
       'rewardAnimation': rewardAnimation,
-      'avoidMacronTwins': avoidMacronTwins,
+      'avoidMacronTwins': avoidFoldTwins,
       'uebersetzungseinheit': uebersetzungseinheit.name,
       'punkteAnzeige': punkteAnzeige,
     };
@@ -554,7 +554,7 @@ class Settings {
         json['disabledRewards'] as List<dynamic>? ?? const [],
       ),
       rewardAnimation: json['rewardAnimation'] as bool? ?? true,
-      avoidMacronTwins: json['avoidMacronTwins'] as bool? ?? true,
+      avoidFoldTwins: json['avoidMacronTwins'] as bool? ?? true,
       uebersetzungseinheit: Uebersetzungseinheit.values.byName(
         json['uebersetzungseinheit'] as String? ?? 'teilsatz',
       ),

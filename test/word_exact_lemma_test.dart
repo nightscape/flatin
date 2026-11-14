@@ -40,6 +40,7 @@ void main() {
       final converted = convertSettingsV3(
         _v2(deselected: ['hic'], forcedOn: ['parere']),
         lemmas,
+        latinLang,
       );
 
       expect(converted['deselectedWords'], containsAll(['hic', 'hīc']));
@@ -50,6 +51,7 @@ void main() {
         convertSettingsV3(
           _v2(deselected: ['obsoletum']),
           lemmas,
+          latinLang,
         )['deselectedWords'],
         ['obsoletum'],
       );
@@ -60,8 +62,8 @@ void main() {
     final lessons = await loadLessonData(latinCourse.books);
     final lemmas = lessons.lessonWords.values.expand((words) => words);
 
-    final once = convertSettingsV3(_v2(deselected: ['hic']), lemmas);
-    expect(convertSettingsV3(once, lemmas), same(once));
+    final once = convertSettingsV3(_v2(deselected: ['hic']), lemmas, latinLang);
+    expect(convertSettingsV3(once, lemmas, latinLang), same(once));
   });
 
   testWidgets('the app reads a v2 store as both lemmas switched off', (

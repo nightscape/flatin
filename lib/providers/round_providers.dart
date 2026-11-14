@@ -229,7 +229,7 @@ class Round extends _$Round {
       unlocked: unlockedBundles(filter, pool),
       pool: pool,
       german: german,
-      avoidMacronTwins: settings.avoidMacronTwins,
+      avoidFoldTwins: settings.avoidFoldTwins,
       formPracticed: (word, label) =>
           filter.formPracticed(word.dataFileId, label),
       stabilityOf: (cardId) => cards[cardId]?.card.stability,

@@ -12,7 +12,7 @@
 /// Collatinus files single words only, so the parts carry the comparison.
 library;
 
-import 'package:latin_practice/data/lesson_data.dart' show normalizeDiacritics;
+import '../support/latin_course.dart' show latinLang;
 import 'package:latin_practice/models/form_label.dart';
 import 'package:yaml/yaml.dart';
 
@@ -23,9 +23,10 @@ import 'collatinus.dart';
 const _marked = 'āēīōūȳăĕĭŏŭ', _plain = 'aeiouyaeiou';
 final _combining = RegExp('[̀-ͯ]');
 
-/// Letters only: no case, no quantity mark. The app's [normalizeDiacritics]
+/// Letters only: no case, no quantity mark. The app's [Language.fold]
 /// strips our macrons; Collatinus adds breves and combining marks on top.
-String oracleNorm(String text) => normalizeDiacritics(text.trim().toLowerCase())
+String oracleNorm(String text) => latinLang
+    .fold(text.trim().toLowerCase())
     .replaceAll(_combining, '')
     .replaceAllMapped(
       RegExp('[$_marked]'),

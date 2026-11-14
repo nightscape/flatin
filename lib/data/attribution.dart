@@ -2,8 +2,8 @@ import 'dart:math';
 
 import 'package:fsrs/fsrs.dart';
 
-import '../models/derivation.dart' show norm;
 import '../models/exercise.dart';
+import 'languages/language.dart' show Language;
 import '../models/practice_item.dart';
 import 'diagnosis.dart';
 
@@ -42,7 +42,11 @@ Attribution attribute(
     answer,
     groupOf,
   ),
-  (final PartsAnswer answer, TypedTexts(:final texts)) => _parts(answer, texts),
+  (final PartsAnswer answer, TypedTexts(:final texts)) => _parts(
+    word.lang,
+    answer,
+    texts,
+  ),
   (final MarksAnswer answer, MarksResponse(:final wordOf)) => _marked(
     answer,
     wordOf,
@@ -57,7 +61,7 @@ Attribution attribute(
 };
 
 Attribution _typed(PracticeItem word, TypedAnswer answer, String text) {
-  if (typedRight(answer, text)) return _good;
+  if (typedRight(word.lang, answer, text)) return _good;
   return _byDiagnosis(diagnose(word, answer.expected.formKey, text));
 }
 
@@ -118,9 +122,11 @@ Attribution _sorted(SortingAnswer answer, Map<FormOption, int> groupOf) {
 }
 
 /// A wrong slot gets the row wrong, whichever part it is.
-Attribution _parts(PartsAnswer answer, List<String> texts) {
+Attribution _parts(Language lang, PartsAnswer answer, List<String> texts) {
   assert(texts.length == answer.slots.length, '${texts.length} texts');
-  return answer.slots.indexed.every((e) => typedRight(e.$2.answer, texts[e.$1]))
+  return answer.slots.indexed.every(
+        (e) => typedRight(lang, e.$2.answer, texts[e.$1]),
+      )
       ? _good
       : (word: Rating.good, grammar: Rating.again);
 }
@@ -188,8 +194,8 @@ int partialOf(ExerciseAnswer answer, ExerciseResponse response) =>
     };
 
 /// Whether [text] is a spelling of [answer], read without macrons.
-bool typedRight(TypedAnswer answer, String text) =>
-    answer.accepted.any((s) => norm(s) == norm(text));
+bool typedRight(Language lang, TypedAnswer answer, String text) =>
+    answer.accepted.any((s) => lang.norm(s) == lang.norm(text));
 
 Rating _worse(Rating a, Rating b) => a.value <= b.value ? a : b;
 

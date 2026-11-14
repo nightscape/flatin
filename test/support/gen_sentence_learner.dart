@@ -138,7 +138,7 @@ SettingsLearner settingsLearnerOf(
       unlocked: unlockedBundles(filter, pool),
       pool: pool,
       german: german ?? world.german,
-      avoidMacronTwins: settings.avoidMacronTwins,
+      avoidFoldTwins: settings.avoidFoldTwins,
       formPracticed: (word, label) =>
           filter.formPracticed(word.dataFileId, label),
       sentences: world.corpus,

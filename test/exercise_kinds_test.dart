@@ -10,7 +10,6 @@ import 'package:latin_practice/data/exercise_spec.dart';
 import 'package:latin_practice/data/german_forms.dart';
 import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/grammar/schema.dart';
-import 'package:latin_practice/models/derivation.dart' show norm;
 import 'package:latin_practice/models/exercise.dart';
 import 'package:latin_practice/models/practice_item.dart';
 import 'package:latin_practice/providers/fsrs_provider.dart';
@@ -18,6 +17,7 @@ import 'package:latin_practice/providers/locale_provider.dart';
 
 import 'support/exercise_fakes.dart';
 import 'support/exercise_invariants.dart';
+import 'support/latin_course.dart' show latinLang;
 
 /// German texts `g@<key>`; [uncovered] keys have none, and every key accepts
 /// [alsoAccepts] besides its own text.
@@ -74,7 +74,7 @@ void main() {
     container.dispose();
     german = GrammarGermanForms(
       File('lib/data/german_verbs.yaml').readAsStringSync(),
-      parseGrammarFiles({
+      parseGrammarFiles(lang: latinLang, {
         for (final path in [
           'lib/data/latin_nouns.yaml',
           'lib/data/latin_verbs.yaml',
@@ -499,8 +499,8 @@ void main() {
           Random(seed),
         );
         expect(
-          (e.answer as TypedAnswer).accepted.map(norm),
-          isNot(contains(norm(e.questionParams['start']!))),
+          (e.answer as TypedAnswer).accepted.map(latinLang.norm),
+          isNot(contains(latinLang.norm(e.questionParams['start']!))),
           reason: '${e.questionParams}',
         );
       }
@@ -767,7 +767,7 @@ void main() {
         unlocked: {puella.type},
         pool: [puella],
         german: nounGerman,
-        avoidMacronTwins: false,
+        avoidFoldTwins: false,
       );
       final twins =
           [
@@ -778,7 +778,7 @@ void main() {
           ].where(
             (e) =>
                 (e.answer as MatchingAnswer).pairs
-                    .map((p) => norm(p.$1.text))
+                    .map((p) => latinLang.norm(p.$1.text))
                     .toSet()
                     .length <
                 4,
@@ -803,7 +803,7 @@ void main() {
         unlocked: {puella.type},
         pool: [puella],
         german: nounGerman,
-        avoidMacronTwins: avoid,
+        avoidFoldTwins: avoid,
       );
       final generator = _spec(ExerciseKind.zuordnen);
       final twins =
@@ -818,7 +818,7 @@ void main() {
           ].where(
             (e) =>
                 (e.answer as MatchingAnswer).pairs
-                    .map((p) => norm(p.$1.text))
+                    .map((p) => latinLang.norm(p.$1.text))
                     .toSet()
                     .length <
                 4,
@@ -845,7 +845,11 @@ void main() {
           Random(seed),
         );
         final latin = (e.answer as MatchingAnswer).pairs.map((p) => p.$1.text);
-        expect(latin.map(norm).toSet(), hasLength(4), reason: '$latin');
+        expect(
+          latin.map(latinLang.norm).toSet(),
+          hasLength(4),
+          reason: '$latin',
+        );
       }
     });
 
@@ -867,7 +871,7 @@ void main() {
       PracticeItem word,
       GrammarBundle bundle,
       int seed, {
-      bool avoidMacronTwins = true,
+      bool avoidFoldTwins = true,
     }) {
       final everywhere = {for (final k in word.formOrder) bundleOf(word, k)};
       return _spec(ExerciseKind.formenKette).build(
@@ -877,7 +881,7 @@ void main() {
           unlocked: everywhere,
           pool: [word],
           german: german,
-          avoidMacronTwins: avoidMacronTwins,
+          avoidFoldTwins: avoidFoldTwins,
         ),
         Random(seed),
       );
@@ -888,11 +892,11 @@ void main() {
       final twins =
           [
             for (var seed = 0; seed < 400; seed++)
-              chain(legere, 'ind.fut2.akt', seed, avoidMacronTwins: false),
+              chain(legere, 'ind.fut2.akt', seed, avoidFoldTwins: false),
           ].where(
             (e) => (e.answer as TypedAnswer).accepted
-                .map(norm)
-                .contains(norm(e.questionParams['start']!)),
+                .map(latinLang.norm)
+                .contains(latinLang.norm(e.questionParams['start']!)),
           );
       expect(twins, isNotEmpty);
     });
@@ -905,17 +909,17 @@ void main() {
         unlocked: everywhere,
         pool: [legere],
         german: german,
-        avoidMacronTwins: avoid,
+        avoidFoldTwins: avoid,
       );
       final generator = _spec(ExerciseKind.formenKette);
       final twins =
           [
             for (var seed = 0; seed < 400; seed++)
-              chain(legere, 'ind.fut2.akt', seed, avoidMacronTwins: false),
+              chain(legere, 'ind.fut2.akt', seed, avoidFoldTwins: false),
           ].where(
             (e) => (e.answer as TypedAnswer).accepted
-                .map(norm)
-                .contains(norm(e.questionParams['start']!)),
+                .map(latinLang.norm)
+                .contains(latinLang.norm(e.questionParams['start']!)),
           );
       expect(twins, isNotEmpty);
       for (final e in twins) {
@@ -950,8 +954,8 @@ void main() {
       for (var seed = 0; seed < 400; seed++) {
         final e = chain(legere, 'ind.fut2.akt', seed);
         expect(
-          (e.answer as TypedAnswer).accepted.map(norm),
-          isNot(contains(norm(e.questionParams['start']!))),
+          (e.answer as TypedAnswer).accepted.map(latinLang.norm),
+          isNot(contains(latinLang.norm(e.questionParams['start']!))),
           reason: '${e.questionParams}',
         );
       }

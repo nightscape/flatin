@@ -162,9 +162,9 @@ const _skipped = {
   'ōtiō sē dare': 'phrase or collocation',
 };
 
-String _head(String word) => normalizeDiacritics(
-  word.split(RegExp(r'[,(]')).first.trim(),
-).replaceAll(RegExp(r'[?!]'), '');
+String _head(String word) => latinLang
+    .fold(word.split(RegExp(r'[,(]')).first.trim())
+    .replaceAll(RegExp(r'[?!]'), '');
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -174,7 +174,7 @@ void main() {
     () async {
       final lessons = await loadLessonData([latinCourse.books.first]);
       final items = await loadAllPracticeItems();
-      final lemmas = {for (final i in items) normalizeDiacritics(i.lemma)};
+      final lemmas = {for (final i in items) latinLang.fold(i.lemma)};
 
       final words = {for (final ws in lessons.lessonWords.values) ...ws};
       final uncovered = {
@@ -184,7 +184,7 @@ void main() {
 
       expect(uncovered.difference(_formOf.keys.toSet()), _skipped.keys.toSet());
       for (final lemma in _formOf.values) {
-        expect(lemmas, contains(normalizeDiacritics(lemma)), reason: lemma);
+        expect(lemmas, contains(latinLang.fold(lemma)), reason: lemma);
       }
     },
   );
@@ -202,7 +202,7 @@ void main() {
       }
       for (final entry in byHead.entries.where((e) => e.value.length > 1)) {
         final matching = items.where(
-          (i) => normalizeDiacritics(i.lemma) == entry.key,
+          (i) => latinLang.fold(i.lemma) == entry.key,
         );
         expect(
           matching.length,

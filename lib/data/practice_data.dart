@@ -3,6 +3,7 @@ import 'dart:async';
 import 'asset_text.dart';
 import '../grammar/engine.dart';
 import '../grammar/schema.dart';
+import 'languages/language.dart' show Language;
 import '../models/course.dart';
 import '../models/derivation.dart';
 import '../models/practice_item.dart';
@@ -52,9 +53,10 @@ class _Parsed {
 class _Loaded {
   final Course course;
   final Map<String, String> sources;
+  final Language lang;
   final Map<String, _Parsed> _byLanguage = {};
 
-  _Loaded(this.course, this.sources) {
+  _Loaded(this.course, this.sources, this.lang) {
     checkDataFileIds(course, {
       for (final file in parsed(courseLanguage).engine.files)
         file.path: file.dataFileId,
@@ -62,7 +64,7 @@ class _Loaded {
   }
 
   _Parsed parsed(String language) => _byLanguage[language] ??= _Parsed(
-    GrammarEngine(parseGrammarFiles(sources, language: language)),
+    GrammarEngine(parseGrammarFiles(sources, lang: lang, language: language)),
   );
 }
 
@@ -124,7 +126,11 @@ Future<_Loaded> _parse() async {
     for (final file in course.dataFiles)
       file.path: await loadAssetText(file.path),
   };
-  return _Loaded(course, sources);
+  return _Loaded(
+    course,
+    sources,
+    Language.parse(await loadAssetText(course.language)),
+  );
 }
 
 Future<FormMetadata> getFormMetadata(

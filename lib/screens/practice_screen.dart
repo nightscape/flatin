@@ -8,7 +8,6 @@ import '../data/diagnosis.dart' show diagnose;
 import '../data/esel_steps.dart';
 import '../data/explanation.dart' show ExplanationLine;
 import '../data/word_focus.dart';
-import '../models/derivation.dart' show norm;
 import '../models/exercise.dart' show bundleOf;
 import '../models/practice_item.dart';
 import '../models/input_strategy.dart';
@@ -53,12 +52,12 @@ bool paysCoins(
   WordFocus focus = const AllWords(),
 ]) {
   final shown = {
-    norm(item.lemma),
-    for (final part in shownPrincipalParts(item)) norm(part.$2),
+    item.lang.norm(item.lemma),
+    for (final part in shownPrincipalParts(item)) item.lang.norm(part.$2),
   };
   return focus is BaseForms ||
       !item.acceptedForms[item.formOrder.indexOf(formKey)].every(
-        (f) => shown.contains(norm(f)),
+        (f) => shown.contains(item.lang.norm(f)),
       );
 }
 
@@ -646,6 +645,7 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
                                             Expanded(
                                               child: strategy.buildInput(
                                                 InputContext(
+                                                  lang: widget.item.lang,
                                                   index: index,
                                                   correctAnswer: correctAnswer,
                                                   allForms: optionForms,

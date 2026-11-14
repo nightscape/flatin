@@ -318,7 +318,7 @@ final class ExerciseContext {
   final GermanForms german;
 
   /// Whether the spec kinds leave out forms that differ only in macrons.
-  final bool avoidMacronTwins;
+  final bool avoidFoldTwins;
 
   /// Whether the learner practises a form; targets, distractors and chain
   /// steps come only from practised forms.
@@ -339,7 +339,7 @@ final class ExerciseContext {
     required this.unlocked,
     required this.pool,
     required this.german,
-    this.avoidMacronTwins = true,
+    this.avoidFoldTwins = true,
     this.formPracticed = _everyForm,
     this.stabilityOf = _neverReviewed,
     this.sentences,

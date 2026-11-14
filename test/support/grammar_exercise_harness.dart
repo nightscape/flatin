@@ -1,6 +1,6 @@
-import 'package:latin_practice/models/derivation.dart' show norm;
 import 'package:latin_practice/models/exercise.dart';
 import 'package:latin_practice/models/practice_item.dart';
+import 'latin_course.dart' show latinLang;
 
 /// A right response to [exercise] of [word] and a wrong one.
 (ExerciseResponse, ExerciseResponse) rightAndWrong(
@@ -14,7 +14,9 @@ import 'package:latin_practice/models/practice_item.dart';
   TypedAnswer(:final expected, :final accepted) => (
     TypedText(expected.text),
     TypedText(
-      word.forms.firstWhere((f) => !accepted.any((a) => norm(a) == norm(f))),
+      word.forms.firstWhere(
+        (f) => !accepted.any((a) => latinLang.norm(a) == latinLang.norm(f)),
+      ),
     ),
   ),
   PartsAnswer(:final slots) => (

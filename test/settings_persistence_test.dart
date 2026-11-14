@@ -19,7 +19,7 @@ void main() {
     final lessons = await loadLessonData(latinCourse.books);
     final word = lessons.lessonWords.values
         .expand((words) => words)
-        .firstWhere((w) => w != normalizeDiacritics(w));
+        .firstWhere((w) => w != latinLang.fold(w));
 
     final first = ProviderContainer();
     await first.read(settingsProvider.future);
@@ -83,7 +83,7 @@ void main() {
     final lessons = await loadLessonData(latinCourse.books);
     final allWords = lessons.lessonWords.values
         .expand((words) => words)
-        .map(normalizeDiacritics)
+        .map(latinLang.fold)
         .toList();
 
     SharedPreferences.setMockInitialValues({
@@ -130,7 +130,7 @@ void main() {
       // is the exact lemma of each.
       SharedPreferences.setMockInitialValues({
         'practice_settings': jsonEncode({
-          'selectedWords': [normalizeDiacritics(lessonWords.first)],
+          'selectedWords': [latinLang.fold(lessonWords.first)],
         }),
       });
 

@@ -8,7 +8,6 @@ import 'dart:math';
 import 'package:flutter/foundation.dart'
     show listEquals, mapEquals, visibleForTesting;
 
-import '../models/derivation.dart' show norm;
 import '../models/exercise.dart';
 import '../models/practice_item.dart';
 import 'exercise_choice.dart' show knowsWell;
@@ -432,7 +431,7 @@ Iterable<Slice> _principalParts(
         cube.cell(word, key),
   ].where(cube.practised).toList();
   if (!row.any((c) => c.bundle == bundle) ||
-      {for (final c in row) norm(c.word.forms[c.index])}.length <
+      {for (final c in row) word.lang.norm(c.word.forms[c.index])}.length <
           select.minParts) {
     return const [];
   }
@@ -459,7 +458,7 @@ Iterable<Slice> _principalParts(
   return prompts
       .where(
         (p) =>
-            (owners[norm(word.forms[p.index])] ?? const {}).every(
+            (owners[word.lang.norm(word.forms[p.index])] ?? const {}).every(
               (id) => id == word.id,
             ) &&
             // A part spelt like the prompt is given, not asked.
@@ -477,7 +476,7 @@ Map<String, Set<String>> _ownersOf(List<PracticeItem> pool) {
   for (final word in pool) {
     for (final spellings in word.acceptedForms) {
       for (final s in spellings) {
-        (owners[norm(s)] ??= {}).add(word.id);
+        (owners[word.lang.norm(s)] ??= {}).add(word.id);
       }
     }
   }
@@ -1054,7 +1053,7 @@ bool _clashes(Match match, Cell a, Cell b, Cube cube) =>
 /// Whether [a] and [b] clash in [view]; Latin texts that differ only in
 /// macrons clash too while the context avoids macron twins.
 bool _alike(Cube cube, View view, Cell a, Cell b) =>
-    view == View.latin && cube.ctx.avoidMacronTwins
+    view == View.latin && cube.ctx.avoidFoldTwins
     ? cube.lookAlike(a, b)
     : cube.clash(view, a, b);
 

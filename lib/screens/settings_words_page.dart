@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../data/lesson_data.dart';
 import '../models/course_filter.dart';
 import '../models/practice_item.dart';
 import '../providers/settings_provider.dart';
@@ -64,7 +63,9 @@ class _WordList extends ConsumerWidget {
     for (final item in items) {
       byLemma.putIfAbsent(item.lemma, () => item);
     }
-    final needle = normalizeDiacritics(query.trim()).toLowerCase();
+    final needle = items.isEmpty
+        ? ''
+        : items.first.lang.fold(query.trim()).toLowerCase();
 
     final rows = <Object>[];
     for (final MapEntry(key: lesson, value: words)
@@ -75,7 +76,7 @@ class _WordList extends ConsumerWidget {
         for (final lemma in words)
           if (byLemma.containsKey(lemma) &&
               filter.lessons.wordToLesson[lemma] == lesson &&
-              normalizeDiacritics(lemma).toLowerCase().contains(needle))
+              byLemma[lemma]!.lang.fold(lemma).toLowerCase().contains(needle))
             byLemma[lemma]!,
       ];
       if (matches.isEmpty) continue;

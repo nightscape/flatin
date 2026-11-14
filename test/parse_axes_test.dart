@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/grammar/schema.dart';
 import 'package:latin_practice/data/practice_data.dart';
 import 'package:yaml/yaml.dart';
+import 'support/latin_course.dart' show latinLang;
 
 YamlMap _read(String path) =>
     loadYaml(File(path).readAsStringSync()) as YamlMap;
@@ -16,7 +17,7 @@ void main() {
     'lib/data/latin_verbs.yaml',
   ]) {
     test('$path passes the axes and label checks of the schema', () async {
-      final axes = parseAxes(_read(path), path: path);
+      final axes = parseAxes(lang: latinLang, _read(path), path: path);
       final metadata = await getFormMetadata(path);
 
       expect(metadata.formOrder, isNotEmpty);
@@ -32,7 +33,11 @@ void main() {
   test('S1: a code declared by two axes is rejected', () {
     final root = _read('test/data/duplicate_code.yaml');
     expect(
-      () => parseAxes(root, path: 'test/data/duplicate_code.yaml'),
+      () => parseAxes(
+        lang: latinLang,
+        root,
+        path: 'test/data/duplicate_code.yaml',
+      ),
       throwsA(isA<SchemaError>()),
     );
   });
