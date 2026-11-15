@@ -14,6 +14,7 @@ import 'package:latin_practice/data/word_focus.dart';
 import 'package:latin_practice/models/reward.dart';
 import 'package:latin_practice/models/settings.dart';
 import 'package:latin_practice/providers/curriculum_provider.dart';
+import 'package:latin_practice/providers/exam_provider.dart';
 import 'package:latin_practice/providers/fsrs_provider.dart';
 import 'package:latin_practice/providers/round_providers.dart';
 import 'package:latin_practice/screens/practice_screen.dart';
@@ -26,7 +27,6 @@ import '../support/round_driver.dart';
 import '../support/store_picture.dart';
 import '../support/word_classification_harness.dart' show letItLoad;
 import 'glossary.dart';
-import '../support/latin_course.dart' show latinLang;
 
 /// A widget that can be found again by key after a rebuild.
 bool _isKeyed(Widget widget) => widget.key is ValueKey<String>;
@@ -436,6 +436,7 @@ class AppSteps {
     );
     final byType = await container.read(practicableItemsByTypeProvider.future);
     final filter = await container.read(courseFilterProvider.future);
+    final lang = await container.read(examLanguageProvider.future);
     final word = tester
         .widget<Text>(find.byKey(const Key('wordClassification.word')))
         .data!;
@@ -444,7 +445,7 @@ class AppSteps {
           // vocabulary data, not a UI translation
           find.text(i.translation).evaluate().isNotEmpty &&
           i.acceptedForms.any(
-            (fs) => fs.any((f) => latinLang.norm(f) == latinLang.norm(word)),
+            (fs) => fs.any((f) => lang.norm(f) == lang.norm(word)),
           ),
     );
     final enabled = filter.practicedForms(item.dataFileId, item.formLabels);
@@ -453,7 +454,7 @@ class AppSteps {
           for (var i = 0; i < item.forms.length; i++)
             enabled.contains(item.formOrder[i]) &&
                 item.acceptedForms[i].any(
-                  (f) => latinLang.norm(f) == latinLang.norm(word),
+                  (f) => lang.norm(f) == lang.norm(word),
                 ),
         ].indexOf(true)];
     final selectors = selectorsFor(item.filterForms(enabled).labels);
