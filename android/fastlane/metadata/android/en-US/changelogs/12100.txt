@@ -1,0 +1,4 @@
+* Tap a Latin form in a task to mark where the stem ends and the ending begins.
+* In exam practice, the word sheet now shows the lesson of a word, its word type, its form and its function in the sentence.
+* Model translations place punctuation and German quotes correctly.
+* Long book names in the course progress are shortened.

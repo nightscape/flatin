@@ -1,0 +1,4 @@
+* Tippe in einer Aufgabe auf eine lateinische Form, um zu markieren, wo der Stamm endet und die Endung beginnt.
+* Beim Prüfung üben zeigt das Wortblatt jetzt die Lektion eines Worts, seine Wortart, seine Form und seine Satzfunktion.
+* Musterübersetzungen setzen Satzzeichen und deutsche Anführungszeichen richtig.
+* Lange Buchnamen im Kursstand werden gekürzt.
