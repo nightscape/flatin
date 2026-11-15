@@ -2,6 +2,7 @@ import 'package:yaml/yaml.dart';
 
 import '../models/course.dart';
 import 'asset_text.dart';
+import 'languages/language.dart';
 
 /// One word of a sentence, as the sentence spells it.
 sealed class SentenceToken {
@@ -26,33 +27,9 @@ final class HeadwordToken extends SentenceToken {
   const HeadwordToken(super.text, this.headword);
 }
 
-enum ConstructionKind {
-  frageNe,
-  frageNonne,
-  frageNum,
-  aciPassiv,
-  pcPpa,
-  pcPpp,
-  doppelterAkkusativ,
-}
-
-/// The Sinnrichtung of a participium coniunctum.
-enum Meaning { temporal, kausal, konzessiv, modal }
-
-/// The typical mistake a wrong rendering makes.
-enum Mistake {
-  tempus,
-  genusVerbi,
-  bezugswort,
-  sinnrichtung,
-  frageart,
-  aussage,
-  rollen,
-  praedikativum,
-}
-
 final class Construction {
-  final ConstructionKind kind;
+  /// A code of [Language.constructions].
+  final String kind;
 
   /// Token index of the participle, the question particle or the
   /// predicative accusative.
@@ -61,15 +38,18 @@ final class Construction {
   /// Token index of the word [head] refers to; null for a question.
   final int? reference;
 
-  /// Non-empty exactly for a participium coniunctum.
-  final List<Meaning> meanings;
+  /// Codes of [Language.meanings]; non-empty exactly when the construction
+  /// [ConstructionRule.hasMeaning].
+  final List<String> meanings;
 
   const Construction(this.kind, this.head, this.reference, this.meanings);
 }
 
 final class WrongRendering {
   final String german;
-  final Mistake mistake;
+
+  /// A code of [Language.mistakes].
+  final String mistake;
   const WrongRendering(this.german, this.mistake);
 }
 
@@ -78,7 +58,7 @@ final class Sentence {
 
   /// The lesson whose words and grammar the sentence stays within.
   final int lesson;
-  final String latin;
+  final String text;
   final List<SentenceToken> tokens;
   final Construction construction;
   final List<String> right;
@@ -87,7 +67,7 @@ final class Sentence {
   const Sentence({
     required this.id,
     required this.lesson,
-    required this.latin,
+    required this.text,
     required this.tokens,
     required this.construction,
     required this.right,
@@ -96,64 +76,73 @@ final class Sentence {
 }
 
 final class SentenceCorpus {
+  /// The language whose codes the sentences use.
+  final Language language;
   final List<Sentence> sentences;
-  const SentenceCorpus(this.sentences);
+  const SentenceCorpus(this.language, this.sentences);
 }
 
-Future<SentenceCorpus> loadSentenceCorpus() async =>
-    parseSentenceCorpus(await loadAssetText((await loadCourse()).sentences));
+Future<SentenceCorpus> loadSentenceCorpus() async => parseSentenceCorpus(
+  await loadAssetText((await loadCourse()).sentences),
+  await loadLanguage(),
+);
 
-SentenceCorpus parseSentenceCorpus(String source) {
+/// Throws when a sentence uses a code that [language] lacks.
+SentenceCorpus parseSentenceCorpus(String source, Language language) {
   final yaml = loadYaml(source) as YamlMap;
   final ids = <String>{};
   final sentences = [
     for (final entry in yaml['sentences'] as YamlList)
-      _sentence(entry as YamlMap),
+      _sentence(entry as YamlMap, language),
   ];
   for (final s in sentences) {
     if (!ids.add(s.id)) throw StateError('sentence id "${s.id}" is twice');
   }
-  return SentenceCorpus(sentences);
+  return SentenceCorpus(language, sentences);
 }
 
-Sentence _sentence(YamlMap map) {
+Sentence _sentence(YamlMap map, Language language) {
   final id = map['id'] as String;
   final tokens = [
     for (final t in map['tokens'] as YamlList)
       _token((t as YamlList).cast<String>(), id),
   ];
   final c = map['construction'] as YamlMap;
-  final construction = Construction(
-    ConstructionKind.values.byName(c['kind'] as String),
-    c['head'] as int,
-    c['reference'] as int?,
-    [
-      for (final m in c['meaning'] as YamlList? ?? const [])
-        Meaning.values.byName(m as String),
-    ],
+  final kind = _code(
+    c['kind'],
+    language.constructions.keys,
+    'construction',
+    id,
   );
-  final isPc = const {
-    ConstructionKind.pcPpa,
-    ConstructionKind.pcPpp,
-  }.contains(construction.kind);
-  final isQuestion = construction.kind.name.startsWith('frage');
+  final rule = language.constructions[kind]!;
+  final construction =
+      Construction(kind, c['head'] as int, c['reference'] as int?, [
+        for (final m in c['meaning'] as YamlList? ?? const [])
+          _code(m, language.meanings, 'meaning', id),
+      ]);
   for (final index in [construction.head, ?construction.reference]) {
     if (index < 0 || index >= tokens.length) {
       throw StateError('$id: token index $index is outside the sentence');
     }
   }
-  if ((construction.reference == null) != isQuestion) {
-    throw StateError('$id: only a question has no reference word');
+  if ((construction.reference != null) != rule.hasReference) {
+    throw StateError(
+      '$id: $kind ${rule.hasReference ? 'needs' : 'has no'} '
+      'reference word',
+    );
   }
-  if (construction.meanings.isEmpty == isPc) {
-    throw StateError('$id: exactly a participium coniunctum has a meaning');
+  if (construction.meanings.isNotEmpty != rule.hasMeaning) {
+    throw StateError(
+      '$id: $kind ${rule.hasMeaning ? 'needs' : 'has no'} '
+      'meaning',
+    );
   }
   final right = (map['right'] as YamlList).cast<String>().toList();
   final wrong = [
     for (final w in map['wrong'] as YamlList)
       WrongRendering(
         (w as YamlMap)['de'] as String,
-        Mistake.values.byName(w['mistake'] as String),
+        _code(w['mistake'], language.mistakes, 'mistake', id),
       ),
   ];
   if (right.length < 2 || right.length > 4) {
@@ -165,7 +154,7 @@ Sentence _sentence(YamlMap map) {
   return Sentence(
     id: id,
     lesson: map['lesson'] as int,
-    latin: map['latin'] as String,
+    text: map['text'] as String,
     tokens: tokens,
     construction: construction,
     right: right,
@@ -179,3 +168,8 @@ SentenceToken _token(List<String> fields, String id) => switch (fields) {
   [final text, final lemma, final key] => FormToken(text, lemma, key),
   _ => throw StateError('$id: token $fields has no 1-3 fields'),
 };
+
+String _code(Object? code, Iterable<String> known, String what, String id) =>
+    known.contains(code)
+    ? code as String
+    : throw StateError('$id: "$code" is no $what of the language');

@@ -32,6 +32,15 @@ final class Language {
   final List<String> sinnrichtung;
   final ExamRules rules;
 
+  /// The constructions a sentence of the corpus illustrates, by code.
+  final Map<String, ConstructionRule> constructions;
+
+  /// The meaning codes of a construction with [ConstructionRule.hasMeaning].
+  final List<String> meanings;
+
+  /// The codes of the typical mistakes a wrong rendering makes.
+  final List<String> mistakes;
+
   Language._(
     this.id,
     this.name,
@@ -45,6 +54,9 @@ final class Language {
     this.clauseArt,
     this.sinnrichtung,
     this.rules,
+    this.constructions,
+    this.meanings,
+    this.mistakes,
   );
 
   /// Every code list by its path in the language file.
@@ -100,6 +112,13 @@ final class Language {
       _strings(clause['art']),
       _strings(clause['sinnrichtung']),
       ExamRules._parse(y['rules'] as YamlMap),
+      Map.unmodifiable({
+        for (final MapEntry(:key, :value)
+            in (y['constructions'] as YamlMap).entries)
+          key as String: ConstructionRule._parse(key, value as YamlMap),
+      }),
+      _strings(y['meanings']),
+      _strings(y['mistakes']),
     );
     language._check();
     return language;
@@ -164,6 +183,42 @@ final class Language {
       codes(c.infinitive);
       codes(c.infinitiveAux);
     }
+  }
+}
+
+/// The words of a construction a learner can mark; each names a feedback key
+/// `exercise.tap.feedback.<role>`.
+enum PillRole { participle, reference, subject, predicative, object }
+
+/// What a construction code of a sentence must have: a [hasReference] word
+/// and a [hasMeaning] list. [roles] is the pills a learner puts on the head
+/// and the reference word; present exactly when [hasReference].
+final class ConstructionRule {
+  final bool hasReference;
+  final bool hasMeaning;
+  final ({PillRole head, PillRole reference})? roles;
+  ConstructionRule._(this.hasReference, this.hasMeaning, this.roles);
+
+  factory ConstructionRule._parse(String code, YamlMap y) {
+    final path = 'constructions.$code';
+    final hasReference = y['reference'] as bool;
+    final roles = y['roles'] as YamlMap?;
+    if ((roles != null) != hasReference) {
+      throw FormatException(
+        '$path: roles are given exactly when the construction has a reference',
+      );
+    }
+    PillRole role(String key) {
+      final name = roles![key];
+      return PillRole.values.asNameMap()[name] ??
+          (throw FormatException('$path.roles.$key: "$name" is no pill role'));
+    }
+
+    return ConstructionRule._(
+      hasReference,
+      y['meaning'] as bool,
+      roles == null ? null : (head: role('head'), reference: role('reference')),
+    );
   }
 }
 

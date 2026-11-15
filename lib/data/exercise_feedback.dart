@@ -110,7 +110,7 @@ List<ExplanationLine> feedbackLines(
         switch ((mistake, ticked.contains(i))) {
           (null, true) => 'exercise.ticks.feedback.rightTicked',
           (null, false) => 'exercise.ticks.feedback.rightLeft',
-          (final m?, true) => 'exercise.ticks.feedback.wrongTicked.${m.name}',
+          (final m?, true) => 'exercise.ticks.feedback.wrongTicked.$m',
           (_?, false) => 'exercise.ticks.feedback.wrongLeft',
         },
         params: {'text': text},

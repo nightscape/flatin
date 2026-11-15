@@ -5,7 +5,6 @@ library;
 
 import '../models/exercise.dart';
 import 'exercise_cube.dart';
-import 'sentences.dart' show ConstructionKind;
 
 /// One kind of exercise.
 /// Produced in `exercise_kinds.dart`; read by the interpreter.
@@ -107,11 +106,13 @@ final class PrincipalParts extends Selection {
 
 /// A sentence of the context's corpus the learner can see: of a lesson up to
 /// the reached one, every form an unlocked cell of a pool word, its
-/// construction kind's name in [constructions] when given.
+/// construction kind's name in [constructions] when given, and with pill
+/// roles when [withRoles].
 final class OneSentence extends Selection {
   final Set<String>? constructions;
+  final bool withRoles;
 
-  const OneSentence({this.constructions});
+  const OneSentence({this.constructions, this.withRoles = false});
 }
 
 /// How a [Spoil] builds its wrong text.
@@ -209,11 +210,10 @@ final class Sort extends AnswerSpec {
 }
 
 /// The learner puts one pill on each marked word of a [OneSentence]'s
-/// construction: per kind the roles of its head and its reference word.
+/// construction: the roles of its head and its reference word, which the
+/// language file gives per construction.
 final class Marks extends AnswerSpec {
-  final Map<ConstructionKind, ({String head, String reference})> roles;
-
-  const Marks(this.roles);
+  const Marks();
 }
 
 /// The learner ticks every right German rendering of a [OneSentence] among

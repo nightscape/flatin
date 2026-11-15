@@ -99,7 +99,7 @@ List<Sentence> visibleSentences(
   return [
     for (final s in corpus.sentences)
       if (s.lesson <= learner.reached &&
-          (constructions?.contains(s.construction.kind.name) ?? true) &&
+          (constructions?.contains(s.construction.kind) ?? true) &&
           s.tokens.whereType<FormToken>().every(placed))
         s,
   ];

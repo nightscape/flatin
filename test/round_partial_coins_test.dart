@@ -268,10 +268,10 @@ void main() {
       'before', () async {
     final sentence = (await loadSentenceCorpus()).sentences.first;
     final word = (await loadAllPracticeItems()).first;
-    ({String text, Mistake? mistake}) right(int i) =>
+    ({String text, String? mistake}) right(int i) =>
         (text: 'right $i', mistake: null);
-    ({String text, Mistake? mistake}) wrong(int i) =>
-        (text: 'wrong $i', mistake: Mistake.values.first);
+    ({String text, String? mistake}) wrong(int i) =>
+        (text: 'wrong $i', mistake: sentence.wrong.first.mistake);
     MarksAnswer marks(int words, List<int> pills) => MarksAnswer(
       'fixed',
       [for (var w = 0; w < words; w++) 'w$w'],

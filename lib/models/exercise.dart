@@ -197,7 +197,7 @@ final class MarksAnswer extends ExerciseAnswer {
 /// mistake. At most half of them are right, so a blind tick does not pay.
 final class TickAnswer extends ExerciseAnswer {
   final Sentence sentence;
-  final List<({String text, Mistake? mistake})> options;
+  final List<({String text, String? mistake})> options;
 
   TickAnswer(this.sentence, this.options) {
     assert(

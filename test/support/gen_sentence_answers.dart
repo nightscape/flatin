@@ -33,7 +33,7 @@ TickAnswer drawTickAnswer(Random rng, Sentence sentence) {
           text: 'option $i',
           mistake: i < k
               ? null
-              : Mistake.values[rng.nextInt(Mistake.values.length)],
+              : sentence.wrong[rng.nextInt(sentence.wrong.length)].mistake,
         ),
     ]..shuffle(rng),
   );

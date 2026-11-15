@@ -88,11 +88,8 @@ void main() {
   test(
     'only the listed construction kinds are selected; none listed is all',
     () {
-      String kindOf(String id) => corpus.sentences
-          .singleWhere((s) => s.id == id)
-          .construction
-          .kind
-          .name;
+      String kindOf(String id) =>
+          corpus.sentences.singleWhere((s) => s.id == id).construction.kind;
       final listed = {'pcPpp', 'frageNum'};
       expect(
         selected(
@@ -102,7 +99,7 @@ void main() {
         listed,
       );
       expect(selected(context()).map(kindOf).toSet(), {
-        for (final k in ConstructionKind.values) k.name,
+        ...corpus.language.constructions.keys,
       });
     },
   );
@@ -132,11 +129,11 @@ void main() {
     test('construction', () {
       final first = corpus.sentences.map((s) => s.lesson).reduce(min);
       final later = {
-        for (final k in ConstructionKind.values)
+        for (final k in corpus.language.constructions.keys)
           if (corpus.sentences
               .where((s) => s.construction.kind == k)
               .every((s) => s.lesson > first))
-            k.name,
+            k,
       };
       expect(later, isNotEmpty);
       expect(
@@ -240,7 +237,7 @@ void main() {
   });
 
   test('the selection equals the filters applied one by one', () {
-    final names = [for (final k in ConstructionKind.values) k.name];
+    final names = [...corpus.language.constructions.keys];
     final rng = Random(349);
     final outcomes = <String, int>{};
     for (var run = 0; run < 400; run++) {

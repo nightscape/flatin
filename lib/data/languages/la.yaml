@@ -1,5 +1,6 @@
 # The Latin language: the analysis codes of `.exam` packs
-# (lib/data/EXAM_SCHEMA.md) and the parameters of the exam rules.
+# (lib/data/EXAM_SCHEMA.md), the parameters of the exam rules, and the codes
+# of the sentence corpus (lib/data/SCHEMA.md "Sentence corpus").
 id: la
 name: {de: Latein, en: Latin}
 
@@ -67,3 +68,21 @@ rules:
     rolle: praedikat
     agrees: [person, numerus, modus]
     infinitive: {is: {modus: inf}, aux: {modus: inf, tempus: praes}}
+
+# The constructions of a sentence. `reference`: it has a word that its head
+# refers to; `meaning`: it has a list of meanings; `roles`: the pills of its
+# head and reference word, exactly when it has a reference.
+constructions:
+  frageNe: {reference: false, meaning: false}
+  frageNonne: {reference: false, meaning: false}
+  frageNum: {reference: false, meaning: false}
+  aciPassiv: {reference: true, meaning: false, roles: {head: participle, reference: subject}}
+  pcPpa: {reference: true, meaning: true, roles: {head: participle, reference: reference}}
+  pcPpp: {reference: true, meaning: true, roles: {head: participle, reference: reference}}
+  doppelterAkkusativ: {reference: true, meaning: false, roles: {head: predicative, reference: object}}
+
+# The meanings of a participium coniunctum (Sinnrichtung).
+meanings: [temporal, kausal, konzessiv, modal]
+
+# The typical mistakes of a wrong rendering.
+mistakes: [tempus, genusVerbi, bezugswort, sinnrichtung, frageart, aussage, rollen, praedikativum]

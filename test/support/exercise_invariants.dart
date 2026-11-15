@@ -304,7 +304,7 @@ List<String> violations(
         }
       }
     case (
-      Marks(:final roles),
+      Marks(),
       MarksAnswer(:final sentenceId, :final words, :final pills, :final target),
     ):
       final s = ctx.sentences!.sentences.singleWhere((s) => s.id == sentenceId);
@@ -315,11 +315,11 @@ List<String> violations(
       if (!listEquals(words, [for (final t in s.tokens) t.text])) {
         found.add('words $words are not those of $sentenceId');
       }
-      final role = roles[c.kind];
+      final role = ctx.sentences!.language.constructions[c.kind]!.roles;
       if (role == null ||
           !listEquals(pills, [
-            (role: role.head, word: c.head),
-            (role: role.reference, word: c.reference!),
+            (role: role.head.name, word: c.head),
+            (role: role.reference.name, word: c.reference!),
           ])) {
         found.add('pills $pills are not the marks of $sentenceId');
       }
@@ -349,7 +349,7 @@ List<String> violations(
           found.add('${o.text} is no such rendering of ${sentence.id}');
         }
       }
-      if (e.questionParams['sentence'] != sentence.latin) {
+      if (e.questionParams['sentence'] != sentence.text) {
         found.add('the question shows ${e.questionParams['sentence']}');
       }
       if (sentence.lesson > ctx.reachedLesson!) {

@@ -20,10 +20,10 @@ import 'support/grammar_exercise_harness.dart';
 /// The pills each supported construction asks, head first: the corpus marks
 /// a construction's head and its reference word.
 const _roles = {
-  ConstructionKind.pcPpa: ['participle', 'reference'],
-  ConstructionKind.pcPpp: ['participle', 'reference'],
-  ConstructionKind.aciPassiv: ['participle', 'subject'],
-  ConstructionKind.doppelterAkkusativ: ['predicative', 'object'],
+  'pcPpa': ['participle', 'reference'],
+  'pcPpp': ['participle', 'reference'],
+  'aciPassiv': ['participle', 'subject'],
+  'doppelterAkkusativ': ['predicative', 'object'],
 };
 
 /// The rating rule written as shares: all right Good, half or more Hard,
@@ -126,7 +126,7 @@ void main() {
     final visible = visibleSentences(
       corpus,
       learner,
-      constructions: {for (final k in _roles.keys) k.name},
+      constructions: _roles.keys.toSet(),
     );
     final pillsOf = [
       for (final s in visible) [s.construction.head, s.construction.reference!],

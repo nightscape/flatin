@@ -54,11 +54,11 @@ Iterable<Set<int>> _tickSets(int n) => [
     },
 ];
 
-String _feedbackKey(({String text, Mistake? mistake}) option, bool ticked) =>
+String _feedbackKey(({String text, String? mistake}) option, bool ticked) =>
     switch ((option.mistake, ticked)) {
       (null, true) => 'exercise.ticks.feedback.rightTicked',
       (null, false) => 'exercise.ticks.feedback.rightLeft',
-      (final m?, true) => 'exercise.ticks.feedback.wrongTicked.${m.name}',
+      (final m?, true) => 'exercise.ticks.feedback.wrongTicked.$m',
       (_?, false) => 'exercise.ticks.feedback.wrongLeft',
     };
 
@@ -210,9 +210,9 @@ void main() {
     final sentence = world.corpus.sentences.firstWhere(
       (s) => s.wrong.length == 3,
     );
-    ({String text, Mistake? mistake}) right(int i) =>
+    ({String text, String? mistake}) right(int i) =>
         (text: sentence.right[i], mistake: null);
-    ({String text, Mistake? mistake}) wrong(int i) =>
+    ({String text, String? mistake}) wrong(int i) =>
         (text: sentence.wrong[i].german, mistake: sentence.wrong[i].mistake);
     final k2 = TickAnswer(sentence, [right(0), right(1), wrong(0), wrong(1)]);
     final k1 = TickAnswer(sentence, [right(0), wrong(0), wrong(1), wrong(2)]);

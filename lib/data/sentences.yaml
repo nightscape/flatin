@@ -10,7 +10,7 @@ sentences:
   # --- L24: questions with -ne, nōnne, num -----------------------------------
   - id: l24-ne-1
     lesson: 24
-    latin: "Vīdistīne hominem in forō?"
+    text: "Vīdistīne hominem in forō?"
     tokens:
       - [vīdistī, vidēre, ind.perf.akt.2.sg]
       - [-ne]
@@ -28,7 +28,7 @@ sentences:
 
   - id: l24-ne-2
     lesson: 24
-    latin: "Audīvistisne clāmōrem mīlitum?"
+    text: "Audīvistisne clāmōrem mīlitum?"
     tokens:
       - [audīvistis, audīre, ind.perf.akt.2.pl]
       - [-ne]
@@ -44,7 +44,7 @@ sentences:
 
   - id: l24-ne-3
     lesson: 24
-    latin: "Timēsne perīcula maris?"
+    text: "Timēsne perīcula maris?"
     tokens:
       - [timēs, timēre, ind.praes.akt.2.sg]
       - [-ne]
@@ -61,7 +61,7 @@ sentences:
 
   - id: l24-nonne-1
     lesson: 24
-    latin: "Nōnne pater fīlium laudibus afficit?"
+    text: "Nōnne pater fīlium laudibus afficit?"
     tokens:
       - [nōnne, nōnne, grund]
       - [pater, pater, nom.sg]
@@ -80,7 +80,7 @@ sentences:
 
   - id: l24-nonne-2
     lesson: 24
-    latin: "Nōnne mīlitēs urbem incendērunt?"
+    text: "Nōnne mīlitēs urbem incendērunt?"
     tokens:
       - [nōnne, nōnne, grund]
       - [mīlitēs, mīles, nom.pl]
@@ -98,7 +98,7 @@ sentences:
 
   - id: l24-nonne-3
     lesson: 24
-    latin: "Nōnne dominus servum pūnīvit?"
+    text: "Nōnne dominus servum pūnīvit?"
     tokens:
       - [nōnne, nōnne, grund]
       - [dominus, dominus, nom.sg]
@@ -114,7 +114,7 @@ sentences:
 
   - id: l24-num-1
     lesson: 24
-    latin: "Num deī hominēs relinquunt?"
+    text: "Num deī hominēs relinquunt?"
     tokens:
       - [num, num, grund]
       - [deī, deus, nom.pl]
@@ -132,7 +132,7 @@ sentences:
 
   - id: l24-num-2
     lesson: 24
-    latin: "Num mīles hostem timet?"
+    text: "Num mīles hostem timet?"
     tokens:
       - [num, num, grund]
       - [mīles, mīles, nom.sg]
@@ -149,7 +149,7 @@ sentences:
 
   - id: l24-num-3
     lesson: 24
-    latin: "Num amīcī nōs relīquērunt?"
+    text: "Num amīcī nōs relīquērunt?"
     tokens:
       - [num, num, grund]
       - [amīcī, amīcus, nom.pl]
@@ -168,7 +168,7 @@ sentences:
   # --- L24: passive AcI (Infinitiv Perfekt Passiv) ---------------------------
   - id: l24-aci-1
     lesson: 24
-    latin: "Mīles dīcit urbem captam esse."
+    text: "Mīles dīcit urbem captam esse."
     tokens:
       - [mīles, mīles, nom.sg]
       - [dīcit, dīcere, ind.praes.akt.3.sg]
@@ -186,7 +186,7 @@ sentences:
 
   - id: l24-aci-2
     lesson: 24
-    latin: "Cīvēs audīvērunt hostēs victōs esse."
+    text: "Cīvēs audīvērunt hostēs victōs esse."
     tokens:
       - [cīvēs, cīvis, nom.pl]
       - [audīvērunt, audīre, ind.perf.akt.3.pl]
@@ -204,7 +204,7 @@ sentences:
 
   - id: l24-aci-3
     lesson: 24
-    latin: "Senātor scit templa violāta esse."
+    text: "Senātor scit templa violāta esse."
     tokens:
       - [senātor, senātor, nom.sg]
       - [scit, scīre, ind.praes.akt.3.sg]
@@ -221,7 +221,7 @@ sentences:
 
   - id: l24-aci-4
     lesson: 24
-    latin: "Rēx cōgnōscit fīliam suam abductam esse."
+    text: "Rēx cōgnōscit fīliam suam abductam esse."
     tokens:
       - [rēx, rēx, nom.sg]
       - [cōgnōscit, cōgnōscere, ind.praes.akt.3.sg]
@@ -240,7 +240,7 @@ sentences:
 
   - id: l24-aci-5
     lesson: 24
-    latin: "Mercātor putat nāvem dēlētam esse."
+    text: "Mercātor putat nāvem dēlētam esse."
     tokens:
       - [mercātor, mercātor, nom.sg]
       - [putat, putāre, ind.praes.akt.3.sg]
@@ -257,7 +257,7 @@ sentences:
 
   - id: l24-aci-6
     lesson: 24
-    latin: "Māter videt cēnam parātam esse."
+    text: "Māter videt cēnam parātam esse."
     tokens:
       - [māter, māter, nom.sg]
       - [videt, vidēre, ind.praes.akt.3.sg]
@@ -274,7 +274,7 @@ sentences:
 
   - id: l24-aci-7
     lesson: 24
-    latin: "Omnēs sciunt oppidum dolō captum esse."
+    text: "Omnēs sciunt oppidum dolō captum esse."
     tokens:
       - [omnēs, omnis, nom.pl.m.pos]
       - [sciunt, scīre, ind.praes.akt.3.pl]
@@ -293,7 +293,7 @@ sentences:
 
   - id: l24-aci-8
     lesson: 24
-    latin: "Pater audit fīlium servātum esse."
+    text: "Pater audit fīlium servātum esse."
     tokens:
       - [pater, pater, nom.sg]
       - [audit, audīre, ind.praes.akt.3.sg]
@@ -312,7 +312,7 @@ sentences:
   # --- L25: PPP as participium coniunctum ------------------------------------
   - id: l25-ppp-1
     lesson: 25
-    latin: "Mīlitēs ab hostibus captī pācem petīvērunt."
+    text: "Mīlitēs ab hostibus captī pācem petīvērunt."
     tokens:
       - [mīlitēs, mīles, nom.pl]
       - [ab]
@@ -333,7 +333,7 @@ sentences:
 
   - id: l25-ppp-2
     lesson: 25
-    latin: "Servus ā dominō pūnītus tacuit."
+    text: "Servus ā dominō pūnītus tacuit."
     tokens:
       - [servus, servus, nom.sg]
       - [ā]
@@ -352,7 +352,7 @@ sentences:
 
   - id: l25-ppp-3
     lesson: 25
-    latin: "Hostēs saepe victī tamen pūgnāvērunt."
+    text: "Hostēs saepe victī tamen pūgnāvērunt."
     tokens:
       - [hostēs, hostis, nom.pl]
       - [saepe]
@@ -370,7 +370,7 @@ sentences:
 
   - id: l25-ppp-4
     lesson: 25
-    latin: "Pater fīliam ā mīlitibus servātam domum dūxit."
+    text: "Pater fīliam ā mīlitibus servātam domum dūxit."
     tokens:
       - [pater, pater, nom.sg]
       - [fīliam, fīlia, akk.sg]
@@ -392,7 +392,7 @@ sentences:
 
   - id: l25-ppp-5
     lesson: 25
-    latin: "Cīvēs ab hostibus territī in urbem fūgērunt."
+    text: "Cīvēs ab hostibus territī in urbem fūgērunt."
     tokens:
       - [cīvēs, cīvis, nom.pl]
       - [ab]
@@ -413,7 +413,7 @@ sentences:
 
   - id: l25-ppp-6
     lesson: 25
-    latin: "Plēbs lēgem ā senātōribus statūtam neglēxit."
+    text: "Plēbs lēgem ā senātōribus statūtam neglēxit."
     tokens:
       - [plēbs, plēbs, nom.sg]
       - [lēgem, lēx, akk.sg]
@@ -432,7 +432,7 @@ sentences:
 
   - id: l25-ppp-7
     lesson: 25
-    latin: "Rōmānī urbem diū oppūgnātam tandem cēpērunt."
+    text: "Rōmānī urbem diū oppūgnātam tandem cēpērunt."
     tokens:
       - [Rōmānī, Rōmānus, nom.pl]
       - [urbem, urbs, akk.sg]
@@ -452,7 +452,7 @@ sentences:
 
   - id: l25-ppp-8
     lesson: 25
-    latin: "Mulier ā taurō petīta clāmāvit."
+    text: "Mulier ā taurō petīta clāmāvit."
     tokens:
       - [mulier, mulier, nom.sg]
       - [ā]
@@ -472,7 +472,7 @@ sentences:
   # --- L26: PPA as participium coniunctum ------------------------------------
   - id: l26-ppa-1
     lesson: 26
-    latin: "Puella rīdēns domum vēnit."
+    text: "Puella rīdēns domum vēnit."
     tokens:
       - [puella, puella, nom.sg]
       - [rīdēns, rīdēre, part.praes.akt.sg.nom.f]
@@ -489,7 +489,7 @@ sentences:
 
   - id: l26-ppa-2
     lesson: 26
-    latin: "Hominēs semper plūs cupientēs numquam beātī sunt."
+    text: "Hominēs semper plūs cupientēs numquam beātī sunt."
     tokens:
       - [hominēs, homō, nom.pl]
       - [semper]
@@ -509,7 +509,7 @@ sentences:
 
   - id: l26-ppa-3
     lesson: 26
-    latin: "Vīdī fīlium tuum in hortō lūdentem."
+    text: "Vīdī fīlium tuum in hortō lūdentem."
     tokens:
       - [vīdī, vidēre, ind.perf.akt.1.sg]
       - [fīlium, fīlius, akk.sg]
@@ -528,7 +528,7 @@ sentences:
 
   - id: l26-ppa-4
     lesson: 26
-    latin: "Mīlitēs mortem timentēs tamen fortiter pūgnāvērunt."
+    text: "Mīlitēs mortem timentēs tamen fortiter pūgnāvērunt."
     tokens:
       - [mīlitēs, mīles, nom.pl]
       - [mortem, mors, akk.sg]
@@ -547,7 +547,7 @@ sentences:
 
   - id: l26-ppa-5
     lesson: 26
-    latin: "Rēx fīliae flentī dōnum dedit."
+    text: "Rēx fīliae flentī dōnum dedit."
     tokens:
       - [rēx, rēx, nom.sg]
       - [fīliae, fīlia, dat.sg]
@@ -567,7 +567,7 @@ sentences:
 
   - id: l26-ppa-6
     lesson: 26
-    latin: "Philosophus canem in viā dormientem cōnspexit."
+    text: "Philosophus canem in viā dormientem cōnspexit."
     tokens:
       - [philosophus, philosophus, nom.sg]
       - [canem, canis, akk.sg]
@@ -586,7 +586,7 @@ sentences:
 
   - id: l26-ppa-7
     lesson: 26
-    latin: "Senātōrēs dē pāce cōnsulentēs clāmōrem audīvērunt."
+    text: "Senātōrēs dē pāce cōnsulentēs clāmōrem audīvērunt."
     tokens:
       - [senātōrēs, senātor, nom.pl]
       - [dē]
@@ -606,7 +606,7 @@ sentences:
 
   - id: l26-ppa-8
     lesson: 26
-    latin: "Fēminae apud āram sacrificantēs deōs ōrāvērunt."
+    text: "Fēminae apud āram sacrificantēs deōs ōrāvērunt."
     tokens:
       - [fēminae, fēmina, nom.pl]
       - [apud]
@@ -626,7 +626,7 @@ sentences:
   # --- L26: double accusative ------------------------------------------------
   - id: l26-dakk-1
     lesson: 26
-    latin: "Philosophī sapientiam summum bonum putant."
+    text: "Philosophī sapientiam summum bonum putant."
     tokens:
       - [philosophī, philosophus, nom.pl]
       - [sapientiam, sapientia, akk.sg]
@@ -643,7 +643,7 @@ sentences:
 
   - id: l26-dakk-2
     lesson: 26
-    latin: "Cīvēs hominem iūstum rēgem fēcērunt."
+    text: "Cīvēs hominem iūstum rēgem fēcērunt."
     tokens:
       - [cīvēs, cīvis, nom.pl]
       - [hominem, homō, akk.sg]
@@ -660,7 +660,7 @@ sentences:
 
   - id: l26-dakk-3
     lesson: 26
-    latin: "Poēta tē amīcum vocat."
+    text: "Poēta tē amīcum vocat."
     tokens:
       - [poēta, poēta, nom.sg]
       - [tē, tū, akk.sg]
@@ -676,7 +676,7 @@ sentences:
 
   - id: l26-dakk-4
     lesson: 26
-    latin: "Hominēs philosophum canem appellābant."
+    text: "Hominēs philosophum canem appellābant."
     tokens:
       - [hominēs, homō, nom.pl]
       - [philosophum, philosophus, akk.sg]
@@ -693,7 +693,7 @@ sentences:
 
   - id: l26-dakk-5
     lesson: 26
-    latin: "Rōmānī Ītaliam patriam suam putābant."
+    text: "Rōmānī Ītaliam patriam suam putābant."
     tokens:
       - [Rōmānī, Rōmānus, nom.pl]
       - [Ītaliam, Ītalia, akk.sg]
@@ -710,7 +710,7 @@ sentences:
 
   - id: l26-dakk-6
     lesson: 26
-    latin: "Philosophus mortem nōn malum putat."
+    text: "Philosophus mortem nōn malum putat."
     tokens:
       - [philosophus, philosophus, nom.sg]
       - [mortem, mors, akk.sg]
@@ -727,7 +727,7 @@ sentences:
 
   - id: l26-dakk-7
     lesson: 26
-    latin: "Rēx mē socium fēcit."
+    text: "Rēx mē socium fēcit."
     tokens:
       - [rēx, rēx, nom.sg]
       - [mē, ego, akk.sg]
@@ -744,7 +744,7 @@ sentences:
 
   - id: l26-dakk-8
     lesson: 26
-    latin: "Cīvēs senātōrem iūstum patrem patriae appellāvērunt."
+    text: "Cīvēs senātōrem iūstum patrem patriae appellāvērunt."
     tokens:
       - [cīvēs, cīvis, nom.pl]
       - [senātōrem, senātor, akk.sg]

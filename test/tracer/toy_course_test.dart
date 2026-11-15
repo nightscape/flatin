@@ -63,6 +63,7 @@ void main() {
     expect(
       parseSentenceCorpus(
         File('$toyDir/toy_sentences.yaml').readAsStringSync(),
+        Language.parse(File('$toyDir/toy_language.yaml').readAsStringSync()),
       ).sentences,
       isEmpty,
     );

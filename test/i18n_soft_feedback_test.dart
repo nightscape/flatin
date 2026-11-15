@@ -59,7 +59,7 @@ void main() {
     );
     final s = world.corpus.sentences.singleWhere((s) => s.id == 'l24-ne-1');
     return [
-      for (final m in Mistake.values)
+      for (final m in world.corpus.language.mistakes)
         (
           homo,
           Exercise(

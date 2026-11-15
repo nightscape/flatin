@@ -50,22 +50,15 @@ void main() {
   });
 
   test('the corpus covers each topic of lessons 24-26', () {
-    final count = <ConstructionKind, int>{};
+    final count = <String, int>{};
     for (final s in corpus.sentences) {
       count.update(s.construction.kind, (n) => n + 1, ifAbsent: () => 1);
     }
     final questions =
-        count[ConstructionKind.frageNe]! +
-        count[ConstructionKind.frageNonne]! +
-        count[ConstructionKind.frageNum]!;
+        count['frageNe']! + count['frageNonne']! + count['frageNum']!;
     expect(questions, greaterThanOrEqualTo(8));
-    for (final kind in [
-      ConstructionKind.aciPassiv,
-      ConstructionKind.pcPpa,
-      ConstructionKind.pcPpp,
-      ConstructionKind.doppelterAkkusativ,
-    ]) {
-      expect(count[kind], greaterThanOrEqualTo(8), reason: kind.name);
+    for (final kind in ['aciPassiv', 'pcPpa', 'pcPpp', 'doppelterAkkusativ']) {
+      expect(count[kind], greaterThanOrEqualTo(8), reason: kind);
     }
   });
 }
@@ -92,15 +85,15 @@ const _checkedGenders = {
 };
 
 const _participleOf = {
-  ConstructionKind.pcPpa: 'part.praes.akt.',
-  ConstructionKind.pcPpp: 'part.perf.pass.',
-  ConstructionKind.aciPassiv: 'part.perf.pass.',
+  'pcPpa': 'part.praes.akt.',
+  'pcPpp': 'part.perf.pass.',
+  'aciPassiv': 'part.perf.pass.',
 };
 
 const _particleOf = {
-  ConstructionKind.frageNe: '-ne',
-  ConstructionKind.frageNonne: 'nōnne',
-  ConstructionKind.frageNum: 'num',
+  'frageNe': '-ne',
+  'frageNonne': 'nōnne',
+  'frageNum': 'num',
 };
 
 final class _Checker {
@@ -119,7 +112,7 @@ final class _Checker {
         .map((t) => t.isEnclitic ? t.text.substring(1) : ' ${t.text}')
         .join()
         .trim();
-    final words = s.latin.replaceAll(RegExp(r'[.,?!;:]'), '');
+    final words = s.text.replaceAll(RegExp(r'[.,?!;:]'), '');
     if (joined.toLowerCase() != words.toLowerCase()) {
       fail('tokens spell "$joined", the sentence "$words"');
     }
@@ -180,7 +173,7 @@ final class _Checker {
         HeadwordToken(:final headword) => headword,
       };
       if (word != particle) {
-        fail('the head of ${c.kind.name} is "${head.text}", not $particle');
+        fail('the head of ${c.kind} is "${head.text}", not $particle');
       }
       return;
     }
@@ -192,7 +185,7 @@ final class _Checker {
     }
     final reference = s.tokens[c.reference!] as FormToken;
 
-    if (c.kind == ConstructionKind.doppelterAkkusativ) {
+    if (c.kind == 'doppelterAkkusativ') {
       if (headFeatures['kasus'] != 'akk' || refFeatures['kasus'] != 'akk') {
         fail('a double accusative needs two accusatives');
       }
@@ -220,7 +213,7 @@ final class _Checker {
       }
     }
 
-    if (c.kind == ConstructionKind.aciPassiv) {
+    if (c.kind == 'aciPassiv') {
       if (refFeatures['kasus'] != 'akk') {
         fail('the subject of an AcI "${reference.text}" is no accusative');
       }

@@ -280,14 +280,24 @@ List<Slice> sentenceSlices(OneSentence select, Cube cube) {
       if (s.lesson <= reached) s,
   ];
   if (left.isEmpty) throw CannotBuild('no sentence up to lesson $reached');
+  if (select.withRoles) {
+    left = [
+      for (final s in left)
+        if (corpus.language.constructions[s.construction.kind]!.roles != null)
+          s,
+    ];
+    if (left.isEmpty) {
+      throw CannotBuild('no sentence with roles up to lesson $reached');
+    }
+  }
   if (select.constructions case final kinds?) {
     assert(
-      kinds.every(ConstructionKind.values.map((k) => k.name).contains),
+      kinds.every(corpus.language.constructions.containsKey),
       '$kinds names no construction kind',
     );
     left = [
       for (final s in left)
-        if (kinds.contains(s.construction.kind.name)) s,
+        if (kinds.contains(s.construction.kind)) s,
     ];
     if (left.isEmpty) {
       throw CannotBuild('no sentence of $kinds up to lesson $reached');
@@ -796,7 +806,7 @@ Map<String, String> _paramsOf(KindSpec spec, Slice slice, Cube cube) => {
           _changeLabel(slice.path[i - 1], slice.path[i]),
       ].join(' → '),
       BundleName() => _bundleName(slice.target),
-      SentenceText() => slice.sentence!.latin,
+      SentenceText() => slice.sentence!.text,
     },
 };
 
@@ -849,14 +859,15 @@ MarksAnswer? _marks(Marks marks, Slice slice, Cube cube) {
   final s = slice.sentence!;
   final c = s.construction;
   final roles =
-      marks.roles[c.kind] ?? (throw StateError('${c.kind.name} has no pills'));
+      cube.ctx.sentences!.language.constructions[c.kind]!.roles ??
+      (throw StateError('${c.kind} has no pills'));
   final formAt = [
     for (final (i, t) in s.tokens.indexed)
       if (t is FormToken) i,
   ];
   final pills = [
-    (role: roles.head, word: c.head),
-    (role: roles.reference, word: c.reference!),
+    (role: roles.head.name, word: c.head),
+    (role: roles.reference.name, word: c.reference!),
   ];
   for (final p in pills) {
     assert(formAt.contains(p.word), '${s.id}: token ${p.word} is no form');
@@ -893,7 +904,7 @@ TickAnswer? _tick(TickMany tick, Slice slice, Random rng) {
   final k = ks[rng.nextInt(ks.length)];
   return TickAnswer(
     s,
-    <({String text, Mistake? mistake})>[
+    <({String text, String? mistake})>[
       for (final text in (s.right.toList()..shuffle(rng)).take(k))
         (text: text, mistake: null),
       for (final w in (s.wrong.toList()..shuffle(rng)).take(n - k))

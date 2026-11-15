@@ -465,8 +465,8 @@ engine and the course books.
 sentences:
   - id: l25-ppp-1              # unique
     lesson: 25                 # words and grammar stay within lessons 1..25
-    latin: "Mīlitēs ab hostibus captī pācem petīvērunt."
-    tokens:                    # the words of `latin`, in order
+    text: "Mīlitēs ab hostibus captī pācem petīvērunt."
+    tokens:                    # the words of `text`, in order
       - [mīlitēs, mīles, nom.pl]                    # text, item lemma, form key
       - [ab]                                        # a lesson headword
       - [hostibus, hostis, abl.pl]
@@ -474,14 +474,13 @@ sentences:
       - [pācem, pāx, akk.sg]
       - [petīvērunt, petere, ind.perf.akt.3.pl]
     construction:
-      kind: pcPpp              # frageNe | frageNonne | frageNum | aciPassiv
-                               # | pcPpa | pcPpp | doppelterAkkusativ
+      kind: pcPpp              # a key of `constructions` in the language file
       head: 3                  # token index: participle, question particle
                                # or predicative accusative
       reference: 0             # token index of its reference word; none for
                                # a question
-      meaning: [temporal, kausal]  # Sinnrichtung, exactly for pcPpa / pcPpp:
-                                   # temporal | kausal | konzessiv | modal
+      meaning: [temporal, kausal]  # codes of `meanings` in the language file,
+                                   # exactly when the construction has meaning
     right:                     # 2-4 right German renderings
       - "Nachdem die Soldaten … gefangen genommen worden waren, baten sie um Frieden."
     wrong:                     # 2-3 renderings, wrong under every reading
@@ -494,18 +493,20 @@ A token is `[text, lemma, key]` when the engine has an item with that lemma:
 item (et, in, `-ne`): `text` is the headword or one of its words. A
 vocabulary item's one form is `grund` (`[nōnne, nōnne, grund]`). An
 enclitic token starts with `-` and is written onto the word before it in
-`latin`.
+`text`.
 
-`mistake` is one of `tempus` (wrong tense or time relation), `genusVerbi`
-(active and passive swapped), `bezugswort` (wrong reference word),
-`sinnrichtung`, `frageart` (wrong expected answer), `aussage` (statement
-instead of question), `rollen` (subject, object or predicate swapped),
-`praedikativum` (second accusative not read as predicate).
+`construction.kind`, each `meaning` and each `mistake` are codes of the
+language file of the course (`constructions`, `meanings`, `mistakes`, see
+"Course manifest"). The loader refuses a code the language lacks, a
+`reference` on a construction without one, a missing `reference`, and a
+`meaning` list that the construction does not allow or lacks, each with the
+sentence id in the error. `mistake` also names the i18n key of its feedback
+(`exercise.ticks.feedback.wrongTicked.<mistake>`).
 
 The data test fails a sentence when a token is no form of its item, when an
 item, headword, form or type is taught after `lesson`, when a headword token
 names a word the engine has an item for, when the tokens do not spell
-`latin`, when a participle does not agree with its reference word in case,
+`text`, when a participle does not agree with its reference word in case,
 number and gender (a noun's gender is its `genus`, S26), when a passive AcI's
 participle has no accusative subject or no `esse` after it, when a question's
 head is not its particle, or when a double accusative has no two accusatives.
@@ -538,6 +539,15 @@ The language file (`lib/data/languages/la.yaml`, read by
   counts as marked (S11).
 - `letters`: the body of a character class, the letters a stem or an ending
   is made of (`a-zāēīōūȳăĕĭŏŭäöüß`). The case does not matter.
+- `constructions`: a map from the code of a construction of the sentence
+  corpus to `{reference: bool, meaning: bool, roles: {head, reference}}`:
+  whether a sentence of it has a reference word, and whether it has a list of
+  meanings. `roles` gives the pill role (`participle`, `reference`, `subject`,
+  `predicative` or `object`) of its head and of its reference word, exactly
+  when it has a reference; the parse refuses a missing or surplus `roles` and
+  an unknown role, naming `constructions.<code>`. `meanings` and
+  `mistakes` are the code lists a sentence's `meaning` and `mistake` draw
+  from. A language without a sentence corpus gives `{}` and `[]`.
 
 The parsed grammar file carries its language (`GrammarFile.lang`), and a
 `Grammar`, a `Derivation` and a `PracticeItem` reach it from there; nothing

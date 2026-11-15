@@ -111,7 +111,7 @@ void main() {
 
   Sentence longest() => corpus.sentences
       .where((s) => s.construction.reference != null)
-      .reduce((a, b) => b.latin.length > a.latin.length ? b : a);
+      .reduce((a, b) => b.text.length > a.text.length ? b : a);
 
   Future<List<MarksResponse>> pump(
     WidgetTester tester,
