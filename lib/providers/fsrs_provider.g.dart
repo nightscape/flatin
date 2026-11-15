@@ -152,8 +152,8 @@ String _$dueCardsHash() => r'bcb4f761c4f67e8b6321013e4226a3c93ac73f1c';
 /// around it. An item whose forms are all untaught or switched off has
 /// nothing to ask and is left out.
 
-@ProviderFor(practicableItemsByType)
-final practicableItemsByTypeProvider = PracticableItemsByTypeProvider._();
+@ProviderFor(practicableItemsByFile)
+final practicableItemsByFileProvider = PracticableItemsByFileProvider._();
 
 /// Every item the user can practise, by exercise type.
 ///
@@ -161,7 +161,7 @@ final practicableItemsByTypeProvider = PracticableItemsByTypeProvider._();
 /// around it. An item whose forms are all untaught or switched off has
 /// nothing to ask and is left out.
 
-final class PracticableItemsByTypeProvider
+final class PracticableItemsByFileProvider
     extends
         $FunctionalProvider<
           AsyncValue<Map<String, List<PracticeItem>>>,
@@ -176,19 +176,19 @@ final class PracticableItemsByTypeProvider
   /// The one place the course filter is applied, so that no consumer can route
   /// around it. An item whose forms are all untaught or switched off has
   /// nothing to ask and is left out.
-  PracticableItemsByTypeProvider._()
+  PracticableItemsByFileProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'practicableItemsByTypeProvider',
+        name: r'practicableItemsByFileProvider',
         isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$practicableItemsByTypeHash();
+  String debugGetCreateSourceHash() => _$practicableItemsByFileHash();
 
   @$internal
   @override
@@ -198,21 +198,21 @@ final class PracticableItemsByTypeProvider
 
   @override
   FutureOr<Map<String, List<PracticeItem>>> create(Ref ref) {
-    return practicableItemsByType(ref);
+    return practicableItemsByFile(ref);
   }
 }
 
-String _$practicableItemsByTypeHash() =>
-    r'a0614d520e6008864c4b8e6a49ca2d457405a6d1';
+String _$practicableItemsByFileHash() =>
+    r'4d7de4e11527252f9e86df4d9a11c56dc3e3d264';
 
 /// Provider for due items by exercise type
 
-@ProviderFor(dueItemsByType)
-final dueItemsByTypeProvider = DueItemsByTypeProvider._();
+@ProviderFor(dueItemsByFile)
+final dueItemsByFileProvider = DueItemsByFileProvider._();
 
 /// Provider for due items by exercise type
 
-final class DueItemsByTypeProvider
+final class DueItemsByFileProvider
     extends
         $FunctionalProvider<
           AsyncValue<Map<String, List<PracticeItem>>>,
@@ -223,19 +223,19 @@ final class DueItemsByTypeProvider
         $FutureModifier<Map<String, List<PracticeItem>>>,
         $FutureProvider<Map<String, List<PracticeItem>>> {
   /// Provider for due items by exercise type
-  DueItemsByTypeProvider._()
+  DueItemsByFileProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'dueItemsByTypeProvider',
+        name: r'dueItemsByFileProvider',
         isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$dueItemsByTypeHash();
+  String debugGetCreateSourceHash() => _$dueItemsByFileHash();
 
   @$internal
   @override
@@ -245,11 +245,11 @@ final class DueItemsByTypeProvider
 
   @override
   FutureOr<Map<String, List<PracticeItem>>> create(Ref ref) {
-    return dueItemsByType(ref);
+    return dueItemsByFile(ref);
   }
 }
 
-String _$dueItemsByTypeHash() => r'ef47deaac61e53f3cacd0056057be49d08de1a8a';
+String _$dueItemsByFileHash() => r'b67bbeb2e89648679f73450d1954fad529d8fb86';
 
 /// The next due item of [dataFileId] that [focus] includes.
 
@@ -311,7 +311,7 @@ final class NextDueItemProvider
   }
 }
 
-String _$nextDueItemHash() => r'e34e2308c3b0e16c30d26052e1cf5bc850c1e80c';
+String _$nextDueItemHash() => r'63b5b27c0852fffa5b7be9c5d8bb9f0f1ed038a3';
 
 /// The next due item of [dataFileId] that [focus] includes.
 
@@ -381,7 +381,7 @@ final class WordFocusesProvider
   }
 }
 
-String _$wordFocusesHash() => r'f107200a678cae1546f909cdedf2b8c23d8c56aa';
+String _$wordFocusesHash() => r'3927a98619d6dd398d00d7113c7b68c9ca48a4db';
 
 /// The German texts of the Latin verbs and nouns; none for a UI language
 /// other than German, so the kinds that show them are not built.

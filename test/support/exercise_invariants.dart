@@ -24,8 +24,8 @@ Set<GrammarBundle> unlockedFor(
     for (final key in word.formOrder) bundleOf(word, key),
   },
   PrincipalParts() => {for (final key in word.formOrder) bundleOf(word, key)},
-  LookAlikes(:final sets) => {
-    for (final s in sets)
+  LookAlikes(:final setName) => {
+    for (final s in (word.roles.lookAlikes[setName] ?? const []))
       if (s.contains(bundle)) ...s,
   },
   _ => {bundle},
@@ -167,9 +167,11 @@ List<String> violations(
         for (final (o, _) in forms)
           cube.cell(ctx.pool.singleWhere((w) => w.id == o.lexemeId), o.formKey),
       ];
-      final lookAlikes = select.sets.where(
-        (s) => s.contains(bundle) && cells.every((c) => s.contains(c.bundle)),
-      );
+      final lookAlikes = (word.roles.lookAlikes[select.setName] ?? const [])
+          .where(
+            (s) =>
+                s.contains(bundle) && cells.every((c) => s.contains(c.bundle)),
+          );
       if (lookAlikes.isEmpty) found.add('no set holds $bundle and the forms');
       if (!cells.any((c) => c.word.id == word.id && c.bundle == bundle)) {
         found.add('no form of ${word.id} in $bundle');
@@ -204,14 +206,14 @@ List<String> violations(
       Parts(:final view),
       PartsAnswer(:final prompt, :final slots, :final given),
     ):
-      final select = spec.select as PrincipalParts;
-      final deponent = select.row.any(
+      final roles = word.roles;
+      final deponent = roles.principalRow.any(
         (p) => word.derivation.deponentKeys.contains(p.key),
       );
       final row = [
-        for (final (:key, name: _) in select.row)
+        for (final (:key, name: _) in roles.principalRow)
           if (word.formOrder.contains(key) &&
-              !(deponent && key == select.supine) &&
+              !(deponent && key == roles.principalSupine) &&
               cube.practised(cube.cell(word, key)))
             key,
       ];
@@ -237,7 +239,9 @@ List<String> violations(
           found.add('given ${g.form.text} is not spelt like ${prompt.text}');
         }
         if (g.name !=
-            select.row.singleWhere((p) => p.key == g.form.formKey).name) {
+            word.roles.principalRow
+                .singleWhere((p) => p.key == g.form.formKey)
+                .name) {
           found.add('given ${g.form.text} is named ${g.name}');
         }
       }
@@ -247,7 +251,7 @@ List<String> violations(
         }
       }
       if (known) {
-        if (!select.promptsFrom.any(prompt.formKey.startsWith)) {
+        if (!word.roles.principalPromptsFrom.any(prompt.formKey.startsWith)) {
           found.add('prompt ${prompt.formKey} is no prompt form');
         }
         if (!cube.practised(promptCell)) {
@@ -268,7 +272,7 @@ List<String> violations(
           }
         }
       } else {
-        if (prompt.formKey != select.row.first.key) {
+        if (prompt.formKey != word.roles.principalRow.first.key) {
           found.add('prompt ${prompt.formKey} is not the first part');
         }
         if (cells.any((c) => cube.lookAlike(c, promptCell))) {
@@ -282,7 +286,7 @@ List<String> violations(
             for (final k in row)
               latinLang.norm(word.forms[word.formOrder.indexOf(k)]),
           }.length <
-          select.minParts) {
+          (spec.select as PrincipalParts).minParts) {
         found.add('the row $row has too few distinct parts');
       }
       if (!cells.any((c) => c.bundle == bundle)) {
@@ -290,7 +294,8 @@ List<String> violations(
       }
       for (final (i, (:name, :answer)) in slots.indexed) {
         final c = cells[i];
-        if (name != select.row.singleWhere((p) => p.key == c.key).name) {
+        if (name !=
+            word.roles.principalRow.singleWhere((p) => p.key == c.key).name) {
           found.add('slot $i is named $name');
         }
         if (answer.expected.text != cube.view(view).accepted(c).first ||

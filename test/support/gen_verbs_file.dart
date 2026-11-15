@@ -24,6 +24,18 @@ typedef DrawnItem = ({
   Map<String, String> overrides,
 });
 
+/// What a drawn file says about its types and axes (S31-S33, S38-S40): the
+/// facts [DrawnVerbsFile.tree] writes and the parser must hand back.
+typedef DrawnRoles = ({
+  Set<String> irregular,
+  Map<String, List<String>> borrows,
+  List<String> bundleAxes,
+  (String, String) baseForm,
+  List<String> changeAxes,
+  String swapAxis,
+  Map<String, List<List<String>>> lookAlikes,
+});
+
 /// A drawn grammar file with three types, items, a `voice:` block and
 /// `follows:` rules, and the facts it was drawn from. No id is a Latin one.
 ///
@@ -40,6 +52,9 @@ final class DrawnVerbsFile {
   final List<Map<String, String>> keys;
   final Map<String, Map<String, String>> endingByType;
   final List<DrawnItem> items;
+
+  /// Null until [withRoles]: the file then says nothing about its roles.
+  final DrawnRoles? roles;
 
   /// The file of the given facts: every key of [axes] plus, when [dropped]
   /// is not empty, every key without the [dropped] axes. The types `T` and
@@ -89,6 +104,7 @@ final class DrawnVerbsFile {
       keys,
       {'T': endings(0), 'TD': endings(0), 'T2': endings(1)},
       [],
+      null,
     );
   }
 
@@ -105,6 +121,23 @@ final class DrawnVerbsFile {
     this.keys,
     this.endingByType,
     this.items,
+    this.roles,
+  );
+
+  DrawnVerbsFile withRoles(DrawnRoles roles) => DrawnVerbsFile._(
+    axes,
+    voiceAxis,
+    active,
+    passive,
+    deponentBy,
+    moves,
+    personal,
+    typeDeponent,
+    rules,
+    keys,
+    endingByType,
+    items,
+    roles,
   );
 
   DrawnVerbsFile withItems(List<DrawnItem> items) => DrawnVerbsFile._(
@@ -120,6 +153,7 @@ final class DrawnVerbsFile {
     keys,
     endingByType,
     items,
+    roles,
   );
 
   String keyOf(Map<String, String> features) =>
@@ -134,6 +168,13 @@ final class DrawnVerbsFile {
     Map<String, String> formsOf(String type) => {
       for (final MapEntry(:key, :value) in endingByType[type]!.entries)
         key: '{s}$value',
+    };
+    Map<String, dynamic> roleFlags(String type) => {
+      if (roles case final r?) ...{
+        if (r.irregular.contains(type)) 'irregular': true,
+        'borrows': ?r.borrows[type],
+        'phrase': texts('endings of $type'),
+      },
     };
     return {
       'data_file_id': 'synthetic',
@@ -154,6 +195,13 @@ final class DrawnVerbsFile {
       },
       'defaults': {'given_part': 'lemma'},
       'classes': ['wortart'],
+      if (roles case final r?) ...{
+        if (r.bundleAxes.isNotEmpty) 'bundle_axes': r.bundleAxes,
+        'base_form': {r.baseForm.$1: r.baseForm.$2},
+        if (r.changeAxes.isNotEmpty) 'change_axes': r.changeAxes,
+        'swap_axis': r.swapAxis,
+        'look_alikes': r.lookAlikes,
+      },
       'voice': {
         'axis': voiceAxis,
         'active': active,
@@ -181,6 +229,7 @@ final class DrawnVerbsFile {
         'T': {
           'class': 'wortart',
           'display': texts('T'),
+          ...roleFlags('T'),
           'stems': {
             's': {'from': 'lemma'},
           },
@@ -189,12 +238,14 @@ final class DrawnVerbsFile {
         'TD': {
           'class': 'wortart',
           'display': texts('TD'),
+          ...roleFlags('TD'),
           'inherits_from': 'T',
           'deponent': typeDeponent ?? 'all',
         },
         'T2': {
           'class': 'wortart',
           'display': texts('T2'),
+          ...roleFlags('T2'),
           'stems': {
             's': {'from': 'lemma'},
           },
@@ -359,4 +410,37 @@ DrawnVerbsFile drawVerbsFile(Random r) {
   }
   file.items.shuffle(r);
   return file;
+}
+
+/// Draws the role facts of [file]: a subset of its types irregular, each type
+/// borrowing the endings of other types, and axes and a base form of its own.
+DrawnRoles drawRoles(Random r, DrawnVerbsFile file) {
+  T pick<T>(List<T> xs) => xs[r.nextInt(xs.length)];
+  List<T> subset<T>(List<T> xs) => [...xs.where((_) => r.nextBool())];
+  const types = ['T', 'TD', 'T2'];
+  final names = [...file.axes.keys];
+  final baseAxis = pick(names);
+  final bundles = {for (final features in file.keys) file.keyOf(features)};
+  return (
+    irregular: subset(types).toSet(),
+    borrows: {
+      for (final type in types)
+        if (r.nextBool())
+          type: [
+            ...(types.where((t) => t != type).toList()..shuffle(r)).take(
+              1 + r.nextInt(2),
+            ),
+          ],
+    },
+    bundleAxes: subset(names),
+    baseForm: (baseAxis, pick(file.axes[baseAxis]!)),
+    changeAxes: subset(names),
+    swapAxis: pick(names),
+    lookAlikes: {
+      for (final set in ['tick', 'sort'])
+        set: [
+          [...(bundles.toList()..shuffle(r)).take(2)],
+        ],
+    },
+  );
 }

@@ -24,7 +24,7 @@ void main() {
     addTearDown(c.dispose);
     final filter = await c.read(courseFilterProvider.future);
     final vocab = (await c.read(
-      practicableItemsByTypeProvider.future,
+      practicableItemsByFileProvider.future,
     ))['vocab']!;
     expect(vocab, isNotEmpty);
 
@@ -71,7 +71,7 @@ void main() {
           const WordClassificationScreen(),
           forcedLocale: const Locale('de'),
           overrides: [
-            dueItemsByTypeProvider.overrideWith(
+            dueItemsByFileProvider.overrideWith(
               (ref) async => {
                 'nouns': [if (file == 'nouns') due],
                 'verbs': [if (file == 'verbs') due],

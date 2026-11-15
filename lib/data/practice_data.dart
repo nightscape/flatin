@@ -1,13 +1,13 @@
 import 'dart:async';
 
 import 'asset_text.dart';
+import 'exercise_kinds.dart' show checkLookAlikeSets;
 import '../grammar/engine.dart';
 import '../grammar/schema.dart';
 import 'languages/language.dart' show Language;
 import '../models/course.dart';
 import '../models/derivation.dart';
 import '../models/practice_item.dart';
-import 'word_focus.dart' show irregularVerbTypes;
 
 /// What the settings screen offers for one data file.
 class FormMetadata {
@@ -24,6 +24,10 @@ class FormMetadata {
   /// S20: each of [availableTypes] as the learner reads it.
   final Map<String, String> displayByType;
 
+  /// S32: the (axis, code) of the form that spells the lemma; null for a file
+  /// without grammar.
+  final (String, String)? baseForm;
+
   FormMetadata({
     required this.dataFileId,
     required this.axes,
@@ -31,6 +35,7 @@ class FormMetadata {
     required this.formLabelsByKey,
     required this.availableTypes,
     required this.displayByType,
+    required this.baseForm,
   });
 }
 
@@ -61,6 +66,14 @@ class _Loaded {
       for (final file in parsed(courseLanguage).engine.files)
         file.path: file.dataFileId,
     });
+    final verbRoles = [
+      for (final file in parsed(courseLanguage).engine.files)
+        if (course.dataFiles.any(
+          (d) => d.id == file.dataFileId && d.role == DataFileRole.verb,
+        ))
+          file.roles,
+    ];
+    if (verbRoles.isNotEmpty) checkLookAlikeSets(verbRoles);
   }
 
   _Parsed parsed(String language) => _byLanguage[language] ??= _Parsed(
@@ -163,6 +176,7 @@ FormMetadata _metadata(GrammarFile file) {
     },
     availableTypes: types,
     displayByType: {for (final type in types) type: file.type(type).display!},
+    baseForm: file.roles.baseForm,
   );
 }
 
@@ -454,7 +468,7 @@ Map<String, List<EndingSet>> endingSetsOf(
   final axes = file.axes;
   final byGroup = <String, Map<String, EndingSet>>{};
   for (final item in file.items.where(
-    (i) => !irregularVerbTypes.contains(i.typeName),
+    (i) => !file.types[i.typeName]!.irregular,
   )) {
     final forms = engine.of(file.dataFileId, item.id).forms;
     for (final spec in file.follows) {

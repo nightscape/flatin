@@ -204,7 +204,10 @@ void main() {
 
   test('every agreeing type has a word', () {
     final types = {for (final w in nouns) w.type};
-    expect((_spec.answer as Match).agreeing.difference(types), isEmpty);
+    expect(
+      nouns.first.derivation.grammar.agreeingTypes.difference(types),
+      isEmpty,
+    );
   });
 
   // Generators: every agreeing word, against all nouns and against each noun
@@ -213,7 +216,7 @@ void main() {
   test('every agreeing word builds a round with each noun or says why', () {
     final agreeing = [
       for (final w in nouns)
-        if ((_spec.answer as Match).agreeing.contains(w.type)) w,
+        if (w.derivation.grammar.agreeingTypes.contains(w.type)) w,
     ];
     final partners = [
       for (final w in nouns)

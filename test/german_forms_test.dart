@@ -101,7 +101,7 @@ void main() {
         for (final (index, key) in item.formOrder.indexed) {
           final codes = key.split('.');
           if (!_inCourse(codes) || !inTable(codes)) continue;
-          final germanKey = GrammarGermanForms.germanKeyOf(key);
+          final germanKey = item.roles.glossKeyOf(key);
           if (!shown.add(germanKey)) continue;
           final List<String> texts;
           if (codes[2] == 'pass' && withoutGermanPassive.contains(id)) {

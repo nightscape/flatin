@@ -43,7 +43,7 @@ void main() {
       expect(expected.length, lessThan(items.length));
 
       final practicable = await container.read(
-        practicableItemsByTypeProvider.future,
+        practicableItemsByFileProvider.future,
       );
       final shown = {
         for (final byType in practicable.values) ...byType.map((i) => i.id),

@@ -72,7 +72,7 @@ Future<Set<String>> _playVocabRound(int lesson) async {
   final c = _container();
   addTearDown(c.dispose);
 
-  final practicable = await c.read(practicableItemsByTypeProvider.future);
+  final practicable = await c.read(practicableItemsByFileProvider.future);
   final vocab = {for (final w in practicable['vocab']!) w.lemma};
 
   final provider = roundProvider(

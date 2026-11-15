@@ -298,7 +298,10 @@ EselStep _endung(
   final templates = item.derivation.grammar.templatesByType;
   final String right = '-${form.ending}';
   final bool borrowed =
-      borrowedEndings[item.type]?.contains(form.endingType) ?? false;
+      item.derivation.grammar.borrowsByType[item.type]?.contains(
+        form.endingType,
+      ) ??
+      false;
   // "-" alone is no text: a form built without an ending says so in words,
   // and an empty ending borrowed from another type names no type either.
   final String? emptyEnding = form.ending.isEmpty ? 'esel.noEnding' : null;
@@ -324,7 +327,7 @@ EselStep _endung(
     answer: emptyEnding != null
         ? ''
         : borrowed
-        ? '$right (${endingTypePhrase(form.endingType, item.derivation.grammar.language)})'
+        ? '$right (${typePhrase(item.derivation.grammar, form.endingType)})'
         : right,
     answerKey: emptyEnding,
     options: _options(

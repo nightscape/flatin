@@ -40,7 +40,7 @@ void main() {
       addTearDown(container.dispose);
 
       final practicable = await container.read(
-        practicableItemsByTypeProvider.future,
+        practicableItemsByFileProvider.future,
       );
       final shown = [...practicable['nouns']!, ...practicable['verbs']!];
       expect(shown, isNotEmpty);
@@ -97,7 +97,7 @@ void main() {
     addTearDown(container.dispose);
 
     final practicable = await container.read(
-      practicableItemsByTypeProvider.future,
+      practicableItemsByFileProvider.future,
     );
     expect(practicable['nouns'], isEmpty);
     expect(practicable['verbs'], isNotEmpty);
@@ -110,7 +110,7 @@ void main() {
     addTearDown(container.dispose);
 
     final practicable = await container.read(
-      practicableItemsByTypeProvider.future,
+      practicableItemsByFileProvider.future,
     );
     final shown = [...practicable['nouns']!, ...practicable['verbs']!];
     final ahead = shown.where((item) => lessons.lessonNumberOf(item) > 5);
@@ -124,7 +124,7 @@ void main() {
     addTearDown(container.dispose);
 
     final practicable = await container.read(
-      practicableItemsByTypeProvider.future,
+      practicableItemsByFileProvider.future,
     );
     final shown = [...practicable['nouns']!, ...practicable['verbs']!];
     expect(shown.where((item) => lessons.lessonNumberOf(item) > 5), isEmpty);
@@ -143,7 +143,7 @@ void main() {
     final narrow = ProviderContainer();
     addTearDown(narrow.dispose);
     final practicable = await narrow.read(
-      practicableItemsByTypeProvider.future,
+      practicableItemsByFileProvider.future,
     );
     expect(_idsOf(practicable).length, lessThan(before.length));
     expect((await narrow.read(fsrsCardsProvider.future)).keys.toSet(), before);

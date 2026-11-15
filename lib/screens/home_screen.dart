@@ -319,8 +319,8 @@ class _PracticeTypeButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final practicableAsync = ref.watch(practicableItemsByTypeProvider);
-    final dueAsync = ref.watch(dueItemsByTypeProvider);
+    final practicableAsync = ref.watch(practicableItemsByFileProvider);
+    final dueAsync = ref.watch(dueItemsByFileProvider);
     final filterAsync = ref.watch(courseFilterProvider);
     final error = practicableAsync.error ?? dueAsync.error ?? filterAsync.error;
     if (error != null) {

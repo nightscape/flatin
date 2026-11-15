@@ -51,7 +51,7 @@ ProviderContainer _container(WidgetTester tester) =>
 Future<Set<String>> _practicable(WidgetTester tester) async {
   final byType = await _container(
     tester,
-  ).read(practicableItemsByTypeProvider.future);
+  ).read(practicableItemsByFileProvider.future);
   return {for (final items in byType.values) ...items.map((i) => i.id)};
 }
 

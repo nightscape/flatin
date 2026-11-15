@@ -2,7 +2,6 @@ import 'dart:math';
 
 import '../data/curriculum.dart';
 import '../data/lesson_data.dart';
-import 'course.dart';
 import 'practice_item.dart';
 import 'settings.dart';
 
@@ -33,13 +32,6 @@ final class FromLesson extends CourseGap {
 
 /// The last lesson whose words and grammar the learner knows.
 int reachedLesson(Settings settings) => settings.kursstand;
-
-/// Per role, the feature of a word's basic form: its first form with it
-/// spells the lemma.
-const basicFormFeature = {
-  DataFileRole.noun: ('kasus', 'nom'),
-  DataFileRole.verb: ('modus', 'inf'),
-};
 
 final class CourseFilter {
   final Settings settings;
@@ -118,7 +110,7 @@ final class CourseFilter {
   }
 
   FormLabel _basicForm(String dataFileId, List<FormLabel> labels) {
-    final (axis, value) = basicFormFeature[curriculum.roleOf(dataFileId)]!;
+    final (axis, value) = curriculum.baseFormOf(dataFileId);
     return labels.firstWhere(
       (l) => l.features[axis] == value,
       orElse: () => throw StateError(

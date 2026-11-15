@@ -52,6 +52,9 @@ class PracticeItem {
   /// The spelling of the course the item belongs to.
   Language get lang => derivation.grammar.lang;
 
+  /// What the item's data file says about its own shape.
+  FileRoles get roles => derivation.grammar.rolesOf(dataFileId);
+
   /// The keys the base-forms focus asks, in the order it asks them.
   final List<FormKey> baseFormKeys;
 

@@ -24,6 +24,7 @@ DataFileShape nounShape({List<FormLabel>? labels, List<String>? types}) => (
   role: DataFileRole.noun,
   labels: labels ?? fixtureLabels,
   types: types ?? fixtureTypes,
+  baseForm: ('kasus', 'nom'),
 );
 
 Curriculum parseNouns(String yaml, {DataFileShape? shape}) =>
@@ -75,6 +76,7 @@ CourseFilter filterTeachingAll(Settings settings, PracticeItem item) =>
             role: item.role,
             labels: item.formLabels,
             types: [item.type],
+            baseForm: item.roles.baseForm ?? ('kasus', 'nom'),
           ),
         },
       ),

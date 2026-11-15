@@ -208,6 +208,27 @@ final class GrammarEngine {
       },
       files.first.language,
       files.first.lang,
+      fileRoles: {for (final file in files) file.dataFileId: file.roles},
+      irregularTypes: {
+        for (final file in files)
+          for (final type in file.declaredTypes.values)
+            if (type.irregular) type.name,
+      },
+      borrowsByType: {
+        for (final file in files)
+          for (final type in file.declaredTypes.values)
+            if (type.borrows.isNotEmpty) type.name: type.borrows.toSet(),
+      },
+      phraseByType: {
+        for (final file in files)
+          for (final type in file.declaredTypes.values)
+            if (type.phrases.isNotEmpty) type.name: type.phrases,
+      },
+      agreeingTypes: {
+        for (final file in files)
+          for (final type in file.declaredTypes.values)
+            if (type.agrees) type.name,
+      },
     );
     assert(
       files.every((file) => file.language == grammar.language),

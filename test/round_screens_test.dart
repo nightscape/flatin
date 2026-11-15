@@ -384,10 +384,14 @@ void main() {
         await answer(tester, screen.exercise, right: true);
         await letItLoad(tester);
       }
-      expect(seen, {
-        ('nouns', ExerciseKind.fehlerFinden),
-        ('nouns', ExerciseKind.umformen),
-      });
+      expect(
+        seen,
+        containsAll([
+          ('nouns', ExerciseKind.fehlerFinden),
+          ('nouns', ExerciseKind.umformen),
+        ]),
+      );
+      expect(seen.map((s) => s.$1).toSet(), {'nouns'});
     });
   }
 

@@ -63,7 +63,7 @@ Future<void> _home(WidgetTester tester) async {
   await _boot(tester);
   final due = ProviderScope.containerOf(
     tester.element(find.byType(HomeScreen)),
-  ).read(dueItemsByTypeProvider);
+  ).read(dueItemsByFileProvider);
   if (due.hasError) Error.throwWithStackTrace(due.error!, due.stackTrace!);
   expect(due.requireValue[_toyFile], hasLength(4));
 }

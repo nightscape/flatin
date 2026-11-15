@@ -32,6 +32,7 @@ Future<Map<String, DataFileShape>> _shapes() async {
         for (final key in metadata.formOrder) metadata.formLabelsByKey[key]!,
       ],
       types: metadata.availableTypes,
+      baseForm: metadata.baseForm!,
     );
   }
   return shapes;

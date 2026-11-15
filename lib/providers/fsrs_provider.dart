@@ -57,7 +57,7 @@ Future<List<PracticeItemCard>> dueCards(Ref ref) async {
 /// around it. An item whose forms are all untaught or switched off has
 /// nothing to ask and is left out.
 @riverpod
-Future<Map<String, List<PracticeItem>>> practicableItemsByType(Ref ref) async {
+Future<Map<String, List<PracticeItem>>> practicableItemsByFile(Ref ref) async {
   final filter = await ref.watch(courseFilterProvider.future);
 
   final course = await ref.watch(courseProvider.future);
@@ -75,9 +75,9 @@ Future<Map<String, List<PracticeItem>>> practicableItemsByType(Ref ref) async {
 
 /// Provider for due items by exercise type
 @riverpod
-Future<Map<String, List<PracticeItem>>> dueItemsByType(Ref ref) async {
+Future<Map<String, List<PracticeItem>>> dueItemsByFile(Ref ref) async {
   final dueCardsList = await ref.watch(dueCardsProvider.future);
-  final practicable = await ref.watch(practicableItemsByTypeProvider.future);
+  final practicable = await ref.watch(practicableItemsByFileProvider.future);
 
   final itemsById = <String, PracticeItem>{};
   for (final items in practicable.values) {
@@ -87,17 +87,17 @@ Future<Map<String, List<PracticeItem>>> dueItemsByType(Ref ref) async {
   }
 
   final course = await ref.watch(courseProvider.future);
-  final dueItemsByType = <String, List<PracticeItem>>{
+  final dueItemsByFile = <String, List<PracticeItem>>{
     for (final file in course.dataFiles) file.id: [],
   };
   for (final card in dueCardsList) {
     // Cards exist for items the current selection filters out, too.
     final item = itemsById[card.itemId];
     if (item == null) continue;
-    dueItemsByType[item.dataFileId]!.add(item);
+    dueItemsByFile[item.dataFileId]!.add(item);
   }
 
-  return dueItemsByType;
+  return dueItemsByFile;
 }
 
 /// The next due item of [dataFileId] that [focus] includes.
@@ -107,9 +107,9 @@ Future<PracticeItem?> nextDueItem(
   String dataFileId,
   WordFocus focus,
 ) async {
-  final dueItemsByType = await ref.watch(dueItemsByTypeProvider.future);
+  final dueItemsByFile = await ref.watch(dueItemsByFileProvider.future);
   final filter = await ref.watch(courseFilterProvider.future);
-  return dueItemsByType[dataFileId]!
+  return dueItemsByFile[dataFileId]!
       .where((word) => focus.offers(word, filter))
       .firstOrNull;
 }
@@ -117,7 +117,7 @@ Future<PracticeItem?> nextDueItem(
 /// The focus choices for the words in the course range.
 @riverpod
 Future<List<WordFocus>> wordFocuses(Ref ref) async {
-  final practicable = await ref.watch(practicableItemsByTypeProvider.future);
+  final practicable = await ref.watch(practicableItemsByFileProvider.future);
   final language = await ref.watch(dataLanguageProvider.future);
   final course = await ref.watch(courseProvider.future);
   return focusesOf(practicable, {

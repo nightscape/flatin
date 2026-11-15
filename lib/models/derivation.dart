@@ -242,6 +242,69 @@ final class Template {
   const Template({this.stemName, required this.endings});
 }
 
+/// One principal part a data file asks for.
+typedef PrincipalPartSpec = ({FormKey key, String name});
+
+/// S31-S37: what one data file says about its own shape; every field is
+/// empty when the file gives none.
+final class FileRoles {
+  /// S31: the axes whose codes name a bundle of forms; empty when the type
+  /// names it.
+  final List<String> bundleAxes;
+
+  /// S32: the feature whose first form spells the lemma, as (axis, code).
+  final (String, String)? baseForm;
+
+  /// S33: the axes one step of a transformation exercise may change.
+  final List<String> changeAxes;
+
+  /// S33: the axis whose other value swaps the participle of a compound form.
+  final String? swapAxis;
+
+  /// S34: set name → bundles that look alike.
+  final Map<String, List<List<String>>> lookAlikes;
+
+  /// S35: the principal-part row, empty when the file has none.
+  final List<PrincipalPartSpec> principalRow;
+  final List<String> principalPromptsFrom;
+  final FormKey? principalSupine;
+
+  /// S36: the axes of a form that must agree with a noun; with the genus axis
+  /// last.
+  final List<String> agreementAxes;
+
+  /// S26: the axis of the genus key of types and items.
+  final String? genusAxis;
+
+  /// S37: first code of a key → how many leading codes the gloss file keys
+  /// by (null: the whole key). A key of another group has no gloss.
+  final Map<String, int?> glossKeys;
+
+  const FileRoles({
+    this.bundleAxes = const [],
+    this.baseForm,
+    this.changeAxes = const [],
+    this.swapAxis,
+    this.lookAlikes = const {},
+    this.principalRow = const [],
+    this.principalPromptsFrom = const [],
+    this.principalSupine,
+    this.agreementAxes = const [],
+    this.genusAxis,
+    this.glossKeys = const {},
+  });
+
+  /// The gloss file's key of the target-language [key].
+  FormKey glossKeyOf(FormKey key) {
+    final codes = key.split('.');
+    if (!glossKeys.containsKey(codes.first)) {
+      throw ArgumentError('the course gives no gloss form for $key');
+    }
+    final keep = glossKeys[codes.first];
+    return keep == null ? key : codes.take(keep).join('.');
+  }
+}
+
 /// The templates of one YAML file, shared by all its items.
 final class Grammar {
   /// Type → form key → template. A type that inherits keeps only the endings
@@ -259,13 +322,37 @@ final class Grammar {
   /// The spelling of the course the file belongs to.
   final Language lang;
 
+  /// Data file id → its roles. A file without grammar has none.
+  final Map<String, FileRoles> fileRoles;
+
+  /// S38: the irregular types.
+  final Set<String> irregularTypes;
+
+  /// S39: type → the types whose endings its school grammar borrows.
+  final Map<String, Set<String>> borrowsByType;
+
+  /// S40: type → language → the phrase naming its endings.
+  final Map<String, Map<String, String>> phraseByType;
+
+  /// S41: the types whose words agree with a noun.
+  final Set<String> agreeingTypes;
+
   Grammar(
     this.templatesByType,
     this.classByType,
     this.displayByType,
     this.language,
-    this.lang,
-  );
+    this.lang, {
+    this.fileRoles = const {},
+    this.irregularTypes = const {},
+    this.borrowsByType = const {},
+    this.phraseByType = const {},
+    this.agreeingTypes = const {},
+  });
+
+  FileRoles rolesOf(String dataFileId) =>
+      fileRoles[dataFileId] ??
+      (throw StateError('no roles loaded for data file "$dataFileId"'));
 }
 
 final class Derivation {

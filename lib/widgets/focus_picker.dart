@@ -27,7 +27,7 @@ class FocusPicker extends ConsumerWidget {
     String t(String key) => FlutterI18n.translate(context, key);
     final (focuses, practicable) = switch ((
       ref.watch(wordFocusesProvider),
-      ref.watch(practicableItemsByTypeProvider),
+      ref.watch(practicableItemsByFileProvider),
     )) {
       (AsyncData(value: final f), AsyncData(value: final p)) => (f, p),
       (AsyncError(:final error), _) ||

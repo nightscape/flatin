@@ -210,13 +210,13 @@ class _WordClassificationScreenState
     try {
       // Try to get due items from FSRS first
       final grammarFiles = (await ref.read(courseProvider.future)).grammarFiles;
-      final dueItemsByType = await ref.read(dueItemsByTypeProvider.future);
+      final dueItemsByFile = await ref.read(dueItemsByFileProvider.future);
       final allDueItems = [
-        for (final file in grammarFiles) ...dueItemsByType[file.id]!,
+        for (final file in grammarFiles) ...dueItemsByFile[file.id]!,
       ];
 
       // Fall back to the same filtered items the due list is drawn from
-      final practicable = await ref.read(practicableItemsByTypeProvider.future);
+      final practicable = await ref.read(practicableItemsByFileProvider.future);
       final allItems = [
         for (final file in grammarFiles) ...practicable[file.id]!,
       ];

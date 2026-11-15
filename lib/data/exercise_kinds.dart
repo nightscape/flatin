@@ -1,6 +1,7 @@
 /// The exercise kinds that run from a spec.
 library;
 
+import '../models/derivation.dart' show FileRoles;
 import '../models/exercise.dart';
 import 'exercise_cube.dart';
 import 'exercise_interpreter.dart';
@@ -66,7 +67,7 @@ const kindSpecs = [
   KindSpec(
     kind: ExerciseKind.umformen,
     questionKey: 'exercise.transform.question',
-    select: AxisPath(axes: ['genus_verbi', 'tempus', 'numerus'], lengths: {1}),
+    select: AxisPath(lengths: {1}),
     params: {
       'start': Show(Ref.start, View.latin),
       'word': Show(Ref.target, View.lemma),
@@ -109,10 +110,7 @@ const kindSpecs = [
   KindSpec(
     kind: ExerciseKind.formenKette,
     questionKey: 'exercise.transform.chainQuestion',
-    select: AxisPath(
-      axes: ['genus_verbi', 'tempus', 'numerus'],
-      lengths: {2, 3},
-    ),
+    select: AxisPath(lengths: {2, 3}),
     params: {
       'start': Show(Ref.start, View.latin),
       'word': Show(Ref.target, View.lemma),
@@ -123,44 +121,21 @@ const kindSpecs = [
   KindSpec(
     kind: ExerciseKind.ankreuzen,
     questionKey: 'exercise.tick.question',
-    select: LookAlikes(
-      sets: [
-        ['ind.impf.akt', 'ind.fut.akt'],
-        ['ind.fut.akt', 'ind.praes.pass'],
-      ],
-      count: (min: 8, max: 12),
-      words: 4,
-    ),
+    select: LookAlikes(setName: 'tick', count: (min: 8, max: 12), words: 4),
     params: {'group': BundleName()},
     answer: Sort(View.latin, tick: true),
   ),
   KindSpec(
     kind: ExerciseKind.sortieren,
     questionKey: 'exercise.sort.question',
-    select: LookAlikes(
-      sets: [
-        ['ind.perf.akt', 'ind.plusq.akt', 'ind.fut2.akt'],
-      ],
-      count: (min: 9, max: 12),
-      words: 4,
-    ),
+    select: LookAlikes(setName: 'sort', count: (min: 9, max: 12), words: 4),
     params: {},
     answer: Sort(View.latin, tick: false),
   ),
   KindSpec(
     kind: ExerciseKind.stammformen,
     questionKey: 'exercise.stammformen.question',
-    select: PrincipalParts(
-      row: [
-        (key: 'inf.praes.akt', name: 'exercise.stammformen.part.infinitive'),
-        (key: 'ind.praes.akt.1.sg', name: 'exercise.stammformen.part.present'),
-        (key: 'ind.perf.akt.1.sg', name: 'exercise.stammformen.part.perfect'),
-        (key: 'sup.akk', name: 'exercise.stammformen.part.supine'),
-      ],
-      promptsFrom: ['ind.perf.akt.1.sg', 'sup.akk', 'part.perf.'],
-      supine: 'sup.akk',
-      minParts: 3,
-    ),
+    select: PrincipalParts(minParts: 3),
     params: {'form': Show(Ref.target, View.latin)},
     answer: Parts(View.latin),
   ),
@@ -240,23 +215,7 @@ const agreementSpecs = {
     questionKey: 'exercise.agree.question',
     select: Sample(n: 4),
     params: {},
-    answer: Match(
-      View.latin,
-      View.latin,
-      agreeing: {
-        'Pronomen-hic',
-        'Pronomen-ille',
-        'Pronomen-iste',
-        'Pronomen-ipse',
-        'Pronomen-idem',
-        'Adjektiv-a-o',
-        'Adjektiv-a-o-er',
-        'Adjektiv-zweiendig',
-        'Adjektiv-dreiendig',
-        'Adjektiv-einendig-i',
-        'Adjektiv-einendig-Konsonantstamm',
-      },
-    ),
+    answer: Match(View.latin, View.latin, agreeing: true),
   ),
 };
 
@@ -270,3 +229,23 @@ final List<SpecGenerator> exerciseGenerators = [
       agreement: agreementSpecs[spec.kind],
     ),
 ];
+
+/// Refuses a kind that asks for a look-alike set that no file of the verb
+/// role declares: its exercises would silently never be built.
+void checkLookAlikeSets(Iterable<FileRoles> verbFiles) {
+  final declared = {for (final file in verbFiles) ...file.lookAlikes.keys};
+  for (final spec in [
+    ...kindSpecs,
+    ...vocabSpecs.values,
+    ...agreementSpecs.values,
+  ]) {
+    if (spec.select case LookAlikes(
+      :final setName,
+    ) when !declared.contains(setName)) {
+      throw StateError(
+        '${spec.kind.name} asks for the look-alike set "$setName", which no '
+        'verb data file declares',
+      );
+    }
+  }
+}

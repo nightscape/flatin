@@ -61,10 +61,17 @@ type_inference:
 
 classes: [deklination, adjektiv, pronomen, numerale]
 
+base_form: {kasus: nom}
+change_axes: [numerus]
+swap_axis: numerus
+agreement_axes: [kasus, numerus, genus]
+genus_axis: genus
+
 types:
   # Ending tables. Leaf types (no delegate, no compose, S14); the verb file
   # delegates its participles to them.
   a-o-Endungen:
+    phrase: {de: "Endung der a-/o-Deklination", en: "1st/2nd declension ending"}
     abstract: true
     forms:
       nom.sg.m: "{stamm}us"
@@ -105,6 +112,7 @@ types:
       vok.pl.n: "{stamm}a"
 
   a-o-er-Endungen:
+    phrase: {de: "Endung der a-/o-Deklination auf -er", en: "1st/2nd declension ending in -er"}
     abstract: true
     inherits_from: a-o-Endungen
     forms:
@@ -112,6 +120,7 @@ types:
       vok.sg.m: "{nom_m}"
 
   Komparativ-Endungen:
+    phrase: {de: "Komparativendung", en: "comparative ending"}
     abstract: true
     forms:
       nom.sg.m: "{kstamm}or"
@@ -153,6 +162,7 @@ types:
       adv: "{kstamm}us"
 
   3-Endungen:
+    phrase: {de: "Endung der 3. Deklination", en: "3rd declension ending"}
     abstract: true
     forms:
       nom.sg.m: "{nom_m}"
@@ -233,6 +243,7 @@ types:
       vok.pl.n: "{stamm}a"
 
   3-Endungen-Partizip:
+    phrase: {de: "Endung der 3. Deklination (Partizip)", en: "3rd declension ending (participle)"}
     abstract: true
     inherits_from: 3-Endungen
     forms:
@@ -244,6 +255,7 @@ types:
 
   # Declensions. One gender per type, so their keys carry no genus.
   O-Deklination-maskulinum:
+    phrase: {de: "Endung der O-Deklination (m)", en: "2nd declension ending (m)"}
     class: deklination
     genus: m
     display: {de: O-Deklination-maskulinum, en: "2nd declension, masculine"}
@@ -275,6 +287,7 @@ types:
       vok.sg: "{nom}"
 
   O-Deklination-neutrum:
+    phrase: {de: "Endung der O-Deklination (n)", en: "2nd declension ending (n)"}
     class: deklination
     genus: n
     display: {de: O-Deklination-neutrum, en: "2nd declension, neuter"}
@@ -295,6 +308,7 @@ types:
       vok.pl: "{stamm}a"
 
   A-Deklination:
+    phrase: {de: "Endung der A-Deklination", en: "1st declension ending"}
     class: deklination
     display: {de: A-Deklination, en: "1st declension"}
     stems:
@@ -314,6 +328,7 @@ types:
       vok.pl: "{stamm}ae"
 
   E-Deklination:
+    phrase: {de: "Endung der E-Deklination", en: "5th declension ending"}
     class: deklination
     display: {de: E-Deklination, en: "5th declension"}
     stems:
@@ -333,6 +348,8 @@ types:
       vok.pl: "{stamm}ēs"
 
   E-Deklination-Konsonantstamm:
+    borrows: [E-Deklination]
+    phrase: {de: "Endung der E-Deklination (Konsonantstamm)", en: "5th declension ending (consonant stem)"}
     class: deklination
     display: {de: E-Deklination-Konsonantstamm, en: "5th declension, consonant stem"}
     inherits_from: E-Deklination
@@ -341,6 +358,7 @@ types:
       dat.sg: "{stamm}eī"
 
   U-Deklination:
+    phrase: {de: "Endung der U-Deklination", en: "4th declension ending"}
     class: deklination
     display: {de: U-Deklination, en: "4th declension"}
     stems:
@@ -360,6 +378,7 @@ types:
       vok.pl: "{stamm}ūs"
 
   Konsonantische-Deklination-mf:
+    phrase: {de: "Endung der konsonantischen Deklination (m/f)", en: "3rd declension consonant-stem ending (m/f)"}
     class: deklination
     display: {de: Konsonantische-Deklination-mf, en: "3rd declension, consonant stem, m/f"}
     stems:
@@ -380,6 +399,7 @@ types:
       vok.pl: "{stamm}ēs"
 
   Konsonantische-Deklination-n:
+    phrase: {de: "Endung der konsonantischen Deklination (n)", en: "3rd declension consonant-stem ending (n)"}
     class: deklination
     genus: n
     display: {de: Konsonantische-Deklination-n, en: "3rd declension, consonant stem, neuter"}
@@ -401,6 +421,8 @@ types:
       vok.pl: "{stamm}a"
 
   Konsonantische-Deklination-i-mf:
+    borrows: [Konsonantische-Deklination-mf]
+    phrase: {de: "Endung der konsonantischen Deklination (i-Stamm, m/f)", en: "3rd declension i-stem ending (m/f)"}
     class: deklination
     display: {de: Konsonantische-Deklination-i-mf, en: "3rd declension, i-stem, m/f"}
     inherits_from: Konsonantische-Deklination-mf
@@ -408,6 +430,8 @@ types:
       gen.pl: "{stamm}ium"
 
   Konsonantische-Deklination-i-n:
+    borrows: [Konsonantische-Deklination-n]
+    phrase: {de: "Endung der konsonantischen Deklination (i-Stamm, n)", en: "3rd declension i-stem ending (n)"}
     class: deklination
     display: {de: Konsonantische-Deklination-i-n, en: "3rd declension, i-stem, neuter"}
     inherits_from: Konsonantische-Deklination-n
@@ -421,6 +445,9 @@ types:
   # Adjectives. Every grade is a delegate into an ending table, so the three
   # grades share one key space and the adverb sits beside them.
   Adjektiv-a-o:
+    agrees: true
+    borrows: [Komparativ-Endungen, a-o-Endungen]
+    phrase: {de: "Adverbendung (Adjektiv der a-/o-Deklination)", en: "adverb ending (1st/2nd declension adjective)"}
     class: adjektiv
     display: {de: Adjektiv-a-o, en: "adjective, 1st/2nd declension"}
     stems:
@@ -436,6 +463,8 @@ types:
       adv.sup: "{sup}ē"
 
   Adjektiv-a-o-er:
+    agrees: true
+    borrows: [Adjektiv-a-o, Komparativ-Endungen, a-o-Endungen, a-o-er-Endungen]
     class: adjektiv
     display: {de: Adjektiv-a-o-er, en: "adjective, 1st/2nd declension in -er"}
     inherits_from: Adjektiv-a-o
@@ -447,6 +476,7 @@ types:
       - {name: pos, type: a-o-er-Endungen, bind: {stamm: stamm, nom_m: nom_m}, set: {grad: pos}}
 
   Adjektiv-3:
+    phrase: {de: "Adverbendung (Adjektiv der 3. Deklination)", en: "adverb ending (3rd declension adjective)"}
     abstract: true
     stems:
       kstamm: {from: komparativ, remove: "or", default: "{stamm}i", display: {de: Komparativstamm, en: Comparative stem}}
@@ -460,6 +490,8 @@ types:
       adv.sup: "{sup}ē"
 
   Adjektiv-zweiendig:
+    agrees: true
+    borrows: [Adjektiv-3, Komparativ-Endungen, 3-Endungen, a-o-Endungen]
     class: adjektiv
     display: {de: Adjektiv-zweiendig, en: "adjective, 3rd declension, two endings"}
     inherits_from: Adjektiv-3
@@ -470,6 +502,8 @@ types:
       nom_n: {from: nom_n, remove: "", display: {de: Nominativ neutrum, en: Nominative neuter}}
 
   Adjektiv-dreiendig:
+    agrees: true
+    borrows: [Adjektiv-3, Komparativ-Endungen, 3-Endungen, a-o-Endungen]
     class: adjektiv
     display: {de: Adjektiv-dreiendig, en: "adjective, 3rd declension, three endings"}
     inherits_from: Adjektiv-3
@@ -481,6 +515,7 @@ types:
       sup:   {from: superlativ, remove: "us", default: "{nom_m}rim", display: {de: Superlativstamm, en: Superlative stem}}
 
   Adjektiv-einendig-i:
+    agrees: true
     class: adjektiv
     display: {de: Adjektiv-einendig-i, en: "adjective, 3rd declension, one ending, i-stem"}
     inherits_from: Adjektiv-3
@@ -491,6 +526,7 @@ types:
       nom_n: {template: "{nom_m}", display: {de: Nominativ, en: Nominative}}
 
   Adjektiv-einendig-Konsonantstamm:
+    agrees: true
     class: adjektiv
     display: {de: Adjektiv-einendig-Konsonantstamm, en: "adjective, 3rd declension, one ending, consonant stem"}
     stems:
@@ -511,18 +547,23 @@ types:
     class: pronomen
     display: {de: Pronomen-is, en: "pronoun is, ea, id"}
   Pronomen-idem:
+    agrees: true
     class: pronomen
     display: {de: Pronomen-idem, en: "pronoun īdem, eadem, idem"}
   Pronomen-hic:
+    agrees: true
     class: pronomen
     display: {de: Pronomen-hic, en: "pronoun hic, haec, hoc"}
   Pronomen-ille:
+    agrees: true
     class: pronomen
     display: {de: Pronomen-ille, en: "pronoun ille, illa, illud"}
   Pronomen-iste:
+    agrees: true
     class: pronomen
     display: {de: Pronomen-iste, en: "pronoun iste, ista, istud"}
   Pronomen-ipse:
+    agrees: true
     class: pronomen
     display: {de: Pronomen-ipse, en: "pronoun ipse, ipsa, ipsum"}
   Pronomen-qui:

@@ -36,7 +36,7 @@ Future<SentenceCorpus> sentenceCorpus(Ref ref) => loadSentenceCorpus();
 /// The topics the course offers now with words of [focus], in course order.
 @riverpod
 Future<List<Topic>> topics(Ref ref, WordFocus focus) async {
-  final byType = await ref.watch(practicableItemsByTypeProvider.future);
+  final byType = await ref.watch(practicableItemsByFileProvider.future);
   final focused = focus.narrow(byType);
   final filter = await ref.watch(courseFilterProvider.future);
   final curriculum = await ref.watch(curriculumProvider.future);
@@ -108,7 +108,7 @@ SelectionInput _selectionInput(
 Future<TodayOffer> todayOffer(Ref ref, WordFocus focus) async {
   final input = _selectionInput(
     await ref.watch(fsrsCardsProvider.future),
-    focus.narrow(await ref.watch(practicableItemsByTypeProvider.future)),
+    focus.narrow(await ref.watch(practicableItemsByFileProvider.future)),
     await ref.watch(courseFilterProvider.future),
     ref.watch(fsrsSchedulerProvider),
   );
@@ -208,7 +208,7 @@ class Round extends _$Round {
   @override
   Future<RoundState> build(RoundRequest request) async {
     final cards = await ref.read(fsrsCardsProvider.future);
-    final practicable = await ref.read(practicableItemsByTypeProvider.future);
+    final practicable = await ref.read(practicableItemsByFileProvider.future);
     final filter = await ref.read(courseFilterProvider.future);
     final german = await ref.read(germanFormsProvider.future);
     final topics = await ref.read(topicsProvider(request.focus).future);

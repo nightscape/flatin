@@ -134,15 +134,17 @@ One file is exactly one YAML document; a `---` separated second document throws.
 
 The top-level keys above are the whole set: `data_file_id`, `axes`, `label`,
 `parts`, `defaults`, `type_inference`, `sandhi`, `classes`, `voice`,
-`follows`, `types`, `items`, `shared`.
+`follows`, `types`, `items`, `shared`, and the role keys of S31-S37
+(`bundle_axes`, `base_form`, `change_axes`, `swap_axis`, `look_alikes`,
+`principal_parts`, `agreement_axes`, `genus_axis`, `gloss_keys`).
 Any other one throws, so a typo such as `itemss:` fails the load instead of
 silently dropping the section. `shared:` is the one key the loader only
 accepts: it holds anchors that items alias (`absent: *ohne_steigerung`), and it
 sits above `items:` because a YAML alias resolves only below its anchor.
 
 An item has no other keys than `id`, `type`, `translation`, `parts`, `forms`,
-`absent`, `passiv`, `deponent`, `de_verb`, `de_noun`, `slots`, `genus` and
-`regular_type`; any other one throws.
+`absent`, `passiv`, `deponent`, `de_verb`, `de_noun`, `slots`, the key named
+by `genus_axis` (S26) and `regular_type`; any other one throws.
 
 Loading a file resolves which keys every item has — `GrammarFile.keysByItem`,
 one `ItemKeys` per item, after S4, S10, S13, S14 and S15. That set is the
@@ -335,9 +337,12 @@ A marked item lists none of these keys; listing one throws.
 A verb that has no object has only this passive: `īre` (`itum est`), but not
 its transitive compound `inīre` (`initus sum`).
 
-**S26. Genus.** A type may give `genus: <code>` (inherited, the child wins), an
+**S26. Genus.** The file names the axis with `genus_axis: <axis id>`; the type
+and item key has that axis id as its name (below: `genus`). A type may give
+`genus: <code>` (inherited, the child wins), an
 item `genus: <code>` or a list of codes for a noun of common gender
-(`cūstōs: [m, f]`); a code is one of the axis `genus`. Once a type of a class
+(`cūstōs: [m, f]`); a code is one of the genus axis. A file without
+`genus_axis` has no such key, so the key throws as an unknown one. Once a type of a class
 gives a genus, every item of that class has exactly one source of it: its
 type's or its own. An item of any other class gives none. A missing, doubled or
 unknown genus throws.
@@ -393,6 +398,57 @@ set fits the source. `impersonal: true` limits the rule to items with
 `passiv: unpersönlich`. An unknown key, axis or code, an axis in both `from`
 and `drop`, an `endings` rule with `drop`, and two `endings` rules with the
 same `from` axes throw.
+
+**S31. Bundle axes.** `bundle_axes: [<axis id>...]` lists the axes whose codes
+make up a bundle of the file (the part of a key a learner practises as one
+unit). Distinct axes of the file; an unknown axis throws, naming the entry.
+
+**S32. Base form.** `base_form: {<axis id>: <code>}` is the code that marks the
+form a word is named by (`kasus: nom`, `modus: inf`). One axis, one of its
+codes; anything else throws.
+
+**S33. Change axes.** `change_axes: [<axis id>...]` lists the axes a change
+exercise may vary, in order; `swap_axis: <axis id>` is the axis a swap
+exercise exchanges. Unknown axes throw.
+
+**S34. Look-alike sets.** `look_alikes: {<set name>: [[<bundle>, <bundle>...]...]}`
+names groups of two or more bundles (keys or key prefixes with a trailing dot)
+whose forms look alike. Every key part must be an existing code in axis
+order; a kind with a look-alike selection reads the set by its name, a file
+without that set offers none.
+
+**S35. Principal parts.** `principal_parts` has `row` (the keys of the parts,
+each with a `name`), `prompts_from` (the keys a prompt may be taken from) and
+`supine` (a key of the row). A missing member, an invalid key or a supine
+outside the row throws.
+
+**S36. Agreement axes.** `agreement_axes: [<axis id>...]` lists the axes a
+participle or adjective agrees in: exactly three axes, in the order case,
+number, gender, or none. Unknown axes or another count throw.
+
+**S37. Gloss keys.** `gloss_keys: {<first code>: all | <n>}` maps the first
+code of a target key to the part of the key that identifies its gloss form:
+`all` keeps the whole key, a number keeps that many codes. A first code that
+belongs to no axis, or a value other than `all` or a positive number, throws;
+asking the gloss key of a group that is not listed throws.
+
+**S38. Irregular types.** A type may give `irregular: true` (default `false`).
+It marks the type as one whose forms are not predicted by a pattern; the
+focus on irregular words reads it. Another value throws.
+
+**S39. Borrowed endings.** A type may give `borrows: [<type>...]`: distinct
+names of types (concrete or abstract), possibly of another file of the same
+grammar, whose endings it shows in the explanation. A name that is no type throws, naming the
+type and the entry.
+
+**S40. Type phrase.** A type, abstract or concrete, may give
+`phrase: {<lang>: <text>}`, the words the explanation uses for its endings, one
+text per data language. A type that is shown through `borrows` (S39) but has no
+phrase throws when the explanation asks for it.
+
+**S41. Agreeing types.** A type may give `agrees: true` (default `false`): its
+items agree with a noun in `agreement_axes` (S36), and the exercise kinds
+treat them so. Another value throws.
 
 **Collisions.** A key produced twice — by own forms, by delegation or by
 composition other than a variant rule (S24) — throws. There is no precedence between them; inheritance (S6) is

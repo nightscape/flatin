@@ -25,7 +25,9 @@ import 'support/key_echo_app.dart';
 import 'support/key_echo_i18n.dart';
 import 'support/word_classification_harness.dart';
 
-/// Every verb whose type is one of [irregularVerbTypes], read off the data.
+/// Every verb whose type is one of [_irregularTypes], read off the data.
+const _irregularTypes = {'esse-Typ', 'esse-Kompositum', 'Unregelmäßig'};
+
 const _irregularLemmas = {
   'esse', 'abesse', 'adesse', 'dēesse', 'praeesse', 'posse', //
   'īre', 'abīre', 'adīre', 'exīre', 'inīre', 'perīre', 'redīre', 'subīre',
@@ -78,7 +80,7 @@ void main() {
   test('the irregular verbs are those of the types esse-Typ, '
       'esse-Kompositum and Unregelmäßig', () async {
     final verbs = await getFormMetadata('lib/data/latin_verbs.yaml');
-    expect(verbs.availableTypes, containsAll(irregularVerbTypes));
+    expect(verbs.availableTypes, containsAll(_irregularTypes));
     final all = await loadAllPracticeItems();
     expect({
       for (final w in all.where(const IrregularVerbs().includes)) w.lemma,
@@ -90,7 +92,7 @@ void main() {
         'in range to exactly its group', () async {
       final c = _container(range);
       addTearDown(c.dispose);
-      final practicable = await c.read(practicableItemsByTypeProvider.future);
+      final practicable = await c.read(practicableItemsByFileProvider.future);
       final focuses = await c.read(wordFocusesProvider.future);
       final nouns = practicable['nouns']!;
       final verbs = practicable['verbs']!;
@@ -148,7 +150,7 @@ void main() {
     final c = _container(LessonRange.full);
     addTearDown(c.dispose);
     final filter = await c.read(courseFilterProvider.future);
-    final practicable = await c.read(practicableItemsByTypeProvider.future);
+    final practicable = await c.read(practicableItemsByFileProvider.future);
     final focuses = await c.read(wordFocusesProvider.future);
     for (final focus in [
       const FileFocus('nouns'),
@@ -191,7 +193,7 @@ void main() {
       'focus', () async {
     final c = _container(LessonRange.full);
     addTearDown(c.dispose);
-    final due = await c.read(dueItemsByTypeProvider.future);
+    final due = await c.read(dueItemsByFileProvider.future);
     expect(
       await c.read(nextDueItemProvider('verbs', const AllWords()).future),
       due['verbs']!.first,
@@ -277,7 +279,10 @@ void main() {
     await letItLoad(tester);
     final opened = tester.widget<PracticeScreen>(find.byType(PracticeScreen));
     expect(opened.focus, const IrregularVerbs());
-    expect(irregularVerbTypes, contains(opened.item.type));
+    expect(
+      opened.item.derivation.grammar.irregularTypes,
+      contains(opened.item.type),
+    );
   });
 
   testWidgets('a held type focus whose type leaves the range stays listed, '

@@ -23,7 +23,7 @@ void main() {
       wrapInApp(
         const HomeScreen(),
         overrides: [
-          practicableItemsByTypeProvider.overrideWith((ref) async {
+          practicableItemsByFileProvider.overrideWith((ref) async {
             await Future<void>.delayed(const Duration(milliseconds: 500));
             return {'nouns': nouns, 'verbs': <PracticeItem>[]};
           }),

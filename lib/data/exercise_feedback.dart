@@ -212,7 +212,7 @@ ExplanationLine _optionLine(
   } else {
     assert(diagnosis is EndingOfOtherType, 'unexpected $diagnosis');
     label = (diagnosis as EndingOfOtherType).types
-        .map((t) => typePhrase(t, word.derivation.grammar.language))
+        .map((t) => typePhrase(word.derivation.grammar, t))
         .join(', ');
   }
   final suffix = switch ((right, chosen)) {

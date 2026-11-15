@@ -3,13 +3,10 @@ library;
 
 import 'dart:math';
 
-import '../models/course.dart';
 import '../models/exercise.dart';
 import '../models/practice_item.dart';
 import 'curriculum.dart';
 import 'selection.dart';
-
-const _verbBundleAxes = ['modus', 'tempus', 'genus_verbi'];
 
 final class Topic {
   /// `<dataFileId>:<lesson>`, e.g. `verbs:23`. In memory only, never stored.
@@ -66,10 +63,10 @@ List<Topic> topicsOf(
       formIndexOf.update(key, (j) => min(j, i), ifAbsent: () => i);
       nameOf.putIfAbsent(
         key,
-        () => item.role == DataFileRole.noun
+        () => item.roles.bundleAxes.isEmpty
             ? nounTypeDisplays[key.$2]!
             : [
-                for (final axis in _verbBundleAxes)
+                for (final axis in item.roles.bundleAxes)
                   item.formLabels[i].display(axis),
               ].nonNulls.join(' '),
       );

@@ -160,8 +160,10 @@ void main() {
     });
 
     test('the fixture comparison table is the shipped table', () {
-      List<String> block(String path) =>
-          blockLines(File(path).readAsStringSync(), '  Komparativ-Endungen:');
+      List<String> block(String path) => blockLines(
+        File(path).readAsStringSync(),
+        '  Komparativ-Endungen:',
+      ).where((line) => !line.trimLeft().startsWith('phrase:')).toList();
 
       List<String> kstamms(String path) => File(path)
           .readAsLinesSync()

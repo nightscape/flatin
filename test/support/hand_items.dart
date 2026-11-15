@@ -2,6 +2,10 @@
 /// word for: Modus, Genus verbi and forms without Person.
 library;
 
+import 'dart:io';
+
+import 'package:latin_practice/grammar/schema.dart';
+import 'package:latin_practice/models/course.dart';
 import 'package:latin_practice/models/derivation.dart';
 import 'package:latin_practice/models/practice_item.dart';
 import 'latin_course.dart';
@@ -66,6 +70,17 @@ final fullVerbAxes = Axes(
 
 FormLabel fullVerbLabel(String key) => FormLabel.fromKey(key, fullVerbAxes);
 
+/// The roles the shipped Latin files give themselves, by data file id.
+final Map<String, FileRoles> shippedRoles = {
+  for (final file in parseGrammarFiles({
+    for (final name in ['nouns', 'verbs'])
+      'lib/data/latin_$name.yaml': File(
+        'lib/data/latin_$name.yaml',
+      ).readAsStringSync(),
+  }, lang: latinLang))
+    file.dataFileId: file.roles,
+};
+
 /// An item whose forms are given as they stand: [forms] maps every form key
 /// to its accepted spellings, the shown one first.
 PracticeItem handItem({
@@ -75,6 +90,8 @@ PracticeItem handItem({
   required Map<FormKey, List<String>> forms,
   String type = 'Testtyp',
   String translation = 'Testwort',
+  DataFileRole? role,
+  Grammar? grammar,
 }) {
   final keys = forms.keys.toList();
   return PracticeItem(
@@ -85,7 +102,7 @@ PracticeItem handItem({
     bookTranslation: translation,
     principalParts: [('', lemma)],
     dataFileId: dataFileId,
-    role: latinCourse.dataFile(dataFileId).role,
+    role: role ?? latinCourse.dataFile(dataFileId).role,
     formOrder: keys,
     forms: [for (final key in keys) forms[key]!.first],
     acceptedForms: [for (final key in keys) forms[key]!],
@@ -98,7 +115,9 @@ PracticeItem handItem({
         for (final key in keys)
           key: GivenForm(formKey: key, variants: forms[key]!),
       },
-      grammar: Grammar({}, {}, {}, 'de', latinLang),
+      grammar:
+          grammar ??
+          Grammar({}, {}, {}, 'de', latinLang, fileRoles: shippedRoles),
     ),
   );
 }

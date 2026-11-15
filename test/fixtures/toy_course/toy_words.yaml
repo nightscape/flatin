@@ -28,6 +28,8 @@ defaults:
 
 classes: [wortklasse]
 
+base_form: {ruf: tu}
+
 types:
   Klasse-Ka:
     class: wortklasse

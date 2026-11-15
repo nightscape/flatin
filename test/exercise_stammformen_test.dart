@@ -7,7 +7,6 @@ import 'package:latin_practice/data/exercise_choice.dart';
 import 'package:latin_practice/data/exercise_feedback.dart';
 import 'package:latin_practice/data/exercise_interpreter.dart';
 import 'package:latin_practice/data/exercise_kinds.dart';
-import 'package:latin_practice/data/exercise_spec.dart';
 import 'package:latin_practice/data/german_forms.dart';
 import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/models/exercise.dart';
@@ -36,8 +35,7 @@ const _rowKeys = [
   'sup.akk',
 ];
 
-List<String> get _promptsFrom =>
-    (_generator.spec.select as PrincipalParts).promptsFrom;
+late List<String> _promptsFrom;
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -47,6 +45,7 @@ void main() {
 
   setUpAll(() async {
     verbs = await loadPracticeItems('lib/data/latin_verbs.yaml');
+    _promptsFrom = verbs.first.roles.principalPromptsFrom;
   });
 
   /// [word]'s word card and the grammar cards of its row at [known]
@@ -453,7 +452,6 @@ void main() {
   });
 
   test('the spec names a part for every row key', () {
-    final select = _generator.spec.select as PrincipalParts;
-    expect([for (final p in select.row) p.key], _rowKeys);
+    expect([for (final p in verbs.first.roles.principalRow) p.key], _rowKeys);
   });
 }

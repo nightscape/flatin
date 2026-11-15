@@ -133,7 +133,7 @@ Widget _practiceTile({
   return Consumer(
     builder: (context, ref, child) {
       final practicable =
-          ref.watch(practicableItemsByTypeProvider).value?[dataFileId] ??
+          ref.watch(practicableItemsByFileProvider).value?[dataFileId] ??
           const <PracticeItem>[];
       final enabled = practicable.isNotEmpty;
       final color = enabled ? Colors.black : Theme.of(context).disabledColor;

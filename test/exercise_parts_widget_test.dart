@@ -60,7 +60,7 @@ void main() {
     final c = ProviderContainer(retry: noRetry);
     addTearDown(c.dispose);
     verbs = (await tester.runAsync(
-      () => c.read(practicableItemsByTypeProvider.future),
+      () => c.read(practicableItemsByFileProvider.future),
     ))!['verbs']!;
     cognoscere = verbs.singleWhere((v) => v.id == 'verbs:cognoscere');
   }

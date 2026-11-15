@@ -7,7 +7,6 @@ import 'dart:math';
 import '../data/diagnosis.dart';
 import '../data/german_forms.dart';
 import '../data/sentences.dart';
-import 'course.dart';
 import 'practice_item.dart';
 
 /// A form bundle of one data file: for verbs the codes of Modus, Tempus and
@@ -16,20 +15,18 @@ import 'practice_item.dart';
 /// Produced by [bundleOf]; read by the selection and the generators.
 typedef GrammarBundle = String;
 
-const _bundleAxes = {'modus', 'tempus', 'genus_verbi'};
-
 /// The bundle that [key] of [item] belongs to.
 /// Produced here; read by the selection, the generators and the storage.
 GrammarBundle bundleOf(PracticeItem item, FormKey key) {
   final index = item.formOrder.indexOf(key);
   assert(index >= 0, '"$key" is not a form of ${item.id}');
-  return switch (item.role) {
-    DataFileRole.verb => item.formLabels[index].axes.formatKey({
-      for (final e in item.formLabels[index].features.entries)
-        if (_bundleAxes.contains(e.key)) e.key: e.value,
-    }),
-    DataFileRole.noun || DataFileRole.vocab => item.type,
-  };
+  final axes = item.roles.bundleAxes;
+  return axes.isEmpty
+      ? item.type
+      : item.formLabels[index].axes.formatKey({
+          for (final e in item.formLabels[index].features.entries)
+            if (axes.contains(e.key)) e.key: e.value,
+        });
 }
 
 /// `grammar:<dataFileId>:<bundle>`, e.g. `grammar:verbs:ind.fut2.pass`; a

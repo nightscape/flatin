@@ -17,7 +17,7 @@ void main() {
     addTearDown(container.dispose);
 
     final practicable = await container.read(
-      practicableItemsByTypeProvider.future,
+      practicableItemsByFileProvider.future,
     );
     final filter = await container.read(courseFilterProvider.future);
     final items = await loadAllPracticeItems();

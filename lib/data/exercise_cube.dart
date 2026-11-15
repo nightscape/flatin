@@ -237,12 +237,13 @@ final class Cube {
   /// one of the same form in the other number; none unless [c] has two words
   /// and a partner in the other number.
   Iterable<BuiltWrong> compoundSwaps(FormCell c) sync* {
+    final swapAxis = c.word.roles.swapAxis;
     final partners = cellsOf(c.word).where(
       (n) =>
-          c.features.containsKey('numerus') &&
-          n.features.containsKey('numerus') &&
+          c.features.containsKey(swapAxis) &&
+          n.features.containsKey(swapAxis) &&
           distance(c, n) == 1 &&
-          differingAxes(c, n).single == 'numerus',
+          differingAxes(c, n).single == swapAxis,
     );
     final parts = c.word.forms[c.index].split(' ');
     if (partners.isEmpty || parts.length != 2) return;

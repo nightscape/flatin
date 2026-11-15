@@ -53,6 +53,7 @@ void main() {
       role: DataFileRole.noun,
       labels: [for (final k in keys) FormLabel.fromKey(k, words.axes)],
       types: {for (final item in words.items) item.typeName}.toList(),
+      baseForm: words.roles.baseForm!,
     );
     final books = [
       for (final path in toyCourse.books) File(path).readAsStringSync(),

@@ -17,8 +17,7 @@ abstract interface class GermanForms {
 /// Renders a Latin form from the verb gloss file for the Latin items with a
 /// `de_verb`, and from the noun gloss file for those with a `de_noun`. A noun
 /// form reads the German key that is its Latin key; a verb form reads the
-/// Latin key cut to modus, tempus and genus verbi for an infinitive or a
-/// participle.
+/// Latin key cut as the verb file's `gloss_keys` say.
 class GrammarGermanForms implements GermanForms {
   GrammarGermanForms(
     String germanVerbsYaml,
@@ -80,7 +79,7 @@ class GrammarGermanForms implements GermanForms {
   @override
   bool covers(PracticeItem item, FormKey key) =>
       (germanNounOf.containsKey(item.id) ||
-          _courseGroups.contains(key.split('.').first)) &&
+          item.roles.glossKeys.containsKey(key.split('.').first)) &&
       _variants(item, key) != null;
 
   @override
@@ -95,8 +94,6 @@ class GrammarGermanForms implements GermanForms {
     return variants;
   }
 
-  static const _courseGroups = {'ind', 'konj', 'inf', 'part'};
-
   /// Null when [item] has no German word or the word lacks the form; a verb
   /// [key] must be in a course group.
   List<String>? _variants(PracticeItem item, FormKey key) {
@@ -106,16 +103,10 @@ class GrammarGermanForms implements GermanForms {
     }
     final verbId = germanVerbOf[item.id];
     if (verbId == null) return null;
-    return _engine.of(_verbsId, verbId).forms[germanKeyOf(key)]?.variants;
-  }
-
-  static FormKey germanKeyOf(FormKey latinKey) {
-    final codes = latinKey.split('.');
-    return switch (codes.first) {
-      'ind' || 'konj' => latinKey,
-      'inf' || 'part' => codes.take(3).join('.'),
-      _ => throw ArgumentError('the course gives no German form for $latinKey'),
-    };
+    return _engine
+        .of(_verbsId, verbId)
+        .forms[item.roles.glossKeyOf(key)]
+        ?.variants;
   }
 }
 

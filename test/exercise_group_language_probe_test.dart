@@ -47,7 +47,7 @@ void main() {
       final c = ProviderContainer(retry: noRetry);
       addTearDown(c.dispose);
       final byType = await tester.runAsync(
-        () => c.read(practicableItemsByTypeProvider.future),
+        () => c.read(practicableItemsByFileProvider.future),
       );
       final vocare = byType!['verbs']!.singleWhere(
         (i) => i.id == 'verbs:vocare',
@@ -104,7 +104,7 @@ void main() {
       final c = ProviderContainer(retry: noRetry);
       addTearDown(c.dispose);
       final byType = await tester.runAsync(
-        () => c.read(practicableItemsByTypeProvider.future),
+        () => c.read(practicableItemsByFileProvider.future),
       );
       final nouns = byType!['nouns']!;
       final hic = nouns.singleWhere((i) => i.id == 'nouns:hic');

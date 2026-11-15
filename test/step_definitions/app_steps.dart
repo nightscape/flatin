@@ -434,7 +434,7 @@ class AppSteps {
     final container = ProviderScope.containerOf(
       tester.element(find.byType(WordClassificationScreen)),
     );
-    final byType = await container.read(practicableItemsByTypeProvider.future);
+    final byType = await container.read(practicableItemsByFileProvider.future);
     final filter = await container.read(courseFilterProvider.future);
     final lang = await container.read(examLanguageProvider.future);
     final word = tester

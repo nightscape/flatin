@@ -23,10 +23,10 @@ void main() {
         wrapInApp(
           const HomeScreen(),
           overrides: [
-            practicableItemsByTypeProvider.overrideWith(
+            practicableItemsByFileProvider.overrideWith(
               (ref) async => {'nouns': nouns, 'verbs': []},
             ),
-            dueItemsByTypeProvider.overrideWith((ref) => due.future),
+            dueItemsByFileProvider.overrideWith((ref) => due.future),
           ],
         ),
       );

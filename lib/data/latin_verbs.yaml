@@ -102,6 +102,27 @@ sandhi:
 
 classes: [konjugation]
 
+bundle_axes: [modus, tempus, genus_verbi]
+base_form: {modus: inf}
+change_axes: [genus_verbi, tempus, numerus]
+swap_axis: numerus
+agreement_axes: [kasus, numerus, genus]
+look_alikes:
+  tick:
+    - [ind.impf.akt, ind.fut.akt]
+    - [ind.fut.akt, ind.praes.pass]
+  sort:
+    - [ind.perf.akt, ind.plusq.akt, ind.fut2.akt]
+principal_parts:
+  row:
+    - {key: inf.praes.akt, name: exercise.stammformen.part.infinitive}
+    - {key: ind.praes.akt.1.sg, name: exercise.stammformen.part.present}
+    - {key: ind.perf.akt.1.sg, name: exercise.stammformen.part.perfect}
+    - {key: sup.akk, name: exercise.stammformen.part.supine}
+  prompts_from: [ind.perf.akt.1.sg, sup.akk, part.perf.]
+  supine: sup.akk
+gloss_keys: {ind: all, konj: all, inf: 3, part: 3}
+
 voice:
   axis: genus_verbi
   active: akt
@@ -127,6 +148,7 @@ follows:
 
 types:
   Perfekt-System:
+    phrase: {de: "Endung des Perfekts", en: "perfect ending"}
     abstract: true
     stems:
       perfekt: {from: perfekt_1sg, remove: "ī", display: {de: Perfektstamm, en: Perfect stem}}
@@ -203,6 +225,8 @@ types:
       inf.fut.pass: "{ppp}um īrī"
 
   A-Konjugation:
+    borrows: [3-Endungen, 3-Endungen-Partizip, a-o-Endungen]
+    phrase: {de: "Endung der A-Konjugation", en: "1st conjugation ending"}
     class: konjugation
     display: {de: A-Konjugation, en: "1st conjugation"}
     inherits_from: Verb-Vollständig
@@ -291,6 +315,8 @@ types:
       imp.praes.pass.2.pl: "{praesens}minī"
       inf.praes.pass: "{praesens}rī"
   E-Konjugation:
+    borrows: [3-Endungen, 3-Endungen-Partizip, a-o-Endungen]
+    phrase: {de: "Endung der E-Konjugation", en: "2nd conjugation ending"}
     class: konjugation
     display: {de: E-Konjugation, en: "2nd conjugation"}
     inherits_from: A-Konjugation
@@ -314,6 +340,8 @@ types:
       konj.praes.pass.2.pl: "{praesens}āminī"
       konj.praes.pass.3.pl: "{praesens}antur"
   I-Konjugation:
+    borrows: [3-Endungen, 3-Endungen-Partizip, a-o-Endungen]
+    phrase: {de: "Endung der I-Konjugation", en: "4th conjugation ending"}
     class: konjugation
     display: {de: I-Konjugation, en: "4th conjugation"}
     inherits_from: Verb-Vollständig
@@ -402,6 +430,8 @@ types:
       imp.praes.pass.2.pl: "{praesens}minī"
       inf.praes.pass: "{praesens}rī"
   Mischkonjugation:
+    borrows: [I-Konjugation, 3-Endungen, 3-Endungen-Partizip, a-o-Endungen]
+    phrase: {de: "Endung der Mischkonjugation", en: "mixed conjugation ending"}
     class: konjugation
     display: {de: Mischkonjugation, en: "mixed conjugation (3rd -iō)"}
     inherits_from: I-Konjugation
@@ -414,6 +444,8 @@ types:
     forms:
       inf.praes.pass: "{praesens}ī"
   Konsonantische:
+    borrows: [3-Endungen, 3-Endungen-Partizip, a-o-Endungen]
+    phrase: {de: "Endung der konsonantischen Konjugation", en: "3rd conjugation ending"}
     class: konjugation
     display: {de: Konsonantische, en: "3rd conjugation"}
     inherits_from: Verb-Vollständig
@@ -499,6 +531,8 @@ types:
       inf.praes.pass: "{praesens}ī"
 
   esse-Typ:
+    irregular: true
+    borrows: [3-Endungen, 3-Endungen-Partizip, a-o-Endungen]
     class: konjugation
     display: {de: esse-Typ, en: esse type}
     inherits_from: Perfekt-System
@@ -508,6 +542,7 @@ types:
       - {name: pfa, type: a-o-Endungen, bind: {stamm: pfa}, set: {modus: part, tempus: fut, genus_verbi: akt}}
 
   esse-Kompositum:
+    irregular: true
     class: konjugation
     display: {de: esse-Kompositum, en: compound of esse}
     inherits_from: esse-Typ
@@ -530,6 +565,9 @@ types:
           - {lexeme: esse, pass: all}
 
   Unregelmäßig:
+    irregular: true
+    borrows: [3-Endungen, 3-Endungen-Partizip, a-o-Endungen]
+    phrase: {de: "unregelmäßige Endung", en: "irregular ending"}
     class: konjugation
     display: {de: Unregelmäßig, en: irregular}
     inherits_from: Verb-Vollständig

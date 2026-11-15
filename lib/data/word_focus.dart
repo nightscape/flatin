@@ -1,13 +1,8 @@
 /// The word group one round asks, chosen at its start and never stored.
 library;
 
-import '../models/course.dart';
 import '../models/course_filter.dart';
 import '../models/practice_item.dart';
-
-/// The verb types whose forms the data gives by hand instead of by one of
-/// the regular conjugations.
-const irregularVerbTypes = {'esse-Typ', 'esse-Kompositum', 'Unregelmäßig'};
 
 sealed class WordFocus {
   /// Unique among the focuses; two focuses with the same id are equal.
@@ -64,7 +59,7 @@ final class IrregularVerbs extends WordFocus {
 
   @override
   bool includes(PracticeItem word) =>
-      word.role == DataFileRole.verb && irregularVerbTypes.contains(word.type);
+      word.derivation.grammar.irregularTypes.contains(word.type);
 }
 
 /// Every noun and verb, asked only for its base forms

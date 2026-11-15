@@ -9,6 +9,7 @@ library;
 import 'package:yaml/yaml.dart';
 
 import '../data/languages/language.dart' show Language;
+import '../models/derivation.dart' show FileRoles, PrincipalPartSpec;
 import '../models/form_label.dart';
 
 /// A violation of one of the schema rules S1-S20.
@@ -476,6 +477,18 @@ final class GrammarType {
   /// S26: the genus of every item of this type.
   final String? genus;
 
+  /// S38: the type's words are irregular.
+  final bool irregular;
+
+  /// S39: the types whose endings the learner is told this type borrows.
+  final List<String> borrows;
+
+  /// S40: language → the phrase naming this type's endings; empty without.
+  final Map<String, String> phrases;
+
+  /// S41: the words of this type agree with a noun.
+  final bool agrees;
+
   GrammarType({
     required this.name,
     this.isAbstract = false,
@@ -491,6 +504,10 @@ final class GrammarType {
     this.sandhi = const [],
     this.deponent,
     this.genus,
+    this.irregular = false,
+    this.borrows = const [],
+    this.phrases = const {},
+    this.agrees = false,
   });
 
   bool get isLeaf => delegates.isEmpty && composes.isEmpty;
@@ -519,6 +536,10 @@ final class GrammarType {
     sandhi: sandhi.isNotEmpty ? sandhi : parent.sandhi,
     deponent: deponent ?? parent.deponent,
     genus: genus ?? parent.genus,
+    irregular: irregular,
+    borrows: borrows,
+    phrases: phrases,
+    agrees: agrees,
   );
 }
 
@@ -661,6 +682,9 @@ final class GrammarFile {
   /// S30.
   final List<FollowSpec> follows;
 
+  /// S31-S37.
+  final FileRoles roles;
+
   /// S26: the genus codes of [item]; empty for an item of a class without one.
   List<String> genusOf(GrammarItem item) =>
       switch (types[item.typeName]!.genus) {
@@ -705,6 +729,7 @@ final class GrammarFile {
     this.baseForms = const [],
     this.voice,
     this.follows = const [],
+    this.roles = const FileRoles(),
   });
 
   GrammarItem item(String id) => items.firstWhere(
@@ -828,6 +853,15 @@ class _FileParser {
     'shared',
     'voice',
     'follows',
+    'bundle_axes',
+    'base_form',
+    'change_axes',
+    'swap_axis',
+    'look_alikes',
+    'principal_parts',
+    'agreement_axes',
+    'genus_axis',
+    'gloss_keys',
   };
 
   static const _itemKeys = {
@@ -842,7 +876,6 @@ class _FileParser {
     'de_verb',
     'de_noun',
     'slots',
-    'genus',
     'regular_type',
   };
 
@@ -857,6 +890,7 @@ class _FileParser {
     final defaults = root['defaults'] as YamlMap?;
     final classes = _classes();
     final voice = _voice(axes);
+    final roles = _roles(axes);
     final file = GrammarFile(
       path: path,
       language: language,
@@ -873,6 +907,7 @@ class _FileParser {
       declaredTypes: _types(axes, classes),
       voice: voice,
       follows: _follows(axes, voice),
+      roles: roles,
     );
     file.items.addAll(_items(file));
     return file;
@@ -1144,7 +1179,11 @@ class _FileParser {
           for (final id in (spec['sandhi'] as YamlList?) ?? const []) '$id',
         ],
         deponent: _deponent(spec['deponent'], 'type $name'),
-        genus: switch (_genus(spec['genus'], 'type $name', axes)) {
+        irregular: _flag(spec['irregular'], 'S38', 'type $name irregular'),
+        borrows: _borrows(name, spec['borrows']),
+        phrases: _phrases(name, spec['phrase']),
+        agrees: _flag(spec['agrees'], 'S41', 'type $name agrees'),
+        genus: switch (_genus(_genusNode(spec), 'type $name', axes)) {
           [] => null,
           [final genus] => genus,
           _ => _bad('S26', 'type $name gives one genus'),
@@ -1506,17 +1545,192 @@ class _FileParser {
     _bad('S13', 'type $type: a compose part needs self, lexeme, slot or stem');
   }
 
-  /// S26: codes of the axis `genus`, without repeats.
+  /// S26: the axis whose id names the genus key of types and items.
+  late final String? _genusAxis = root['genus_axis'] as String?;
+
+  Object? _genusNode(YamlMap spec) =>
+      _genusAxis == null ? null : spec[_genusAxis];
+
+  /// S26: codes of the genus axis, without repeats.
   List<String> _genus(Object? node, String where, Axes axes) {
     if (node == null) return const [];
     final codes = [for (final code in _asList(node)) '$code'];
-    final axis = axes.axes.where((a) => a.id == 'genus').firstOrNull;
+    final axis = axes.axes.where((a) => a.id == _genusAxis).firstOrNull;
     if (axis == null ||
         codes.toSet().length != codes.length ||
         codes.any((code) => axis.indexOf(code) < 0)) {
-      _bad('S26', '$where: "genus: $node" is no list of genus codes');
+      _bad('S26', '$where: "$_genusAxis: $node" is no list of genus codes');
     }
     return codes;
+  }
+
+  bool _flag(Object? node, String rule, String where) => switch (node) {
+    null => false,
+    final bool flag => flag,
+    _ => _bad(rule, '$where: give true or false'),
+  };
+
+  /// S39: the names only; [_Linker] checks that each names a type.
+  List<String> _borrows(String type, Object? node) {
+    if (node == null) return const [];
+    if (node is! YamlList ||
+        node.isEmpty ||
+        node.toSet().length != node.length) {
+      _bad('S39', 'type $type borrows: give a list of distinct type names');
+    }
+    return [for (final name in node) '$name'];
+  }
+
+  /// S40: the phrase naming a type's endings, in every data language.
+  Map<String, String> _phrases(String type, Object? node) =>
+      node == null ? const {} : _texts(node, 'type $type phrase');
+
+  List<String> _axisList(Axes axes, String key, String rule) {
+    final node = root[key];
+    if (node == null) return const [];
+    if (node is! YamlList ||
+        node.isEmpty ||
+        node.toSet().length != node.length) {
+      _bad(rule, '$key: give a list of distinct axis ids');
+    }
+    return [
+      for (final id in node)
+        axes.axes.any((a) => a.id == id)
+            ? '$id'
+            : _bad(rule, '$key: "$id" is no axis'),
+    ];
+  }
+
+  String? _axisOf(Axes axes, String key, String rule) {
+    final node = root[key];
+    if (node == null) return null;
+    if (node is! String || !axes.axes.any((a) => a.id == node)) {
+      _bad(rule, '$key: "$node" is no axis');
+    }
+    return node;
+  }
+
+  /// A key or key prefix (a trailing dot) whose codes all exist in order.
+  FormKey _keyOf(Axes axes, Object? node, String where, String rule) {
+    final key = '$node';
+    try {
+      axes.parseKey(key.endsWith('.') ? key.substring(0, key.length - 1) : key);
+    } on ArgumentError catch (e) {
+      _bad(rule, '$where: ${e.message}');
+    }
+    return key;
+  }
+
+  /// S31-S37: what the file says about its own shape.
+  FileRoles _roles(Axes axes) {
+    final baseNode = root['base_form'];
+    (String, String)? baseForm;
+    if (baseNode != null) {
+      if (baseNode is! YamlMap || baseNode.length != 1) {
+        _bad('S32', 'base_form: give one axis id and one of its codes');
+      }
+      final entry = baseNode.entries.single;
+      final axis = axes.axes.where((a) => a.id == entry.key).firstOrNull;
+      if (axis == null || axis.indexOf('${entry.value}') < 0) {
+        _bad(
+          'S32',
+          'base_form: "${entry.key}: ${entry.value}" is no axis code',
+        );
+      }
+      baseForm = ('${entry.key}', '${entry.value}');
+    }
+
+    final lookNode = root['look_alikes'];
+    final lookAlikes = <String, List<List<String>>>{};
+    if (lookNode != null) {
+      if (lookNode is! YamlMap) _bad('S34', 'look_alikes: give a map of sets');
+      for (final entry in lookNode.entries) {
+        final groups = entry.value;
+        final where = 'look_alikes.${entry.key}';
+        if (groups is! YamlList ||
+            groups.isEmpty ||
+            groups.any((g) => g is! YamlList || g.length < 2)) {
+          _bad('S34', '$where: give lists of two or more bundles');
+        }
+        lookAlikes['${entry.key}'] = [
+          for (final g in groups)
+            [for (final b in g as YamlList) _keyOf(axes, b, where, 'S34')],
+        ];
+      }
+    }
+
+    final partsNode = root['principal_parts'];
+    var row = <PrincipalPartSpec>[];
+    var promptsFrom = <String>[];
+    FormKey? supine;
+    if (partsNode != null) {
+      if (partsNode is! YamlMap ||
+          partsNode['row'] is! YamlList ||
+          partsNode['prompts_from'] is! YamlList ||
+          partsNode['supine'] == null) {
+        _bad('S35', 'principal_parts: give row, prompts_from and supine');
+      }
+      row = [
+        for (final part in partsNode['row'] as YamlList)
+          if (part is YamlMap && part['key'] != null && part['name'] != null)
+            (
+              key: _keyOf(axes, part['key'], 'principal_parts.row', 'S35'),
+              name: '${part['name']}',
+            )
+          else
+            _bad('S35', 'principal_parts.row: each part has a key and a name'),
+      ];
+      promptsFrom = [
+        for (final k in partsNode['prompts_from'] as YamlList)
+          _keyOf(axes, k, 'principal_parts.prompts_from', 'S35'),
+      ];
+      supine = _keyOf(
+        axes,
+        partsNode['supine'],
+        'principal_parts.supine',
+        'S35',
+      );
+      if (!row.any((part) => part.key == supine)) {
+        _bad('S35', 'principal_parts.supine: "$supine" is no key of the row');
+      }
+    }
+
+    final glossNode = root['gloss_keys'];
+    final glossKeys = <String, int?>{};
+    if (glossNode != null) {
+      if (glossNode is! YamlMap || glossNode.isEmpty) {
+        _bad('S37', 'gloss_keys: give a map of first codes');
+      }
+      for (final entry in glossNode.entries) {
+        final keep = entry.value;
+        if (axes.axisOfCode('${entry.key}') == null ||
+            !(keep == 'all' || (keep is int && keep > 0))) {
+          _bad(
+            'S37',
+            'gloss_keys.${entry.key}: give a code of an axis and "all" or '
+                'a code count',
+          );
+        }
+        glossKeys['${entry.key}'] = keep == 'all' ? null : keep as int;
+      }
+    }
+
+    return FileRoles(
+      bundleAxes: _axisList(axes, 'bundle_axes', 'S31'),
+      baseForm: baseForm,
+      changeAxes: _axisList(axes, 'change_axes', 'S33'),
+      swapAxis: _axisOf(axes, 'swap_axis', 'S33'),
+      lookAlikes: lookAlikes,
+      principalRow: row,
+      principalPromptsFrom: promptsFrom,
+      principalSupine: supine,
+      agreementAxes: switch (_axisList(axes, 'agreement_axes', 'S36')) {
+        final list when list.isEmpty || list.length == 3 => list,
+        _ => _bad('S36', 'agreement_axes: give case, number and gender axes'),
+      },
+      genusAxis: _axisOf(axes, 'genus_axis', 'S26'),
+      glossKeys: glossKeys,
+    );
   }
 
   Voice? _voice(Axes axes) {
@@ -1712,7 +1926,9 @@ class _FileParser {
     for (final entry in node) {
       final spec = entry as YamlMap;
       for (final key in spec.keys) {
-        if (!_itemKeys.contains(key)) _bad('file', 'unknown item key "$key"');
+        if (!_itemKeys.contains(key) && key != _genusAxis) {
+          _bad('file', 'unknown item key "$key"');
+        }
       }
       final parts = <String, List<String>>{};
       for (final p in ((spec['parts'] as YamlMap?) ?? YamlMap()).entries) {
@@ -1814,7 +2030,7 @@ class _FileParser {
           deNoun: spec['de_noun'] as String?,
           slots: _slots(spec['slots'], 'item $id'),
           impersonalPassive: impersonal,
-          genus: _genus(spec['genus'], 'item $id', file.axes),
+          genus: _genus(_genusNode(spec), 'item $id', file.axes),
           regularType: spec['regular_type'] as String?,
         ),
       );
@@ -1848,6 +2064,7 @@ class _Linker {
 
   void link() {
     _registerTypes();
+    _checkBorrows();
     for (final file in files) {
       file.types = {
         for (final name in file.declaredTypes.keys) name: _resolve(file, name),
@@ -1881,6 +2098,23 @@ class _Linker {
           );
         }
         _fileOfType[name] = file;
+      }
+    }
+  }
+
+  /// S39: a borrowed type is declared in some file, never the type itself.
+  void _checkBorrows() {
+    for (final file in files) {
+      for (final type in file.declaredTypes.values) {
+        for (final (i, name) in type.borrows.indexed) {
+          if (!_fileOfType.containsKey(name) || name == type.name) {
+            _fail(
+              'S39',
+              file.path,
+              'types.${type.name}.borrows[$i]: "$name" names no other type',
+            );
+          }
+        }
       }
     }
   }

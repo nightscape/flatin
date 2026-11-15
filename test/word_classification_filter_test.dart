@@ -25,7 +25,7 @@ void main() {
     final container = ProviderContainer();
     expect(await container.read(dueCardsProvider.future), isEmpty);
     final practicable = await container.read(
-      practicableItemsByTypeProvider.future,
+      practicableItemsByFileProvider.future,
     );
     expect(practicable['nouns']!.every((i) => i.type == enabledType), isTrue);
     expect(practicable['verbs'], isEmpty);

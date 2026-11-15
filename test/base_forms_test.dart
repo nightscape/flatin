@@ -467,7 +467,7 @@ void main() {
     'the irregular verbs without a regular reading ask the forms of the golden',
     () => expectGolden(
       'base_forms_irregular',
-      (i) => i.regularType == null && irregularVerbTypes.contains(i.typeName),
+      (i) => i.regularType == null && verbsFile.types[i.typeName]!.irregular,
     ),
   );
 
@@ -532,7 +532,7 @@ void main() {
       addTearDown(container.dispose);
       final filter = await container.read(courseFilterProvider.future);
       final practicable = await container.read(
-        practicableItemsByTypeProvider.future,
+        practicableItemsByFileProvider.future,
       );
       final offered = [
         for (final words in practicable.values)

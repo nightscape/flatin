@@ -83,155 +83,11 @@ List<ExplanationLine> _variantsLine(PracticeItem item, FormKey formKey) {
   ];
 }
 
-/// S14: per item class, the types whose endings its school grammar really
-/// borrows — participle and comparative endings, the consonant endings of the
-/// i-stems, the I-Konjugation endings of `capiō`. An unlisted pair is an
-/// engine detail the learner is never told, so the form is named after its own
-/// class: `habeō` is an E-Konjugation form, and the perfect endings belong to
-/// no class at all.
-const borrowedEndings = <String, Set<String>>{
-  'A-Konjugation': {'3-Endungen', '3-Endungen-Partizip', 'a-o-Endungen'},
-  'E-Konjugation': {'3-Endungen', '3-Endungen-Partizip', 'a-o-Endungen'},
-  'I-Konjugation': {'3-Endungen', '3-Endungen-Partizip', 'a-o-Endungen'},
-  'Konsonantische': {'3-Endungen', '3-Endungen-Partizip', 'a-o-Endungen'},
-  'Mischkonjugation': {
-    'I-Konjugation',
-    '3-Endungen',
-    '3-Endungen-Partizip',
-    'a-o-Endungen',
-  },
-  'Unregelmäßig': {'3-Endungen', '3-Endungen-Partizip', 'a-o-Endungen'},
-  'esse-Typ': {'3-Endungen', '3-Endungen-Partizip', 'a-o-Endungen'},
-  'Adjektiv-a-o': {'Komparativ-Endungen', 'a-o-Endungen'},
-  'Adjektiv-a-o-er': {
-    'Adjektiv-a-o',
-    'Komparativ-Endungen',
-    'a-o-Endungen',
-    'a-o-er-Endungen',
-  },
-  'Adjektiv-dreiendig': {
-    'Adjektiv-3',
-    'Komparativ-Endungen',
-    '3-Endungen',
-    'a-o-Endungen',
-  },
-  'Adjektiv-zweiendig': {
-    'Adjektiv-3',
-    'Komparativ-Endungen',
-    '3-Endungen',
-    'a-o-Endungen',
-  },
-  'I-Deklination-mf': {'Konsonantische-Deklination-mf'},
-  'Konsonantische-Deklination-i-mf': {'Konsonantische-Deklination-mf'},
-  'Konsonantische-Deklination-i-n': {'Konsonantische-Deklination-n'},
-  'E-Deklination-Konsonantstamm': {'E-Deklination'},
-};
-
-/// The school-grammar phrase naming each type [borrowedEndings] can name, by
+/// S40: the school-grammar phrase naming the endings of [type] in the data
 /// language; the clause prints it as it stands.
-const endingTypePhrases = <String, Map<String, String>>{
-  '3-Endungen': {
-    'de': 'Endung der 3. Deklination',
-    'en': '3rd declension ending',
-  },
-  '3-Endungen-Partizip': {
-    'de': 'Endung der 3. Deklination (Partizip)',
-    'en': '3rd declension ending (participle)',
-  },
-  'a-o-Endungen': {
-    'de': 'Endung der a-/o-Deklination',
-    'en': '1st/2nd declension ending',
-  },
-  'a-o-er-Endungen': {
-    'de': 'Endung der a-/o-Deklination auf -er',
-    'en': '1st/2nd declension ending in -er',
-  },
-  'Komparativ-Endungen': {'de': 'Komparativendung', 'en': 'comparative ending'},
-  'I-Konjugation': {
-    'de': 'Endung der I-Konjugation',
-    'en': '4th conjugation ending',
-  },
-  'Adjektiv-a-o': {
-    'de': 'Adverbendung (Adjektiv der a-/o-Deklination)',
-    'en': 'adverb ending (1st/2nd declension adjective)',
-  },
-  'Adjektiv-3': {
-    'de': 'Adverbendung (Adjektiv der 3. Deklination)',
-    'en': 'adverb ending (3rd declension adjective)',
-  },
-  'Konsonantische-Deklination-mf': {
-    'de': 'Endung der konsonantischen Deklination (m/f)',
-    'en': '3rd declension consonant-stem ending (m/f)',
-  },
-  'Konsonantische-Deklination-n': {
-    'de': 'Endung der konsonantischen Deklination (n)',
-    'en': '3rd declension consonant-stem ending (n)',
-  },
-  'E-Deklination': {
-    'de': 'Endung der E-Deklination',
-    'en': '5th declension ending',
-  },
-};
-
-String endingTypePhrase(String type, String language) =>
-    (endingTypePhrases[type] ??
-    (throw StateError('no phrase for ending type $type')))[language]!;
-
-/// The phrase for each type a diagnosis can name that the ending clause never
-/// does; [typePhrase] reads it after [endingTypePhrases].
-const diagnosisOnlyTypePhrases = <String, Map<String, String>>{
-  'A-Deklination': {
-    'de': 'Endung der A-Deklination',
-    'en': '1st declension ending',
-  },
-  'O-Deklination-maskulinum': {
-    'de': 'Endung der O-Deklination (m)',
-    'en': '2nd declension ending (m)',
-  },
-  'O-Deklination-neutrum': {
-    'de': 'Endung der O-Deklination (n)',
-    'en': '2nd declension ending (n)',
-  },
-  'U-Deklination': {
-    'de': 'Endung der U-Deklination',
-    'en': '4th declension ending',
-  },
-  'E-Deklination-Konsonantstamm': {
-    'de': 'Endung der E-Deklination (Konsonantstamm)',
-    'en': '5th declension ending (consonant stem)',
-  },
-  'Konsonantische-Deklination-i-mf': {
-    'de': 'Endung der konsonantischen Deklination (i-Stamm, m/f)',
-    'en': '3rd declension i-stem ending (m/f)',
-  },
-  'Konsonantische-Deklination-i-n': {
-    'de': 'Endung der konsonantischen Deklination (i-Stamm, n)',
-    'en': '3rd declension i-stem ending (n)',
-  },
-  'A-Konjugation': {
-    'de': 'Endung der A-Konjugation',
-    'en': '1st conjugation ending',
-  },
-  'E-Konjugation': {
-    'de': 'Endung der E-Konjugation',
-    'en': '2nd conjugation ending',
-  },
-  'Konsonantische': {
-    'de': 'Endung der konsonantischen Konjugation',
-    'en': '3rd conjugation ending',
-  },
-  'Mischkonjugation': {
-    'de': 'Endung der Mischkonjugation',
-    'en': 'mixed conjugation ending',
-  },
-  'Perfekt-System': {'de': 'Endung des Perfekts', 'en': 'perfect ending'},
-  'Unregelmäßig': {'de': 'unregelmäßige Endung', 'en': 'irregular ending'},
-};
-
-String typePhrase(String type, String language) =>
-    (endingTypePhrases[type] ??
-    diagnosisOnlyTypePhrases[type] ??
-    (throw StateError('no phrase for type $type')))[language]!;
+String typePhrase(Grammar grammar, String type) =>
+    (grammar.phraseByType[type] ??
+    (throw StateError('no phrase for type $type')))[grammar.language]!;
 
 ExplanationLine _diagnosisLine(
   PracticeItem item,
@@ -264,7 +120,7 @@ ExplanationLine _diagnosisLine(
         params: {
           'answer': answer,
           'types': types
-              .map((type) => typePhrase(type, item.derivation.grammar.language))
+              .map((type) => typePhrase(item.derivation.grammar, type))
               .join(', '),
         },
       );

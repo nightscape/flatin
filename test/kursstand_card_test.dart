@@ -3,7 +3,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/data/curriculum.dart';
 import 'package:latin_practice/data/lesson_data.dart';
 import 'package:latin_practice/data/practice_data.dart';
-import 'package:latin_practice/models/course_filter.dart';
 import 'package:latin_practice/models/lesson_range.dart';
 import 'package:latin_practice/models/settings.dart';
 import 'package:latin_practice/providers/curriculum_provider.dart';
@@ -344,7 +343,7 @@ void main() {
       (i) => lessons.lessonNumberOf(i) == 21,
     );
     final curriculum = await lateFormsCurriculum(item.dataFileId, 2);
-    final (axis, value) = basicFormFeature[item.role]!;
+    final (axis, value) = item.roles.baseForm!;
     final basic = item.formLabels.firstWhere((l) => l.features[axis] == value);
 
     await _open(

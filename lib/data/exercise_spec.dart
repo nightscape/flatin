@@ -4,7 +4,6 @@
 library;
 
 import '../models/exercise.dart';
-import '../models/form_label.dart' show FormKey;
 import 'exercise_cube.dart';
 import 'sentences.dart' show ConstructionKind;
 
@@ -56,15 +55,13 @@ final class Sample extends Selection {
   const Sample({required this.n});
 }
 
-/// A start cell and the target, reached by changing one of [axes] per step,
-/// each axis at most once.
+/// A start cell and the target, reached by changing one of the file's
+/// `change_axes` per step, each axis at most once.
 final class AxisPath extends Selection {
-  final List<String> axes;
-
   /// The step counts a path may have.
   final Set<int> lengths;
 
-  const AxisPath({required this.axes, required this.lengths});
+  const AxisPath({required this.lengths});
 }
 
 /// One target cell and a text that is no form of the word, built by one of
@@ -80,41 +77,32 @@ final class Spoil extends Selection {
 /// in the asked bundle. No cell reads like a cell of its word in another
 /// bundle of the set.
 final class LookAlikes extends Selection {
-  /// Bundles whose forms look alike, in the order the learner reads them.
-  final List<List<GrammarBundle>> sets;
+  /// The file's `look_alikes` entry naming the sets of bundles whose forms
+  /// look alike, in the order the learner reads them.
+  final String setName;
   final ({int min, int max}) count;
 
   /// The most words the cells come from, the asked one included.
   final int words;
 
   const LookAlikes({
-    required this.sets,
+    required this.setName,
     required this.count,
     required this.words,
   });
 }
 
-/// The principal parts of a verb: the cells of [row] the word has and the
-/// learner practises, in that order. While the part cards are not known well
-/// the prompt is the first part and the rest of the row is asked; once they
-/// are, the prompt is a practised form whose key starts with one of
-/// [promptsFrom] and the whole row is asked. A row with a deponent part has
-/// no [supine]: hortārī, hortor, hortātus sum.
+/// The principal parts of a verb: the cells of the file's `principal_parts`
+/// row the word has and the learner practises, in that order. While the part
+/// cards are not known well the prompt is the first part and the rest of the
+/// row is asked; once they are, the prompt is a practised form whose key
+/// starts with one of `prompts_from` and the whole row is asked. A row with a
+/// deponent part has no supine: hortārī, hortor, hortātus sum.
 final class PrincipalParts extends Selection {
-  /// Each part's key and the i18n key of its name.
-  final List<({FormKey key, String name})> row;
-  final List<String> promptsFrom;
-  final FormKey supine;
-
   /// The fewest distinct texts a row needs to be worth asking.
   final int minParts;
 
-  const PrincipalParts({
-    required this.row,
-    required this.promptsFrom,
-    required this.supine,
-    required this.minParts,
-  });
+  const PrincipalParts({required this.minParts});
 }
 
 /// A sentence of the context's corpus the learner can see: of a lesson up to
@@ -199,14 +187,15 @@ final class Parts extends AnswerSpec {
 }
 
 /// The learner pairs the [left] text of every sampled cell with its [right]
-/// text, or for a word of an [agreeing] type with the [right] text of a noun
-/// cell of the pool that agrees with it in case, number and gender.
+/// text, or with [agreeing] for a word of an `agrees` type with the [right]
+/// text of a noun cell of the pool that agrees with it in case, number and
+/// gender.
 final class Match extends AnswerSpec {
   final View left;
   final View right;
-  final Set<String> agreeing;
+  final bool agreeing;
 
-  const Match(this.left, this.right, {this.agreeing = const {}});
+  const Match(this.left, this.right, {this.agreeing = false});
 }
 
 /// The learner puts every selected cell, shown in [view], into the group of

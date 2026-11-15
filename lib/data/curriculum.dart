@@ -14,6 +14,7 @@ typedef DataFileShape = ({
   DataFileRole role,
   List<FormLabel> labels,
   List<String> types,
+  (String axis, String code) baseForm,
 });
 
 /// The syntax topics a book's `syntax:` entry can name: each code of
@@ -85,6 +86,9 @@ final class Curriculum {
   /// data file id -> its form labels, in file order.
   final Map<String, List<FormLabel>> _labels;
 
+  /// data file id -> the (axis, code) of its base form.
+  final Map<String, (String, String)> _baseForms;
+
   /// syntax topic id -> the lesson that teaches it.
   final Map<String, int> _syntaxLessons;
 
@@ -94,6 +98,7 @@ final class Curriculum {
     this.courseTopics,
     this._roles,
     this._labels,
+    this._baseForms,
     this._syntaxLessons,
   );
 
@@ -213,6 +218,10 @@ final class Curriculum {
       topics,
       {for (final MapEntry(:key, :value) in shapes.entries) key: value.role},
       {for (final MapEntry(:key, :value) in shapes.entries) key: value.labels},
+      {
+        for (final MapEntry(:key, :value) in shapes.entries)
+          key: value.baseForm,
+      },
       syntaxLessons,
     );
   }
@@ -265,6 +274,9 @@ final class Curriculum {
 
   /// The form labels of a file with a grammar progression, in file order.
   List<FormLabel> labelsOf(String dataFileId) => _labels[dataFileId]!;
+
+  /// The (axis, code) of the form of [dataFileId] that spells the lemma.
+  (String, String) baseFormOf(String dataFileId) => _baseForms[dataFileId]!;
 
   bool taughtForm(String dataFileId, FormKey key, LessonRange range) =>
       range.contains(formLesson(dataFileId, key));
@@ -361,6 +373,7 @@ Future<Curriculum> loadCurriculum(List<String> assets) async {
         for (final key in metadata.formOrder) metadata.formLabelsByKey[key]!,
       ],
       types: metadata.availableTypes,
+      baseForm: metadata.baseForm!,
     );
   }
   return Curriculum.parse(

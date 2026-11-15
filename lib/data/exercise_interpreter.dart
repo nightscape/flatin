@@ -72,9 +72,8 @@ final class SpecGenerator implements ExerciseGenerator {
       : [spec, ?agreement].where((s) => _asks(s, word)).toList();
 
   static bool _asks(KindSpec spec, PracticeItem word) => switch (spec.answer) {
-    Match(:final agreeing) when agreeing.isNotEmpty => agreeing.contains(
-      word.type,
-    ),
+    Match(:final agreeing) when agreeing =>
+      word.derivation.grammar.agreeingTypes.contains(word.type),
     _ => true,
   };
 
@@ -222,14 +221,14 @@ Iterable<Slice> _slices(
   ),
   LookAlikes() => _lookAlikes(select, cube, word, bundle, rng),
   PrincipalParts() => _principalParts(select, cube, word, bundle, rng),
-  AxisPath(:final axes, :final lengths) =>
+  AxisPath(:final lengths) =>
     (cube.cellsOf(word, bundle: bundle).toList()..shuffle(rng)).expand(
       (target) => (lengths.toList()..shuffle(rng)).expand(
         (n) => _routes(
           cube,
           target,
           n,
-          axes,
+          word.roles.changeAxes,
           rng,
         ).map((path) => Slice(target, path: path)),
       ),
@@ -371,7 +370,7 @@ Iterable<Slice> _slicesInto(
           when group.every((c) => c.bundle == bundle && cube.practised(c)))
         Slice(target, group: group),
   ],
-  LookAlikes(:final sets) => [
+  LookAlikes(:final setName) => [
     if (exercise.answer case SortingAnswer(:final forms))
       if ([
             for (final (o, _) in forms)
@@ -382,7 +381,8 @@ Iterable<Slice> _slicesInto(
           ]
           case final group
           when group.every(cube.practised) && group.contains(target))
-        for (final lookAlikes in sets)
+        for (final lookAlikes
+            in (target.word.roles.lookAlikes[setName] ?? const []))
           if (lookAlikes.contains(bundle) &&
               group.every((c) => lookAlikes.contains(c.bundle)))
             Slice(target, group: group, lookAlikes: lookAlikes),
@@ -395,10 +395,16 @@ Iterable<Slice> _slicesInto(
     null,
     into: target,
   ).where((slice) => slice.target == target),
-  AxisPath(:final axes, :final lengths) => [
+  AxisPath(:final lengths) => [
     if (target.bundle == bundle)
       for (final n in lengths)
-        for (final path in _routes(cube, target, n, axes, null))
+        for (final path in _routes(
+          cube,
+          target,
+          n,
+          target.word.roles.changeAxes,
+          null,
+        ))
           Slice(target, path: path),
   ],
   OneSentence select => [
@@ -428,12 +434,14 @@ Iterable<Slice> _principalParts(
   Random? rng, {
   FormCell? into,
 }) {
-  final deponent = select.row.any(
+  final roles = word.roles;
+  final deponent = roles.principalRow.any(
     (p) => word.derivation.deponentKeys.contains(p.key),
   );
   final row = [
-    for (final (:key, name: _) in select.row)
-      if (word.formOrder.contains(key) && !(deponent && key == select.supine))
+    for (final (:key, name: _) in roles.principalRow)
+      if (word.formOrder.contains(key) &&
+          !(deponent && key == roles.principalSupine))
         cube.cell(word, key),
   ].where(cube.practised).toList();
   if (!row.any((c) => c.bundle == bundle) ||
@@ -448,7 +456,7 @@ Iterable<Slice> _principalParts(
     final given = row.first;
     final asked = row.skip(1).toList();
     return [
-      if (given.key == select.row.first.key &&
+      if (given.key == roles.principalRow.first.key &&
           asked.any((c) => c.bundle == bundle) &&
           !asked.any((c) => cube.lookAlike(c, given)))
         Slice(given, group: asked),
@@ -456,7 +464,8 @@ Iterable<Slice> _principalParts(
   }
   final prompts = [
     for (final c in cube.cellsOf(word))
-      if (select.promptsFrom.any(c.key.startsWith) && (into ?? c) == c) c,
+      if (roles.principalPromptsFrom.any(c.key.startsWith) && (into ?? c) == c)
+        c,
   ];
   if (rng != null) prompts.shuffle(rng);
   final owners = _spellingOwners[cube.ctx.pool] ??= _ownersOf(cube.ctx.pool);
@@ -540,7 +549,7 @@ Iterable<Slice> _lookAlikes(
   ]..shuffle(rng);
   final words = [word, ...others.take(select.words - 1)];
   final sets = [
-    for (final s in select.sets)
+    for (final s in (word.roles.lookAlikes[select.setName] ?? const []))
       if (s.contains(bundle) && s.every(cube.ctx.unlocked.contains)) s,
   ]..shuffle(rng);
   for (final lookAlikes in sets) {
@@ -596,12 +605,11 @@ bool _readsAsOther(Cube cube, FormCell c, List<GrammarBundle> lookAlikes) =>
               _alike(cube, View.latin, c, o),
         );
 
-const _bundleAxes = ['modus', 'tempus', 'genus_verbi'];
-
 /// The name of [c]'s bundle, e.g. "Indikativ Futur I Aktiv".
 String _bundleName(FormCell c) {
   final name = [
-    for (final axis in _bundleAxes) c.word.formLabels[c.index].display(axis),
+    for (final axis in c.word.roles.bundleAxes)
+      c.word.formLabels[c.index].display(axis),
   ].nonNulls.join(' ');
   assert(name.isNotEmpty, '${c.bundle} has no name');
   return name;
@@ -824,9 +832,9 @@ ExerciseAnswer? _answerOf(KindSpec spec, Slice slice, Cube cube, Random rng) =>
         _accepted(spec, view, slice, cube),
       ),
       final Match match =>
-        match.agreeing.isEmpty
-            ? _match(spec, match, slice, cube)
-            : _matchAgreeing(spec, match, slice, cube, rng),
+        match.agreeing
+            ? _matchAgreeing(spec, match, slice, cube, rng)
+            : _match(spec, match, slice, cube),
       final Sort sort => _sort(sort, slice, cube),
       Parts(:final view) => _parts(spec, view, slice, cube),
       final Marks marks => _marks(marks, slice, cube),
@@ -895,9 +903,10 @@ TickAnswer? _tick(TickMany tick, Slice slice, Random rng) {
 }
 
 /// The prompt and one slot per part of the row, named by
-/// [PrincipalParts.row]; a part spelt like the prompt is given, not asked.
+/// the file's principal-part row; a part spelt like the prompt is given, not
+/// asked.
 PartsAnswer _parts(KindSpec spec, View view, Slice slice, Cube cube) {
-  final row = (spec.select as PrincipalParts).row;
+  final row = slice.target.word.roles.principalRow;
   final prompt = optionOf(slice.target, View.latin, cube);
   final slots = <({String name, TypedAnswer answer})>[];
   final given = <({int at, String name, FormOption form})>[];
@@ -966,10 +975,13 @@ typedef _Kng = (String kasus, String numerus, String genus);
 /// The readings of [c] itself: the genus comes from its key, or for a noun
 /// from its word.
 Set<_Kng> _kngOf(FormCell c) {
-  final kasus = c.features['kasus'];
-  final numerus = c.features['numerus'];
+  final axes = c.word.roles.agreementAxes;
+  if (axes.isEmpty) return {};
+  final [kasusAxis, numerusAxis, genusAxis] = axes;
+  final kasus = c.features[kasusAxis];
+  final numerus = c.features[numerusAxis];
   if (kasus == null || numerus == null) return {};
-  final genus = c.features['genus'];
+  final genus = c.features[genusAxis];
   return {
     for (final g in genus == null ? c.word.genus : [genus]) (kasus, numerus, g),
   };
@@ -1202,7 +1214,7 @@ String? _answerObjection(
       }
       return null;
     case (final Match match, MatchingAnswer(:final pairs, :final agreements))
-        when match.agreeing.isNotEmpty:
+        when match.agreeing:
       return _agreementObjection(spec, match, slice, cube, pairs, agreements);
     case (
       final Parts parts,
