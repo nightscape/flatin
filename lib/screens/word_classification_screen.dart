@@ -19,7 +19,6 @@ import '../providers/reward_provider.dart';
 import '../widgets/reward_burst.dart';
 import '../widgets/esel_panel.dart';
 import '../widgets/explanation_lines.dart';
-import 'dart:math';
 
 /// The pick that says "this form has no value on that axis", e.g. the Person
 /// of an Infinitiv.
@@ -231,7 +230,7 @@ class _WordClassificationScreenState
       final filter = await ref.read(courseFilterProvider.future);
 
       // Pick from due items if available, otherwise random
-      final random = Random();
+      final random = ref.read(exerciseRandomProvider);
       final item =
           widget.item ??
           (allDueItems.isNotEmpty
