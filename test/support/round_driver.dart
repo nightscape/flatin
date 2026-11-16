@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:latin_practice/models/course.dart' show loadLanguage;
 import 'package:latin_practice/models/exercise.dart';
 import 'package:latin_practice/screens/exercise_match_widget.dart';
 import 'package:latin_practice/screens/exercise_screen.dart';
@@ -8,7 +9,6 @@ import 'package:latin_practice/screens/exercise_tap_widget.dart';
 import 'package:latin_practice/screens/exercise_ticks_widget.dart';
 
 import 'grammar_exercise_harness.dart';
-import 'latin_course.dart' show latinLang;
 
 /// The task on screen, whether a single task or a matching one.
 Exercise shown(WidgetTester tester) {
@@ -56,6 +56,7 @@ Future<void> answer(
   Exercise exercise, {
   required bool right,
 }) async {
+  final lang = await loadLanguage();
   switch (exercise.answer) {
     case ChoiceAnswer(:final options, right: final rightOption):
       final index = right
@@ -72,12 +73,10 @@ Future<void> answer(
           tester,
           right
               ? options.singleWhere(
-                  (o) => latinLang.norm(o) == latinLang.norm(expected.text),
+                  (o) => lang.norm(o) == lang.norm(expected.text),
                 )
               : options.firstWhere(
-                  (o) => !accepted.any(
-                    (a) => latinLang.norm(a) == latinLang.norm(o),
-                  ),
+                  (o) => !accepted.any((a) => lang.norm(a) == lang.norm(o)),
                 ),
         );
       }
@@ -99,13 +98,11 @@ Future<void> answer(
             tester,
             wrong
                 ? options.firstWhere(
-                    (o) => !slot.accepted.any(
-                      (a) => latinLang.norm(a) == latinLang.norm(o),
-                    ),
+                    (o) =>
+                        !slot.accepted.any((a) => lang.norm(a) == lang.norm(o)),
                   )
                 : options.singleWhere(
-                    (o) =>
-                        latinLang.norm(o) == latinLang.norm(slot.expected.text),
+                    (o) => lang.norm(o) == lang.norm(slot.expected.text),
                   ),
             key,
           );
