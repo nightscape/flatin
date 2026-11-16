@@ -1,14 +1,18 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 // IMPORTANT: ⚠️ only import annotations ⚠️
 import 'package:pickled_cucumber/src/annotations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/material.dart';
-import 'package:latin_practice/main.dart' as app;
+import 'package:latin_practice/main.dart' show LatinPracticeApp, noRetry;
 import 'package:integration_test/integration_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:latin_practice/data/game_rules.dart';
+import 'package:latin_practice/data/languages/language.dart';
+import 'package:latin_practice/models/course_filter.dart';
+import 'package:latin_practice/models/practice_item.dart';
 import 'package:latin_practice/data/round_plan.dart' show roundLength;
 import 'package:latin_practice/data/word_focus.dart';
 import 'package:latin_practice/models/reward.dart';
@@ -49,7 +53,13 @@ class AppSteps {
   @Given('the app is running')
   @And('the app is running')
   Future<void> theAppIsRunning(WidgetTester tester) async {
-    app.main();
+    await tester.pumpWidget(
+      ProviderScope(
+        retry: noRetry,
+        overrides: [exerciseRandomProvider.overrideWithValue(Random(17))],
+        child: const LatinPracticeApp(),
+      ),
+    );
     await tester.pumpAndSettle();
   }
 
@@ -426,17 +436,15 @@ class AppSteps {
     }
   }
 
-  /// Picks one form the shown word stands for, found from the word and its
-  /// translation on screen.
-  @When('I classify the word correctly')
-  @And('I classify the word correctly')
-  Future<void> iClassifyCorrectly(WidgetTester tester) async {
-    final container = ProviderScope.containerOf(
-      tester.element(find.byType(WordClassificationScreen)),
-    );
-    final byType = await container.read(practicableItemsByFileProvider.future);
-    final filter = await container.read(courseFilterProvider.future);
-    final lang = await container.read(examLanguageProvider.future);
+  /// The word on the classification screen, the item it was drawn from
+  /// (found from the word and its translation on screen) and that item's
+  /// enabled forms.
+  ({String word, PracticeItem item, Set<String> enabled}) _shownWord(
+    WidgetTester tester,
+    Map<String, List<PracticeItem>> byType,
+    CourseFilter filter,
+    Language lang,
+  ) {
     final word = tester
         .widget<Text>(find.byKey(const Key('wordClassification.word')))
         .data!;
@@ -448,7 +456,67 @@ class AppSteps {
             (fs) => fs.any((f) => lang.norm(f) == lang.norm(word)),
           ),
     );
-    final enabled = filter.practicedForms(item.dataFileId, item.formLabels);
+    return (
+      word: word,
+      item: item,
+      enabled: filter.practicedForms(item.dataFileId, item.formLabels),
+    );
+  }
+
+  /// What the failed dropdown wait can say about the screen, from what exists.
+  Future<String> _describeClassificationScreen(WidgetTester tester) async {
+    final screen = find.byType(WordClassificationScreen);
+    if (screen.evaluate().isEmpty) {
+      final onScreen = find
+          .byWidgetPredicate((w) => w.runtimeType.toString().endsWith('Screen'))
+          .evaluate()
+          .map((e) => e.widget.runtimeType)
+          .toSet();
+      return 'the classification screen is not open; screens on screen: '
+          '${onScreen.isEmpty ? 'none' : onScreen.join(', ')}';
+    }
+    if (find.byKey(const Key('wordClassification.word')).evaluate().isEmpty) {
+      return 'no word is shown';
+    }
+    final container = ProviderScope.containerOf(tester.element(screen));
+    final (:word, :item, :enabled) = _shownWord(
+      tester,
+      await container.read(practicableItemsByFileProvider.future),
+      await container.read(courseFilterProvider.future),
+      await container.read(examLanguageProvider.future),
+    );
+    return 'word "$word" ("${item.translation}"), enabled forms $enabled';
+  }
+
+  /// Pumps until the first row of classification dropdowns is on screen; a
+  /// timeout names the drawn word and its enabled forms.
+  Future<void> _waitForClassificationDropdowns(WidgetTester tester) async {
+    final dropdowns = find.byWidgetPredicate(
+      (widget) => _hasKeyPrefix(widget, 'classification.0.'),
+    );
+    final deadline = DateTime.now().add(const Duration(seconds: 30));
+    while (dropdowns.evaluate().isEmpty) {
+      if (DateTime.now().isAfter(deadline)) {
+        final drawn = await _describeClassificationScreen(tester);
+        fail('No classification.0.* dropdown after 30 s: $drawn');
+      }
+      await tester.pump(const Duration(milliseconds: 100));
+    }
+    await tester.pumpAndSettle();
+  }
+
+  /// Picks one form the shown word stands for, found from the word and its
+  /// translation on screen.
+  @When('I classify the word correctly')
+  @And('I classify the word correctly')
+  Future<void> iClassifyCorrectly(WidgetTester tester) async {
+    final container = ProviderScope.containerOf(
+      tester.element(find.byType(WordClassificationScreen)),
+    );
+    final byType = await container.read(practicableItemsByFileProvider.future);
+    final filter = await container.read(courseFilterProvider.future);
+    final lang = await container.read(examLanguageProvider.future);
+    final (:word, :item, :enabled) = _shownWord(tester, byType, filter, lang);
     final label =
         item.formLabels[[
           for (var i = 0; i < item.forms.length; i++)
@@ -508,10 +576,8 @@ class AppSteps {
 
   @When('I wait for the word to load')
   @And('I wait for the word to load')
-  Future<void> iWaitForWord(WidgetTester tester) async {
-    await Future.delayed(const Duration(seconds: 2));
-    await tester.pumpAndSettle();
-  }
+  Future<void> iWaitForWord(WidgetTester tester) =>
+      _waitForClassificationDropdowns(tester);
 
   @When('I select classification options')
   @And('I select classification options')
@@ -558,8 +624,7 @@ class AppSteps {
         attempts++;
       }
     } else if (item == 'the word') {
-      await Future.delayed(const Duration(seconds: 2));
-      await tester.pumpAndSettle();
+      await _waitForClassificationDropdowns(tester);
     } else {
       await tester.pumpAndSettle(const Duration(seconds: 2));
     }
