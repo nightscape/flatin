@@ -1,46 +1,53 @@
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:latin_practice/data/lesson_data.dart' show lastLesson;
 import 'package:latin_practice/data/settings_conversion.dart';
 import 'package:latin_practice/models/lesson_range.dart';
 import 'package:latin_practice/models/settings.dart';
+import 'support/latin_course.dart'
+    show latinFullRange, latinLastLesson, latinLaterLesson;
 
 Settings _load(Map<String, dynamic> stored) => Settings.fromJson(
   jsonDecode(jsonEncode({settingsVersionField: settingsVersion, ...stored}))
       as Map<String, dynamic>,
+  lastLesson: latinLastLesson,
 );
 
 void main() {
   group('the grammar links', () {
     test('by default only the upper bounds are linked', () {
-      final settings = Settings();
+      final settings = Settings(lastLesson: latinLastLesson);
       expect(settings.grammarFromLinked, isFalse);
       expect(settings.grammarToLinked, isTrue);
-      expect(settings.courseWords, LessonRange.full);
-      expect(settings.courseGrammar, LessonRange.full);
+      expect(settings.courseWords, latinFullRange);
+      expect(settings.courseGrammar, latinFullRange);
     });
 
     test('a linked upper bound ends where the words end, Später too', () {
       expect(
-        Settings().withWordRange(LessonRange(5, 23)).courseGrammar,
+        Settings(
+          lastLesson: latinLastLesson,
+        ).withWordRange(LessonRange(5, 23)).courseGrammar,
         LessonRange(1, 23),
       );
       expect(
-        Settings().withWordRange(LessonRange(5, laterLesson)).courseGrammar,
-        LessonRange(1, laterLesson),
+        Settings(
+          lastLesson: latinLastLesson,
+        ).withWordRange(LessonRange(5, latinLaterLesson)).courseGrammar,
+        LessonRange(1, latinLaterLesson),
       );
     });
 
     test('a linked lower bound starts where the words start', () {
-      final settings = Settings()
-          .withGrammarLinked(from: true)
-          .withWordRange(LessonRange(7, 12));
+      final settings = Settings(
+        lastLesson: latinLastLesson,
+      ).withGrammarLinked(from: true).withWordRange(LessonRange(7, 12));
       expect(settings.courseGrammar, LessonRange(7, 12));
     });
 
     test('an open bound stays, pushed only to keep the range non-empty', () {
       final settings = Settings(
+        lastLesson: latinLastLesson,
         courseWords: LessonRange(20, 30),
         courseGrammar: LessonRange(25, 35),
         grammarToLinked: false,
@@ -57,6 +64,7 @@ void main() {
 
     test('linking a bound snaps it to the word bound', () {
       final settings = Settings(
+        lastLesson: latinLastLesson,
         courseWords: LessonRange(5, 12),
         courseGrammar: LessonRange(1, 3),
         grammarToLinked: false,
@@ -73,6 +81,7 @@ void main() {
 
     test('moving a linked grammar bound unlinks only that bound', () {
       final both = Settings(
+        lastLesson: latinLastLesson,
         courseWords: LessonRange(5, 12),
         grammarFromLinked: true,
       );
@@ -88,6 +97,7 @@ void main() {
 
     test('both links survive a JSON round trip', () {
       final settings = Settings(
+        lastLesson: latinLastLesson,
         courseWords: LessonRange(4, 17),
         courseGrammar: LessonRange(1, 9),
         grammarFromLinked: true,
@@ -117,23 +127,23 @@ void main() {
     test('true with the words at the last lesson keeps the grammar on '
         'Später', () {
       final settings = _load({
-        'courseWords': {'from': 3, 'to': lastLesson},
-        'courseGrammar': {'from': 1, 'to': laterLesson},
+        'courseWords': {'from': 3, 'to': latinLastLesson},
+        'courseGrammar': {'from': 1, 'to': latinLaterLesson},
         'grammarFollowsWords': true,
       });
-      expect(settings.courseWords, LessonRange(3, laterLesson));
-      expect(settings.courseGrammar, LessonRange(1, laterLesson));
+      expect(settings.courseWords, LessonRange(3, latinLaterLesson));
+      expect(settings.courseGrammar, LessonRange(1, latinLaterLesson));
     });
 
     test('false loads as both bounds open', () {
       final settings = _load({
-        'courseWords': {'from': 4, 'to': lastLesson},
+        'courseWords': {'from': 4, 'to': latinLastLesson},
         'courseGrammar': {'from': 2, 'to': 9},
         'grammarFollowsWords': false,
       });
       expect(settings.grammarFromLinked, isFalse);
       expect(settings.grammarToLinked, isFalse);
-      expect(settings.courseWords, LessonRange(4, lastLesson));
+      expect(settings.courseWords, LessonRange(4, latinLastLesson));
       expect(settings.courseGrammar, LessonRange(2, 9));
     });
 
@@ -141,8 +151,8 @@ void main() {
       final settings = _load({});
       expect(settings.grammarFromLinked, isFalse);
       expect(settings.grammarToLinked, isTrue);
-      expect(settings.courseWords, LessonRange.full);
-      expect(settings.courseGrammar, LessonRange.full);
+      expect(settings.courseWords, latinFullRange);
+      expect(settings.courseGrammar, latinFullRange);
     });
   });
 }

@@ -13,13 +13,14 @@ import 'package:latin_practice/screens/word_classification_screen.dart';
 import 'support/course_providers.dart';
 import 'support/stored_settings.dart';
 import 'support/word_classification_harness.dart';
+import 'support/latin_course.dart' show latinLastLesson;
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   test('vocab has no grammar gap and its dropdowns offer exactly its '
       'practised forms', () async {
-    seedSettings(Settings());
+    seedSettings(Settings(lastLesson: latinLastLesson));
     final c = ProviderContainer(retry: noRetry);
     addTearDown(c.dispose);
     final filter = await c.read(courseFilterProvider.future);
@@ -42,7 +43,7 @@ void main() {
   });
 
   test('the translation choices of a verb are translations of verbs', () async {
-    seedSettings(Settings());
+    seedSettings(Settings(lastLesson: latinLastLesson));
     final verbs = await loadPracticeItems('lib/data/latin_verbs.yaml');
     final verbTranslations = {for (final v in verbs) v.translation};
     final c = ProviderContainer(retry: noRetry);
@@ -60,7 +61,7 @@ void main() {
   ]) {
     testWidgets('word classification asks the one due $file item with its '
         'title', (tester) async {
-      seedSettings(Settings());
+      seedSettings(Settings(lastLesson: latinLastLesson));
       final due = (await loadPracticeItems('lib/data/latin_$file.yaml')).first;
       tester.view.physicalSize = const Size(1200, 4800);
       tester.view.devicePixelRatio = 1.0;
@@ -94,7 +95,11 @@ void main() {
   testWidgets('the input page has one dropdown per grammar file', (
     tester,
   ) async {
-    await openSettingsWith(tester, Settings().toJson(), page: 'input');
+    await openSettingsWith(
+      tester,
+      Settings(lastLesson: latinLastLesson).toJson(),
+      page: 'input',
+    );
 
     expect(find.byKey(const Key('input.nouns')), findsOneWidget);
     expect(find.byKey(const Key('input.verbs')), findsOneWidget);
@@ -103,7 +108,10 @@ void main() {
   testWidgets('a topic chip shows the icon of the file of its topic', (
     tester,
   ) async {
-    await openSettingsWith(tester, Settings().toJson());
+    await openSettingsWith(
+      tester,
+      Settings(lastLesson: latinLastLesson).toJson(),
+    );
 
     final chips = tester.widgetList<FilterChip>(
       find.byWidgetPredicate(

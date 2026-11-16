@@ -8,10 +8,11 @@ import 'package:latin_practice/models/settings.dart';
 import 'package:latin_practice/providers/curriculum_provider.dart';
 
 import 'support/course_providers.dart';
+import 'support/latin_course.dart' show latinLastLesson;
 
 Future<CourseFilter> _unlinked(LessonRange words, LessonRange grammar) async {
   seedSettings(
-    Settings()
+    Settings(lastLesson: latinLastLesson)
         .withGrammarLinked(to: false)
         .withWordRange(words)
         .withGrammarRange(grammar),

@@ -1,12 +1,12 @@
 import 'dart:math';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:latin_practice/data/lesson_data.dart';
 import 'package:latin_practice/data/rewards.dart';
 import 'package:latin_practice/models/distractor_strategy.dart';
 import 'package:latin_practice/models/settings.dart';
 
 import 'support/gen_settings.dart';
+import 'support/latin_course.dart' show latinLastLesson;
 
 void main() {
   test('drawn switches lie in their universes and reach none and all off', () {
@@ -45,7 +45,7 @@ void main() {
       expect(drawn.every((d) => d.$1), isTrue, reason: '$drawn');
       if (drawn.isEmpty) none++;
       if (drawn.length == 3 + 2 + 2 + 2) all++;
-      expect(s.kursstand, inInclusiveRange(1, lastLesson));
+      expect(s.kursstand, inInclusiveRange(1, latinLastLesson));
       if (off == 0) expect(drawn, isEmpty);
       if (off == 1) expect(drawn.length, 9);
     }
@@ -80,7 +80,7 @@ void main() {
     };
     const words = {'hīc', 'hic', 'porta'};
     const topics = {'1/nouns/a', '2/verbs/inf'};
-    final fresh = Settings();
+    final fresh = Settings(lastLesson: latinLastLesson);
     final rng = Random(354);
     final reach = <String, int>{};
     void count(String what, bool hit) => reach.update(

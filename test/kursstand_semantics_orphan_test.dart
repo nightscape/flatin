@@ -13,6 +13,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'support/kursstand_shelf_driver.dart';
 import 'support/word_classification_harness.dart';
+import 'support/latin_course.dart' show latinLastLesson;
 
 final _children = <int, List<int>>{};
 final _orphans = <String>[];
@@ -63,7 +64,9 @@ void main() {
   ) async {
     final semantics = tester.ensureSemantics();
     SharedPreferences.setMockInitialValues({
-      'practice_settings': jsonEncode(Settings().toJson()),
+      'practice_settings': jsonEncode(
+        Settings(lastLesson: latinLastLesson).toJson(),
+      ),
     });
     tester.view.physicalSize = const Size(780, 1264);
     tester.view.devicePixelRatio = 2;

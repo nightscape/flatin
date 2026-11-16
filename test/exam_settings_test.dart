@@ -10,6 +10,7 @@ import 'package:latin_practice/providers/settings_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'support/gen_settings.dart';
+import 'support/latin_course.dart' show latinLastLesson;
 
 const _cases = 300;
 const _providerCases = 12;
@@ -26,8 +27,9 @@ Json _v4(Settings settings) => jsonDecode(
 
 /// The fixed states the seeded loop runs first.
 final _static = <String, Settings Function()>{
-  'defaults': Settings.new,
+  'defaults': () => Settings(lastLesson: latinLastLesson),
   'satz, points on': () => Settings(
+    lastLesson: latinLastLesson,
     uebersetzungseinheit: Uebersetzungseinheit.satz,
     punkteAnzeige: true,
   ),
@@ -56,7 +58,10 @@ void main() {
   test('[E] a version 4 store converts to the exam defaults (clause, points '
       'off), keeps every other field, and round-trips', () {
     for (final (name, drawn) in _drawn(_cases)) {
-      final converted = Settings.fromJson(convertSettingsV5(_v4(drawn)));
+      final converted = Settings.fromJson(
+        convertSettingsV5(_v4(drawn)),
+        lastLesson: latinLastLesson,
+      );
       expect(
         converted.uebersetzungseinheit,
         Uebersetzungseinheit.teilsatz,
@@ -65,7 +70,10 @@ void main() {
       expect(converted.punkteAnzeige, isFalse, reason: name);
       expect(converted.toJson(), _withDefaults(drawn), reason: name);
       expect(
-        Settings.fromJson(jsonDecode(jsonEncode(drawn.toJson()))).toJson(),
+        Settings.fromJson(
+          jsonDecode(jsonEncode(drawn.toJson())),
+          lastLesson: latinLastLesson,
+        ).toJson(),
         drawn.toJson(),
         reason: '$name: the exam settings round-trip',
       );

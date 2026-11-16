@@ -6,13 +6,19 @@ import 'package:latin_practice/providers/curriculum_provider.dart';
 import 'package:latin_practice/providers/fsrs_provider.dart';
 
 import 'support/course_providers.dart';
+import 'support/latin_course.dart' show latinLastLesson;
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   test('the card counts only what practice shows', () async {
     final nouns = await getFormMetadata('lib/data/latin_nouns.yaml');
-    seedSettings(Settings(disabledForms: {'nouns': nouns.formOrder.toSet()}));
+    seedSettings(
+      Settings(
+        lastLesson: latinLastLesson,
+        disabledForms: {'nouns': nouns.formOrder.toSet()},
+      ),
+    );
     final container = ProviderContainer();
     addTearDown(container.dispose);
 

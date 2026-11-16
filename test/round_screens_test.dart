@@ -29,6 +29,7 @@ import 'support/key_echo_app.dart';
 import 'support/key_echo_i18n.dart';
 import 'support/round_driver.dart';
 import 'support/word_classification_harness.dart';
+import 'support/latin_course.dart' show latinLastLesson;
 
 class _Stub implements ExerciseGenerator {
   int calls = 0;
@@ -58,7 +59,11 @@ Future<void> _pumpStart(WidgetTester tester, {bool animation = true}) async {
   tester.view.devicePixelRatio = 1.0;
   addTearDown(tester.view.reset);
   seedSettings(
-    Settings(courseWords: LessonRange(1, 1), rewardAnimation: animation),
+    Settings(
+      lastLesson: latinLastLesson,
+      courseWords: LessonRange(1, 1),
+      rewardAnimation: animation,
+    ),
   );
   await tester.pumpWidget(
     wrapInKeyEchoAppWith(
@@ -132,7 +137,9 @@ void main() {
   testWidgets('the start page names topics only through its namer', (
     tester,
   ) async {
-    seedSettings(Settings(courseWords: LessonRange(1, 1)));
+    seedSettings(
+      Settings(lastLesson: latinLastLesson, courseWords: LessonRange(1, 1)),
+    );
     await tester.pumpWidget(
       wrapInKeyEchoAppWith(const GrammarStartScreen(namer: _FixedNamer())),
     );
@@ -220,7 +227,9 @@ void main() {
   testWidgets('the end screen shows the bonus sum next to the points', (
     tester,
   ) async {
-    seedSettings(Settings(courseWords: LessonRange(1, 1)));
+    seedSettings(
+      Settings(lastLesson: latinLastLesson, courseWords: LessonRange(1, 1)),
+    );
     await tester.runAsync(
       () => RewardStorage.save(
         const RewardLedger(
@@ -258,7 +267,9 @@ void main() {
 
   testWidgets('the end screen offers no purchase when every affordable '
       'building still waits for others', (tester) async {
-    seedSettings(Settings(courseWords: LessonRange(1, 1)));
+    seedSettings(
+      Settings(lastLesson: latinLastLesson, courseWords: LessonRange(1, 1)),
+    );
     await tester.runAsync(
       () => RewardStorage.save(
         const RewardLedger(
@@ -300,7 +311,9 @@ void main() {
   testWidgets('home and drawer open the start page, which builds no '
       'exercise; a pair no kind fits shows its error on the round screen '
       'only', (tester) async {
-    seedSettings(Settings(courseWords: LessonRange(1, 1)));
+    seedSettings(
+      Settings(lastLesson: latinLastLesson, courseWords: LessonRange(1, 1)),
+    );
     final stub = _Stub();
     await tester.pumpWidget(
       wrapInKeyEchoAppWith(
@@ -349,6 +362,7 @@ void main() {
       addTearDown(tester.view.reset);
       seedSettings(
         Settings(
+          lastLesson: latinLastLesson,
           courseWords: LessonRange(1, 20),
           inputStrategyIds: {dropdownFile: 'dropdown_all_forms'},
         ),
@@ -407,6 +421,7 @@ void main() {
       addTearDown(tester.view.reset);
       seedSettings(
         Settings(
+          lastLesson: latinLastLesson,
           inputStrategyIds: {
             'nouns': 'dropdown_distractors',
             'verbs': 'dropdown_distractors',
@@ -463,6 +478,7 @@ void _macronTwinTest() => testWidgets(
     addTearDown(tester.view.reset);
     seedSettings(
       Settings(
+        lastLesson: latinLastLesson,
         courseWords: LessonRange(1, 20),
         inputStrategyIds: {'nouns': 'dropdown_all_forms'},
       ),

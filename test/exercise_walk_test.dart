@@ -86,7 +86,7 @@ void main() {
   });
 
   CourseFilter filterAt(int lesson) => CourseFilter(
-    Settings(courseWords: LessonRange(1, lesson)),
+    Settings(lastLesson: latinLastLesson, courseWords: LessonRange(1, lesson)),
     curriculum,
     lessons,
   );
@@ -98,7 +98,7 @@ void main() {
     for (final dataFileId in ['nouns', 'verbs']) {
       final ofFile = items.where((i) => i.dataFileId == dataFileId).toList();
       var seen = <GrammarBundle>{};
-      for (var lesson = _firstLesson; lesson <= lastLesson; lesson++) {
+      for (var lesson = _firstLesson; lesson <= latinLastLesson; lesson++) {
         final filter = filterAt(lesson);
         final pool = ofFile.where(filter.reachesPractice).toList();
         final unlocked = unlockedBundles(filter, pool);

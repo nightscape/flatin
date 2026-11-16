@@ -5,7 +5,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:latin_practice/data/lesson_data.dart';
 import 'package:latin_practice/models/lesson_range.dart';
 import 'package:latin_practice/models/settings.dart';
 import 'package:latin_practice/providers/settings_provider.dart';
@@ -15,6 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'support/gen_settings.dart';
 import 'support/word_classification_harness.dart';
+import 'support/latin_course.dart' show latinLastLesson, latinLaterLesson;
 
 const _seed = 3503;
 const _pureCases = 20000;
@@ -56,7 +56,7 @@ int _to(Json range) => range['to'] as int;
 
 int _kursstandOf(Json s) =>
     s['kursstand'] as int? ??
-    min(max(_to(_words(s)), _to(_grammar(s))), lastLesson);
+    min(max(_to(_words(s)), _to(_grammar(s))), latinLastLesson);
 
 bool _sameRanges(Json a, Json b) =>
     _from(_words(a)) == _from(_words(b)) &&
@@ -70,11 +70,11 @@ int _drawPick(Random rng, Json s) {
   final start = max(_from(_words(s)), _from(_grammar(s)));
   return switch (rng.nextInt(6)) {
     0 => k,
-    1 => min(k + 1, lastLesson),
+    1 => min(k + 1, latinLastLesson),
     2 => 1 + rng.nextInt(k),
     3 when start > 1 => 1 + rng.nextInt(start - 1),
-    4 => lastLesson,
-    _ => 1 + rng.nextInt(lastLesson),
+    4 => latinLastLesson,
+    _ => 1 + rng.nextInt(latinLastLesson),
   };
 }
 
@@ -86,7 +86,7 @@ int _drawPick(Random rng, Json s) {
 Json _afterPick(Json s, int lesson) {
   final k = _kursstandOf(s);
   if (lesson == k) return s;
-  Json follow(Json r) => min(_to(r), lastLesson) == k && _from(r) <= lesson
+  Json follow(Json r) => min(_to(r), latinLastLesson) == k && _from(r) <= lesson
       ? {'from': _from(r), 'to': lesson}
       : r;
   final words = follow(_words(s));
@@ -108,7 +108,7 @@ Json _afterPick(Json s, int lesson) {
 /// comes back unless it ends at [back] (it follows forth to k).
 bool _comesBack(Json s, int back) {
   final k = _kursstandOf(s);
-  bool ok(Json r) => min(_to(r), lastLesson) == k
+  bool ok(Json r) => min(_to(r), latinLastLesson) == k
       ? _to(r) == k || _from(r) > back
       : _to(r) != back;
   return ok(_words(s)) && ok(_grammar(s));
@@ -135,12 +135,13 @@ class _Dismiss extends _Action {
 /// below the start of the word range.
 final _fixed = <(Json, List<_Action>, int?)>[
   (
-    Settings().toJson()..remove('kursstand'),
-    [_Pick(lastLesson, viaNext: false)],
+    Settings(lastLesson: latinLastLesson).toJson()..remove('kursstand'),
+    [_Pick(latinLastLesson, viaNext: false)],
     null,
   ),
   (
     Settings(
+      lastLesson: latinLastLesson,
       courseWords: LessonRange(1, 20),
       courseGrammar: LessonRange(10, 20),
       kursstand: 20,
@@ -150,6 +151,7 @@ final _fixed = <(Json, List<_Action>, int?)>[
   ),
   (
     Settings(
+      lastLesson: latinLastLesson,
       courseWords: LessonRange(15, 20),
       courseGrammar: LessonRange(1, 20),
       kursstand: 20,
@@ -212,7 +214,7 @@ void _count(_Reach reach, String what, bool hit) =>
 void _countPick(_Reach reach, Json s, int lesson, {required bool viaNext}) {
   final k = _kursstandOf(s);
   final starts = [_from(_words(s)), _from(_grammar(s))];
-  final open = [_to(_words(s)), _to(_grammar(s))].contains(laterLesson);
+  final open = [_to(_words(s)), _to(_grammar(s))].contains(latinLaterLesson);
   _count(reach, 'pick = current', lesson == k);
   _count(reach, 'pick = current+1', lesson == k + 1);
   _count(reach, 'the next button', viaNext);
@@ -227,8 +229,8 @@ void _countPick(_Reach reach, Json s, int lesson, {required bool viaNext}) {
     'a range starting above the pick',
     starts.any((f) => f > lesson),
   );
-  _count(reach, 'the last lesson', lesson == lastLesson);
-  _count(reach, 'Kursstand at the last lesson', k == lastLesson);
+  _count(reach, 'the last lesson', lesson == latinLastLesson);
+  _count(reach, 'Kursstand at the last lesson', k == latinLastLesson);
   _count(reach, 'an open-ended range', open);
   _count(reach, 'pick = current on an open range', lesson == k && open);
   _count(reach, 'to-linked grammar', s['grammarToLinked'] as bool);
@@ -321,10 +323,10 @@ void main() {
               of: _next,
               matching: find.text('$nextText ${k + 1}'),
             ),
-            k < lastLesson ? findsOneWidget : findsNothing,
+            k < latinLastLesson ? findsOneWidget : findsNothing,
             reason: 'P3 $reason',
           );
-          expect(_next, k < lastLesson ? findsOneWidget : findsNothing);
+          expect(_next, k < latinLastLesson ? findsOneWidget : findsNothing);
           if (locale.languageCode == 'en') {
             for (final label in german.values) {
               final shown = (label as String).replaceAll(
@@ -413,7 +415,10 @@ void main() {
         {'points', 'town'},
         {'points'},
       ])
-        ('fixed rewards off $off', Settings(disabledRewards: off).toJson()),
+        (
+          'fixed rewards off $off',
+          Settings(lastLesson: latinLastLesson, disabledRewards: off).toJson(),
+        ),
       for (var seed = _seed; seed < _seed + 50; seed++)
         ('seed $seed', _drawStored(Random(seed))),
     ];
@@ -444,8 +449,10 @@ void main() {
     _expectReached(reach);
   });
 
-  Json step(Json s, int lesson) =>
-      Settings.fromJson(s).withKursstand(lesson).toJson();
+  Json step(Json s, int lesson) => Settings.fromJson(
+    s,
+    lastLesson: latinLastLesson,
+  ).withKursstand(lesson).toJson();
 
   test('steps of the Kursstand store what the rule says', () {
     final reach = <String, int>{};

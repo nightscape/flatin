@@ -49,7 +49,7 @@ void main() {
   /// One tick exercise per mistake, ticked so that every feedback line kind
   /// shows: a right and a wrong tick, a right and a wrong option left.
   List<(PracticeItem, Exercise, Set<int>)> staticExamples() {
-    final l = settingsLearnerOf(world, Settings());
+    final l = settingsLearnerOf(world, Settings(lastLesson: latinLastLesson));
     final homo = l.ctx.pool.singleWhere((w) => w.lemma == 'homō');
     final built = generator.build(
       homo,
@@ -87,7 +87,7 @@ void main() {
   (PracticeItem, Exercise, Set<int>)? draw(Random rng) {
     final l = rng.nextBool()
         ? drawSettingsLearner(rng, world)
-        : settingsLearnerOf(world, Settings());
+        : settingsLearnerOf(world, Settings(lastLesson: latinLastLesson));
     final held = [
       for (final s in world.corpus.sentences)
         for (final t in s.tokens.whereType<FormToken>())

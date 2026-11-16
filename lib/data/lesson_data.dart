@@ -3,9 +3,6 @@ import 'asset_text.dart';
 import '../models/course.dart';
 import '../models/practice_item.dart';
 
-/// The highest lesson number of the configured volumes.
-const int lastLesson = 40;
-
 /// Maps each Latin word to the lesson in which it was introduced.
 ///
 /// Lookup is by the exact spelling, macrons included: hīc (adverb) and hic
@@ -40,6 +37,12 @@ class LessonData {
     }
     return lesson;
   }
+
+  /// The highest lesson of the loaded data: the length of the course.
+  int get lastLesson => bookByLesson.keys.reduce((a, b) => a > b ? a : b);
+
+  /// The stop beyond the last lesson: what the course never reaches.
+  int get laterLesson => lastLesson + 1;
 
   /// The lesson numbers of the loaded data, ascending: the course scale.
   List<int> get lessonNumbers => bookByLesson.keys.toList()..sort();
@@ -109,14 +112,15 @@ Future<LessonData> loadLessonData(List<String> assetPaths) async {
     }
   }
 
-  // A test loads one volume on its own, so only the configured course is
-  // pinned to [lastLesson]; a lesson above it breaks the scale either way.
   final highest = bookByLesson.keys.reduce((a, b) => a > b ? a : b);
   final wholeCourse = assetPaths.join() == (await loadCourse()).books.join();
-  assert(
-    wholeCourse ? highest == lastLesson : highest <= lastLesson,
-    'the data ends at lesson $highest, lastLesson says $lastLesson',
-  );
+  if (wholeCourse) {
+    for (var lesson = 1; lesson <= highest; lesson++) {
+      if (!bookByLesson.containsKey(lesson)) {
+        throw StateError('no lesson $lesson, but lesson $highest exists');
+      }
+    }
+  }
 
   return LessonData(
     wordToLesson: wordToLesson,

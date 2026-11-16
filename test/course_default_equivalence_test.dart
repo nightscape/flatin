@@ -16,7 +16,7 @@ void main() {
   test(
     'the default course practises what the settings alone practised',
     () async {
-      final settings = Settings();
+      final settings = Settings(lastLesson: latinLastLesson);
       final lessons = await loadLessonData(latinCourse.books);
       final curriculum = await loadCurriculum(latinCourse.books);
       final filter = CourseFilter(settings, curriculum, lessons);
@@ -46,7 +46,7 @@ void main() {
   test(
     'the default course card counts what the settings alone counted',
     () async {
-      final settings = Settings();
+      final settings = Settings(lastLesson: latinLastLesson);
       final lessons = await loadLessonData(latinCourse.books);
       final curriculum = await loadCurriculum(latinCourse.books);
       final filter = CourseFilter(settings, curriculum, lessons);

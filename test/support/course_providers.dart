@@ -43,6 +43,7 @@ Future<Curriculum> curriculumOf(List<String> books) async => Curriculum.parse(
   books,
   await _shapes(),
   syntaxTopics: syntaxTopicIds(latinLang),
+  lastLesson: latinLastLesson,
 );
 
 /// A curriculum over the real data that teaches everything in lesson 1 except
@@ -60,7 +61,11 @@ Future<Curriculum> lateGenitiveCurriculum() async {
   yaml.write(
     '  - lesson: 30\n    grammar:\n      nouns:\n        forms:\n          - {name: T, kasus: gen}\n',
   );
-  return Curriculum.parse([yaml.toString()], shapes);
+  return Curriculum.parse(
+    [yaml.toString()],
+    shapes,
+    lastLesson: latinLastLesson,
+  );
 }
 
 /// A curriculum over the real data that teaches everything in lesson 1 except
@@ -85,7 +90,11 @@ Future<Curriculum> lateTypeCurriculum(
   yaml.write(
     '  - lesson: $lesson\n    grammar:\n      $dataFileId:\n        types: [$typeName]\n',
   );
-  return Curriculum.parse([yaml.toString()], shapes);
+  return Curriculum.parse(
+    [yaml.toString()],
+    shapes,
+    lastLesson: latinLastLesson,
+  );
 }
 
 /// A curriculum over the real data that teaches every type in lesson 1 and
@@ -104,5 +113,9 @@ Future<Curriculum> lateFormsCurriculum(String dataFileId, int lesson) async {
   yaml.write(
     '  - lesson: $lesson\n    grammar:\n      $dataFileId:\n        forms:\n          - {name: T}\n',
   );
-  return Curriculum.parse([yaml.toString()], shapes);
+  return Curriculum.parse(
+    [yaml.toString()],
+    shapes,
+    lastLesson: latinLastLesson,
+  );
 }

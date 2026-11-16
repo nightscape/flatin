@@ -13,6 +13,7 @@ import 'package:latin_practice/providers/fsrs_provider.dart';
 import 'package:latin_practice/providers/locale_provider.dart';
 
 import 'support/course_fixture.dart';
+import 'support/latin_course.dart' show latinLastLesson;
 
 Set<FormKey> _keysOf(Exercise e) => switch (e.answer) {
   ChoiceAnswer(:final options) => {for (final o in options) o.formKey},
@@ -60,6 +61,7 @@ void main() {
     var built = 0;
     for (final word in adjectives) {
       final settings = Settings(
+        lastLesson: latinLastLesson,
         disabledFeatures: {
           word.dataFileId: {'grad': offGrad},
         },

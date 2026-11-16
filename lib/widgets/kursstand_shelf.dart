@@ -56,7 +56,8 @@ const _cover = Color(0xFF4A3426);
 
 /// The book of [lesson] among books starting at [bookStarts], 0-based;
 /// `bookStarts.length` is "Später".
-int bookIndex(List<int> bookStarts, int lesson) => lesson == laterLesson
+int bookIndex(List<int> bookStarts, int lesson, int laterLesson) =>
+    lesson == laterLesson
     ? bookStarts.length
     : bookStarts.lastIndexWhere((s) => s <= lesson);
 
@@ -83,6 +84,7 @@ class BookScale {
     this.left,
     double width, {
     required this.kursstand,
+    required this.laterLesson,
   }) {
     assert(bookStarts.first == 1, 'the first book starts at lesson 1');
     assert(expansion.length == bookStarts.length);
@@ -138,12 +140,15 @@ class BookScale {
   final List<int> bookStarts;
   final int kursstand;
 
+  /// The lesson number of "Später".
+  final int laterLesson;
+
   /// The left end of the track.
   final double left;
   final starts = <double>[], widths = <double>[];
   late final List<double> _room;
 
-  int bookOf(int lesson) => bookIndex(bookStarts, lesson);
+  int bookOf(int lesson) => bookIndex(bookStarts, lesson, laterLesson);
 
   int lessonsIn(int book) =>
       (book + 1 < bookStarts.length ? bookStarts[book + 1] : laterLesson) -
@@ -392,7 +397,7 @@ class ShelfPainter extends CustomPainter {
     if (tiedTo) _bow(canvas, shelfBowAt(scale, words.to));
     onPaint?.call(
       [
-        for (var l = 1; l <= laterLesson; l++)
+        for (var l = 1; l <= scale.laterLesson; l++)
           books[scale.bookOf(l)].top(scale.x(l)),
       ],
       [for (final book in books) book.spineHead],

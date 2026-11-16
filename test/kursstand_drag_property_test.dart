@@ -9,12 +9,14 @@ import 'package:latin_practice/models/lesson_range.dart';
 
 import 'support/kursstand_shelf_driver.dart';
 import 'support/kursstand_sliders_harness.dart';
+import 'support/latin_course.dart' show latinLaterLesson;
 
 const _cases = int.fromEnvironment('CASES', defaultValue: 40);
 const _seed = int.fromEnvironment('SEED', defaultValue: 1);
 
 LessonRange _range(Random rng) {
-  final a = 1 + rng.nextInt(laterLesson), b = 1 + rng.nextInt(laterLesson);
+  final a = 1 + rng.nextInt(latinLaterLesson),
+      b = 1 + rng.nextInt(latinLaterLesson);
   return LessonRange(min(a, b), max(a, b));
 }
 

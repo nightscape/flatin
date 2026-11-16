@@ -2,14 +2,21 @@
 // too wide for that, the room a full book cannot take goes to the other
 // books, the closed ones too, and the row stays centred on the track.
 import 'package:flutter_test/flutter_test.dart';
-import 'package:latin_practice/data/lesson_data.dart';
 import 'package:latin_practice/widgets/kursstand_shelf.dart';
+import 'support/latin_course.dart' show latinLastLesson, latinLaterLesson;
 
 void main() {
   const starts = [1, 21];
 
   test('a narrow track gives each book its share of the free room', () {
-    final scale = BookScale(starts, [1, 0.3], 0, 300, kursstand: lastLesson);
+    final scale = BookScale(
+      starts,
+      [1, 0.3],
+      0,
+      300,
+      kursstand: latinLastLesson,
+      laterLesson: latinLaterLesson,
+    );
     expect(scale.widths[0] - 22, moreOrLessEquals(234 / 1.3));
     expect(scale.widths[1] - 22, moreOrLessEquals(234 * 0.3 / 1.3));
     expect(scale.starts.first, 0);
@@ -28,7 +35,8 @@ void main() {
         expansion,
         24,
         1200,
-        kursstand: lastLesson,
+        kursstand: latinLastLesson,
+        laterLesson: latinLaterLesson,
       );
       for (var b = 0; b < starts.length; b++) {
         expect(scale.widths[b], moreOrLessEquals(20 * shelfMaxCell));
@@ -41,7 +49,14 @@ void main() {
 
   test('a full book passes its room to the closed one', () {
     // 560 px: the open book takes its 280 px, the closed one the rest.
-    final scale = BookScale(starts, [1, 0], 0, 560, kursstand: lastLesson);
+    final scale = BookScale(
+      starts,
+      [1, 0],
+      0,
+      560,
+      kursstand: latinLastLesson,
+      laterLesson: latinLaterLesson,
+    );
     expect(scale.widths[0], moreOrLessEquals(20 * shelfMaxCell));
     expect(scale.widths[1], moreOrLessEquals(560 - 280 - 22));
     expect(scale.starts.first, 0);

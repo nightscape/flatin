@@ -8,7 +8,6 @@ import 'package:latin_practice/data/exercise_spec.dart';
 import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/data/sentences.dart';
 import 'package:latin_practice/models/exercise.dart';
-import 'package:latin_practice/models/lesson_range.dart';
 import 'package:latin_practice/models/practice_item.dart';
 
 import 'package:latin_practice/data/languages/language.dart';
@@ -58,7 +57,7 @@ void main() {
       pool: items,
       german: fakeExerciseContext().german,
       sentences: corpus,
-      reachedLesson: laterLesson,
+      reachedLesson: latinLaterLesson,
     );
   });
 

@@ -68,7 +68,12 @@ ProviderContainer _container() => ProviderContainer(
 /// Plays a round of vocab only with the words of [lesson] to its end, every
 /// answer right, and returns the lemmas it asked.
 Future<Set<String>> _playVocabRound(int lesson) async {
-  seedSettings(Settings(courseWords: LessonRange(lesson, lesson)));
+  seedSettings(
+    Settings(
+      lastLesson: latinLastLesson,
+      courseWords: LessonRange(lesson, lesson),
+    ),
+  );
   final c = _container();
   addTearDown(c.dispose);
 

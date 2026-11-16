@@ -230,7 +230,7 @@ void main() {
     final rng = Random(324);
     final answers = <TickAnswer>[k1, k2];
     while (answers.length < 40) {
-      final l = settingsLearnerOf(world, Settings());
+      final l = settingsLearnerOf(world, Settings(lastLesson: latinLastLesson));
       final (word, bundle) = drawPair(rng, l)!;
       try {
         answers.add(
@@ -261,11 +261,17 @@ void main() {
     final de = translationKeys('de');
     final en = translationKeys('en');
     final rng = Random(3240);
-    final full = settingsLearnerOf(world, Settings());
-    final early = settingsLearnerOf(world, Settings(kursstand: 1));
+    final full = settingsLearnerOf(
+      world,
+      Settings(lastLesson: latinLastLesson),
+    );
+    final early = settingsLearnerOf(
+      world,
+      Settings(lastLesson: latinLastLesson, kursstand: 1),
+    );
     final english = settingsLearnerOf(
       world,
-      Settings(),
+      Settings(lastLesson: latinLastLesson),
       german: const NoForms(),
     );
     final earlyWord = early.ctx.pool.first;
@@ -375,7 +381,11 @@ void main() {
     );
     addTearDown(container.dispose);
     final german = await container.read(germanFormsProvider.future);
-    final l = settingsLearnerOf(world, Settings(), german: german);
+    final l = settingsLearnerOf(
+      world,
+      Settings(lastLesson: latinLastLesson),
+      german: german,
+    );
     final rng = Random(1);
     for (var i = 0; i < 20; i++) {
       final (word, bundle) = drawPair(rng, l)!;
@@ -442,7 +452,7 @@ void main() {
       tester.view.devicePixelRatio = 1.0;
       addTearDown(tester.view.reset);
       final rng = Random(32);
-      final l = settingsLearnerOf(world, Settings());
+      final l = settingsLearnerOf(world, Settings(lastLesson: latinLastLesson));
       final (homo, akkSg) = homoAkkSg(l);
       final built = generator.build(homo, akkSg, l.ctx, rng);
       final sentence = world.corpus.sentences.singleWhere(

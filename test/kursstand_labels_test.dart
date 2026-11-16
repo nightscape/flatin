@@ -6,6 +6,7 @@ import 'package:latin_practice/models/lesson_range.dart';
 
 import 'support/app_fonts.dart';
 import 'support/kursstand_sliders_harness.dart';
+import 'support/latin_course.dart' show latinLaterLesson;
 
 const _width = 366.0;
 
@@ -57,12 +58,12 @@ void main() {
     ('words at L1', LessonRange(1, 2), LessonRange(1, 2), true, true, true, 1),
     (
       'words at the end',
-      LessonRange(laterLesson - 1, laterLesson),
-      LessonRange(3, laterLesson),
+      LessonRange(latinLaterLesson - 1, latinLaterLesson),
+      LessonRange(3, latinLaterLesson),
       false,
       true,
       true,
-      laterLesson,
+      latinLaterLesson,
     ),
     (
       'grammar at L1, thumbs close',
@@ -76,16 +77,16 @@ void main() {
     (
       'grammar at the end, thumbs close',
       LessonRange(5, 30),
-      LessonRange(laterLesson - 3, laterLesson),
+      LessonRange(latinLaterLesson - 3, latinLaterLesson),
       false,
       false,
       false,
-      laterLesson,
+      latinLaterLesson,
     ),
     (
       'grammar shallow chains',
       LessonRange(18, 19),
-      LessonRange(1, laterLesson),
+      LessonRange(1, latinLaterLesson),
       false,
       false,
       false,
@@ -93,12 +94,12 @@ void main() {
     ),
     (
       'words shallow chains',
-      LessonRange(1, laterLesson),
+      LessonRange(1, latinLaterLesson),
       LessonRange(18, 19),
       false,
       false,
       true,
-      laterLesson,
+      latinLaterLesson,
     ),
   ];
   for (final (name, words, grammar, left, right, onWords, lesson) in cases) {

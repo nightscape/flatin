@@ -12,7 +12,9 @@ void main() {
   test('the lesson scale runs 1..lastLesson, split over two volumes', () async {
     final lessons = await loadLessonData(latinCourse.books);
 
-    expect(lessons.lessonNumbers, [for (var i = 1; i <= lastLesson; i++) i]);
+    expect(lessons.lessonNumbers, [
+      for (var i = 1; i <= latinLastLesson; i++) i,
+    ]);
     expect(lessons.bookOf(20), 1);
     expect(lessons.bookOf(21), 2);
   });
@@ -25,7 +27,7 @@ void main() {
     for (final item in items) {
       expect(
         lessons.lessonNumberOf(item),
-        inInclusiveRange(1, lastLesson),
+        inInclusiveRange(1, latinLastLesson),
         reason: item.id,
       );
     }
@@ -66,15 +68,11 @@ void main() {
     expect(range.contains(2), isFalse);
     expect(range.contains(8), isFalse);
     expect(LessonRange.fromJson(range.toJson()), range);
-    expect(LessonRange.full, LessonRange(1, laterLesson));
+    expect(latinFullRange, LessonRange(1, latinLaterLesson));
   });
 
-  test('a lesson range outside the scale is a programming error', () {
+  test('an empty or inverted lesson range is a programming error', () {
     expect(() => LessonRange(0, 5), throwsA(isA<AssertionError>()));
     expect(() => LessonRange(5, 3), throwsA(isA<AssertionError>()));
-    expect(
-      () => LessonRange(1, laterLesson + 1),
-      throwsA(isA<AssertionError>()),
-    );
   });
 }

@@ -5,10 +5,12 @@ import 'package:flutter/rendering.dart' show RenderRepaintBoundary;
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'repo_dir.dart';
+
 const stepShots = bool.fromEnvironment('STEP_SHOTS');
 
 final _runDir =
-    'build/step_shots/'
+    '$repoDir/build/step_shots/'
     '${DateTime.now().toIso8601String().replaceAll(RegExp(r'[:.]'), '-')}';
 var _counter = 0;
 

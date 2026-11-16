@@ -10,6 +10,7 @@ import 'package:latin_practice/theme.dart';
 import 'package:latin_practice/widgets/kursstand_shelf.dart';
 
 import 'support/gen_settings.dart';
+import 'support/latin_course.dart' show latinLaterLesson;
 
 /// Records the x of every vertical line, every untranslated path with its
 /// colour, and the origin of every rounded rect drawn around it.
@@ -98,6 +99,7 @@ void _check(_Shelf shelf, String why) {
     c.left,
     c.width,
     kursstand: c.kursstand,
+    laterLesson: latinLaterLesson,
   );
   final canvas = _Recorder();
   ShelfPainter(

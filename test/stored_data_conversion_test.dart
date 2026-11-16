@@ -1,7 +1,11 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/data/settings_conversion.dart';
+
+import 'support/gen_exam.dart' show drawnLanguage;
+import 'support/gen_settings.dart' show drawStoredSettings;
 
 void main() {
   final map = MigrationMap.parse(
@@ -118,6 +122,21 @@ void main() {
       },
     }, map);
     expect(convertSettingsV2(once, map), same(once));
+  });
+
+  test('a store of version 3 or later is not converted by version 3', () {
+    const lemmas = ['hīc', 'hic', 'amō', 'ōs', 'vīta', 'via'];
+    for (var seed = 0; seed < 25; seed++) {
+      final r = Random(seed);
+      final version = 3 + r.nextInt(3);
+      final stored = drawStoredSettings(r, words: lemmas.toSet())
+        ..[settingsVersionField] = version;
+      expect(
+        convertSettingsV3(stored, lemmas, drawnLanguage(r)),
+        same(stored),
+        reason: 'seed $seed, version $version',
+      );
+    }
   });
 
   test('a form the old settings screen never offered stays practised', () {

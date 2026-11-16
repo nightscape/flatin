@@ -11,6 +11,8 @@ import 'package:integration_test/integration_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:latin_practice/data/game_rules.dart';
 import 'package:latin_practice/data/languages/language.dart';
+import 'package:latin_practice/data/lesson_data.dart' show loadLessonData;
+import 'package:latin_practice/models/course.dart' show loadCourse;
 import 'package:latin_practice/models/course_filter.dart';
 import 'package:latin_practice/models/practice_item.dart';
 import 'package:latin_practice/data/round_plan.dart' show roundLength;
@@ -729,9 +731,15 @@ class AppSteps {
   @And('I switched the {string} reward off')
   Future<void> iSwitchedRewardOff(WidgetTester tester, String reward) async {
     final prefs = await SharedPreferences.getInstance();
+    final lessons = await loadLessonData((await loadCourse()).books);
     await prefs.setString(
       'practice_settings',
-      jsonEncode(Settings(disabledRewards: {reward}).toJson()),
+      jsonEncode(
+        Settings(
+          lastLesson: lessons.lastLesson,
+          disabledRewards: {reward},
+        ).toJson(),
+      ),
     );
   }
 

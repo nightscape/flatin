@@ -22,8 +22,9 @@ List<LernzielChip> lernzielRow(LessonRange range, List<LessonRange> presets) =>
       if (!presets.contains(range)) (preset: null, selected: true),
     ];
 
-/// `L24`, `L20–L24`, or with the open end `L3–[later]`.
-String lernzielLabel(LessonRange range, String later) {
+/// `L24`, `L20–L24`, or with the open end `L3–[later]`; the open end is
+/// [laterLesson].
+String lernzielLabel(LessonRange range, String later, int laterLesson) {
   String stop(int lesson) => lesson == laterLesson ? later : 'L$lesson';
   return range.from == range.to
       ? stop(range.from)

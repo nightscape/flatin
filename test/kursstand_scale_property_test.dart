@@ -8,21 +8,26 @@
 import 'dart:math';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:latin_practice/data/lesson_data.dart';
-import 'package:latin_practice/models/lesson_range.dart';
 import 'package:latin_practice/widgets/kursstand_shelf.dart';
 
 import 'support/gen_settings.dart';
+import 'support/latin_course.dart' show latinLastLesson, latinLaterLesson;
 
 void _check(BookScaleCase c, String when) {
-  BookScale scale(int kursstand) =>
-      BookScale(c.starts, c.expansion, c.left, c.width, kursstand: kursstand);
+  BookScale scale(int kursstand) => BookScale(
+    c.starts,
+    c.expansion,
+    c.left,
+    c.width,
+    kursstand: kursstand,
+    laterLesson: latinLaterLesson,
+  );
   final s = scale(c.kursstand);
-  final plain = scale(lastLesson);
-  for (var l = 2; l <= laterLesson; l++) {
+  final plain = scale(latinLastLesson);
+  for (var l = 2; l <= latinLaterLesson; l++) {
     expect(s.x(l), greaterThan(s.x(l - 1)), reason: '$when: L$l after L$l-1');
   }
-  for (var l = 1; l <= laterLesson; l++) {
+  for (var l = 1; l <= latinLaterLesson; l++) {
     expect(s.lessonAt(s.x(l)), l, reason: '$when: the thumb of L$l');
   }
   for (var b = 0; b < c.starts.length; b++) {
@@ -100,7 +105,7 @@ void main() {
         width: 240,
         kursstand: 5,
       ),
-      for (final k in [1, 20, 21, 24, lastLesson])
+      for (final k in [1, 20, 21, 24, latinLastLesson])
         for (final expansion in [
           [1.0, 0.3],
           [0.3, 1.0],
@@ -131,13 +136,20 @@ void main() {
     // The track of the shelf in the settings card on a 360 px phone.
     const track = 240.0;
     var narrowest = double.infinity;
-    for (var k = 1; k <= lastLesson; k++) {
+    for (var k = 1; k <= latinLastLesson; k++) {
       for (final (dragged, other) in [(0, 1), (1, 0)]) {
         for (final rest in [0.0, 0.3, 1.0]) {
           final expansion = [0.0, 0.0]
             ..[dragged] = 1
             ..[other] = rest;
-          final s = BookScale([1, 21], expansion, 24, track, kursstand: k);
+          final s = BookScale(
+            [1, 21],
+            expansion,
+            24,
+            track,
+            kursstand: k,
+            laterLesson: latinLaterLesson,
+          );
           final first = dragged == 0 ? 1 : 21;
           for (var l = first; l < first + s.lessonsIn(dragged); l++) {
             narrowest = min(narrowest, s.cell(l));

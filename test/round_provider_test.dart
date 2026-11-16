@@ -27,6 +27,7 @@ import 'package:latin_practice/services/fsrs_storage.dart';
 import 'support/course_providers.dart';
 import 'support/grammar_exercise_harness.dart';
 import 'support/recording_rewards.dart';
+import 'support/latin_course.dart' show latinLastLesson;
 
 ProviderContainer _container() => ProviderContainer(
   retry: noRetry,
@@ -94,7 +95,9 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   test('a fresh store at lesson 1 offers a new topic of lesson 1', () async {
-    seedSettings(Settings(courseWords: LessonRange(1, 1)));
+    seedSettings(
+      Settings(lastLesson: latinLastLesson, courseWords: LessonRange(1, 1)),
+    );
     final c = _container();
     addTearDown(c.dispose);
     final offer = await c.read(todayOfferProvider(const AllWords()).future);
@@ -123,7 +126,9 @@ void main() {
   ]) {
     test('a blocked round with $name reviews each word once on its first '
         'attempt and every bundle once, at the end, in one save', () async {
-      seedSettings(Settings(courseWords: LessonRange(1, 1)));
+      seedSettings(
+        Settings(lastLesson: latinLastLesson, courseWords: LessonRange(1, 1)),
+      );
       final c = _container();
       addTearDown(c.dispose);
       final offer =
@@ -193,7 +198,9 @@ void main() {
   }
 
   test('the bonus reads the word difficulty from before the review', () async {
-    seedSettings(Settings(courseWords: LessonRange(1, 1)));
+    seedSettings(
+      Settings(lastLesson: latinLastLesson, courseWords: LessonRange(1, 1)),
+    );
     final c = _container();
     addTearDown(c.dispose);
     final offer =
@@ -226,7 +233,9 @@ void main() {
   });
 
   test('a second response while one is in flight is ignored', () async {
-    seedSettings(Settings(courseWords: LessonRange(1, 1)));
+    seedSettings(
+      Settings(lastLesson: latinLastLesson, courseWords: LessonRange(1, 1)),
+    );
     final sent = <RewardEvent>[];
     final c = ProviderContainer(
       retry: noRetry,
@@ -274,7 +283,9 @@ void main() {
   test(
     'an aborted round keeps its word reviews and reviews no bundle',
     () async {
-      seedSettings(Settings(courseWords: LessonRange(1, 1)));
+      seedSettings(
+        Settings(lastLesson: latinLastLesson, courseWords: LessonRange(1, 1)),
+      );
       final c = _container();
       addTearDown(c.dispose);
       final offer =

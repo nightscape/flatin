@@ -26,7 +26,8 @@ import 'support/exercise_fakes.dart';
 import 'support/gen_sentence_learner.dart';
 import 'support/key_echo_i18n.dart';
 import 'support/word_classification_harness.dart';
-import 'support/latin_course.dart' show latinLang;
+import 'support/latin_course.dart'
+    show latinLang, latinLastLesson, latinLaterLesson;
 
 // Finger travel is a physical size, so the bound is absolute, not a screen fraction.
 const _maxReachDp = 280.0;
@@ -98,7 +99,7 @@ void main() {
       pool: items,
       german: fakeExerciseContext().german,
       sentences: corpus,
-      reachedLesson: laterLesson,
+      reachedLesson: latinLaterLesson,
     );
     final t = s.tokens[s.construction.head] as FormToken;
     final word = itemOfToken(items, t);
@@ -290,6 +291,7 @@ void main() {
     };
     seedSettings(
       Settings(
+        lastLesson: latinLastLesson,
         courseWords: LessonRange(1, 25),
         deselectedWords: {
           for (final w in english)

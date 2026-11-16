@@ -8,7 +8,6 @@ import 'package:latin_practice/data/exam.dart';
 import 'package:latin_practice/data/lesson_data.dart';
 import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/data/token_lessons.dart';
-import 'package:latin_practice/models/lesson_range.dart';
 import 'package:latin_practice/models/practice_item.dart';
 import 'package:latin_practice/providers/exam_provider.dart';
 import 'package:latin_practice/providers/locale_provider.dart';
@@ -115,7 +114,7 @@ void main() {
         final lesson = curriculum.formLesson(id, label.key);
         expect(
           curriculum.formLessonOrNull(id, label.key),
-          lesson == laterLesson ? isNull : lesson,
+          lesson == latinLaterLesson ? isNull : lesson,
           reason: label.key,
         );
       }
@@ -126,7 +125,7 @@ void main() {
       final lesson = curriculum.typeLesson(item.dataFileId, item.type);
       expect(
         curriculum.typeLessonOrNull(item.dataFileId, item.type),
-        lesson == laterLesson ? isNull : lesson,
+        lesson == latinLaterLesson ? isNull : lesson,
         reason: item.type,
       );
     }
@@ -161,7 +160,7 @@ void main() {
       final ids = syntaxTopicIds(latinLang).toList()..sort();
       for (var seed = 0; seed < 40; seed++) {
         final r = Random(seed);
-        final lesson = 1 + r.nextInt(lastLesson);
+        final lesson = 1 + r.nextInt(latinLastLesson);
         final good = ids[r.nextInt(ids.length)];
         final bad = [
           'clause.art.${latinLang.rules.mainClause}',
@@ -173,8 +172,12 @@ void main() {
         String book(List<String> topics, [int at = 0]) =>
             'lessons:\n  - lesson: ${lesson + at}\n    grammar:\n'
             '      syntax: [${topics.join(', ')}]\n';
-        Curriculum parse(List<String> sources) =>
-            Curriculum.parse(sources, {}, syntaxTopics: ids.toSet());
+        Curriculum parse(List<String> sources) => Curriculum.parse(
+          sources,
+          {},
+          syntaxTopics: ids.toSet(),
+          lastLesson: latinLastLesson,
+        );
 
         expect(
           parse([

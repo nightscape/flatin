@@ -22,7 +22,8 @@ import 'package:latin_practice/services/reward_storage.dart';
 
 import 'support/course_providers.dart';
 import 'support/word_classification_harness.dart';
-import 'support/latin_course.dart' show latinLang;
+import 'support/latin_course.dart'
+    show latinFullRange, latinLang, latinLastLesson, latinLaterLesson;
 
 List<String> _baseForms(PracticeItem item) => [
   for (final key in item.baseFormKeys) item.forms[item.formOrder.indexOf(key)],
@@ -526,8 +527,10 @@ void main() {
 
   test('at every course position, every word the focus offers has a base '
       'form to ask or a genus', () async {
-    for (var to = 1; to <= laterLesson; to++) {
-      seedSettings(Settings(courseWords: LessonRange(1, to)));
+    for (var to = 1; to <= latinLaterLesson; to++) {
+      seedSettings(
+        Settings(lastLesson: latinLastLesson, courseWords: LessonRange(1, to)),
+      );
       final container = ProviderContainer();
       addTearDown(container.dispose);
       final filter = await container.read(courseFilterProvider.future);
@@ -558,7 +561,9 @@ void main() {
 
   test('vocab items load with no base forms, and the focus offers none of '
       'them', () async {
-    seedSettings(Settings(courseWords: LessonRange.full));
+    seedSettings(
+      Settings(lastLesson: latinLastLesson, courseWords: latinFullRange),
+    );
     final container = ProviderContainer();
     addTearDown(container.dispose);
     final filter = await container.read(courseFilterProvider.future);
@@ -572,7 +577,9 @@ void main() {
   });
 
   Future<Finder> verbsButtonInBaseForms(WidgetTester tester, int to) async {
-    seedSettings(Settings(courseWords: LessonRange(1, to)));
+    seedSettings(
+      Settings(lastLesson: latinLastLesson, courseWords: LessonRange(1, to)),
+    );
     await _pumpLarge(tester, const HomeScreen());
     await tester.tap(find.byKey(const Key('focus.picker')));
     await tester.pumpAndSettle();
@@ -596,7 +603,7 @@ void main() {
 
   testWidgets('the home screen offers the base forms focus and opens the '
       'practice with it; the grammar start does not', (tester) async {
-    seedSettings(Settings());
+    seedSettings(Settings(lastLesson: latinLastLesson));
     await _pumpLarge(tester, const GrammarStartScreen());
     expect(find.byKey(const Key('focus.option.baseForms')), findsNothing);
 
@@ -615,7 +622,7 @@ void main() {
 
   testWidgets('the base forms practice shows lemma and meaning, asks the '
       'base forms and pays for each right one', (tester) async {
-    seedSettings(Settings());
+    seedSettings(Settings(lastLesson: latinLastLesson));
     final rex = word('nouns:rex');
     await _pumpLarge(
       tester,
@@ -642,7 +649,7 @@ void main() {
   testWidgets('a wrong genus pays nothing and rates the card down', (
     tester,
   ) async {
-    seedSettings(Settings());
+    seedSettings(Settings(lastLesson: latinLastLesson));
     await _pumpLarge(
       tester,
       PracticeScreen(item: word('nouns:rex'), focus: const BaseForms()),
@@ -663,7 +670,7 @@ void main() {
   testWidgets('only a noun in the base forms focus is asked its genus', (
     tester,
   ) async {
-    seedSettings(Settings());
+    seedSettings(Settings(lastLesson: latinLastLesson));
     await _pumpLarge(
       tester,
       PracticeScreen(item: word('verbs:amare'), focus: const BaseForms()),

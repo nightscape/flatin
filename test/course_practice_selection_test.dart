@@ -15,7 +15,10 @@ import 'support/word_classification_harness.dart';
 import 'support/latin_course.dart';
 
 /// The course position of a learner in the middle of the first volume.
-final _upToFive = Settings(courseWords: LessonRange(1, 5));
+final _upToFive = Settings(
+  lastLesson: latinLastLesson,
+  courseWords: LessonRange(1, 5),
+);
 
 Future<ProviderContainer> _containerWithLateGenitive() async {
   final curriculum = await lateGenitiveCurriculum();
@@ -92,7 +95,12 @@ void main() {
 
   test('an item whose forms are all switched off is not practised', () async {
     final nouns = await getFormMetadata('lib/data/latin_nouns.yaml');
-    seedSettings(Settings(disabledForms: {'nouns': nouns.formOrder.toSet()}));
+    seedSettings(
+      Settings(
+        lastLesson: latinLastLesson,
+        disabledForms: {'nouns': nouns.formOrder.toSet()},
+      ),
+    );
     final container = ProviderContainer();
     addTearDown(container.dispose);
 
@@ -133,7 +141,7 @@ void main() {
   });
 
   test('narrowing the course deletes no card', () async {
-    seedSettings(Settings());
+    seedSettings(Settings(lastLesson: latinLastLesson));
     final wide = ProviderContainer();
     final before = (await wide.read(fsrsCardsProvider.future)).keys.toSet();
     wide.dispose();

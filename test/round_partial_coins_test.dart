@@ -154,6 +154,7 @@ void main() {
     for (var draw = 0; draw < 12; draw++) {
       seedSettings(
         Settings(
+          lastLesson: latinLastLesson,
           courseWords: LessonRange(1, 24 + rng.nextInt(3)),
           deselectedWords: {
             for (final w in words)

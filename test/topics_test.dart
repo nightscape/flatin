@@ -94,10 +94,10 @@ void main() {
       }
       final expected = {
         for (final e in firstLesson.entries)
-          if (e.value == laterLesson) e.key,
+          if (e.value == latinLaterLesson) e.key,
       };
       final listed = {
-        for (final t in topics.where((t) => t.lesson == laterLesson))
+        for (final t in topics.where((t) => t.lesson == latinLaterLesson))
           for (final b in t.bundles) (t.dataFileId, b),
       };
       expect(expected, isNotEmpty);
@@ -116,7 +116,7 @@ void main() {
 
   test('topic order equals the selection order of the grammar cards', () async {
     final filter = CourseFilter(
-      Settings(courseWords: LessonRange.full),
+      Settings(lastLesson: latinLastLesson, courseWords: latinFullRange),
       curriculum,
       lessons,
     );
@@ -159,7 +159,7 @@ void main() {
 
   test('offered bundles are the topic bundles that are unlocked', () {
     final filter = CourseFilter(
-      Settings(courseWords: LessonRange(1, 10)),
+      Settings(lastLesson: latinLastLesson, courseWords: LessonRange(1, 10)),
       curriculum,
       lessons,
     );
@@ -177,7 +177,10 @@ void main() {
   test('the provider lists only the topics of the course position', () async {
     SharedPreferences.setMockInitialValues({
       'practice_settings': jsonEncode(
-        Settings(courseWords: LessonRange(1, 10)).toJson(),
+        Settings(
+          lastLesson: latinLastLesson,
+          courseWords: LessonRange(1, 10),
+        ).toJson(),
       ),
     });
     final container = ProviderContainer();

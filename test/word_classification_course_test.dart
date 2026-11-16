@@ -8,12 +8,15 @@ import 'package:latin_practice/screens/word_classification_screen.dart';
 
 import 'support/course_providers.dart';
 import 'support/word_classification_harness.dart';
+import 'support/latin_course.dart' show latinLastLesson;
 
 void main() {
   testWidgets('a narrowed course offers no form it has not taught', (
     tester,
   ) async {
-    seedSettings(Settings(courseWords: LessonRange(1, 5)));
+    seedSettings(
+      Settings(lastLesson: latinLastLesson, courseWords: LessonRange(1, 5)),
+    );
     final curriculum = await lateGenitiveCurriculum();
     final rosa = (await loadPracticeItems(
       'lib/data/latin_nouns.yaml',

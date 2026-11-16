@@ -4,18 +4,20 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/data/settings_conversion.dart';
 import 'package:latin_practice/models/lesson_range.dart';
 import 'package:latin_practice/models/settings.dart';
+import 'support/latin_course.dart'
+    show latinFullRange, latinLastLesson, latinLaterLesson;
 
 void main() {
   group('course ranges', () {
     test('a fresh setting practises the whole course', () {
-      final settings = Settings();
+      final settings = Settings(lastLesson: latinLastLesson);
 
-      expect(settings.courseWords, LessonRange.full);
-      expect(settings.courseGrammar, LessonRange(1, laterLesson));
+      expect(settings.courseWords, latinFullRange);
+      expect(settings.courseGrammar, LessonRange(1, latinLaterLesson));
     });
 
     test('unlinked, the grammar range stands on its own', () {
-      final settings = Settings()
+      final settings = Settings(lastLesson: latinLastLesson)
           .withWordRange(LessonRange(5, 12))
           .withGrammarLinked(to: false)
           .withGrammarRange(LessonRange(1, 8));
@@ -30,16 +32,22 @@ void main() {
 
   group('overrides', () {
     test('a toggle stores an override only against the course verdict', () {
-      final off = Settings().toggleWord('amare', inRange: true);
+      final off = Settings(
+        lastLesson: latinLastLesson,
+      ).toggleWord('amare', inRange: true);
       expect(off.overrideOfWord('amare'), Override.forcedOff);
 
-      final on = Settings().toggleWord('amare', inRange: false);
+      final on = Settings(
+        lastLesson: latinLastLesson,
+      ).toggleWord('amare', inRange: false);
       expect(on.overrideOfWord('amare'), Override.forcedOn);
     });
 
     test('toggling twice leaves no override behind', () {
       for (final inRange in [true, false]) {
-        final once = Settings().toggleWord('amare', inRange: inRange);
+        final once = Settings(
+          lastLesson: latinLastLesson,
+        ).toggleWord('amare', inRange: inRange);
         final twice = once.toggleWord('amare', inRange: inRange);
 
         expect(
@@ -53,7 +61,9 @@ void main() {
     });
 
     test('a toggle against an override of the other side clears it', () {
-      final forcedOn = Settings().toggleWord('amare', inRange: false);
+      final forcedOn = Settings(
+        lastLesson: latinLastLesson,
+      ).toggleWord('amare', inRange: false);
       final back = forcedOn.toggleWord('amare', inRange: false);
 
       expect(back.forcedOnWords, isEmpty);
@@ -61,7 +71,7 @@ void main() {
     });
 
     test('types and forms override the same way', () {
-      final settings = Settings()
+      final settings = Settings(lastLesson: latinLastLesson)
           .toggleType('nouns', 'A-Deklination', inRange: true)
           .toggleForm('nouns', 'gen.sg', inRange: false);
 
@@ -74,7 +84,7 @@ void main() {
     });
 
     test('clearOverrides empties every override and keeps the ranges', () {
-      final settings = Settings()
+      final settings = Settings(lastLesson: latinLastLesson)
           .withWordRange(LessonRange(3, 9))
           .toggleWord('amare', inRange: true)
           .toggleType('nouns', 'A-Deklination', inRange: false)
@@ -100,11 +110,16 @@ void main() {
 
     test('an entry cannot be forced on and off at once', () {
       expect(
-        () => Settings(deselectedWords: {'amare'}, forcedOnWords: {'amare'}),
+        () => Settings(
+          lastLesson: latinLastLesson,
+          deselectedWords: {'amare'},
+          forcedOnWords: {'amare'},
+        ),
         throwsA(isA<AssertionError>()),
       );
       expect(
         () => Settings(
+          lastLesson: latinLastLesson,
           disabledTypes: {
             'nouns': {'A-Deklination'},
           },
@@ -116,6 +131,7 @@ void main() {
       );
       expect(
         () => Settings(
+          lastLesson: latinLastLesson,
           disabledForms: {
             'nouns': {'gen.sg'},
           },
@@ -131,6 +147,7 @@ void main() {
   group('storage', () {
     test('every new field survives a JSON round trip', () {
       final settings = Settings(
+        lastLesson: latinLastLesson,
         disabledFeatures: {
           'verbs': {
             'genus_verbi': {'pass'},
@@ -154,6 +171,7 @@ void main() {
 
       final restored = Settings.fromJson(
         jsonDecode(jsonEncode(settings.toJson())) as Map<String, dynamic>,
+        lastLesson: latinLastLesson,
       );
 
       expect(restored.courseWords, LessonRange(4, 17));
@@ -191,10 +209,11 @@ void main() {
 
       final settings = Settings.fromJson(
         jsonDecode(jsonEncode(stored)) as Map<String, dynamic>,
+        lastLesson: latinLastLesson,
       );
 
-      expect(settings.courseWords, LessonRange.full);
-      expect(settings.courseGrammar, LessonRange.full);
+      expect(settings.courseWords, latinFullRange);
+      expect(settings.courseGrammar, latinFullRange);
       expect(settings.grammarToLinked, isTrue);
       expect(settings.deselectedTopics, isEmpty);
       expect(settings.forcedOnTopics, isEmpty);

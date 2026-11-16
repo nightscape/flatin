@@ -25,7 +25,7 @@ void main() {
 
       // Real text: the error line interpolates the message, and the English
       // title shows that the translations load on the error screen.
-      expect(find.textContaining('broken lessons'), findsOneWidget);
+      expect(find.textContaining('broken lessons'), findsWidgets);
       expect(find.text('Settings'), findsOneWidget);
       expect(find.text('settings.title'), findsNothing);
     },

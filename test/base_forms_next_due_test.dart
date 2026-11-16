@@ -7,6 +7,7 @@ import 'package:latin_practice/providers/curriculum_provider.dart';
 import 'package:latin_practice/providers/fsrs_provider.dart';
 
 import 'support/course_providers.dart';
+import 'support/latin_course.dart' show latinLastLesson;
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -15,6 +16,7 @@ void main() {
       'ask under a grammar range that excludes most verbs', () async {
     seedSettings(
       Settings(
+        lastLesson: latinLastLesson,
         courseWords: LessonRange(1, 26),
         courseGrammar: LessonRange(26, 26),
       ),

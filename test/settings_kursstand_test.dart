@@ -3,12 +3,13 @@ import 'dart:math';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:latin_practice/data/lesson_data.dart';
 import 'package:latin_practice/data/settings_conversion.dart';
 import 'package:latin_practice/models/lesson_range.dart';
 import 'package:latin_practice/models/settings.dart';
 import 'package:latin_practice/providers/settings_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'support/latin_course.dart'
+    show latinFullRange, latinLastLesson, latinLaterLesson;
 
 Future<(Settings, Map<String, dynamic>)> _load(
   Map<String, dynamic> stored,
@@ -27,8 +28,8 @@ Future<(Settings, Map<String, dynamic>)> _load(
 }
 
 LessonRange _range(Random rng) {
-  final from = 1 + rng.nextInt(laterLesson);
-  return LessonRange(from, from + rng.nextInt(laterLesson - from + 1));
+  final from = 1 + rng.nextInt(latinLaterLesson);
+  return LessonRange(from, from + rng.nextInt(latinLaterLesson - from + 1));
 }
 
 void main() {
@@ -81,21 +82,24 @@ void main() {
   test('a store open at the top has reached the last lesson', () async {
     final (settings, _) = await _load({
       settingsVersionField: 3,
-      ...Settings().toJson()..remove('kursstand'),
+      ...Settings(lastLesson: latinLastLesson).toJson()..remove('kursstand'),
     });
 
-    expect(settings.kursstand, lastLesson);
-    expect(settings.courseWords, LessonRange.full);
+    expect(settings.kursstand, latinLastLesson);
+    expect(settings.courseWords, latinFullRange);
   });
 
   test('the Kursstand survives a reload', () async {
-    final (settings, _) = await _load(Settings(kursstand: 7).toJson());
+    final (settings, _) = await _load(
+      Settings(lastLesson: latinLastLesson, kursstand: 7).toJson(),
+    );
     expect(settings.kursstand, 7);
   });
 
   group('a step of the Kursstand', () {
     test('moves the word range and a linked grammar range that end at it', () {
       final next = Settings(
+        lastLesson: latinLastLesson,
         courseWords: LessonRange(4, 24),
         kursstand: 24,
       ).withKursstand(25);
@@ -107,6 +111,7 @@ void main() {
 
     test('moves an unlinked grammar range that ends at it', () {
       final next = Settings(
+        lastLesson: latinLastLesson,
         courseWords: LessonRange(1, 20),
         courseGrammar: LessonRange(2, 24),
         grammarToLinked: false,
@@ -120,6 +125,7 @@ void main() {
 
     test('keeps a range that ends earlier', () {
       final next = Settings(
+        lastLesson: latinLastLesson,
         courseWords: LessonRange(1, 24),
         courseGrammar: LessonRange(5, 12),
         grammarToLinked: false,
@@ -133,6 +139,7 @@ void main() {
     test('back takes the ranges that end at it along, but not one that starts '
         'above the new Kursstand', () {
       final next = Settings(
+        lastLesson: latinLastLesson,
         courseWords: LessonRange(3, 24),
         courseGrammar: LessonRange(20, 24),
         grammarToLinked: false,
@@ -146,6 +153,7 @@ void main() {
 
     test('a back step below a grammar start keeps that start', () {
       final next = Settings(
+        lastLesson: latinLastLesson,
         courseWords: LessonRange(1, 20),
         courseGrammar: LessonRange(10, 20),
         kursstand: 20,
@@ -158,6 +166,7 @@ void main() {
 
     test('a word range that starts above the new Kursstand stays', () {
       final next = Settings(
+        lastLesson: latinLastLesson,
         courseWords: LessonRange(15, 20),
         courseGrammar: LessonRange(1, 20),
         kursstand: 20,
@@ -171,6 +180,7 @@ void main() {
     test('a step back and forth above the range starts gives both ranges '
         'back with their link', () {
       final before = Settings(
+        lastLesson: latinLastLesson,
         courseWords: LessonRange(2, 20),
         courseGrammar: LessonRange(3, 20),
         kursstand: 20,
@@ -187,7 +197,7 @@ void main() {
     });
 
     test('takes a range open at the top along from the last lesson', () {
-      final next = Settings().withKursstand(24);
+      final next = Settings(lastLesson: latinLastLesson).withKursstand(24);
       expect(next.courseWords, LessonRange(1, 24));
       expect(next.courseGrammar, LessonRange(1, 24));
     });
@@ -197,18 +207,19 @@ void main() {
       for (var i = 0; i < 2000; i++) {
         final toLinked = rng.nextBool();
         final before = Settings(
+          lastLesson: latinLastLesson,
           courseWords: _range(rng),
           courseGrammar: _range(rng),
           grammarFromLinked: rng.nextBool(),
           grammarToLinked: toLinked,
-          kursstand: rng.nextBool() ? null : 1 + rng.nextInt(lastLesson),
+          kursstand: rng.nextBool() ? null : 1 + rng.nextInt(latinLastLesson),
         );
-        final lesson = 1 + rng.nextInt(lastLesson);
+        final lesson = 1 + rng.nextInt(latinLastLesson);
         final after = before.withKursstand(lesson);
         final reason = 'case $i: ${before.toJson()} to $lesson';
 
         LessonRange followed(LessonRange r) =>
-            min(r.to, lastLesson) == before.kursstand && r.from <= lesson
+            min(r.to, latinLastLesson) == before.kursstand && r.from <= lesson
             ? LessonRange(r.from, lesson)
             : r;
         final words = followed(before.courseWords);

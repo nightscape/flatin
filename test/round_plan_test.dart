@@ -11,7 +11,6 @@ import 'package:latin_practice/data/topics.dart';
 import 'package:latin_practice/models/course_filter.dart';
 import 'package:latin_practice/models/exercise.dart';
 import 'package:latin_practice/models/fsrs_card.dart';
-import 'package:latin_practice/models/lesson_range.dart';
 import 'package:latin_practice/models/practice_item.dart';
 import 'package:latin_practice/models/settings.dart';
 import 'package:latin_practice/services/fsrs_storage.dart';
@@ -34,7 +33,7 @@ void main() {
     final curriculum = await loadCurriculum(latinCourse.books);
     final lessons = await loadLessonData(latinCourse.books);
     filter = CourseFilter(
-      Settings(courseWords: LessonRange.full),
+      Settings(lastLesson: latinLastLesson, courseWords: latinFullRange),
       curriculum,
       lessons,
     );

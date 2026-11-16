@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:latin_practice/data/lesson_data.dart';
 import 'package:latin_practice/data/rewards.dart';
 import 'package:latin_practice/models/distractor_strategy.dart';
 import 'package:latin_practice/models/exam_units.dart';
@@ -9,6 +8,8 @@ import 'package:latin_practice/models/lernziel_chips.dart';
 import 'package:latin_practice/models/lesson_range.dart';
 import 'package:latin_practice/models/practice_item.dart';
 import 'package:latin_practice/models/settings.dart';
+import '../support/latin_course.dart'
+    show latinFullRange, latinLastLesson, latinLaterLesson;
 
 typedef Json = Map<String, dynamic>;
 
@@ -52,12 +53,12 @@ Settings drawSettings(
     if (firstOnly + full > 0) {
       final u = rng.nextDouble();
       if (u < firstOnly) return LessonRange(1, 1);
-      if (u < firstOnly + full) return LessonRange.full;
+      if (u < firstOnly + full) return latinFullRange;
     }
-    final from = 1 + rng.nextInt(laterLesson);
+    final from = 1 + rng.nextInt(latinLaterLesson);
     final to = rng.nextDouble() < openEnd
-        ? laterLesson
-        : from + rng.nextInt(laterLesson - from + 1);
+        ? latinLaterLesson
+        : from + rng.nextInt(latinLaterLesson - from + 1);
     return LessonRange(from, to);
   }
 
@@ -93,6 +94,7 @@ Settings drawSettings(
   final (topicOffs, topicOns) = offAndOn(topics, topicsOff ?? off);
   final files = {...types.keys, ...forms.keys, ...features.keys};
   final settings = Settings(
+    lastLesson: latinLastLesson,
     courseWords: wordRange,
     courseGrammar: grammarRange,
     grammarFromLinked: rng.nextBool(),
@@ -104,8 +106,8 @@ Settings drawSettings(
     kursstand: kursstand < derived
         ? null
         : kursstand < derived + atRangeEnd
-        ? min((rng.nextBool() ? wordRange : grammarRange).to, lastLesson)
-        : 1 + rng.nextInt(lastLesson),
+        ? min((rng.nextBool() ? wordRange : grammarRange).to, latinLastLesson)
+        : 1 + rng.nextInt(latinLastLesson),
     disabledTypes: {
       for (final MapEntry(:key, :value) in typeOverrides.entries) key: value.$1,
     },
@@ -216,7 +218,8 @@ typedef BookScaleCase = ({
 BookScaleCase drawBookScaleCase(Random rng) {
   final starts = {
     1,
-    for (var i = rng.nextInt(4); i > 0; i--) 2 + rng.nextInt(lastLesson - 1),
+    for (var i = rng.nextInt(4); i > 0; i--)
+      2 + rng.nextInt(latinLastLesson - 1),
   }.toList()..sort();
   double weight() => switch (rng.nextInt(4)) {
     0 => 0.0,
@@ -229,7 +232,7 @@ BookScaleCase drawBookScaleCase(Random rng) {
     expansion: [for (final _ in starts) weight()],
     left: rng.nextDouble() * 30,
     width: (starts.length + 1) * 22 + 1 + rng.nextDouble() * 1400,
-    kursstand: 1 + rng.nextInt(lastLesson),
+    kursstand: 1 + rng.nextInt(latinLastLesson),
   );
 }
 

@@ -8,6 +8,7 @@ import 'package:latin_practice/providers/curriculum_provider.dart';
 import 'support/course_providers.dart';
 import 'support/stored_settings.dart';
 import 'support/word_classification_harness.dart' show letItLoad;
+import 'support/latin_course.dart' show latinLastLesson;
 
 const _type = 'A-Deklination';
 final _typeRow = find.byKey(const Key('type.nouns.$_type'));
@@ -41,7 +42,11 @@ void main() {
     'a type the course has not taught is greyed and a tap forces it on',
     (tester) async {
       final curriculum = await lateTypeCurriculum('nouns', _type, 32);
-      await _open(tester, Settings(courseWords: LessonRange(1, 5)), curriculum);
+      await _open(
+        tester,
+        Settings(lastLesson: latinLastLesson, courseWords: LessonRange(1, 5)),
+        curriculum,
+      );
 
       expect(_gapText(_typeRow, 'ab Lektion 32'), findsOneWidget);
       expect(titleColor(tester, _typeRow), isNot(Colors.black));
@@ -66,7 +71,11 @@ void main() {
     'a form the course has not taught is greyed and a tap forces it on',
     (tester) async {
       final curriculum = await lateGenitiveCurriculum();
-      await _open(tester, Settings(courseWords: LessonRange(1, 5)), curriculum);
+      await _open(
+        tester,
+        Settings(lastLesson: latinLastLesson, courseWords: LessonRange(1, 5)),
+        curriculum,
+      );
 
       expect(titleColor(tester, _nomRow), Colors.black);
       expect(_gapText(_genRow, 'ab Lektion 30'), findsOneWidget);
@@ -95,6 +104,7 @@ void main() {
     await _open(
       tester,
       Settings(
+        lastLesson: latinLastLesson,
         courseWords: LessonRange(1, 5),
         forcedOnForms: {
           'nouns': {'gen.sg'},

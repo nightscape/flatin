@@ -9,13 +9,13 @@ import 'package:latin_practice/data/exercise_kinds.dart';
 import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/data/sentences.dart';
 import 'package:latin_practice/models/exercise.dart';
-import 'package:latin_practice/models/lesson_range.dart';
 import 'package:latin_practice/models/practice_item.dart';
 
 import 'support/exercise_fakes.dart';
 import 'support/exercise_invariants.dart';
 import 'support/gen_sentence_learner.dart';
 import 'support/grammar_exercise_harness.dart';
+import 'support/latin_course.dart' show latinLaterLesson;
 
 /// The pills each supported construction asks, head first: the corpus marks
 /// a construction's head and its reference word.
@@ -47,7 +47,7 @@ void main() {
     corpus = await loadSentenceCorpus();
     items = await loadAllPracticeItems();
     everything = (
-      reached: laterLesson,
+      reached: latinLaterLesson,
       unlocked: {
         for (final w in items)
           for (final k in w.formOrder) bundleOf(w, k),
@@ -209,7 +209,7 @@ void main() {
         practised: everything.practised,
       ),
       (
-        reached: laterLesson,
+        reached: latinLaterLesson,
         unlocked: const {},
         pool: items,
         practised: everything.practised,

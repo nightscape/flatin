@@ -47,7 +47,7 @@ void main() {
   testWidgets('the card shows the shelf, both summaries and reset', (
     tester,
   ) async {
-    await _open(tester, Settings());
+    await _open(tester, Settings(lastLesson: latinLastLesson));
 
     expect(shelfPainter(tester).scale.bookStarts, isNotEmpty);
     expect(_text('kursstand.words.slider'), findsOneWidget);
@@ -68,18 +68,24 @@ void main() {
   testWidgets('the words reach Später, the linked grammar with them', (
     tester,
   ) async {
-    await _open(tester, Settings(courseWords: LessonRange(10, 20)));
+    await _open(
+      tester,
+      Settings(lastLesson: latinLastLesson, courseWords: LessonRange(10, 20)),
+    );
 
-    await dragRange(tester, words: true, to: LessonRange(12, laterLesson));
+    await dragRange(tester, words: true, to: LessonRange(12, latinLaterLesson));
     final stored = await storedSettings();
-    expect(stored['courseWords'], LessonRange(12, laterLesson).toJson());
-    expect(stored['courseGrammar'], LessonRange(1, laterLesson).toJson());
+    expect(stored['courseWords'], LessonRange(12, latinLaterLesson).toJson());
+    expect(stored['courseGrammar'], LessonRange(1, latinLaterLesson).toJson());
   });
 
   testWidgets('each screen-reader tie button ties or unties its bound', (
     tester,
   ) async {
-    await _open(tester, Settings(courseWords: LessonRange(10, 20)));
+    await _open(
+      tester,
+      Settings(lastLesson: latinLastLesson, courseWords: LessonRange(10, 20)),
+    );
     Future<void> tie(String side) async {
       tester
           .widget<Semantics>(_text('kursstand.tie.$side'))
@@ -103,7 +109,7 @@ void main() {
   testWidgets('the grammar range follows the word range while linked', (
     tester,
   ) async {
-    await _open(tester, Settings());
+    await _open(tester, Settings(lastLesson: latinLastLesson));
 
     await dragRange(tester, words: true, to: LessonRange(21, 23));
 
@@ -115,11 +121,14 @@ void main() {
   testWidgets('dragging the word ribbons to the ends stops at L1 and Später', (
     tester,
   ) async {
-    await _open(tester, Settings(courseWords: LessonRange(10, 20)));
+    await _open(
+      tester,
+      Settings(lastLesson: latinLastLesson, courseWords: LessonRange(10, 20)),
+    );
 
     for (final (start, dx, expected) in [
-      (false, 1000.0, LessonRange(10, laterLesson)),
-      (true, -1000.0, LessonRange(1, laterLesson)),
+      (false, 1000.0, LessonRange(10, latinLaterLesson)),
+      (true, -1000.0, LessonRange(1, latinLaterLesson)),
     ]) {
       await tester.dragFrom(
         shelfGrip(tester, words: true, start: start),
@@ -134,7 +143,10 @@ void main() {
   testWidgets('the grammar ribbons move on their own when unlinked', (
     tester,
   ) async {
-    await _open(tester, Settings(grammarToLinked: false));
+    await _open(
+      tester,
+      Settings(lastLesson: latinLastLesson, grammarToLinked: false),
+    );
 
     await dragRange(tester, words: true, to: LessonRange(1, 5));
     await dragRange(tester, words: false, to: LessonRange(3, 12));
@@ -145,7 +157,10 @@ void main() {
   });
 
   testWidgets('a word chip flips the word against the range', (tester) async {
-    await _open(tester, Settings(courseWords: LessonRange(21, 23)));
+    await _open(
+      tester,
+      Settings(lastLesson: latinLastLesson, courseWords: LessonRange(21, 23)),
+    );
 
     await _tapChip(tester, 'kursstand.word.rosa');
     expect((await storedSettings())['forcedOnWords'], ['rosa']);
@@ -165,7 +180,10 @@ void main() {
     final topics = (await loadCurriculum(latinCourse.books)).courseTopics;
     final earlier = topics.firstWhere((t) => t.lesson <= 3);
     final later = topics.firstWhere((t) => t.lesson > 3 && t.lesson < 40);
-    await _open(tester, Settings(courseWords: LessonRange(1, 3)));
+    await _open(
+      tester,
+      Settings(lastLesson: latinLastLesson, courseWords: LessonRange(1, 3)),
+    );
 
     await _tapChip(tester, 'kursstand.topic.${earlier.key}');
     await _tapChip(tester, 'kursstand.topic.${later.key}');
@@ -185,7 +203,7 @@ void main() {
 
       await _open(
         tester,
-        Settings(courseWords: LessonRange(21, 23)),
+        Settings(lastLesson: latinLastLesson, courseWords: LessonRange(21, 23)),
         page: 'words',
       );
 
@@ -229,7 +247,7 @@ void main() {
 
     await _open(
       tester,
-      Settings(courseWords: LessonRange(21, 23)),
+      Settings(lastLesson: latinLastLesson, courseWords: LessonRange(21, 23)),
       page: 'words',
       curriculum: curriculum,
     );
@@ -271,6 +289,7 @@ void main() {
     await _open(
       tester,
       Settings(
+        lastLesson: latinLastLesson,
         courseWords: LessonRange(21, 23),
         forcedOnTypes: {
           item.dataFileId: {item.type},
@@ -293,7 +312,11 @@ void main() {
   ) async {
     await _open(
       tester,
-      Settings(courseWords: LessonRange(21, 23), forcedOnWords: {'rosa'}),
+      Settings(
+        lastLesson: latinLastLesson,
+        courseWords: LessonRange(21, 23),
+        forcedOnWords: {'rosa'},
+      ),
       page: 'words',
     );
 
@@ -320,7 +343,7 @@ void main() {
 
       await _open(
         tester,
-        Settings(courseWords: LessonRange(21, 23)),
+        Settings(lastLesson: latinLastLesson, courseWords: LessonRange(21, 23)),
         page: 'words',
         curriculum: curriculum,
       );
@@ -349,6 +372,7 @@ void main() {
     await _open(
       tester,
       Settings(
+        lastLesson: latinLastLesson,
         grammarToLinked: false,
         courseGrammar: LessonRange(5, 40),
         disabledForms: {
@@ -376,6 +400,7 @@ void main() {
     await _open(
       tester,
       Settings(
+        lastLesson: latinLastLesson,
         courseWords: LessonRange(1, 5),
         forcedOnWords: {'rosa'},
         deselectedWords: {'servus'},
@@ -399,7 +424,11 @@ void main() {
   testWidgets('overrides survive a slider move', (tester) async {
     await _open(
       tester,
-      Settings(forcedOnWords: {'rosa'}, deselectedWords: {'servus'}),
+      Settings(
+        lastLesson: latinLastLesson,
+        forcedOnWords: {'rosa'},
+        deselectedWords: {'servus'},
+      ),
     );
 
     await dragRange(tester, words: true, to: LessonRange(1, 12));
@@ -411,7 +440,7 @@ void main() {
   });
 
   testWidgets('the tiles open the detail pages', (tester) async {
-    await _open(tester, Settings());
+    await _open(tester, Settings(lastLesson: latinLastLesson));
 
     for (final page in ['words', 'nouns', 'verbs', 'input']) {
       await openSettingsPage(tester, page);

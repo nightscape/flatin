@@ -5,6 +5,8 @@ import 'package:flutter/rendering.dart' show RenderRepaintBoundary;
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'repo_dir.dart';
+
 /// The store locale this run makes pictures for, e.g. `de-DE`.
 const storeLocale = String.fromEnvironment(
   'STORE_LOCALE',
@@ -24,7 +26,7 @@ Locale get storeDeviceLocale {
 /// `fastlane store_pictures` collects them; an app on a device has a
 /// read-only working directory, so it writes into its temporary directory.
 String get _pictureDir => Platform.environment.containsKey('FLUTTER_TEST')
-    ? 'build/store_shots/$storeLocale'
+    ? '$repoDir/build/store_shots/$storeLocale'
     : '${Directory.systemTemp.path}/store_shots/$storeLocale';
 
 /// Renders the screen as a 1080 x 1920 phone picture into

@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import '../data/lesson_data.dart' show lastLesson;
 import '../data/rewards.dart' show switchableRewardIds;
 import '../data/settings_conversion.dart'
     show settingsVersion, settingsVersionField;
@@ -62,6 +61,15 @@ class Settings {
   /// the word bound.
   final LessonRange courseGrammar;
 
+  /// The highest lesson of the course these settings belong to.
+  final int lastLesson;
+
+  /// The stop beyond [lastLesson]: what the course never reaches.
+  int get laterLesson => lastLesson + 1;
+
+  /// Every lesson plus the "later" stop.
+  LessonRange get fullRange => LessonRange(1, laterLesson);
+
   /// The lesson the class has reached, 1..[lastLesson]: what the learner
   /// knows. The course ranges say what is practised.
   final int kursstand;
@@ -105,6 +113,7 @@ class Settings {
   final bool punkteAnzeige;
 
   Settings({
+    required this.lastLesson,
     Map<String, Set<String>>? disabledForms,
     Map<String, Map<String, Set<String>>>? disabledFeatures,
     Map<String, Set<String>>? disabledTypes,
@@ -131,18 +140,21 @@ class Settings {
        disabledTypes = disabledTypes ?? {},
        inputStrategyIds = inputStrategyIds ?? {},
        deselectedWords = deselectedWords ?? {},
-       courseWords = courseWords ?? LessonRange.full,
+       courseWords = courseWords ?? LessonRange(1, lastLesson + 1),
        courseGrammar = _linkedGrammar(
-         courseWords ?? LessonRange.full,
-         courseGrammar ?? LessonRange.full,
+         courseWords ?? LessonRange(1, lastLesson + 1),
+         courseGrammar ?? LessonRange(1, lastLesson + 1),
          from: grammarFromLinked,
          to: grammarToLinked,
        ),
        kursstand =
            kursstand ??
            _furthestLesson(
-             courseWords ?? LessonRange.full,
-             grammarToLinked ? null : courseGrammar ?? LessonRange.full,
+             courseWords ?? LessonRange(1, lastLesson + 1),
+             grammarToLinked
+                 ? null
+                 : courseGrammar ?? LessonRange(1, lastLesson + 1),
+             lastLesson,
            ),
        forcedOnWords = forcedOnWords ?? {},
        forcedOnTypes = forcedOnTypes ?? {},
@@ -153,6 +165,11 @@ class Settings {
     assert(
       1 <= this.kursstand && this.kursstand <= lastLesson,
       'Kursstand ${this.kursstand} is outside 1..$lastLesson',
+    );
+    assert(
+      this.courseWords.to <= laterLesson &&
+          this.courseGrammar.to <= laterLesson,
+      'a course range ends beyond lesson $laterLesson',
     );
     assert(
       this.forcedOnWords.intersection(this.deselectedWords).isEmpty,
@@ -196,6 +213,7 @@ class Settings {
     bool? punkteAnzeige,
   }) {
     return Settings(
+      lastLesson: lastLesson,
       disabledForms: disabledForms ?? this.disabledForms,
       disabledFeatures: disabledFeatures ?? this.disabledFeatures,
       disabledTypes: disabledTypes ?? this.disabledTypes,
@@ -237,8 +255,11 @@ class Settings {
 
   /// The furthest lesson the course ranges reach; an open end counts as the
   /// last lesson. [grammar] is null while it ends where the words end.
-  static int _furthestLesson(LessonRange words, LessonRange? grammar) =>
-      min(max(words.to, grammar?.to ?? words.to), lastLesson);
+  static int _furthestLesson(
+    LessonRange words,
+    LessonRange? grammar,
+    int lastLesson,
+  ) => min(max(words.to, grammar?.to ?? words.to), lastLesson);
 
   Settings withWordRange(LessonRange range) => copyWith(courseWords: range);
 
@@ -455,7 +476,10 @@ class Settings {
   }
 
   /// Create from JSON
-  factory Settings.fromJson(Map<String, dynamic> json) {
+  factory Settings.fromJson(
+    Map<String, dynamic> json, {
+    required int lastLesson,
+  }) {
     assert(
       json[settingsVersionField] == settingsVersion,
       'stored settings are of another version; convert them first',
@@ -518,6 +542,7 @@ class Settings {
     _rejectContradictionsByFile(forcedOnForms, disabledForms, 'form');
 
     return Settings(
+      lastLesson: lastLesson,
       disabledForms: disabledForms,
       disabledFeatures:
           featureMap?.map(
@@ -537,7 +562,7 @@ class Settings {
       distractorStrategyId: distractorId,
       deselectedWords: deselectedWords,
       courseWords: linked.liftWords && storedWords?.to == lastLesson
-          ? LessonRange(storedWords!.from, laterLesson)
+          ? LessonRange(storedWords!.from, lastLesson + 1)
           : storedWords,
       courseGrammar: grammarRange == null
           ? null

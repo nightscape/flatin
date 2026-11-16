@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/data/curriculum.dart';
-import 'package:latin_practice/data/lesson_data.dart';
 import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/models/lesson_range.dart';
 import 'support/latin_course.dart';
@@ -44,9 +43,9 @@ void main() {
         taught.add(curriculum.typeLesson(entry.key, type));
       }
     }
-    expect(taught.difference({laterLesson}), pinned);
+    expect(taught.difference({latinLaterLesson}), pinned);
     expect([
-      for (var l = 1; l <= lastLesson; l++)
+      for (var l = 1; l <= latinLastLesson; l++)
         if (!pinned.contains(l)) l,
     ], syntaxOnlyLessons);
   });
@@ -55,9 +54,9 @@ void main() {
     for (final entry in metadata.entries) {
       for (final key in entry.value.formOrder) {
         final lesson = curriculum.formLesson(entry.key, key);
-        expect(lesson, inInclusiveRange(1, laterLesson), reason: key);
+        expect(lesson, inInclusiveRange(1, latinLaterLesson), reason: key);
         expect(
-          lesson == laterLesson,
+          lesson == latinLaterLesson,
           isLater(key),
           reason: '${entry.key} $key is $lesson',
         );
@@ -90,7 +89,7 @@ void main() {
     for (final key in metadata['nouns']!.formOrder) {
       if (key.startsWith('adv')) continue;
       final lesson = curriculum.formLesson('nouns', key);
-      if (lesson == laterLesson) continue;
+      if (lesson == latinLaterLesson) continue;
       byCase.putIfAbsent(key.split('.').first, () => {}).add(lesson);
     }
     for (final kasus in byCase.entries) {
@@ -116,13 +115,17 @@ void main() {
   });
 
   test('what no lesson teaches sits one stop beyond the last lesson', () {
-    expect(curriculum.formLesson('verbs', 'ger.gen'), laterLesson);
-    expect(curriculum.formLesson('nouns', 'nom.sg.m.komp'), laterLesson);
+    expect(curriculum.formLesson('verbs', 'ger.gen'), latinLaterLesson);
+    expect(curriculum.formLesson('nouns', 'nom.sg.m.komp'), latinLaterLesson);
     expect(
-      curriculum.taughtForm('verbs', 'ger.gen', LessonRange(1, lastLesson)),
+      curriculum.taughtForm(
+        'verbs',
+        'ger.gen',
+        LessonRange(1, latinLastLesson),
+      ),
       isFalse,
     );
-    expect(curriculum.taughtForm('verbs', 'ger.gen', LessonRange.full), isTrue);
+    expect(curriculum.taughtForm('verbs', 'ger.gen', latinFullRange), isTrue);
   });
 }
 

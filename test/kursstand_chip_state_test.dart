@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/data/curriculum.dart';
-import 'package:latin_practice/data/lesson_data.dart';
 import 'package:latin_practice/models/lesson_range.dart';
 import 'package:latin_practice/models/settings.dart';
 
@@ -18,7 +17,8 @@ void main() {
     await openSettingsWith(
       tester,
       Settings(
-        courseWords: LessonRange(1, lastLesson),
+        lastLesson: latinLastLesson,
+        courseWords: LessonRange(1, latinLastLesson),
         forcedOnWords: {'rosa'},
       ).toJson(),
     );
@@ -32,7 +32,10 @@ void main() {
     final topic = (await loadCurriculum(latinCourse.books)).courseTopics.first;
     await openSettingsWith(
       tester,
-      Settings(forcedOnTopics: {topic.key}).toJson(),
+      Settings(
+        lastLesson: latinLastLesson,
+        forcedOnTopics: {topic.key},
+      ).toJson(),
     );
 
     final chip = _chip(tester, 'kursstand.topic.${topic.key}');
@@ -46,7 +49,8 @@ void main() {
     await openSettingsWith(
       tester,
       Settings(
-        courseWords: LessonRange(1, lastLesson),
+        lastLesson: latinLastLesson,
+        courseWords: LessonRange(1, latinLastLesson),
         deselectedWords: {'rosa'},
       ).toJson(),
     );
@@ -62,7 +66,10 @@ void main() {
     final topic = (await loadCurriculum(latinCourse.books)).courseTopics.first;
     await openSettingsWith(
       tester,
-      Settings(deselectedTopics: {topic.key}).toJson(),
+      Settings(
+        lastLesson: latinLastLesson,
+        deselectedTopics: {topic.key},
+      ).toJson(),
     );
 
     final chip = _chip(tester, 'kursstand.topic.${topic.key}');

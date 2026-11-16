@@ -21,6 +21,7 @@ void main() {
     await openSettingsWith(
       tester,
       Settings(
+        lastLesson: latinLastLesson,
         courseWords: LessonRange(1, 30),
         courseGrammar: LessonRange(1, 30),
       ).toJson(),

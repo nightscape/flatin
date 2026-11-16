@@ -24,6 +24,7 @@ import 'support/course_providers.dart';
 import 'support/key_echo_app.dart';
 import 'support/key_echo_i18n.dart';
 import 'support/word_classification_harness.dart';
+import 'support/latin_course.dart' show latinFullRange, latinLastLesson;
 
 /// Every verb whose type is one of [_irregularTypes], read off the data.
 const _irregularTypes = {'esse-Typ', 'esse-Kompositum', 'Unregelmäßig'};
@@ -37,7 +38,13 @@ const _irregularLemmas = {
 };
 
 ProviderContainer _container(LessonRange range) {
-  seedSettings(Settings(courseWords: range, courseGrammar: range));
+  seedSettings(
+    Settings(
+      lastLesson: latinLastLesson,
+      courseWords: range,
+      courseGrammar: range,
+    ),
+  );
   return ProviderContainer(
     retry: noRetry,
     overrides: [
@@ -87,7 +94,7 @@ void main() {
     }, _irregularLemmas);
   });
 
-  for (final range in [LessonRange(1, 3), LessonRange.full]) {
+  for (final range in [LessonRange(1, 3), latinFullRange]) {
     test('in lessons ${range.from}..${range.to} each focus narrows the words '
         'in range to exactly its group', () async {
       final c = _container(range);
@@ -117,7 +124,7 @@ void main() {
       expect({
         for (final w in const IrregularVerbs().narrow(practicable)['verbs']!)
           w.lemma,
-      }, range == LessonRange.full ? _irregularLemmas : isEmpty);
+      }, range == latinFullRange ? _irregularLemmas : isEmpty);
       expect(const IrregularVerbs().narrow(practicable)['nouns'], isEmpty);
 
       final types = focuses.skip(4).cast<TypeFocus>().toList();
@@ -147,7 +154,7 @@ void main() {
 
   test('a focused round asks only words of its focus; the topics listed '
       'have words of it', () async {
-    final c = _container(LessonRange.full);
+    final c = _container(latinFullRange);
     addTearDown(c.dispose);
     final filter = await c.read(courseFilterProvider.future);
     final practicable = await c.read(practicableItemsByFileProvider.future);
@@ -191,7 +198,7 @@ void main() {
 
   test('the next noun or verb to practise is the next due one of the '
       'focus', () async {
-    final c = _container(LessonRange.full);
+    final c = _container(latinFullRange);
     addTearDown(c.dispose);
     final due = await c.read(dueItemsByFileProvider.future);
     expect(
@@ -215,6 +222,7 @@ void main() {
       'disables a group without words in range, with a reason', (tester) async {
     seedSettings(
       Settings(
+        lastLesson: latinLastLesson,
         courseWords: LessonRange(1, 1),
         courseGrammar: LessonRange(1, 1),
       ),
@@ -250,14 +258,14 @@ void main() {
 
   testWidgets('with every lesson in range the irregular verbs can be '
       'picked', (tester) async {
-    seedSettings(Settings());
+    seedSettings(Settings(lastLesson: latinLastLesson));
     await _pumpLarge(tester, const GrammarStartScreen());
     expect(_option(tester, 'irregular').enabled, isTrue);
   });
 
   testWidgets('on the home screen the focus narrows the noun and verb '
       'practice', (tester) async {
-    seedSettings(Settings());
+    seedSettings(Settings(lastLesson: latinLastLesson));
     await _pumpLarge(tester, const HomeScreen());
     expect(
       tester
@@ -287,7 +295,7 @@ void main() {
 
   testWidgets('a held type focus whose type leaves the range stays listed, '
       'disabled, with the reason', (tester) async {
-    seedSettings(Settings());
+    seedSettings(Settings(lastLesson: latinLastLesson));
     await _pumpLarge(tester, const HomeScreen());
     await _pick(tester, 'verbs:Unregelmäßig');
 

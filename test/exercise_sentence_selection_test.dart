@@ -7,11 +7,11 @@ import 'package:latin_practice/data/exercise_spec.dart';
 import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/data/sentences.dart';
 import 'package:latin_practice/models/exercise.dart';
-import 'package:latin_practice/models/lesson_range.dart';
 import 'package:latin_practice/models/practice_item.dart';
 
 import 'support/exercise_fakes.dart';
 import 'support/gen_sentence_learner.dart';
+import 'support/latin_course.dart' show latinLaterLesson;
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -37,7 +37,7 @@ void main() {
   };
 
   ExerciseContext context({
-    int reached = laterLesson,
+    int? reached,
     Set<GrammarBundle>? unlocked,
     List<PracticeItem>? pool,
   }) => ExerciseContext(
@@ -45,7 +45,7 @@ void main() {
     pool: pool ?? items,
     german: fakeExerciseContext().german,
     sentences: corpus,
-    reachedLesson: reached,
+    reachedLesson: reached ?? latinLaterLesson,
   );
 
   List<String> selected(
@@ -149,7 +149,7 @@ void main() {
       expect(
         () => selected(context(pool: [])),
         declines(
-          'no sentence up to lesson $laterLesson has its forms in the pool',
+          'no sentence up to lesson $latinLaterLesson has its forms in the pool',
         ),
       );
     });
@@ -158,7 +158,7 @@ void main() {
       expect(
         () => selected(context(unlocked: {})),
         declines(
-          'every sentence up to lesson $laterLesson has a locked bundle',
+          'every sentence up to lesson $latinLaterLesson has a locked bundle',
         ),
       );
     });

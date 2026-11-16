@@ -7,13 +7,13 @@ import 'package:latin_practice/data/exercise_spec.dart' show OneSentence;
 import 'package:latin_practice/data/german_forms.dart';
 import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/data/sentences.dart';
-import 'package:latin_practice/models/lesson_range.dart';
 import 'package:latin_practice/models/exercise.dart';
 import 'package:latin_practice/models/practice_item.dart';
 import 'package:latin_practice/providers/fsrs_provider.dart';
 import 'package:latin_practice/providers/locale_provider.dart';
 
 import 'support/exercise_invariants.dart';
+import 'support/latin_course.dart' show latinLaterLesson;
 
 /// Every [_stride]th word with all its bundles, so the test stays fast.
 const _stride = 7;
@@ -57,7 +57,7 @@ void main() {
                     pool: items,
                     german: forms,
                     sentences: corpus,
-                    reachedLesson: laterLesson,
+                    reachedLesson: latinLaterLesson,
                   )
                 : ExerciseContext(
                     unlocked: unlockedFor(g.spec, word, bundle),

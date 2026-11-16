@@ -7,6 +7,7 @@ import 'package:latin_practice/models/settings.dart';
 import 'support/course_fixture.dart';
 import 'support/hand_items.dart';
 import 'support/test_axes.dart';
+import 'support/latin_course.dart' show latinLastLesson;
 
 const _lessons = LessonData(
   wordToLesson: {'nauta': 21},
@@ -78,7 +79,9 @@ CourseFilter _filter(Settings settings, String curriculum) => CourseFilter(
   _lessons,
 );
 
-final _inRange = Settings().withWordRange(LessonRange(21, 23));
+final _inRange = Settings(
+  lastLesson: latinLastLesson,
+).withWordRange(LessonRange(21, 23));
 final _gen = _nauta.formLabels.firstWhere((l) => l.key == 'gen.sg');
 
 void main() {
@@ -103,7 +106,9 @@ void main() {
     });
 
     test('word gap on the word row', () {
-      final outside = Settings().withWordRange(LessonRange(1, 5));
+      final outside = Settings(
+        lastLesson: latinLastLesson,
+      ).withWordRange(LessonRange(1, 5));
       final forced = outside.copyWith(forcedOnWords: {'nauta'});
 
       expect(
@@ -164,6 +169,7 @@ void main() {
 
   test('a gap below the grammar range is not the word-axis gap', () {
     final settings = Settings(
+      lastLesson: latinLastLesson,
       grammarToLinked: false,
       courseGrammar: LessonRange(5, 40),
     );

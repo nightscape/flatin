@@ -27,6 +27,7 @@ class SlidersProbe {
   Settings shown(WidgetTester tester) {
     final shelf = shelfPainter(tester);
     return Settings(
+      lastLesson: latinLastLesson,
       courseWords: shelf.words,
       courseGrammar: shelf.grammar,
       grammarFromLinked: shelf.tiedFrom,
@@ -63,6 +64,7 @@ Future<SlidersProbe> pumpSliders(
   ))!;
   final probe = SlidersProbe(
     Settings(
+      lastLesson: latinLastLesson,
       courseWords: words,
       courseGrammar: grammar,
       grammarFromLinked: from,

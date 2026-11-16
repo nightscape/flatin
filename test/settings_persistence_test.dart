@@ -44,7 +44,10 @@ void main() {
 
   test('the notifier stores what the course says about the entry, not a '
       'constant', () async {
-    final stored = Settings(courseWords: LessonRange(1, 20));
+    final stored = Settings(
+      lastLesson: latinLastLesson,
+      courseWords: LessonRange(1, 20),
+    );
     SharedPreferences.setMockInitialValues({
       'practice_settings': jsonEncode({
         settingsVersionField: settingsVersion,
