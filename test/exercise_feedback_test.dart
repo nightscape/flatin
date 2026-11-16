@@ -4,6 +4,7 @@ import 'package:latin_practice/data/exercise_feedback.dart';
 import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/models/exercise.dart';
 import 'package:latin_practice/models/practice_item.dart';
+import 'support/latin_course.dart' show latinLang;
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -40,6 +41,7 @@ void main() {
     grammarCardId: GrammarCardId('verbs', 'ind.praes.akt'),
     kind: kind,
     questionKey: 'exercise.screen.sampleQuestion',
+    languageName: latinLang.name,
     answer: answer,
   );
 
@@ -135,7 +137,7 @@ void main() {
       );
       final lines = feedbackLines(
         vocare,
-        exercise(ExerciseKind.deLatWahl, ChoiceAnswer([r, wrong], r)),
+        exercise(ExerciseKind.formWahl, ChoiceAnswer([r, wrong], r)),
         ChosenOption(wrong),
       );
       expect(lines.last.params['label'], 'Endung der E-Konjugation');
@@ -151,7 +153,7 @@ void main() {
       expect(
         () => feedbackLines(
           vocare,
-          exercise(ExerciseKind.latDeWahl, ChoiceAnswer([r, foreign], r)),
+          exercise(ExerciseKind.bedeutungWahl, ChoiceAnswer([r, foreign], r)),
           ChosenOption(r),
         ),
         throwsA(isA<AssertionError>()),

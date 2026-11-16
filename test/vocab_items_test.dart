@@ -51,9 +51,9 @@ const _overlappingMeanings = [
 ];
 
 const _vocabKinds = {
-  ExerciseKind.latDeWahl,
-  ExerciseKind.deLatWahl,
-  ExerciseKind.deLatTippen,
+  ExerciseKind.bedeutungWahl,
+  ExerciseKind.formWahl,
+  ExerciseKind.formTippen,
   ExerciseKind.zuordnen,
 };
 

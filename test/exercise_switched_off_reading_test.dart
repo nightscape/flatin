@@ -41,7 +41,7 @@ void main() {
         formPracticed: (w, l) => filter.formPracticed(w.dataFileId, l),
       );
       final typing = exerciseGenerators.singleWhere(
-        (g) => g.kind == ExerciseKind.deLatTippen,
+        (g) => g.kind == ExerciseKind.formTippen,
       );
       TypedAnswer? asked;
       for (final bundle in ctx.unlocked) {

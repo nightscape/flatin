@@ -56,7 +56,7 @@ class _ExerciseTapWidgetState extends State<ExerciseTapWidget> {
       FlutterI18n.translate(context, key, translationParams: params);
 
   String _pillName(int pill) =>
-      _t('exercise.tap.pill.${_answer.pills[pill].role}');
+      _t('exercise.markieren.pill.${_answer.pills[pill].role}');
 
   bool get _complete => _placed.length == _answer.pills.length;
 
@@ -86,7 +86,7 @@ class _ExerciseTapWidgetState extends State<ExerciseTapWidget> {
             children: [
               ExerciseQuestion(exercise),
               const SizedBox(height: 4),
-              Text(_t('exercise.tap.hint')),
+              Text(_t('exercise.markieren.hint')),
               const SizedBox(height: 16),
               Wrap(
                 spacing: 6,
@@ -97,7 +97,7 @@ class _ExerciseTapWidgetState extends State<ExerciseTapWidget> {
               ),
               const SizedBox(height: 12),
               Wrap(
-                key: const Key('exercise.tap.tray'),
+                key: const Key('exercise.markieren.tray'),
                 spacing: 6,
                 runSpacing: 6,
                 children: [
@@ -124,7 +124,7 @@ class _ExerciseTapWidgetState extends State<ExerciseTapWidget> {
   }
 
   Widget _trayPill(int p) => ChoiceChip(
-    key: Key('exercise.tap.pill.$p'),
+    key: Key('exercise.markieren.pill.$p'),
     label: Text(_pillName(p)),
     selected: _held == p,
     onSelected: (_) => setState(() => _held = _held == p ? null : p),
@@ -135,7 +135,7 @@ class _ExerciseTapWidgetState extends State<ExerciseTapWidget> {
     label: _pillName(p),
     excludeSemantics: true,
     child: GestureDetector(
-      key: Key('exercise.tap.placed.$p'),
+      key: Key('exercise.markieren.placed.$p'),
       onTap: _checked ? null : () => setState(() => _placed.remove(p)),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
@@ -163,7 +163,7 @@ class _ExerciseTapWidgetState extends State<ExerciseTapWidget> {
       button: held,
       label: _answer.words[w],
       child: GestureDetector(
-        key: Key('exercise.tap.word.$w'),
+        key: Key('exercise.markieren.word.$w'),
         onTap: held ? () => _place(w) : null,
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),

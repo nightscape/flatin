@@ -173,7 +173,7 @@ void main() {
             questionKey: 'q',
             select: const OneSentence(),
             params: const {},
-            answer: const Typed(View.latin),
+            answer: const Typed(View.form),
           ),
         ).build(word, bundle, context(reached: 0), Random(0)),
         declines('no sentence up to lesson 0'),

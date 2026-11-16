@@ -80,7 +80,7 @@ class _ExerciseSortWidgetState extends State<ExerciseSortWidget> {
               ExerciseQuestion(exercise),
               if (!_answer.tick) ...[
                 const SizedBox(height: 8),
-                Text(_t('exercise.sort.hint')),
+                Text(_t('exercise.sortieren.hint')),
               ],
               const SizedBox(height: 16),
               if (_answer.tick)
@@ -113,7 +113,7 @@ class _ExerciseSortWidgetState extends State<ExerciseSortWidget> {
   Widget _tickRow(int i, FormOption option, int right) => Card(
     color: _verdict(i, right),
     child: CheckboxListTile(
-      key: Key('exercise.sort.form.$i'),
+      key: Key('exercise.sortieren.form.$i'),
       title: Text(option.text),
       value: _groupOf(i) == 0,
       onChanged: _checked
@@ -141,7 +141,7 @@ class _ExerciseSortWidgetState extends State<ExerciseSortWidget> {
       excludeSemantics: true,
       label: option.text,
       child: Draggable<int>(
-        key: Key('exercise.sort.form.$i'),
+        key: Key('exercise.sortieren.form.$i'),
         data: i,
         maxSimultaneousDrags: _checked ? 0 : 1,
         onDraggableCanceled: (_, _) => setState(() => _given.remove(i)),
@@ -169,7 +169,7 @@ class _ExerciseSortWidgetState extends State<ExerciseSortWidget> {
         container: true,
         label: _answer.groups[g],
         child: Container(
-          key: Key('exercise.sort.group.$g'),
+          key: Key('exercise.sortieren.group.$g'),
           constraints: const BoxConstraints(minHeight: 170),
           padding: const EdgeInsets.all(4),
           decoration: BoxDecoration(

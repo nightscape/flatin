@@ -96,11 +96,11 @@ List<ExplanationLine> feedbackLines(
     for (final (i, pill) in pills.indexed)
       wordOf[i] == pill.word
           ? ExplanationLine(
-              'exercise.tap.feedback.${pill.role}.right',
+              'exercise.markieren.feedback.${pill.role}.right',
               params: {'word': words[pill.word]},
             )
           : ExplanationLine(
-              'exercise.tap.feedback.${pill.role}.wrong',
+              'exercise.markieren.feedback.${pill.role}.wrong',
               params: {'word': words[pill.word], 'chosen': words[wordOf[i]]},
             ),
   ],
@@ -108,10 +108,10 @@ List<ExplanationLine> feedbackLines(
     for (final (i, (:text, :mistake)) in options.indexed)
       ExplanationLine(
         switch ((mistake, ticked.contains(i))) {
-          (null, true) => 'exercise.ticks.feedback.rightTicked',
-          (null, false) => 'exercise.ticks.feedback.rightLeft',
-          (final m?, true) => 'exercise.ticks.feedback.wrongTicked.$m',
-          (_?, false) => 'exercise.ticks.feedback.wrongLeft',
+          (null, true) => 'exercise.satzAnkreuzen.feedback.rightTicked',
+          (null, false) => 'exercise.satzAnkreuzen.feedback.rightLeft',
+          (final m?, true) => 'exercise.satzAnkreuzen.feedback.wrongTicked.$m',
+          (_?, false) => 'exercise.satzAnkreuzen.feedback.wrongLeft',
         },
         params: {'text': text},
       ),

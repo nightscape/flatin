@@ -264,6 +264,7 @@ void main() {
                 grammarCardId: e.grammarCardId,
                 kind: ExerciseKind.formBilden,
                 questionKey: 'q',
+                languageName: latinLang.name,
                 answer: s.answer,
               ),
               TypedText(text),

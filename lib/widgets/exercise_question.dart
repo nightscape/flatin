@@ -24,6 +24,9 @@ class ExerciseQuestion extends StatelessWidget {
       exercise.questionKey,
       translationParams: {
         ...exercise.questionParams,
+        ...exercise.languageParam(
+          FlutterI18n.currentLocale(context)!.languageCode,
+        ),
         for (final name in exercise.formParams) name: '$_open$name$_close',
       },
     );

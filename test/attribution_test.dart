@@ -5,6 +5,7 @@ import 'package:latin_practice/data/diagnosis.dart';
 import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/models/exercise.dart';
 import 'package:latin_practice/models/practice_item.dart';
+import 'support/latin_course.dart' show latinLang;
 
 const _bundle = 'ind.praes.akt';
 const _key = 'ind.praes.akt.1.sg';
@@ -22,6 +23,7 @@ Exercise _exercise(PracticeItem item, ExerciseAnswer answer) => Exercise(
   grammarCardId: GrammarCardId(item.dataFileId, _bundle),
   kind: ExerciseKind.formBilden,
   questionKey: 'q',
+  languageName: latinLang.name,
   answer: answer,
 );
 

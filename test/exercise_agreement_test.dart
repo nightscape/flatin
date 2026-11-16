@@ -324,16 +324,16 @@ void main() {
       scrollable: find.byType(Scrollable).first,
     );
 
-    expect(find.text('exercise.agree.question'), findsOneWidget);
-    expect(find.text('exercise.agree.hint'), findsOneWidget);
-    await tapKey('exercise.match.left.0');
-    await tapKey('exercise.match.right.1');
+    expect(find.text('exercise.zuordnen.agree.question'), findsOneWidget);
+    expect(find.text('exercise.zuordnen.agree.hint'), findsOneWidget);
+    await tapKey('exercise.zuordnen.left.0');
+    await tapKey('exercise.zuordnen.right.1');
     expect(find.textContaining('1 · '), findsNWidgets(2));
-    await tapKey('exercise.match.left.0');
+    await tapKey('exercise.zuordnen.left.0');
     expect(find.textContaining('1 · '), findsNothing);
     for (var i = 0; i < pairs.length; i++) {
-      await tapKey('exercise.match.left.$i');
-      await tapKey('exercise.match.right.$i');
+      await tapKey('exercise.zuordnen.left.$i');
+      await tapKey('exercise.zuordnen.right.$i');
     }
     await tapKey('exercise.check.button');
     await tester.pumpAndSettle();

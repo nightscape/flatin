@@ -136,7 +136,7 @@ void main() {
       await tester.pumpAndSettle();
       for (var i = 0; i < pairs.length; i++) {
         for (final side in ['left', 'right']) {
-          final button = find.byKey(Key('exercise.match.$side.$i'));
+          final button = find.byKey(Key('exercise.zuordnen.$side.$i'));
           await tester.ensureVisible(button);
           await tester.tap(button);
           await tester.pump();

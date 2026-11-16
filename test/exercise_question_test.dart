@@ -55,7 +55,7 @@ void main() {
           if (e.formParams.isNotEmpty) e.kind,
       },
       {
-        ExerciseKind.latDeWahl,
+        ExerciseKind.bedeutungWahl,
         ExerciseKind.umformen,
         ExerciseKind.fehlerFinden,
         ExerciseKind.bestimmen,

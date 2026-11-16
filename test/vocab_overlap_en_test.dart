@@ -27,8 +27,8 @@ void main() {
       for (final word in vocab) {
         for (final generator in exerciseGenerators) {
           if (!{
-            ExerciseKind.latDeWahl,
-            ExerciseKind.deLatWahl,
+            ExerciseKind.bedeutungWahl,
+            ExerciseKind.formWahl,
             ExerciseKind.zuordnen,
           }.contains(generator.kind)) {
             continue;

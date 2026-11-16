@@ -135,7 +135,7 @@ void main() {
       final marks = SpecGenerator(
         KindSpec(
           kind: ExerciseKind.markieren,
-          questionKey: 'exercise.tap.question',
+          questionKey: 'exercise.markieren.question',
           select: const OneSentence(withRoles: true),
           params: const {},
           answer: const Marks(),
@@ -144,7 +144,7 @@ void main() {
       final ticks = SpecGenerator(
         KindSpec(
           kind: ExerciseKind.satzAnkreuzen,
-          questionKey: 'exercise.ticks.question',
+          questionKey: 'exercise.satzAnkreuzen.question',
           select: const OneSentence(),
           params: const {'sentence': SentenceText()},
           answer: TickMany(count: 4),

@@ -112,6 +112,7 @@ class _Fallback implements ExerciseGenerator {
     grammarCardId: GrammarCardId(word.dataFileId, bundle),
     kind: kind,
     questionKey: 'q',
+    languageName: latinLang.name,
     answer: TypedAnswer(
       FormOption(
         text: word.forms.first,
@@ -333,6 +334,7 @@ void main() {
             ? ExerciseKind.satzAnkreuzen
             : ExerciseKind.markieren,
         questionKey: 'q',
+        languageName: latinLang.name,
         answer: answer,
       );
       final attribution = attribute(word, exercise, response);

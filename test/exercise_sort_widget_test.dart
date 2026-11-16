@@ -200,14 +200,14 @@ void main() {
       final responses = await pump(tester, e);
       expect(
         find.text(
-          keyEcho('exercise.tick.question', {
+          keyEcho('exercise.ankreuzen.question', {
             'group': answerOf(e).groups.first,
           }),
         ),
         findsOneWidget,
       );
       for (final (i, (_, group)) in answerOf(e).forms.indexed) {
-        if (group == 0) await tap(tester, 'exercise.sort.form.$i');
+        if (group == 0) await tap(tester, 'exercise.sortieren.form.$i');
       }
       await tap(tester, 'exercise.check.button');
       expect(find.text('exercise.screen.right'), findsOneWidget);
@@ -237,18 +237,18 @@ void main() {
 
     Future<void> dragToGroup(WidgetTester tester, int form, int group) async {
       final from = tester.getCenter(
-        find.byKey(Key('exercise.sort.form.$form')),
+        find.byKey(Key('exercise.sortieren.form.$form')),
       );
       final to = tester.getCenter(
-        find.byKey(Key('exercise.sort.group.$group')),
+        find.byKey(Key('exercise.sortieren.group.$group')),
       );
       await tester.dragFrom(from, to - from);
       await tester.pumpAndSettle();
     }
 
     Finder formIn(int form, int group) => find.descendant(
-      of: find.byKey(Key('exercise.sort.group.$group')),
-      matching: find.byKey(Key('exercise.sort.form.$form')),
+      of: find.byKey(Key('exercise.sortieren.group.$group')),
+      matching: find.byKey(Key('exercise.sortieren.form.$form')),
     );
 
     Exercise sortExercise() =>
@@ -314,14 +314,17 @@ void main() {
       await dragToGroup(tester, 0, 0);
       expect(formIn(0, 0), findsOneWidget);
       final from = tester.getCenter(
-        find.byKey(const Key('exercise.sort.form.0')),
+        find.byKey(const Key('exercise.sortieren.form.0')),
       );
       await tester.dragFrom(from, const Offset(0, -150));
       await tester.pumpAndSettle();
       for (var g = 0; g < 3; g++) {
         expect(formIn(0, g), findsNothing);
       }
-      expect(find.byKey(const Key('exercise.sort.form.0')), findsOneWidget);
+      expect(
+        find.byKey(const Key('exercise.sortieren.form.0')),
+        findsOneWidget,
+      );
     });
 
     testWidgets('sorting checks once every form has a group', (tester) async {
@@ -378,11 +381,13 @@ void main() {
       final screen = Offset.zero & const Size(360, 640);
       final boxes = [
         for (var g = 0; g < 3; g++)
-          tester.getRect(find.byKey(Key('exercise.sort.group.$g'))),
+          tester.getRect(find.byKey(Key('exercise.sortieren.group.$g'))),
       ];
       var farthest = 0.0;
       for (var i = 0; i < 12; i++) {
-        final rect = tester.getRect(find.byKey(Key('exercise.sort.form.$i')));
+        final rect = tester.getRect(
+          find.byKey(Key('exercise.sortieren.form.$i')),
+        );
         expect(
           screen.contains(rect.topLeft) && screen.contains(rect.bottomRight),
           isTrue,
@@ -411,13 +416,17 @@ void main() {
       await pump(tester, e);
       for (final (i, (option, _)) in answerOf(e).forms.indexed) {
         expect(
-          tester.getSemantics(find.byKey(Key('exercise.sort.form.$i'))).label,
+          tester
+              .getSemantics(find.byKey(Key('exercise.sortieren.form.$i')))
+              .label,
           option.text,
         );
       }
       for (final (g, name) in answerOf(e).groups.indexed) {
         expect(
-          tester.getSemantics(find.byKey(Key('exercise.sort.group.$g'))).label,
+          tester
+              .getSemantics(find.byKey(Key('exercise.sortieren.group.$g')))
+              .label,
           contains(name),
         );
       }

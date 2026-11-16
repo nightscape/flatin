@@ -8,6 +8,7 @@ import 'package:latin_practice/models/exercise.dart';
 
 import 'support/gen_round.dart';
 import 'support/hand_items.dart';
+import 'support/latin_course.dart' show latinLang;
 
 const _right = (word: Rating.good, grammar: Rating.good);
 const _wrong = (word: Rating.again, grammar: Rating.again);
@@ -39,19 +40,20 @@ Exercise _exercise(GrammarBundle bundle, ExerciseKind kind) {
     grammarCardId: GrammarCardId('verbs', bundle),
     kind: kind,
     questionKey: 'q',
+    languageName: latinLang.name,
     answer: ChoiceAnswer(options, options.first),
   );
 }
 
 RoundTask _task(GrammarBundle bundle) =>
-    RoundTask(_word, bundle, _exercise(bundle, ExerciseKind.latDeWahl));
+    RoundTask(_word, bundle, _exercise(bundle, ExerciseKind.bedeutungWahl));
 
 List<RoundTask> _tasks(int n, [int bundles = 1]) => [
   for (var i = 0; i < n; i++) _task('b${i % bundles}'),
 ];
 
 Exercise _retry(RoundTask failed) =>
-    _exercise(failed.bundle, ExerciseKind.deLatWahl);
+    _exercise(failed.bundle, ExerciseKind.formWahl);
 
 (RoundState, AnswerOutcome) _answer(RoundState s, Attribution a) =>
     answer(s, a, _retry);
@@ -92,7 +94,7 @@ void main() {
       expect(retry.isRetry, isTrue);
       expect(retry.word, _word);
       expect(retry.bundle, 'b0');
-      expect(retry.exercise.kind, ExerciseKind.deLatWahl);
+      expect(retry.exercise.kind, ExerciseKind.formWahl);
       expect(next.answeredFirst, 3);
     });
 

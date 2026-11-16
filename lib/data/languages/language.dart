@@ -187,7 +187,7 @@ final class Language {
 }
 
 /// The words of a construction a learner can mark; each names a feedback key
-/// `exercise.tap.feedback.<role>`.
+/// `exercise.markieren.feedback.<role>`.
 enum PillRole { participle, reference, subject, predicative, object }
 
 /// What a construction code of a sentence must have: a [hasReference] word

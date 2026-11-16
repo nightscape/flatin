@@ -27,7 +27,7 @@ Answered _answered({bool right = true, double? difficulty}) => Answered(
   right: right,
   firstAttempt: true,
   wordDifficulty: difficulty,
-  kind: 'deLatWahl',
+  kind: 'formWahl',
   dataFile: 'latin_nouns',
   at: DateTime(2026, 3, 4),
 );

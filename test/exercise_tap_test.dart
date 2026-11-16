@@ -363,7 +363,7 @@ void main() {
           [for (final l in lines) l.key],
           [
             for (final (i, p) in answer.pills.indexed)
-              'exercise.tap.feedback.${p.role}.${right[i] ? 'right' : 'wrong'}',
+              'exercise.markieren.feedback.${p.role}.${right[i] ? 'right' : 'wrong'}',
           ],
         );
         for (final (i, p) in answer.pills.indexed) {

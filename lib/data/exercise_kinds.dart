@@ -9,88 +9,88 @@ import 'exercise_spec.dart';
 
 const kindSpecs = [
   KindSpec(
-    kind: ExerciseKind.latDeWahl,
-    questionKey: 'exercise.translate.latDe.question',
+    kind: ExerciseKind.bedeutungWahl,
+    questionKey: 'exercise.bedeutungWahl.question',
     select: OneCell(),
     params: {
-      'form': Show(Ref.target, View.latin),
+      'form': Show(Ref.target, View.form),
       'word': Show(Ref.target, View.lemma),
     },
     answer: Choose(
-      View.german,
+      View.meaning,
       from: Neighbours(k: 1, withBuiltWrong: true),
       count: 4,
     ),
   ),
   KindSpec(
-    kind: ExerciseKind.deLatWahl,
-    questionKey: 'exercise.translate.deLat.question',
+    kind: ExerciseKind.formWahl,
+    questionKey: 'exercise.formWahl.question',
     select: OneCell(),
     params: {
-      'german': Show(Ref.target, View.german),
+      'german': Show(Ref.target, View.meaning),
       'word': Show(Ref.target, View.lemma),
     },
     answer: Choose(
-      View.latin,
+      View.form,
       from: Neighbours(k: 1, withBuiltWrong: true),
       count: 4,
     ),
   ),
   KindSpec(
-    kind: ExerciseKind.deLatTippen,
-    questionKey: 'exercise.translate.deLatType.question',
+    kind: ExerciseKind.formTippen,
+    questionKey: 'exercise.formTippen.question',
     select: OneCell(),
     params: {
-      'german': Show(Ref.target, View.german),
+      'german': Show(Ref.target, View.meaning),
       'word': Show(Ref.target, View.lemma),
     },
-    answer: Typed(View.latin),
+    answer: Typed(View.form),
   ),
   KindSpec(
     kind: ExerciseKind.formBilden,
-    questionKey: 'exercise.build.question',
+    questionKey: 'exercise.formBilden.question',
     select: OneCell(),
     params: {
       'label': Show(Ref.target, View.label),
       'word': Show(Ref.target, View.lemma),
     },
-    answer: Typed(View.latin),
+    answer: Typed(View.form),
   ),
   KindSpec(
     kind: ExerciseKind.irrlaeufer,
-    questionKey: 'exercise.oddone.question',
+    questionKey: 'exercise.irrlaeufer.question',
     select: OddOneOut(majority: 3, maxDraws: 200),
     params: {},
-    answer: Choose(View.latin, from: TheSelection(), count: 4),
+    answer: Choose(View.form, from: TheSelection(), count: 4),
   ),
   KindSpec(
     kind: ExerciseKind.umformen,
-    questionKey: 'exercise.transform.question',
+    questionKey: 'exercise.umformen.question',
     select: AxisPath(lengths: {1}),
     params: {
-      'start': Show(Ref.start, View.latin),
+      'start': Show(Ref.start, View.form),
       'word': Show(Ref.target, View.lemma),
       'changes': AxisChanges(),
     },
-    answer: Typed(View.latin),
+    answer: Typed(View.form),
   ),
   KindSpec(
     kind: ExerciseKind.fehlerFinden,
-    questionKey: 'exercise.finderror.question',
+    questionKey: 'exercise.fehlerFinden.question',
     select: Spoil(ways: {SpoilWay.compoundSwap, SpoilWay.otherTypeEnding}),
     params: {
       'label': Show(Ref.target, View.label),
       'word': Show(Ref.target, View.lemma),
-      'wrong': Show(Ref.spoiled, View.latin),
+      'wrong': Show(Ref.spoiled, View.form),
     },
-    answer: Typed(View.latin),
+    answer: Typed(View.form),
   ),
   KindSpec(
     kind: ExerciseKind.bestimmen,
     questionKey: 'exercise.bestimmen.question',
     select: OneCell(),
     params: {
-      'form': Show(Ref.target, View.latin),
+      'form': Show(Ref.target, View.form),
       'word': Show(Ref.target, View.lemma),
     },
     answer: Choose(
@@ -101,46 +101,46 @@ const kindSpecs = [
   ),
   KindSpec(
     kind: ExerciseKind.zuordnen,
-    questionKey: 'exercise.match.question',
+    questionKey: 'exercise.zuordnen.question',
     select: Sample(n: 4),
     params: {'word': Show(Ref.target, View.lemma)},
-    answer: Match(View.latin, View.german),
+    answer: Match(View.form, View.meaning),
   ),
   KindSpec(
     kind: ExerciseKind.formenKette,
-    questionKey: 'exercise.transform.chainQuestion',
+    questionKey: 'exercise.formenKette.question',
     select: AxisPath(lengths: {2, 3}),
     params: {
-      'start': Show(Ref.start, View.latin),
+      'start': Show(Ref.start, View.form),
       'word': Show(Ref.target, View.lemma),
       'changes': AxisChanges(),
     },
-    answer: Typed(View.latin),
+    answer: Typed(View.form),
   ),
   KindSpec(
     kind: ExerciseKind.ankreuzen,
-    questionKey: 'exercise.tick.question',
+    questionKey: 'exercise.ankreuzen.question',
     select: LookAlikes(setName: 'tick', count: (min: 8, max: 12), words: 4),
     params: {'group': BundleName()},
-    answer: Sort(View.latin, tick: true),
+    answer: Sort(View.form, tick: true),
   ),
   KindSpec(
     kind: ExerciseKind.sortieren,
-    questionKey: 'exercise.sort.question',
+    questionKey: 'exercise.sortieren.question',
     select: LookAlikes(setName: 'sort', count: (min: 9, max: 12), words: 4),
     params: {},
-    answer: Sort(View.latin, tick: false),
+    answer: Sort(View.form, tick: false),
   ),
   KindSpec(
     kind: ExerciseKind.stammformen,
     questionKey: 'exercise.stammformen.question',
     select: PrincipalParts(minParts: 3),
-    params: {'form': Show(Ref.target, View.latin)},
-    answer: Parts(View.latin),
+    params: {'form': Show(Ref.target, View.form)},
+    answer: Parts(View.form),
   ),
   KindSpec(
     kind: ExerciseKind.markieren,
-    questionKey: 'exercise.tap.question',
+    questionKey: 'exercise.markieren.question',
     // A question marks only its particle, so it has no second word to tell.
     select: OneSentence(withRoles: true),
     params: {},
@@ -148,7 +148,7 @@ const kindSpecs = [
   ),
   KindSpec(
     kind: ExerciseKind.satzAnkreuzen,
-    questionKey: 'exercise.ticks.question',
+    questionKey: 'exercise.satzAnkreuzen.question',
     select: OneSentence(),
     params: {'sentence': SentenceText()},
     answer: TickMany(count: 4),
@@ -158,41 +158,41 @@ const kindSpecs = [
 /// How the translation kinds ask a vocab item: its meaning, with the other
 /// vocab items as the wrong options. No other kind asks one.
 const vocabSpecs = {
-  ExerciseKind.latDeWahl: KindSpec(
-    kind: ExerciseKind.latDeWahl,
-    questionKey: 'exercise.vocab.latDe.question',
+  ExerciseKind.bedeutungWahl: KindSpec(
+    kind: ExerciseKind.bedeutungWahl,
+    questionKey: 'exercise.bedeutungWahl.vocab.question',
     select: OneCell(),
-    params: {'word': Show(Ref.target, View.latin)},
+    params: {'word': Show(Ref.target, View.form)},
     answer: Choose(
-      View.german,
+      View.meaning,
       from: Neighbours(k: 0, withBuiltWrong: false),
       count: 4,
     ),
   ),
-  ExerciseKind.deLatWahl: KindSpec(
-    kind: ExerciseKind.deLatWahl,
-    questionKey: 'exercise.vocab.deLat.question',
+  ExerciseKind.formWahl: KindSpec(
+    kind: ExerciseKind.formWahl,
+    questionKey: 'exercise.formWahl.vocab.question',
     select: OneCell(),
-    params: {'german': Show(Ref.target, View.german)},
+    params: {'german': Show(Ref.target, View.meaning)},
     answer: Choose(
-      View.latin,
+      View.form,
       from: Neighbours(k: 0, withBuiltWrong: false),
       count: 4,
     ),
   ),
-  ExerciseKind.deLatTippen: KindSpec(
-    kind: ExerciseKind.deLatTippen,
-    questionKey: 'exercise.vocab.deLatType.question',
+  ExerciseKind.formTippen: KindSpec(
+    kind: ExerciseKind.formTippen,
+    questionKey: 'exercise.formTippen.vocab.question',
     select: OneCell(),
-    params: {'german': Show(Ref.target, View.german)},
-    answer: Typed(View.latin),
+    params: {'german': Show(Ref.target, View.meaning)},
+    answer: Typed(View.form),
   ),
   ExerciseKind.zuordnen: KindSpec(
     kind: ExerciseKind.zuordnen,
-    questionKey: 'exercise.vocab.match.question',
+    questionKey: 'exercise.zuordnen.vocab.question',
     select: Sample(n: 4),
     params: {},
-    answer: Match(View.latin, View.german),
+    answer: Match(View.form, View.meaning),
   ),
 };
 
@@ -201,10 +201,10 @@ const vocabSpecs = {
 const agreementSpecs = {
   ExerciseKind.zuordnen: KindSpec(
     kind: ExerciseKind.zuordnen,
-    questionKey: 'exercise.agree.question',
+    questionKey: 'exercise.zuordnen.agree.question',
     select: Sample(n: 4),
     params: {},
-    answer: Match(View.latin, View.latin, agreeing: true),
+    answer: Match(View.form, View.form, agreeing: true),
   ),
 };
 

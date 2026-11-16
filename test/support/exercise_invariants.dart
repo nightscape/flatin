@@ -72,7 +72,7 @@ List<String> violations(
         if (o.text != cube.view(view).accepted(c).first) {
           found.add('${o.text} is not the shown text of $c');
         }
-        if (o.builtWrongBy == null && view == View.latin) {
+        if (o.builtWrongBy == null && view == View.form) {
           if (!word.accepts(word.formOrder.indexOf(o.formKey), o.text)) {
             found.add('${o.text} is no form of $c but has no diagnosis');
           }
@@ -145,7 +145,7 @@ List<String> violations(
           }
         }
         for (final other in cells) {
-          if ((left == View.latin && ctx.avoidFoldTwins
+          if ((left == View.form && ctx.avoidFoldTwins
                   ? cube.lookAlike(other, c)
                   : cube.clash(left, other, c)) ||
               cube.clash(right, other, c)) {

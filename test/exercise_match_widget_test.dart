@@ -122,9 +122,9 @@ void main() {
     }
 
     Future<void> pair(WidgetTester tester, int left, int right) async {
-      await tester.tap(find.byKey(Key('exercise.match.left.$left')));
+      await tester.tap(find.byKey(Key('exercise.zuordnen.left.$left')));
       await tester.pump();
-      await tester.tap(find.byKey(Key('exercise.match.right.$right')));
+      await tester.tap(find.byKey(Key('exercise.zuordnen.right.$right')));
       await tester.pump();
     }
 
@@ -260,7 +260,7 @@ void main() {
         await pair(tester, i, i);
       }
       expect(find.byKey(const Key('exercise.check.button')), findsOneWidget);
-      await tester.tap(find.byKey(const Key('exercise.match.left.0')));
+      await tester.tap(find.byKey(const Key('exercise.zuordnen.left.0')));
       await tester.pump();
       expect(find.byKey(const Key('exercise.check.button')), findsNothing);
     });
@@ -316,7 +316,7 @@ void main() {
   test('de and en have the same exercise.match keys', () {
     Set<String> matchKeys(String l) => translationKeys(
       l,
-    ).where((k) => k.startsWith('exercise.match.')).toSet();
+    ).where((k) => k.startsWith('exercise.zuordnen.')).toSet();
     expect(matchKeys('de'), isNotEmpty);
     expect(matchKeys('de'), matchKeys('en'));
   });

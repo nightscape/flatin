@@ -30,7 +30,7 @@ Future<PracticeItem> _vocare({String language = 'de'}) async =>
 
 Future<Exercise> _choice() async {
   final vocare = await _vocare();
-  final built = const FakeLatDeGenerator().build(
+  final built = const FakeBedeutungWahlGenerator().build(
     vocare,
     'ind.fut2.pass',
     fakeExerciseContext(unlocked: {'ind.fut2.pass'}, pool: [vocare]),
@@ -41,6 +41,7 @@ Future<Exercise> _choice() async {
     grammarCardId: built.grammarCardId,
     kind: built.kind,
     questionKey: 'exercise.screen.sampleQuestion',
+    languageName: latinLang.name,
     questionParams: built.questionParams,
     answer: built.answer,
   );
@@ -58,6 +59,7 @@ Exercise _typed(Exercise choice) {
     grammarCardId: choice.grammarCardId,
     kind: ExerciseKind.formBilden,
     questionKey: choice.questionKey,
+    languageName: choice.languageName,
     questionParams: choice.questionParams,
     answer: TypedAnswer(expected, [expected.text]),
   );
@@ -79,6 +81,7 @@ Future<Exercise> _typedForm(ExerciseKind kind) async {
     grammarCardId: choice.grammarCardId,
     kind: kind,
     questionKey: choice.questionKey,
+    languageName: choice.languageName,
     questionParams: choice.questionParams,
     answer: TypedAnswer(expected, vocare.acceptedForms[i]),
   );
@@ -304,8 +307,9 @@ void main() {
     final exercise = Exercise(
       wordCardId: vocare.id,
       grammarCardId: GrammarCardId.of(vocare, right.formKey),
-      kind: ExerciseKind.latDeWahl,
+      kind: ExerciseKind.bedeutungWahl,
       questionKey: 'exercise.screen.sampleQuestion',
+      languageName: latinLang.name,
       answer: ChoiceAnswer([right, option(0)], right),
     );
     await _pump(tester, exercise, 'narrow');
@@ -428,12 +432,12 @@ void main() {
       }
     }
 
-    testWidgets('deLatTippen keeps the text field under a dropdown setting', (
+    testWidgets('formTippen keeps the text field under a dropdown setting', (
       tester,
     ) async {
       await _pump(
         tester,
-        await _typedForm(ExerciseKind.deLatTippen),
+        await _typedForm(ExerciseKind.formTippen),
         'phone',
         strategyId: 'dropdown_all_forms',
       );

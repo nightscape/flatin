@@ -13,8 +13,8 @@ enum KindClass { recognition, building }
 
 KindClass classOf(ExerciseKind kind) => switch (kind) {
   ExerciseKind.bestimmen ||
-  ExerciseKind.latDeWahl ||
-  ExerciseKind.deLatWahl ||
+  ExerciseKind.bedeutungWahl ||
+  ExerciseKind.formWahl ||
   ExerciseKind.irrlaeufer ||
   ExerciseKind.zuordnen ||
   ExerciseKind.ankreuzen ||
@@ -22,7 +22,7 @@ KindClass classOf(ExerciseKind kind) => switch (kind) {
   ExerciseKind.markieren ||
   ExerciseKind.satzAnkreuzen => KindClass.recognition,
   ExerciseKind.formBilden ||
-  ExerciseKind.deLatTippen ||
+  ExerciseKind.formTippen ||
   ExerciseKind.umformen ||
   ExerciseKind.fehlerFinden ||
   ExerciseKind.formenKette ||

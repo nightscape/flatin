@@ -94,12 +94,18 @@ String courseYaml(CourseSpec course, Random rng) {
   ].join('\n');
 }
 
-/// Game rules with one `answered` earn rule per id of [dataFileIds].
-String gameRulesYaml(List<String> dataFileIds) => [
+/// Game rules with one `answered` earn rule per id of [dataFileIds] and one
+/// per name of [kinds].
+String gameRulesYaml(
+  List<String> dataFileIds, {
+  List<String> kinds = const [],
+}) => [
   'resources: [coins]',
-  'earn:${dataFileIds.isEmpty ? ' []' : ''}',
+  'earn:${dataFileIds.isEmpty && kinds.isEmpty ? ' []' : ''}',
   for (final id in dataFileIds)
     '  - {on: answered, when: {dataFile: $id}, gain: {coins: 1}}',
+  for (final kind in kinds)
+    '  - {on: answered, when: {kind: $kind}, gain: {coins: 1}}',
   'buildings: []',
 ].join('\n');
 

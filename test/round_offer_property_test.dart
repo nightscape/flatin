@@ -45,7 +45,7 @@ final class _AnyPair implements ExerciseGenerator {
   const _AnyPair();
 
   @override
-  ExerciseKind get kind => ExerciseKind.latDeWahl;
+  ExerciseKind get kind => ExerciseKind.bedeutungWahl;
 
   @override
   Exercise build(
@@ -63,7 +63,8 @@ final class _AnyPair implements ExerciseGenerator {
       wordCardId: word.id,
       grammarCardId: GrammarCardId(word.dataFileId, bundle),
       kind: kind,
-      questionKey: 'exercise.latDeWahl.question',
+      questionKey: 'exercise.bedeutungWahl.question',
+      languageName: latinLang.name,
       questionParams: {'form': word.lemma},
       answer: ChoiceAnswer([option], option),
     );

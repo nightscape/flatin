@@ -18,6 +18,7 @@ import 'package:latin_practice/providers/locale_provider.dart';
 import 'package:latin_practice/providers/round_providers.dart';
 
 import 'support/course_providers.dart';
+import 'support/latin_course.dart' show latinLang;
 
 /// A recognition kind that asks a sentence, so a fresh card tries it first.
 const _sentenceKind = SpecGenerator(
@@ -26,7 +27,7 @@ const _sentenceKind = SpecGenerator(
     questionKey: 'q',
     select: OneSentence(),
     params: {},
-    answer: Choose(View.latin, from: TheSelection(), count: 2),
+    answer: Choose(View.form, from: TheSelection(), count: 2),
   ),
 );
 
@@ -54,6 +55,7 @@ class _Fallback implements ExerciseGenerator {
       grammarCardId: GrammarCardId(word.dataFileId, bundle),
       kind: kind,
       questionKey: 'q',
+      languageName: latinLang.name,
       answer: TypedAnswer(form, ['x']),
     );
   }

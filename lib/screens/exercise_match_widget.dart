@@ -111,8 +111,11 @@ class _ExerciseMatchWidgetState extends State<ExerciseMatchWidget> {
               Text(
                 _t(
                   (exercise.answer as MatchingAnswer).agreements == null
-                      ? 'exercise.match.hint'
-                      : 'exercise.agree.hint',
+                      ? 'exercise.zuordnen.hint'
+                      : 'exercise.zuordnen.agree.hint',
+                  exercise.languageParam(
+                    FlutterI18n.currentLocale(context)!.languageCode,
+                  ),
                 ),
               ),
               const SizedBox(height: 16),
@@ -159,7 +162,7 @@ class _ExerciseMatchWidgetState extends State<ExerciseMatchWidget> {
       left == null || !_paired.containsKey(left) ? null : left + 1;
 
   Widget _leftButton(int left) => _button(
-    key: Key('exercise.match.left.$left'),
+    key: Key('exercise.zuordnen.left.$left'),
     text: _right[left].$1.text,
     number: _number(left),
     selected: _selectedLeft == left,
@@ -173,7 +176,7 @@ class _ExerciseMatchWidgetState extends State<ExerciseMatchWidget> {
         .map((e) => e.key)
         .firstOrNull;
     return _button(
-      key: Key('exercise.match.right.$right'),
+      key: Key('exercise.zuordnen.right.$right'),
       text: _right[right].$2.text,
       number: _number(left),
       selected: false,

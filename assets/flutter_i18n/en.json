@@ -260,8 +260,59 @@
       "wrong": "Here it is: {answer}",
       "sampleQuestion": "What does {form} mean?"
     },
-    "build": {
+    "bestimmen": {
+      "question": "Determine {form} (of {word})"
+    },
+    "bedeutungWahl": {
+      "question": "What does {form} (of {word}) mean?",
+      "vocab": {
+        "question": "What does {word} mean?"
+      }
+    },
+    "formWahl": {
+      "question": "Which {language} form of {word} means: {german}",
+      "vocab": {
+        "question": "What is the {language} for “{german}”?"
+      }
+    },
+    "irrlaeufer": {
+      "question": "Which form does not belong with the others?"
+    },
+    "zuordnen": {
+      "question": "Match the forms of {word}",
+      "hint": "Tap a {language} form first, then the German form that fits it.",
+      "agree": {
+        "question": "Match the forms that agree in case, number and gender",
+        "hint": "Tap a form on the left first, then the noun form that agrees with it."
+      },
+      "vocab": {
+        "question": "Match the words to their meanings"
+      }
+    },
+    "formBilden": {
       "question": "{label} of {word}"
+    },
+    "formTippen": {
+      "question": "Type the {language} form of {word} that means: {german}",
+      "vocab": {
+        "question": "Write in {language}: {german}"
+      }
+    },
+    "umformen": {
+      "question": "Change {start} of {word} to: {changes}"
+    },
+    "fehlerFinden": {
+      "question": "{label} of {word}: \"{wrong}\" is wrong. What is the right form?"
+    },
+    "formenKette": {
+      "question": "Change {start} of {word} step by step: {changes}"
+    },
+    "ankreuzen": {
+      "question": "Tick every form in the {group}"
+    },
+    "sortieren": {
+      "question": "Put each form into its group",
+      "hint": "Drag each form into its group."
     },
     "stammformen": {
       "question": "Principal parts of {form}",
@@ -272,60 +323,7 @@
         "supine": "Supine"
       }
     },
-    "bestimmen": {
-      "question": "Determine {form} (of {word})"
-    },
-    "oddone": {
-      "question": "Which form does not belong with the others?"
-    },
-    "transform": {
-      "question": "Change {start} of {word} to: {changes}",
-      "chainQuestion": "Change {start} of {word} step by step: {changes}"
-    },
-    "finderror": {
-      "question": "{label} of {word}: \"{wrong}\" is wrong. What is the right form?"
-    },
-    "match": {
-      "question": "Match the forms of {word}",
-      "hint": "Tap a Latin form first, then the German form that fits it."
-    },
-    "agree": {
-      "question": "Match the forms that agree in case, number and gender",
-      "hint": "Tap a form on the left first, then the noun form that agrees with it."
-    },
-    "translate": {
-      "latDe": {
-        "question": "What does {form} (of {word}) mean?"
-      },
-      "deLat": {
-        "question": "Which Latin form of {word} means: {german}"
-      },
-      "deLatType": {
-        "question": "Type the Latin form of {word} that means: {german}"
-      }
-    },
-    "vocab": {
-      "latDe": {
-        "question": "What does {word} mean?"
-      },
-      "deLat": {
-        "question": "What is the Latin for “{german}”?"
-      },
-      "deLatType": {
-        "question": "Write in Latin: {german}"
-      },
-      "match": {
-        "question": "Match the words to their meanings"
-      }
-    },
-    "tick": {
-      "question": "Tick every form in the {group}"
-    },
-    "sort": {
-      "question": "Put each form into its group",
-      "hint": "Drag each form into its group."
-    },
-    "tap": {
+    "markieren": {
       "question": "Put each label on its word",
       "hint": "Tap a label, then its word.",
       "pill": {
@@ -358,7 +356,7 @@
         }
       }
     },
-    "ticks": {
+    "satzAnkreuzen": {
       "question": "Which renderings of “{sentence}” are right? Tick every right one.",
       "feedback": {
         "rightTicked": "“{text}” – right",

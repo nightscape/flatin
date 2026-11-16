@@ -4,8 +4,8 @@
    "retry": false,
    "word": "nouns:domina",
    "bundle": "A-Deklination",
-   "kind": "latDeWahl",
-   "question": "exercise.translate.latDe.question",
+   "kind": "bedeutungWahl",
+   "question": "exercise.bedeutungWahl.question",
    "params": {
     "form": "dominam",
     "word": "domina"
@@ -25,7 +25,7 @@
    "word": "verbs:appropinquare",
    "bundle": "ind.praes.akt",
    "kind": "zuordnen",
-   "question": "exercise.match.question",
+   "question": "exercise.zuordnen.question",
    "params": {
     "word": "appropinquāre"
    },
@@ -44,7 +44,7 @@
    "word": "nouns:dominus",
    "bundle": "O-Deklination-maskulinum",
    "kind": "zuordnen",
-   "question": "exercise.match.question",
+   "question": "exercise.zuordnen.question",
    "params": {
     "word": "dominus"
    },
@@ -62,8 +62,8 @@
    "retry": false,
    "word": "verbs:cessare",
    "bundle": "ind.praes.akt",
-   "kind": "latDeWahl",
-   "question": "exercise.translate.latDe.question",
+   "kind": "bedeutungWahl",
+   "question": "exercise.bedeutungWahl.question",
    "params": {
     "form": "cessāmus",
     "word": "cessāre"
@@ -103,7 +103,7 @@
    "word": "nouns:filia",
    "bundle": "A-Deklination",
    "kind": "irrlaeufer",
-   "question": "exercise.oddone.question",
+   "question": "exercise.irrlaeufer.question",
    "params": {},
    "answer": {
     "options": [
@@ -119,8 +119,8 @@
    "retry": false,
    "word": "nouns:filius",
    "bundle": "O-Deklination-maskulinum",
-   "kind": "latDeWahl",
-   "question": "exercise.translate.latDe.question",
+   "kind": "bedeutungWahl",
+   "question": "exercise.bedeutungWahl.question",
    "params": {
     "form": "fīlie",
     "word": "fīlius"
@@ -139,8 +139,8 @@
    "retry": false,
    "word": "nouns:rosa",
    "bundle": "A-Deklination",
-   "kind": "deLatWahl",
-   "question": "exercise.translate.deLat.question",
+   "kind": "formWahl",
+   "question": "exercise.formWahl.question",
    "params": {
     "german": "die Rosen (sind da)",
     "word": "rosa"
@@ -160,7 +160,7 @@
    "word": "nouns:serva",
    "bundle": "A-Deklination",
    "kind": "irrlaeufer",
-   "question": "exercise.oddone.question",
+   "question": "exercise.irrlaeufer.question",
    "params": {},
    "answer": {
     "options": [
@@ -177,7 +177,7 @@
    "word": "nouns:servus",
    "bundle": "O-Deklination-maskulinum",
    "kind": "zuordnen",
-   "question": "exercise.match.question",
+   "question": "exercise.zuordnen.question",
    "params": {
     "word": "servus"
    },
@@ -195,8 +195,8 @@
    "retry": true,
    "word": "nouns:domina",
    "bundle": "A-Deklination",
-   "kind": "deLatWahl",
-   "question": "exercise.translate.deLat.question",
+   "kind": "formWahl",
+   "question": "exercise.formWahl.question",
    "params": {
     "german": "mit den Herrinnen",
     "word": "domina"
@@ -215,8 +215,8 @@
    "retry": true,
    "word": "verbs:appropinquare",
    "bundle": "ind.praes.akt",
-   "kind": "latDeWahl",
-   "question": "exercise.translate.latDe.question",
+   "kind": "bedeutungWahl",
+   "question": "exercise.bedeutungWahl.question",
    "params": {
     "form": "appropinquātis",
     "word": "appropinquāre"
@@ -236,7 +236,7 @@
    "word": "nouns:dominus",
    "bundle": "O-Deklination-maskulinum",
    "kind": "irrlaeufer",
-   "question": "exercise.oddone.question",
+   "question": "exercise.irrlaeufer.question",
    "params": {},
    "answer": {
     "options": [
@@ -255,7 +255,7 @@
    "word": "nouns:domina",
    "bundle": "A-Deklination",
    "kind": "zuordnen",
-   "question": "exercise.match.question",
+   "question": "exercise.zuordnen.question",
    "params": {
     "word": "domina"
    },
@@ -273,8 +273,8 @@
    "retry": false,
    "word": "verbs:appropinquare",
    "bundle": "ind.praes.akt",
-   "kind": "latDeWahl",
-   "question": "exercise.translate.latDe.question",
+   "kind": "bedeutungWahl",
+   "question": "exercise.bedeutungWahl.question",
    "params": {
     "form": "appropinquant",
     "word": "appropinquāre"
@@ -294,7 +294,7 @@
    "word": "nouns:dominus",
    "bundle": "O-Deklination-maskulinum",
    "kind": "zuordnen",
-   "question": "exercise.match.question",
+   "question": "exercise.zuordnen.question",
    "params": {
     "word": "dominus"
    },
@@ -332,8 +332,8 @@
    "retry": false,
    "word": "nouns:familia",
    "bundle": "A-Deklination",
-   "kind": "latDeWahl",
-   "question": "exercise.translate.latDe.question",
+   "kind": "bedeutungWahl",
+   "question": "exercise.bedeutungWahl.question",
    "params": {
     "form": "familiae",
     "word": "familia"
@@ -372,8 +372,8 @@
    "retry": false,
    "word": "nouns:filius",
    "bundle": "O-Deklination-maskulinum",
-   "kind": "deLatWahl",
-   "question": "exercise.translate.deLat.question",
+   "kind": "formWahl",
+   "question": "exercise.formWahl.question",
    "params": {
     "german": "die Söhne (sind da)",
     "word": "fīlius"
@@ -393,7 +393,7 @@
    "word": "nouns:rosa",
    "bundle": "A-Deklination",
    "kind": "zuordnen",
-   "question": "exercise.match.question",
+   "question": "exercise.zuordnen.question",
    "params": {
     "word": "rosa"
    },
@@ -412,7 +412,7 @@
    "word": "nouns:serva",
    "bundle": "A-Deklination",
    "kind": "zuordnen",
-   "question": "exercise.match.question",
+   "question": "exercise.zuordnen.question",
    "params": {
     "word": "serva"
    },
@@ -431,7 +431,7 @@
    "word": "nouns:servus",
    "bundle": "O-Deklination-maskulinum",
    "kind": "irrlaeufer",
-   "question": "exercise.oddone.question",
+   "question": "exercise.irrlaeufer.question",
    "params": {},
    "answer": {
     "options": [
@@ -447,8 +447,8 @@
    "retry": true,
    "word": "nouns:domina",
    "bundle": "A-Deklination",
-   "kind": "deLatWahl",
-   "question": "exercise.translate.deLat.question",
+   "kind": "formWahl",
+   "question": "exercise.formWahl.question",
    "params": {
     "german": "die Herrinnen (sind da)",
     "word": "domina"
@@ -467,8 +467,8 @@
    "retry": true,
    "word": "verbs:appropinquare",
    "bundle": "ind.praes.akt",
-   "kind": "deLatWahl",
-   "question": "exercise.translate.deLat.question",
+   "kind": "formWahl",
+   "question": "exercise.formWahl.question",
    "params": {
     "german": "ich nähere mich",
     "word": "appropinquāre"
@@ -509,8 +509,8 @@
    "retry": false,
    "word": "nouns:domina",
    "bundle": "A-Deklination",
-   "kind": "latDeWahl",
-   "question": "exercise.translate.latDe.question",
+   "kind": "bedeutungWahl",
+   "question": "exercise.bedeutungWahl.question",
    "params": {
     "form": "dominam",
     "word": "domina"
@@ -530,7 +530,7 @@
    "word": "verbs:appropinquare",
    "bundle": "ind.praes.akt",
    "kind": "zuordnen",
-   "question": "exercise.match.question",
+   "question": "exercise.zuordnen.question",
    "params": {
     "word": "appropinquāre"
    },
@@ -549,7 +549,7 @@
    "word": "nouns:dominus",
    "bundle": "O-Deklination-maskulinum",
    "kind": "zuordnen",
-   "question": "exercise.match.question",
+   "question": "exercise.zuordnen.question",
    "params": {
     "word": "dominus"
    },
@@ -567,8 +567,8 @@
    "retry": false,
    "word": "verbs:cessare",
    "bundle": "ind.praes.akt",
-   "kind": "latDeWahl",
-   "question": "exercise.translate.latDe.question",
+   "kind": "bedeutungWahl",
+   "question": "exercise.bedeutungWahl.question",
    "params": {
     "form": "cessāmus",
     "word": "cessāre"
@@ -588,7 +588,7 @@
    "word": "nouns:familia",
    "bundle": "A-Deklination",
    "kind": "zuordnen",
-   "question": "exercise.match.question",
+   "question": "exercise.zuordnen.question",
    "params": {
     "word": "familia"
    },
@@ -647,7 +647,7 @@
    "word": "nouns:rosa",
    "bundle": "A-Deklination",
    "kind": "irrlaeufer",
-   "question": "exercise.oddone.question",
+   "question": "exercise.irrlaeufer.question",
    "params": {},
    "answer": {
     "options": [
@@ -664,7 +664,7 @@
    "word": "nouns:serva",
    "bundle": "A-Deklination",
    "kind": "irrlaeufer",
-   "question": "exercise.oddone.question",
+   "question": "exercise.irrlaeufer.question",
    "params": {},
    "answer": {
     "options": [
@@ -681,7 +681,7 @@
    "word": "nouns:servus",
    "bundle": "O-Deklination-maskulinum",
    "kind": "irrlaeufer",
-   "question": "exercise.oddone.question",
+   "question": "exercise.irrlaeufer.question",
    "params": {},
    "answer": {
     "options": [
@@ -697,8 +697,8 @@
    "retry": true,
    "word": "nouns:domina",
    "bundle": "A-Deklination",
-   "kind": "deLatWahl",
-   "question": "exercise.translate.deLat.question",
+   "kind": "formWahl",
+   "question": "exercise.formWahl.question",
    "params": {
     "german": "(die Farbe) der Herrin",
     "word": "domina"
@@ -718,7 +718,7 @@
    "word": "verbs:appropinquare",
    "bundle": "ind.praes.akt",
    "kind": "irrlaeufer",
-   "question": "exercise.oddone.question",
+   "question": "exercise.irrlaeufer.question",
    "params": {},
    "answer": {
     "options": [
@@ -757,7 +757,7 @@
    "word": "nouns:domina",
    "bundle": "A-Deklination",
    "kind": "zuordnen",
-   "question": "exercise.match.question",
+   "question": "exercise.zuordnen.question",
    "params": {
     "word": "domina"
    },
@@ -775,8 +775,8 @@
    "retry": false,
    "word": "verbs:appropinquare",
    "bundle": "ind.praes.akt",
-   "kind": "latDeWahl",
-   "question": "exercise.translate.latDe.question",
+   "kind": "bedeutungWahl",
+   "question": "exercise.bedeutungWahl.question",
    "params": {
     "form": "appropinquant",
     "word": "appropinquāre"
@@ -796,7 +796,7 @@
    "word": "nouns:dominus",
    "bundle": "O-Deklination-maskulinum",
    "kind": "irrlaeufer",
-   "question": "exercise.oddone.question",
+   "question": "exercise.irrlaeufer.question",
    "params": {},
    "answer": {
     "options": [
@@ -812,8 +812,8 @@
    "retry": false,
    "word": "verbs:cessare",
    "bundle": "ind.praes.akt",
-   "kind": "deLatWahl",
-   "question": "exercise.translate.deLat.question",
+   "kind": "formWahl",
+   "question": "exercise.formWahl.question",
    "params": {
     "german": "du zögerst",
     "word": "cessāre"
@@ -852,8 +852,8 @@
    "retry": false,
    "word": "nouns:filia",
    "bundle": "A-Deklination",
-   "kind": "latDeWahl",
-   "question": "exercise.translate.latDe.question",
+   "kind": "bedeutungWahl",
+   "question": "exercise.bedeutungWahl.question",
    "params": {
     "form": "fīliae",
     "word": "fīlia"
@@ -892,8 +892,8 @@
    "retry": false,
    "word": "nouns:rosa",
    "bundle": "A-Deklination",
-   "kind": "deLatWahl",
-   "question": "exercise.translate.deLat.question",
+   "kind": "formWahl",
+   "question": "exercise.formWahl.question",
    "params": {
     "german": "mit der Rose",
     "word": "rosa"
@@ -913,7 +913,7 @@
    "word": "nouns:serva",
    "bundle": "A-Deklination",
    "kind": "irrlaeufer",
-   "question": "exercise.oddone.question",
+   "question": "exercise.irrlaeufer.question",
    "params": {},
    "answer": {
     "options": [
@@ -929,8 +929,8 @@
    "retry": false,
    "word": "nouns:servus",
    "bundle": "O-Deklination-maskulinum",
-   "kind": "deLatWahl",
-   "question": "exercise.translate.deLat.question",
+   "kind": "formWahl",
+   "question": "exercise.formWahl.question",
    "params": {
     "german": "die Sklaven (sind da)",
     "word": "servus"
@@ -950,7 +950,7 @@
    "word": "nouns:domina",
    "bundle": "A-Deklination",
    "kind": "irrlaeufer",
-   "question": "exercise.oddone.question",
+   "question": "exercise.irrlaeufer.question",
    "params": {},
    "answer": {
     "options": [
@@ -967,7 +967,7 @@
    "word": "verbs:appropinquare",
    "bundle": "ind.praes.akt",
    "kind": "zuordnen",
-   "question": "exercise.match.question",
+   "question": "exercise.zuordnen.question",
    "params": {
     "word": "appropinquāre"
    },
@@ -985,8 +985,8 @@
    "retry": true,
    "word": "nouns:dominus",
    "bundle": "O-Deklination-maskulinum",
-   "kind": "latDeWahl",
-   "question": "exercise.translate.latDe.question",
+   "kind": "bedeutungWahl",
+   "question": "exercise.bedeutungWahl.question",
    "params": {
     "form": "dominō",
     "word": "dominus"
@@ -1007,8 +1007,8 @@
    "retry": false,
    "word": "nouns:domina",
    "bundle": "A-Deklination",
-   "kind": "latDeWahl",
-   "question": "exercise.translate.latDe.question",
+   "kind": "bedeutungWahl",
+   "question": "exercise.bedeutungWahl.question",
    "params": {
     "form": "domina",
     "word": "domina"
@@ -1027,8 +1027,8 @@
    "retry": false,
    "word": "verbs:appropinquare",
    "bundle": "ind.praes.akt",
-   "kind": "deLatWahl",
-   "question": "exercise.translate.deLat.question",
+   "kind": "formWahl",
+   "question": "exercise.formWahl.question",
    "params": {
     "german": "ihr nähert euch",
     "word": "appropinquāre"
@@ -1048,7 +1048,7 @@
    "word": "nouns:dominus",
    "bundle": "O-Deklination-maskulinum",
    "kind": "zuordnen",
-   "question": "exercise.match.question",
+   "question": "exercise.zuordnen.question",
    "params": {
     "word": "dominus"
    },
@@ -1066,8 +1066,8 @@
    "retry": false,
    "word": "verbs:cessare",
    "bundle": "ind.praes.akt",
-   "kind": "latDeWahl",
-   "question": "exercise.translate.latDe.question",
+   "kind": "bedeutungWahl",
+   "question": "exercise.bedeutungWahl.question",
    "params": {
     "form": "cessāmus",
     "word": "cessāre"
@@ -1087,7 +1087,7 @@
    "word": "nouns:familia",
    "bundle": "A-Deklination",
    "kind": "irrlaeufer",
-   "question": "exercise.oddone.question",
+   "question": "exercise.irrlaeufer.question",
    "params": {},
    "answer": {
     "options": [
@@ -1163,8 +1163,8 @@
    "retry": false,
    "word": "nouns:serva",
    "bundle": "A-Deklination",
-   "kind": "latDeWahl",
-   "question": "exercise.translate.latDe.question",
+   "kind": "bedeutungWahl",
+   "question": "exercise.bedeutungWahl.question",
    "params": {
     "form": "servam",
     "word": "serva"
@@ -1203,8 +1203,8 @@
    "retry": true,
    "word": "nouns:domina",
    "bundle": "A-Deklination",
-   "kind": "deLatWahl",
-   "question": "exercise.translate.deLat.question",
+   "kind": "formWahl",
+   "question": "exercise.formWahl.question",
    "params": {
     "german": "(o) Herrin!",
     "word": "domina"
@@ -1243,8 +1243,8 @@
    "retry": true,
    "word": "nouns:dominus",
    "bundle": "O-Deklination-maskulinum",
-   "kind": "deLatWahl",
-   "question": "exercise.translate.deLat.question",
+   "kind": "formWahl",
+   "question": "exercise.formWahl.question",
    "params": {
     "german": "(ich helfe) dem Hausherrn",
     "word": "dominus"
@@ -1266,7 +1266,7 @@
    "word": "nouns:domina",
    "bundle": "A-Deklination",
    "kind": "zuordnen",
-   "question": "exercise.match.question",
+   "question": "exercise.zuordnen.question",
    "params": {
     "word": "domina"
    },
@@ -1284,8 +1284,8 @@
    "retry": false,
    "word": "verbs:appropinquare",
    "bundle": "ind.praes.akt",
-   "kind": "latDeWahl",
-   "question": "exercise.translate.latDe.question",
+   "kind": "bedeutungWahl",
+   "question": "exercise.bedeutungWahl.question",
    "params": {
     "form": "appropinquāmus",
     "word": "appropinquāre"
@@ -1304,8 +1304,8 @@
    "retry": false,
    "word": "nouns:dominus",
    "bundle": "O-Deklination-maskulinum",
-   "kind": "latDeWahl",
-   "question": "exercise.translate.latDe.question",
+   "kind": "bedeutungWahl",
+   "question": "exercise.bedeutungWahl.question",
    "params": {
     "form": "domine",
     "word": "dominus"
@@ -1325,7 +1325,7 @@
    "word": "verbs:cessare",
    "bundle": "ind.praes.akt",
    "kind": "zuordnen",
-   "question": "exercise.match.question",
+   "question": "exercise.zuordnen.question",
    "params": {
     "word": "cessāre"
    },
@@ -1344,7 +1344,7 @@
    "word": "nouns:familia",
    "bundle": "A-Deklination",
    "kind": "irrlaeufer",
-   "question": "exercise.oddone.question",
+   "question": "exercise.irrlaeufer.question",
    "params": {},
    "answer": {
     "options": [
@@ -1360,8 +1360,8 @@
    "retry": false,
    "word": "nouns:filia",
    "bundle": "A-Deklination",
-   "kind": "latDeWahl",
-   "question": "exercise.translate.latDe.question",
+   "kind": "bedeutungWahl",
+   "question": "exercise.bedeutungWahl.question",
    "params": {
     "form": "fīliīs",
     "word": "fīlia"
@@ -1381,7 +1381,7 @@
    "word": "nouns:filius",
    "bundle": "O-Deklination-maskulinum",
    "kind": "zuordnen",
-   "question": "exercise.match.question",
+   "question": "exercise.zuordnen.question",
    "params": {
     "word": "fīlius"
    },
@@ -1399,8 +1399,8 @@
    "retry": false,
    "word": "nouns:rosa",
    "bundle": "A-Deklination",
-   "kind": "latDeWahl",
-   "question": "exercise.translate.latDe.question",
+   "kind": "bedeutungWahl",
+   "question": "exercise.bedeutungWahl.question",
    "params": {
     "form": "rosās",
     "word": "rosa"
@@ -1439,8 +1439,8 @@
    "retry": false,
    "word": "nouns:servus",
    "bundle": "O-Deklination-maskulinum",
-   "kind": "deLatWahl",
-   "question": "exercise.translate.deLat.question",
+   "kind": "formWahl",
+   "question": "exercise.formWahl.question",
    "params": {
     "german": "der Sklave (ist da)",
     "word": "servus"
@@ -1460,7 +1460,7 @@
    "word": "nouns:domina",
    "bundle": "A-Deklination",
    "kind": "irrlaeufer",
-   "question": "exercise.oddone.question",
+   "question": "exercise.irrlaeufer.question",
    "params": {},
    "answer": {
     "options": [

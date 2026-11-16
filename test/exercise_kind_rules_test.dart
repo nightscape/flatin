@@ -182,66 +182,66 @@ void main() {
   group('what every kind builds', () {
     final shapes = [
       (
-        ExerciseKind.latDeWahl,
+        ExerciseKind.bedeutungWahl,
         'verbs:vocare',
         'ind.praes.akt',
-        'exercise.translate.latDe.question',
+        'exercise.bedeutungWahl.question',
         {'form', 'word'},
       ),
       (
-        ExerciseKind.deLatWahl,
+        ExerciseKind.formWahl,
         'verbs:vocare',
         'ind.praes.akt',
-        'exercise.translate.deLat.question',
+        'exercise.formWahl.question',
         {'german', 'word'},
       ),
       (
-        ExerciseKind.deLatTippen,
+        ExerciseKind.formTippen,
         'verbs:vocare',
         'ind.praes.akt',
-        'exercise.translate.deLatType.question',
+        'exercise.formTippen.question',
         {'german', 'word'},
       ),
       (
         ExerciseKind.formBilden,
         'verbs:audire',
         'konj.impf.pass',
-        'exercise.build.question',
+        'exercise.formBilden.question',
         {'label', 'word'},
       ),
       (
         ExerciseKind.formBilden,
         'nouns:puella',
         '',
-        'exercise.build.question',
+        'exercise.formBilden.question',
         {'label', 'word'},
       ),
       (
         ExerciseKind.irrlaeufer,
         'verbs:vocare',
         'ind.praes.akt',
-        'exercise.oddone.question',
+        'exercise.irrlaeufer.question',
         <String>{},
       ),
       (
         ExerciseKind.umformen,
         'verbs:audire',
         'ind.praes.pass',
-        'exercise.transform.question',
+        'exercise.umformen.question',
         {'start', 'word', 'changes'},
       ),
       (
         ExerciseKind.formenKette,
         'verbs:audire',
         'ind.praes.pass',
-        'exercise.transform.chainQuestion',
+        'exercise.formenKette.question',
         {'start', 'word', 'changes'},
       ),
       (
         ExerciseKind.fehlerFinden,
         'verbs:vocare',
         'ind.perf.pass',
-        'exercise.finderror.question',
+        'exercise.fehlerFinden.question',
         {'label', 'word', 'wrong'},
       ),
       (
@@ -255,21 +255,21 @@ void main() {
         ExerciseKind.zuordnen,
         'verbs:vocare',
         'ind.praes.akt',
-        'exercise.match.question',
+        'exercise.zuordnen.question',
         {'word'},
       ),
       (
         ExerciseKind.ankreuzen,
         'verbs:vocare',
         'ind.fut.akt',
-        'exercise.tick.question',
+        'exercise.ankreuzen.question',
         {'group'},
       ),
       (
         ExerciseKind.sortieren,
         'verbs:vocare',
         'ind.plusq.akt',
-        'exercise.sort.question',
+        'exercise.sortieren.question',
         <String>{},
       ),
     ];
@@ -356,9 +356,9 @@ void main() {
     }
 
     for (final kind in [
-      ExerciseKind.latDeWahl,
-      ExerciseKind.deLatWahl,
-      ExerciseKind.deLatTippen,
+      ExerciseKind.bedeutungWahl,
+      ExerciseKind.formWahl,
+      ExerciseKind.formTippen,
     ]) {
       test('$kind: no German forms', () {
         expect(
@@ -962,10 +962,10 @@ void main() {
 
     for (final MapEntry(key: key, value: frame) in frames.entries) {
       final tense = key.split('.')[1];
-      test('$tense: deLatWahl and deLatTippen show the German text in the '
+      test('$tense: formWahl and formTippen show the German text in the '
           'frame', () {
         final bundle = bundleOf(vocare, key);
-        for (final kind in [ExerciseKind.deLatWahl, ExerciseKind.deLatTippen]) {
+        for (final kind in [ExerciseKind.formWahl, ExerciseKind.formTippen]) {
           final shown = {
             for (final e in built(kind, vocare, bundle, seeds: 60))
               e.questionParams['german']!,
@@ -975,9 +975,9 @@ void main() {
         }
       });
 
-      test('$tense: latDeWahl frames every option', () {
+      test('$tense: bedeutungWahl frames every option', () {
         final bundle = bundleOf(vocare, key);
-        for (final e in built(ExerciseKind.latDeWahl, vocare, bundle)) {
+        for (final e in built(ExerciseKind.bedeutungWahl, vocare, bundle)) {
           final texts = (e.answer as ChoiceAnswer).options.map((o) => o.text);
           expect(texts, everyElement(startsWith('Ich frag')));
           expect(texts, everyElement(endsWith('.')));
@@ -985,11 +985,11 @@ void main() {
       });
     }
 
-    test('latDeWahl frames all options or none', () {
+    test('bedeutungWahl frames all options or none', () {
       final unlocked = {'ind.praes.pass', 'konj.praes.pass', 'konj.impf.pass'};
       for (final bundle in unlocked) {
         for (final e in built(
-          ExerciseKind.latDeWahl,
+          ExerciseKind.bedeutungWahl,
           vocare,
           bundle,
           seeds: 40,
@@ -1009,9 +1009,9 @@ void main() {
       'the present subjunctive is asked only once its bundle is unlocked',
       () {
         for (final kind in [
-          ExerciseKind.latDeWahl,
-          ExerciseKind.deLatWahl,
-          ExerciseKind.deLatTippen,
+          ExerciseKind.bedeutungWahl,
+          ExerciseKind.formWahl,
+          ExerciseKind.formTippen,
         ]) {
           expect(
             () => build(
@@ -1027,19 +1027,22 @@ void main() {
       },
     );
 
-    test('amare impf and perf still build, and deLatTippen accepts both '
+    test('amare impf and perf still build, and formTippen accepts both '
         'forms', () {
       final all = _bundles(amare);
       final impf = amare.forms[amare.formOrder.indexOf('ind.impf.akt.1.sg')];
       final perf = amare.forms[amare.formOrder.indexOf('ind.perf.akt.1.sg')];
       var asked = false;
       for (var seed = 0; seed < 40; seed++) {
-        for (final kind in [ExerciseKind.latDeWahl, ExerciseKind.deLatWahl]) {
+        for (final kind in [
+          ExerciseKind.bedeutungWahl,
+          ExerciseKind.formWahl,
+        ]) {
           build(kind, amare, 'ind.impf.akt', unlocked: all, seed: seed);
           build(kind, amare, 'ind.perf.akt', unlocked: all, seed: seed);
         }
         final e = build(
-          ExerciseKind.deLatTippen,
+          ExerciseKind.formTippen,
           amare,
           'ind.impf.akt',
           unlocked: all,
@@ -1058,7 +1061,7 @@ void main() {
       for (var seed = 0; seed < 5; seed++) {
         expect(
           () => build(
-            ExerciseKind.latDeWahl,
+            ExerciseKind.bedeutungWahl,
             amare,
             'inf.praes.akt',
             unlocked: all,
@@ -1071,7 +1074,7 @@ void main() {
 
     test('too few German distractors cannot be built', () {
       expect(
-        () => build(ExerciseKind.latDeWahl, vocare, 'inf.praes.akt'),
+        () => build(ExerciseKind.bedeutungWahl, vocare, 'inf.praes.akt'),
         _cannotBuild(),
       );
     });
@@ -1089,7 +1092,7 @@ void main() {
       PracticeItem item, {
       Set<GrammarBundle>? unlocked,
       GermanForms? forms,
-      ExerciseKind kind = ExerciseKind.deLatWahl,
+      ExerciseKind kind = ExerciseKind.formWahl,
     }) => [
       for (final e in built(
         kind,
@@ -1107,7 +1110,7 @@ void main() {
       final asked = vocare.formLabels[vocare.formOrder.indexOf(key)].features;
       final answers = [
         for (final e in built(
-          ExerciseKind.deLatWahl,
+          ExerciseKind.formWahl,
           vocare,
           'ind.praes.akt',
           unlocked: _bundles(vocare),
@@ -1169,7 +1172,7 @@ void main() {
         'ind.perf.akt.2.sg': ['vocavisti'],
       });
       for (final e in built(
-        ExerciseKind.deLatWahl,
+        ExerciseKind.formWahl,
         item,
         bundleOf(item, _target),
         unlocked: _bundles(item),
@@ -1203,7 +1206,7 @@ void main() {
       });
       final answers = [
         for (final e in built(
-          ExerciseKind.deLatWahl,
+          ExerciseKind.formWahl,
           item,
           bundleOf(item, _target),
           unlocked: _bundles(item),
@@ -1226,7 +1229,7 @@ void main() {
       const key = 'ind.praes.akt.3.sg';
       var otherType = 0;
       for (final e in built(
-        ExerciseKind.deLatWahl,
+        ExerciseKind.formWahl,
         amare,
         'ind.praes.akt',
         unlocked: _bundles(amare),
@@ -1263,7 +1266,7 @@ void main() {
       final item = _hand(neighbours);
       final answers = choices(
         item,
-        kind: ExerciseKind.latDeWahl,
+        kind: ExerciseKind.bedeutungWahl,
         forms: _GermanByKey({
           for (final k in item.formOrder) k: 'g@$k',
         }, covered: item.formOrder.toSet()..remove('ind.fut.akt.2.pl')),
@@ -1282,7 +1285,7 @@ void main() {
         for (final k in item.formOrder) k: 'g@$k',
       }, covered: item.formOrder.toSet()..remove(_target));
       for (final e in built(
-        ExerciseKind.latDeWahl,
+        ExerciseKind.bedeutungWahl,
         item,
         bundleOf(item, _target),
         unlocked: _bundles(item),
@@ -1300,7 +1303,7 @@ void main() {
 
     for (final kind in [
       ExerciseKind.formBilden,
-      ExerciseKind.deLatTippen,
+      ExerciseKind.formTippen,
       ExerciseKind.umformen,
       ExerciseKind.formenKette,
       ExerciseKind.fehlerFinden,
@@ -1327,8 +1330,8 @@ void main() {
     }
 
     for (final kind in [
-      ExerciseKind.latDeWahl,
-      ExerciseKind.deLatWahl,
+      ExerciseKind.bedeutungWahl,
+      ExerciseKind.formWahl,
       ExerciseKind.irrlaeufer,
       ExerciseKind.bestimmen,
     ]) {
@@ -1353,10 +1356,10 @@ void main() {
       });
     }
 
-    test('deLatWahl: a wrong ending of another type blames the grammar', () {
+    test('formWahl: a wrong ending of another type blames the grammar', () {
       final wrongs = [
         for (final e in built(
-          ExerciseKind.deLatWahl,
+          ExerciseKind.formWahl,
           puella,
           puella.type,
           seeds: 60,

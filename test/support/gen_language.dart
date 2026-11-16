@@ -82,3 +82,9 @@ drawnSentenceLanguage(Random r) {
     renames: renames,
   );
 }
+
+/// A language `name` map with a fresh name per UI language code.
+Map<String, String> drawnLanguageName(Random r) {
+  final n = r.nextInt(1 << 30);
+  return {'de': 'Sprachede$n', 'en': 'Languageen$n'};
+}

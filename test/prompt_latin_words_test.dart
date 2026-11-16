@@ -22,7 +22,7 @@ Set<String> latinParams(Exercise e) {
   return {
     for (final MapEntry(:key, :value) in spec.params.entries)
       if (value is SentenceText ||
-          (value is Show && value.view == cube.View.latin))
+          (value is Show && value.view == cube.View.form))
         key,
   };
 }

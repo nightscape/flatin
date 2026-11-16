@@ -67,6 +67,7 @@ void main() {
             grammarCardId: built.grammarCardId,
             kind: built.kind,
             questionKey: built.questionKey,
+            languageName: built.languageName,
             questionParams: built.questionParams,
             answer: TickAnswer(s, [
               (text: s.right[0], mistake: null),
@@ -137,7 +138,7 @@ void main() {
       );
       await tester.pumpAndSettle();
       for (final i in ticked) {
-        await tester.tap(find.byKey(Key('exercise.ticks.option.$i')));
+        await tester.tap(find.byKey(Key('exercise.satzAnkreuzen.option.$i')));
         await tester.pump();
       }
       await tester.tap(find.byKey(const Key('exercise.check.button')));
@@ -181,7 +182,7 @@ void main() {
     );
     await tester.pumpAndSettle();
     for (final i in [0, 2]) {
-      await tester.tap(find.byKey(Key('exercise.ticks.option.$i')));
+      await tester.tap(find.byKey(Key('exercise.satzAnkreuzen.option.$i')));
       await tester.pump();
     }
     await tester.tap(find.byKey(const Key('exercise.check.button')));
@@ -198,10 +199,10 @@ void main() {
     final options = (e.answer as TickAnswer).options;
     expect(lines, [
       for (final (i, key) in [
-        'exercise.ticks.feedback.rightTicked',
-        'exercise.ticks.feedback.wrongLeft',
-        'exercise.ticks.feedback.rightTicked',
-        'exercise.ticks.feedback.wrongLeft',
+        'exercise.satzAnkreuzen.feedback.rightTicked',
+        'exercise.satzAnkreuzen.feedback.wrongLeft',
+        'exercise.satzAnkreuzen.feedback.rightTicked',
+        'exercise.satzAnkreuzen.feedback.wrongLeft',
       ].indexed)
         keyEcho(key, {'text': options[i].text}),
     ]);
@@ -213,8 +214,8 @@ void main() {
       final tree = jsonDecode(
         File('assets/flutter_i18n/$code.json').readAsStringSync(),
       );
-      final feedback = tree['exercise']['ticks']['feedback'] as Map;
-      final tap = tree['exercise']['tap']['feedback'] as Map;
+      final feedback = tree['exercise']['satzAnkreuzen']['feedback'] as Map;
+      final tap = tree['exercise']['markieren']['feedback'] as Map;
       final rightActions = {
         'rightTicked': feedback['rightTicked'],
         'rightLeft': feedback['rightLeft'],

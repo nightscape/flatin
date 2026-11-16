@@ -19,6 +19,7 @@ Iterable<Exercise Function()> strayFormParams(List<Exercise> drawn) sync* {
         grammarCardId: e.grammarCardId,
         kind: e.kind,
         questionKey: e.questionKey,
+        languageName: e.languageName,
         questionParams: e.questionParams,
         formParams: {...e.formParams, stray},
         answer: e.answer,

@@ -97,7 +97,7 @@ class _ExerciseTicksWidgetState extends State<ExerciseTicksWidget> {
         ? Colors.green.shade100
         : Colors.red.shade100,
     child: CheckboxListTile(
-      key: Key('exercise.ticks.option.$i'),
+      key: Key('exercise.satzAnkreuzen.option.$i'),
       title: Text(text),
       value: _ticked.contains(i),
       onChanged: _checked

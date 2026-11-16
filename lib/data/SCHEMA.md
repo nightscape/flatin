@@ -501,7 +501,7 @@ language file of the course (`constructions`, `meanings`, `mistakes`, see
 `reference` on a construction without one, a missing `reference`, and a
 `meaning` list that the construction does not allow or lacks, each with the
 sentence id in the error. `mistake` also names the i18n key of its feedback
-(`exercise.ticks.feedback.wrongTicked.<mistake>`).
+(`exercise.satzAnkreuzen.feedback.wrongTicked.<mistake>`).
 
 The data test fails a sentence when a token is no form of its item, when an
 item, headword, form or type is taught after `lesson`, when a headword token

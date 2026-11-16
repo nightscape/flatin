@@ -109,11 +109,12 @@ final class SpecGenerator implements ExerciseGenerator {
           grammarCardId: GrammarCardId(word.dataFileId, bundle),
           kind: spec.kind,
           questionKey: spec.questionKey,
+          languageName: word.lang.name,
           questionParams: _paramsOf(spec, slice, cube),
           formParams: {
             for (final MapEntry(:key, :value) in spec.params.entries)
               if (value is SentenceText ||
-                  (value is Show && value.view == View.latin))
+                  (value is Show && value.view == View.form))
                 key,
           },
           answer: answer,
@@ -479,7 +480,7 @@ Iterable<Slice> _principalParts(
   ];
   if (rng != null) prompts.shuffle(rng);
   final owners = _spellingOwners[cube.ctx.pool] ??= _ownersOf(cube.ctx.pool);
-  String text(FormCell c) => optionOf(c, View.latin, cube).text;
+  String text(FormCell c) => optionOf(c, View.form, cube).text;
   return prompts
       .where(
         (p) =>
@@ -568,7 +569,7 @@ Iterable<Slice> _lookAlikes(
     final picked = <FormCell>[];
     bool fits(FormCell c) =>
         !_readsAsOther(cube, c, lookAlikes) &&
-        !picked.any((p) => _alike(cube, View.latin, p, c));
+        !picked.any((p) => _alike(cube, View.form, p, c));
     final target = targets.where(fits).firstOrNull;
     if (target == null) continue;
     picked.add(target);
@@ -612,7 +613,7 @@ bool _readsAsOther(Cube cube, FormCell c, List<GrammarBundle> lookAlikes) =>
           (o) =>
               o.bundle != c.bundle &&
               lookAlikes.contains(o.bundle) &&
-              _alike(cube, View.latin, c, o),
+              _alike(cube, View.form, c, o),
         );
 
 /// The name of [c]'s bundle, e.g. "Indikativ Futur I Aktiv".
@@ -701,7 +702,7 @@ Iterable<List<FormCell>> _routes(
   steps,
   axes,
   rng,
-).where((path) => !_alike(cube, View.latin, path.first, to));
+).where((path) => !_alike(cube, View.form, path.first, to));
 
 /// The paths of [steps] axis changes into [to], start first; shuffled with
 /// [rng], in cell order without.
@@ -725,7 +726,7 @@ Iterable<List<FormCell>> _paths(
       for (final from in _changedOn(cube, to, axis))
         if (cube.practised(from) &&
             cube.unlocked(from) &&
-            !cube.clash(View.latin, from, to))
+            !cube.clash(View.form, from, to))
           from,
     ];
     if (rng != null) froms.shuffle(rng);
@@ -918,7 +919,7 @@ TickAnswer? _tick(TickMany tick, Slice slice, Random rng) {
 /// asked.
 PartsAnswer _parts(KindSpec spec, View view, Slice slice, Cube cube) {
   final row = slice.target.word.roles.principalRow;
-  final prompt = optionOf(slice.target, View.latin, cube);
+  final prompt = optionOf(slice.target, View.form, cube);
   final slots = <({String name, TypedAnswer answer})>[];
   final given = <({int at, String name, FormOption form})>[];
   for (final (at, c) in slice.group.indexed) {
@@ -1002,7 +1003,7 @@ Set<_Kng> _kngOf(FormCell c) {
 /// spelling fits.
 Set<_Kng> _readingsOf(Cube cube, FormCell c) => {
   for (final o in cube.allCellsOf(c.word))
-    if (cube.fits(View.latin, c, o)) ..._kngOf(o),
+    if (cube.fits(View.form, c, o)) ..._kngOf(o),
 };
 
 /// Whether the spellings of [a] and [b] agree in case, number and gender.
@@ -1019,7 +1020,7 @@ String _agreementLabel(Cube cube, FormCell left, FormCell right) {
   final shared = _readingsOf(cube, right);
   return describeLabels([
     for (final o in cube.allCellsOf(left.word))
-      if (cube.fits(View.latin, left, o) &&
+      if (cube.fits(View.form, left, o) &&
           _kngOf(o).intersection(shared).isNotEmpty)
         o.word.formLabels[o.index],
   ]);
@@ -1082,7 +1083,7 @@ bool _clashes(Match match, Cell a, Cell b, Cube cube) =>
 /// Whether [a] and [b] clash in [view]; Latin texts that differ only in
 /// macrons clash too while the context avoids macron twins.
 bool _alike(Cube cube, View view, Cell a, Cell b) =>
-    view == View.latin && cube.ctx.avoidFoldTwins
+    view == View.form && cube.ctx.avoidFoldTwins
     ? cube.lookAlike(a, b)
     : cube.clash(view, a, b);
 
@@ -1144,7 +1145,7 @@ Set<FormCell> _readings(KindSpec spec, Slice slice, Cube cube) {
     case AxisPath():
       var cells = {
         for (final c in cube.allCellsOf(word))
-          if (cube.fits(View.latin, slice.path.first, c)) c,
+          if (cube.fits(View.form, slice.path.first, c)) c,
       };
       for (var i = 1; i < slice.path.length; i++) {
         final axis = _axisOf(slice.path[i - 1], slice.path[i]);
@@ -1297,7 +1298,7 @@ String? _answerObjection(
           return '$c reads like another group';
         }
         for (final other in slice.group.take(i)) {
-          if (_alike(cube, View.latin, other, c)) {
+          if (_alike(cube, View.form, other, c)) {
             return '$other clashes with $c';
           }
         }

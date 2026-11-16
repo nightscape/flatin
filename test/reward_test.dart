@@ -31,7 +31,7 @@ Answered _answered({
   right: right,
   firstAttempt: firstAttempt,
   wordDifficulty: wordDifficulty,
-  kind: 'deLatWahl',
+  kind: 'formWahl',
   dataFile: 'latin_nouns',
   at: at,
 );

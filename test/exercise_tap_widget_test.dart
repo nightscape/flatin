@@ -26,11 +26,12 @@ import 'support/exercise_fakes.dart';
 import 'support/gen_sentence_learner.dart';
 import 'support/key_echo_i18n.dart';
 import 'support/word_classification_harness.dart';
+import 'support/latin_course.dart' show latinLang;
 
 // Finger travel is a physical size, so the bound is absolute, not a screen fraction.
 const _maxReachDp = 280.0;
 
-/// Every string of the German `exercise.tap` block.
+/// Every string of the German `exercise.markieren` block.
 List<String> _germanTapTexts() {
   final de = jsonDecode(File('assets/flutter_i18n/de.json').readAsStringSync());
   final texts = <String>[];
@@ -41,7 +42,7 @@ List<String> _germanTapTexts() {
     final Map<String, dynamic> m => m.values.forEach(walk),
     _ => throw ArgumentError('$node'),
   };
-  walk(de['exercise']['tap']);
+  walk(de['exercise']['markieren']);
   return texts.where((t) => t.length > 3).toList();
 }
 
@@ -69,6 +70,7 @@ class _Fallback implements ExerciseGenerator {
       grammarCardId: GrammarCardId(word.dataFileId, bundle),
       kind: kind,
       questionKey: 'q',
+      languageName: latinLang.name,
       answer: TypedAnswer(form, ['x']),
     );
   }
@@ -147,8 +149,8 @@ void main() {
   }
 
   Finder placedOn(int pill, int word) => find.descendant(
-    of: find.byKey(Key('exercise.tap.word.$word')),
-    matching: find.byKey(Key('exercise.tap.placed.$pill')),
+    of: find.byKey(Key('exercise.markieren.word.$word')),
+    matching: find.byKey(Key('exercise.markieren.placed.$pill')),
   );
 
   bool checkEnabled(WidgetTester tester) => tester
@@ -172,10 +174,10 @@ void main() {
 
     final pills = [
       for (var p = 0; p < answer.pills.length; p++)
-        find.byKey(Key('exercise.tap.pill.$p')),
+        find.byKey(Key('exercise.markieren.pill.$p')),
     ];
     for (var w = 0; w < answer.words.length; w++) {
-      final word = find.byKey(Key('exercise.tap.word.$w'));
+      final word = find.byKey(Key('exercise.markieren.word.$w'));
       expect(onScreen(word), isTrue, reason: answer.words[w]);
       final nearest = pills
           .map((p) => (tester.getCenter(p) - tester.getCenter(word)).distance)
@@ -189,20 +191,20 @@ void main() {
     expect(checkEnabled(tester), isFalse);
 
     final first = answer.pills.first;
-    await tap(tester, 'exercise.tap.pill.0');
-    await tap(tester, 'exercise.tap.word.${first.word}');
+    await tap(tester, 'exercise.markieren.pill.0');
+    await tap(tester, 'exercise.markieren.word.${first.word}');
     expect(placedOn(0, first.word), findsOneWidget);
-    expect(find.byKey(const Key('exercise.tap.pill.0')), findsNothing);
+    expect(find.byKey(const Key('exercise.markieren.pill.0')), findsNothing);
     expect(checkEnabled(tester), isFalse);
 
-    await tap(tester, 'exercise.tap.placed.0');
+    await tap(tester, 'exercise.markieren.placed.0');
     expect(placedOn(0, first.word), findsNothing);
-    expect(find.byKey(const Key('exercise.tap.pill.0')), findsOneWidget);
+    expect(find.byKey(const Key('exercise.markieren.pill.0')), findsOneWidget);
 
     for (final (p, pill) in answer.pills.indexed) {
       expect(checkEnabled(tester), isFalse);
-      await tap(tester, 'exercise.tap.pill.$p');
-      await tap(tester, 'exercise.tap.word.${pill.word}');
+      await tap(tester, 'exercise.markieren.pill.$p');
+      await tap(tester, 'exercise.markieren.word.${pill.word}');
     }
     expect(checkEnabled(tester), isTrue);
     await tap(tester, 'exercise.check.button');
@@ -225,10 +227,10 @@ void main() {
       for (var w = 0; w < answer.words.length; w++)
         if (answer.pills.every((p) => p.word != w)) w,
     ].first;
-    await tap(tester, 'exercise.tap.pill.0');
-    await tap(tester, 'exercise.tap.word.$other');
-    await tap(tester, 'exercise.tap.pill.1');
-    await tap(tester, 'exercise.tap.word.${answer.pills[1].word}');
+    await tap(tester, 'exercise.markieren.pill.0');
+    await tap(tester, 'exercise.markieren.word.$other');
+    await tap(tester, 'exercise.markieren.pill.1');
+    await tap(tester, 'exercise.markieren.word.${answer.pills[1].word}');
     await tap(tester, 'exercise.check.button');
     expect(
       find.textContaining(
@@ -250,9 +252,9 @@ void main() {
     expect(next.exercise, isNot(firstTask.exercise));
     final responses = await pump(tester, firstTask);
     final first = (firstTask.exercise.answer as MarksAnswer).pills.first;
-    await tap(tester, 'exercise.tap.pill.0');
-    await tap(tester, 'exercise.tap.word.${first.word}');
-    await tap(tester, 'exercise.tap.pill.1');
+    await tap(tester, 'exercise.markieren.pill.0');
+    await tap(tester, 'exercise.markieren.word.${first.word}');
+    await tap(tester, 'exercise.markieren.pill.1');
     await tester.pumpWidget(
       wrapInKeyEchoApp(
         ExerciseTapWidget(
@@ -265,11 +267,11 @@ void main() {
     await tester.pumpAndSettle();
     final answer = next.exercise.answer as MarksAnswer;
     for (var p = 0; p < answer.pills.length; p++) {
-      expect(find.byKey(Key('exercise.tap.placed.$p')), findsNothing);
-      expect(find.byKey(Key('exercise.tap.pill.$p')), findsOneWidget);
+      expect(find.byKey(Key('exercise.markieren.placed.$p')), findsNothing);
+      expect(find.byKey(Key('exercise.markieren.pill.$p')), findsOneWidget);
       expect(
         tester
-            .widget<ChoiceChip>(find.byKey(Key('exercise.tap.pill.$p')))
+            .widget<ChoiceChip>(find.byKey(Key('exercise.markieren.pill.$p')))
             .selected,
         isFalse,
       );
@@ -322,7 +324,7 @@ void main() {
     for (final task in marking) {
       final answer = task.exercise.answer as MarksAnswer;
       for (final p in answer.pills) {
-        final name = en['exercise']['tap']['pill'][p.role] as String;
+        final name = en['exercise']['markieren']['pill'][p.role] as String;
         expect(german, isNot(contains(name)), reason: p.role);
       }
     }
@@ -336,8 +338,8 @@ void main() {
     await pump(tester, task, language: 'en');
     final answer = task.exercise.answer as MarksAnswer;
     for (final (p, pill) in answer.pills.indexed) {
-      await tap(tester, 'exercise.tap.pill.$p');
-      await tap(tester, 'exercise.tap.word.${pill.word}');
+      await tap(tester, 'exercise.markieren.pill.$p');
+      await tap(tester, 'exercise.markieren.word.${pill.word}');
     }
     await tap(tester, 'exercise.check.button');
     final text = [
@@ -347,7 +349,10 @@ void main() {
       File('assets/flutter_i18n/en.json').readAsStringSync(),
     );
     for (final p in answer.pills) {
-      expect(text, contains(en['exercise']['tap']['pill'][p.role] as String));
+      expect(
+        text,
+        contains(en['exercise']['markieren']['pill'][p.role] as String),
+      );
     }
     for (final g in _germanTapTexts()) {
       expect(text, isNot(contains(g)), reason: g);

@@ -10,12 +10,13 @@ import 'package:latin_practice/widgets/explanation_lines.dart';
 import 'key_echo_i18n.dart';
 
 /// [wrapInKeyEchoApp] with an [explainer] and more provider [overrides];
-/// the data language is [dataLanguage].
+/// the data language is [dataLanguage] and the UI language [code].
 Widget wrapInKeyEchoAppWith(
   Widget home, {
   Explainer? explainer,
   List<Override> overrides = const [],
   String dataLanguage = 'de',
+  String code = 'en',
 }) => ProviderScope(
   retry: noRetry,
   overrides: [
@@ -25,7 +26,9 @@ Widget wrapInKeyEchoAppWith(
   ],
   child: MaterialApp(
     localizationsDelegates: [
-      FlutterI18nDelegate(translationLoader: KeyEchoTranslationLoader()),
+      FlutterI18nDelegate(
+        translationLoader: KeyEchoTranslationLoader(code: code),
+      ),
       GlobalMaterialLocalizations.delegate,
       GlobalWidgetsLocalizations.delegate,
     ],

@@ -5,6 +5,7 @@ import 'package:latin_practice/models/exercise.dart';
 import 'package:latin_practice/models/practice_item.dart';
 
 import 'hand_items.dart';
+import 'latin_course.dart' show latinLang;
 
 /// An [ExerciseContext] whose German texts come from [FakeGermanForms].
 ExerciseContext fakeExerciseContext({
@@ -18,11 +19,11 @@ ExerciseContext fakeExerciseContext({
 
 /// Latin form → choose its German text among the other forms of the bundle.
 /// Builds only for an unlocked bundle and a word of the pool.
-class FakeLatDeGenerator implements ExerciseGenerator {
-  const FakeLatDeGenerator();
+class FakeBedeutungWahlGenerator implements ExerciseGenerator {
+  const FakeBedeutungWahlGenerator();
 
   @override
-  ExerciseKind get kind => ExerciseKind.latDeWahl;
+  ExerciseKind get kind => ExerciseKind.bedeutungWahl;
 
   @override
   Exercise build(
@@ -60,7 +61,8 @@ class FakeLatDeGenerator implements ExerciseGenerator {
       wordCardId: word.id,
       grammarCardId: GrammarCardId(word.dataFileId, bundle),
       kind: kind,
-      questionKey: 'exercise.latDeWahl.question',
+      questionKey: 'exercise.bedeutungWahl.question',
+      languageName: latinLang.name,
       questionParams: {'form': word.forms[word.formOrder.indexOf(target)]},
       answer: ChoiceAnswer(
         options,
@@ -117,4 +119,16 @@ PracticeItem syntheticVerb(Map<FormKey, List<String>> forms) => handItem(
   lemma: 'synthetica',
   axes: changeableVerbAxes,
   forms: forms,
+);
+
+/// [e] as an exercise of a course whose language is called [names].
+Exercise withLanguageName(Exercise e, Map<String, String> names) => Exercise(
+  wordCardId: e.wordCardId,
+  grammarCardId: e.grammarCardId,
+  kind: e.kind,
+  questionKey: e.questionKey,
+  languageName: names,
+  questionParams: e.questionParams,
+  formParams: e.formParams,
+  answer: e.answer,
 );

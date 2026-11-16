@@ -7,6 +7,7 @@ import 'package:latin_practice/models/exercise.dart';
 import 'package:latin_practice/models/practice_item.dart';
 
 import 'support/exercise_fakes.dart';
+import 'support/latin_course.dart' show latinLang;
 
 /// A [Random] whose every `nextDouble` is [value]; `nextInt` is 0.
 class _Fixed implements Random {
@@ -44,6 +45,7 @@ class _Stub implements ExerciseGenerator {
       grammarCardId: GrammarCardId(word.dataFileId, bundle),
       kind: kind,
       questionKey: 'exercise.screen.sampleQuestion',
+      languageName: latinLang.name,
       answer: TypedAnswer(
         FormOption(
           text: word.forms.first,
@@ -84,8 +86,8 @@ void main() {
       },
       {
         ExerciseKind.bestimmen,
-        ExerciseKind.latDeWahl,
-        ExerciseKind.deLatWahl,
+        ExerciseKind.bedeutungWahl,
+        ExerciseKind.formWahl,
         ExerciseKind.irrlaeufer,
         ExerciseKind.zuordnen,
         ExerciseKind.ankreuzen,

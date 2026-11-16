@@ -260,8 +260,59 @@
       "wrong": "So heißt es: {answer}",
       "sampleQuestion": "Was bedeutet {form}?"
     },
-    "build": {
+    "bestimmen": {
+      "question": "Bestimme {form} (von {word})"
+    },
+    "bedeutungWahl": {
+      "question": "Was bedeutet {form} (von {word})?",
+      "vocab": {
+        "question": "Was bedeutet {word}?"
+      }
+    },
+    "formWahl": {
+      "question": "Welche Form von {word} auf {language} bedeutet: {german}",
+      "vocab": {
+        "question": "Was heißt „{german}“ auf {language}?"
+      }
+    },
+    "irrlaeufer": {
+      "question": "Welche Form gehört nicht zu den anderen?"
+    },
+    "zuordnen": {
+      "question": "Ordne die Formen von {word} zu",
+      "hint": "Tippe erst eine Form auf {language}, dann die passende deutsche Form.",
+      "agree": {
+        "question": "Ordne die Formen zu, die in Kasus, Numerus und Genus übereinstimmen",
+        "hint": "Tippe erst eine Form links, dann die Form des Nomens, die zu ihr passt."
+      },
+      "vocab": {
+        "question": "Ordne die Wörter ihren Bedeutungen zu"
+      }
+    },
+    "formBilden": {
       "question": "{label} von {word}"
+    },
+    "formTippen": {
+      "question": "Schreibe die Form von {word} auf {language}, die bedeutet: {german}",
+      "vocab": {
+        "question": "Schreibe auf {language}: {german}"
+      }
+    },
+    "umformen": {
+      "question": "{start} von {word} umformen zu: {changes}"
+    },
+    "fehlerFinden": {
+      "question": "{label} von {word}: „{wrong}“ ist falsch. Wie lautet die richtige Form?"
+    },
+    "formenKette": {
+      "question": "{start} von {word} der Reihe nach umformen: {changes}"
+    },
+    "ankreuzen": {
+      "question": "Kreuze alle Formen im {group} an"
+    },
+    "sortieren": {
+      "question": "Ordne jede Form der richtigen Gruppe zu",
+      "hint": "Ziehe jede Form in ihre Gruppe."
     },
     "stammformen": {
       "question": "Stammformen zu {form}",
@@ -272,60 +323,7 @@
         "supine": "Supinum"
       }
     },
-    "bestimmen": {
-      "question": "Bestimme {form} (von {word})"
-    },
-    "oddone": {
-      "question": "Welche Form gehört nicht zu den anderen?"
-    },
-    "transform": {
-      "question": "{start} von {word} umformen zu: {changes}",
-      "chainQuestion": "{start} von {word} der Reihe nach umformen: {changes}"
-    },
-    "finderror": {
-      "question": "{label} von {word}: „{wrong}“ ist falsch. Wie lautet die richtige Form?"
-    },
-    "match": {
-      "question": "Ordne die Formen von {word} zu",
-      "hint": "Tippe erst eine lateinische, dann die passende deutsche Form."
-    },
-    "agree": {
-      "question": "Ordne die Formen zu, die in Kasus, Numerus und Genus übereinstimmen",
-      "hint": "Tippe erst eine Form links, dann die Form des Nomens, die zu ihr passt."
-    },
-    "translate": {
-      "latDe": {
-        "question": "Was bedeutet {form} (von {word})?"
-      },
-      "deLat": {
-        "question": "Welche lateinische Form von {word} bedeutet: {german}"
-      },
-      "deLatType": {
-        "question": "Schreibe die lateinische Form von {word}, die bedeutet: {german}"
-      }
-    },
-    "vocab": {
-      "latDe": {
-        "question": "Was bedeutet {word}?"
-      },
-      "deLat": {
-        "question": "Was heißt „{german}“ auf Latein?"
-      },
-      "deLatType": {
-        "question": "Schreibe auf Latein: {german}"
-      },
-      "match": {
-        "question": "Ordne die Wörter ihren Bedeutungen zu"
-      }
-    },
-    "tick": {
-      "question": "Kreuze alle Formen im {group} an"
-    },
-    "sort": {
-      "question": "Ordne jede Form der richtigen Gruppe zu",
-      "hint": "Ziehe jede Form in ihre Gruppe."
-    },
-    "tap": {
+    "markieren": {
       "question": "Lege jedes Schild auf sein Wort",
       "hint": "Tippe ein Schild an, dann sein Wort.",
       "pill": {
@@ -358,7 +356,7 @@
         }
       }
     },
-    "ticks": {
+    "satzAnkreuzen": {
       "question": "Welche Übersetzungen von „{sentence}“ sind richtig? Kreuze alle richtigen an.",
       "feedback": {
         "rightTicked": "„{text}“ – richtig",

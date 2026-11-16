@@ -33,8 +33,8 @@ void main() {
     () async {
       final verbs = await loadPracticeItems('lib/data/latin_verbs.yaml');
       final vocare = verbs.singleWhere((i) => i.id == 'verbs:vocare');
-      final generator = generatorFor(ExerciseKind.latDeWahl, [
-        const FakeLatDeGenerator(),
+      final generator = generatorFor(ExerciseKind.bedeutungWahl, [
+        const FakeBedeutungWahlGenerator(),
       ]);
       final ctx = fakeExerciseContext(
         unlocked: {'ind.fut2.pass', 'konj.fut.akt'},
@@ -59,7 +59,7 @@ void main() {
     () async {
       final verbs = await loadPracticeItems('lib/data/latin_verbs.yaml');
       final vocare = verbs.singleWhere((i) => i.id == 'verbs:vocare');
-      const generator = FakeLatDeGenerator();
+      const generator = FakeBedeutungWahlGenerator();
       Exercise build(ExerciseContext ctx) =>
           generator.build(vocare, 'ind.fut2.pass', ctx, Random(1));
 

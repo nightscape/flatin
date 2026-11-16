@@ -115,7 +115,7 @@ List<_Step> _sequence(Random random) {
               firstAttempt: first,
               partial: partial,
               wordDifficulty: difficulty,
-              kind: 'deLatWahl',
+              kind: 'formWahl',
               dataFile: 'latin_nouns',
               at: at,
             ),

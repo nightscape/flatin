@@ -56,10 +56,10 @@ Iterable<Set<int>> _tickSets(int n) => [
 
 String _feedbackKey(({String text, String? mistake}) option, bool ticked) =>
     switch ((option.mistake, ticked)) {
-      (null, true) => 'exercise.ticks.feedback.rightTicked',
-      (null, false) => 'exercise.ticks.feedback.rightLeft',
-      (final m?, true) => 'exercise.ticks.feedback.wrongTicked.$m',
-      (_?, false) => 'exercise.ticks.feedback.wrongLeft',
+      (null, true) => 'exercise.satzAnkreuzen.feedback.rightTicked',
+      (null, false) => 'exercise.satzAnkreuzen.feedback.rightLeft',
+      (final m?, true) => 'exercise.satzAnkreuzen.feedback.wrongTicked.$m',
+      (_?, false) => 'exercise.satzAnkreuzen.feedback.wrongLeft',
     };
 
 Map<String, dynamic> _translations(String code) =>
@@ -329,7 +329,7 @@ void main() {
       expect(builds, isTrue, reason: '${word.id} $bundle');
       outcomes.update('built', (n) => n + 1, ifAbsent: () => 1);
       final answer = e.answer as TickAnswer;
-      expect(e.questionKey, 'exercise.ticks.question');
+      expect(e.questionKey, 'exercise.satzAnkreuzen.question');
       expect(violations(e, generator.spec, word, bundle, l.ctx), isEmpty);
       expect(candidates, contains(answer.sentence.id));
       final k = answer.right.length;
@@ -388,7 +388,7 @@ void main() {
     final en = _translations('en');
     final keys = [
       for (final k in translationKeys('en'))
-        if (k.startsWith('exercise.ticks.')) k,
+        if (k.startsWith('exercise.satzAnkreuzen.')) k,
     ];
     expect(keys, isNotEmpty);
     for (final key in keys) {
@@ -429,7 +429,7 @@ void main() {
     Future<List<bool>> ticks(WidgetTester tester) async => [
       for (var i = 0; i < 4; i++)
         await () async {
-          final box = find.byKey(Key('exercise.ticks.option.$i'));
+          final box = find.byKey(Key('exercise.satzAnkreuzen.option.$i'));
           await reveal(tester, box);
           return tester.widget<CheckboxListTile>(box).value!;
         }(),
@@ -456,6 +456,7 @@ void main() {
             grammarCardId: built.grammarCardId,
             kind: built.kind,
             questionKey: built.questionKey,
+            languageName: built.languageName,
             questionParams: built.questionParams,
             answer: TickAnswer(sentence, [
               (text: sentence.right[0], mistake: null),
@@ -503,7 +504,7 @@ void main() {
         expect(await checkEnabled(tester), isFalse);
         final model = <int>{};
         for (final t in taps) {
-          await tap(tester, 'exercise.ticks.option.$t');
+          await tap(tester, 'exercise.satzAnkreuzen.option.$t');
           model.contains(t) ? model.remove(t) : model.add(t);
           expect(await ticks(tester), [
             for (var j = 0; j < 4; j++) model.contains(j),
@@ -511,7 +512,7 @@ void main() {
           expect(await checkEnabled(tester), model.isNotEmpty);
         }
         if (model.isEmpty) {
-          await tap(tester, 'exercise.ticks.option.0');
+          await tap(tester, 'exercise.satzAnkreuzen.option.0');
           model.add(0);
         }
         await tap(tester, 'exercise.check.button');

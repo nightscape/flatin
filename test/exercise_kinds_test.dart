@@ -114,9 +114,9 @@ void main() {
     }
   }
 
-  group('A2 latDeWahl from its spec', () {
+  group('A2 bedeutungWahl from its spec', () {
     test('shows a Latin form and offers the German texts of neighbours', () {
-      final e = build(ExerciseKind.latDeWahl, vocare, 'ind.praes.akt');
+      final e = build(ExerciseKind.bedeutungWahl, vocare, 'ind.praes.akt');
       final answer = e.answer as ChoiceAnswer;
       final target = answer.right.formKey;
       expect(e.questionParams, {
@@ -125,13 +125,13 @@ void main() {
       });
       expect(answer.right.text, german.accepted(vocare, target).first);
       expect(answer.options, hasLength(4));
-      expectValid(ExerciseKind.latDeWahl, vocare, 'ind.praes.akt');
+      expectValid(ExerciseKind.bedeutungWahl, vocare, 'ind.praes.akt');
     });
 
     test('frames every option of a subjunctive form', () {
       for (var seed = 0; seed < 10; seed++) {
         final e = build(
-          ExerciseKind.latDeWahl,
+          ExerciseKind.bedeutungWahl,
           vocare,
           'konj.impf.akt',
           seed: seed,
@@ -139,7 +139,7 @@ void main() {
         final options = (e.answer as ChoiceAnswer).options;
         expect(options.map((o) => o.text), everyElement(startsWith('Ich ')));
       }
-      expectValid(ExerciseKind.latDeWahl, vocare, 'konj.impf.akt');
+      expectValid(ExerciseKind.bedeutungWahl, vocare, 'konj.impf.akt');
     });
 
     test(
@@ -152,7 +152,7 @@ void main() {
                   100,
                   (seed) =>
                       build(
-                            ExerciseKind.latDeWahl,
+                            ExerciseKind.bedeutungWahl,
                             rosa,
                             rosa.type,
                             seed: seed,
@@ -174,7 +174,7 @@ void main() {
       final wrongKeys = {
         for (var seed = 0; seed < 100; seed++)
           if (build(
-                ExerciseKind.latDeWahl,
+                ExerciseKind.bedeutungWahl,
                 rosa,
                 rosa.type,
                 seed: seed,
@@ -191,13 +191,13 @@ void main() {
     test('frames the four options of roma dat.sg with distinct German', () {
       final context = ctx(roma, {roma.type}, forms: nounGerman);
       final e = build(
-        ExerciseKind.latDeWahl,
+        ExerciseKind.bedeutungWahl,
         roma,
         roma.type,
         seed: Iterable<int>.generate(100).firstWhere(
           (seed) =>
               (build(
-                        ExerciseKind.latDeWahl,
+                        ExerciseKind.bedeutungWahl,
                         roma,
                         roma.type,
                         seed: seed,
@@ -215,7 +215,7 @@ void main() {
       expect(
         violations(
           e,
-          _spec(ExerciseKind.latDeWahl).spec,
+          _spec(ExerciseKind.bedeutungWahl).spec,
           roma,
           roma.type,
           context,
@@ -227,7 +227,7 @@ void main() {
     test('cannot build without German forms', () {
       expect(
         () => build(
-          ExerciseKind.latDeWahl,
+          ExerciseKind.bedeutungWahl,
           vocare,
           'ind.praes.akt',
           forms: const NoForms(),
@@ -240,29 +240,33 @@ void main() {
       String shown(Exercise e) =>
           '${e.questionParams} ${(e.answer as ChoiceAnswer).options.map((o) => o.text)}';
       expect(
-        shown(build(ExerciseKind.latDeWahl, vocare, 'ind.perf.akt', seed: 7)),
-        shown(build(ExerciseKind.latDeWahl, vocare, 'ind.perf.akt', seed: 7)),
+        shown(
+          build(ExerciseKind.bedeutungWahl, vocare, 'ind.perf.akt', seed: 7),
+        ),
+        shown(
+          build(ExerciseKind.bedeutungWahl, vocare, 'ind.perf.akt', seed: 7),
+        ),
       );
     });
   });
 
-  group('A3 deLatWahl from its spec', () {
+  group('A3 formWahl from its spec', () {
     test('shows the German text and offers Latin forms and wrong endings', () {
-      final e = build(ExerciseKind.deLatWahl, vocare, 'ind.praes.akt');
+      final e = build(ExerciseKind.formWahl, vocare, 'ind.praes.akt');
       final answer = e.answer as ChoiceAnswer;
       expect(e.questionParams, {
         'german': german.accepted(vocare, answer.right.formKey).first,
         'word': vocare.lemma,
       });
       expect(answer.options, hasLength(4));
-      expectValid(ExerciseKind.deLatWahl, vocare, 'ind.praes.akt');
+      expectValid(ExerciseKind.formWahl, vocare, 'ind.praes.akt');
     });
 
     test('offers the ending of another declension as a wrong option', () {
       final wrong = {
         for (var seed = 0; seed < 100; seed++)
           ...(build(
-                    ExerciseKind.deLatWahl,
+                    ExerciseKind.formWahl,
                     rosa,
                     rosa.type,
                     seed: seed,
@@ -278,10 +282,10 @@ void main() {
     test('a cell without German text clashes with nothing', () {
       final cube = Cube(ctx(tartarus, {tartarus.type}, forms: nounGerman));
       final cells = cube.cellsOf(tartarus).toList();
-      final uncovered = cells.where((c) => !cube.view(View.german).covers(c));
+      final uncovered = cells.where((c) => !cube.view(View.meaning).covers(c));
       expect(uncovered, isNotEmpty);
       for (final c in uncovered) {
-        expect(cube.clash(View.german, cells.first, c), isFalse);
+        expect(cube.clash(View.meaning, cells.first, c), isFalse);
       }
     });
 
@@ -295,12 +299,12 @@ void main() {
       for (final bundle in bundles) {
         for (var seed = 0; seed < 5; seed++) {
           final e = _spec(
-            ExerciseKind.deLatWahl,
+            ExerciseKind.formWahl,
           ).build(tartarus, bundle, context, Random(seed));
           expect(
             violations(
               e,
-              _spec(ExerciseKind.deLatWahl).spec,
+              _spec(ExerciseKind.formWahl).spec,
               tartarus,
               bundle,
               context,
@@ -315,7 +319,7 @@ void main() {
         }
       }
       expect(
-        wrongCells.where((c) => !cube.view(View.german).covers(c)),
+        wrongCells.where((c) => !cube.view(View.meaning).covers(c)),
         isNotEmpty,
       );
     });
@@ -323,7 +327,7 @@ void main() {
     test('cannot build without German forms', () {
       expect(
         () => build(
-          ExerciseKind.deLatWahl,
+          ExerciseKind.formWahl,
           vocare,
           'ind.praes.akt',
           forms: const NoForms(),
@@ -333,21 +337,21 @@ void main() {
     });
   });
 
-  group('A7 deLatTippen from its spec', () {
+  group('A7 formTippen from its spec', () {
     test('accepts the forms whose German reads the same, framed or not', () {
-      final e = build(ExerciseKind.deLatTippen, vocare, 'ind.praes.akt');
+      final e = build(ExerciseKind.formTippen, vocare, 'ind.praes.akt');
       final answer = e.answer as TypedAnswer;
       expect(e.questionParams['german'], 'du rufst');
       expect(answer.expected.formKey, 'ind.praes.akt.2.sg');
       // The subjunctive reads "Ich frage, ob du rufst", so vocēs is wrong.
       expect(answer.accepted, ['vocās']);
-      expectValid(ExerciseKind.deLatTippen, vocare, 'ind.praes.akt');
+      expectValid(ExerciseKind.formTippen, vocare, 'ind.praes.akt');
     });
 
     test('reads a noun with German forms', () {
       for (var seed = 0; seed < 10; seed++) {
         final e = build(
-          ExerciseKind.deLatTippen,
+          ExerciseKind.formTippen,
           rosa,
           rosa.type,
           seed: seed,
@@ -356,7 +360,7 @@ void main() {
         expect(
           violations(
             e,
-            _spec(ExerciseKind.deLatTippen).spec,
+            _spec(ExerciseKind.formTippen).spec,
             rosa,
             rosa.type,
             ctx(rosa, {rosa.type}, forms: nounGerman),
@@ -409,14 +413,14 @@ void main() {
       );
     });
 
-    group('deLatWahl objects to a wrong option that', () {
+    group('formWahl objects to a wrong option that', () {
       const bundle = 'ind.praes.akt';
       Set<String> objectionsToSwap(
         bool Function(Cube, FormCell, FormCell) pick,
       ) {
         final c = ctx(vocare, {bundle});
         final cube = Cube(c);
-        final e = build(ExerciseKind.deLatWahl, vocare, bundle);
+        final e = build(ExerciseKind.formWahl, vocare, bundle);
         final answer = e.answer as ChoiceAnswer;
         final target = cube.cell(vocare, answer.right.formKey);
         final stray = cube
@@ -426,17 +430,18 @@ void main() {
           (o) => o != answer.right && o.builtWrongBy == null,
         );
         final options = [...answer.options];
-        options[swapped] = optionOf(stray, View.latin, cube);
+        options[swapped] = optionOf(stray, View.form, cube);
         final changed = Exercise(
           wordCardId: e.wordCardId,
           grammarCardId: e.grammarCardId,
           kind: e.kind,
           questionKey: e.questionKey,
+          languageName: e.languageName,
           questionParams: e.questionParams,
           answer: ChoiceAnswer(options, answer.right),
         );
         return _spec(
-          ExerciseKind.deLatWahl,
+          ExerciseKind.formWahl,
         ).objections(changed, vocare, bundle, c).toSet();
       }
 
@@ -723,6 +728,7 @@ void main() {
         grammarCardId: e.grammarCardId,
         kind: e.kind,
         questionKey: e.questionKey,
+        languageName: e.languageName,
         questionParams: e.questionParams,
         answer: MatchingAnswer([
           (pairs[0].$1, pairs[1].$2),
@@ -943,7 +949,7 @@ void main() {
       final lengths = <int>{};
       for (var seed = 0; seed < 20; seed++) {
         final e = chain(vocare, 'ind.praes.pass', seed);
-        expect(e.questionKey, 'exercise.transform.chainQuestion');
+        expect(e.questionKey, 'exercise.formenKette.question');
         lengths.add('→'.allMatches(e.questionParams['changes']!).length + 1);
       }
       expect(lengths, {2, 3});

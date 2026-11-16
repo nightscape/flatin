@@ -12,9 +12,9 @@ import 'package:latin_practice/providers/locale_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const _germanTextKinds = {
-  ExerciseKind.latDeWahl,
-  ExerciseKind.deLatWahl,
-  ExerciseKind.deLatTippen,
+  ExerciseKind.bedeutungWahl,
+  ExerciseKind.formWahl,
+  ExerciseKind.formTippen,
   ExerciseKind.zuordnen,
 };
 

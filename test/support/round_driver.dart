@@ -118,10 +118,10 @@ Future<void> answer(
       await reveal(tester, find.byKey(const Key('exercise.next.button')));
     case MatchingAnswer(:final pairs):
       for (var i = 0; i < pairs.length; i++) {
-        await tap(tester, 'exercise.match.left.$i');
+        await tap(tester, 'exercise.zuordnen.left.$i');
         await tap(
           tester,
-          'exercise.match.right.${right ? i : (i + 1) % pairs.length}',
+          'exercise.zuordnen.right.${right ? i : (i + 1) % pairs.length}',
         );
       }
       await tap(tester, 'exercise.check.button');
@@ -129,13 +129,13 @@ Future<void> answer(
       for (final (i, (_, g)) in forms.indexed) {
         final given = right || i > 0 ? g : (g + 1) % groups.length;
         if (tick) {
-          if (given == 0) await tap(tester, 'exercise.sort.form.$i');
+          if (given == 0) await tap(tester, 'exercise.sortieren.form.$i');
         } else {
           final from = tester.getCenter(
-            find.byKey(Key('exercise.sort.form.$i')),
+            find.byKey(Key('exercise.sortieren.form.$i')),
           );
           final to = tester.getCenter(
-            find.byKey(Key('exercise.sort.group.$given')),
+            find.byKey(Key('exercise.sortieren.group.$given')),
           );
           await tester.dragFrom(from, to - from);
           await tester.pumpAndSettle();
@@ -145,14 +145,14 @@ Future<void> answer(
     case final MarksAnswer marks:
       final given = (right ? rightMarks(marks) : wrongMarks(marks)).wordOf;
       for (final (p, w) in given.indexed) {
-        await tap(tester, 'exercise.tap.pill.$p');
-        await tap(tester, 'exercise.tap.word.$w');
+        await tap(tester, 'exercise.markieren.pill.$p');
+        await tap(tester, 'exercise.markieren.word.$w');
       }
       await tap(tester, 'exercise.check.button');
     case final TickAnswer answer:
       final ticks = right ? rightTicks(answer) : wrongTicks(answer);
       for (final i in ticks.ticked) {
-        await tap(tester, 'exercise.ticks.option.$i');
+        await tap(tester, 'exercise.satzAnkreuzen.option.$i');
       }
       await tap(tester, 'exercise.check.button');
   }

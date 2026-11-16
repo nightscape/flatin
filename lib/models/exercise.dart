@@ -45,12 +45,12 @@ extension type GrammarCardId._(String id) implements String {
 /// Produced by the kind selection; read by the generators and the screen.
 enum ExerciseKind {
   bestimmen,
-  latDeWahl,
-  deLatWahl,
+  bedeutungWahl,
+  formWahl,
   irrlaeufer,
   zuordnen,
   formBilden,
-  deLatTippen,
+  formTippen,
   umformen,
   fehlerFinden,
   formenKette,
@@ -282,11 +282,16 @@ final class Exercise {
   final Set<String> formParams;
   final ExerciseAnswer answer;
 
+  /// The language file's `name` of the word's language, by UI language code;
+  /// fills `{language}` in the question and hint texts.
+  final Map<String, String> languageName;
+
   Exercise({
     required this.wordCardId,
     required this.grammarCardId,
     required this.kind,
     required this.questionKey,
+    required this.languageName,
     this.questionParams = const {},
     this.formParams = const {},
     required this.answer,
@@ -297,6 +302,11 @@ final class Exercise {
       'word $wordCardId and $grammarCardId come from two data files',
     );
   }
+
+  /// The texts' `{language}` parameter in the UI language [code].
+  Map<String, String> languageParam(String code) => {
+    'language': languageName[code]!,
+  };
 }
 
 /// Thrown by [ExerciseGenerator.build] when the word has no exercise of its

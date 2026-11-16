@@ -4,7 +4,9 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:latin_practice/data/game_rules.dart';
 import 'package:latin_practice/models/course.dart';
+import 'package:latin_practice/models/exercise.dart' show ExerciseKind;
 
 import 'support/gen_course.dart';
 
@@ -134,6 +136,64 @@ void main() {
         loadCourses(),
         _stateError([courses[at].gameRules, '"$id"']),
         reason: 'seed $seed',
+      );
+    }
+  });
+
+  // Generators: drawCourse and courseListAssets (reused, gen_course.dart);
+  // gameRulesYaml takes the `kinds` of its rules. The kind names are the retired ones
+  // (static examples, spelled in parts so no search finds them) then drawn
+  // names that no kind has.
+  final retired = [
+    'lat'
+        'De'
+        'Wahl',
+    'de'
+        'Lat'
+        'Wahl',
+    'de'
+        'Lat'
+        'Tippen',
+  ];
+  Iterable<String> unknownKinds(Random rng) sync* {
+    yield* retired;
+    for (var i = 0; i < _seeds; i++) {
+      yield 'kind${rng.nextInt(1 << 30)}';
+    }
+  }
+
+  test('a game rule that names an exercise kind the app does not have '
+      'throws and names the game rules file and the kind', () async {
+    final rng = Random(5);
+    var seed = 0;
+    for (final kind in unknownKinds(rng)) {
+      seed++;
+      final course = drawCourse(Random(seed), 'c0');
+      final assets = courseListAssets([course], Random(seed));
+      assets[course.gameRules] = gameRulesYaml([], kinds: [kind]);
+      _serve(assets);
+      await expectLater(
+        loadCourses(),
+        _stateError([course.gameRules, '"$kind"']),
+        reason: kind,
+      );
+    }
+  });
+
+  test('the load check refuses an unknown exercise kind and accepts every '
+      'kind the app has', () {
+    final rng = Random(6);
+    final spec = drawCourse(rng, 'c0');
+    final course = Course.parse(spec.path, courseYaml(spec, rng));
+    GameRules rules(String kind) =>
+        GameRules.parse(gameRulesYaml([], kinds: [kind]), spec.gameRules);
+    for (final kind in ExerciseKind.values) {
+      checkCourses([(course, rules(kind.name))]);
+    }
+    for (final kind in unknownKinds(rng)) {
+      expect(
+        () => checkCourses([(course, rules(kind))]),
+        _stateError([spec.gameRules, '"$kind"']),
       );
     }
   });

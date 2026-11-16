@@ -55,7 +55,7 @@ final class BuiltWrong extends Cell {
   String toString() => '${word.id}@$key:$text';
 }
 
-enum View { latin, german, lemma, label }
+enum View { form, meaning, lemma, label }
 
 /// Turns a cell into the texts a learner may read or give for it.
 abstract interface class ViewProvider {
@@ -70,8 +70,8 @@ abstract interface class ViewProvider {
   Object styleOf(Cell c);
 }
 
-final class _LatinView implements ViewProvider {
-  const _LatinView();
+final class _FormView implements ViewProvider {
+  const _FormView();
 
   @override
   bool covers(Cell c) => true;
@@ -95,8 +95,8 @@ const _subjunctiveFrame = {
   'plusq': 'Ich fragte, ob {}.',
 };
 
-final class _GermanView implements ViewProvider {
-  const _GermanView(this.german);
+final class _MeaningView implements ViewProvider {
+  const _MeaningView(this.german);
 
   final GermanForms german;
 
@@ -150,14 +150,14 @@ final class _LabelView implements ViewProvider {
 
 /// An index over the words of an [ExerciseContext]; built per call.
 final class Cube {
-  Cube(this.ctx) : _german = _GermanView(ctx.german);
+  Cube(this.ctx) : _german = _MeaningView(ctx.german);
 
   final ExerciseContext ctx;
-  final _GermanView _german;
+  final _MeaningView _german;
 
   ViewProvider view(View v) => switch (v) {
-    View.latin => const _LatinView(),
-    View.german => _german,
+    View.form => const _FormView(),
+    View.meaning => _german,
     View.lemma => const _LemmaView(),
     View.label => const _LabelView(),
   };
@@ -279,7 +279,7 @@ final class Cube {
   /// Whether the Latin texts of [a] and [b] clash once macrons are ignored,
   /// as a typed answer and a plain reading of the text do.
   bool lookAlike(Cell a, Cell b) {
-    final latin = view(View.latin);
+    final latin = view(View.form);
     final lang = a.word.lang;
     bool fitsPlain(Cell target, Cell c) => latin
         .accepted(c)
