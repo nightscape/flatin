@@ -463,6 +463,31 @@ class AppSteps {
     );
   }
 
+  /// What the failed dropdown wait can say about the screen, from what exists.
+  Future<String> _describeClassificationScreen(WidgetTester tester) async {
+    final screen = find.byType(WordClassificationScreen);
+    if (screen.evaluate().isEmpty) {
+      final onScreen = find
+          .byWidgetPredicate((w) => w.runtimeType.toString().endsWith('Screen'))
+          .evaluate()
+          .map((e) => e.widget.runtimeType)
+          .toSet();
+      return 'the classification screen is not open; screens on screen: '
+          '${onScreen.isEmpty ? 'none' : onScreen.join(', ')}';
+    }
+    if (find.byKey(const Key('wordClassification.word')).evaluate().isEmpty) {
+      return 'no word is shown';
+    }
+    final container = ProviderScope.containerOf(tester.element(screen));
+    final (:word, :item, :enabled) = _shownWord(
+      tester,
+      await container.read(practicableItemsByFileProvider.future),
+      await container.read(courseFilterProvider.future),
+      await container.read(examLanguageProvider.future),
+    );
+    return 'word "$word" ("${item.translation}"), enabled forms $enabled';
+  }
+
   /// Pumps until the first row of classification dropdowns is on screen; a
   /// timeout names the drawn word and its enabled forms.
   Future<void> _waitForClassificationDropdowns(WidgetTester tester) async {
@@ -472,23 +497,7 @@ class AppSteps {
     final deadline = DateTime.now().add(const Duration(seconds: 30));
     while (dropdowns.evaluate().isEmpty) {
       if (DateTime.now().isAfter(deadline)) {
-        final container = ProviderScope.containerOf(
-          tester.element(find.byType(WordClassificationScreen)),
-        );
-        final shown = find.byKey(const Key('wordClassification.word'));
-        final String drawn;
-        if (shown.evaluate().isEmpty) {
-          drawn = 'no word is shown';
-        } else {
-          final (:word, :item, :enabled) = _shownWord(
-            tester,
-            await container.read(practicableItemsByFileProvider.future),
-            await container.read(courseFilterProvider.future),
-            await container.read(examLanguageProvider.future),
-          );
-          drawn =
-              'word "$word" ("${item.translation}"), enabled forms $enabled';
-        }
+        final drawn = await _describeClassificationScreen(tester);
         fail('No classification.0.* dropdown after 30 s: $drawn');
       }
       await tester.pump(const Duration(milliseconds: 100));
