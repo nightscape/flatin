@@ -40,5 +40,32 @@ void main() {
       },
       timeout: const Timeout(Duration(minutes: 2)),
     );
+    testWidgets(
+      'the word wait on the $name screen says the classification screen is not open',
+      (tester) async {
+        await seedEverythingDue(const {});
+        await tester.pumpWidget(wrapInApp(screen));
+        await tester.pumpAndSettle();
+
+        Object? error;
+        try {
+          await AppSteps().iWaitForWord(tester);
+        } catch (e) {
+          error = e;
+        }
+        expect(
+          error,
+          isA<TestFailure>().having(
+            (e) => e.message,
+            'message',
+            allOf(
+              contains('classification screen is not open'),
+              contains('${screen.runtimeType}'),
+            ),
+          ),
+        );
+      },
+      timeout: const Timeout(Duration(minutes: 2)),
+    );
   }
 }
