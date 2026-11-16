@@ -18,20 +18,15 @@ import '../support/round_driver.dart';
 import '../support/word_classification_harness.dart' show letItLoad;
 import 'toy_assets.dart';
 
-typedef TracerStep = ({
-  String id,
-  bool red,
-  Future<void> Function(WidgetTester) run,
-});
+typedef TracerStep = ({String id, Future<void> Function(WidgetTester) run});
 
-/// The app run with only the toy course. A step marked `red` is listed in
-/// test/tracer/KNOWN_RED.md with its first error; it fails here either way,
-/// and when it passes the failure says to unmark it.
+/// The app run with only the toy course: a Latin fact left in the code makes
+/// a step fail.
 final tracerSteps = <TracerStep>[
-  (id: 'home', red: true, run: _home),
-  (id: 'round', red: true, run: _round),
-  (id: 'settings', red: true, run: _settings),
-  (id: 'exam-import', red: true, run: _examImport),
+  (id: 'home', run: _home),
+  (id: 'round', run: _round),
+  (id: 'settings', run: _settings),
+  (id: 'exam-import', run: _examImport),
 ];
 
 const _toyFile = 'toy_words';
@@ -119,12 +114,6 @@ void main() {
   for (final step in tracerSteps) {
     testWidgets('the app runs the toy course: ${step.id}', (tester) async {
       await step.run(tester);
-      if (step.red) {
-        fail(
-          '${step.id} passes: mark it green in tracerSteps and drop its '
-          'line from test/tracer/KNOWN_RED.md',
-        );
-      }
     });
   }
 }

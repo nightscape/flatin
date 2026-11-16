@@ -21,7 +21,10 @@ late Curriculum _curriculum;
 late LessonData _lessons;
 
 CourseFilter _filter(int upToLesson) => CourseFilter(
-  Settings(courseWords: LessonRange(1, upToLesson)),
+  Settings(
+    lastLesson: latinLastLesson,
+    courseWords: LessonRange(1, upToLesson),
+  ),
   _curriculum,
   _lessons,
 );
@@ -77,7 +80,7 @@ void main() {
     _lessons = await loadLessonData(latinCourse.books);
     await FsrsStorage.syncCards(_items);
     all = await FsrsStorage.syncGrammarCards(_items);
-    filter = _filter(laterLesson);
+    filter = _filter(latinLaterLesson);
     final verbs = _items.where((i) => i.dataFileId == 'verbs');
     amare = verbs.firstWhere((i) => i.id == 'verbs:laudare');
     vocare = verbs.firstWhere((i) => i.id == 'verbs:vocare');

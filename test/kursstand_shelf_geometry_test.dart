@@ -10,6 +10,7 @@ import 'package:latin_practice/models/lesson_range.dart';
 
 import 'support/kursstand_shelf_driver.dart';
 import 'support/kursstand_sliders_harness.dart';
+import 'support/latin_course.dart' show latinLaterLesson;
 
 const _squeezed = 22.0;
 
@@ -31,8 +32,8 @@ void main() {
     void check(String when) {
       final scale = probe.scale;
       final tops = probe.tops;
-      expect(tops, hasLength(laterLesson));
-      for (var l = 1; l <= laterLesson; l++) {
+      expect(tops, hasLength(latinLaterLesson));
+      for (var l = 1; l <= latinLaterLesson; l++) {
         expect(
           (tops[l - 1].dx - scale.x(l)).abs(),
           lessThanOrEqualTo(0.5),

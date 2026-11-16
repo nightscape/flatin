@@ -9,17 +9,30 @@ import 'package:latin_practice/screens/settings_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'support/word_classification_harness.dart';
+import 'support/latin_course.dart' show latinLastLesson;
 
 const _storeKey = 'practice_settings';
 
 void main() {
   test('macron twins are avoided unless stored settings say otherwise', () {
-    expect(Settings().avoidFoldTwins, isTrue);
-    final json = Settings().toJson()..remove('avoidMacronTwins');
-    expect(Settings.fromJson(json).avoidFoldTwins, isTrue);
+    expect(Settings(lastLesson: latinLastLesson).avoidFoldTwins, isTrue);
+    final json = Settings(lastLesson: latinLastLesson).toJson()
+      ..remove('avoidMacronTwins');
+    expect(
+      Settings.fromJson(json, lastLesson: latinLastLesson).avoidFoldTwins,
+      isTrue,
+    );
     final back = Settings.fromJson(
-      jsonDecode(jsonEncode(Settings(avoidFoldTwins: false).toJson()))
+      jsonDecode(
+            jsonEncode(
+              Settings(
+                lastLesson: latinLastLesson,
+                avoidFoldTwins: false,
+              ).toJson(),
+            ),
+          )
           as Map<String, dynamic>,
+      lastLesson: latinLastLesson,
     );
     expect(back.avoidFoldTwins, isFalse);
   });
@@ -66,6 +79,7 @@ void main() {
               (await SharedPreferences.getInstance()).getString(_storeKey)!,
             )
             as Map<String, dynamic>,
+        lastLesson: latinLastLesson,
       );
       expect(stored.avoidFoldTwins, isFalse);
     },

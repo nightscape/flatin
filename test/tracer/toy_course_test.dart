@@ -9,12 +9,11 @@ import 'package:latin_practice/grammar/engine.dart';
 import 'package:latin_practice/grammar/schema.dart';
 import 'package:latin_practice/models/practice_item.dart';
 
+import '../support/latin_course.dart' show lastLessonOf;
 import 'toy_assets.dart';
-import 'toy_course_boot_test.dart' show tracerSteps;
 import 'package:latin_practice/models/course.dart';
 
 final _latin = RegExp(r'[āēīōūȳĀĒĪŌŪȲăĕĭŏŭ]|latin_|\b(nouns|verbs|vocab)\b');
-final _knownRed = RegExp(r'^- ([a-z-]+): (\S.*)$');
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -31,8 +30,6 @@ void main() {
     }
   });
 
-  // The books' lesson range is checked against lastLesson by loadLessonData,
-  // which the tracer's home step lists; Curriculum.parse reads their schema.
   test('the toy course parses with the app parsers', () {
     final words = parseGrammarFiles(lang: courseLanguage(toyCourse), {
       'toy_words.yaml': File('$toyDir/toy_words.yaml').readAsStringSync(),
@@ -58,7 +55,9 @@ void main() {
     final books = [
       for (final path in toyCourse.books) File(path).readAsStringSync(),
     ];
-    Curriculum.parse(books, {words.dataFileId: shape});
+    Curriculum.parse(books, {
+      words.dataFileId: shape,
+    }, lastLesson: lastLessonOf(toyCourse));
 
     expect(
       parseSentenceCorpus(
@@ -70,21 +69,6 @@ void main() {
     parseExam(
       File('$toyDir/toy.exam').readAsStringSync(),
       Language.parse(File('$toyDir/toy_language.yaml').readAsStringSync()),
-    );
-  });
-
-  test('KNOWN_RED.md lists exactly the red steps of the tracer, each with '
-      'its first error', () {
-    final listed = [
-      for (final line in File('test/tracer/KNOWN_RED.md').readAsLinesSync())
-        if (_knownRed.firstMatch(line) case final m?) m[1]!,
-    ];
-    expect(
-      listed,
-      unorderedEquals([
-        for (final step in tracerSteps)
-          if (step.red) step.id,
-      ]),
     );
   });
 }

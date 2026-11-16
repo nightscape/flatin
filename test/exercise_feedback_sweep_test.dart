@@ -9,7 +9,6 @@ import 'package:latin_practice/data/exercise_spec.dart' show OneSentence;
 import 'package:latin_practice/data/german_forms.dart';
 import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/data/sentences.dart';
-import 'package:latin_practice/models/lesson_range.dart';
 import 'package:latin_practice/models/exercise.dart';
 import 'package:latin_practice/models/practice_item.dart';
 import 'package:latin_practice/providers/fsrs_provider.dart';
@@ -17,6 +16,7 @@ import 'package:latin_practice/providers/locale_provider.dart';
 
 import 'exercise_pair_sweep_test.dart' show sweep;
 import 'support/grammar_exercise_harness.dart';
+import 'support/latin_course.dart' show latinLaterLesson;
 
 final _everyBundle = Expando<Set<GrammarBundle>>();
 
@@ -129,7 +129,7 @@ void main() {
       pool: items,
       german: forms,
       sentences: corpus,
-      reachedLesson: laterLesson,
+      reachedLesson: latinLaterLesson,
     );
     sweep(
       items,

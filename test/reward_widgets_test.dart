@@ -29,12 +29,14 @@ void main() {
   group('reward settings', () {
     test('the switches survive a JSON round trip', () {
       final settings = Settings(
+        lastLesson: latinLastLesson,
         disabledRewards: {'town'},
         rewardAnimation: false,
       );
 
       final back = Settings.fromJson(
         jsonDecode(jsonEncode(settings.toJson())) as Map<String, dynamic>,
+        lastLesson: latinLastLesson,
       );
 
       expect(back.disabledRewards, {'town'});
@@ -42,11 +44,11 @@ void main() {
     });
 
     test('stored settings without reward fields load with everything on', () {
-      final json = Settings().toJson()
+      final json = Settings(lastLesson: latinLastLesson).toJson()
         ..remove('disabledRewards')
         ..remove('rewardAnimation');
 
-      final loaded = Settings.fromJson(json);
+      final loaded = Settings.fromJson(json, lastLesson: latinLastLesson);
 
       expect(loaded.disabledRewards, isEmpty);
       expect(loaded.rewardAnimation, isTrue);
@@ -75,7 +77,10 @@ void main() {
     });
 
     test('a reward that cannot be switched off is refused', () {
-      expect(() => Settings().toggleReward('days'), throwsAssertionError);
+      expect(
+        () => Settings(lastLesson: latinLastLesson).toggleReward('days'),
+        throwsAssertionError,
+      );
     });
 
     testWidgets('the settings screen offers the three switches and stores a '
@@ -110,6 +115,7 @@ void main() {
               (await SharedPreferences.getInstance()).getString(_storeKey)!,
             )
             as Map<String, dynamic>,
+        lastLesson: latinLastLesson,
       );
       expect(stored.disabledRewards, {'town'});
     });
@@ -211,41 +217,57 @@ void main() {
     testWidgets('shows the bonus next to the points only when above 0', (
       tester,
     ) async {
-      await pumpBurst(tester, Settings(), bonus: 10);
+      await pumpBurst(tester, Settings(lastLesson: latinLastLesson), bonus: 10);
       expect(find.text('🪙 +10'), findsOneWidget);
       expect(find.text('⭐ +10'), findsOneWidget);
       await tester.pumpAndSettle();
     });
 
     testWidgets('marks multiplied gains with the factor', (tester) async {
-      await pumpBurst(tester, Settings(), bonus: 10, factor: 2);
+      await pumpBurst(
+        tester,
+        Settings(lastLesson: latinLastLesson),
+        bonus: 10,
+        factor: 2,
+      );
       expect(find.text('🪙 +10 (×2)'), findsOneWidget);
       expect(find.text('⭐ +10 (×2)'), findsOneWidget);
       await tester.pumpAndSettle();
     });
 
     testWidgets('shows no bonus text without a bonus', (tester) async {
-      await pumpBurst(tester, Settings());
+      await pumpBurst(tester, Settings(lastLesson: latinLastLesson));
       expect(find.text('🪙 +10'), findsOneWidget);
       expect(find.textContaining('⭐'), findsNothing);
       await tester.pumpAndSettle();
     });
 
     testWidgets('is absent when the animation is switched off', (tester) async {
-      await pumpBurst(tester, Settings(rewardAnimation: false));
+      await pumpBurst(
+        tester,
+        Settings(lastLesson: latinLastLesson, rewardAnimation: false),
+      );
       expect(find.text('🪙 +10'), findsNothing);
     });
 
     testWidgets('is absent when the device disables animations', (
       tester,
     ) async {
-      await pumpBurst(tester, Settings(), disableAnimations: true);
+      await pumpBurst(
+        tester,
+        Settings(lastLesson: latinLastLesson),
+        disableAnimations: true,
+      );
       expect(find.text('🪙 +10'), findsNothing);
     });
 
     testWidgets('shows, moves up and is gone after 700 ms', (tester) async {
       var taps = 0;
-      await pumpBurst(tester, Settings(), onTapBelow: () => taps++);
+      await pumpBurst(
+        tester,
+        Settings(lastLesson: latinLastLesson),
+        onTapBelow: () => taps++,
+      );
       final start = tester.getTopLeft(find.text('🪙 +10')).dy;
 
       await tester.tap(find.text('🪙 +10'), warnIfMissed: false);

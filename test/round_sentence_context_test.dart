@@ -18,7 +18,7 @@ import 'package:latin_practice/providers/locale_provider.dart';
 import 'package:latin_practice/providers/round_providers.dart';
 
 import 'support/course_providers.dart';
-import 'support/latin_course.dart' show latinLang;
+import 'support/latin_course.dart' show latinLang, latinLastLesson;
 
 /// A recognition kind that asks a sentence, so a fresh card tries it first.
 const _sentenceKind = SpecGenerator(
@@ -87,6 +87,7 @@ void main() {
     };
     seedSettings(
       Settings(
+        lastLesson: latinLastLesson,
         courseWords: LessonRange(1, 25),
         deselectedWords: {
           for (final w in await loadAllPracticeItems())
@@ -109,7 +110,9 @@ void main() {
 
   test('a learner at lesson 1 gets no sentence: the build names the '
       'reached lesson', () async {
-    seedSettings(Settings(courseWords: LessonRange(1, 1)));
+    seedSettings(
+      Settings(lastLesson: latinLastLesson, courseWords: LessonRange(1, 1)),
+    );
     final c = _container([_sentenceKind], 0);
     await expectLater(
       c.read(roundProvider(const MixedRound(FileFocus('verbs'))).future),

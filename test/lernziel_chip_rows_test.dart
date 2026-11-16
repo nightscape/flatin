@@ -77,8 +77,10 @@ void _expectRows(
   ]) {
     final shown = _row(tester, words: words);
     expect(shown, [
-      for (final p in presets) (lernzielLabel(p, _later), p == range),
-      if (!presets.contains(range)) (lernzielLabel(range, _later), true),
+      for (final p in presets)
+        (lernzielLabel(p, _later, latinLaterLesson), p == range),
+      if (!presets.contains(range))
+        (lernzielLabel(range, _later, latinLaterLesson), true),
     ], reason: '$why: the ${words ? 'word' : 'grammar'} row');
     expect(shown.where((c) => c.$2), hasLength(1), reason: why);
   }
@@ -94,21 +96,35 @@ void main() {
     ))!.bookStarts;
     final container = await _pump(tester, const SettingsScreen());
     final fixed = [
-      Settings(courseWords: LessonRange(1, 1), kursstand: 1),
-      Settings(courseWords: LessonRange(21, 21), kursstand: 21),
-      Settings(courseWords: LessonRange(21, 24), kursstand: 24),
       Settings(
+        lastLesson: latinLastLesson,
+        courseWords: LessonRange(1, 1),
+        kursstand: 1,
+      ),
+      Settings(
+        lastLesson: latinLastLesson,
+        courseWords: LessonRange(21, 21),
+        kursstand: 21,
+      ),
+      Settings(
+        lastLesson: latinLastLesson,
+        courseWords: LessonRange(21, 24),
+        kursstand: 24,
+      ),
+      Settings(
+        lastLesson: latinLastLesson,
         courseWords: LessonRange(3, 30),
         courseGrammar: LessonRange(24, 24),
         grammarToLinked: false,
         kursstand: 24,
       ),
       Settings(
-        courseWords: LessonRange(25, laterLesson),
+        lastLesson: latinLastLesson,
+        courseWords: LessonRange(25, latinLaterLesson),
         grammarFromLinked: true,
         kursstand: 24,
       ),
-      Settings(kursstand: lastLesson),
+      Settings(lastLesson: latinLastLesson, kursstand: latinLastLesson),
     ];
     final rng = Random(3513);
     final cases = [
@@ -130,7 +146,7 @@ void main() {
       final chip = find.byKey(
         Key(
           'lernziel.${words ? 'words' : 'grammar'}.'
-          '${lernzielLabel(preset, _later)}',
+          '${lernzielLabel(preset, _later, latinLaterLesson)}',
         ),
       );
       await tester.ensureVisible(chip);
@@ -146,7 +162,7 @@ void main() {
       expect(shelf.grammar, oracle.courseGrammar, reason: '$why: grammar');
       _expectRows(tester, tapped, starts, '$why, after the tap');
 
-      final n = 1 + rng.nextInt(lastLesson);
+      final n = 1 + rng.nextInt(latinLastLesson);
       await container.read(settingsProvider.notifier).setKursstand(n);
       await letItLoad(tester);
       final moved = container.read(settingsProvider).requireValue;
@@ -166,6 +182,7 @@ void main() {
   ) async {
     final container = await _pump(tester, const HomeScreen());
     final s = Settings(
+      lastLesson: latinLastLesson,
       courseWords: LessonRange(21, 24),
       courseGrammar: LessonRange(24, 24),
       grammarToLinked: false,

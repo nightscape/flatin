@@ -9,6 +9,7 @@ import '../data/languages/language.dart' show Language;
 import '../data/lesson_data.dart';
 import '../models/course.dart';
 import '../data/settings_conversion.dart';
+import 'lesson_provider.dart';
 
 part 'settings_provider.g.dart';
 
@@ -18,22 +19,26 @@ class SettingsNotifier extends _$SettingsNotifier {
 
   @override
   Future<Settings> build() async {
-    return await _loadSettings();
+    final lastLesson = (await ref.watch(lessonDataProvider.future)).lastLesson;
+    return await _loadSettings(lastLesson);
   }
 
-  Future<Settings> _loadSettings() async {
+  Future<Settings> _loadSettings(int lastLesson) async {
     final prefs = await SharedPreferences.getInstance();
     final settingsJson = prefs.getString(_settingsKey);
 
     if (settingsJson == null) {
-      return Settings();
+      return Settings(lastLesson: lastLesson);
     }
 
     final json = jsonDecode(settingsJson) as Map<String, dynamic>;
     if (json[settingsVersionField] == settingsVersion) {
-      return Settings.fromJson(json);
+      return Settings.fromJson(json, lastLesson: lastLesson);
     }
-    final converted = Settings.fromJson(await _convert(json));
+    final converted = Settings.fromJson(
+      await _convert(json),
+      lastLesson: lastLesson,
+    );
     await _saveSettings(converted);
     return converted;
   }

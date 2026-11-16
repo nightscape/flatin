@@ -10,12 +10,13 @@ import 'package:latin_practice/screens/home_screen.dart';
 
 import 'support/course_providers.dart';
 import 'support/word_classification_harness.dart';
+import 'support/latin_course.dart' show latinLastLesson;
 
 void main() {
   testWidgets(
     'the home entry does not open a non-due item before the due list loads',
     (tester) async {
-      seedSettings(Settings());
+      seedSettings(Settings(lastLesson: latinLastLesson));
       final nouns = await loadPracticeItems('lib/data/latin_nouns.yaml');
       final due = Completer<Map<String, List<PracticeItem>>>();
 

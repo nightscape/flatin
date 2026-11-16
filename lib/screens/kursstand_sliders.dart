@@ -162,7 +162,8 @@ class _KursstandSlidersState extends State<KursstandSliders>
         translationParams: params,
       );
 
-  String _stop(int lesson) => lesson == laterLesson ? _tr('later') : 'L$lesson';
+  String _stop(int lesson) =>
+      lesson == _settings.laterLesson ? _tr('later') : 'L$lesson';
 
   List<int> get _thumbLessons => [
     _words.from,
@@ -186,7 +187,13 @@ class _KursstandSlidersState extends State<KursstandSliders>
       for (var b = 0; b < widget.bookStarts.length; b++)
         [
           for (var t = 0; t < 4; t++)
-            if (bookIndex(widget.bookStarts, lessons[t]) == b) _weight(t),
+            if (bookIndex(
+                  widget.bookStarts,
+                  lessons[t],
+                  _settings.laterLesson,
+                ) ==
+                b)
+              _weight(t),
         ].fold(0.0, max),
     ];
   }
@@ -204,6 +211,7 @@ class _KursstandSlidersState extends State<KursstandSliders>
     shelfInset,
     _trackWidth,
     kursstand: _settings.kursstand,
+    laterLesson: _settings.laterLesson,
   );
 
   /// Changes the widths only when the dragged ribbon entered another book.
@@ -212,6 +220,7 @@ class _KursstandSlidersState extends State<KursstandSliders>
     final book = bookIndex(
       widget.bookStarts,
       _thumbLessons[_thumb(grip.words, grip.start)],
+      _settings.laterLesson,
     );
     if (book == drag.book) return;
     _drag = (unit: drag.unit, book: book);
@@ -233,8 +242,8 @@ class _KursstandSlidersState extends State<KursstandSliders>
     final after = _thumbLessons;
     var moved = false;
     for (var t = 0; t < 4; t++) {
-      if (bookIndex(widget.bookStarts, before[t]) !=
-          bookIndex(widget.bookStarts, after[t])) {
+      if (bookIndex(widget.bookStarts, before[t], _settings.laterLesson) !=
+          bookIndex(widget.bookStarts, after[t], _settings.laterLesson)) {
         _touch(t);
         moved = true;
       }
@@ -351,7 +360,13 @@ class _KursstandSlidersState extends State<KursstandSliders>
     final thumb = _thumb(grip.words, grip.start);
     _drag = (
       unit: ((_fingerX - grip.offset - shelfInset) / _trackWidth).clamp(0, 1),
-      book: _drag?.book ?? bookIndex(widget.bookStarts, _thumbLessons[thumb]),
+      book:
+          _drag?.book ??
+          bookIndex(
+            widget.bookStarts,
+            _thumbLessons[thumb],
+            _settings.laterLesson,
+          ),
     );
     _touch(thumb);
     _followFinger();
@@ -423,7 +438,7 @@ class _KursstandSlidersState extends State<KursstandSliders>
   Widget _thumbSemantics(bool words, bool start) {
     final r = words ? _words : _grammar;
     final lesson = start ? r.from : r.to;
-    final up = lesson < (start ? r.to : laterLesson);
+    final up = lesson < (start ? r.to : _settings.laterLesson);
     final down = lesson > (start ? 1 : r.from);
     void step(int by) => setState(() {
       final next = start

@@ -7,11 +7,13 @@ import 'package:latin_practice/providers/fsrs_provider.dart';
 
 import 'support/course_providers.dart';
 import 'support/legacy_selection.dart';
+import 'support/latin_course.dart' show latinLastLesson;
 
 /// A learner who switched words, a type and two forms off by hand and whose
 /// course still covers everything: what the app practises must be what the
 /// settings alone practised before the course filter existed.
 final _byHand = Settings(
+  lastLesson: latinLastLesson,
   deselectedWords: {'rosa', 'dominus'},
   disabledTypes: {
     'nouns': {'U-Deklination'},

@@ -4,8 +4,8 @@ import '../models/course.dart';
 import '../models/form_label.dart';
 import '../models/lesson_range.dart';
 import 'asset_text.dart';
+import 'lesson_data.dart' show loadLessonData;
 import 'languages/language.dart' show Language;
-import 'lesson_data.dart' show lastLesson;
 import 'practice_data.dart';
 
 /// What a curriculum is checked against: the role, the form labels and the
@@ -92,6 +92,12 @@ final class Curriculum {
   /// syntax topic id -> the lesson that teaches it.
   final Map<String, int> _syntaxLessons;
 
+  /// The highest lesson of the course.
+  final int lastLesson;
+
+  /// The stop beyond [lastLesson]: where the `later:` entry sits.
+  int get laterLesson => lastLesson + 1;
+
   const Curriculum._(
     this._formTopics,
     this._typeTopics,
@@ -100,6 +106,7 @@ final class Curriculum {
     this._labels,
     this._baseForms,
     this._syntaxLessons,
+    this.lastLesson,
   );
 
   /// [syntaxTopics] are the ids a `syntax:` entry may name (see
@@ -108,6 +115,7 @@ final class Curriculum {
     List<String> yamlSources,
     Map<String, DataFileShape> shapes, {
     Set<String> syntaxTopics = const {},
+    required int lastLesson,
   }) {
     final syntaxLessons = <String, int>{};
     final selectors = {for (final id in shapes.keys) id: <_Selector>[]};
@@ -138,7 +146,7 @@ final class Curriculum {
         }
       }
       if (book['later'] != null) {
-        grammars.add((laterLesson, book['later'] as YamlMap));
+        grammars.add((lastLesson + 1, book['later'] as YamlMap));
       }
       for (final (lesson, grammar) in grammars) {
         for (final topic in (grammar['syntax'] as YamlList? ?? const [])) {
@@ -223,6 +231,7 @@ final class Curriculum {
           key: value.baseForm,
       },
       syntaxLessons,
+      lastLesson,
     );
   }
 
@@ -278,14 +287,14 @@ final class Curriculum {
   /// The (axis, code) of the form of [dataFileId] that spells the lemma.
   (String, String) baseFormOf(String dataFileId) => _baseForms[dataFileId]!;
 
+  int? _courseLesson(int? lesson) => lesson == laterLesson ? null : lesson;
+
   bool taughtForm(String dataFileId, FormKey key, LessonRange range) =>
       range.contains(formLesson(dataFileId, key));
 
   bool taughtType(String dataFileId, String typeName, LessonRange range) =>
       range.contains(typeLesson(dataFileId, typeName));
 }
-
-int? _courseLesson(int? lesson) => lesson == laterLesson ? null : lesson;
 
 Map<String, Set<String>> _parseSelector(
   YamlMap selector,
@@ -380,5 +389,6 @@ Future<Curriculum> loadCurriculum(List<String> assets) async {
     [for (final asset in assets) await loadAssetText(asset)],
     shapes,
     syntaxTopics: syntaxTopicIds(await loadLanguage()),
+    lastLesson: (await loadLessonData(assets)).lastLesson,
   );
 }

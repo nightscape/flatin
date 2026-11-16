@@ -18,6 +18,7 @@ import 'support/exercise_invariants.dart';
 import 'support/gen_exam.dart';
 import 'support/gen_settings.dart';
 import 'support/word_classification_harness.dart';
+import 'support/latin_course.dart' show latinLastLesson;
 
 const _packs = 12;
 
@@ -174,7 +175,11 @@ void main() {
       for (final einheit in Uebersetzungseinheit.values) {
         final why = '$name, ${einheit.name}';
         final units = _expected(pack, einheit);
-        await _open(tester, pack, Settings(uebersetzungseinheit: einheit));
+        await _open(
+          tester,
+          pack,
+          Settings(lastLesson: latinLastLesson, uebersetzungseinheit: einheit),
+        );
         await _revealAll(tester, pack, units.length);
         final allTokens = [
           for (final s in _saetze(pack))
@@ -220,7 +225,11 @@ void main() {
         await _open(
           tester,
           pack,
-          Settings(uebersetzungseinheit: einheit, punkteAnzeige: true),
+          Settings(
+            lastLesson: latinLastLesson,
+            uebersetzungseinheit: einheit,
+            punkteAnzeige: true,
+          ),
           size: const Size(360, 640),
         );
         for (var step = 0; step < 40; step++) {
@@ -321,7 +330,7 @@ void main() {
       await _open(
         tester,
         pack,
-        Settings(uebersetzungseinheit: einheit),
+        Settings(lastLesson: latinLastLesson, uebersetzungseinheit: einheit),
         stored: {'fsrs_cards': stored},
       );
       final helped = <String>{};

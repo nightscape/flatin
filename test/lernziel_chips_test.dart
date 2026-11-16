@@ -70,8 +70,8 @@ void _checkRow(LessonRange range, List<LessonRange> presets, String when) {
     reason: '$when: the presets in order',
   );
   expect(
-    lernzielLabel(selected.single.preset ?? range, _later),
-    lernzielLabel(range, _later),
+    lernzielLabel(selected.single.preset ?? range, _later, latinLaterLesson),
+    lernzielLabel(range, _later, latinLaterLesson),
     reason: '$when: the selected label names the range',
   );
 }
@@ -86,7 +86,7 @@ void main() {
   });
 
   test('the presets are the distinct ranges up to the Kursstand', () {
-    for (var k = 1; k <= lastLesson; k++) {
+    for (var k = 1; k <= latinLastLesson; k++) {
       final presets = chipsFor(k, bookStarts);
       expect(presets, _presetsOracle(k, bookStarts), reason: 'Kursstand $k');
       expect(presets.toSet(), hasLength(presets.length), reason: 'L$k');
@@ -106,23 +106,31 @@ void main() {
       LessonRange(21, 24),
       LessonRange(1, 24),
     ]);
-    expect(chipsFor(lastLesson, bookStarts), [
-      LessonRange(lastLesson, lastLesson),
-      LessonRange(21, lastLesson),
-      LessonRange(1, lastLesson),
+    expect(chipsFor(latinLastLesson, bookStarts), [
+      LessonRange(latinLastLesson, latinLastLesson),
+      LessonRange(21, latinLastLesson),
+      LessonRange(1, latinLastLesson),
     ]);
   });
 
   test('every range has its own label', () {
     final ranges = [
-      for (var from = 1; from <= laterLesson; from++)
-        for (var to = from; to <= laterLesson; to++) LessonRange(from, to),
+      for (var from = 1; from <= latinLaterLesson; from++)
+        for (var to = from; to <= latinLaterLesson; to++) LessonRange(from, to),
     ];
-    final labels = {for (final r in ranges) lernzielLabel(r, _later)};
+    final labels = {
+      for (final r in ranges) lernzielLabel(r, _later, latinLaterLesson),
+    };
     expect(labels, hasLength(ranges.length));
-    expect(lernzielLabel(LessonRange(24, 24), _later), 'L24');
-    expect(lernzielLabel(LessonRange(20, 24), _later), 'L20–L24');
-    expect(lernzielLabel(LessonRange(3, laterLesson), _later), 'L3–Später');
+    expect(lernzielLabel(LessonRange(24, 24), _later, latinLaterLesson), 'L24');
+    expect(
+      lernzielLabel(LessonRange(20, 24), _later, latinLaterLesson),
+      'L20–L24',
+    );
+    expect(
+      lernzielLabel(LessonRange(3, latinLaterLesson), _later, latinLaterLesson),
+      'L3–Später',
+    );
   });
 
   test('each row selects exactly one chip for any range and Kursstand', () {
@@ -137,10 +145,10 @@ void main() {
       (24, LessonRange(1, 24)),
       (24, LessonRange(20, 24)),
       (24, LessonRange(25, 30)),
-      (24, LessonRange(3, laterLesson)),
-      (lastLesson, LessonRange(lastLesson, lastLesson)),
-      (lastLesson, LessonRange(1, laterLesson)),
-      (lastLesson, LessonRange(laterLesson, laterLesson)),
+      (24, LessonRange(3, latinLaterLesson)),
+      (latinLastLesson, LessonRange(latinLastLesson, latinLastLesson)),
+      (latinLastLesson, LessonRange(1, latinLaterLesson)),
+      (latinLastLesson, LessonRange(latinLaterLesson, latinLaterLesson)),
     ];
     for (final (k, range) in fixed) {
       _checkRow(range, chipsFor(k, bookStarts), 'K$k, $range');
@@ -158,25 +166,32 @@ void main() {
   test('a preset tap sets its row and moves the other only by the link '
       'rule', () {
     final fixed = [
-      Settings(kursstand: 1),
-      Settings(courseWords: LessonRange(3, 30), kursstand: 21),
+      Settings(lastLesson: latinLastLesson, kursstand: 1),
       Settings(
+        lastLesson: latinLastLesson,
+        courseWords: LessonRange(3, 30),
+        kursstand: 21,
+      ),
+      Settings(
+        lastLesson: latinLastLesson,
         courseWords: LessonRange(25, 30),
-        courseGrammar: LessonRange(26, laterLesson),
+        courseGrammar: LessonRange(26, latinLaterLesson),
         grammarFromLinked: true,
         kursstand: 24,
       ),
       Settings(
+        lastLesson: latinLastLesson,
         courseWords: LessonRange(5, 10),
         courseGrammar: LessonRange(30, 35),
         grammarToLinked: false,
         kursstand: 24,
       ),
       Settings(
-        courseWords: LessonRange(1, laterLesson),
+        lastLesson: latinLastLesson,
+        courseWords: LessonRange(1, latinLaterLesson),
         grammarToLinked: false,
-        courseGrammar: LessonRange(2, laterLesson),
-        kursstand: lastLesson,
+        courseGrammar: LessonRange(2, latinLaterLesson),
+        kursstand: latinLastLesson,
       ),
     ];
     final rng = Random(3510);
@@ -223,18 +238,56 @@ void main() {
 
   test('after a Kursstand change the presets and the selection follow', () {
     final fixed = <(Settings, int)>[
-      (Settings(courseWords: LessonRange(1, 24), kursstand: 24), 25),
-      (Settings(courseWords: LessonRange(21, 24), kursstand: 24), 25),
-      (Settings(courseWords: LessonRange(20, 20), kursstand: 20), 21),
-      (Settings(courseWords: LessonRange(1, 2), kursstand: 2), 1),
-      (Settings(courseWords: LessonRange(30, 35), kursstand: 24), 25),
-      (Settings(kursstand: lastLesson), 1),
+      (
+        Settings(
+          lastLesson: latinLastLesson,
+          courseWords: LessonRange(1, 24),
+          kursstand: 24,
+        ),
+        25,
+      ),
+      (
+        Settings(
+          lastLesson: latinLastLesson,
+          courseWords: LessonRange(21, 24),
+          kursstand: 24,
+        ),
+        25,
+      ),
+      (
+        Settings(
+          lastLesson: latinLastLesson,
+          courseWords: LessonRange(20, 20),
+          kursstand: 20,
+        ),
+        21,
+      ),
+      (
+        Settings(
+          lastLesson: latinLastLesson,
+          courseWords: LessonRange(1, 2),
+          kursstand: 2,
+        ),
+        1,
+      ),
+      (
+        Settings(
+          lastLesson: latinLastLesson,
+          courseWords: LessonRange(30, 35),
+          kursstand: 24,
+        ),
+        25,
+      ),
+      (Settings(lastLesson: latinLastLesson, kursstand: latinLastLesson), 1),
     ];
     final rng = Random(3511);
     final cases = [
       ...fixed,
       for (var i = 0; i < 2000; i++)
-        (drawLernzielSettings(rng, bookStarts), 1 + rng.nextInt(lastLesson)),
+        (
+          drawLernzielSettings(rng, bookStarts),
+          1 + rng.nextInt(latinLastLesson),
+        ),
     ];
     for (final (i, (s, n)) in cases.indexed) {
       final next = s.withKursstand(n);

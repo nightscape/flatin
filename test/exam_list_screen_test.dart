@@ -13,6 +13,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'support/gen_exam.dart';
 import 'support/key_echo_i18n.dart';
 import 'support/word_classification_harness.dart';
+import 'support/latin_course.dart' show latinLastLesson;
 
 const _cases = 15;
 
@@ -116,7 +117,9 @@ void main() {
           },
       ];
       SharedPreferences.setMockInitialValues({
-        'practice_settings': jsonEncode(Settings().toJson()),
+        'practice_settings': jsonEncode(
+          Settings(lastLesson: latinLastLesson).toJson(),
+        ),
       });
       await tester.pumpWidget(const SizedBox());
       tester.view.physicalSize = const Size(1200, 4000);
@@ -193,7 +196,9 @@ void main() {
       ...'fung\n'.codeUnits,
     ]);
     SharedPreferences.setMockInitialValues({
-      'practice_settings': jsonEncode(Settings().toJson()),
+      'practice_settings': jsonEncode(
+        Settings(lastLesson: latinLastLesson).toJson(),
+      ),
     });
     await tester.pumpWidget(
       wrapInApp(

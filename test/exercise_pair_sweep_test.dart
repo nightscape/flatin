@@ -8,10 +8,10 @@ import 'package:latin_practice/data/german_forms.dart';
 import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/data/sentences.dart';
 import 'package:latin_practice/models/exercise.dart';
-import 'package:latin_practice/models/lesson_range.dart';
 import 'package:latin_practice/models/practice_item.dart';
 import 'package:latin_practice/providers/fsrs_provider.dart';
 import 'package:latin_practice/providers/locale_provider.dart';
+import 'support/latin_course.dart' show latinLaterLesson;
 
 const _seeds = [1, 2, 3];
 
@@ -116,7 +116,7 @@ void main() {
       pool: items,
       german: german,
       sentences: corpus,
-      reachedLesson: laterLesson,
+      reachedLesson: latinLaterLesson,
     );
     final held = {
       for (final s in corpus.sentences)

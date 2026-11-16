@@ -3,7 +3,6 @@ import 'dart:math';
 import '../models/course_filter.dart';
 import '../models/exercise.dart';
 import '../models/fsrs_card.dart';
-import '../models/lesson_range.dart';
 import '../models/practice_item.dart';
 import 'curriculum.dart';
 
@@ -40,7 +39,7 @@ final class SelectedPair {
 /// Produced here; read by [BundleIndex] and the topics.
 int grammarLesson(Curriculum curriculum, PracticeItem word, FormKey key) =>
     word.isVocab
-    ? laterLesson
+    ? curriculum.laterLesson
     : max(
         curriculum.typeLesson(word.dataFileId, word.type),
         curriculum.formLesson(word.dataFileId, key),

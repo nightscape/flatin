@@ -13,6 +13,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'support/stored_settings.dart';
 import 'support/word_classification_harness.dart';
+import 'support/latin_course.dart' show latinLastLesson;
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -63,15 +64,28 @@ void main() {
       final json =
           jsonDecode(prefs.getString('practice_settings')!)
               as Map<String, dynamic>;
-      expect(Settings.fromJson(json).distractorStrategyId, 'random');
+      expect(
+        Settings.fromJson(
+          json,
+          lastLesson: latinLastLesson,
+        ).distractorStrategyId,
+        'random',
+      );
       json['distractorStrategyId'] = 'nope';
-      expect(() => Settings.fromJson(json), throwsStateError);
+      expect(
+        () => Settings.fromJson(json, lastLesson: latinLastLesson),
+        throwsStateError,
+      );
     });
 
     testWidgets('the settings screen offers the registry entries', (
       tester,
     ) async {
-      await openSettingsWith(tester, Settings().toJson(), page: 'input');
+      await openSettingsWith(
+        tester,
+        Settings(lastLesson: latinLastLesson).toJson(),
+        page: 'input',
+      );
       await tester.tap(find.byKey(const Key('input.distractors')));
       await tester.pumpAndSettle();
       expect(find.text('Zufällig'), findsWidgets);

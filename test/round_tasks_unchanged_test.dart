@@ -16,6 +16,7 @@ import 'package:latin_practice/providers/round_providers.dart';
 
 import 'support/course_providers.dart';
 import 'support/grammar_exercise_harness.dart';
+import 'support/latin_course.dart' show latinLastLesson;
 
 const _golden = 'test/round_tasks_unchanged.golden.json';
 
@@ -90,9 +91,15 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   final settings = {
-    'whole course': Settings(),
-    'lesson 25': Settings(courseWords: LessonRange(1, 25)),
-    'lesson 5': Settings(courseWords: LessonRange(1, 5)),
+    'whole course': Settings(lastLesson: latinLastLesson),
+    'lesson 25': Settings(
+      lastLesson: latinLastLesson,
+      courseWords: LessonRange(1, 25),
+    ),
+    'lesson 5': Settings(
+      lastLesson: latinLastLesson,
+      courseWords: LessonRange(1, 5),
+    ),
   };
   final cases = [
     for (final MapEntry(key: name, value: s) in settings.entries)

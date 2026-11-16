@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'support/i18n_keys.dart';
 import 'support/word_classification_harness.dart';
+import 'support/latin_course.dart' show latinLastLesson;
 
 final _chip = find.byKey(const Key('home.kursstand'));
 final _coins = find.byKey(const Key('home.coins'));
@@ -40,7 +41,11 @@ Future<void> _openSheet(WidgetTester tester) async {
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  final at24 = Settings(courseWords: LessonRange(1, 24), kursstand: 24);
+  final at24 = Settings(
+    lastLesson: latinLastLesson,
+    courseWords: LessonRange(1, 24),
+    kursstand: 24,
+  );
 
   testWidgets('the app bar shows the Kursstand beside the coins at 360x640', (
     tester,

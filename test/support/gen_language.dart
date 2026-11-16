@@ -88,3 +88,35 @@ Map<String, String> drawnLanguageName(Random r) {
   final n = r.nextInt(1 << 30);
   return {'de': 'Sprachede$n', 'en': 'Languageen$n'};
 }
+
+const _toyGrammar =
+    '    grammar:\n      toy_words:\n        forms:\n'
+    '          - {name: Grundformen}\n        types: [Klasse-Ka]\n';
+
+/// The book files of a drawn course: [lessons] lessons numbered 1.. in order,
+/// split over one to three volumes (one volume when a hole is drawn), with a
+/// word of their own each. [gap] is the lesson left out when the draw asks
+/// for a hole, else null.
+({List<String> books, int lessons, int? gap}) drawnCourseBooks(
+  Random r, {
+  bool withGap = false,
+}) {
+  final lessons = (withGap ? 3 : 1) + r.nextInt(60);
+  final gap = withGap ? 2 + r.nextInt(lessons - 2) : null;
+  final volumes = withGap ? 1 : 1 + r.nextInt(min(3, lessons));
+  final cuts = {for (var i = 1; i < volumes; i++) 2 + r.nextInt(lessons - 1)}
+    ..add(lessons + 1);
+  final books = <String>[];
+  var next = 1;
+  for (final end in (cuts.toList()..sort())) {
+    final entries = [
+      for (var l = next; l < end; l++)
+        if (l != gap)
+          '  - lesson: $l\n    words: ["w$l"]\n'
+              '${l == 1 ? _toyGrammar : ''}',
+    ];
+    books.add('book: "B${books.length + 1}"\nlessons:\n${entries.join()}');
+    next = end;
+  }
+  return (books: books, lessons: lessons, gap: gap);
+}

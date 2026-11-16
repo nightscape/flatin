@@ -4,9 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/topics.dart';
 import '../data/word_focus.dart';
-import '../models/lesson_range.dart';
 import '../providers/reward_provider.dart';
 import '../providers/round_providers.dart';
+import '../providers/settings_provider.dart';
 import '../widgets/focus_picker.dart';
 import 'round_screen.dart';
 
@@ -43,13 +43,19 @@ class _GrammarStartState extends ConsumerState<GrammarStartScreen> {
     final offer = ref.watch(todayOfferProvider(_focus));
     final topics = ref.watch(topicsProvider(_focus));
     final rewards = ref.watch(rewardsProvider);
-    final error = offer.error ?? topics.error ?? rewards.error;
+    final settings = ref.watch(settingsProvider);
+    final error =
+        offer.error ?? topics.error ?? rewards.error ?? settings.error;
     final Widget body;
     if (error != null) {
       body = Center(child: Text(t('home.error', {'error': '$error'})));
-    } else if (!offer.hasValue || !topics.hasValue || !rewards.hasValue) {
+    } else if (!offer.hasValue ||
+        !topics.hasValue ||
+        !rewards.hasValue ||
+        !settings.hasValue) {
       body = const Center(child: CircularProgressIndicator());
     } else {
+      final laterLesson = settings.requireValue.laterLesson;
       final request = requestOf(offer.requireValue, _focus);
       body = ListView(
         padding: const EdgeInsets.all(16),

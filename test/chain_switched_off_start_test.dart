@@ -11,6 +11,7 @@ import 'package:latin_practice/providers/fsrs_provider.dart';
 import 'package:latin_practice/providers/locale_provider.dart';
 
 import 'support/course_fixture.dart';
+import 'support/latin_course.dart' show latinLastLesson;
 
 void main() {
   test('a chain never starts from a switched-off number', () async {
@@ -24,6 +25,7 @@ void main() {
     final amare = items.singleWhere((i) => i.id == 'verbs:amare');
     final filter = filterTeachingAll(
       Settings(
+        lastLesson: latinLastLesson,
         disabledFeatures: {
           amare.dataFileId: {
             'numerus': {'pl'},

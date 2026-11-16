@@ -13,6 +13,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'support/course_fixture.dart';
 import 'support/hand_items.dart';
 import 'support/word_classification_harness.dart';
+import 'support/latin_course.dart' show latinLastLesson;
 
 final item = handItem(
   dataFileId: 'verbs',
@@ -43,7 +44,9 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   test('switching the Passive off switches off every passive form', () {
-    final settings = Settings().toggleFeature('verbs', 'genus', 'pass');
+    final settings = Settings(
+      lastLesson: latinLastLesson,
+    ).toggleFeature('verbs', 'genus', 'pass');
 
     expect(
       filterTeachingAll(
@@ -55,11 +58,9 @@ void main() {
   });
 
   test('a form stays off while either its key or a feature is off', () {
-    var settings = Settings().toggleForm(
-      'verbs',
-      'ind.perf.akt.3.sg',
-      inRange: true,
-    );
+    var settings = Settings(
+      lastLesson: latinLastLesson,
+    ).toggleForm('verbs', 'ind.perf.akt.3.sg', inRange: true);
     settings = settings.toggleFeature('verbs', 'genus', 'pass');
 
     expect(
@@ -79,7 +80,9 @@ void main() {
   });
 
   test('the classification stops asking an axis with one value left', () {
-    final settings = Settings().toggleFeature('verbs', 'genus', 'pass');
+    final settings = Settings(
+      lastLesson: latinLastLesson,
+    ).toggleFeature('verbs', 'genus', 'pass');
     final enabled = filterTeachingAll(
       settings,
       item,

@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/data/settings_conversion.dart';
 import 'package:latin_practice/models/settings.dart';
+import 'support/latin_course.dart' show latinLastLesson;
 
 Map<String, dynamic> _stored(Map<String, dynamic> fields) => {
   settingsVersionField: settingsVersion,
@@ -18,6 +19,7 @@ void main() {
           'deselectedWords': ['rosa'],
           'forcedOnWords': ['rosa'],
         }),
+        lastLesson: latinLastLesson,
       ),
       throwsStateError,
     );
@@ -34,6 +36,7 @@ void main() {
             'nouns': ['A-Deklination'],
           },
         }),
+        lastLesson: latinLastLesson,
       ),
       throwsStateError,
     );
@@ -50,6 +53,7 @@ void main() {
             'nouns': ['gen.sg'],
           },
         }),
+        lastLesson: latinLastLesson,
       ),
       throwsStateError,
     );
@@ -65,6 +69,7 @@ void main() {
           'verbs': ['gen.sg'],
         },
       }),
+      lastLesson: latinLastLesson,
     );
 
     expect(settings.overrideOfForm('nouns', 'gen.sg'), Override.forcedOff);

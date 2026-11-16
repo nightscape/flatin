@@ -18,16 +18,17 @@ import 'package:latin_practice/screens/practice_screen.dart';
 import 'support/course_providers.dart';
 import 'support/round_driver.dart';
 import 'support/word_classification_harness.dart';
-import 'support/latin_course.dart' show latinLang;
+import 'support/latin_course.dart' show latinLang, latinLastLesson;
 
 /// Words and grammar both narrowed to [lesson], every data file on
 /// [strategyId].
-Settings _settings(int lesson, String strategyId) => Settings()
-    .withGrammarLinked(to: false)
-    .withWordRange(LessonRange(lesson, lesson))
-    .withGrammarRange(LessonRange(lesson, lesson))
-    .setInputStrategy('nouns', strategyId)
-    .setInputStrategy('verbs', strategyId);
+Settings _settings(int lesson, String strategyId) =>
+    Settings(lastLesson: latinLastLesson)
+        .withGrammarLinked(to: false)
+        .withWordRange(LessonRange(lesson, lesson))
+        .withGrammarRange(LessonRange(lesson, lesson))
+        .setInputStrategy('nouns', strategyId)
+        .setInputStrategy('verbs', strategyId);
 
 Future<CourseFilter> _filter() async {
   final container = ProviderContainer();

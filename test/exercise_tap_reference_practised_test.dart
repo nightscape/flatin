@@ -5,10 +5,10 @@ import 'package:latin_practice/data/exercise_kinds.dart';
 import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/data/sentences.dart';
 import 'package:latin_practice/models/exercise.dart';
-import 'package:latin_practice/models/lesson_range.dart';
 
 import 'support/exercise_fakes.dart';
 import 'support/gen_sentence_learner.dart';
+import 'support/latin_course.dart' show latinLaterLesson;
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -31,7 +31,7 @@ void main() {
         pool: items,
         german: fakeExerciseContext().german,
         sentences: corpus,
-        reachedLesson: laterLesson,
+        reachedLesson: latinLaterLesson,
         formPracticed: (w, l) => !(w.id == word.id && l.key == t.key),
       );
       for (var seed = 0; seed < 5; seed++) {

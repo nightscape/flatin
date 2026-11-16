@@ -9,11 +9,12 @@ import 'package:latin_practice/screens/home_screen.dart';
 
 import 'support/course_providers.dart';
 import 'support/word_classification_harness.dart';
+import 'support/latin_course.dart' show latinLastLesson;
 
 void main() {
   testWidgets('a type focus picked on the home screen survives a narrower '
       'course range', (tester) async {
-    seedSettings(Settings());
+    seedSettings(Settings(lastLesson: latinLastLesson));
     tester.view.physicalSize = const Size(1200, 2400);
     tester.view.devicePixelRatio = 1.0;
     addTearDown(tester.view.reset);

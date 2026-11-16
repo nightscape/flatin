@@ -16,12 +16,17 @@ final toyCourse = Course.parse(
 
 /// Makes the asset bundle answer [coursesAsset] with the list of the toy
 /// course; every other asset is the app's own, read as the test binding reads
-/// it, or else the repo file the toy manifest names.
-void injectToyCourse() {
+/// it, or else the repo file the toy manifest names. [served] answers first.
+void injectToyCourse({Map<String, String> served = const {}}) {
   final appAssets = Platform.environment['UNIT_TEST_ASSETS']!;
   TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
       .setMockMessageHandler('flutter/assets', (message) async {
         final key = utf8.decode(message!.buffer.asUint8List());
+        if (served.containsKey(key)) {
+          return ByteData.sublistView(
+            Uint8List.fromList(utf8.encode(served[key]!)),
+          );
+        }
         final file = [
           if (key == coursesAsset) '$toyDir/courses.yaml',
           '$appAssets/$key',

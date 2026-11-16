@@ -5,10 +5,10 @@ import 'package:latin_practice/data/exercise_spec.dart' show OneSentence;
 import 'package:latin_practice/data/german_forms.dart';
 import 'package:latin_practice/data/sentences.dart';
 import 'package:latin_practice/models/exercise.dart';
-import 'package:latin_practice/models/lesson_range.dart';
 import 'package:latin_practice/models/practice_item.dart';
 
 import 'exercise_invariants.dart';
+import '../support/latin_course.dart' show latinLaterLesson;
 
 /// Every [stride]th word of [items] with all its bundles, asked through every
 /// shipped generator that can build there, one exercise per seed. With
@@ -36,7 +36,7 @@ List<(PracticeItem, Exercise)> drawExercises(
                 pool: items,
                 german: german,
                 sentences: corpus,
-                reachedLesson: laterLesson,
+                reachedLesson: latinLaterLesson,
               )
             : ExerciseContext(
                 unlocked: unlockedFor(g.spec, word, bundle),

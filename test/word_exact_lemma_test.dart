@@ -109,7 +109,9 @@ void main() {
       final withMacrons = items.singleWhere((item) => item.lemma == 'pārēre');
 
       Future<CourseFilter> filterWith(Set<String> deselected) async {
-        seedSettings(Settings(deselectedWords: deselected));
+        seedSettings(
+          Settings(lastLesson: latinLastLesson, deselectedWords: deselected),
+        );
         final container = ProviderContainer();
         addTearDown(container.dispose);
         return container.read(courseFilterProvider.future);

@@ -16,8 +16,6 @@ tags:
   # skips itself unless PRINTED_PARADIGMS is set.
   printed: {}
 
-  # Boots the app with only the toy course; it fails until the code reads
-  # every course fact from data (test/tracer/KNOWN_RED.md). Run with
-  #   flutter test --tags tracer --run-skipped
-  tracer:
-    skip: "run flutter test --tags tracer --run-skipped"
+  # Boots the app with only the toy course; part of the default run, and
+  # `flutter test --tags tracer` runs it alone.
+  tracer: {}

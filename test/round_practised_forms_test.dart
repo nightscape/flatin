@@ -15,6 +15,7 @@ import 'package:latin_practice/providers/locale_provider.dart';
 import 'package:latin_practice/providers/round_providers.dart';
 
 import 'support/course_providers.dart';
+import 'support/latin_course.dart' show latinFullRange, latinLastLesson;
 
 class _Recording implements ExerciseGenerator {
   _Recording(this.inner, this.seen);
@@ -48,8 +49,9 @@ void main() {
     final sup = mirus.formLabels.firstWhere((l) => l.features['grad'] == 'sup');
     seedSettings(
       Settings(
+        lastLesson: latinLastLesson,
         courseWords: LessonRange(5, 5),
-        courseGrammar: LessonRange.full,
+        courseGrammar: latinFullRange,
         grammarToLinked: false,
         disabledFeatures: {
           'nouns': {

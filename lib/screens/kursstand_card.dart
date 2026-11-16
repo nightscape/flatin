@@ -7,7 +7,6 @@ import '../data/curriculum.dart';
 import '../data/practice_data.dart';
 import '../models/course.dart';
 import '../models/course_filter.dart';
-import '../models/lesson_range.dart';
 import '../models/settings.dart';
 import '../models/practice_item.dart';
 import '../providers/course_provider.dart';
@@ -44,7 +43,10 @@ class KursstandCard extends ConsumerStatefulWidget {
 
 class _KursstandCardState extends ConsumerState<KursstandCard> {
   final _scroll = ScrollController();
-  late final _lessons = [...widget.filter.lessons.lessonNumbers, laterLesson];
+  late final _lessons = [
+    ...widget.filter.lessons.lessonNumbers,
+    widget.filter.lessons.laterLesson,
+  ];
   late final _blocks = {for (final l in _lessons) l: GlobalKey()};
   late final Future<Map<String, FormMetadata>> _metadata = () async {
     final language = await ref.read(dataLanguageProvider.future);
@@ -73,7 +75,7 @@ class _KursstandCardState extends ConsumerState<KursstandCard> {
     super.dispose();
   }
 
-  String _stop(int lesson) => lesson == laterLesson
+  String _stop(int lesson) => lesson == _filter.lessons.laterLesson
       ? FlutterI18n.translate(context, 'settings.kursstand.later')
       : 'L$lesson';
 
@@ -114,7 +116,7 @@ class _KursstandCardState extends ConsumerState<KursstandCard> {
   /// The words a lesson introduces; a word listed twice or again in a later
   /// lesson belongs to its first.
   List<String> _wordsOf(int lesson) => {
-    if (lesson != laterLesson)
+    if (lesson != _filter.lessons.laterLesson)
       for (final w in _filter.lessons.lessonWords[lesson]!)
         if (_filter.lessons.wordToLesson[w] == lesson) w,
   }.toList();
@@ -253,7 +255,7 @@ class _KursstandCardState extends ConsumerState<KursstandCard> {
             color: lit ? gold.withAlpha(60) : sand,
             padding: const EdgeInsets.fromLTRB(16, 10, 16, 6),
             child: Text(
-              lesson == laterLesson
+              lesson == _filter.lessons.laterLesson
                   ? _tr('later')
                   : _tr('lesson', {'lesson': '$lesson'}),
               style: TextStyle(

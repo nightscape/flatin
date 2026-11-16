@@ -31,6 +31,7 @@ import '../support/round_driver.dart';
 import '../support/store_picture.dart';
 import '../support/word_classification_harness.dart' show letItLoad;
 import 'glossary.dart';
+import '../support/latin_course.dart' show latinLastLesson;
 
 /// A widget that can be found again by key after a rebuild.
 bool _isKeyed(Widget widget) => widget.key is ValueKey<String>;
@@ -731,7 +732,12 @@ class AppSteps {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(
       'practice_settings',
-      jsonEncode(Settings(disabledRewards: {reward}).toJson()),
+      jsonEncode(
+        Settings(
+          lastLesson: latinLastLesson,
+          disabledRewards: {reward},
+        ).toJson(),
+      ),
     );
   }
 

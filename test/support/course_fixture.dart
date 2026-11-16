@@ -8,6 +8,7 @@ import 'package:latin_practice/models/course_filter.dart';
 import 'package:latin_practice/models/practice_item.dart';
 import 'package:latin_practice/models/settings.dart';
 
+import 'latin_course.dart' show latinLastLesson;
 import 'test_axes.dart';
 import 'package:latin_practice/models/course.dart';
 
@@ -27,8 +28,11 @@ DataFileShape nounShape({List<FormLabel>? labels, List<String>? types}) => (
   baseForm: ('kasus', 'nom'),
 );
 
-Curriculum parseNouns(String yaml, {DataFileShape? shape}) =>
-    Curriculum.parse([yaml], {'nouns': shape ?? nounShape()});
+Curriculum parseNouns(String yaml, {DataFileShape? shape}) => Curriculum.parse(
+  [yaml],
+  {'nouns': shape ?? nounShape()},
+  lastLesson: latinLastLesson,
+);
 
 /// Every order of [items], so an order-independent law can be stated over
 /// all of them instead of over two hand-picked orders.
@@ -79,6 +83,7 @@ CourseFilter filterTeachingAll(Settings settings, PracticeItem item) =>
             baseForm: item.roles.baseForm ?? ('kasus', 'nom'),
           ),
         },
+        lastLesson: settings.lastLesson,
       ),
       LessonData(
         wordToLesson: {item.lemma: 1},

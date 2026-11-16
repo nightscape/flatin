@@ -182,7 +182,11 @@ CardStore _synced(DateTime now) =>
 /// An empty course: words of lesson 1 only, every noun and verb type off,
 /// nothing reviewed.
 _State _emptyCourse(DateTime now) => _static(
-  Settings(courseWords: LessonRange(1, 1), disabledTypes: _typesOf),
+  Settings(
+    lastLesson: latinLastLesson,
+    courseWords: LessonRange(1, 1),
+    disabledTypes: _typesOf,
+  ),
   _synced(now),
 );
 
@@ -190,6 +194,7 @@ _State _emptyCourse(DateTime now) => _static(
 /// and the grammar range holds none of its forms.
 _State _forcedOnWordWithoutForm(DateTime now) => _static(
   Settings(
+    lastLesson: latinLastLesson,
     courseWords: LessonRange(23, 32),
     courseGrammar: LessonRange(23, 39),
     grammarToLinked: false,
@@ -219,6 +224,7 @@ _State _reviewedWordWithoutForm(DateTime now) {
   store.r[id] = 0;
   return _static(
     Settings(
+      lastLesson: latinLastLesson,
       courseWords: LessonRange(18, 34),
       courseGrammar: LessonRange(13, 31),
       grammarToLinked: false,
@@ -279,10 +285,7 @@ Set<String> _classes(_State s, DateTime now) {
     if (pool.words.isEmpty) ...[
       if (!emptyWith(st.copyWith(disabledTypes: {}))) 'empty by types off',
       if (!emptyWith(
-        st.copyWith(
-          courseWords: LessonRange.full,
-          courseGrammar: LessonRange.full,
-        ),
+        st.copyWith(courseWords: latinFullRange, courseGrammar: latinFullRange),
       ))
         'empty by range',
       if (!emptyWith(st.copyWith(deselectedWords: {}))) 'empty by deselection',

@@ -16,7 +16,8 @@ import 'package:latin_practice/providers/round_providers.dart';
 import 'package:latin_practice/providers/settings_provider.dart';
 
 import 'support/course_providers.dart';
-import 'support/latin_course.dart' show latinLang;
+import 'support/latin_course.dart'
+    show latinFullRange, latinLang, latinLastLesson;
 
 /// Records the macron switch of every context a round builds with.
 class _Recording implements ExerciseGenerator {
@@ -76,8 +77,9 @@ bool _isTwinChain(Exercise e) => (e.answer as TypedAnswer).accepted
 ProviderContainer _container(List<ExerciseGenerator> registry) {
   seedSettings(
     Settings(
+      lastLesson: latinLastLesson,
       courseWords: LessonRange(5, 5),
-      courseGrammar: LessonRange.full,
+      courseGrammar: latinFullRange,
       grammarToLinked: false,
     ),
   );

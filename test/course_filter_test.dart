@@ -7,6 +7,7 @@ import 'package:latin_practice/models/settings.dart';
 import 'support/course_fixture.dart';
 import 'support/hand_items.dart';
 import 'support/test_axes.dart';
+import 'support/latin_course.dart' show latinLastLesson;
 
 /// A learner whose course reaches lesson 23: "nauta" is a word of lesson 21,
 /// but its type is not taught before lesson 32.
@@ -56,7 +57,7 @@ CourseFilter _filter(Settings settings, String curriculum) => CourseFilter(
 void main() {
   test('a word in range whose type comes later is not practised yet', () {
     final filter = _filter(
-      Settings().withWordRange(LessonRange(21, 23)),
+      Settings(lastLesson: latinLastLesson).withWordRange(LessonRange(21, 23)),
       _lateType,
     );
 
@@ -66,7 +67,9 @@ void main() {
   });
 
   test('once the type is taught the item is practised', () {
-    final filter = _filter(Settings().withWordRange(LessonRange(21, 23)), '''
+    final filter = _filter(
+      Settings(lastLesson: latinLastLesson).withWordRange(LessonRange(21, 23)),
+      '''
 lessons:
   - lesson: 21
     grammar:
@@ -74,14 +77,15 @@ lessons:
         forms:
           - {name: T}
         types: [A-Deklination, O-Deklination]
-''');
+''',
+    );
 
     expect(filter.itemPracticed(_nauta), isTrue);
   });
 
   test('a word the course has not reached is out of range', () {
     final filter = _filter(
-      Settings().withWordRange(LessonRange(1, 20)),
+      Settings(lastLesson: latinLastLesson).withWordRange(LessonRange(1, 20)),
       everythingInLessonOne,
     );
 
@@ -90,7 +94,9 @@ lessons:
   });
 
   test('forced-off beats forced-on beats the range', () {
-    final inRange = Settings().withWordRange(LessonRange(21, 23));
+    final inRange = Settings(
+      lastLesson: latinLastLesson,
+    ).withWordRange(LessonRange(21, 23));
 
     expect(
       _filter(
@@ -100,7 +106,9 @@ lessons:
       isFalse,
     );
 
-    final outOfRange = Settings().withWordRange(LessonRange(1, 20));
+    final outOfRange = Settings(
+      lastLesson: latinLastLesson,
+    ).withWordRange(LessonRange(1, 20));
     expect(
       _filter(
         outOfRange.toggleWord('nauta', inRange: false),
@@ -110,6 +118,7 @@ lessons:
     );
 
     final both = Settings(
+      lastLesson: latinLastLesson,
       deselectedWords: {'nauta'},
       forcedOnTypes: {
         'nouns': {'A-Deklination'},
@@ -120,7 +129,7 @@ lessons:
   });
 
   test('a switched-off axis value beats a forced-on form', () {
-    final settings = Settings()
+    final settings = Settings(lastLesson: latinLastLesson)
         .toggleFeature('nouns', 'numerus', 'pl')
         .toggleForm('nouns', 'dat.pl', inRange: false);
     final filter = _filter(settings, everythingInLessonOne);
@@ -130,7 +139,9 @@ lessons:
   });
 
   test('practicedForms and summary count what the learner sees', () {
-    final filter = _filter(Settings().withWordRange(LessonRange(21, 23)), '''
+    final filter = _filter(
+      Settings(lastLesson: latinLastLesson).withWordRange(LessonRange(21, 23)),
+      '''
 lessons:
   - lesson: 21
     grammar:
@@ -143,7 +154,8 @@ lessons:
       nouns:
         forms:
           - {name: T, numerus: pl}
-''');
+''',
+    );
 
     expect(filter.practicedForms('nouns', _nauta.formLabels), {
       'nom.sg',
@@ -162,7 +174,9 @@ lessons:
         'gen.sg': ['nautae'],
       },
     );
-    final filter = _filter(Settings().withWordRange(LessonRange(21, 23)), '''
+    final filter = _filter(
+      Settings(lastLesson: latinLastLesson).withWordRange(LessonRange(21, 23)),
+      '''
 lessons:
   - lesson: 21
     grammar:
@@ -173,7 +187,8 @@ lessons:
       nouns:
         forms:
           - {name: T}
-''');
+''',
+    );
 
     expect(
       () => filter.practicedForms('nouns', noNominative.formLabels),
@@ -202,7 +217,9 @@ lessons:
         forms:
           - {name: T, numerus: pl}
 ''';
-    final inRange = Settings().withWordRange(LessonRange(21, 23));
+    final inRange = Settings(
+      lastLesson: latinLastLesson,
+    ).withWordRange(LessonRange(21, 23));
 
     test('a deselected topic\'s forms are not practised', () {
       final filter = _filter(inRange, lateForms);

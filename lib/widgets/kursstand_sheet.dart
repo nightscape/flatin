@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../data/lesson_data.dart' show lastLesson;
 import '../providers/settings_provider.dart';
 
 Future<void> showKursstandSheet(BuildContext context) =>
@@ -18,7 +17,8 @@ class KursstandSheet extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final kursstand = ref.watch(settingsProvider).requireValue.kursstand;
+    final settings = ref.watch(settingsProvider).requireValue;
+    final (kursstand, lastLesson) = (settings.kursstand, settings.lastLesson);
     void choose(int lesson) {
       if (lesson != kursstand) {
         ref.read(settingsProvider.notifier).setKursstand(lesson);

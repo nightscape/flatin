@@ -45,12 +45,14 @@ class LernzielChipRow extends StatelessWidget {
         ))
           ChoiceChip(
             key: Key(
-              'lernziel.$row.${chip.preset == null ? 'custom' : lernzielLabel(chip.preset!, later)}',
+              'lernziel.$row.${chip.preset == null ? 'custom' : lernzielLabel(chip.preset!, later, settings.laterLesson)}',
             ),
             avatar: chip.preset == null
                 ? const Icon(Icons.tune, size: 16, color: ink)
                 : null,
-            label: Text(lernzielLabel(chip.preset ?? range, later)),
+            label: Text(
+              lernzielLabel(chip.preset ?? range, later, settings.laterLesson),
+            ),
             selected: chip.selected,
             showCheckmark: false,
             selectedColor: _colour(words).withAlpha(words ? 150 : 90),
@@ -84,7 +86,7 @@ class LernzielEntry extends ConsumerWidget {
       key: Key('home.lernziel.${words ? 'words' : 'grammar'}'),
       label: Text(
         '${FlutterI18n.translate(context, 'lernziel.${words ? 'words' : 'grammar'}')} '
-        '${lernzielLabel(r, later)}',
+        '${lernzielLabel(r, later, settings.laterLesson)}',
       ),
       backgroundColor: _colour(words).withAlpha(words ? 150 : 90),
       side: BorderSide(color: _colour(words)),
