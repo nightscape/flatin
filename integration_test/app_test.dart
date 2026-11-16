@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -5,22 +7,39 @@ import '../test/step_definitions/app_steps.pickled.dart';
 
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+  // An accessibility client outside the app turns platform semantics on at a
+  // random point, and the binding's handle for it trips the leak check.
+  binding.platformDispatcher.onSemanticsEnabledChanged = null;
   setUp(() => SharedPreferences.setMockInitialValues({}));
 
-  // "A SemanticsHandle was active at the end of the test" fires when the
-  // handle count grew during a scenario. No step turns semantics on, so the
-  // handle is the one SemanticsBinding opens when macOS switches its
-  // accessibility bridge on — which lands in whichever scenario is running.
-  int handlesAtStart = 0;
-  setUp(() => handlesAtStart = binding.debugOutstandingSemanticsHandles);
-  tearDown(() {
-    expect(
-      binding.debugOutstandingSemanticsHandles,
-      lessThanOrEqualTo(handlesAtStart),
-      reason:
-          'the platform switched semantics on during this scenario; the '
-          'handle belongs to the binding, not to a step',
-    );
+  // Generators: example sequences plus seeded random toggle sequences (the
+  // platform's on/off requests are the whole input space of the observable,
+  // the outstanding handle count).
+  final toggleSequences = <List<bool>>[
+    [true],
+    [true, false, true],
+    for (final seed in List.generate(20, (i) => i))
+      () {
+        final random = Random(seed);
+        return List.generate(1 + random.nextInt(6), (_) => random.nextBool());
+      }(),
+  ];
+
+  testWidgets('platform semantics requests open no semantics handle', (
+    tester,
+  ) async {
+    addTearDown(binding.platformDispatcher.clearSemanticsEnabledTestValue);
+    final before = binding.debugOutstandingSemanticsHandles;
+    for (final sequence in toggleSequences) {
+      for (final enabled in sequence) {
+        binding.platformDispatcher.semanticsEnabledTestValue = enabled;
+        expect(
+          binding.debugOutstandingSemanticsHandles,
+          before,
+          reason: 'platform semantics request $enabled in $sequence',
+        );
+      }
+    }
   });
 
   runFeatures();

@@ -20,7 +20,7 @@ dart run build_runner build --delete-conflicting-outputs
 
 # Run Cucumber-style BDD tests (test/features/*.feature)
 flutter test test/features_test.dart         # headless; screenshot steps are skipped
-flutter test integration_test/ -d macos      # in the real app; screenshots only on Android/iOS
+bash integration_test/run_5x_macos.sh 1     # in the real app on macOS (hang watchdog); screenshots only on Android/iOS
 
 # Deploy (Fastlane)
 cd android && fastlane release
