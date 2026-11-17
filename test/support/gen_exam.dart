@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:latin_practice/data/exam.dart';
 import 'package:latin_practice/data/languages/language.dart';
+import 'package:latin_practice/data/lesson_data.dart';
 import 'package:yaml/yaml.dart';
 
 import 'latin_course.dart';
@@ -25,6 +26,10 @@ final class ExamGen {
   /// How often a drawn noun token carries a `funktion`.
   final double funktionChance;
 
+  /// How often a drawn hilfe gives its `angabe` or `de` as an empty string,
+  /// which an imported pack may do.
+  final double blankHilfeChance;
+
   ExamGen(
     this.r, {
     this.nouns = const ['lupus', 'silva', 'iter'],
@@ -32,6 +37,7 @@ final class ExamGen {
     this.verbs = const ['vidēre', 'ire'],
     this.participles = const ['laudāre'],
     this.funktionChance = 0.1,
+    this.blankHilfeChance = 0,
   });
 
   static const reachKeys = [
@@ -216,8 +222,8 @@ final class ExamGen {
       for (final lemma in lemmas.take(chance(0.3) ? 0 : r.nextInt(3) + 1))
         {
           'lemma': lemma,
-          'angabe': phrase(_latin),
-          'de': phrase(_german),
+          'angabe': chance(blankHilfeChance) ? '' : phrase(_latin),
+          'de': chance(blankHilfeChance) ? '' : phrase(_german),
           'tokens': [
             for (final t in words)
               if (t['lemma'] == lemma) t['id'] as String,
@@ -1506,3 +1512,15 @@ Language drawnLanguage(Random r) {
   };
   return Language.parse(jsonEncode(data));
 }
+
+/// [lessons] without the lesson of each word of [dropped]: a word the lists
+/// no longer name.
+LessonData withoutWords(LessonData lessons, Set<String> dropped) => LessonData(
+  wordToLesson: {
+    for (final e in lessons.wordToLesson.entries)
+      if (!dropped.contains(e.key)) e.key: e.value,
+  },
+  lessonWords: lessons.lessonWords,
+  bookByLesson: lessons.bookByLesson,
+  books: lessons.books,
+);

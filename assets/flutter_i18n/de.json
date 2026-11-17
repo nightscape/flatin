@@ -429,6 +429,12 @@
     "words": "Wörter",
     "grammar": "Grammatik"
   },
+  "lookup": {
+    "home": "Wort nachschlagen",
+    "title": "Wort nachschlagen",
+    "hint": "Wort eingeben",
+    "notFound": "Nichts gefunden."
+  },
   "exam": {
     "home": "Prüfung üben",
     "list": {

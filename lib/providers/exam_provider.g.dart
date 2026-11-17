@@ -8,6 +8,45 @@ part of 'exam_provider.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
+/// The language of the active course: its codes, spelling folds and rules.
+
+@ProviderFor(courseLanguage)
+final courseLanguageProvider = CourseLanguageProvider._();
+
+/// The language of the active course: its codes, spelling folds and rules.
+
+final class CourseLanguageProvider
+    extends
+        $FunctionalProvider<AsyncValue<Language>, Language, FutureOr<Language>>
+    with $FutureModifier<Language>, $FutureProvider<Language> {
+  /// The language of the active course: its codes, spelling folds and rules.
+  CourseLanguageProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'courseLanguageProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$courseLanguageHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<Language> $createElement($ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<Language> create(Ref ref) {
+    return courseLanguage(ref);
+  }
+}
+
+String _$courseLanguageHash() => r'853c6432220b1c568dfc91e56b31030646588e60';
+
 /// The language whose codes and rules the exam packs of the active course use.
 
 @ProviderFor(examLanguage)
@@ -45,7 +84,7 @@ final class ExamLanguageProvider
   }
 }
 
-String _$examLanguageHash() => r'3c02a335c16d781ee42fe587d9d6fbb783f2186e';
+String _$examLanguageHash() => r'2c0adba1752929d29dde6a58d7dbb16961842398';
 
 /// The imported exam packs of the active course.
 
@@ -201,12 +240,12 @@ final class ExamWordsProvider
 
 String _$examWordsHash() => r'a9cf6e6fa1dc32ed0e3b17cb12c6c22d73b7580b';
 
-/// Where the course teaches the words of the exam sheet.
+/// Where the course teaches its words.
 
 @ProviderFor(lessonLookup)
 final lessonLookupProvider = LessonLookupProvider._();
 
-/// Where the course teaches the words of the exam sheet.
+/// Where the course teaches its words.
 
 final class LessonLookupProvider
     extends
@@ -216,7 +255,7 @@ final class LessonLookupProvider
           FutureOr<LessonLookup>
         >
     with $FutureModifier<LessonLookup>, $FutureProvider<LessonLookup> {
-  /// Where the course teaches the words of the exam sheet.
+  /// Where the course teaches its words.
   LessonLookupProvider._()
     : super(
         from: null,
@@ -243,4 +282,4 @@ final class LessonLookupProvider
   }
 }
 
-String _$lessonLookupHash() => r'0c2d74f03dfc150202b1c6b7740b708ca037c180';
+String _$lessonLookupHash() => r'2ddd9d40e14e7bda611c95d7e075bdbc5afd0f4b';

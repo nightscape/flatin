@@ -41,16 +41,6 @@ String _thinSyntax(String book, Random r, double keep) => book.replaceAllMapped(
       'syntax: [${m[1]!.split(', ').where((_) => r.nextDouble() < keep).join(', ')}]',
 );
 
-LessonData _without(LessonData lessons, Set<String> dropped) => LessonData(
-  wordToLesson: {
-    for (final e in lessons.wordToLesson.entries)
-      if (!dropped.contains(e.key)) e.key: e.value,
-  },
-  lessonWords: lessons.lessonWords,
-  bookByLesson: lessons.bookByLesson,
-  books: lessons.books,
-);
-
 /// The form a token names in a data file: written independently of
 /// [formKeyOfAnalyse], by filtering and then taking the most specific label.
 FormKey? _formKey(List<FormLabel> labels, Map<String, Object> codes) {
@@ -143,6 +133,91 @@ List<Override> _lookupOverride(
   if (testFiles) lessonLookupProvider.overrideWith((ref) async => lookup()),
 ];
 
+/// The lessons of [token] by an independent copy of the sheet's lesson rule.
+TokenLessons _ruleLessons(LessonLookup l, WordToken token, Clause clause) {
+  final types = <int>{}, forms = <int>{};
+  for (final file in l.files[token.lemma] ?? const <WordFile>[]) {
+    if (!l.curriculum.hasGrammar(file.dataFileId)) continue;
+    final type = l.curriculum.typeLessonOrNull(file.dataFileId, file.type);
+    if (type != null) types.add(type);
+    final key = formKeyOfAnalyse(
+      l.curriculum.labelsOf(file.dataFileId),
+      token.analyse.codes,
+    );
+    final form = key == null
+        ? null
+        : l.curriculum.formLessonOrNull(file.dataFileId, key);
+    if (form != null) forms.add(form);
+  }
+  List<int> sorted(Iterable<int> xs) => xs.toList()..sort();
+  final exactWord = l.lessons.wordToLesson[token.lemma];
+  final both = types.intersection(forms);
+  final syntax = <String, int>{};
+  for (final id in [
+    for (final MapEntry(:key, :value) in token.analyse.codes.entries)
+      'analyse.$key.$value',
+    'clause.art.${clause.art}',
+  ]) {
+    final lesson = l.curriculum.syntaxLessonOrNull(id);
+    if (lesson != null) syntax[id] = lesson;
+  }
+  final folded = <String, Set<int>>{};
+  for (final MapEntry(:key, :value) in l.lessons.wordToLesson.entries) {
+    (folded[l.language.fold(key)] ??= {}).add(value);
+  }
+  return (
+    word: sorted(
+      exactWord != null
+          ? [exactWord]
+          : folded[l.language.fold(token.lemma)] ?? const <int>{},
+    ),
+    typeAndForm: sorted(both),
+    type: sorted(types.difference(both)),
+    form: sorted(forms.difference(both)),
+    syntax: syntax,
+  );
+}
+
+/// The (key, text) of every text that the sheet shows for [token] and its
+/// [l] lessons, under a key-echo i18n.
+List<(String?, String)> _sheetLines(
+  WordToken token,
+  TokenLessons l,
+  String? meaning,
+  Hilfe? hilfe,
+) {
+  (String?, String) line(String kind, int n, {String? topic}) => (
+    'exam.sheet.lesson.${topic ?? kind}.$n',
+    keyEcho('exam.sheet.lesson.$kind', {
+      'lesson': '$n',
+      if (topic != null) 'topic': 'exam.$topic',
+    }),
+  );
+  return [
+    (null, token.la),
+    (null, keyEcho('exam.sheet.lemma', {'lemma': token.lemma})),
+    if (meaning != null && meaning.isNotEmpty)
+      (null, keyEcho('exam.sheet.meaning', {'meaning': meaning})),
+    if (hilfe != null && hilfe.angabe.isNotEmpty)
+      (null, keyEcho('exam.sheet.entry', {'angabe': hilfe.angabe})),
+    (
+      null,
+      keyEcho('exam.sheet.analysis', {
+        'analysis': [
+          for (final e in token.analyse.codes.entries)
+            'exam.analyse.${e.key}.${e.value}',
+        ].join(', '),
+      }),
+    ),
+    for (final n in l.word) line('word', n),
+    for (final n in l.typeAndForm) line('typeAndForm', n),
+    for (final n in l.type) line('type', n),
+    for (final n in l.form) line('form', n),
+    for (final MapEntry(:key, :value) in l.syntax.entries)
+      line('syntax', value, topic: key),
+  ];
+}
+
 void main() {
   testWidgets('the sheet shows the word, type, form and syntax '
       'lessons the lookups give, and nothing for a value that is missing', (
@@ -206,11 +281,12 @@ void main() {
         adjectives: [...some(nouns, 2), _unlisted],
         participles: some(verbs, 2),
         funktionChance: 0.4,
+        blankHilfeChance: 0.3,
       );
       final exam = parseExam(jsonEncode(gen.exam()), latinLang);
       final keepWords = [1.0, 0.7, 0.0][seed % 3];
       final keepSyntax = [1.0, 0.5, 0.0][(seed ~/ 3) % 3];
-      final lessons = _without(realLessons, {
+      final lessons = withoutWords(realLessons, {
         for (final w in realLessons.wordToLesson.keys)
           if (r.nextDouble() >= keepWords) w,
         ..._oneSpellingPerGroup(r, byLetters),
@@ -298,6 +374,44 @@ void main() {
             (t.key as ValueKey<String>).value: t.data!,
         };
         final expected = _expected(token, clause, files, lessons, curriculum);
+        final ruleLessons = _ruleLessons(
+          LessonLookup(latinLang, lessons, curriculum, files),
+          token,
+          clause,
+        );
+        final hilfe = exam.hilfen.where((h) => h.lemma == token.lemma);
+        if (hilfe.any((h) => h.angabe.isEmpty)) hit('empty hilfe angabe');
+        final hilfeDe = hilfe.firstOrNull?.de;
+        final courseMeaning = items
+            .where((i) => i.lemma == token.lemma)
+            .firstOrNull
+            ?.translation;
+        if (hilfeDe != null && hilfeDe.isEmpty) {
+          hit(
+            courseMeaning != null && courseMeaning.isNotEmpty
+                ? 'empty hilfe de with course meaning'
+                : 'empty hilfe de without course meaning',
+          );
+        }
+        final shownSheet = [
+          for (final t in tester.widgetList<Text>(
+            find.descendant(
+              of: find.byKey(const Key('exam.sheet')),
+              matching: find.byType(Text),
+            ),
+          ))
+            ((t.key as ValueKey<String>?)?.value, t.data!),
+        ];
+        expect(
+          shownSheet,
+          _sheetLines(
+            token,
+            ruleLessons,
+            hilfeDe != null && hilfeDe.isNotEmpty ? hilfeDe : courseMeaning,
+            hilfe.firstOrNull,
+          ),
+          reason: '$why: the whole sheet equals the lines of the rule copy',
+        );
         expect(shown.keys.toSet(), expected.keys.toSet(), reason: why);
         for (final MapEntry(:key, :value) in shown.entries) {
           final id = key.substring(_prefix.length, key.lastIndexOf('.'));
@@ -380,6 +494,9 @@ void main() {
       'several type or form lines',
       'word line of a homograph',
       'no form line',
+      'empty hilfe angabe',
+      'empty hilfe de with course meaning',
+      'empty hilfe de without course meaning',
     ]) {
       expect(seen[what], greaterThan(0), reason: 'drawn cases reach "$what"');
     }

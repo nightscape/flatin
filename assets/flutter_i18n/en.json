@@ -429,6 +429,12 @@
     "words": "Words",
     "grammar": "Grammar"
   },
+  "lookup": {
+    "home": "Look up a word",
+    "title": "Look up a word",
+    "hint": "Type a word",
+    "notFound": "Not found."
+  },
   "exam": {
     "home": "Practise an exam",
     "list": {

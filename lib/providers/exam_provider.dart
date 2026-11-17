@@ -18,12 +18,17 @@ import 'locale_provider.dart';
 
 part 'exam_provider.g.dart';
 
-/// The language whose codes and rules the exam packs of the active course use.
+/// The language of the active course: its codes, spelling folds and rules.
 @riverpod
-Future<Language> examLanguage(Ref ref) async {
+Future<Language> courseLanguage(Ref ref) async {
   await ref.watch(courseProvider.future);
   return loadLanguage();
 }
+
+/// The language whose codes and rules the exam packs of the active course use.
+@riverpod
+Future<Language> examLanguage(Ref ref) =>
+    ref.watch(courseLanguageProvider.future);
 
 /// The imported exam packs of the active course.
 @riverpod
@@ -120,12 +125,12 @@ Future<Map<String, ExamWord>> examWords(Ref ref) async {
   return words;
 }
 
-/// Where the course teaches the words of the exam sheet.
+/// Where the course teaches its words.
 @riverpod
 Future<LessonLookup> lessonLookup(Ref ref) async {
   final words = await ref.watch(examWordsProvider.future);
   return LessonLookup(
-    await ref.watch(examLanguageProvider.future),
+    await ref.watch(courseLanguageProvider.future),
     await ref.watch(lessonDataProvider.future),
     await ref.watch(curriculumProvider.future),
     {for (final MapEntry(:key, :value) in words.entries) key: value.files},
