@@ -150,7 +150,7 @@ final class ExamAxesProvider
   }
 }
 
-String _$examAxesHash() => r'f372ce0730275abb60338b9f944bc376453a1690';
+String _$examAxesHash() => r'98fe63bc8f734c121468fa6e74c03dcc810b829c';
 
 /// The app's words by lemma: the meaning in the UI language, and the word
 /// card id and data file, one per data file that lists the lemma.

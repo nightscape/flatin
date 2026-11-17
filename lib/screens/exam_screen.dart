@@ -153,7 +153,11 @@ class _ExamScreenState extends ConsumerState<ExamScreen> {
 
   /// The merkmale of [i] that have a dropdown.
   List<String> _asked(BestimmenItem i, _AxesOf axes) =>
-      AnswerDescription.askable(axes(i), i.merkmale);
+      AnswerDescription.askable(
+        axes(i),
+        (_tokens[i.token]! as WordToken).analyse.codes,
+        i.merkmale,
+      );
 
   /// Whether the task has an item that only the task mark decides.
   bool _hasSelfMarked(ExamTask t, _AxesOf axes) => switch (t) {

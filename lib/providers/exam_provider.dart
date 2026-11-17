@@ -61,14 +61,16 @@ Future<Map<String, Axes>> examAxes(Ref ref) async {
       (a) => examLanguage.form.contains(a.id),
     )) {
       final codes = {for (final c in examLanguage.analyse[axis.id]!) '$c'};
+      final values = [
+        for (final v in axis.values)
+          if (codes.contains(v.$1)) v,
+      ];
+      if (values.isEmpty) continue;
       kept.add(
         GrammarAxis(
           id: axis.id,
           name: axis.name,
-          values: [
-            for (final v in axis.values)
-              if (codes.contains(v.$1)) v,
-          ],
+          values: values,
           hiddenInLabel: axis.hiddenInLabel.intersection(codes),
         ),
       );

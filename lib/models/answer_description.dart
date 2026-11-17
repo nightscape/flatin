@@ -189,11 +189,21 @@ class AnswerDescription {
     return files.reduce((a, b) => covered(b) > covered(a) ? b : a);
   }
 
-  /// The merkmale of [merkmale] that have a dropdown in [files].
-  static List<String> askable(List<Axes> files, Iterable<String> merkmale) {
+  /// The merkmale of [merkmale] that have a dropdown in [files] and offer
+  /// the code that [codes] gives the token.
+  static List<String> askable(
+    List<Axes> files,
+    Codes codes,
+    Iterable<String> merkmale,
+  ) {
     if (files.isEmpty) return const [];
-    final ids = _fit(files, merkmale).axes.map((a) => a.id).toSet();
-    return merkmale.where(ids.contains).toList();
+    final axes = _fit(files, merkmale);
+    return [
+      for (final m in merkmale)
+        if (axes.axes.any((a) => a.id == m) &&
+            axes.byId(m).codes.contains('${codes[m]}'))
+          m,
+    ];
   }
 
   /// The question for the [askable] merkmale of a token with analysis
@@ -203,7 +213,7 @@ class AnswerDescription {
     Codes codes,
     Iterable<String> merkmale,
   ) {
-    final ids = askable(files, merkmale);
+    final ids = askable(files, codes, merkmale);
     final selectors = Selectors.forAxes(_fit(files, merkmale), ids);
     return AnswerDescription(selectors, [
       {for (final id in selectors.sections) id: '${codes[id]!}'},

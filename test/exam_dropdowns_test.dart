@@ -83,6 +83,22 @@ List<Asked> _items(Pack pack) {
   ];
 }
 
+/// The cases with the lemma of every word token replaced by a word that no
+/// data file of the app lists.
+Iterable<(String, Pack)> _unknownLemmas() sync* {
+  final aux = latinLang.rules.compound!.aux;
+  for (final (name, pack) in _cases()) {
+    final uebersetzung = pack['uebersetzung'] as Pack;
+    for (final t in [
+      ...uebersetzung['hilfen'] as List,
+      for (final s in uebersetzung['saetze'] as List) ...s['tokens'] as List,
+    ]) {
+      if (t['lemma'] case final String l when l != aux) t['lemma'] = 'ignot$l';
+    }
+    yield ('$name, unknown lemmas', pack);
+  }
+}
+
 Iterable<Asked> _asked(Pack pack) =>
     _items(pack).where((i) => i.sections.isNotEmpty);
 
@@ -541,5 +557,39 @@ void main() {
       );
     }
     expect(selfMarked, greaterThan(0));
+  });
+
+  testWidgets('an item whose lemma no data file lists shows a dropdown for '
+      'each of its form merkmale', (tester) async {
+    var seen = 0;
+    for (final (name, pack) in _unknownLemmas()) {
+      await _open(tester, pack);
+      for (final i in _asked(pack)) {
+        for (final s in i.sections) {
+          seen++;
+          expect(
+            find.byKey(_dropdown(i, s)),
+            findsOneWidget,
+            reason: '$name ${i.task}.${i.index} $s',
+          );
+        }
+      }
+    }
+    expect(seen, greaterThan(0));
+  });
+
+  test('every code of the language analyse that the Latin data files teach '
+      'has a value in the grammar axis of that key', () async {
+    final gaps = <String>[];
+    for (final file in ['nouns', 'verbs']) {
+      final grammar = await loadGrammarFile(file, language: 'de');
+      for (final axis in grammar.axes.axes) {
+        if (!latinLang.form.contains(axis.id)) continue;
+        for (final code in latinLang.analyse[axis.id]!) {
+          if (!axis.codes.contains('$code')) gaps.add('$file ${axis.id} $code');
+        }
+      }
+    }
+    expect(gaps, isEmpty);
   });
 }
