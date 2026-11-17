@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:latin_practice/data/exercise_choice.dart';
 import 'package:latin_practice/data/exercise_kinds.dart';
 import 'package:latin_practice/data/german_forms.dart';
@@ -44,6 +45,7 @@ void main() {
 
   setUpAll(() async {
     TestWidgetsFlutterBinding.ensureInitialized();
+    SharedPreferences.setMockInitialValues({});
     adjectives = [
       for (final i in await loadAllPracticeItems())
         if (i.formOrder.any((k) => k.contains('komp'))) i,

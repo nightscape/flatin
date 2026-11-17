@@ -8,18 +8,18 @@ part of 'exam_provider.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
-/// The language whose codes and rules the exam packs use.
+/// The language whose codes and rules the exam packs of the active course use.
 
 @ProviderFor(examLanguage)
 final examLanguageProvider = ExamLanguageProvider._();
 
-/// The language whose codes and rules the exam packs use.
+/// The language whose codes and rules the exam packs of the active course use.
 
 final class ExamLanguageProvider
     extends
         $FunctionalProvider<AsyncValue<Language>, Language, FutureOr<Language>>
     with $FutureModifier<Language>, $FutureProvider<Language> {
-  /// The language whose codes and rules the exam packs use.
+  /// The language whose codes and rules the exam packs of the active course use.
   ExamLanguageProvider._()
     : super(
         from: null,
@@ -45,17 +45,17 @@ final class ExamLanguageProvider
   }
 }
 
-String _$examLanguageHash() => r'2db64d5c7033e10cef8fe10a04d1aea1aef049bb';
+String _$examLanguageHash() => r'3c02a335c16d781ee42fe587d9d6fbb783f2186e';
 
-/// The imported exam packs.
+/// The imported exam packs of the active course.
 
 @ProviderFor(ExamPacks)
 final examPacksProvider = ExamPacksProvider._();
 
-/// The imported exam packs.
+/// The imported exam packs of the active course.
 final class ExamPacksProvider
     extends $AsyncNotifierProvider<ExamPacks, List<Exam>> {
-  /// The imported exam packs.
+  /// The imported exam packs of the active course.
   ExamPacksProvider._()
     : super(
         from: null,
@@ -75,9 +75,9 @@ final class ExamPacksProvider
   ExamPacks create() => ExamPacks();
 }
 
-String _$examPacksHash() => r'5a0866c6aba750aaa1c42cf988b132bf3d1b1ac9';
+String _$examPacksHash() => r'612e53b3e0b452ee6e09aee3682d76c45e1d7708';
 
-/// The imported exam packs.
+/// The imported exam packs of the active course.
 
 abstract class _$ExamPacks extends $AsyncNotifier<List<Exam>> {
   FutureOr<List<Exam>> build();

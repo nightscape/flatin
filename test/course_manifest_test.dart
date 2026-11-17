@@ -16,6 +16,8 @@ const _seeds = 200;
 /// must give exactly these, in this order.
 const CourseSpec _latin = (
   path: 'lib/data/course.yaml',
+  id: 'latein',
+  name: {'de': 'Latein', 'en': 'Latin'},
   language: 'lib/data/languages/la.yaml',
   dataFiles: [
     (id: 'nouns', path: 'lib/data/latin_nouns.yaml', role: DataFileRole.noun),
@@ -75,10 +77,19 @@ Matcher _stateError(List<String> parts) => throwsA(
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  test('a list of one course loads that course: its data file ids, paths '
-      'and roles in order, its gloss files, books, sentences, game rules and '
-      'language', () async {
-    for (final (name, assets, courses) in _oneCourse()) {
+  test('a list of one to four courses loads its courses in order: their ids, '
+      'names, data file ids, paths and roles, gloss files, books, sentences, '
+      'game rules and language', () async {
+    final cases = [
+      ..._oneCourse(),
+      for (var seed = 1; seed <= _seeds; seed++)
+        () {
+          final rng = Random(seed);
+          final courses = _drawList(rng);
+          return ('list $seed', courseListAssets(courses, rng), courses);
+        }(),
+    ];
+    for (final (name, assets, courses) in cases) {
       _serve(assets);
       final loaded = await loadCourses();
       expect(
@@ -89,16 +100,59 @@ void main() {
     }
   });
 
-  test('a list of any other length than one throws and names the count, '
-      'after the checks of each entry passed', () async {
+  test('an empty list throws and names the list', () async {
+    _serve(courseListAssets([], Random(1)));
+    await expectLater(loadCourses(), _stateError(['$coursesAsset lists no']));
+  });
+
+  test('a course id that repeats in a list throws and names the manifest of '
+      'the repeat and the id', () async {
     for (var seed = 1; seed <= _seeds; seed++) {
       final rng = Random(seed);
-      final courses = seed == 1 ? <CourseSpec>[] : _drawList(rng);
+      final courses = _drawList(rng);
+      final at = 1 + rng.nextInt(courses.length - 1);
+      final id = courses[rng.nextInt(at)].id;
+      courses[at] = (
+        path: courses[at].path,
+        id: id,
+        name: courses[at].name,
+        language: courses[at].language,
+        dataFiles: courses[at].dataFiles,
+        glossFiles: courses[at].glossFiles,
+        books: courses[at].books,
+        sentences: courses[at].sentences,
+        gameRules: courses[at].gameRules,
+        earnDataFiles: courses[at].earnDataFiles,
+      );
       _serve(courseListAssets(courses, rng));
       await expectLater(
         loadCourses(),
-        _stateError(['$coursesAsset lists ${courses.length} courses']),
+        _stateError([courses[at].path, 'course id "$id" repeats']),
         reason: 'seed $seed',
+      );
+    }
+  });
+
+  test('a manifest whose id is no lowercase slug, or whose name lacks an '
+      'offered language, has another language, or has an empty text throws '
+      'and names the manifest', () {
+    final rng = Random(7);
+    final spec = drawCourse(rng, 'c0');
+    final text = courseYaml(spec, rng);
+    final broken = [
+      for (final id in ['Latein', 'la tein', '', '-a', 'a--b', 'ä', 'a_b'])
+        text.replaceFirst('id: c0', "id: '$id'"),
+      text.replaceFirst('name: {de: Kurs c0, ', 'name: {'),
+      text.replaceFirst('en: Course c0}', 'en: Course c0, fr: Cours}'),
+      text.replaceFirst('de: Kurs c0', "de: ' '"),
+      text.replaceFirst('name: {de: Kurs c0, en: Course c0}', 'name: Kurs'),
+      text.replaceFirst('id: c0\n', ''),
+    ];
+    for (final source in broken) {
+      expect(
+        () => Course.parse(spec.path, source),
+        _stateError([spec.path]),
+        reason: source,
       );
     }
   });

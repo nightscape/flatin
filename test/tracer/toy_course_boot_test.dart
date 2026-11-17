@@ -34,7 +34,7 @@ final tracerSteps = <TracerStep>[
 const _toyFile = 'toy_words';
 
 Future<void> _boot(WidgetTester tester) async {
-  resetPracticeDataForTest();
+  resetPracticeData();
   SharedPreferences.setMockInitialValues({});
   injectToyCourse();
   tester.view.physicalSize = const Size(1200, 4000);

@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fsrs/fsrs.dart' show Rating;
 import 'package:latin_practice/data/attribution.dart';
 import 'package:latin_practice/data/curriculum.dart';
@@ -72,6 +73,7 @@ String _translate(Map<String, dynamic> json, String key, String text) =>
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences.setMockInitialValues({});
 
   late SentenceWorld world;
   final generator = generatorFor(_kind, exerciseGenerators) as SpecGenerator;

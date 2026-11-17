@@ -31,7 +31,10 @@ part 'round_providers.g.dart';
 
 /// The sentences of the sentence kinds; an asset, so loaded once.
 @Riverpod(keepAlive: true)
-Future<SentenceCorpus> sentenceCorpus(Ref ref) => loadSentenceCorpus();
+Future<SentenceCorpus> sentenceCorpus(Ref ref) async {
+  await ref.watch(courseProvider.future);
+  return loadSentenceCorpus();
+}
 
 /// The topics the course offers now with words of [focus], in course order.
 @riverpod

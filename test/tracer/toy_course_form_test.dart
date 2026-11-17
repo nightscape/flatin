@@ -109,7 +109,7 @@ void main() {
       'the language forms words with ${c.form}, the kraft axis has '
       '${c.axisValues} and the language analyse has ${c.analyse}',
       (tester) async {
-        resetPracticeDataForTest();
+        resetPracticeData();
         SharedPreferences.setMockInitialValues({});
         injectToyCourse(
           served: {

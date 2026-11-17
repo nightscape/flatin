@@ -45,7 +45,7 @@ final class GameRulesProvider
   }
 }
 
-String _$gameRulesHash() => r'07184b407cbff0ea98dd86ff1bff0431cac537b7';
+String _$gameRulesHash() => r'a4a036036840a2024c54932a6495b1a9ce24ef7d';
 
 /// Loads after [gameRulesProvider], so a screen that has the ledger also has
 /// the rules.

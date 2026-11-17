@@ -9,6 +9,7 @@ import '../data/languages/language.dart' show Language;
 import '../data/lesson_data.dart';
 import '../models/course.dart';
 import '../data/settings_conversion.dart';
+import 'course_provider.dart';
 import 'lesson_provider.dart';
 
 part 'settings_provider.g.dart';
@@ -17,15 +18,18 @@ part 'settings_provider.g.dart';
 class SettingsNotifier extends _$SettingsNotifier {
   static const String _settingsKey = 'practice_settings';
 
+  late String _key;
+
   @override
   Future<Settings> build() async {
+    _key = (await ref.watch(courseScopeProvider.future)).key(_settingsKey);
     final lastLesson = (await ref.watch(lessonDataProvider.future)).lastLesson;
     return await _loadSettings(lastLesson);
   }
 
   Future<Settings> _loadSettings(int lastLesson) async {
     final prefs = await SharedPreferences.getInstance();
-    final settingsJson = prefs.getString(_settingsKey);
+    final settingsJson = prefs.getString(_key);
 
     if (settingsJson == null) {
       return Settings(lastLesson: lastLesson);
@@ -92,7 +96,7 @@ class SettingsNotifier extends _$SettingsNotifier {
 
   Future<void> _saveSettings(Settings settings) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_settingsKey, jsonEncode(settings.toJson()));
+    await prefs.setString(_key, jsonEncode(settings.toJson()));
   }
 
   /// Toggle a form's enabled state.

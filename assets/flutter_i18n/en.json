@@ -2,6 +2,9 @@
   "app": {
     "title": "Learn Latin"
   },
+  "course": {
+    "switch": "Switch course"
+  },
   "home": {
     "nouns": "Nouns (declension)",
     "verbs": "Verbs (conjugation)",

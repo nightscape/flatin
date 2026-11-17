@@ -82,6 +82,7 @@ class _Loaded {
 }
 
 _Loaded? _loaded;
+int _generation = 0;
 Zone? _parsingZone;
 final _waiting = <Completer<_Loaded>>[];
 
@@ -89,9 +90,10 @@ final _waiting = <Completer<_Loaded>>[];
 /// abandon it. The app leaves the no-op default in place.
 Future<void> Function() parseGate = () async {};
 
-/// Puts the loader back to the state of a fresh process, so a test can drive
-/// the first load again.
-void resetPracticeDataForTest() {
+/// Puts the loader back to the state of a fresh process: the next load reads
+/// the active course's files again.
+void resetPracticeData() {
+  _generation++;
   _loaded = null;
   _parsingZone = null;
   _waiting.clear();
@@ -112,13 +114,19 @@ Future<_Loaded> _load() async {
     return waiter.future;
   }
   _parsingZone = Zone.current;
+  final generation = _generation;
   final _Loaded loaded;
   try {
     loaded = await _parse();
   } catch (error, stack) {
-    _release((waiter) => waiter.completeError(error, stack));
+    if (generation == _generation) {
+      _release((waiter) => waiter.completeError(error, stack));
+    }
     rethrow;
   }
+  // A reset since the parse began means the result may belong to a course
+  // that is no longer active: its caller gets it, the cache does not.
+  if (generation != _generation) return loaded;
   _loaded ??= loaded;
   _release((waiter) => waiter.complete(_loaded!));
   return _loaded!;
@@ -183,8 +191,9 @@ FormMetadata _metadata(GrammarFile file) {
 Future<List<PracticeItem>> loadPracticeItems(
   String assetPath, {
   String language = courseLanguage,
-}) async {
-  final all = await _load();
+}) async => _itemsOf(await _load(), assetPath, language);
+
+List<PracticeItem> _itemsOf(_Loaded all, String assetPath, String language) {
   final loaded = all.parsed(language);
   final dataFile = all.course.dataFileAt(assetPath);
   final file = loaded.file(dataFile.id);
@@ -211,10 +220,13 @@ Future<List<PracticeItem>> loadPracticeItems(
 /// The items of every data file, in course order.
 Future<List<PracticeItem>> loadAllPracticeItems({
   String language = courseLanguage,
-}) async => [
-  for (final file in (await _load()).course.dataFiles)
-    ...await loadPracticeItems(file.path, language: language),
-];
+}) async {
+  final all = await _load();
+  return [
+    for (final file in all.course.dataFiles)
+      ..._itemsOf(all, file.path, language),
+  ];
+}
 
 /// The parsed data file [dataFileId] in [language].
 Future<GrammarFile> loadGrammarFile(

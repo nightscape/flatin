@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fsrs/fsrs.dart' show Rating;
 import 'package:latin_practice/data/attribution.dart';
 import 'package:latin_practice/data/curriculum.dart';
@@ -74,6 +75,7 @@ void main() {
 
   setUpAll(() async {
     TestWidgetsFlutterBinding.ensureInitialized();
+    SharedPreferences.setMockInitialValues({});
     items = await loadAllPracticeItems();
     corpus = await loadSentenceCorpus();
     curriculum = await loadCurriculum(latinCourse.books);

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:latin_practice/data/languages/language.dart';
+import 'package:latin_practice/models/course.dart' show coursesAsset;
 import 'package:yaml/yaml.dart';
 
 import 'latin_course.dart';
@@ -119,4 +120,71 @@ const _toyGrammar =
     next = end;
   }
   return (books: books, lessons: lessons, gap: gap);
+}
+
+const _toyCourseDir = 'test/fixtures/toy_course';
+
+/// One drawn course of a course list: the toy course under its own id, name
+/// and data file id.
+typedef DrawnCourse = ({
+  String id,
+  String dataFileId,
+  Map<String, String> name,
+});
+
+/// One to three drawn courses with distinct ids and data file ids; the
+/// first of the list is the course that data stored before a list existed
+/// belongs to.
+List<DrawnCourse> drawnCourses(Random r, {int min = 1, int max = 3}) {
+  final count = min + r.nextInt(max - min + 1);
+  return [
+    for (var i = 0; i < count; i++)
+      (
+        id: 'kurs$i-${r.nextInt(1000)}',
+        dataFileId: 'words${i}_${r.nextInt(1000)}',
+        name: drawnLanguageName(r),
+      ),
+  ];
+}
+
+String _toyFile(String name) => File('$_toyCourseDir/$name').readAsStringSync();
+
+/// The asset texts that make the app load [courses] as its course list; every
+/// course teaches the toy words of its own data file in the two toy books.
+Map<String, String> servedCourses(List<DrawnCourse> courses) {
+  String own(String text, DrawnCourse c) =>
+      text.replaceAll('toy_words', c.dataFileId);
+  final manifest = _toyFile('course.yaml');
+  return {
+    coursesAsset: [
+      for (final c in courses) '- drawn/${c.id}/course.yaml',
+    ].join('\n'),
+    for (final c in courses) ...{
+      'drawn/${c.id}/course.yaml': own(manifest, c)
+          .replaceFirst('id: toy\n', 'id: ${c.id}\n')
+          .replaceFirst(
+            RegExp(r'name: \{.*\}\n'),
+            'name: {de: "${c.name['de']}", en: "${c.name['en']}"}\n',
+          )
+          .replaceAll('$_toyCourseDir/toy_book_', 'drawn/${c.id}/book_')
+          .replaceAll(
+            '$_toyCourseDir/${c.dataFileId}.yaml',
+            'drawn/${c.id}/words.yaml',
+          ),
+      'drawn/${c.id}/words.yaml': own(_toyFile('toy_words.yaml'), c),
+      'drawn/${c.id}/book_1.yaml': own(_toyFile('toy_book_1.yaml'), c),
+      'drawn/${c.id}/book_2.yaml': own(_toyFile('toy_book_2.yaml'), c),
+    },
+  };
+}
+
+/// The toy exam pack under [packId], bound to [course] by its `kurs` header
+/// unless [course] is null.
+String drawnPack(String packId, String? course) {
+  final text = _toyFile(
+    'toy.exam',
+  ).replaceFirst('id: toy-pack\n', 'id: $packId\n');
+  return course == null
+      ? text
+      : text.replaceFirst('schema: 1\n', 'schema: 1\nkurs: $course\n');
 }

@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:latin_practice/data/exercise_kinds.dart';
 import 'package:latin_practice/data/exercise_spec.dart' show OneSentence;
 import 'package:latin_practice/data/german_forms.dart';
@@ -27,6 +28,7 @@ void main() {
 
   setUpAll(() async {
     TestWidgetsFlutterBinding.ensureInitialized();
+    SharedPreferences.setMockInitialValues({});
     items = await loadAllPracticeItems();
     corpus = await loadSentenceCorpus();
     everyBundle = {

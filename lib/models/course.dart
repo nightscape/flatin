@@ -3,6 +3,7 @@ import 'package:yaml/yaml.dart';
 import '../data/asset_text.dart';
 import '../data/game_rules.dart';
 import '../data/languages/language.dart' show Language;
+import '../providers/locale_provider.dart' show offeredLocales;
 import 'exercise.dart' show ExerciseKind;
 
 /// The list of course manifests the app reads.
@@ -20,9 +21,20 @@ final class DataFile {
   const DataFile(this.id, this.path, this.role);
 }
 
+/// The key of the stored id of the course the learner reads.
+const activeCourseKey = 'active_course';
+
+final _courseId = RegExp(r'^[a-z0-9]+(-[a-z0-9]+)*$');
+
 /// The files one course reads, as its manifest at [path] names them.
 final class Course {
   final String path;
+
+  /// A lowercase slug, unique in the course list.
+  final String id;
+
+  /// The name of the course by UI language code, one per offered locale.
+  final Map<String, String> name;
   final String language;
 
   /// In load order, which is also the display order.
@@ -38,6 +50,8 @@ final class Course {
 
   const Course({
     required this.path,
+    required this.id,
+    required this.name,
     required this.language,
     required this.dataFiles,
     required this.glossFiles,
@@ -47,6 +61,8 @@ final class Course {
   });
 
   static const _keys = {
+    'id',
+    'name',
     'language',
     'data_files',
     'gloss_files',
@@ -59,8 +75,29 @@ final class Course {
   factory Course.parse(String path, String source) {
     final yaml = _map(loadYaml(source), path);
     _keysExactly(yaml, _keys, path);
+    final id = _string(yaml['id'], '$path: id');
+    if (!_courseId.hasMatch(id)) {
+      throw StateError('$path: id "$id" is not a lowercase slug');
+    }
+    final name = {
+      for (final MapEntry(:key, :value) in _map(
+        yaml['name'],
+        '$path: name',
+      ).entries)
+        _string(key, '$path: name'): _string(value, '$path: name.$key'),
+    };
+    final codes = {for (final o in offeredLocales) o.code};
+    if (name.keys.toSet().difference(codes).isNotEmpty ||
+        codes.difference(name.keys.toSet()).isNotEmpty ||
+        name.values.any((n) => n.trim().isEmpty)) {
+      throw StateError(
+        '$path: name needs exactly one non-empty text for each of $codes',
+      );
+    }
     return Course(
       path: path,
+      id: id,
+      name: name,
       language: _string(yaml['language'], '$path: language'),
       dataFiles: [
         for (final (i, entry) in _list(yaml['data_files'], path).indexed)
@@ -88,6 +125,13 @@ final class Course {
   /// Every data file but the vocab file, in course order.
   List<DataFile> get grammarFiles =>
       dataFiles.where((f) => f.role != DataFileRole.vocab).toList();
+
+  /// Whether the card [cardId] (an item id or a grammar card id) belongs to
+  /// one of this course's data files.
+  bool ownsCard(String cardId) => dataFiles.any(
+    (f) =>
+        cardId.startsWith('${f.id}:') || cardId.startsWith('grammar:${f.id}:'),
+  );
 
   DataFile dataFile(String id) => dataFiles.singleWhere(
     (f) => f.id == id,
@@ -138,13 +182,17 @@ YamlList _list(Object? value, String where) =>
 String _string(Object? value, String where) =>
     value is String ? value : throw StateError('$where: not a string');
 
-/// Throws a [StateError] when a data file id repeats across [courses] (naming
-/// the manifest of the repeat), when a game rule's `when` names a data file
-/// or an exercise kind its course does not have (naming the game rules file),
-/// and then when the list does not hold exactly one course.
+/// Throws a [StateError] when a course id or a data file id repeats across
+/// [courses] (naming the manifest of the repeat), when a game rule's `when`
+/// names a data file or an exercise kind its course does not have (naming the
+/// game rules file), and then when the list is empty.
 void checkCourses(List<(Course, GameRules)> courses) {
   final seen = <String>{};
+  final ids = <String>{};
   for (final (course, rules) in courses) {
+    if (!ids.add(course.id)) {
+      throw StateError('${course.path}: course id "${course.id}" repeats');
+    }
     for (final file in course.dataFiles) {
       if (!seen.add(file.id)) {
         throw StateError('${course.path}: data file id "${file.id}" repeats');
@@ -169,11 +217,7 @@ void checkCourses(List<(Course, GameRules)> courses) {
       }
     }
   }
-  if (courses.length != 1) {
-    throw StateError(
-      '$coursesAsset lists ${courses.length} courses; the app reads one',
-    );
-  }
+  if (courses.isEmpty) throw StateError('$coursesAsset lists no course');
 }
 
 /// Throws a [StateError] naming the data file whose own `data_file_id`
@@ -211,9 +255,34 @@ Future<List<Course>> loadCourses() async {
   return [for (final (course, _) in courses) course];
 }
 
-/// The one course of [coursesAsset].
-Future<Course> loadCourse() async => (await loadCourses()).single;
+/// The course of [courses] that [storedId] names, or the first one when the
+/// store holds no id or an id that left the list.
+Course activeOf(List<Course> courses, String? storedId) =>
+    courses.firstWhere((c) => c.id == storedId, orElse: () => courses.first);
 
-/// The language file of the one course.
+String? _activeCourseId;
+
+/// Tells the loaders that have no `Ref` which course the learner reads. The
+/// provider that holds the learner's choice calls it.
+void useCourse(String id) => _activeCourseId = id;
+
+/// The course the learner reads, as [useCourse] last set it, else the first.
+Future<Course> loadCourse() async =>
+    activeOf(await loadCourses(), _activeCourseId);
+
+/// The language file of the active course.
 Future<Language> loadLanguage() async =>
     Language.parse(await loadAssetText((await loadCourse()).language));
+
+/// The active course and the list it comes from. What an earlier version
+/// stored without a course belongs to the first course, so only the other
+/// courses get a suffixed storage key.
+final class CourseScope {
+  final List<Course> all;
+  final Course active;
+  CourseScope(this.all, this.active) : assert(all.contains(active));
+
+  bool get isFirst => active == all.first;
+
+  String key(String base) => isFirst ? base : '$base.${active.id}';
+}

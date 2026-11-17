@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fsrs/fsrs.dart';
 import 'package:latin_practice/data/attribution.dart';
 import 'package:latin_practice/data/diagnosis.dart';
@@ -87,6 +88,7 @@ PracticeItem _hand(Map<FormKey, List<String>> forms) => handItem(
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences.setMockInitialValues({});
 
   late PracticeItem vocare;
   late PracticeItem audire;

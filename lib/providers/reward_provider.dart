@@ -1,5 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import 'course_provider.dart';
 import '../data/game_rules.dart';
 import '../data/rewards.dart';
 import '../models/reward.dart';
@@ -8,7 +9,10 @@ import '../services/reward_storage.dart';
 part 'reward_provider.g.dart';
 
 @riverpod
-Future<GameRules> gameRules(Ref ref) => loadGameRules();
+Future<GameRules> gameRules(Ref ref) async {
+  await ref.watch(courseProvider.future);
+  return loadGameRules();
+}
 
 /// Loads after [gameRulesProvider], so a screen that has the ledger also has
 /// the rules.

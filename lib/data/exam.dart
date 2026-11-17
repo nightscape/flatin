@@ -299,6 +299,9 @@ final class FreiTask extends ExamTask {
 
 final class Exam {
   final String id;
+
+  /// The id of the course the pack belongs to; null: the first course.
+  final String? kurs;
   final String titel;
   final int von;
   final int bis;
@@ -314,6 +317,7 @@ final class Exam {
 
   const Exam({
     required this.id,
+    this.kurs,
     required this.titel,
     required this.von,
     required this.bis,
@@ -352,6 +356,24 @@ Exam parseExam(String source, Language language) {
   return exam;
 }
 
+/// Throws [ExamRejected] unless [exam] belongs to the course [active] of
+/// [courseIds]: its `kurs`, or the first course when it names none.
+void checkExamCourse(
+  Exam exam, {
+  required List<String> courseIds,
+  required String active,
+}) {
+  final kurs = exam.kurs ?? courseIds.first;
+  final detail = !courseIds.contains(kurs)
+      ? 'no course "$kurs"'
+      : kurs != active
+      ? 'belongs to the course "$kurs", not to the active course "$active"'
+      : null;
+  if (detail != null) {
+    throw ExamRejected([ExamError(ExamRule.field, 'exam.kurs', detail)]);
+  }
+}
+
 /// The pack as YAML text that [parseExam] reads back to the same pack.
 /// The text is JSON, which is YAML.
 String serializeExam(Exam exam) =>
@@ -361,6 +383,7 @@ String serializeExam(Exam exam) =>
 Map<String, Object> examToYaml(Exam e) => {
   'schema': 1,
   'id': e.id,
+  if (e.kurs != null) 'kurs': e.kurs!,
   'titel': e.titel,
   'lektionen': {'von': e.von, 'bis': e.bis},
   'schwerpunkte': e.schwerpunkte,
@@ -598,6 +621,7 @@ Exam _exam(_Map m) {
   );
   return Exam(
     id: m.req('id'),
+    kurs: m.opt('kurs'),
     titel: m.req('titel'),
     von: von,
     bis: bis,

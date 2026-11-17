@@ -1,4 +1,6 @@
 # The toy course: one word class and no gloss files.
+id: toy
+name: {de: Spielkurs, en: Toy course}
 language: test/fixtures/toy_course/toy_language.yaml
 data_files:
   - {id: toy_words, path: test/fixtures/toy_course/toy_words.yaml, role: noun}

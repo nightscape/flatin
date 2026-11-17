@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:latin_practice/data/exercise_choice.dart';
 import 'package:latin_practice/data/exercise_kinds.dart';
 import 'package:latin_practice/data/practice_data.dart';
@@ -18,6 +19,7 @@ void main() {
     'a typed answer accepts a reading whose tense is switched off',
     () async {
       TestWidgetsFlutterBinding.ensureInitialized();
+      SharedPreferences.setMockInitialValues({});
       final items = await loadAllPracticeItems();
       final container = ProviderContainer(
         overrides: [dataLanguageProvider.overrideWith((ref) => 'de')],

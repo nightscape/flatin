@@ -8,6 +8,7 @@ import '../data/word_focus.dart';
 import '../models/course.dart';
 import '../models/reward.dart';
 import '../widgets/app_drawer.dart';
+import '../widgets/course_switcher.dart';
 import '../widgets/focus_picker.dart';
 import '../widgets/kursstand_chip.dart';
 import '../widgets/lernziel_chips.dart';
@@ -41,14 +42,17 @@ class HomeScreen extends ConsumerWidget {
       _ => (false, false),
     };
 
+    final severalCourses = (ref.watch(coursesProvider).value?.length ?? 1) > 1;
     return Scaffold(
       drawer: buildAppDrawer(context),
       appBar: AppBar(
-        title: Text(
-          key: const Key('app.title'),
-          FlutterI18n.translate(context, 'app.title'),
-          style: TextStyle(fontSize: titleFontSize),
-        ),
+        title: severalCourses
+            ? CourseSwitcher(fontSize: titleFontSize)
+            : Text(
+                key: const Key('app.title'),
+                FlutterI18n.translate(context, 'app.title'),
+                style: TextStyle(fontSize: titleFontSize),
+              ),
         actions: [const KursstandChip(), if (showCoins) const _Coins()],
       ),
       body: SingleChildScrollView(
@@ -60,7 +64,9 @@ class HomeScreen extends ConsumerWidget {
               builder: (context, box) {
                 final menu = Column(
                   children: [
-                    const _PracticeStart(),
+                    _PracticeStart(
+                      key: ValueKey(ref.watch(activeCourseProvider).value),
+                    ),
                     const SizedBox(height: 14),
                     _MenuButton(
                       buttonKey: const Key('home.grammar.button'),
@@ -254,7 +260,7 @@ class _TownPanel extends ConsumerWidget {
 /// The focus of the grammar file practice, then a button per grammar file.
 /// The focus starts at "Alles" whenever the home screen is built anew.
 class _PracticeStart extends ConsumerStatefulWidget {
-  const _PracticeStart();
+  const _PracticeStart({super.key});
 
   @override
   ConsumerState<_PracticeStart> createState() => _PracticeStartState();
