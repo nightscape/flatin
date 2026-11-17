@@ -270,9 +270,17 @@ void main() {
           for (final t in pack['aufgaben'] as List) 'exam.task.${t['id']}',
         ];
         for (final m in marks) {
-          await _tap(
-            tester,
-            find.byKey(Key('$m.${rng.nextBool() ? 'habIch' : 'anders'}')),
+          final mark = find.byKey(
+            Key('$m.${rng.nextBool() ? 'habIch' : 'anders'}'),
+          );
+          if (mark.evaluate().isNotEmpty) {
+            await _tap(tester, mark);
+            continue;
+          }
+          expect(
+            find.byKey(Key('$m.item.0')),
+            findsOneWidget,
+            reason: '$why: $m has neither a mark row nor an asked item',
           );
         }
         expect(

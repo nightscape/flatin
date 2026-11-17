@@ -451,7 +451,8 @@
       "points": "Punkte: {n} von {total}",
       "taskPoints": "{n} P.",
       "finish": "Prüfung beenden",
-      "finished": "{n} Wörter kommen morgen wieder."
+      "finished": "{n} Wörter kommen morgen wieder.",
+      "tryAgain": "Noch nicht ganz. Versuch es noch einmal."
     },
     "sheet": {
       "lemma": "Grundform: {lemma}",

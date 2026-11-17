@@ -7,6 +7,7 @@ import '../data/attribution.dart' show attributeParadigm;
 import '../data/esel_groups.dart';
 import '../data/esel_steps.dart';
 import '../models/exercise.dart' show bundleOf;
+import '../models/answer_description.dart';
 import '../models/practice_item.dart';
 import '../models/course_filter.dart';
 import '../providers/curriculum_provider.dart';
@@ -14,141 +15,15 @@ import '../models/course.dart';
 import '../providers/course_provider.dart';
 import '../providers/fsrs_provider.dart';
 import '../widgets/app_drawer.dart';
+import '../widgets/axis_dropdowns.dart';
 import '../models/reward.dart';
 import '../providers/reward_provider.dart';
 import '../widgets/reward_burst.dart';
 import '../widgets/esel_panel.dart';
 import '../widgets/explanation_lines.dart';
 
-/// The pick that says "this form has no value on that axis", e.g. the Person
-/// of an Infinitiv.
-const String absentValue = '';
-
-/// The dropdowns the classification screen shows for one item: one per axis
-/// whose value varies among the forms the learner may be asked about. An axis
-/// the enabled forms agree on is not asked, it is [fixed].
-class Selectors {
-  final Axes axes;
-
-  /// The axis ids with a dropdown, in axis order.
-  final List<String> sections;
-
-  /// Per shown axis, the codes it offers in axis order; [absentValue] comes
-  /// first when some enabled form has no value on that axis.
-  final Map<String, List<String>> options;
-
-  /// Axis id → the single code every enabled form has; part of every pick.
-  final Map<String, String> fixed;
-
-  const Selectors({
-    required this.axes,
-    required this.sections,
-    required this.options,
-    required this.fixed,
-  });
-
-  /// The text of one option: the axis value's own text, never a label override
-  /// (S17), so the Tempus dropdown reads "Futur I" under an Infinitiv too.
-  String optionText(String section, String code) =>
-      code == absentValue ? '—' : axes.byId(section).display(code);
-
-  bool isComplete(Map<String, String?> picks) =>
-      sections.every((section) => picks[section] != null);
-
-  /// The label of [labels] that [picks] names, or null if there is none.
-  FormLabel? labelFor(Map<String, String?> picks, List<FormLabel> labels) {
-    assert(isComplete(picks));
-    final features = {
-      ...fixed,
-      for (final section in sections)
-        if (picks[section] != absentValue) section: picks[section]!,
-    };
-    final key = axes.formatKey(features);
-    for (final label in labels) {
-      if (label.key == key) return label;
-    }
-    return null;
-  }
-
-  /// The right dropdowns of [combinations]: each label of [correct] goes to
-  /// at most one distinct combination, best match first, and counts the
-  /// dropdowns that agree with it. Ties go to the earlier combination, then
-  /// the earlier label.
-  int rightPicks(
-    List<Map<String, String?>> combinations,
-    List<FormLabel> correct,
-  ) {
-    final distinct = {for (final c in combinations) textOf(c): c}.values;
-    final pairs = [
-      for (final (i, c) in distinct.indexed)
-        for (final (j, label) in correct.indexed)
-          (
-            combination: i,
-            label: j,
-            agree: sections
-                .where((s) => c[s] == (label.features[s] ?? absentValue))
-                .length,
-          ),
-    ]..sort((a, b) => b.agree.compareTo(a.agree));
-    final usedCombinations = <int>{};
-    final usedLabels = <int>{};
-    var right = 0;
-    for (final p in pairs) {
-      if (p.agree == 0) break;
-      if (usedCombinations.contains(p.combination) ||
-          usedLabels.contains(p.label)) {
-        continue;
-      }
-      usedCombinations.add(p.combination);
-      usedLabels.add(p.label);
-      right += p.agree;
-    }
-    return right;
-  }
-
-  /// A pick in the words of the dropdowns, e.g. "Futur I 3. Person Singular".
-  String textOf(Map<String, String?> picks) => [
-    for (final section in sections)
-      if (picks[section] != absentValue) optionText(section, picks[section]!),
-  ].join(' ');
-
-  /// [label] in the words of the dropdowns.
-  String textOfLabel(FormLabel label) => textOf({
-    for (final section in sections)
-      section: label.features[section] ?? absentValue,
-  });
-}
-
-/// The selectors for the forms the learner may be asked about.
-Selectors selectorsFor(List<FormLabel> enabledLabels) {
-  assert(enabledLabels.isNotEmpty);
-  final axes = enabledLabels.first.axes;
-  final sections = <String>[];
-  final options = <String, List<String>>{};
-  final fixed = <String, String>{};
-
-  for (final axis in axes.axes) {
-    final used = {
-      for (final label in enabledLabels) label.features[axis.id] ?? absentValue,
-    };
-    if (used.length == 1) {
-      if (used.single != absentValue) fixed[axis.id] = used.single;
-      continue;
-    }
-    sections.add(axis.id);
-    options[axis.id] = [
-      if (used.contains(absentValue)) absentValue,
-      ...axis.codes.where(used.contains),
-    ];
-  }
-
-  return Selectors(
-    axes: axes,
-    sections: sections,
-    options: options,
-    fixed: fixed,
-  );
-}
+export '../models/answer_description.dart'
+    show Selectors, absentValue, selectorsFor;
 
 class WordClassificationScreen extends ConsumerStatefulWidget {
   /// Test seam: when given, these replace the random item and form pick.
@@ -458,10 +333,11 @@ class _WordClassificationScreenState
       _selectors.labelFor(combination, _currentItem!.formLabels);
 
   /// Check if a combination is correct
-  bool _isCombinationCorrect(Map<String, String?> combination) {
-    final formLabel = _combinationToFormLabel(combination);
-    return formLabel != null && _correctAnswers.contains(formLabel);
-  }
+  bool _isCombinationCorrect(Map<String, String?> combination) =>
+      AnswerDescription.ofLabels(
+        _enabledLabels,
+        _correctAnswers,
+      ).accepts(combination);
 
   /// Complete combinations the learner got wrong, including those that map to
   /// no label at all.
@@ -545,50 +421,18 @@ class _WordClassificationScreenState
       child: Row(
         children: [
           Expanded(
-            child: Wrap(
-              spacing: isMobile ? 8 : 12,
-              runSpacing: isMobile ? 8 : 12,
-              children: selectors.sections.map((section) {
-                return SizedBox(
-                  width: isMobile ? double.infinity : 150,
-                  child: DropdownButtonFormField<String>(
-                    key: Key('classification.$index.$section'),
-                    isExpanded: true,
-                    value: combination[section],
-                    decoration: InputDecoration(
-                      labelText: selectors.axes.byId(section).name,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: isMobile ? 12 : 16,
-                        vertical: isMobile ? 12 : 16,
-                      ),
-                    ),
-                    items: [
-                      const DropdownMenuItem<String>(
-                        value: null,
-                        child: Text('--'),
-                      ),
-                      ...selectors.options[section]!.map(
-                        (code) => DropdownMenuItem<String>(
-                          value: code,
-                          child: Text(selectors.optionText(section, code)),
-                        ),
-                      ),
-                    ],
-                    onChanged: _isChecked
-                        ? null
-                        : (value) {
-                            setState(() {
-                              _selectedAnswers[index] =
-                                  Map<String, String?>.from(combination)
-                                    ..[section] = value;
-                            });
-                          },
-                  ),
-                );
-              }).toList(),
+            child: AxisDropdowns(
+              selectors: selectors,
+              keyPrefix: 'classification.$index',
+              picks: combination,
+              isMobile: isMobile,
+              onPick: _isChecked
+                  ? null
+                  : (section, value) => setState(() {
+                      _selectedAnswers[index] = Map<String, String?>.from(
+                        combination,
+                      )..[section] = value;
+                    }),
             ),
           ),
           if (_selectedAnswers.length > 1 && !_isChecked)

@@ -97,6 +97,61 @@ abstract class _$ExamPacks extends $AsyncNotifier<List<Exam>> {
   }
 }
 
+/// By data file id, each grammar file's axes that the language forms words
+/// with (`form`), in the language of the UI and in the order of that file,
+/// with the codes of the language's `analyse` only: the analysis keys that
+/// have a dropdown. A file with no such axis is left out.
+
+@ProviderFor(examAxes)
+final examAxesProvider = ExamAxesProvider._();
+
+/// By data file id, each grammar file's axes that the language forms words
+/// with (`form`), in the language of the UI and in the order of that file,
+/// with the codes of the language's `analyse` only: the analysis keys that
+/// have a dropdown. A file with no such axis is left out.
+
+final class ExamAxesProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<Map<String, Axes>>,
+          Map<String, Axes>,
+          FutureOr<Map<String, Axes>>
+        >
+    with
+        $FutureModifier<Map<String, Axes>>,
+        $FutureProvider<Map<String, Axes>> {
+  /// By data file id, each grammar file's axes that the language forms words
+  /// with (`form`), in the language of the UI and in the order of that file,
+  /// with the codes of the language's `analyse` only: the analysis keys that
+  /// have a dropdown. A file with no such axis is left out.
+  ExamAxesProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'examAxesProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$examAxesHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<Map<String, Axes>> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<Map<String, Axes>> create(Ref ref) {
+    return examAxes(ref);
+  }
+}
+
+String _$examAxesHash() => r'98fe63bc8f734c121468fa6e74c03dcc810b829c';
+
 /// The app's words by lemma: the meaning in the UI language, and the word
 /// card id and data file, one per data file that lists the lemma.
 
