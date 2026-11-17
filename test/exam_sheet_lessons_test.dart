@@ -133,9 +133,8 @@ List<Override> _lookupOverride(
   if (testFiles) lessonLookupProvider.overrideWith((ref) async => lookup()),
 ];
 
-/// The lessons of [token] as the sheet computed them before the lookup by
-/// lemma and form was split out of it.
-TokenLessons _oldLessons(LessonLookup l, WordToken token, Clause clause) {
+/// The lessons of [token] by an independent copy of the sheet's lesson rule.
+TokenLessons _ruleLessons(LessonLookup l, WordToken token, Clause clause) {
   final types = <int>{}, forms = <int>{};
   for (final file in l.files[token.lemma] ?? const <WordFile>[]) {
     if (!l.curriculum.hasGrammar(file.dataFileId)) continue;
@@ -179,9 +178,9 @@ TokenLessons _oldLessons(LessonLookup l, WordToken token, Clause clause) {
   );
 }
 
-/// The (key, text) of every text that the sheet showed before the sheet
-/// widget was shared with the lookup screen, under a key-echo i18n.
-List<(String?, String)> _oldSheet(
+/// The (key, text) of every text that the sheet shows for [token] and its
+/// [l] lessons, under a key-echo i18n.
+List<(String?, String)> _sheetLines(
   WordToken token,
   TokenLessons l,
   String? meaning,
@@ -374,7 +373,7 @@ void main() {
             (t.key as ValueKey<String>).value: t.data!,
         };
         final expected = _expected(token, clause, files, lessons, curriculum);
-        final oldLessons = _oldLessons(
+        final ruleLessons = _ruleLessons(
           LessonLookup(latinLang, lessons, curriculum, files),
           token,
           clause,
@@ -391,9 +390,9 @@ void main() {
         ];
         expect(
           shownSheet,
-          _oldSheet(
+          _sheetLines(
             token,
-            oldLessons,
+            ruleLessons,
             hilfe.firstOrNull?.de ??
                 items
                     .where((i) => i.lemma == token.lemma)
@@ -401,7 +400,7 @@ void main() {
                     ?.translation,
             hilfe.firstOrNull,
           ),
-          reason: '$why: the whole sheet equals the sheet before the split',
+          reason: '$why: the whole sheet equals the lines of the rule copy',
         );
         expect(shown.keys.toSet(), expected.keys.toSet(), reason: why);
         for (final MapEntry(:key, :value) in shown.entries) {

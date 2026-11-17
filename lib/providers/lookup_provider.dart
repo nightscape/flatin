@@ -4,6 +4,7 @@ import '../data/languages/language.dart' show Language;
 import '../data/practice_data.dart';
 import '../data/token_lessons.dart';
 import '../models/form_label.dart' show FormKey;
+import 'course_provider.dart';
 import 'exam_provider.dart';
 import 'locale_provider.dart';
 
@@ -35,9 +36,11 @@ final class FormIndex {
       _byFold[language.foldLower(text.trim())] ?? const [];
 }
 
-/// The [FormIndex] of the active course; a course switch rebuilds it.
-@riverpod
+/// The [FormIndex] of the active course. It stays until a course switch
+/// rebuilds it.
+@Riverpod(keepAlive: true)
 Future<FormIndex> formIndex(Ref ref) async {
+  await ref.watch(courseProvider.future);
   final language = await ref.watch(courseLanguageProvider.future);
   final items = await loadAllPracticeItems(
     language: await ref.watch(dataLanguageProvider.future),

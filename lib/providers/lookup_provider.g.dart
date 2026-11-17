@@ -8,12 +8,14 @@ part of 'lookup_provider.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
-/// The [FormIndex] of the active course; a course switch rebuilds it.
+/// The [FormIndex] of the active course. It stays until a course switch
+/// rebuilds it.
 
 @ProviderFor(formIndex)
 final formIndexProvider = FormIndexProvider._();
 
-/// The [FormIndex] of the active course; a course switch rebuilds it.
+/// The [FormIndex] of the active course. It stays until a course switch
+/// rebuilds it.
 
 final class FormIndexProvider
     extends
@@ -23,14 +25,15 @@ final class FormIndexProvider
           FutureOr<FormIndex>
         >
     with $FutureModifier<FormIndex>, $FutureProvider<FormIndex> {
-  /// The [FormIndex] of the active course; a course switch rebuilds it.
+  /// The [FormIndex] of the active course. It stays until a course switch
+  /// rebuilds it.
   FormIndexProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'formIndexProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -49,4 +52,4 @@ final class FormIndexProvider
   }
 }
 
-String _$formIndexHash() => r'f1c7cd9ec9a014a2195082c70fbf2f9ac1703cef';
+String _$formIndexHash() => r'66b0f6fe6538d59c68c2907082745aa30c2ab321';

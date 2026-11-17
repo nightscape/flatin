@@ -47,11 +47,12 @@ class WordSheet extends StatelessWidget {
       children: [
         Text(spelling, style: Theme.of(context).textTheme.headlineSmall),
         Text(t('exam.sheet.lemma', {'lemma': lemma})),
-        if (meaning != null)
-          Text(t('exam.sheet.meaning', {'meaning': meaning!})),
-        if (entry != null) Text(t('exam.sheet.entry', {'angabe': entry!})),
-        if (analysis != null)
-          Text(t('exam.sheet.analysis', {'analysis': analysis!})),
+        if (meaning case final m? when m.isNotEmpty)
+          Text(t('exam.sheet.meaning', {'meaning': m})),
+        if (entry case final e? when e.isNotEmpty)
+          Text(t('exam.sheet.entry', {'angabe': e})),
+        if (analysis case final a? when a.isNotEmpty)
+          Text(t('exam.sheet.analysis', {'analysis': a})),
         if (lessons case final l?) ...[
           for (final n in l.word) line('word', n),
           for (final n in l.typeAndForm) line('typeAndForm', n),
