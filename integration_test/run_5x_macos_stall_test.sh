@@ -4,6 +4,7 @@
 # other checkout runs, and asserts the wrapper never opens an app for them.
 set -euo pipefail
 repo=$(cd "$(dirname "$0")/.." && pwd)
+mkdir -p "$repo/target"
 work=$(mktemp -d "$repo/target/stall-test.XXXXXX")
 trap 'rm -rf "$work"' EXIT
 mkdir -p "$work/bin"
