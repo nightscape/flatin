@@ -97,26 +97,33 @@ abstract class _$ExamPacks extends $AsyncNotifier<List<Exam>> {
   }
 }
 
-/// The axes of the course's grammar files that the language forms words
-/// with (`form`), in the language of the UI; an axis id that several files
-/// declare is taken from the first. These are the analysis keys that have a
-/// dropdown, with the codes of the language's `analyse` only.
+/// By data file id, each grammar file's axes that the language forms words
+/// with (`form`), in the language of the UI and in the order of that file,
+/// with the codes of the language's `analyse` only: the analysis keys that
+/// have a dropdown. A file with no such axis is left out.
 
 @ProviderFor(examAxes)
 final examAxesProvider = ExamAxesProvider._();
 
-/// The axes of the course's grammar files that the language forms words
-/// with (`form`), in the language of the UI; an axis id that several files
-/// declare is taken from the first. These are the analysis keys that have a
-/// dropdown, with the codes of the language's `analyse` only.
+/// By data file id, each grammar file's axes that the language forms words
+/// with (`form`), in the language of the UI and in the order of that file,
+/// with the codes of the language's `analyse` only: the analysis keys that
+/// have a dropdown. A file with no such axis is left out.
 
 final class ExamAxesProvider
-    extends $FunctionalProvider<AsyncValue<Axes>, Axes, FutureOr<Axes>>
-    with $FutureModifier<Axes>, $FutureProvider<Axes> {
-  /// The axes of the course's grammar files that the language forms words
-  /// with (`form`), in the language of the UI; an axis id that several files
-  /// declare is taken from the first. These are the analysis keys that have a
-  /// dropdown, with the codes of the language's `analyse` only.
+    extends
+        $FunctionalProvider<
+          AsyncValue<Map<String, Axes>>,
+          Map<String, Axes>,
+          FutureOr<Map<String, Axes>>
+        >
+    with
+        $FutureModifier<Map<String, Axes>>,
+        $FutureProvider<Map<String, Axes>> {
+  /// By data file id, each grammar file's axes that the language forms words
+  /// with (`form`), in the language of the UI and in the order of that file,
+  /// with the codes of the language's `analyse` only: the analysis keys that
+  /// have a dropdown. A file with no such axis is left out.
   ExamAxesProvider._()
     : super(
         from: null,
@@ -133,16 +140,17 @@ final class ExamAxesProvider
 
   @$internal
   @override
-  $FutureProviderElement<Axes> $createElement($ProviderPointer pointer) =>
-      $FutureProviderElement(pointer);
+  $FutureProviderElement<Map<String, Axes>> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
 
   @override
-  FutureOr<Axes> create(Ref ref) {
+  FutureOr<Map<String, Axes>> create(Ref ref) {
     return examAxes(ref);
   }
 }
 
-String _$examAxesHash() => r'3ed6df0206fed7c614b0b5ab0b3f42c26c355759';
+String _$examAxesHash() => r'f372ce0730275abb60338b9f944bc376453a1690';
 
 /// The app's words by lemma: the meaning in the UI language, and the word
 /// card id and data file, one per data file that lists the lemma.

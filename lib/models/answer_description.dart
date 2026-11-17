@@ -181,21 +181,30 @@ class AnswerDescription {
     ]);
   }
 
-  /// The merkmale of [merkmale] that have a dropdown on [axes].
-  static List<String> askable(Axes axes, Iterable<String> merkmale) {
-    final ids = axes.axes.map((a) => a.id).toSet();
+  /// The axes of the grammar file of [files] that has most of [merkmale] as
+  /// axes, the first on a tie: its order is the order of the dropdowns of the
+  /// token's word class.
+  static Axes _fit(List<Axes> files, Iterable<String> merkmale) {
+    int covered(Axes a) => a.axes.where((x) => merkmale.contains(x.id)).length;
+    return files.reduce((a, b) => covered(b) > covered(a) ? b : a);
+  }
+
+  /// The merkmale of [merkmale] that have a dropdown in [files].
+  static List<String> askable(List<Axes> files, Iterable<String> merkmale) {
+    if (files.isEmpty) return const [];
+    final ids = _fit(files, merkmale).axes.map((a) => a.id).toSet();
     return merkmale.where(ids.contains).toList();
   }
 
   /// The question for the [askable] merkmale of a token with analysis
   /// [codes].
   factory AnswerDescription.ofToken(
-    Axes axes,
+    List<Axes> files,
     Codes codes,
     Iterable<String> merkmale,
   ) {
-    final ids = askable(axes, merkmale);
-    final selectors = Selectors.forAxes(axes, ids);
+    final ids = askable(files, merkmale);
+    final selectors = Selectors.forAxes(_fit(files, merkmale), ids);
     return AnswerDescription(selectors, [
       {for (final id in selectors.sections) id: '${codes[id]!}'},
     ]);

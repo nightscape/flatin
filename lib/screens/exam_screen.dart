@@ -18,6 +18,10 @@ import '../widgets/axis_dropdowns.dart';
 /// One exam pack: the translation in self-check units of the chosen size,
 /// then the tasks: a `bestimmen` item with dropdowns is checked by the
 /// screen, every other answer by the learner against the solution.
+/// The axes of the grammar files, those that list the lemma of an item's
+/// token first.
+typedef _AxesOf = List<Axes> Function(BestimmenItem item);
+
 class ExamScreen extends ConsumerStatefulWidget {
   final Exam exam;
   const ExamScreen({super.key, required this.exam});
@@ -67,14 +71,34 @@ class _ExamScreenState extends ConsumerState<ExamScreen> {
       AsyncError(:final error) => throw error,
       _ => null,
     };
-    final axes = switch (ref.watch(examAxesProvider)) {
+    final byFile = switch (ref.watch(examAxesProvider)) {
       AsyncData(:final value) => value,
       AsyncError(:final error) => throw error,
       _ => null,
     };
-    if (settings == null || axes == null) {
+    final words = switch (ref.watch(examWordsProvider)) {
+      AsyncData(:final value) => value,
+      AsyncError(:final error) => throw error,
+      _ => null,
+    };
+    if (settings == null || byFile == null || words == null) {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
+    List<Axes> axes(BestimmenItem i) {
+      final own = {
+        for (final f
+            in words[(_tokens[i.token]! as WordToken).lemma]?.files ??
+                const <WordFile>[])
+          f.dataFileId,
+      };
+      return [
+        for (final e in byFile.entries)
+          if (own.contains(e.key)) e.value,
+        for (final e in byFile.entries)
+          if (!own.contains(e.key)) e.value,
+      ];
+    }
+
     final units = examUnits(exam, settings.uebersetzungseinheit);
     return Scaffold(
       appBar: AppBar(title: Text(exam.titel)),
@@ -111,7 +135,7 @@ class _ExamScreenState extends ConsumerState<ExamScreen> {
     );
   }
 
-  Widget _points(List<ExamUnit> units, Axes axes) {
+  Widget _points(List<ExamUnit> units, _AxesOf axes) {
     final done = units.where((u) => _marks['unit:${u.id}'] == true).length;
     final translation = units.isEmpty
         ? 0
@@ -128,17 +152,17 @@ class _ExamScreenState extends ConsumerState<ExamScreen> {
   }
 
   /// The merkmale of [i] that have a dropdown.
-  List<String> _asked(BestimmenItem i, Axes axes) =>
-      AnswerDescription.askable(axes, i.merkmale);
+  List<String> _asked(BestimmenItem i, _AxesOf axes) =>
+      AnswerDescription.askable(axes(i), i.merkmale);
 
   /// Whether the task has an item that only the task mark decides.
-  bool _hasSelfMarked(ExamTask t, Axes axes) => switch (t) {
+  bool _hasSelfMarked(ExamTask t, _AxesOf axes) => switch (t) {
     ItemTask(art: ItemArt.bestimmen, :final items) =>
       items.cast<BestimmenItem>().any((i) => _asked(i, axes).isEmpty),
     _ => true,
   };
 
-  int _earned(ExamTask t, Axes axes) {
+  int _earned(ExamTask t, _AxesOf axes) {
     final marked = _marks['task:${t.id}'] == true;
     return switch (t) {
       ItemTask(art: ItemArt.bestimmen, :final items) => [
@@ -370,7 +394,7 @@ class _ExamScreenState extends ConsumerState<ExamScreen> {
     for (final MapEntry(:key, :value) in a.codes.entries) _code(key, value),
   ].join(', ');
 
-  Widget _task(ExamTask t, Settings settings, Axes axes) {
+  Widget _task(ExamTask t, Settings settings, _AxesOf axes) {
     final key = 'task:${t.id}';
     final prefix = 'exam.task.${t.id}';
     return Card(
@@ -415,10 +439,10 @@ class _ExamScreenState extends ConsumerState<ExamScreen> {
     );
   }
 
-  Widget _askedItem(ExamTask t, int j, BestimmenItem i, Axes axes) {
+  Widget _askedItem(ExamTask t, int j, BestimmenItem i, _AxesOf axes) {
     final word = _tokens[i.token]!;
     final description = AnswerDescription.ofToken(
-      axes,
+      axes(i),
       (word as WordToken).analyse.codes,
       i.merkmale,
     );
@@ -485,7 +509,7 @@ class _ExamScreenState extends ConsumerState<ExamScreen> {
 
   /// A dropdown item still unsolved when its task is revealed earns nothing:
   /// copying the shown answer is no retry.
-  void _forfeit(ExamTask t, Axes axes) {
+  void _forfeit(ExamTask t, _AxesOf axes) {
     if (t case ItemTask(art: ItemArt.bestimmen, :final items)) {
       for (final (j, i) in items.cast<BestimmenItem>().indexed) {
         final k = 'task:${t.id}:$j';
@@ -557,13 +581,13 @@ class _ExamScreenState extends ConsumerState<ExamScreen> {
   }
 
   /// A marked-"anders" item, or a dropdown item that had a wrong check.
-  bool _needsHelp(ItemTask t, int j, TaskItem i, Axes axes) =>
+  bool _needsHelp(ItemTask t, int j, TaskItem i, _AxesOf axes) =>
       (_marks['task:${t.id}'] == false &&
           (i is! BestimmenItem || _asked(i, axes).isEmpty)) ||
       (_wrongChecks['task:${t.id}:$j'] ?? 0) > 0 ||
       _forfeited.contains('task:${t.id}:$j');
 
-  Future<void> _finish(List<ExamUnit> units, Axes axes) async {
+  Future<void> _finish(List<ExamUnit> units, _AxesOf axes) async {
     final helped = {
       ..._tapped,
       for (final u in units)

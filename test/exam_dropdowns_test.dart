@@ -182,6 +182,13 @@ void main() {
     final axes = (await tester.runAsync(
       () => loadGrammarFile('verbs', language: 'de'),
     ))!.axes;
+    final nounAxes = (await tester.runAsync(
+      () => loadGrammarFile('nouns', language: 'de'),
+    ))!.axes;
+    final fileOf = {
+      for (final p in (await tester.runAsync(loadAllPracticeItems))!)
+        p.lemma: p.dataFileId,
+    };
     var seen = 0;
     for (final (name, pack) in _cases()) {
       await _open(tester, pack);
@@ -203,6 +210,35 @@ void main() {
             ),
         };
         expect(shown, i.sections.toSet(), reason: '$name ${i.task}.${i.index}');
+        final classAxes =
+            fileOf[i.lemma] == 'verbs' ||
+                i.sections.any(
+                  (m) => const [
+                    'person',
+                    'tempus',
+                    'modus',
+                    'genus_verbi',
+                  ].contains(m),
+                )
+            ? axes
+            : nounAxes;
+        final onScreen = [...i.sections]
+          ..sort((a, b) {
+            final pa = tester.getTopLeft(find.byKey(_dropdown(i, a)));
+            final pb = tester.getTopLeft(find.byKey(_dropdown(i, b)));
+            return pa.dy != pb.dy
+                ? pa.dy.compareTo(pb.dy)
+                : pa.dx.compareTo(pb.dx);
+          });
+        expect(
+          onScreen,
+          [
+            for (final a in classAxes.axes)
+              if (i.sections.contains(a.id)) a.id,
+          ],
+          reason:
+              '$name ${i.task}.${i.index}: practice order of the word class',
+        );
         for (final s in i.sections) {
           final expected = Selectors.forAxes(axes, i.sections);
           final dropdown = _shown(tester, find.byKey(_dropdown(i, s)));
@@ -449,5 +485,61 @@ void main() {
         expect(_points(tester), expected, reason: '$name task $key');
       }
     }
+  });
+
+  testWidgets('a task marked hab ich after its dropdown items are solved at '
+      'the first check queues no lemma', (tester) async {
+    final items = (await tester.runAsync(loadAllPracticeItems))!;
+    final lemmas = {for (final item in items) item.lemma};
+    final later = DateTime.now().toUtc().add(const Duration(days: 30));
+    final stored = jsonEncode({
+      'version': '2.0',
+      'cards': [
+        for (final item in items)
+          PracticeItemCard(
+            itemId: item.id,
+            card: fsrs.Card(cardId: item.id.hashCode),
+            due: later,
+          ).toMap(),
+      ],
+    });
+    var selfMarked = 0;
+    for (final (name, pack) in _cases()) {
+      await _open(tester, pack, stored: {'fsrs_cards': stored});
+      for (final i in _asked(pack)) {
+        await _answer(tester, i, _right(i));
+      }
+      final asked = {for (final i in _asked(pack)) '${i.task}.${i.index}'};
+      selfMarked += _items(
+        pack,
+      ).where((i) => i.sections.isEmpty && lemmas.contains(i.lemma)).length;
+      for (final t in pack['aufgaben'] as List) {
+        final id = t['id'] as String;
+        await tester.tap(find.byKey(Key('exam.task.$id.show')));
+        await tester.pump();
+        final allAsked =
+            t['art'] == 'bestimmen' &&
+            [
+              for (var j = 0; j < (t['items'] as List).length; j++) '$id.$j',
+            ].every(asked.contains);
+        if (allAsked) continue;
+        await tester.tap(find.byKey(Key('exam.task.$id.habIch')));
+        await tester.pump();
+      }
+      await tester.tap(find.byKey(const Key('exam.finish')));
+      await tester.pump();
+      await tester.runAsync(() => Future.delayed(const Duration(seconds: 1)));
+      await letItLoad(tester);
+      final cards = (await tester.runAsync(FsrsStorage.loadCards))!;
+      expect(
+        {
+          for (final item in items)
+            if (cards[item.id]!.due.isBefore(later)) item.lemma,
+        },
+        isEmpty,
+        reason: name,
+      );
+    }
+    expect(selfMarked, greaterThan(0));
   });
 }
