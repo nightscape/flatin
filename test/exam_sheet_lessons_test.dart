@@ -196,9 +196,9 @@ List<(String?, String)> _sheetLines(
   return [
     (null, token.la),
     (null, keyEcho('exam.sheet.lemma', {'lemma': token.lemma})),
-    if (meaning != null)
+    if (meaning != null && meaning.isNotEmpty)
       (null, keyEcho('exam.sheet.meaning', {'meaning': meaning})),
-    if (hilfe != null)
+    if (hilfe != null && hilfe.angabe.isNotEmpty)
       (null, keyEcho('exam.sheet.entry', {'angabe': hilfe.angabe})),
     (
       null,
@@ -281,6 +281,7 @@ void main() {
         adjectives: [...some(nouns, 2), _unlisted],
         participles: some(verbs, 2),
         funktionChance: 0.4,
+        blankHilfeChance: 0.3,
       );
       final exam = parseExam(jsonEncode(gen.exam()), latinLang);
       final keepWords = [1.0, 0.7, 0.0][seed % 3];
@@ -379,6 +380,9 @@ void main() {
           clause,
         );
         final hilfe = exam.hilfen.where((h) => h.lemma == token.lemma);
+        if (hilfe.any((h) => h.angabe.isEmpty || h.de.isEmpty)) {
+          hit('empty hilfe text');
+        }
         final shownSheet = [
           for (final t in tester.widgetList<Text>(
             find.descendant(
@@ -484,6 +488,7 @@ void main() {
       'several type or form lines',
       'word line of a homograph',
       'no form line',
+      'empty hilfe text',
     ]) {
       expect(seen[what], greaterThan(0), reason: 'drawn cases reach "$what"');
     }

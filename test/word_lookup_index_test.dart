@@ -2,9 +2,12 @@ import 'dart:math';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:latin_practice/data/languages/language.dart';
 import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/main.dart';
+import 'package:latin_practice/models/course.dart' show loadLanguage;
 import 'package:latin_practice/providers/course_provider.dart';
+import 'package:latin_practice/providers/exam_provider.dart';
 import 'package:latin_practice/providers/locale_provider.dart';
 import 'package:latin_practice/providers/lookup_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -49,10 +52,16 @@ void main() {
         injectToyCourse(served: servedCourses(courses));
         SharedPreferences.setMockInitialValues({});
         final counter = _BuildCounter();
+        Language? language;
         final c = ProviderContainer(
           retry: noRetry,
           observers: [counter],
-          overrides: [dataLanguageProvider.overrideWith((ref) => 'de')],
+          overrides: [
+            dataLanguageProvider.overrideWith((ref) => 'de'),
+            courseLanguageProvider.overrideWith(
+              (ref) async => language ??= await loadLanguage(),
+            ),
+          ],
         );
         addTearDown(c.dispose);
         var active = courses.first;
