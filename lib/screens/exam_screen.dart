@@ -14,6 +14,7 @@ import '../models/settings.dart';
 import '../providers/exam_provider.dart';
 import '../providers/settings_provider.dart';
 import '../widgets/axis_dropdowns.dart';
+import 'word_sheet.dart';
 
 /// One exam pack: the translation in self-check units of the chosen size,
 /// then the tasks: a `bestimmen` item with dropdowns is checked by the
@@ -351,45 +352,18 @@ class _ExamScreenState extends ConsumerState<ExamScreen> {
           return Padding(
             key: const Key('exam.sheet'),
             padding: const EdgeInsets.all(16),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(t.la, style: Theme.of(context).textTheme.headlineSmall),
-                Text(_t('exam.sheet.lemma', {'lemma': t.lemma})),
-                if (meaning != null)
-                  Text(_t('exam.sheet.meaning', {'meaning': meaning})),
-                if (hilfe != null)
-                  Text(_t('exam.sheet.entry', {'angabe': hilfe.angabe})),
-                Text(
-                  _t('exam.sheet.analysis', {'analysis': _analysis(t.analyse)}),
-                ),
-                if (lessons != null) ..._lessonLines(lessons),
-              ],
+            child: WordSheet(
+              spelling: t.la,
+              lemma: t.lemma,
+              meaning: meaning,
+              entry: hilfe?.angabe,
+              analysis: _analysis(t.analyse),
+              lessons: lessons,
             ),
           );
         },
       ),
     );
-  }
-
-  /// One line per fact; its key names the fact and the lesson.
-  List<Widget> _lessonLines(TokenLessons l) {
-    Widget line(String kind, int lesson, {String? topic}) => Text(
-      _t('exam.sheet.lesson.$kind', {
-        'lesson': '$lesson',
-        if (topic != null) 'topic': _t('exam.$topic'),
-      }),
-      key: Key('exam.sheet.lesson.${topic ?? kind}.$lesson'),
-    );
-    return [
-      for (final n in l.word) line('word', n),
-      for (final n in l.typeAndForm) line('typeAndForm', n),
-      for (final n in l.type) line('type', n),
-      for (final n in l.form) line('form', n),
-      for (final MapEntry(:key, :value) in l.syntax.entries)
-        line('syntax', value, topic: key),
-    ];
   }
 
   String _code(String field, Object code) => _t('exam.analyse.$field.$code');

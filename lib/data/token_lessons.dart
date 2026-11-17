@@ -3,6 +3,7 @@ import 'exam.dart';
 import 'languages/language.dart' show Language;
 import 'lesson_data.dart';
 import 'analyse_form.dart';
+import '../models/form_label.dart' show FormKey;
 
 /// A data file that lists a word, with the type the item has in it.
 typedef WordFile = ({String dataFileId, String type});
@@ -47,26 +48,51 @@ final class LessonLookup {
     return byFold;
   }();
 
-  /// A lemma in several data files has one type and one form per file; the
-  /// distinct lessons are all returned.
-  TokenLessons of(WordToken token, Clause clause) {
+  /// The lessons of [lemma] in each of [files], with the form that [formOf]
+  /// names in that file; the distinct lessons of several files are all
+  /// returned, and [TokenLessons.syntax] is empty.
+  TokenLessons lessonsOf(
+    String lemma,
+    Iterable<WordFile> files,
+    FormKey? Function(WordFile file) formOf,
+  ) {
     final types = <int>{}, forms = <int>{};
-    for (final file in files[token.lemma] ?? const <WordFile>[]) {
+    for (final file in files) {
       if (!curriculum.hasGrammar(file.dataFileId)) continue;
       final type = curriculum.typeLessonOrNull(file.dataFileId, file.type);
       if (type != null) types.add(type);
-      final key = formKeyOfAnalyse(
-        curriculum.labelsOf(file.dataFileId),
-        token.analyse.codes,
-      );
+      final key = formOf(file);
       final form = key == null
           ? null
           : curriculum.formLessonOrNull(file.dataFileId, key);
       if (form != null) forms.add(form);
     }
     List<int> sorted(Iterable<int> xs) => xs.toList()..sort();
-    final exactWord = lessons.wordToLesson[token.lemma];
+    final exactWord = lessons.wordToLesson[lemma];
     final both = types.intersection(forms);
+    return (
+      word: sorted(
+        exactWord != null
+            ? [exactWord]
+            : _foldedWordLessons[language.fold(lemma)] ?? const <int>{},
+      ),
+      typeAndForm: sorted(both),
+      type: sorted(types.difference(both)),
+      form: sorted(forms.difference(both)),
+      syntax: const {},
+    );
+  }
+
+  /// A lemma in several data files has one type and one form per file.
+  TokenLessons of(WordToken token, Clause clause) {
+    final byForm = lessonsOf(
+      token.lemma,
+      files[token.lemma] ?? const <WordFile>[],
+      (file) => formKeyOfAnalyse(
+        curriculum.labelsOf(file.dataFileId),
+        token.analyse.codes,
+      ),
+    );
     final syntax = <String, int>{};
     for (final id in [
       for (final MapEntry(:key, :value) in token.analyse.codes.entries)
@@ -77,14 +103,10 @@ final class LessonLookup {
       if (lesson != null) syntax[id] = lesson;
     }
     return (
-      word: sorted(
-        exactWord != null
-            ? [exactWord]
-            : _foldedWordLessons[language.fold(token.lemma)] ?? const <int>{},
-      ),
-      typeAndForm: sorted(both),
-      type: sorted(types.difference(both)),
-      form: sorted(forms.difference(both)),
+      word: byForm.word,
+      typeAndForm: byForm.typeAndForm,
+      type: byForm.type,
+      form: byForm.form,
       syntax: syntax,
     );
   }

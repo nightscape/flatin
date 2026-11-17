@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:latin_practice/data/exam.dart';
 import 'package:latin_practice/data/languages/language.dart';
+import 'package:latin_practice/data/lesson_data.dart';
 import 'package:yaml/yaml.dart';
 
 import 'latin_course.dart';
@@ -1506,3 +1507,15 @@ Language drawnLanguage(Random r) {
   };
   return Language.parse(jsonEncode(data));
 }
+
+/// [lessons] without the lesson of each word of [dropped]: a word the lists
+/// no longer name.
+LessonData withoutWords(LessonData lessons, Set<String> dropped) => LessonData(
+  wordToLesson: {
+    for (final e in lessons.wordToLesson.entries)
+      if (!dropped.contains(e.key)) e.key: e.value,
+  },
+  lessonWords: lessons.lessonWords,
+  bookByLesson: lessons.bookByLesson,
+  books: lessons.books,
+);

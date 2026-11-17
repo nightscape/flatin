@@ -22,6 +22,7 @@ import '../theme.dart';
 import '../widgets/town_view.dart';
 import 'town_screen.dart';
 import 'exam_list_screen.dart';
+import 'lookup_screen.dart';
 import 'grammar_start_screen.dart';
 import 'word_classification_screen.dart';
 import 'practice_screen.dart';
@@ -101,6 +102,17 @@ class HomeScreen extends ConsumerWidget {
                       onPressed: () => Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) => const ExamListScreen(),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 14),
+                    _MenuButton(
+                      buttonKey: const Key('home.lookup.button'),
+                      icon: Icons.search,
+                      label: FlutterI18n.translate(context, 'lookup.home'),
+                      onPressed: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const LookupScreen(),
                         ),
                       ),
                     ),
