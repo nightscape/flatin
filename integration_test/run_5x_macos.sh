@@ -9,7 +9,7 @@ runs=${1:-5}
 flutter_bin=${FLUTTER:-flutter}
 run_timeout=${RUN_TIMEOUT:-900}
 stall_after=${STALL_AFTER:-45}
-app=build/macos/Build/Products/Debug/latin_practice.app
+app=$PWD/build/macos/Build/Products/Debug/latin_practice.app
 mkdir -p target
 failed=0
 
@@ -31,7 +31,7 @@ for i in $(seq 1 "$runs"); do
     idle=$(( $(date +%s) - $(stat -f %m "$log") ))
     if [ "$idle" -ge "$stall_after" ] && pgrep -f "$app/Contents/MacOS" >/dev/null; then
       echo "STALL: opened app after $idle s" >>"$log"
-      open "$PWD/$app"
+      open "$app"
     fi
     if [ $((SECONDS - started)) -ge "$run_timeout" ]; then
       echo "WATCHDOG: run exceeded $run_timeout s" >>"$log"
