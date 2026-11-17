@@ -207,8 +207,10 @@ void main() {
           final expected = Selectors.forAxes(axes, i.sections);
           final dropdown = _shown(tester, find.byKey(_dropdown(i, s)));
           expect(dropdown.label, axes.byId(s).name, reason: name);
+          final analyse = [for (final c in latinLang.analyse[s]!) '$c'];
           expect(dropdown.options, [
-            for (final c in expected.options[s]!) expected.optionText(s, c),
+            for (final c in expected.options[s]!)
+              if (analyse.contains(c)) expected.optionText(s, c),
           ], reason: name);
         }
       }
@@ -295,7 +297,12 @@ void main() {
       final rng = Random(seed);
       await _open(tester, pack, stored: {'fsrs_cards': stored});
       final helped = <String>{};
+      final revealed = <String>{};
       for (final i in asked) {
+        if (revealed.contains(i.task)) {
+          helped.add(i.lemma);
+          continue;
+        }
         if (seed == 0 || rng.nextBool()) {
           final section = i.sections.first;
           final wrong = _menu(tester, find.byKey(_dropdown(i, section)))
@@ -305,7 +312,14 @@ void main() {
           await _answer(tester, i, {..._right(i), section: wrong});
           helped.add(i.lemma);
         }
-        await _answer(tester, i, _right(i));
+        if (seed == 1 || rng.nextInt(4) == 0) {
+          await tester.tap(find.byKey(Key('exam.task.${i.task}.show')));
+          await tester.pump();
+          revealed.add(i.task);
+          helped.add(i.lemma);
+        } else {
+          await _answer(tester, i, _right(i));
+        }
       }
       await tester.tap(find.byKey(const Key('exam.finish')));
       await tester.pump();
@@ -370,6 +384,69 @@ void main() {
           expect(at, isNonNegative, reason: '$s: "$t" in order among $offered');
           from = at + 1;
         }
+      }
+    }
+  });
+
+  testWidgets('every task keeps its self-mark row after the reveal, except a '
+      'bestimmen task whose items all have dropdowns', (tester) async {
+    for (final (name, pack) in _cases()) {
+      await _open(tester, pack);
+      final asked = {for (final i in _asked(pack)) '${i.task}.${i.index}'};
+      for (final t in pack['aufgaben'] as List) {
+        final id = t['id'] as String;
+        await tester.tap(find.byKey(Key('exam.task.$id.show')));
+        await tester.pump();
+        final allAsked =
+            t['art'] == 'bestimmen' &&
+            [
+              for (var j = 0; j < (t['items'] as List).length; j++) '$id.$j',
+            ].every(asked.contains);
+        expect(
+          find.byKey(Key('exam.task.$id.habIch')),
+          allAsked ? findsNothing : findsOneWidget,
+          reason: '$name task $id (${t['art']})',
+        );
+      }
+    }
+  });
+  testWidgets('an item whose solution is shown before it is solved earns '
+      'nothing and is locked; solved items keep their points', (tester) async {
+    for (final (name, pack) in _cases()) {
+      final rng = Random(name.hashCode);
+      await _open(tester, pack);
+      var expected = 0;
+      final byTask = <String, List<Asked>>{};
+      for (final i in _asked(pack)) {
+        byTask.putIfAbsent(i.task, () => []).add(i);
+      }
+      for (final MapEntry(:key, value: items) in byTask.entries) {
+        final solvedFirst = List.generate(items.length, (_) => rng.nextBool());
+        for (final (n, i) in items.indexed) {
+          if (!solvedFirst[n]) continue;
+          await _answer(tester, i, _right(i));
+          expected += i.punkte;
+        }
+        await tester.tap(find.byKey(Key('exam.task.$key.show')));
+        await tester.pump();
+        for (final (n, i) in items.indexed) {
+          if (solvedFirst[n]) continue;
+          for (final s in i.sections) {
+            expect(
+              tester
+                  .widget<DropdownButtonFormField<String>>(
+                    find.byKey(_dropdown(i, s)),
+                  )
+                  .onChanged,
+              isNull,
+              reason: '$name ${i.task}.${i.index}: locked after the reveal',
+            );
+          }
+          if (find.byKey(Key('${_prefix(i)}.check')).evaluate().isNotEmpty) {
+            await _answer(tester, i, _right(i));
+          }
+        }
+        expect(_points(tester), expected, reason: '$name task $key');
       }
     }
   });

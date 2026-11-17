@@ -10,6 +10,7 @@ import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/main.dart';
 import 'package:latin_practice/providers/fsrs_provider.dart';
 import 'package:latin_practice/screens/exam_list_screen.dart';
+import 'package:latin_practice/screens/exam_screen.dart';
 import 'package:latin_practice/screens/home_screen.dart';
 import 'package:latin_practice/screens/round_end_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -27,6 +28,7 @@ final tracerSteps = <TracerStep>[
   (id: 'round', run: _round),
   (id: 'settings', run: _settings),
   (id: 'exam-import', run: _examImport),
+  (id: 'exam-open', run: _examOpen),
 ];
 
 const _toyFile = 'toy_words';
@@ -108,6 +110,30 @@ Future<void> _examImport(WidgetTester tester) async {
     fail('the pack is refused: ${tester.widget<Text>(refused).data}');
   }
   _expectShown(tester, find.byKey(const Key('exam.list.toy-pack')));
+}
+
+/// Opens every imported pack: the exam screen shows each one without an
+/// error, whatever data files the course has.
+Future<void> _examOpen(WidgetTester tester) async {
+  await _examImport(tester);
+  for (final entry
+      in find
+          .byWidgetPredicate(
+            (w) =>
+                w.key is ValueKey<String> &&
+                (w.key! as ValueKey<String>).value.startsWith('exam.list.') &&
+                w is ListTile,
+          )
+          .evaluate()
+          .toList()) {
+    await tester.tap(find.byWidget(entry.widget));
+    await letItLoad(tester);
+    expect(tester.takeException(), isNull);
+    _expectShown(tester, find.byKey(const Key('exam.finish')));
+    expect(find.byType(ExamScreen), findsOneWidget);
+    tester.state<NavigatorState>(find.byType(Navigator).first).pop();
+    await letItLoad(tester);
+  }
 }
 
 void main() {

@@ -277,11 +277,11 @@ void main() {
             await _tap(tester, mark);
             continue;
           }
-          for (var j = 0; ; j++) {
-            final check = find.byKey(Key('$m.item.$j.check'));
-            if (check.evaluate().isEmpty) break;
-            await _tap(tester, check);
-          }
+          expect(
+            find.byKey(Key('$m.item.0')),
+            findsOneWidget,
+            reason: '$why: $m has neither a mark row nor an asked item',
+          );
         }
         expect(
           find.byKey(const Key('exam.points')),

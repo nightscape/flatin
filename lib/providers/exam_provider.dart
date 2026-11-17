@@ -6,7 +6,7 @@ import '../data/languages/language.dart' show Language;
 import '../data/practice_data.dart';
 import '../data/token_lessons.dart';
 import '../models/course.dart';
-import '../models/form_label.dart' show Axes;
+import '../models/form_label.dart' show Axes, GrammarAxis;
 import '../models/fsrs_card.dart';
 import '../services/exam_storage.dart';
 import '../services/fsrs_storage.dart';
@@ -44,14 +44,42 @@ class ExamPacks extends _$ExamPacks {
   }
 }
 
-/// The axes of the verb data file, which cover every analysis key that has a
-/// dropdown, in the language of the UI.
+/// The axes of the course's grammar files that the language forms words
+/// with (`form`), in the language of the UI; an axis id that several files
+/// declare is taken from the first. These are the analysis keys that have a
+/// dropdown, with the codes of the language's `analyse` only.
 @riverpod
 Future<Axes> examAxes(Ref ref) async {
   final course = await ref.watch(courseProvider.future);
   final language = await ref.watch(dataLanguageProvider.future);
-  final verbs = course.ofRole(DataFileRole.verb);
-  return (await loadGrammarFile(verbs.id, language: language)).axes;
+  final examLanguage = await ref.watch(examLanguageProvider.future);
+  final form = examLanguage.form;
+  final byId = <String, GrammarAxis>{};
+  for (final file in course.grammarFiles) {
+    final grammar = await loadGrammarFile(file.id, language: language);
+    for (final axis in grammar.axes.axes.where((a) => form.contains(a.id))) {
+      final codes = {for (final c in examLanguage.analyse[axis.id]!) '$c'};
+      byId.putIfAbsent(
+        axis.id,
+        () => GrammarAxis(
+          id: axis.id,
+          name: axis.name,
+          values: [
+            for (final v in axis.values)
+              if (codes.contains(v.$1)) v,
+          ],
+          hiddenInLabel: axis.hiddenInLabel.intersection(codes),
+        ),
+      );
+    }
+  }
+  final ids = byId.keys.toList();
+  return Axes(
+    axes: byId.values.toList(),
+    head: ids,
+    tail: const [],
+    mergeAxis: ids.first,
+  );
 }
 
 typedef ExamWord = ({

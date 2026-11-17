@@ -97,20 +97,26 @@ abstract class _$ExamPacks extends $AsyncNotifier<List<Exam>> {
   }
 }
 
-/// The axes of the verb data file, which cover every analysis key that has a
-/// dropdown, in the language of the UI.
+/// The axes of the course's grammar files that the language forms words
+/// with (`form`), in the language of the UI; an axis id that several files
+/// declare is taken from the first. These are the analysis keys that have a
+/// dropdown, with the codes of the language's `analyse` only.
 
 @ProviderFor(examAxes)
 final examAxesProvider = ExamAxesProvider._();
 
-/// The axes of the verb data file, which cover every analysis key that has a
-/// dropdown, in the language of the UI.
+/// The axes of the course's grammar files that the language forms words
+/// with (`form`), in the language of the UI; an axis id that several files
+/// declare is taken from the first. These are the analysis keys that have a
+/// dropdown, with the codes of the language's `analyse` only.
 
 final class ExamAxesProvider
     extends $FunctionalProvider<AsyncValue<Axes>, Axes, FutureOr<Axes>>
     with $FutureModifier<Axes>, $FutureProvider<Axes> {
-  /// The axes of the verb data file, which cover every analysis key that has a
-  /// dropdown, in the language of the UI.
+  /// The axes of the course's grammar files that the language forms words
+  /// with (`form`), in the language of the UI; an axis id that several files
+  /// declare is taken from the first. These are the analysis keys that have a
+  /// dropdown, with the codes of the language's `analyse` only.
   ExamAxesProvider._()
     : super(
         from: null,
@@ -136,7 +142,7 @@ final class ExamAxesProvider
   }
 }
 
-String _$examAxesHash() => r'b9ef59432bfbf25e4010a621b6a59d6ad0b369e9';
+String _$examAxesHash() => r'3ed6df0206fed7c614b0b5ab0b3f42c26c355759';
 
 /// The app's words by lemma: the meaning in the UI language, and the word
 /// card id and data file, one per data file that lists the lemma.

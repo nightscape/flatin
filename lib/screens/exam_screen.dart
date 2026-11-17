@@ -39,6 +39,7 @@ class _ExamScreenState extends ConsumerState<ExamScreen> {
   final _picks = <String, Map<String, String?>>{};
   final _wrongChecks = <String, int>{};
   final _solved = <String>{};
+  final _forfeited = <String>{};
   final _lastWrong = <String>{};
   final _tapped = <String>{};
   int? _queued;
@@ -147,6 +148,7 @@ class _ExamScreenState extends ConsumerState<ExamScreen> {
             asked: _asked(i, axes).length,
             selfOk: marked,
             solved: _solved.contains('task:${t.id}:$j'),
+            forfeited: _forfeited.contains('task:${t.id}:$j'),
             wrongChecks: _wrongChecks['task:${t.id}:$j'] ?? 0,
           ),
       ].fold(0, (a, b) => a + b),
@@ -393,7 +395,10 @@ class _ExamScreenState extends ConsumerState<ExamScreen> {
             if (!_revealed.contains(key))
               OutlinedButton(
                 key: Key('$prefix.show'),
-                onPressed: () => setState(() => _revealed.add(key)),
+                onPressed: () => setState(() {
+                  _revealed.add(key);
+                  _forfeit(t, axes);
+                }),
                 child: Text(_t('exam.screen.showSolution')),
               )
             else ...[
@@ -422,6 +427,7 @@ class _ExamScreenState extends ConsumerState<ExamScreen> {
     final picks =
         _picks[k] ?? {for (final s in description.selectors.sections) s: null};
     final solved = _solved.contains(k);
+    final locked = solved || _forfeited.contains(k);
     final wrong = _lastWrong.contains(k);
     return Container(
       key: Key(prefix),
@@ -448,14 +454,14 @@ class _ExamScreenState extends ConsumerState<ExamScreen> {
             keyPrefix: prefix,
             picks: picks,
             isMobile: MediaQuery.of(context).size.width < 600,
-            onPick: solved
+            onPick: locked
                 ? null
                 : (section, value) => setState(() {
                     _picks[k] = {...picks, section: value};
                     _lastWrong.remove(k);
                   }),
           ),
-          if (!solved) ...[
+          if (!locked) ...[
             const SizedBox(height: 8),
             FilledButton(
               key: Key('$prefix.check'),
@@ -475,6 +481,19 @@ class _ExamScreenState extends ConsumerState<ExamScreen> {
         ],
       ),
     );
+  }
+
+  /// A dropdown item still unsolved when its task is revealed earns nothing:
+  /// copying the shown answer is no retry.
+  void _forfeit(ExamTask t, Axes axes) {
+    if (t case ItemTask(art: ItemArt.bestimmen, :final items)) {
+      for (final (j, i) in items.cast<BestimmenItem>().indexed) {
+        final k = 'task:${t.id}:$j';
+        if (_asked(i, axes).isNotEmpty && !_solved.contains(k)) {
+          _forfeited.add(k);
+        }
+      }
+    }
   }
 
   void _check(String k, AnswerDescription d, Map<String, String?> picks) =>
@@ -541,7 +560,8 @@ class _ExamScreenState extends ConsumerState<ExamScreen> {
   bool _needsHelp(ItemTask t, int j, TaskItem i, Axes axes) =>
       (_marks['task:${t.id}'] == false &&
           (i is! BestimmenItem || _asked(i, axes).isEmpty)) ||
-      (_wrongChecks['task:${t.id}:$j'] ?? 0) > 0;
+      (_wrongChecks['task:${t.id}:$j'] ?? 0) > 0 ||
+      _forfeited.contains('task:${t.id}:$j');
 
   Future<void> _finish(List<ExamUnit> units, Axes axes) async {
     final helped = {
