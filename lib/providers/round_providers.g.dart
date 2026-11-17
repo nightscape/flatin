@@ -190,7 +190,7 @@ final class TodayOfferProvider
   }
 }
 
-String _$todayOfferHash() => r'df5a63d02107d4f31149295dde5a5d771e13c0be';
+String _$todayOfferHash() => r'46bfedec56143ab598cb0b1262e22c55e93babd8';
 
 final class TodayOfferFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<TodayOffer>, WordFocus> {
@@ -257,7 +257,7 @@ final class RoundProvider extends $AsyncNotifierProvider<Round, RoundState> {
   }
 }
 
-String _$roundHash() => r'27971d566fd87917b01f7cb3ceea944f2f79036a';
+String _$roundHash() => r'349b75698c8e9978ea90d48d3f4d283072135cb5';
 
 /// One round. Auto-dispose and never stored: leaving it aborts it, which
 /// keeps the word reviews already written and reviews no bundle.

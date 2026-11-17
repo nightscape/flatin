@@ -198,6 +198,9 @@ class SettingsNotifier extends _$SettingsNotifier {
   Future<void> setPunkteAnzeige(bool on) =>
       _update((s) => s.copyWith(punkteAnzeige: on));
 
+  Future<void> setStemMarking(StemMarking mode) =>
+      _update((s) => s.copyWith(stemMarking: mode));
+
   /// Drops every manual choice; the course ranges stay.
   Future<void> clearOverrides() => _update((s) => s.clearOverrides());
 

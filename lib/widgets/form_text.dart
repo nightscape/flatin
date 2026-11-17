@@ -1,16 +1,23 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
-enum StemMarking { aus, zeigen, selbstMarkieren, frei }
+import '../models/settings.dart' show StemMarking;
 
 /// A target-language form. [split] is the number of letters (grapheme
-/// clusters) in the stem; null, or a split that leaves no ending, shows the
-/// plain [text] and asks nothing.
+/// clusters) in the stem; null means the form has no known stem, and 0 means
+/// the whole text is ending, as in the later words of a form of several
+/// words: [StemMarking.zeigen] colours all of it, and no mode takes taps.
 ///
-/// In [StemMarking.selbstMarkieren] the learner taps the gap between stem and
-/// ending once; [onMark] gets whether the tap hit the boundary. The reply is
-/// the same neutral colour for a right and a wrong tap.
+/// [StemMarking.aus] shows the plain [text] and takes no taps.
 ///
-/// In [StemMarking.frei] [split] is ignored: a tap on a gap marks the letters
+/// With a split, [StemMarking.zeigen] colours the ending and takes no taps.
+/// [StemMarking.selbstMarkieren] lets the learner place the bar with a tap,
+/// move it with another tap or a drag, and check it with the confirm button;
+/// [onMark] gets whether the confirmed gap is the boundary, and the bar
+/// glides there in the same neutral colour for a right and a wrong mark.
+///
+/// Without a split, both modes mark freely: a tap on a gap marks the letters
 /// after it, a tap on another gap moves the mark, a tap on the marked gap
 /// removes it. Nothing is checked or reported.
 ///
@@ -26,8 +33,10 @@ class FormText extends StatefulWidget {
     this.onMark,
     this.style,
   }) : assert(
-         mode != StemMarking.selbstMarkieren || onMark != null,
-         'mode selbstMarkieren needs onMark',
+         mode != StemMarking.selbstMarkieren ||
+             (split ?? 0) == 0 ||
+             onMark != null,
+         'a split form in selbstMarkieren needs onMark',
        );
 
   final String text;
@@ -39,21 +48,27 @@ class FormText extends StatefulWidget {
   static const textKey = Key('form-text-text');
   static const separatorKey = Key('form-text-separator');
   static const confirmKey = Key('form-text-confirm');
+  static const checkKey = Key('form-text-check');
+
+  /// The side of the confirm button: the Material minimum tap target.
+  static const confirmSize = 48.0;
 
   @override
   State<FormText> createState() => _FormTextState();
 }
 
 class _FormTextState extends State<FormText> {
-  int? _tapped;
   int? _mark;
+  bool _confirmed = false;
 
   @override
   void didUpdateWidget(FormText old) {
     super.didUpdateWidget(old);
-    if (old.text != widget.text || old.split != widget.split) {
-      _tapped = null;
+    if (old.text != widget.text ||
+        old.split != widget.split ||
+        old.mode != widget.mode) {
       _mark = null;
+      _confirmed = false;
     }
   }
 
@@ -62,16 +77,24 @@ class _FormTextState extends State<FormText> {
     final letters = widget.text.characters;
     final split = widget.split;
     assert(
-      split == null || (split > 0 && split <= letters.length),
-      'split $split outside 1..${letters.length} of "${widget.text}"',
+      split == null || (split >= 0 && split < letters.length),
+      'split $split outside 0..${letters.length - 1} of "${widget.text}"',
     );
-    final free = widget.mode == StemMarking.frei;
-    final hasSplit = split != null && split < letters.length;
+    final scheme = Theme.of(context).colorScheme;
+    if (split == 0 && widget.mode == StemMarking.zeigen) {
+      return Text(
+        widget.text,
+        key: FormText.textKey,
+        style: (widget.style ?? const TextStyle()).copyWith(
+          color: scheme.tertiary,
+        ),
+      );
+    }
     if (widget.mode == StemMarking.aus ||
-        (free ? letters.length < 2 : !hasSplit)) {
+        split == 0 ||
+        (split == null && letters.length < 2)) {
       return Text(widget.text, key: FormText.textKey, style: widget.style);
     }
-    final scheme = Theme.of(context).colorScheme;
     final style = DefaultTextStyle.of(context).style.merge(widget.style);
     final direction = Directionality.of(context);
     final scaler = MediaQuery.textScalerOf(context);
@@ -94,23 +117,47 @@ class _FormTextState extends State<FormText> {
           for (final g in gapPositions)
             painter.getFullHeightForCaret(g, Rect.zero),
         ];
-        final textWidth = painter.width;
-        final textHeight = painter.height;
+        // At a line break the downstream caret starts the next line; the
+        // upstream one ends this line, so a tap there finds the gap too.
+        final targets = [
+          for (var g = 0; g < gapPositions.length; g++) ...[
+            (g, gapAt[g], gapHeight[g]),
+            (
+              g,
+              painter.getOffsetForCaret(
+                TextPosition(
+                  offset: gapPositions[g].offset,
+                  affinity: TextAffinity.upstream,
+                ),
+                Rect.zero,
+              ),
+              gapHeight[g],
+            ),
+          ],
+        ];
+        final textSize = painter.size;
         final last = painter.computeLineMetrics().last;
         final lastEnd = last.left + last.width + 4;
-        final confirmAt = lastEnd + last.height <= constraints.maxWidth
+        final confirmAt = lastEnd + FormText.confirmSize <= constraints.maxWidth
             ? Offset(lastEnd, last.baseline - last.ascent)
-            : Offset(0, textHeight);
+            : Offset(0, textSize.height);
         painter.dispose();
+        // The caret positions decide, not the glyphs: a combining mark has
+        // its own glyph, which would split a letter.
         int gapUnder(Offset at) {
-          final p = laidOut();
-          final offset = p.getPositionForOffset(at).offset;
-          p.dispose();
-          return widget.text
-              .substring(0, offset)
-              .characters
-              .length
-              .clamp(1, letters.length - 1);
+          double off((int, Offset, double) t) => at.dy < t.$2.dy
+              ? t.$2.dy - at.dy
+              : max(0, at.dy - t.$2.dy - t.$3);
+          final line = targets.map(off).reduce(min);
+          return 1 +
+              targets
+                  .where((t) => off(t) == line)
+                  .reduce(
+                    (a, b) => (a.$2.dx - at.dx).abs() <= (b.$2.dx - at.dx).abs()
+                        ? a
+                        : b,
+                  )
+                  .$1;
         }
 
         return _marked(
@@ -118,8 +165,7 @@ class _FormTextState extends State<FormText> {
           letters,
           gapAt,
           gapHeight,
-          textWidth,
-          textHeight,
+          textSize,
           confirmAt,
           last.height,
           gapUnder,
@@ -133,21 +179,16 @@ class _FormTextState extends State<FormText> {
     Characters letters,
     List<Offset> gapAt,
     List<double> gapHeight,
-    double textWidth,
-    double textHeight,
+    Size textSize,
     Offset confirmAt,
-    double confirmSize,
+    double lineHeight,
     int Function(Offset) gapUnder,
   ) {
     final split = widget.split;
-    final free = widget.mode == StemMarking.frei;
-    final tapped = _tapped;
-    final endingFrom = switch (widget.mode) {
-      StemMarking.zeigen => split,
-      StemMarking.selbstMarkieren => tapped == null ? null : split,
-      StemMarking.frei => _mark,
-      StemMarking.aus => throw StateError('aus is plain text'),
-    };
+    final mark = _mark;
+    final shown = split != null && widget.mode == StemMarking.zeigen;
+    final checking = split != null && !shown;
+    final endingFrom = shown || _confirmed ? split : mark;
     final text = Text.rich(
       key: FormText.textKey,
       TextSpan(
@@ -174,21 +215,25 @@ class _FormTextState extends State<FormText> {
       ),
     );
 
+    final withButton = checking && mark != null;
     final stack = SizedBox(
-      width: textWidth,
-      height: textHeight,
+      width: withButton
+          ? max(textSize.width, confirmAt.dx + FormText.confirmSize)
+          : textSize.width,
+      height: withButton
+          ? max(textSize.height, confirmAt.dy + FormText.confirmSize)
+          : textSize.height,
       child: Stack(
         clipBehavior: Clip.none,
         children: [
-          Positioned(left: 0, top: 0, width: textWidth, child: text),
-          if (widget.mode == StemMarking.zeigen)
-            bar(gapAt[split! - 1], gapHeight[split - 1]),
-          if (free && _mark != null)
-            bar(gapAt[_mark! - 1], gapHeight[_mark! - 1]),
-          if (widget.mode == StemMarking.selbstMarkieren && tapped != null)
+          Positioned(left: 0, top: 0, width: textSize.width, child: text),
+          if (shown) bar(gapAt[split - 1], gapHeight[split - 1]),
+          if (mark != null && !_confirmed)
+            bar(gapAt[mark - 1], gapHeight[mark - 1]),
+          if (_confirmed)
             Positioned.fill(
               child: TweenAnimationBuilder<Offset>(
-                tween: Tween(begin: gapAt[tapped - 1], end: gapAt[split! - 1]),
+                tween: Tween(begin: gapAt[mark! - 1], end: gapAt[split! - 1]),
                 duration: const Duration(milliseconds: 300),
                 curve: Curves.easeInOut,
                 builder: (context, at, _) => Stack(
@@ -197,35 +242,50 @@ class _FormTextState extends State<FormText> {
                 ),
               ),
             ),
-          if (widget.mode == StemMarking.selbstMarkieren && tapped == split)
+          if (withButton && !_confirmed)
+            Positioned(
+              left: confirmAt.dx,
+              top: confirmAt.dy,
+              child: IconButton(
+                key: FormText.confirmKey,
+                constraints: const BoxConstraints.tightFor(
+                  width: FormText.confirmSize,
+                  height: FormText.confirmSize,
+                ),
+                padding: EdgeInsets.zero,
+                icon: Icon(Icons.done, color: scheme.outline),
+                onPressed: () {
+                  setState(() => _confirmed = true);
+                  widget.onMark!(mark == split);
+                },
+              ),
+            ),
+          if (_confirmed && mark == split)
             Positioned(
               left: confirmAt.dx,
               top: confirmAt.dy,
               child: Icon(
                 Icons.check,
-                key: FormText.confirmKey,
-                size: confirmSize,
+                key: FormText.checkKey,
+                size: lineHeight,
                 color: scheme.outline,
               ),
             ),
         ],
       ),
     );
-    if (widget.mode == StemMarking.zeigen ||
-        (widget.mode == StemMarking.selbstMarkieren && tapped != null)) {
-      return stack;
+    if (shown || _confirmed) return stack;
+    void place(Offset at) {
+      final gap = gapUnder(at);
+      setState(() => _mark = gap == mark ? null : gap);
     }
+
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
-      onTapUp: (details) {
-        final nearest = gapUnder(details.localPosition);
-        if (free) {
-          setState(() => _mark = nearest == _mark ? null : nearest);
-        } else {
-          setState(() => _tapped = nearest);
-          widget.onMark!(nearest == split);
-        }
-      },
+      onTapUp: (details) => place(details.localPosition),
+      onHorizontalDragUpdate: checking
+          ? (details) => setState(() => _mark = gapUnder(details.localPosition))
+          : null,
       child: stack,
     );
   }

@@ -11,6 +11,7 @@ import 'package:latin_practice/main.dart' show noRetry;
 import 'package:latin_practice/models/exercise.dart';
 import 'package:latin_practice/models/input_strategy.dart';
 import 'package:latin_practice/models/practice_item.dart';
+import 'package:latin_practice/models/settings.dart' show StemMarking;
 import 'package:latin_practice/providers/fsrs_provider.dart';
 import 'package:latin_practice/screens/exercise_parts_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -222,6 +223,66 @@ void main() {
       );
       expect(letters.right, lessThanOrEqualTo(320), reason: '$letters');
     }
+  });
+
+  testWidgets('in every stem marking, a given form carries the split of its '
+      'own derivation, and a built or foreign form none', (tester) async {
+    await load(tester, 'de');
+    final corpus = (await tester.runAsync(loadSentenceCorpus))!;
+    final built = [
+      for (final (w, e) in drawExercises(
+        verbs,
+        const FakeGermanForms(),
+        corpus,
+        stride: 7,
+        stabilityOf: (_) => 30,
+      ))
+        if (e.kind == ExerciseKind.stammformen) (w, e),
+    ];
+    var split = 0;
+    for (final mode in StemMarking.values) {
+      await tester.pumpWidget(const SizedBox());
+      for (final (word, e) in built.take(8)) {
+        final parts = ExercisePartsWidget(
+          word: word,
+          exercise: e,
+          inputStrategy: InputStrategy.byId('text_field'),
+          optionForms: const {},
+          onResponse: (_) {},
+        );
+        await tester.pumpWidget(
+          wrapInApp(
+            parts,
+            forcedLocale: const Locale('de'),
+            overrides: [
+              if (mode != StemMarking.zeigen)
+                stemMarkingProvider.overrideWithValue(mode),
+            ],
+          ),
+        );
+        await tester.pumpAndSettle();
+        for (final g in (e.answer as PartsAnswer).given) {
+          final shown = tester.widget<FormText>(
+            find.byKey(Key('exercise.given.${g.at}'), skipOffstage: false),
+          );
+          final own = g.form.builtWrongBy == null && g.form.lexemeId == word.id;
+          expect(shown.mode, mode);
+          expect(
+            shown.split,
+            own
+                ? word.derivation
+                      .stemOf(g.form.formKey, g.form.text)
+                      ?.spelling
+                      .characters
+                      .length
+                : null,
+            reason: '${word.id} ${g.form.text}',
+          );
+          if (shown.split != null) split++;
+        }
+      }
+    }
+    expect(split, greaterThan(0));
   });
 
   testWidgets('the prompt fuī shows the perfect as given text and asks the '

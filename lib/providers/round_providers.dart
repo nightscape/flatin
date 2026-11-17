@@ -20,6 +20,7 @@ import '../models/exercise.dart';
 import '../models/fsrs_card.dart';
 import '../models/practice_item.dart';
 import '../models/reward.dart';
+import '../models/settings.dart' show StemMarking;
 import 'course_provider.dart';
 import 'curriculum_provider.dart';
 import 'fsrs_provider.dart';
@@ -90,16 +91,56 @@ final class NothingToPractise extends TodayOffer {
   const NothingToPractise();
 }
 
+/// The cards selection reads. In [StemMarking.selbstMarkieren] a due stem
+/// card makes its item's word card due as well, no earlier than the stem
+/// card, when a practised form of [items] shows that stem split and the word
+/// was last reviewed before the stem card fell due; no other card changes. In
+/// the other modes the stem cards play no part, and [cards] pass unchanged.
+Map<String, PracticeItemCard> withStemPriority(
+  Map<String, PracticeItemCard> cards,
+  List<PracticeItem> items,
+  CourseFilter filter,
+  StemMarking mode,
+  DateTime now,
+) {
+  if (mode != StemMarking.selbstMarkieren) return cards;
+  final due = {
+    for (final MapEntry(key: id, value: stem) in cards.entries)
+      if (StemCardId.isStemCard(id) && !stem.due.isAfter(now)) id: stem,
+  };
+  final dueWords = {for (final id in due.keys) StemCardId.wordCardOf(id)};
+  final raised = Map.of(cards);
+  for (final item in items.where((i) => dueWords.contains(i.id))) {
+    for (final key in filter.practicedForms(item.dataFileId, item.formLabels)) {
+      final shown = item.derivation.stemOf(
+        key,
+        item.forms[item.formOrder.indexOf(key)],
+      );
+      final stem = shown == null ? null : due[StemCardId(item, shown.name)];
+      if (stem == null) continue;
+      final word = raised[item.id]!;
+      final lastReview = word.lastReview;
+      if (stem.due.isBefore(word.due) &&
+          (lastReview == null || lastReview.isBefore(stem.due))) {
+        raised[item.id] = word.copyWith(due: stem.due);
+      }
+    }
+  }
+  return raised;
+}
+
 SelectionInput _selectionInput(
   Map<String, PracticeItemCard> cards,
   Map<String, List<PracticeItem>> practicable,
   CourseFilter filter,
   Scheduler scheduler,
+  StemMarking mode,
 ) {
   final now = DateTime.now().toUtc();
+  final items = [for (final items in practicable.values) ...items];
   return (
-    cards: cards,
-    items: [for (final items in practicable.values) ...items],
+    cards: withStemPriority(cards, items, filter, mode, now),
+    items: items,
     filter: filter,
     retrievability: (c) =>
         scheduler.getCardRetrievability(c.card, currentDateTime: now),
@@ -114,6 +155,7 @@ Future<TodayOffer> todayOffer(Ref ref, WordFocus focus) async {
     focus.narrow(await ref.watch(practicableItemsByFileProvider.future)),
     await ref.watch(courseFilterProvider.future),
     ref.watch(fsrsSchedulerProvider),
+    ref.watch(stemMarkingProvider),
   );
   final index = BundleIndex(input.items, input.filter);
   SelectedPair? select({required bool includeNotDue}) => selectPair(
@@ -223,6 +265,7 @@ class Round extends _$Round {
       focused,
       filter,
       ref.read(fsrsSchedulerProvider),
+      settings.stemMarking,
     );
     ExerciseContext contextOf(
       List<PracticeItem> pool, {

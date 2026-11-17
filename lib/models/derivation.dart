@@ -426,4 +426,25 @@ final class Derivation {
          ),
          'two variants differ only in quantity marks',
        );
+
+  /// The stem [text] shows as form [key]: the name and the spelling of the
+  /// stem variant whose join with the ending is [text]. Null when the form is
+  /// no stem plus a non-empty ending at a rule-free seam, so its boundary is
+  /// no single gap. A [text] that no variant spells throws.
+  ({String name, String spelling})? stemOf(FormKey key, String text) {
+    final form = forms[key]!;
+    if (form is! GeneratedForm ||
+        form.sandhiRule != null ||
+        form.ending.isEmpty) {
+      return null;
+    }
+    final norm = grammar.lang.norm;
+    final spelling = stems[form.stemName]!.variants.singleWhere(
+      (v) => norm(v + form.ending) == norm(text),
+      orElse: () => throw StateError(
+        '"$text" is no variant of ${form.stemName} + "${form.ending}" at $key',
+      ),
+    );
+    return (name: form.stemName, spelling: spelling);
+  }
 }

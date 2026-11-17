@@ -8,6 +8,7 @@ import 'package:latin_practice/data/exercise_spec.dart';
 import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/data/sentences.dart';
 import 'package:latin_practice/models/exercise.dart';
+import 'package:latin_practice/models/settings.dart' show StemMarking;
 import 'package:latin_practice/models/practice_item.dart';
 import 'package:latin_practice/providers/fsrs_provider.dart';
 import 'package:latin_practice/providers/locale_provider.dart';
@@ -48,7 +49,7 @@ void main() {
     );
     final german = await container.read(germanFormsProvider.future);
     container.dispose();
-    drawn = drawExercises(
+    drawn = drawPromptExercises(
       items,
       german,
       await loadSentenceCorpus(),
@@ -56,32 +57,38 @@ void main() {
     );
   });
 
-  testWidgets('every Latin word of a prompt is a free-marking form text', (
-    tester,
-  ) async {
-    final byKind = <ExerciseKind, (PracticeItem, Exercise)>{};
-    for (final d in drawn) {
-      if (exerciseGenerators.any((g) => g.spec.kind == d.$2.kind)) {
-        byKind.putIfAbsent(d.$2.kind, () => d);
-      }
-    }
-    expect(byKind.keys, contains(ExerciseKind.satzAnkreuzen));
+  testWidgets('in every stem marking, every Latin word of a prompt is a form '
+      'text in that marking', (tester) async {
+    final picked = firstPerKindAndClass(
+      drawn.where(
+        (d) => exerciseGenerators.any((g) => g.spec.kind == d.$2.kind),
+      ),
+    );
+    expect(picked.map((d) => d.$2.kind), contains(ExerciseKind.satzAnkreuzen));
+    expect(picked.where((d) => showsMultiWordSplit(d.$2)), isNotEmpty);
     final missing = <String>[];
-    for (final (word, e) in byKind.values) {
-      await tester.pumpWidget(
-        wrapInApp(
-          Scaffold(body: ExerciseQuestion(e)),
-          forcedLocale: const Locale('de'),
-        ),
-      );
-      await tester.pumpAndSettle();
-      final marked = [
-        for (final f in tester.widgetList<FormText>(find.byType(FormText)))
-          if (f.mode == StemMarking.frei) f.text,
-      ];
-      for (final w in promptLatinWords(e)) {
-        if (!marked.any((t) => t.split(' ').contains(w))) {
-          missing.add('${e.kind.name} ${word.id}: "$w"');
+    for (final mode in StemMarking.values) {
+      await tester.pumpWidget(const SizedBox());
+      for (final (word, e) in picked) {
+        await tester.pumpWidget(
+          wrapInApp(
+            Scaffold(body: ExerciseQuestion(e)),
+            forcedLocale: const Locale('de'),
+            overrides: [
+              if (mode != StemMarking.zeigen)
+                stemMarkingProvider.overrideWithValue(mode),
+            ],
+          ),
+        );
+        await tester.pumpAndSettle();
+        final marked = [
+          for (final f in tester.widgetList<FormText>(find.byType(FormText)))
+            if (f.mode == mode) f.text,
+        ];
+        for (final w in promptLatinWords(e)) {
+          if (!marked.any((t) => t.split(' ').contains(w))) {
+            missing.add('$mode ${e.kind.name} ${word.id}: "$w"');
+          }
         }
       }
     }

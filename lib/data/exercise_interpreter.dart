@@ -5,6 +5,7 @@ library;
 
 import 'dart:math';
 
+import 'package:flutter/widgets.dart' show StringCharacters;
 import 'package:flutter/foundation.dart'
     show listEquals, mapEquals, visibleForTesting;
 
@@ -117,6 +118,7 @@ final class SpecGenerator implements ExerciseGenerator {
                   (value is Show && value.view == View.form))
                 key,
           },
+          stemSplits: _stemSplitsOf(spec, slice, cube),
           answer: answer,
         );
       }
@@ -809,6 +811,22 @@ Map<String, String> _paramsOf(KindSpec spec, Slice slice, Cube cube) => {
       BundleName() => _bundleName(slice.target),
       SentenceText() => slice.sentence!.text,
     },
+};
+
+/// The shown forms that are one real form of a stem plus an ending.
+Map<String, StemSplit> _stemSplitsOf(KindSpec spec, Slice slice, Cube cube) => {
+  for (final MapEntry(:key, :value) in spec.params.entries)
+    if (value case Show(:final of, view: View.form))
+      if (_ref(slice, of) case final FormCell cell)
+        if (cell.word.derivation.stemOf(
+              cell.key,
+              cube.view(View.form).accepted(cell).first,
+            )
+            case (:final name, :final spelling))
+          key: (
+            stemLength: spelling.characters.length,
+            card: StemCardId(cell.word, name),
+          ),
 };
 
 /// Whether [c] would also be right: it clashes with the target in every view

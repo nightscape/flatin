@@ -10,7 +10,9 @@ import 'package:latin_practice/data/exam.dart';
 import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/main.dart';
 import 'package:latin_practice/models/course.dart';
+import 'package:latin_practice/models/exercise.dart' show StemCardId;
 import 'package:latin_practice/models/reward.dart';
+import 'package:latin_practice/models/settings.dart';
 import 'package:latin_practice/providers/course_provider.dart';
 import 'package:latin_practice/providers/exam_provider.dart';
 import 'package:latin_practice/providers/fsrs_provider.dart';
@@ -33,6 +35,9 @@ class _Own {
   int kursstand = 2;
   final reviewed = <String>{};
   final packs = <String>{};
+
+  /// Each stem card as stored after its last mark.
+  final stems = <String, String>{};
 }
 
 Future<void> _expectOwn(
@@ -59,7 +64,18 @@ Future<void> _expectOwn(
   expect(
     {
       for (final e in cards.entries)
-        if (!e.key.startsWith('grammar:') && e.value.lastReview != null) e.key,
+        if (StemCardId.isStemCard(e.key)) e.key: jsonEncode(e.value.toMap()),
+    },
+    own.stems,
+    reason: '$reason: stem cards of ${course.id}',
+  );
+  expect(
+    {
+      for (final e in cards.entries)
+        if (!e.key.startsWith('grammar:') &&
+            !StemCardId.isStemCard(e.key) &&
+            e.value.lastReview != null)
+          e.key,
     },
     own.reviewed,
     reason: '$reason: reviewed cards of ${course.id}',
@@ -74,9 +90,10 @@ Future<void> _expectOwn(
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  test('each course reads back exactly its own kursstand, cards and packs '
-      'under any sequence of switches, reviews and imports, and the reward '
-      'ledger counts every answer', () async {
+  test('each course reads back exactly its own kursstand, cards, stem cards '
+      'and packs under any sequence of switches, reviews, marks and imports, '
+      'and the reward ledger counts every answer', () async {
+    var marks = 0;
     for (var seed = 0; seed < _cases; seed++) {
       final r = Random(seed);
       final courses = drawnCourses(r, min: 2);
@@ -92,7 +109,7 @@ void main() {
       String reason() => 'seed $seed, ${log.join(', ')}';
 
       for (var step = 0; step < _steps; step++) {
-        switch (r.nextInt(5)) {
+        switch (r.nextInt(6)) {
           case 0:
             active = courses[r.nextInt(courses.length)];
             log.add('switch ${active.id}');
@@ -107,7 +124,8 @@ void main() {
             final cards = await c.read(fsrsCardsProvider.future);
             final words = [
               for (final id in cards.keys)
-                if (!id.startsWith('grammar:')) id,
+                if (!id.startsWith('grammar:') && !StemCardId.isStemCard(id))
+                  id,
             ]..sort();
             final id = words[r.nextInt(words.length)];
             log.add('review $id');
@@ -145,6 +163,21 @@ void main() {
             } else {
               await expectLater(imported, throwsA(isA<ExamRejected>()));
             }
+          case 5:
+            final stems = [
+              for (final item in await loadAllPracticeItems())
+                for (final stem in item.derivation.stems.keys)
+                  StemCardId(item, stem),
+            ];
+            if (stems.isEmpty) break;
+            final id = stems[r.nextInt(stems.length)];
+            final right = r.nextBool();
+            log.add('mark $id $right');
+            await storeStemReview(Scheduler(), id, right);
+            c.invalidate(fsrsCardsProvider);
+            final stored = (await c.read(fsrsCardsProvider.future))[id]!;
+            own[active.id]!.stems[id] = jsonEncode(stored.toMap());
+            marks++;
         }
         await _expectOwn(c, active, own[active.id]!, reason());
       }
@@ -165,6 +198,56 @@ void main() {
         reason: 'seed $seed: one ledger',
       );
     }
+    expect(marks, greaterThan(0), reason: 'no drawn history marked a stem');
+  });
+
+  test('each course reads its own stored stem marking, and stored settings '
+      'without one read zeigen and keep their bytes', () async {
+    final withoutMarking = <String>{};
+    for (var seed = 0; seed < _cases; seed++) {
+      final r = Random(seed);
+      final courses = drawnCourses(r, min: 2);
+      resetPracticeData();
+      injectToyCourse(served: servedCourses(courses));
+      String keyOf(int k) =>
+          k == 0 ? 'practice_settings' : 'practice_settings.${courses[k].id}';
+      final stored = <String, Object>{};
+      final expected = <String, StemMarking>{};
+      for (var k = 0; k < courses.length; k++) {
+        final json = Settings(
+          lastLesson: 2,
+          kursstand: 1 + r.nextInt(2),
+          stemMarking: StemMarking.values[r.nextInt(StemMarking.values.length)],
+        ).toJson();
+        if (r.nextBool()) json.remove('stemMarking');
+        final kept = r.nextInt(4) > 0;
+        if (kept) stored[keyOf(k)] = jsonEncode(json);
+        if (kept && !json.containsKey('stemMarking')) {
+          withoutMarking.add(k == 0 ? 'first' : 'other');
+        }
+        expected[courses[k].id] = StemMarking.values.byName(
+          (kept ? json['stemMarking'] as String? : null) ?? 'zeigen',
+        );
+      }
+      SharedPreferences.setMockInitialValues(stored);
+      final c = ProviderContainer(retry: noRetry);
+      addTearDown(c.dispose);
+      for (final k in [...courses]..shuffle(r)) {
+        await c.read(activeCourseProvider.notifier).select(k.id);
+        expect(
+          (await c.read(settingsProvider.future)).stemMarking,
+          expected[k.id],
+          reason: 'seed $seed: ${k.id} of ${stored.keys}',
+        );
+      }
+      final prefs = await SharedPreferences.getInstance();
+      expect(
+        {for (final key in stored.keys) key: prefs.getString(key)},
+        stored,
+        reason: 'seed $seed',
+      );
+    }
+    expect(withoutMarking, {'first', 'other'});
   });
 
   test('a stored active course that is not in the list reads as the first '

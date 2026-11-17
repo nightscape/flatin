@@ -41,6 +41,22 @@ extension type GrammarCardId._(String id) implements String {
       GrammarCardId(item.dataFileId, bundleOf(item, key));
 }
 
+/// The schedule card of one stem of an item: `<item id>:stem:<stem name>`.
+/// It starts with the item's data file id, so it belongs to the item's course.
+extension type StemCardId._(String id) implements String {
+  StemCardId(PracticeItem item, String stemName)
+    : id = '${item.id}:stem:$stemName';
+
+  static bool isStemCard(String cardId) => cardId.contains(':stem:');
+
+  /// The word card of the item the stem card [cardId] belongs to.
+  static String wordCardOf(String cardId) =>
+      cardId.substring(0, cardId.indexOf(':stem:'));
+}
+
+/// Where a shown form's stem ends, and the card its mark feeds.
+typedef StemSplit = ({int stemLength, StemCardId card});
+
 /// The kinds of exercise; `exercise.<name>.*` holds each kind's i18n keys.
 /// Produced by the kind selection; read by the generators and the screen.
 enum ExerciseKind {
@@ -280,6 +296,10 @@ final class Exercise {
   /// The keys of [questionParams] whose value is Latin text (a form or a
   /// sentence) shown in the question; never the form the learner is asked to give.
   final Set<String> formParams;
+
+  /// The [formParams] that show one form with a stem/ending boundary.
+  final Map<String, StemSplit> stemSplits;
+
   final ExerciseAnswer answer;
 
   /// The language file's `name` of the word's language, by UI language code;
@@ -294,9 +314,11 @@ final class Exercise {
     required this.languageName,
     this.questionParams = const {},
     this.formParams = const {},
+    this.stemSplits = const {},
     required this.answer,
   }) {
     assert(formParams.every(questionParams.containsKey));
+    assert(stemSplits.keys.every(formParams.contains));
     assert(
       grammarCardId.startsWith('grammar:${wordCardId.split(':').first}:'),
       'word $wordCardId and $grammarCardId come from two data files',
