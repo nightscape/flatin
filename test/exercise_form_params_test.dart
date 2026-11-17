@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/data/sentences.dart';
 import 'package:latin_practice/models/exercise.dart';
@@ -31,6 +32,7 @@ Iterable<Exercise Function()> strayFormParams(List<Exercise> drawn) sync* {
 void main() {
   test('a form param must name a question param', () async {
     TestWidgetsFlutterBinding.ensureInitialized();
+    SharedPreferences.setMockInitialValues({});
     final items = await loadAllPracticeItems();
     final container = ProviderContainer(
       overrides: [dataLanguageProvider.overrideWith((ref) => 'de')],

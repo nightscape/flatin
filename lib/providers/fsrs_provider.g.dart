@@ -54,12 +54,14 @@ final class FsrsSchedulerProvider
 
 String _$fsrsSchedulerHash() => r'0d0b3a951dcad9e3faed4e21fd6e20e0439cc4c5';
 
-/// Every word card and grammar card, synced with the YAML items.
+/// Every word card and grammar card of the active course, synced with the
+/// YAML items. The cards of the other courses stay in the store untouched.
 
 @ProviderFor(fsrsCards)
 final fsrsCardsProvider = FsrsCardsProvider._();
 
-/// Every word card and grammar card, synced with the YAML items.
+/// Every word card and grammar card of the active course, synced with the
+/// YAML items. The cards of the other courses stay in the store untouched.
 
 final class FsrsCardsProvider
     extends
@@ -71,7 +73,8 @@ final class FsrsCardsProvider
     with
         $FutureModifier<Map<String, PracticeItemCard>>,
         $FutureProvider<Map<String, PracticeItemCard>> {
-  /// Every word card and grammar card, synced with the YAML items.
+  /// Every word card and grammar card of the active course, synced with the
+  /// YAML items. The cards of the other courses stay in the store untouched.
   FsrsCardsProvider._()
     : super(
         from: null,
@@ -98,7 +101,7 @@ final class FsrsCardsProvider
   }
 }
 
-String _$fsrsCardsHash() => r'c81f641b2179ac611a69a84f1373126f474d0bd7';
+String _$fsrsCardsHash() => r'8cb038f0f95941da0d1c7183b883fcd3d405b20c';
 
 /// The due word cards; grammar cards are due through the rounds.
 

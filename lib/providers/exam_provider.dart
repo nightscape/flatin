@@ -18,28 +18,39 @@ import 'locale_provider.dart';
 
 part 'exam_provider.g.dart';
 
-/// The language whose codes and rules the exam packs use.
+/// The language whose codes and rules the exam packs of the active course use.
 @riverpod
-Future<Language> examLanguage(Ref ref) => loadLanguage();
+Future<Language> examLanguage(Ref ref) async {
+  await ref.watch(courseProvider.future);
+  return loadLanguage();
+}
 
-/// The imported exam packs.
+/// The imported exam packs of the active course.
 @riverpod
 class ExamPacks extends _$ExamPacks {
   @override
-  Future<List<Exam>> build() async =>
-      ExamStorage.load(await ref.watch(examLanguageProvider.future));
+  Future<List<Exam>> build() async => ExamStorage.load(
+    await ref.watch(examLanguageProvider.future),
+    await ref.watch(courseScopeProvider.future),
+  );
 
-  /// Throws [ExamRejected] and keeps the list when the pack breaks a rule.
+  /// Throws [ExamRejected] and keeps the list when the pack breaks a rule or
+  /// belongs to another course.
   Future<void> import(String source) async {
     final language = await ref.read(examLanguageProvider.future);
-    await ExamStorage.add(source, language);
-    state = AsyncValue.data(await ExamStorage.load(language));
+    final scope = await ref.read(courseScopeProvider.future);
+    await ExamStorage.add(source, language, scope);
+    state = AsyncValue.data(await ExamStorage.load(language, scope));
   }
 
   Future<void> delete(String id) async {
-    await ExamStorage.delete(id);
+    final scope = await ref.read(courseScopeProvider.future);
+    await ExamStorage.delete(id, scope);
     state = AsyncValue.data(
-      await ExamStorage.load(await ref.read(examLanguageProvider.future)),
+      await ExamStorage.load(
+        await ref.read(examLanguageProvider.future),
+        scope,
+      ),
     );
   }
 }

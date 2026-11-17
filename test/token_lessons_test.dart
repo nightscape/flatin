@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:latin_practice/data/analyse_form.dart';
 import 'package:latin_practice/data/curriculum.dart';
 import 'package:latin_practice/data/exam.dart';
@@ -39,6 +40,7 @@ Map<String, Object>? _codesOf(FormLabel label) {
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences.setMockInitialValues({});
 
   late Curriculum curriculum;
   late LessonData lessons;

@@ -50,7 +50,7 @@ final class SentenceCorpusProvider
   }
 }
 
-String _$sentenceCorpusHash() => r'480225cb39aa746cfc121c888fb033c9123570ea';
+String _$sentenceCorpusHash() => r'add6a061e463b2f281488e0d1868b918424c2263';
 
 /// The topics the course offers now with words of [focus], in course order.
 

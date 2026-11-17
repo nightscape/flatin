@@ -513,12 +513,17 @@ head is not its particle, or when a double accusative has no two accusatives.
 
 # Course manifest
 
-`lib/data/courses.yaml` lists the course manifests the app reads; the app
-reads exactly one, and a list of another length throws at load. A manifest
-(`lib/data/course.yaml`, read by `lib/models/course.dart`) names every file of
-one course:
+`lib/data/courses.yaml` lists the course manifests the app reads; an empty
+list throws at load. With two or more courses the learner switches between
+them, and each keeps its own settings, cards and exam packs. What an earlier
+version stored without a course (settings, exam packs, an exam pack without
+`kurs`) belongs to the first course of the list: the Latin course must stay
+first. A manifest (`lib/data/course.yaml`, read by `lib/models/course.dart`)
+names every file of one course:
 
 ```yaml
+id: latein                                 # lowercase slug, unique in the list
+name: {de: Latein, en: Latin}              # one text per UI language
 language: lib/data/languages/la.yaml       # the codes and rules of the exam packs
 data_files:                                # load order = display order
   - {id: nouns, path: lib/data/latin_nouns.yaml, role: noun}

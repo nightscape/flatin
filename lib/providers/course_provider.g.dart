@@ -52,6 +52,60 @@ final class CoursesProvider
 
 String _$coursesHash() => r'19393b2060fe86e25a2f94837297911cb933b771';
 
+/// The id of the course the learner reads: the stored choice, else the first
+/// course.
+
+@ProviderFor(ActiveCourse)
+final activeCourseProvider = ActiveCourseProvider._();
+
+/// The id of the course the learner reads: the stored choice, else the first
+/// course.
+final class ActiveCourseProvider
+    extends $AsyncNotifierProvider<ActiveCourse, String> {
+  /// The id of the course the learner reads: the stored choice, else the first
+  /// course.
+  ActiveCourseProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'activeCourseProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$activeCourseHash();
+
+  @$internal
+  @override
+  ActiveCourse create() => ActiveCourse();
+}
+
+String _$activeCourseHash() => r'855350cc66ecb1a33862a708b78c15fa2fdb0904';
+
+/// The id of the course the learner reads: the stored choice, else the first
+/// course.
+
+abstract class _$ActiveCourse extends $AsyncNotifier<String> {
+  FutureOr<String> build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final ref = this.ref as $Ref<AsyncValue<String>, String>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<AsyncValue<String>, String>,
+              AsyncValue<String>,
+              Object?,
+              Object?
+            >;
+    element.handleCreate(ref, build);
+  }
+}
+
 /// The course the app runs.
 
 @ProviderFor(course)
@@ -88,4 +142,48 @@ final class CourseProvider
   }
 }
 
-String _$courseHash() => r'301b40abba25f2def0bf08a7ac2770da35ab279f';
+String _$courseHash() => r'de82387d70971b6a240878785e49dc226bafa67f';
+
+/// The active course with its list, for the storage keys of per-course data.
+
+@ProviderFor(courseScope)
+final courseScopeProvider = CourseScopeProvider._();
+
+/// The active course with its list, for the storage keys of per-course data.
+
+final class CourseScopeProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<CourseScope>,
+          CourseScope,
+          FutureOr<CourseScope>
+        >
+    with $FutureModifier<CourseScope>, $FutureProvider<CourseScope> {
+  /// The active course with its list, for the storage keys of per-course data.
+  CourseScopeProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'courseScopeProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$courseScopeHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<CourseScope> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<CourseScope> create(Ref ref) {
+    return courseScope(ref);
+  }
+}
+
+String _$courseScopeHash() => r'd21ea942e517e191d9a4f40fc618e0b25dbc5848';

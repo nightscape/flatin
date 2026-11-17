@@ -31,6 +31,7 @@ entries from 0.
 |---|---|
 | `schema` | the int 1 |
 | `id`, `titel` | string |
+| `kurs` | optional string: the id of the course the pack belongs to; without it the pack belongs to the first course of the list. The import refuses a pack of another course than the active one |
 | `lektionen` | `{von, bis}`, ints: the first lesson of the block and the lesson of the focus |
 | `schwerpunkte` | list of strings: app topic ids (`verbs:2`) and grammar section ids (`L2.1`) |
 | `schwerpunkt`, `thema` | string: plain text for the PDF |

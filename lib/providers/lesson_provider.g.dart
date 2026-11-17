@@ -95,4 +95,4 @@ final class PracticeItemsProvider
   }
 }
 
-String _$practiceItemsHash() => r'c7a68183fa6e0e742032adc3adf5796fe0a51649';
+String _$practiceItemsHash() => r'c00c612485af4595ff399d5e1a59fcff9b6607f8';

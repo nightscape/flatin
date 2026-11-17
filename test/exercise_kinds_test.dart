@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:latin_practice/data/exercise_cube.dart';
 import 'package:latin_practice/data/exercise_interpreter.dart';
 import 'package:latin_practice/data/exercise_kinds.dart';
@@ -45,6 +46,7 @@ SpecGenerator _spec(ExerciseKind kind) =>
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences.setMockInitialValues({});
 
   late PracticeItem vocare;
   late PracticeItem incendere;

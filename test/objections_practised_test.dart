@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:latin_practice/data/exercise_kinds.dart';
 import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/models/exercise.dart';
@@ -11,6 +12,7 @@ import 'package:latin_practice/providers/locale_provider.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences.setMockInitialValues({});
 
   test('objections reject an option whose form is switched off', () async {
     final mirus = (await loadPracticeItems(

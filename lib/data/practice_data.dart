@@ -89,9 +89,9 @@ final _waiting = <Completer<_Loaded>>[];
 /// abandon it. The app leaves the no-op default in place.
 Future<void> Function() parseGate = () async {};
 
-/// Puts the loader back to the state of a fresh process, so a test can drive
-/// the first load again.
-void resetPracticeDataForTest() {
+/// Puts the loader back to the state of a fresh process: the next load reads
+/// the active course's files again.
+void resetPracticeData() {
   _loaded = null;
   _parsingZone = null;
   _waiting.clear();

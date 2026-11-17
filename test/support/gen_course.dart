@@ -9,6 +9,8 @@ typedef DataFileSpec = ({String id, String path, DataFileRole role});
 /// course's game rules, one earn rule each.
 typedef CourseSpec = ({
   String path,
+  String id,
+  Map<String, String> name,
   String language,
   List<DataFileSpec> dataFiles,
   Map<DataFileRole, String> glossFiles,
@@ -18,8 +20,9 @@ typedef CourseSpec = ({
   List<String> earnDataFiles,
 });
 
-/// A course in directory [dir] with 1..4 data files of any roles, their ids
-/// prefixed with [dir] so that courses of distinct [dir]s share no id, a gloss
+/// A course in directory [dir] with 1..4 data files of any roles, its id and
+/// their ids prefixed with [dir] so that courses of distinct [dir]s share no
+/// id, a gloss
 /// file for any subset of the roles, 0..3 books, and game rules that name
 /// 0..2 of the course's data file ids.
 CourseSpec drawCourse(Random rng, String dir) {
@@ -36,6 +39,8 @@ CourseSpec drawCourse(Random rng, String dir) {
   ];
   return (
     path: '$dir/course.yaml',
+    id: dir,
+    name: {'de': 'Kurs $dir', 'en': 'Course $dir'},
     language: '$dir/language.yaml',
     dataFiles: dataFiles,
     glossFiles: {
@@ -55,6 +60,8 @@ CourseSpec drawCourse(Random rng, String dir) {
 /// [course] with one more data file whose id is [id] and whose path is new.
 CourseSpec withDataFile(CourseSpec course, String id) => (
   path: course.path,
+  id: course.id,
+  name: course.name,
   language: course.language,
   dataFiles: [
     ...course.dataFiles,
@@ -70,6 +77,8 @@ CourseSpec withDataFile(CourseSpec course, String id) => (
 /// [course] whose game rules also name the data file id [id].
 CourseSpec withEarnDataFile(CourseSpec course, String id) => (
   path: course.path,
+  id: course.id,
+  name: course.name,
   language: course.language,
   dataFiles: course.dataFiles,
   glossFiles: course.glossFiles,
@@ -85,6 +94,8 @@ String courseYaml(CourseSpec course, Random rng) {
       ? ' [${items.join(', ')}]'
       : items.map((i) => '\n  - $i').join();
   return [
+    'id: ${course.id}',
+    'name: {${[for (final MapEntry(:key, :value) in course.name.entries) '$key: $value'].join(', ')}}',
     'language: ${course.language}',
     'data_files:${list([for (final f in course.dataFiles) '{id: ${f.id}, path: ${f.path}, role: ${f.role.name}}'])}',
     'gloss_files: {${[for (final MapEntry(:key, :value) in course.glossFiles.entries) '${key.name}: $value'].join(', ')}}',
@@ -124,6 +135,8 @@ Map<String, String> courseListAssets(List<CourseSpec> courses, Random rng) => {
 /// equality with [specView].
 Map<String, Object> courseView(Course course) => {
   'path': course.path,
+  'id': course.id,
+  'name': course.name,
   'language': course.language,
   'dataFiles': [
     for (final f in course.dataFiles) [f.id, f.path, f.role],
@@ -136,6 +149,8 @@ Map<String, Object> courseView(Course course) => {
 
 Map<String, Object> specView(CourseSpec spec) => {
   'path': spec.path,
+  'id': spec.id,
+  'name': spec.name,
   'language': spec.language,
   'dataFiles': [
     for (final f in spec.dataFiles) [f.id, f.path, f.role],

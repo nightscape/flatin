@@ -41,7 +41,7 @@ void main() {
   tearDown(() {
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMessageHandler('flutter/assets', null);
-    resetPracticeDataForTest();
+    resetPracticeData();
   });
 
   group('a course whose verbs file lacks a look-alike set a kind asks for '
@@ -50,7 +50,7 @@ void main() {
       test('seed $seed', () async {
         final (verbs, gone) = _verbsWithoutOneSet(Random(seed));
         _serve(verbs);
-        resetPracticeDataForTest();
+        resetPracticeData();
         await expectLater(
           loadAllPracticeItems(),
           throwsA(
@@ -70,7 +70,7 @@ void main() {
     for (var seed = 0; seed < 10; seed++) {
       test('seed $seed', () async {
         _serve(_verbsWithOtherId(Random(seed)));
-        resetPracticeDataForTest();
+        resetPracticeData();
         await expectLater(
           loadAllPracticeItems(),
           throwsA(

@@ -14,4 +14,7 @@ Future<LessonData> lessonData(Ref ref) async {
 
 /// Every practice item of the loaded data files, nouns first.
 @riverpod
-Future<List<PracticeItem>> practiceItems(Ref ref) => loadAllPracticeItems();
+Future<List<PracticeItem>> practiceItems(Ref ref) async {
+  await ref.watch(courseProvider.future);
+  return loadAllPracticeItems();
+}

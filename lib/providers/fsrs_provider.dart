@@ -30,12 +30,18 @@ Scheduler fsrsScheduler(Ref ref) {
   return Scheduler();
 }
 
-/// Every word card and grammar card, synced with the YAML items.
+/// Every word card and grammar card of the active course, synced with the
+/// YAML items. The cards of the other courses stay in the store untouched.
 @riverpod
 Future<Map<String, PracticeItemCard>> fsrsCards(Ref ref) async {
+  final course = await ref.watch(courseProvider.future);
   final items = await loadAllPracticeItems();
   await FsrsStorage.syncCards(items);
-  return FsrsStorage.syncGrammarCards(items);
+  final synced = await FsrsStorage.syncGrammarCards(items);
+  return {
+    for (final MapEntry(:key, :value) in synced.entries)
+      if (course.ownsCard(key)) key: value,
+  };
 }
 
 /// The due word cards; grammar cards are due through the rounds.

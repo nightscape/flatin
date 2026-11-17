@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:latin_practice/data/curriculum.dart';
 import 'package:latin_practice/data/exercise_kinds.dart';
 import 'package:latin_practice/data/lesson_data.dart';
@@ -25,6 +26,7 @@ import 'support/latin_course.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences.setMockInitialValues({});
 
   late SentenceWorld world;
   final generator = generatorFor(

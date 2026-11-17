@@ -2,6 +2,9 @@
   "app": {
     "title": "Latein Lernen"
   },
+  "course": {
+    "switch": "Kurs wechseln"
+  },
   "home": {
     "nouns": "Nomen (Deklination)",
     "verbs": "Verben (Konjugation)",

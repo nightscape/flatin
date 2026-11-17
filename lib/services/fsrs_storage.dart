@@ -28,7 +28,7 @@ class FsrsStorage {
     final json = jsonDecode(cardsJson) as Map<String, dynamic>;
 
     if (json['version'] != _currentVersion) {
-      await saveCards({});
+      await _write({});
       return {};
     }
 
@@ -43,8 +43,12 @@ class FsrsStorage {
     return cardsMap;
   }
 
-  /// Save all FSRS cards to storage
-  static Future<void> saveCards(Map<String, PracticeItemCard> cards) async {
+  /// Stores [cards] beside the stored cards of the other courses: a card of
+  /// [cards] replaces the stored card of its id, and no stored card goes.
+  static Future<void> saveCards(Map<String, PracticeItemCard> cards) async =>
+      _write({...await loadCards(), ...cards});
+
+  static Future<void> _write(Map<String, PracticeItemCard> cards) async {
     final prefs = await SharedPreferences.getInstance();
     final cardsList = cards.values.map((card) => card.toMap()).toList();
 

@@ -12,7 +12,7 @@ import 'support/word_classification_harness.dart';
 /// wait forever on the practice data that the first one had already loaded,
 /// and then on the load that the first one had left in flight.
 void main() {
-  setUp(resetPracticeDataForTest);
+  setUp(resetPracticeData);
   tearDown(() => parseGate = () async {});
 
   test('two concurrent loads of one zone parse once', () async {

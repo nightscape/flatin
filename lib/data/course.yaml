@@ -1,4 +1,6 @@
 # The files of one course; SCHEMA.md "Course manifest".
+id: latein
+name: {de: Latein, en: Latin}
 language: lib/data/languages/la.yaml
 data_files:
   - {id: nouns, path: lib/data/latin_nouns.yaml, role: noun}
