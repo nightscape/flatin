@@ -3,6 +3,7 @@ import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/rewards.dart';
+import '../models/settings.dart' show StemMarking;
 import '../providers/course_provider.dart';
 import '../providers/settings_provider.dart';
 import 'course_scope.dart';
@@ -30,6 +31,46 @@ class _MacronSwitch extends ConsumerWidget {
             ),
             value: settings.avoidFoldTwins,
             onChanged: ref.read(settingsProvider.notifier).setAvoidMacronTwins,
+          ),
+        );
+  }
+}
+
+class _StemMarkingSection extends ConsumerWidget {
+  const _StemMarkingSection();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    String tr(String id) =>
+        FlutterI18n.translate(context, 'settings.stemMarking.$id');
+    return ref
+        .watch(settingsProvider)
+        .when(
+          skipLoadingOnReload: true,
+          loading: () => const SizedBox.shrink(),
+          error: (error, _) => loadErrorText(context, error),
+          data: (settings) => Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              SectionTitle(tr('title')),
+              SegmentedButton<StemMarking>(
+                key: const Key('settings.stemMarking'),
+                segments: [
+                  for (final m in StemMarking.values)
+                    ButtonSegment(
+                      value: m,
+                      label: Text(
+                        tr(m.name),
+                        key: Key('settings.stemMarking.${m.name}'),
+                      ),
+                    ),
+                ],
+                selected: {settings.stemMarking},
+                onSelectionChanged: (s) => ref
+                    .read(settingsProvider.notifier)
+                    .setStemMarking(s.single),
+              ),
+            ],
           ),
         );
   }
@@ -118,6 +159,7 @@ class SettingsScreen extends ConsumerWidget {
               const SettingsInputPage(),
             ),
             const _MacronSwitch(),
+            const _StemMarkingSection(),
             const _RewardSection(),
           ],
         ),

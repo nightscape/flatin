@@ -28,6 +28,9 @@ enum Override {
 /// say where the learner overruled that. The off sets are the ones the app
 /// has always stored, so stored settings of the previous format read as
 /// forced-off without conversion.
+/// How prompt forms show the boundary between stem and ending.
+enum StemMarking { aus, zeigen, selbstMarkieren }
+
 class Settings {
   /// Map of data file identifier to set of form keys the user switched off
   /// e.g., {"nouns": {"genitive_singular", ...}, ...}
@@ -112,6 +115,8 @@ class Settings {
   /// Whether the exam screen shows the points gained.
   final bool punkteAnzeige;
 
+  final StemMarking stemMarking;
+
   Settings({
     required this.lastLesson,
     Map<String, Set<String>>? disabledForms,
@@ -135,6 +140,7 @@ class Settings {
     this.avoidFoldTwins = true,
     this.uebersetzungseinheit = Uebersetzungseinheit.teilsatz,
     this.punkteAnzeige = false,
+    this.stemMarking = StemMarking.zeigen,
   }) : disabledForms = disabledForms ?? {},
        disabledFeatures = disabledFeatures ?? {},
        disabledTypes = disabledTypes ?? {},
@@ -211,6 +217,7 @@ class Settings {
     bool? avoidFoldTwins,
     Uebersetzungseinheit? uebersetzungseinheit,
     bool? punkteAnzeige,
+    StemMarking? stemMarking,
   }) {
     return Settings(
       lastLesson: lastLesson,
@@ -235,6 +242,7 @@ class Settings {
       avoidFoldTwins: avoidFoldTwins ?? this.avoidFoldTwins,
       uebersetzungseinheit: uebersetzungseinheit ?? this.uebersetzungseinheit,
       punkteAnzeige: punkteAnzeige ?? this.punkteAnzeige,
+      stemMarking: stemMarking ?? this.stemMarking,
     );
   }
 
@@ -472,6 +480,8 @@ class Settings {
       'avoidMacronTwins': avoidFoldTwins,
       'uebersetzungseinheit': uebersetzungseinheit.name,
       'punkteAnzeige': punkteAnzeige,
+      // The default stays unwritten, so stored settings keep their bytes.
+      if (stemMarking != StemMarking.zeigen) 'stemMarking': stemMarking.name,
     };
   }
 
@@ -584,6 +594,9 @@ class Settings {
         json['uebersetzungseinheit'] as String? ?? 'teilsatz',
       ),
       punkteAnzeige: json['punkteAnzeige'] as bool? ?? false,
+      stemMarking: StemMarking.values.byName(
+        json['stemMarking'] as String? ?? StemMarking.zeigen.name,
+      ),
     );
   }
 }

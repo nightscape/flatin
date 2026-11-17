@@ -103,12 +103,12 @@ final class FsrsCardsProvider
 
 String _$fsrsCardsHash() => r'8cb038f0f95941da0d1c7183b883fcd3d405b20c';
 
-/// The due word cards; grammar cards are due through the rounds.
+/// The due word cards; grammar and stem cards are due through the rounds.
 
 @ProviderFor(dueCards)
 final dueCardsProvider = DueCardsProvider._();
 
-/// The due word cards; grammar cards are due through the rounds.
+/// The due word cards; grammar and stem cards are due through the rounds.
 
 final class DueCardsProvider
     extends
@@ -120,7 +120,7 @@ final class DueCardsProvider
     with
         $FutureModifier<List<PracticeItemCard>>,
         $FutureProvider<List<PracticeItemCard>> {
-  /// The due word cards; grammar cards are due through the rounds.
+  /// The due word cards; grammar and stem cards are due through the rounds.
   DueCardsProvider._()
     : super(
         from: null,
@@ -147,7 +147,7 @@ final class DueCardsProvider
   }
 }
 
-String _$dueCardsHash() => r'bcb4f761c4f67e8b6321013e4226a3c93ac73f1c';
+String _$dueCardsHash() => r'86d845a7f20c12a6df3067d38802a998d5a04291';
 
 /// Every item the user can practise, by exercise type.
 ///
@@ -385,6 +385,52 @@ final class WordFocusesProvider
 }
 
 String _$wordFocusesHash() => r'3927a98619d6dd398d00d7113c7b68c9ca48a4db';
+
+/// How the prompts mark stems. Before the settings load, the default.
+
+@ProviderFor(stemMarking)
+final stemMarkingProvider = StemMarkingProvider._();
+
+/// How the prompts mark stems. Before the settings load, the default.
+
+final class StemMarkingProvider
+    extends $FunctionalProvider<StemMarking, StemMarking, StemMarking>
+    with $Provider<StemMarking> {
+  /// How the prompts mark stems. Before the settings load, the default.
+  StemMarkingProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'stemMarkingProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$stemMarkingHash();
+
+  @$internal
+  @override
+  $ProviderElement<StemMarking> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  StemMarking create(Ref ref) {
+    return stemMarking(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(StemMarking value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<StemMarking>(value),
+    );
+  }
+}
+
+String _$stemMarkingHash() => r'c454cb9d1ed55a5003a6143a3e372ee86936ec18';
 
 /// The German texts of the Latin verbs and nouns; none for a UI language
 /// other than German, so the kinds that show them are not built.

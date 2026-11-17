@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/exercise.dart';
+import '../models/settings.dart' show StemMarking;
+import '../providers/fsrs_provider.dart';
 import 'form_text.dart';
 
-/// The question of [exercise]. Each Latin word in it is a [FormText] the
-/// learner can mark freely, per exercise; the text around it is the translated sentence.
-class ExerciseQuestion extends StatelessWidget {
+/// The question of [exercise]. Each Latin word in it is a [FormText] in the
+/// learner's stem marking, per exercise; a shown form with a stem split gets
+/// its split, and its confirmed mark reviews its stem card. The text around
+/// the words is the translated sentence.
+class ExerciseQuestion extends ConsumerWidget {
   const ExerciseQuestion(this.exercise, {super.key});
 
   final Exercise exercise;
@@ -17,7 +22,8 @@ class ExerciseQuestion extends StatelessWidget {
   static const _close = '';
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final mode = ref.watch(stemMarkingProvider);
     final style = Theme.of(context).textTheme.titleLarge;
     final sentence = FlutterI18n.translate(
       context,
@@ -35,7 +41,14 @@ class ExerciseQuestion extends StatelessWidget {
     for (final m in RegExp('$_open(.+?)$_close').allMatches(sentence)) {
       spans.add(TextSpan(text: sentence.substring(from, m.start)));
       spans.addAll(
-        _wordSpans(context, exercise.questionParams[m.group(1)]!, style),
+        _wordSpans(
+          context,
+          exercise.questionParams[m.group(1)]!,
+          exercise.stemSplits[m.group(1)],
+          mode,
+          (card, right) => reviewStemCard(ref, card, right),
+          style,
+        ),
       );
       from = m.end;
     }
@@ -57,8 +70,15 @@ class ExerciseQuestion extends StatelessWidget {
   static Iterable<InlineSpan> _wordSpans(
     BuildContext context,
     String text,
+    StemSplit? split,
+    StemMarking mode,
+    void Function(StemCardId, bool) onMark,
     TextStyle? style,
   ) sync* {
+    assert(
+      split == null || _word.stringMatch(text) == text,
+      'the split form "$text" is not one word',
+    );
     final unscaled = MediaQuery.of(
       context,
     ).copyWith(textScaler: TextScaler.noScaling);
@@ -71,8 +91,9 @@ class ExerciseQuestion extends StatelessWidget {
           data: unscaled,
           child: FormText(
             text: m[0]!,
-            split: null,
-            mode: StemMarking.frei,
+            split: split?.stemLength,
+            mode: mode,
+            onMark: split == null ? null : (right) => onMark(split.card, right),
             style: style,
           ),
         ),

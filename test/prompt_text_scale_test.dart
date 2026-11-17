@@ -9,6 +9,7 @@ import 'package:latin_practice/models/practice_item.dart';
 import 'package:latin_practice/providers/fsrs_provider.dart';
 import 'package:latin_practice/providers/locale_provider.dart';
 import 'package:latin_practice/widgets/exercise_question.dart';
+import 'package:latin_practice/models/settings.dart' show StemMarking;
 import 'package:latin_practice/widgets/form_text.dart';
 
 import 'support/gen_prompt_exercises.dart';
@@ -50,54 +51,65 @@ void main() {
     );
   });
 
-  testWidgets('a form in a prompt has the size of the plain text at every '
-      'text scale', (tester) async {
+  testWidgets('in every stem marking, a form in a prompt has the size of the '
+      'plain text at every text scale', (tester) async {
     final wrong = <String>[];
-    for (final (e, scale) in scaledPromptForms(drawn)) {
-      Widget scaled(Widget child) => Builder(
-        builder: (context) => MediaQuery(
-          data: MediaQuery.of(
-            context,
-          ).copyWith(textScaler: TextScaler.linear(scale)),
-          child: Scaffold(body: child),
-        ),
-      );
-      await tester.pumpWidget(
-        wrapInApp(
-          scaled(ExerciseQuestion(e)),
-          forcedLocale: const Locale('de'),
-        ),
-      );
-      await tester.pumpAndSettle();
-      final shown = [
-        for (final el in find.byType(FormText).evaluate())
-          (
-            (el.widget as FormText).text,
-            tester.getRect(find.byWidget(el.widget)).size,
+    for (final mode in StemMarking.values) {
+      await tester.pumpWidget(const SizedBox());
+      for (final (e, scale) in scaledPromptForms(drawn)) {
+        Widget scaled(Widget child) => Builder(
+          builder: (context) => MediaQuery(
+            data: MediaQuery.of(
+              context,
+            ).copyWith(textScaler: TextScaler.linear(scale)),
+            child: Scaffold(body: child),
           ),
-      ];
-      for (final (text, size) in shown) {
+        );
+        await tester.pumpWidget(const SizedBox());
         await tester.pumpWidget(
           wrapInApp(
-            scaled(
-              Builder(
-                builder: (context) => Align(
-                  alignment: Alignment.topLeft,
-                  child: Text(
-                    text,
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                ),
-              ),
-            ),
+            scaled(ExerciseQuestion(e)),
             forcedLocale: const Locale('de'),
+            overrides: [
+              if (mode != StemMarking.zeigen)
+                stemMarkingProvider.overrideWithValue(mode),
+            ],
           ),
         );
         await tester.pumpAndSettle();
-        final plain = tester.getSize(find.text(text));
-        if ((plain.height - size.height).abs() > 0.5 ||
-            (plain.width - size.width).abs() > 0.5) {
-          wrong.add('${e.kind.name} x$scale "$text": $size vs plain $plain');
+        final shown = [
+          for (final el in find.byType(FormText).evaluate())
+            (
+              (el.widget as FormText).text,
+              tester.getRect(find.byWidget(el.widget)).size,
+            ),
+        ];
+        for (final (text, size) in shown) {
+          await tester.pumpWidget(const SizedBox());
+          await tester.pumpWidget(
+            wrapInApp(
+              scaled(
+                Builder(
+                  builder: (context) => Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      text,
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                  ),
+                ),
+              ),
+              forcedLocale: const Locale('de'),
+            ),
+          );
+          await tester.pumpAndSettle();
+          final plain = tester.getSize(find.text(text));
+          if ((plain.height - size.height).abs() > 0.5 ||
+              (plain.width - size.width).abs() > 0.5) {
+            wrong.add(
+              '$mode ${e.kind.name} x$scale "$text": $size vs plain $plain',
+            );
+          }
         }
       }
     }

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/attribution.dart';
 import '../data/exercise_feedback.dart';
 import '../models/exercise.dart';
 import '../models/input_strategy.dart';
 import '../models/practice_item.dart';
+import '../providers/fsrs_provider.dart';
 import '../widgets/exercise_question.dart';
 import '../widgets/explanation_lines.dart';
 import '../widgets/form_text.dart';
@@ -13,7 +15,7 @@ import '../widgets/form_text.dart';
 /// Shows one principal-parts [Exercise]: one input per part, each following
 /// [inputStrategy]; after the feedback, "next" hands the texts to
 /// [onResponse] once.
-class ExercisePartsWidget extends StatefulWidget {
+class ExercisePartsWidget extends ConsumerStatefulWidget {
   final PracticeItem word;
   final Exercise exercise;
 
@@ -36,10 +38,11 @@ class ExercisePartsWidget extends StatefulWidget {
   });
 
   @override
-  State<ExercisePartsWidget> createState() => _ExercisePartsWidgetState();
+  ConsumerState<ExercisePartsWidget> createState() =>
+      _ExercisePartsWidgetState();
 }
 
-class _ExercisePartsWidgetState extends State<ExercisePartsWidget> {
+class _ExercisePartsWidgetState extends ConsumerState<ExercisePartsWidget> {
   static const _contentWidth = 600.0;
 
   late List<String> _texts = _empty();
@@ -101,14 +104,25 @@ class _ExercisePartsWidgetState extends State<ExercisePartsWidget> {
     var i = 0;
     for (var at = 0; at < _answer.slots.length + given.length; at++) {
       if (given[at] case (:final name, :final form, at: _)) {
+        final stem =
+            form.builtWrongBy == null && form.lexemeId == widget.word.id
+            ? widget.word.derivation.stemOf(form.formKey, form.text)
+            : null;
         widgets.addAll([
           Text(_t(name)),
           const SizedBox(height: 4),
           FormText(
             key: Key('exercise.given.$at'),
             text: form.text,
-            split: null,
-            mode: StemMarking.frei,
+            split: stem?.spelling.characters.length,
+            mode: ref.watch(stemMarkingProvider),
+            onMark: stem == null
+                ? null
+                : (right) => reviewStemCard(
+                    ref,
+                    StemCardId(widget.word, stem.name),
+                    right,
+                  ),
             style: Theme.of(context).textTheme.titleMedium,
           ),
         ]);

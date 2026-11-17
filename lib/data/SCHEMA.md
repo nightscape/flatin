@@ -571,6 +571,12 @@ rule's `when.dataFile` names an `id` of its course and `when.kind` an exercise
 kind. Each of these checks throws at load and names the file it found the
 error in.
 
+A stem card has the id `<data_file_id>:<item>:stem:<stem name>`, so it belongs
+to the course of its item. The first confirmed stem mark creates it; no sync
+does. Round selection reads it in one rule only: with the setting `selbst
+markieren`, a due stem card moves the due date of its own word card to its own
+due date when that is earlier. With `aus` and `zeigen`, stem cards play no part.
+
 # Course books
 
 A book file (`books:` of the manifest, read by `lib/data/curriculum.dart`) is

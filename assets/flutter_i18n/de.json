@@ -38,6 +38,12 @@
       "animation": "Animation"
     },
     "title": "Einstellungen",
+    "stemMarking": {
+      "title": "Stamm und Endung",
+      "aus": "Aus",
+      "zeigen": "Zeigen",
+      "selbstMarkieren": "Selbst markieren"
+    },
     "avoidMacronTwins": "Ähnliche Formen mit Längenzeichen vermeiden",
     "nouns": "Nomen (Deklination)",
     "verbs": "Verben (Konjugation)",

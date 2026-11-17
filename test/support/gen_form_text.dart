@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:latin_practice/widgets/form_text.dart';
+import 'package:latin_practice/models/settings.dart' show StemMarking;
 
 /// Letters of Latin, Greek and Cyrillic words, with precomposed and combining
 /// macrons.
@@ -34,21 +34,34 @@ const formTextLetters = [
 
 typedef FormTextCase = ({String text, int? split, StemMarking mode});
 
-/// 0 to 12 letters; split null, or 1..length (length = no ending).
+/// 0 to 12 letters; split null, or 1..length-1 when the form has 2 letters
+/// or more.
 FormTextCase drawFormTextCase(Random rng) {
   final letters = [
     for (var i = rng.nextInt(13); i > 0; i--)
       formTextLetters[rng.nextInt(formTextLetters.length)],
   ];
-  final split = letters.isEmpty || rng.nextInt(5) == 0
+  final split = letters.length < 2 || rng.nextInt(4) == 0
       ? null
-      : 1 + rng.nextInt(letters.length);
+      : 1 + rng.nextInt(letters.length - 1);
   return (
     text: letters.join(),
     split: split,
     mode: StemMarking.values[rng.nextInt(StemMarking.values.length)],
   );
 }
+
+/// What the learner can do with a form in its marking: free marking, placing
+/// a bar to confirm, or nothing.
+enum FormTextTaps { none, free, checked }
+
+FormTextTaps tapsOf(FormTextCase c) => switch ((c.mode, c.split)) {
+  (StemMarking.aus, _) => FormTextTaps.none,
+  (_, null) when c.text.characters.length < 2 => FormTextTaps.none,
+  (_, null) => FormTextTaps.free,
+  (StemMarking.zeigen, _) => FormTextTaps.none,
+  (StemMarking.selbstMarkieren, _) => FormTextTaps.checked,
+};
 
 /// 1..8 taps on the gaps 1..[letters]-1 of a form; [letters] is at least 2.
 List<int> drawGapTaps(Random rng, int letters) => [

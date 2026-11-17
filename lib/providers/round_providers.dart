@@ -20,6 +20,7 @@ import '../models/exercise.dart';
 import '../models/fsrs_card.dart';
 import '../models/practice_item.dart';
 import '../models/reward.dart';
+import '../models/settings.dart' show StemMarking;
 import 'course_provider.dart';
 import 'curriculum_provider.dart';
 import 'fsrs_provider.dart';
@@ -90,15 +91,38 @@ final class NothingToPractise extends TodayOffer {
   const NothingToPractise();
 }
 
+/// The cards selection reads. In [StemMarking.selbstMarkieren] a due stem
+/// card makes its item's word card due as well, no earlier than the stem
+/// card; no other card changes. In the other modes the stem cards play no
+/// part, and [cards] pass unchanged.
+Map<String, PracticeItemCard> withStemPriority(
+  Map<String, PracticeItemCard> cards,
+  StemMarking mode,
+  DateTime now,
+) {
+  if (mode != StemMarking.selbstMarkieren) return cards;
+  final raised = Map.of(cards);
+  for (final MapEntry(key: id, value: stem) in cards.entries) {
+    if (!StemCardId.isStemCard(id) || stem.due.isAfter(now)) continue;
+    final wordId = StemCardId.wordCardOf(id);
+    final word = raised[wordId]!;
+    if (stem.due.isBefore(word.due)) {
+      raised[wordId] = word.copyWith(due: stem.due);
+    }
+  }
+  return raised;
+}
+
 SelectionInput _selectionInput(
   Map<String, PracticeItemCard> cards,
   Map<String, List<PracticeItem>> practicable,
   CourseFilter filter,
   Scheduler scheduler,
+  StemMarking mode,
 ) {
   final now = DateTime.now().toUtc();
   return (
-    cards: cards,
+    cards: withStemPriority(cards, mode, now),
     items: [for (final items in practicable.values) ...items],
     filter: filter,
     retrievability: (c) =>
@@ -114,6 +138,7 @@ Future<TodayOffer> todayOffer(Ref ref, WordFocus focus) async {
     focus.narrow(await ref.watch(practicableItemsByFileProvider.future)),
     await ref.watch(courseFilterProvider.future),
     ref.watch(fsrsSchedulerProvider),
+    ref.watch(stemMarkingProvider),
   );
   final index = BundleIndex(input.items, input.filter);
   SelectedPair? select({required bool includeNotDue}) => selectPair(
@@ -223,6 +248,7 @@ class Round extends _$Round {
       focused,
       filter,
       ref.read(fsrsSchedulerProvider),
+      settings.stemMarking,
     );
     ExerciseContext contextOf(
       List<PracticeItem> pool, {

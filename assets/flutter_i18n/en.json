@@ -38,6 +38,12 @@
       "animation": "Animation"
     },
     "title": "Settings",
+    "stemMarking": {
+      "title": "Stem and ending",
+      "aus": "Off",
+      "zeigen": "Show",
+      "selbstMarkieren": "Mark yourself"
+    },
     "avoidMacronTwins": "Avoid forms that differ only in macrons",
     "nouns": "Nouns (declension)",
     "verbs": "Verbs (conjugation)",

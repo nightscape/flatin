@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Card;
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -14,6 +14,7 @@ import '../models/course.dart';
 import '../models/distractor_strategy.dart';
 import '../models/exercise.dart';
 import '../models/practice_item.dart';
+import '../models/settings.dart' show StemMarking;
 import '../models/fsrs_card.dart';
 import '../services/fsrs_storage.dart';
 import '../data/practice_data.dart';
@@ -44,7 +45,7 @@ Future<Map<String, PracticeItemCard>> fsrsCards(Ref ref) async {
   };
 }
 
-/// The due word cards; grammar cards are due through the rounds.
+/// The due word cards; grammar and stem cards are due through the rounds.
 @riverpod
 Future<List<PracticeItemCard>> dueCards(Ref ref) async {
   final cards = await ref.watch(fsrsCardsProvider.future);
@@ -52,6 +53,7 @@ Future<List<PracticeItemCard>> dueCards(Ref ref) async {
 
   return cards.values
       .where((card) => !card.itemId.startsWith('grammar:'))
+      .where((card) => !StemCardId.isStemCard(card.itemId))
       .where((card) => card.due.isBefore(now) || card.due.isAtSameMomentAs(now))
       .toList()
     ..sort((a, b) => a.due.compareTo(b.due));
@@ -168,6 +170,37 @@ Future<void> reviewCard(
 
   // Invalidate providers to refresh UI
   ref.invalidate(fsrsCardsProvider);
+}
+
+/// How the prompts mark stems. Before the settings load, the default.
+@riverpod
+StemMarking stemMarking(Ref ref) =>
+    ref.watch(settingsProvider).value?.stemMarking ?? StemMarking.zeigen;
+
+/// Reviews the stem card [id] with a confirmed mark; see [storeStemReview].
+Future<void> reviewStemCard(WidgetRef ref, StemCardId id, bool right) async {
+  await storeStemReview(ref.read(fsrsSchedulerProvider), id, right);
+  ref.invalidate(fsrsCardsProvider);
+}
+
+/// Stores the review of the stem card [id], creating it on its first mark;
+/// no other card changes.
+Future<void> storeStemReview(
+  Scheduler scheduler,
+  StemCardId id,
+  bool right,
+) async {
+  final stored = await FsrsStorage.loadCards();
+  final card =
+      stored[id] ??
+      PracticeItemCard(
+        itemId: id,
+        card: Card(cardId: id.hashCode),
+        due: DateTime.now().toUtc(),
+      );
+  await FsrsStorage.saveCards({
+    id: _reviewed(scheduler, card, right ? Rating.good : Rating.again),
+  });
 }
 
 PracticeItemCard _reviewed(
