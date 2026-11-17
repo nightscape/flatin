@@ -1,0 +1,2 @@
+* In Bestimmen-Aufgaben der Prüfung wählst du die Merkmale jetzt mit denselben Auswahllisten wie beim Üben.
+* Eine falsche Antwort zeigt dir, was nicht stimmt, und du darfst es noch einmal versuchen: richtig beim ersten Versuch gibt die vollen Punkte, beim zweiten die Hälfte, nie Minuspunkte.

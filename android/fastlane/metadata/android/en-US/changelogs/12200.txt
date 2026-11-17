@@ -1,0 +1,2 @@
+* In exam identification tasks, you now pick the features with the same dropdowns as in practice.
+* A wrong answer shows you what is not right, and you may try again: right on the first try earns the full points, on a retry half, never minus points.
