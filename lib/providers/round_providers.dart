@@ -93,21 +93,37 @@ final class NothingToPractise extends TodayOffer {
 
 /// The cards selection reads. In [StemMarking.selbstMarkieren] a due stem
 /// card makes its item's word card due as well, no earlier than the stem
-/// card; no other card changes. In the other modes the stem cards play no
-/// part, and [cards] pass unchanged.
+/// card, when a practised form of [items] shows that stem split and the word
+/// was last reviewed before the stem card fell due; no other card changes. In
+/// the other modes the stem cards play no part, and [cards] pass unchanged.
 Map<String, PracticeItemCard> withStemPriority(
   Map<String, PracticeItemCard> cards,
+  List<PracticeItem> items,
+  CourseFilter filter,
   StemMarking mode,
   DateTime now,
 ) {
   if (mode != StemMarking.selbstMarkieren) return cards;
+  final due = {
+    for (final MapEntry(key: id, value: stem) in cards.entries)
+      if (StemCardId.isStemCard(id) && !stem.due.isAfter(now)) id: stem,
+  };
+  final dueWords = {for (final id in due.keys) StemCardId.wordCardOf(id)};
   final raised = Map.of(cards);
-  for (final MapEntry(key: id, value: stem) in cards.entries) {
-    if (!StemCardId.isStemCard(id) || stem.due.isAfter(now)) continue;
-    final wordId = StemCardId.wordCardOf(id);
-    final word = raised[wordId]!;
-    if (stem.due.isBefore(word.due)) {
-      raised[wordId] = word.copyWith(due: stem.due);
+  for (final item in items.where((i) => dueWords.contains(i.id))) {
+    for (final key in filter.practicedForms(item.dataFileId, item.formLabels)) {
+      final shown = item.derivation.stemOf(
+        key,
+        item.forms[item.formOrder.indexOf(key)],
+      );
+      final stem = shown == null ? null : due[StemCardId(item, shown.name)];
+      if (stem == null) continue;
+      final word = raised[item.id]!;
+      final lastReview = word.lastReview;
+      if (stem.due.isBefore(word.due) &&
+          (lastReview == null || lastReview.isBefore(stem.due))) {
+        raised[item.id] = word.copyWith(due: stem.due);
+      }
     }
   }
   return raised;
@@ -121,9 +137,10 @@ SelectionInput _selectionInput(
   StemMarking mode,
 ) {
   final now = DateTime.now().toUtc();
+  final items = [for (final items in practicable.values) ...items];
   return (
-    cards: withStemPriority(cards, mode, now),
-    items: [for (final items in practicable.values) ...items],
+    cards: withStemPriority(cards, items, filter, mode, now),
+    items: items,
     filter: filter,
     retrievability: (c) =>
         scheduler.getCardRetrievability(c.card, currentDateTime: now),

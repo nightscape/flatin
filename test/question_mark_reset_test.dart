@@ -48,7 +48,7 @@ void main() {
     );
     final german = await container.read(germanFormsProvider.future);
     container.dispose();
-    drawn = drawExercises(
+    drawn = drawPromptExercises(
       items,
       german,
       await loadSentenceCorpus(),

@@ -16,16 +16,14 @@ import 'support/gen_form_text.dart';
 import 'support/gen_prompt_exercises.dart';
 import 'support/word_classification_harness.dart';
 
-/// One drawn exercise per kind whose prompt shows Latin text, on each narrow
-/// phone width, at each text scale a learner can set.
+/// One drawn exercise per kind and split class whose prompt shows Latin
+/// text, on each narrow phone width, at each text scale a learner can set.
 Iterable<(Exercise, double, double)> narrowPromptForms(
   List<(PracticeItem, Exercise)> drawn,
 ) sync* {
-  final byKind = <ExerciseKind, Exercise>{};
-  for (final (_, e) in drawn) {
-    if (e.formParams.isNotEmpty) byKind.putIfAbsent(e.kind, () => e);
-  }
-  for (final e in byKind.values) {
+  for (final (_, e) in firstPerKindAndClass(
+    drawn.where((d) => d.$2.formParams.isNotEmpty),
+  )) {
     for (final width in const [320.0, 360.0]) {
       for (final scale in formTextScales) {
         yield (e, width, scale);
@@ -46,7 +44,7 @@ void main() {
     );
     final german = await container.read(germanFormsProvider.future);
     container.dispose();
-    drawn = drawExercises(
+    drawn = drawPromptExercises(
       items,
       german,
       await loadSentenceCorpus(),

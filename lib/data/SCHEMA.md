@@ -575,7 +575,9 @@ A stem card has the id `<data_file_id>:<item>:stem:<stem name>`, so it belongs
 to the course of its item. The first confirmed stem mark creates it; no sync
 does. Round selection reads it in one rule only: with the setting `selbst
 markieren`, a due stem card moves the due date of its own word card to its own
-due date when that is earlier. With `aus` and `zeigen`, stem cards play no part.
+due date when that is earlier, but only when a practised form of the item shows
+that stem split and the word card's last review is earlier than the stem card's
+due date. With `aus` and `zeigen`, stem cards play no part.
 
 # Course books
 

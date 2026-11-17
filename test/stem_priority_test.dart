@@ -7,6 +7,7 @@ import 'package:latin_practice/data/lesson_data.dart';
 import 'package:latin_practice/data/practice_data.dart';
 import 'package:latin_practice/data/selection.dart';
 import 'package:latin_practice/models/course_filter.dart';
+import 'package:latin_practice/models/derivation.dart';
 import 'package:latin_practice/models/exercise.dart';
 import 'package:latin_practice/models/fsrs_card.dart';
 import 'package:latin_practice/models/practice_item.dart';
@@ -43,6 +44,19 @@ import 'support/latin_course.dart';
   return (store, stems);
 }
 
+/// The stem card ids whose stem a practised form of [items] shows split,
+/// read from the generated forms.
+Set<String> _shownStems(List<PracticeItem> items, CourseFilter filter) => {
+  for (final item in items)
+    for (final key in filter.practicedForms(item.dataFileId, item.formLabels))
+      if (item.derivation.forms[key] case GeneratedForm(
+        sandhiRule: null,
+        :final ending,
+        :final stemName,
+      ) when ending.isNotEmpty)
+        StemCardId(item, stemName),
+};
+
 String _pairOf(SelectedPair? p) => p == null
     ? 'none'
     : '${p.word.id} ${p.bundle} ${p.anchorIsGrammar} ${p.anchorIsNew}';
@@ -66,15 +80,19 @@ void main() {
   });
 
   test('only in selbst markieren does a due stem card move its own word '
-      'card, and only its due, to the earlier date', () {
+      'card, and only its due, to the earlier date, when a practised form '
+      'shows the stem split and the word was last reviewed before', () {
     final rng = Random(4180);
+    final shown = _shownStems(items, filter);
     var raised = 0;
+    var notShown = 0;
+    var reviewedSince = 0;
     for (var i = 0; i < 60; i++) {
       final now = DateTime.now().toUtc();
       final (store, stems) = _drawStore(rng, items, fresh, now);
       final cards = {...store.cards, ...stems};
       for (final mode in StemMarking.values) {
-        final got = withStemPriority(cards, mode, now);
+        final got = withStemPriority(cards, items, filter, mode, now);
         if (mode != StemMarking.selbstMarkieren) {
           expect(identical(got, cards), isTrue, reason: '$mode');
           continue;
@@ -82,6 +100,15 @@ void main() {
         final earliest = <String, DateTime>{};
         for (final MapEntry(key: id, value: s) in stems.entries) {
           if (s.due.isAfter(now)) continue;
+          if (!shown.contains(id)) {
+            notShown++;
+            continue;
+          }
+          final lastReview = cards[StemCardId.wordCardOf(id)]!.lastReview;
+          if (lastReview != null && !lastReview.isBefore(s.due)) {
+            reviewedSince++;
+            continue;
+          }
           earliest.update(
             StemCardId.wordCardOf(id),
             (d) => s.due.isBefore(d) ? s.due : d,
@@ -104,6 +131,8 @@ void main() {
       }
     }
     expect(raised, greaterThan(0));
+    expect(notShown, greaterThan(0));
+    expect(reviewedSince, greaterThan(0));
   });
 
   test('in every stem marking, the stem cards in the store change the '
@@ -118,6 +147,8 @@ void main() {
         for (final includeNotDue in [false, true]) {
           final raised = withStemPriority(
             {...store.cards, ...stems},
+            items,
+            filter,
             mode,
             now,
           );
@@ -151,5 +182,50 @@ void main() {
         }
       }
     }
+  });
+
+  test('in selbst markieren with no confirmed mark, a word is selected '
+      'raised to a stem due date at most once', () {
+    final rng = Random(4182);
+    final index = BundleIndex(items, filter);
+    const steps = [Duration(minutes: 1), Duration(hours: 1), Duration(days: 1)];
+    var served = 0;
+    for (var i = 0; i < 10; i++) {
+      var now = DateTime.now().toUtc();
+      final (store, stems) = _drawStore(rng, items, fresh, now);
+      final cards = {...store.cards, ...stems};
+      final raisesServed = <(String, DateTime)>{};
+      for (var step = 0; step < 12; step++) {
+        now = now.add(steps[rng.nextInt(steps.length)]);
+        final raised = withStemPriority(
+          cards,
+          items,
+          filter,
+          StemMarking.selbstMarkieren,
+          now,
+        );
+        final pair = selectPair(
+          cards: raised,
+          items: items,
+          filter: filter,
+          retrievability: (c) => store.r[c.itemId]!,
+          now: now,
+          includeNotDue: false,
+          index: index,
+        );
+        if (pair == null) break;
+        final id = pair.word.id;
+        final due = raised[id]!.due;
+        if (due != cards[id]!.due) {
+          served++;
+          expect(raisesServed.add((id, due)), isTrue, reason: '$id $due');
+        }
+        cards[id] = cards[id]!.copyWith(
+          lastReview: now,
+          due: now.add(dueOffsets[rng.nextInt(dueOffsets.length)]),
+        );
+      }
+    }
+    expect(served, greaterThan(0));
   });
 }

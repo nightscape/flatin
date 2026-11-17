@@ -68,3 +68,44 @@ Set<String> expectedLatin(Exercise e) => switch (e.answer) {
   MarksAnswer() ||
   TickAnswer() => const {},
 };
+
+/// Whether [e] shows a split form of more than one word.
+bool showsMultiWordSplit(Exercise e) =>
+    e.stemSplits.keys.any((k) => e.questionParams[k]!.contains(' '));
+
+/// [drawExercises] at [stride], plus every exercise of the first three words
+/// that have a split form of more than one word: a stride draw reaches such a
+/// form at a prompt too rarely.
+List<(PracticeItem, Exercise)> drawPromptExercises(
+  List<PracticeItem> items,
+  GermanForms german,
+  SentenceCorpus corpus, {
+  required int stride,
+}) => [
+  ...drawExercises(items, german, corpus, stride: stride),
+  ...drawExercises(
+    [
+      for (final w in items)
+        if ([
+          for (var i = 0; i < w.forms.length; i++)
+            if (w.forms[i].contains(' '))
+              w.derivation.stemOf(w.formOrder[i], w.forms[i]),
+        ].nonNulls.isNotEmpty)
+          w,
+    ].take(3).toList(),
+    german,
+    corpus,
+    stride: 1,
+  ),
+];
+
+/// The first of [drawn] per exercise kind and per [showsMultiWordSplit].
+List<(PracticeItem, Exercise)> firstPerKindAndClass(
+  Iterable<(PracticeItem, Exercise)> drawn,
+) {
+  final first = <(ExerciseKind, bool), (PracticeItem, Exercise)>{};
+  for (final d in drawn) {
+    first.putIfAbsent((d.$2.kind, showsMultiWordSplit(d.$2)), () => d);
+  }
+  return first.values.toList();
+}

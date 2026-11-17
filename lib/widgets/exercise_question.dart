@@ -66,7 +66,8 @@ class ExerciseQuestion extends ConsumerWidget {
   static final _word = RegExp(r'[\p{L}\p{M}]{2,}', unicode: true);
 
   // The WidgetSpan already scales its child by the text scaler; FormText must
-  // not scale a second time.
+  // not scale a second time. A split form of several words splits only the
+  // word that holds the end of the stem.
   static Iterable<InlineSpan> _wordSpans(
     BuildContext context,
     String text,
@@ -75,15 +76,15 @@ class ExerciseQuestion extends ConsumerWidget {
     void Function(StemCardId, bool) onMark,
     TextStyle? style,
   ) sync* {
-    assert(
-      split == null || _word.stringMatch(text) == text,
-      'the split form "$text" is not one word',
-    );
+    final seam = split == null
+        ? null
+        : text.characters.take(split.stemLength).toString().length;
     final unscaled = MediaQuery.of(
       context,
     ).copyWith(textScaler: TextScaler.noScaling);
     var at = 0;
     for (final m in _word.allMatches(text)) {
+      final own = seam != null && m.start < seam && seam < m.end ? split : null;
       yield TextSpan(text: text.substring(at, m.start));
       yield WidgetSpan(
         alignment: PlaceholderAlignment.middle,
@@ -91,9 +92,11 @@ class ExerciseQuestion extends ConsumerWidget {
           data: unscaled,
           child: FormText(
             text: m[0]!,
-            split: split?.stemLength,
+            split: own == null
+                ? null
+                : text.substring(m.start, seam).characters.length,
             mode: mode,
-            onMark: split == null ? null : (right) => onMark(split.card, right),
+            onMark: own == null ? null : (right) => onMark(own.card, right),
             style: style,
           ),
         ),

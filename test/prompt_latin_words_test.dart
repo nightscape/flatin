@@ -49,7 +49,7 @@ void main() {
     );
     final german = await container.read(germanFormsProvider.future);
     container.dispose();
-    drawn = drawExercises(
+    drawn = drawPromptExercises(
       items,
       german,
       await loadSentenceCorpus(),
@@ -59,17 +59,17 @@ void main() {
 
   testWidgets('in every stem marking, every Latin word of a prompt is a form '
       'text in that marking', (tester) async {
-    final byKind = <ExerciseKind, (PracticeItem, Exercise)>{};
-    for (final d in drawn) {
-      if (exerciseGenerators.any((g) => g.spec.kind == d.$2.kind)) {
-        byKind.putIfAbsent(d.$2.kind, () => d);
-      }
-    }
-    expect(byKind.keys, contains(ExerciseKind.satzAnkreuzen));
+    final picked = firstPerKindAndClass(
+      drawn.where(
+        (d) => exerciseGenerators.any((g) => g.spec.kind == d.$2.kind),
+      ),
+    );
+    expect(picked.map((d) => d.$2.kind), contains(ExerciseKind.satzAnkreuzen));
+    expect(picked.where((d) => showsMultiWordSplit(d.$2)), isNotEmpty);
     final missing = <String>[];
     for (final mode in StemMarking.values) {
       await tester.pumpWidget(const SizedBox());
-      for (final (word, e) in byKind.values) {
+      for (final (word, e) in picked) {
         await tester.pumpWidget(
           wrapInApp(
             Scaffold(body: ExerciseQuestion(e)),

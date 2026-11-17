@@ -22,15 +22,15 @@ enum Override {
   };
 }
 
+/// How prompt forms show the boundary between stem and ending.
+enum StemMarking { aus, zeigen, selbstMarkieren }
+
 /// Settings model holding the user's practice selection.
 ///
 /// The course ranges say what the learner has been taught; the forced sets
 /// say where the learner overruled that. The off sets are the ones the app
 /// has always stored, so stored settings of the previous format read as
 /// forced-off without conversion.
-/// How prompt forms show the boundary between stem and ending.
-enum StemMarking { aus, zeigen, selbstMarkieren }
-
 class Settings {
   /// Map of data file identifier to set of form keys the user switched off
   /// e.g., {"nouns": {"genitive_singular", ...}, ...}

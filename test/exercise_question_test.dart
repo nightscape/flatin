@@ -35,7 +35,7 @@ void main() {
     );
     final german = await container.read(germanFormsProvider.future);
     container.dispose();
-    drawn = drawExercises(
+    drawn = drawPromptExercises(
       items,
       german,
       await loadSentenceCorpus(),
@@ -85,17 +85,15 @@ void main() {
   testWidgets('in every stem marking the question shows exactly its form '
       'params as form texts in that marking, and a shown form with a stem '
       'split carries it', (tester) async {
-    final byKind = <ExerciseKind, (PracticeItem, Exercise)>{};
-    for (final d in drawn) {
-      if (d.$2.stemSplits.isNotEmpty) byKind.putIfAbsent(d.$2.kind, () => d);
-    }
-    for (final d in drawn) {
-      byKind.putIfAbsent(d.$2.kind, () => d);
-    }
-    expect(byKind.values.where((d) => d.$2.stemSplits.isNotEmpty), isNotEmpty);
+    final picked = firstPerKindAndClass([
+      ...drawn.where((d) => d.$2.stemSplits.isNotEmpty),
+      ...drawn,
+    ]);
+    expect(picked.where((d) => d.$2.stemSplits.isNotEmpty), isNotEmpty);
+    expect(picked.where((d) => showsMultiWordSplit(d.$2)), isNotEmpty);
     for (final mode in StemMarking.values) {
       await tester.pumpWidget(const SizedBox());
-      for (final (word, e) in byKind.values) {
+      for (final (word, e) in picked) {
         await tester.pumpWidget(
           wrapInApp(
             Scaffold(body: ExerciseQuestion(e)),
@@ -117,7 +115,7 @@ void main() {
           },
           {
             for (final MapEntry(:key, :value) in e.stemSplits.entries)
-              e.questionParams[key]!: value.stemLength,
+              ..._splitWords(e.questionParams[key]!, value.stemLength),
           },
           reason: reason,
         );
@@ -201,6 +199,18 @@ void main() {
       }
     }
   });
+}
+
+/// The word of a shown form that holds the end of its stem, with the stem
+/// letters in that word.
+Map<String, int> _splitWords(String form, int stemLength) {
+  var before = 0;
+  for (final w in form.split(' ')) {
+    final n = w.characters.length;
+    if (stemLength < before + n) return {w: stemLength - before};
+    before += n + 1;
+  }
+  throw StateError('the stem of "$form" is longer than the form');
 }
 
 Object? _texts(ExerciseResponse r) => switch (r) {
