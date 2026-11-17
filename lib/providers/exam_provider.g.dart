@@ -97,6 +97,47 @@ abstract class _$ExamPacks extends $AsyncNotifier<List<Exam>> {
   }
 }
 
+/// The axes of the verb data file, which cover every analysis key that has a
+/// dropdown, in the language of the UI.
+
+@ProviderFor(examAxes)
+final examAxesProvider = ExamAxesProvider._();
+
+/// The axes of the verb data file, which cover every analysis key that has a
+/// dropdown, in the language of the UI.
+
+final class ExamAxesProvider
+    extends $FunctionalProvider<AsyncValue<Axes>, Axes, FutureOr<Axes>>
+    with $FutureModifier<Axes>, $FutureProvider<Axes> {
+  /// The axes of the verb data file, which cover every analysis key that has a
+  /// dropdown, in the language of the UI.
+  ExamAxesProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'examAxesProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$examAxesHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<Axes> $createElement($ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<Axes> create(Ref ref) {
+    return examAxes(ref);
+  }
+}
+
+String _$examAxesHash() => r'b9ef59432bfbf25e4010a621b6a59d6ad0b369e9';
+
 /// The app's words by lemma: the meaning in the UI language, and the word
 /// card id and data file, one per data file that lists the lemma.
 

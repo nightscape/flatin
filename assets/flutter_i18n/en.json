@@ -451,7 +451,8 @@
       "points": "Points: {n} of {total}",
       "taskPoints": "{n} pts",
       "finish": "Finish the exam",
-      "finished": "{n} words come back tomorrow."
+      "finished": "{n} words come back tomorrow.",
+      "tryAgain": "Not quite yet. Try again."
     },
     "sheet": {
       "lemma": "Dictionary form: {lemma}",

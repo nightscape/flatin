@@ -6,9 +6,11 @@ import '../data/languages/language.dart' show Language;
 import '../data/practice_data.dart';
 import '../data/token_lessons.dart';
 import '../models/course.dart';
+import '../models/form_label.dart' show Axes;
 import '../models/fsrs_card.dart';
 import '../services/exam_storage.dart';
 import '../services/fsrs_storage.dart';
+import 'course_provider.dart';
 import 'curriculum_provider.dart';
 import 'fsrs_provider.dart';
 import 'lesson_provider.dart';
@@ -40,6 +42,16 @@ class ExamPacks extends _$ExamPacks {
       await ExamStorage.load(await ref.read(examLanguageProvider.future)),
     );
   }
+}
+
+/// The axes of the verb data file, which cover every analysis key that has a
+/// dropdown, in the language of the UI.
+@riverpod
+Future<Axes> examAxes(Ref ref) async {
+  final course = await ref.watch(courseProvider.future);
+  final language = await ref.watch(dataLanguageProvider.future);
+  final verbs = course.ofRole(DataFileRole.verb);
+  return (await loadGrammarFile(verbs.id, language: language)).axes;
 }
 
 typedef ExamWord = ({

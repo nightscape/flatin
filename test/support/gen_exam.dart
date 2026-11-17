@@ -186,6 +186,22 @@ final class ExamGen {
     return f;
   }
 
+  /// Draws packs until one has a `bestimmen` item with a dropdown merkmal
+  /// (one of the `form` keys of [latinLang]).
+  Map<String, Object> examWithDropdowns() {
+    while (true) {
+      final e = exam();
+      final found = [
+        for (final a in e['aufgaben'] as List)
+          if ((a as Map)['art'] == 'bestimmen')
+            for (final i in a['items'] as List)
+              if (((i as Map)['merkmale'] as List).any(latinLang.form.contains))
+                i,
+      ];
+      if (found.isNotEmpty) return e;
+    }
+  }
+
   Map<String, Object> exam() {
     final sentenceNumbers = distinct(1 + r.nextInt(3), 40);
     final saetze = [for (final n in sentenceNumbers) sentence('s$n')];

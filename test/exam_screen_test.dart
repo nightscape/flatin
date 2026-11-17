@@ -270,10 +270,18 @@ void main() {
           for (final t in pack['aufgaben'] as List) 'exam.task.${t['id']}',
         ];
         for (final m in marks) {
-          await _tap(
-            tester,
-            find.byKey(Key('$m.${rng.nextBool() ? 'habIch' : 'anders'}')),
+          final mark = find.byKey(
+            Key('$m.${rng.nextBool() ? 'habIch' : 'anders'}'),
           );
+          if (mark.evaluate().isNotEmpty) {
+            await _tap(tester, mark);
+            continue;
+          }
+          for (var j = 0; ; j++) {
+            final check = find.byKey(Key('$m.item.$j.check'));
+            if (check.evaluate().isEmpty) break;
+            await _tap(tester, check);
+          }
         }
         expect(
           find.byKey(const Key('exam.points')),

@@ -6,13 +6,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/exam.dart';
 import '../data/token_lessons.dart';
+import '../models/answer_description.dart';
+import '../models/exam_points.dart';
 import '../models/exam_units.dart';
+import '../models/form_label.dart' show Axes;
 import '../models/settings.dart';
 import '../providers/exam_provider.dart';
 import '../providers/settings_provider.dart';
+import '../widgets/axis_dropdowns.dart';
 
 /// One exam pack: the translation in self-check units of the chosen size,
-/// then the tasks, each checked by the learner against the solution.
+/// then the tasks: a `bestimmen` item with dropdowns is checked by the
+/// screen, every other answer by the learner against the solution.
 class ExamScreen extends ConsumerStatefulWidget {
   final Exam exam;
   const ExamScreen({super.key, required this.exam});
@@ -28,6 +33,13 @@ class _ExamScreenState extends ConsumerState<ExamScreen> {
   /// Unit or task key -> true for "hab ich", false for "anders"; a mark is
   /// final, so the points never go down.
   final _marks = <String, bool>{};
+
+  /// Per dropdown item (`task:<id>:<index>`): the picks, the number of wrong
+  /// checks, whether it is solved, and whether the last check was wrong.
+  final _picks = <String, Map<String, String?>>{};
+  final _wrongChecks = <String, int>{};
+  final _solved = <String>{};
+  final _lastWrong = <String>{};
   final _tapped = <String>{};
   int? _queued;
 
@@ -54,7 +66,12 @@ class _ExamScreenState extends ConsumerState<ExamScreen> {
       AsyncError(:final error) => throw error,
       _ => null,
     };
-    if (settings == null) {
+    final axes = switch (ref.watch(examAxesProvider)) {
+      AsyncData(:final value) => value,
+      AsyncError(:final error) => throw error,
+      _ => null,
+    };
+    if (settings == null || axes == null) {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
     final units = examUnits(exam, settings.uebersetzungseinheit);
@@ -63,7 +80,7 @@ class _ExamScreenState extends ConsumerState<ExamScreen> {
       body: ListView(
         padding: const EdgeInsets.all(12),
         children: [
-          if (settings.punkteAnzeige) _points(units),
+          if (settings.punkteAnzeige) _points(units, axes),
           Text(
             _t('exam.screen.translation'),
             style: Theme.of(context).textTheme.titleLarge,
@@ -75,12 +92,12 @@ class _ExamScreenState extends ConsumerState<ExamScreen> {
               _t('exam.screen.tasks'),
               style: Theme.of(context).textTheme.titleLarge,
             ),
-          for (final t in exam.aufgaben) _task(t, settings),
+          for (final t in exam.aufgaben) _task(t, settings, axes),
           const SizedBox(height: 16),
           if (_queued == null)
             ElevatedButton(
               key: const Key('exam.finish'),
-              onPressed: () => _finish(units),
+              onPressed: () => _finish(units, axes),
               child: Text(_t('exam.screen.finish')),
             )
           else
@@ -93,14 +110,12 @@ class _ExamScreenState extends ConsumerState<ExamScreen> {
     );
   }
 
-  Widget _points(List<ExamUnit> units) {
+  Widget _points(List<ExamUnit> units, Axes axes) {
     final done = units.where((u) => _marks['unit:${u.id}'] == true).length;
     final translation = units.isEmpty
         ? 0
         : exam.punkteUebersetzung * done ~/ units.length;
-    final tasks = exam.aufgaben
-        .where((t) => _marks['task:${t.id}'] == true)
-        .fold(0, (sum, t) => sum + t.punkte);
+    final tasks = exam.aufgaben.fold(0, (sum, t) => sum + _earned(t, axes));
     return Text(
       _t('exam.screen.points', {
         'n': '${translation + tasks}',
@@ -109,6 +124,34 @@ class _ExamScreenState extends ConsumerState<ExamScreen> {
       key: const Key('exam.points'),
       style: Theme.of(context).textTheme.titleMedium,
     );
+  }
+
+  /// The merkmale of [i] that have a dropdown.
+  List<String> _asked(BestimmenItem i, Axes axes) =>
+      AnswerDescription.askable(axes, i.merkmale);
+
+  /// Whether the task has an item that only the task mark decides.
+  bool _hasSelfMarked(ExamTask t, Axes axes) => switch (t) {
+    ItemTask(art: ItemArt.bestimmen, :final items) =>
+      items.cast<BestimmenItem>().any((i) => _asked(i, axes).isEmpty),
+    _ => true,
+  };
+
+  int _earned(ExamTask t, Axes axes) {
+    final marked = _marks['task:${t.id}'] == true;
+    return switch (t) {
+      ItemTask(art: ItemArt.bestimmen, :final items) => [
+        for (final (j, i) in items.cast<BestimmenItem>().indexed)
+          itemPoints(
+            i.punkte,
+            asked: _asked(i, axes).length,
+            selfOk: marked,
+            solved: _solved.contains('task:${t.id}:$j'),
+            wrongChecks: _wrongChecks['task:${t.id}:$j'] ?? 0,
+          ),
+      ].fold(0, (a, b) => a + b),
+      _ => marked ? t.punkte : 0,
+    };
   }
 
   Widget _unit(int i, ExamUnit u) {
@@ -325,7 +368,7 @@ class _ExamScreenState extends ConsumerState<ExamScreen> {
     for (final MapEntry(:key, :value) in a.codes.entries) _code(key, value),
   ].join(', ');
 
-  Widget _task(ExamTask t, Settings settings) {
+  Widget _task(ExamTask t, Settings settings, Axes axes) {
     final key = 'task:${t.id}';
     final prefix = 'exam.task.${t.id}';
     return Card(
@@ -343,6 +386,9 @@ class _ExamScreenState extends ConsumerState<ExamScreen> {
             ),
             Text(_plain(t.frage)),
             for (final line in _prompts(t)) Text('• $line'),
+            if (t case ItemTask(art: ItemArt.bestimmen, :final items))
+              for (final (j, i) in items.cast<BestimmenItem>().indexed)
+                if (_asked(i, axes).isNotEmpty) _askedItem(t, j, i, axes),
             const SizedBox(height: 8),
             if (!_revealed.contains(key))
               OutlinedButton(
@@ -353,14 +399,94 @@ class _ExamScreenState extends ConsumerState<ExamScreen> {
             else ...[
               for (final (k, line) in _solution(t).indexed)
                 Text(line, key: Key('$prefix.solution.$k')),
-              const SizedBox(height: 8),
-              _markRow(key, prefix),
+              if (_hasSelfMarked(t, axes)) ...[
+                const SizedBox(height: 8),
+                _markRow(key, prefix),
+              ],
             ],
           ],
         ),
       ),
     );
   }
+
+  Widget _askedItem(ExamTask t, int j, BestimmenItem i, Axes axes) {
+    final word = _tokens[i.token]!;
+    final description = AnswerDescription.ofToken(
+      axes,
+      (word as WordToken).analyse.codes,
+      i.merkmale,
+    );
+    final k = 'task:${t.id}:$j';
+    final prefix = 'exam.task.${t.id}.item.$j';
+    final picks =
+        _picks[k] ?? {for (final s in description.selectors.sections) s: null};
+    final solved = _solved.contains(k);
+    final wrong = _lastWrong.contains(k);
+    return Container(
+      key: Key(prefix),
+      margin: const EdgeInsets.only(top: 8),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: solved
+              ? Colors.green
+              : wrong
+              ? Colors.red
+              : Theme.of(context).dividerColor,
+          width: solved || wrong ? 2 : 1,
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(word.la, style: Theme.of(context).textTheme.titleMedium),
+          const SizedBox(height: 8),
+          AxisDropdowns(
+            selectors: description.selectors,
+            keyPrefix: prefix,
+            picks: picks,
+            isMobile: MediaQuery.of(context).size.width < 600,
+            onPick: solved
+                ? null
+                : (section, value) => setState(() {
+                    _picks[k] = {...picks, section: value};
+                    _lastWrong.remove(k);
+                  }),
+          ),
+          if (!solved) ...[
+            const SizedBox(height: 8),
+            FilledButton(
+              key: Key('$prefix.check'),
+              onPressed: description.selectors.isComplete(picks)
+                  ? () => _check(k, description, picks)
+                  : null,
+              child: Text(_t('wordClassification.check')),
+            ),
+          ],
+          if (solved || wrong)
+            Text(
+              _t(
+                solved ? 'wordClassification.correct' : 'exam.screen.tryAgain',
+              ),
+              key: Key('$prefix.feedback'),
+            ),
+        ],
+      ),
+    );
+  }
+
+  void _check(String k, AnswerDescription d, Map<String, String?> picks) =>
+      setState(() {
+        if (d.accepts(picks)) {
+          _solved.add(k);
+          _lastWrong.remove(k);
+        } else {
+          _wrongChecks[k] = (_wrongChecks[k] ?? 0) + 1;
+          _lastWrong.add(k);
+        }
+      });
 
   String _plain(String s) => s.replaceAll('`', '');
 
@@ -411,7 +537,13 @@ class _ExamScreenState extends ConsumerState<ExamScreen> {
     return '${t.la}: ${features.join(', ')}';
   }
 
-  Future<void> _finish(List<ExamUnit> units) async {
+  /// A marked-"anders" item, or a dropdown item that had a wrong check.
+  bool _needsHelp(ItemTask t, int j, TaskItem i, Axes axes) =>
+      (_marks['task:${t.id}'] == false &&
+          (i is! BestimmenItem || _asked(i, axes).isEmpty)) ||
+      (_wrongChecks['task:${t.id}:$j'] ?? 0) > 0;
+
+  Future<void> _finish(List<ExamUnit> units, Axes axes) async {
     final helped = {
       ..._tapped,
       for (final u in units)
@@ -420,8 +552,8 @@ class _ExamScreenState extends ConsumerState<ExamScreen> {
             for (final t in line)
               if (t is WordToken) t.lemma,
       for (final t in exam.aufgaben.whereType<ItemTask>())
-        if (_marks['task:${t.id}'] == false)
-          for (final i in t.items)
+        for (final (j, i) in t.items.indexed)
+          if (_needsHelp(t, j, i, axes))
             ?switch (i) {
               BestimmenItem(:final token) => switch (_tokens[token]!) {
                 WordToken(:final lemma) => lemma,
