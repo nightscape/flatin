@@ -25,14 +25,16 @@ typedef CourseSpec = ({
 /// id, a gloss
 /// file for any subset of the roles, 0..3 books, and game rules that name
 /// 0..2 of the course's data file ids. With [anyShape] a course has 0..4 data
-/// files and each of `books`, `sentences` and `game_rules` is absent or
-/// present by a coin toss.
+/// files; `sentences` is absent or present by a coin toss, and so are `books`
+/// and `game_rules` when it has no data file (a course with data files has
+/// 1..3 books and game rules).
 CourseSpec drawCourse(Random rng, String dir, {bool anyShape = false}) {
   final fileCount = (anyShape ? 0 : 1) + rng.nextInt(anyShape ? 5 : 4);
-  final bookCount = rng.nextInt(4);
-  final hasBooks = !anyShape || rng.nextBool();
+  final hasData = fileCount > 0;
+  final bookCount = (hasData ? 1 : 0) + rng.nextInt(hasData ? 3 : 4);
+  final hasBooks = hasData || !anyShape || rng.nextBool();
   final hasSentences = !anyShape || rng.nextBool();
-  final hasRules = !anyShape || rng.nextBool();
+  final hasRules = hasData || !anyShape || rng.nextBool();
   final earnCount = fileCount == 0 || !hasRules ? 0 : rng.nextInt(3);
   final dataFiles = [
     for (var i = 0; i < fileCount; i++)
@@ -80,6 +82,34 @@ CourseSpec withDataFile(CourseSpec course, String id) => (
   sentences: course.sentences,
   gameRules: course.gameRules,
   earnDataFiles: course.earnDataFiles,
+);
+
+/// [course] with no books, so that `books` is an empty list or absent.
+CourseSpec withoutBooks(CourseSpec course) => (
+  path: course.path,
+  id: course.id,
+  name: course.name,
+  language: course.language,
+  dataFiles: course.dataFiles,
+  glossFiles: course.glossFiles,
+  books: [],
+  sentences: course.sentences,
+  gameRules: course.gameRules,
+  earnDataFiles: course.earnDataFiles,
+);
+
+/// [course] with no game rules file.
+CourseSpec withoutGameRules(CourseSpec course) => (
+  path: course.path,
+  id: course.id,
+  name: course.name,
+  language: course.language,
+  dataFiles: course.dataFiles,
+  glossFiles: course.glossFiles,
+  books: course.books,
+  sentences: course.sentences,
+  gameRules: null,
+  earnDataFiles: [],
 );
 
 /// [course] whose game rules also name the data file id [id].

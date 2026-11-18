@@ -44,13 +44,13 @@ final class Course {
   /// names none.
   final Map<DataFileRole, String> glossFiles;
 
-  /// In reading order; empty when the course has no books.
+  /// In reading order; empty only when the course has no data files.
   final List<String> books;
 
   /// Null when the course has no sentence corpus.
   final String? sentences;
 
-  /// Null when the course has no game rules.
+  /// Null only when the course has no data files.
   final String? gameRules;
 
   const Course({
@@ -68,8 +68,9 @@ final class Course {
   static const _required = {'id', 'name', 'language', 'data_files'};
   static const _optional = {'gloss_files', 'books', 'sentences', 'game_rules'};
 
-  /// Throws a [StateError] naming [path] for a key that is unknown, or a
-  /// required key that is missing.
+  /// Throws a [StateError] naming [path] for a key that is unknown, a
+  /// required key that is missing, or a course with data files that has no
+  /// books or no game rules.
   factory Course.parse(String path, String source) {
     final yaml = _map(loadYaml(source), path);
     _keysAmong(yaml, _required, _optional, path);
@@ -92,7 +93,7 @@ final class Course {
         '$path: name needs exactly one non-empty text for each of $codes',
       );
     }
-    return Course(
+    final course = Course(
       path: path,
       id: id,
       name: name,
@@ -127,6 +128,15 @@ final class Course {
           ? _string(yaml['game_rules'], '$path: game_rules')
           : null,
     );
+    if (course.dataFiles.isNotEmpty) {
+      if (course.books.isEmpty) {
+        throw StateError('$path: a course with data files needs books');
+      }
+      if (course.gameRules == null) {
+        throw StateError('$path: a course with data files needs game_rules');
+      }
+    }
+    return course;
   }
 
   /// Every data file but the vocab file, in course order.

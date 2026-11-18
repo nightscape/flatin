@@ -246,4 +246,104 @@ void main() {
       }
     });
   });
+  group('data course without optional keys', () {
+    const optional = ['gloss_files', 'books', 'sentences', 'game_rules'];
+
+    ({Map<String, String> assets, String id}) dataCourseWithout(
+      Random r,
+      Set<String> dropped,
+    ) {
+      final courses = drawnCourses(r, min: 1, max: 1);
+      final assets = servedCourses(courses);
+      final key = 'drawn/${courses.single.id}/course.yaml';
+      final kept = <String>[];
+      var inDropped = false;
+      for (final line in assets[key]!.split('\n')) {
+        if (dropped.any((k) => line.startsWith('$k:'))) {
+          inDropped = true;
+          continue;
+        }
+        if (inDropped && line.startsWith('  ')) continue;
+        inDropped = false;
+        kept.add(line);
+      }
+      assets[key] = kept.join('\n');
+      return (assets: assets, id: courses.single.id);
+    }
+
+    Set<String> subset(int mask) => {
+      for (var i = 0; i < 4; i++)
+        if (mask >> i & 1 == 1) optional[i],
+    };
+
+    test('the loader refuses a manifest without books or without game rules '
+        'and names the manifest and the key', () async {
+      // Generators: all 16 subsets of the optional keys (exhaustive); the
+      // data course is drawnCourses (reused).
+      for (var mask = 0; mask < 16; mask++) {
+        final dropped = subset(mask);
+        final d = dataCourseWithout(Random(mask), dropped);
+        injectToyCourse(served: d.assets);
+        final missing = ['books', 'game_rules'].where(dropped.contains);
+        if (missing.isEmpty) {
+          expect((await loadCourses()).single.id, d.id, reason: '$dropped');
+        } else {
+          await expectLater(
+            loadCourses(),
+            throwsA(
+              isA<StateError>().having(
+                (e) => e.message,
+                'message',
+                allOf(
+                  contains('drawn/${d.id}/course.yaml'),
+                  contains(missing.first),
+                ),
+              ),
+            ),
+            reason: '$dropped',
+          );
+        }
+      }
+    });
+
+    testWidgets('every screen its home screen offers opens without an '
+        'exception, for any subset of sentences and gloss files', (
+      tester,
+    ) async {
+      // Generators: all 4 subsets of the keys the loader leaves optional
+      // for a course with data files; the data course is drawnCourses.
+      const offered = [
+        'home.grammar.button',
+        'home.wordClassification.button',
+        'home.lookup.button',
+        'home.exam.button',
+      ];
+      for (var mask = 0; mask < 4; mask++) {
+        final dropped = {
+          if (mask & 1 == 1) 'sentences',
+          if (mask & 2 == 2) 'gloss_files',
+        };
+        final d = dataCourseWithout(Random(mask), dropped);
+        for (final key in offered) {
+          resetPracticeData();
+          SharedPreferences.setMockInitialValues({activeCourseKey: d.id});
+          injectToyCourse(served: d.assets);
+          tester.view.physicalSize = const Size(1200, 4000);
+          tester.view.devicePixelRatio = 1.0;
+          addTearDown(tester.view.reset);
+          await tester.pumpWidget(
+            KeyedSubtree(
+              key: UniqueKey(),
+              child: wrapInKeyEchoAppWith(const HomeScreen()),
+            ),
+          );
+          await letItLoad(tester);
+          expect(tester.takeException(), isNull, reason: '$dropped home');
+          await tester.tap(find.byKey(Key(key)));
+          await letItLoad(tester);
+          expect(tester.takeException(), isNull, reason: '$dropped $key');
+        }
+      }
+    });
+  });
 }

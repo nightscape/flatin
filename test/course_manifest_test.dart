@@ -195,6 +195,23 @@ void main() {
     }
   });
 
+  test('a course with data files and no books, or no game rules, throws and '
+      'names the manifest and the key', () async {
+    for (var seed = 1; seed <= _seeds; seed++) {
+      final rng = Random(seed);
+      final spec = drawCourse(rng, 'c0');
+      final (broken, key) = rng.nextBool()
+          ? (withoutBooks(spec), 'books')
+          : (withoutGameRules(spec), 'game_rules');
+      _serve(courseListAssets([broken], rng));
+      await expectLater(
+        loadCourses(),
+        _stateError([spec.path, key]),
+        reason: 'seed $seed',
+      );
+    }
+  });
+
   test('a game rule that names a data file id its course lacks throws and '
       'names the game rules file and the id', () async {
     for (var seed = 1; seed <= _seeds; seed++) {
