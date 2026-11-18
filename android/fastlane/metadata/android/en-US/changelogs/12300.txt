@@ -1,0 +1,3 @@
+* New word lookup: tap the search button on the home screen, type a Latin word, with or without macrons, and see its base word, form, meaning and lesson.
+* Stem and ending: one setting (off / show / mark yourself) for stem and ending in the tasks. With "mark yourself" you place the split yourself.
+* Course switcher: each course now has its own settings, cards and packs.

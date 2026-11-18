@@ -1,0 +1,3 @@
+* Neue Wortsuche: Über den Suchknopf auf dem Startbildschirm tippst du ein lateinisches Wort ein, mit oder ohne Längenzeichen, und siehst Grundform, Form, Bedeutung und Lektion.
+* Stamm und Endung: Eine Einstellung (aus / zeigen / selbst markieren) für Stamm und Endung in den Aufgaben. Mit „selbst markieren“ setzt du die Trennung selbst.
+* Kurswechsel: Jeder Kurs hat jetzt eigene Einstellungen, Karten und Pakete.
