@@ -18,7 +18,7 @@ const _packs = 300;
 final List<(String, Map<String, Object>)> _cases = [
   (
     'synthetic',
-    examToYaml(
+    schema1Yaml(
       parseExam(
         File('test/fixtures/exam/synthetic.exam').readAsStringSync(),
         latinLang,
@@ -34,7 +34,7 @@ Iterable<(Map, String)> _words(Map exam) sync* {
   for (final (i, s) in (exam['uebersetzung']['saetze'] as List).indexed) {
     for (final (j, t) in (s['tokens'] as List).indexed) {
       if (t.containsKey('lemma')) {
-        yield (t, 'exam.uebersetzung.saetze[$i].tokens[$j]');
+        yield (t, 'exam.translation.sentences[$i].tokens[$j]');
       }
     }
   }
@@ -43,7 +43,7 @@ Iterable<(Map, String)> _words(Map exam) sync* {
 Iterable<(Map, String)> _clauses(Map exam) sync* {
   for (final (i, s) in (exam['uebersetzung']['saetze'] as List).indexed) {
     for (final (k, c) in (s['teilsaetze'] as List).indexed) {
-      yield (c, 'exam.uebersetzung.saetze[$i].teilsaetze[$k]');
+      yield (c, 'exam.translation.sentences[$i].clauses[$k]');
     }
   }
 }
@@ -89,7 +89,7 @@ List<_Mutation> _mutations(Random r) {
     return {
       for (final (t, path) in _words(exam))
         if (t['verbform'] case [final ppp, _] when hit(byId[ppp]!.$1))
-          '$path.verbform',
+          '$path.verb_form',
     };
   }
 

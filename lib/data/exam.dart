@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:yaml/yaml.dart';
 
+import 'exam_conversion.dart';
 import 'languages/language.dart';
 
 /// The rules of lib/data/EXAM_SCHEMA.md, by the id an [ExamError] names.
@@ -64,7 +65,7 @@ enum ExamRule {
 final class ExamError {
   final ExamRule rule;
 
-  /// Where the rule breaks, e.g. `exam.uebersetzung.saetze[3].teilsaetze[1]`.
+  /// Where the rule breaks, e.g. `exam.translation.sentences[3].clauses[1]`.
   final String path;
   final String detail;
   const ExamError(this.rule, this.path, this.detail);
@@ -82,11 +83,20 @@ final class ExamRejected implements Exception {
   String toString() => 'ExamRejected:\n${errors.join('\n')}';
 }
 
-extension ExamCode on Enum {
-  /// The code a `.exam` file writes: the name in snake case.
-  String get code =>
-      name.replaceAllMapped(RegExp('[A-Z]'), (m) => '_${m[0]!.toLowerCase()}');
-}
+/// The `type` of an item task as a `.exam` file writes it.
+const _itemTypes = {
+  'analyze': ItemArt.bestimmen,
+  'principal_parts': ItemArt.stammformen,
+  'form': ItemArt.bilden,
+  'transform': ItemArt.umformen,
+  'vocab': ItemArt.vokabel,
+  'derivation': ItemArt.ableitung,
+  'short_answer': ItemArt.kurzantwort,
+  'multiple_choice': ItemArt.wissenMc,
+};
+
+/// The only `direction` of a `vocab` task: Latin prompt, German answer.
+const _vocabDirection = 'la-de';
 
 /// The `analyse` of a word token: a code per key of the language, in the
 /// language's order.
@@ -347,7 +357,7 @@ Exam parseExam(String source, Language language) {
   }
   final Exam exam;
   try {
-    exam = _whole(_Map(yaml, 'exam', language), _exam);
+    exam = _whole(_Map(_schema2(yaml), 'exam', language), _exam);
   } on ExamError catch (e) {
     throw ExamRejected([e]);
   }
@@ -356,8 +366,15 @@ Exam parseExam(String source, Language language) {
   return exam;
 }
 
+/// [yaml] with English keys: a schema 1 pack is converted, any other schema
+/// is left for [_exam] to accept or refuse.
+Object? _schema2(Object? yaml) {
+  final root = _cast<Map>(yaml, 'exam');
+  return root['schema'] == 1 ? convertSchema1(root) : root;
+}
+
 /// Throws [ExamRejected] unless [exam] belongs to the course [active] of
-/// [courseIds]: its `kurs`, or the first course when it names none.
+/// [courseIds]: its `course`, or the first course when it names none.
 void checkExamCourse(
   Exam exam, {
   required List<String> courseIds,
@@ -370,7 +387,7 @@ void checkExamCourse(
       ? 'belongs to the course "$kurs", not to the active course "$active"'
       : null;
   if (detail != null) {
-    throw ExamRejected([ExamError(ExamRule.field, 'exam.kurs', detail)]);
+    throw ExamRejected([ExamError(ExamRule.field, 'exam.course', detail)]);
   }
 }
 
@@ -381,25 +398,30 @@ String serializeExam(Exam exam) =>
 
 /// The pack as the plain YAML data model: maps, lists, strings and ints.
 Map<String, Object> examToYaml(Exam e) => {
-  'schema': 1,
+  'schema': 2,
   'id': e.id,
-  if (e.kurs != null) 'kurs': e.kurs!,
-  'titel': e.titel,
-  'lektionen': {'von': e.von, 'bis': e.bis},
-  'schwerpunkte': e.schwerpunkte,
-  'schwerpunkt': e.schwerpunkt,
-  'thema': e.thema,
-  'zeit_min': e.zeitMin,
-  'punkte_uebersetzung': e.punkteUebersetzung,
-  'punkte_gesamt': e.punkteGesamt,
-  'uebersetzung': {
-    'hilfen': [
+  if (e.kurs != null) 'course': e.kurs!,
+  'title': e.titel,
+  'lessons': {'from': e.von, 'to': e.bis},
+  'topics': e.schwerpunkte,
+  'focus': e.schwerpunkt,
+  'theme': e.thema,
+  'time_min': e.zeitMin,
+  'points_translation': e.punkteUebersetzung,
+  'points_total': e.punkteGesamt,
+  'translation': {
+    'glosses': [
       for (final h in e.hilfen)
-        {'lemma': h.lemma, 'angabe': h.angabe, 'de': h.de, 'tokens': h.tokens},
+        {
+          'lemma': h.lemma,
+          'grammar': h.angabe,
+          'meaning': h.de,
+          'tokens': h.tokens,
+        },
     ],
-    'saetze': [for (final s in e.saetze) _sentenceToYaml(s)],
+    'sentences': [for (final s in e.saetze) _sentenceToYaml(s)],
   },
-  'aufgaben': [for (final t in e.aufgaben) _taskToYaml(t)],
+  'tasks': [for (final t in e.aufgaben) _taskToYaml(t)],
 };
 
 Map<String, Object> _sentenceToYaml(ExamSentence s) => {
@@ -407,67 +429,71 @@ Map<String, Object> _sentenceToYaml(ExamSentence s) => {
   'tokens': [
     for (final t in s.tokens)
       switch (t) {
-        PunctuationToken() => {'id': t.id, 'la': t.la},
+        PunctuationToken() => {'id': t.id, 'text': t.la},
         WordToken() => {
           'id': t.id,
-          'la': t.la,
+          'text': t.la,
           'lemma': t.lemma,
-          'analyse': t.analyse.codes,
-          'rolle': ?t.rolle,
-          'bezug': ?t.bezug,
-          'verbform': ?t.verbform,
+          'analysis': t.analyse.codes,
+          'role': ?t.rolle,
+          'head': ?t.bezug,
+          'verb_form': ?t.verbform,
         },
       },
   ],
-  'teilsaetze': [
+  'clauses': [
     for (final c in s.teilsaetze)
       {
         'id': c.id,
-        'art': c.art,
+        'type': c.art,
         'tokens': c.tokens,
-        'uebergeordnet': ?c.uebergeordnet,
-        'sinnrichtung': ?c.sinnrichtung,
-        'de': c.de,
-        'ausrichtung': [
-          for (final a in c.ausrichtung) {'tokens': a.tokens, 'de': a.de},
+        'parent': ?c.uebergeordnet,
+        'sense': ?c.sinnrichtung,
+        'meaning': c.de,
+        'alignment': [
+          for (final a in c.ausrichtung) {'tokens': a.tokens, 'meaning': a.de},
         ],
       },
   ],
-  'de': s.de,
+  'meaning': s.de,
 };
 
 Map<String, Object> _taskToYaml(ExamTask t) => {
   'id': t.id,
-  'titel': t.titel,
-  'punkte': t.punkte,
-  'art': switch (t) {
-    ItemTask() => t.art.code,
-    OrdnenTask() => 'ordnen',
-    FreiTask() => 'frei',
+  'title': t.titel,
+  'points': t.punkte,
+  'type': switch (t) {
+    ItemTask() => _itemTypeOf(t.art),
+    OrdnenTask() => 'order',
+    FreiTask() => 'free',
   },
-  'frage': t.frage,
+  if (t is ItemTask && t.art == ItemArt.vokabel) 'direction': _vocabDirection,
+  'prompt': t.frage,
   if (t is ItemTask) 'items': [for (final i in t.items) _itemToYaml(i)],
-  if (t is OrdnenTask) 'elemente': t.elemente,
-  'loesung': t.loesung,
+  if (t is OrdnenTask) 'elements': t.elemente,
+  'solution': t.loesung,
 };
+
+String _itemTypeOf(ItemArt art) =>
+    _itemTypes.entries.singleWhere((e) => e.value == art).key;
 
 Map<String, Object> _itemToYaml(TaskItem i) => {
   ...switch (i) {
-    BestimmenItem() => {'token': i.token, 'merkmale': i.merkmale},
-    StammformenItem() => {'lemma': i.lemma, 'stammformen': i.stammformen},
-    BildenItem() => {'lemma': i.lemma, 'merkmale': i.merkmale, 'form': i.form},
-    UmformenItem() => {'vorgabe': i.vorgabe, 'ziel': i.ziel},
-    VokabelItem() => {'la': i.la, 'de': i.de},
-    AbleitungItem() => {'fremdwort': i.fremdwort, 'la': i.la},
-    KurzantwortItem() => {'frage': i.frage, 'stichwoerter': i.stichwoerter},
+    BestimmenItem() => {'token': i.token, 'features': i.merkmale},
+    StammformenItem() => {'lemma': i.lemma, 'principal_parts': i.stammformen},
+    BildenItem() => {'lemma': i.lemma, 'features': i.merkmale, 'form': i.form},
+    UmformenItem() => {'given': i.vorgabe, 'target': i.ziel},
+    VokabelItem() => {'prompt': i.la, 'answer': i.de},
+    AbleitungItem() => {'loanword': i.fremdwort, 'source': i.la},
+    KurzantwortItem() => {'prompt': i.frage, 'keywords': i.stichwoerter},
     WissenMcItem() => {
-      'frage': i.frage,
-      'teilsatz': ?i.teilsatz,
-      'optionen': i.optionen,
-      'richtig': i.richtig,
+      'prompt': i.frage,
+      'clause': ?i.teilsatz,
+      'options': i.optionen,
+      'correct': i.richtig,
     },
   },
-  'punkte': i.punkte,
+  'points': i.punkte,
 };
 
 /// The readings of a variant string: `(a | b)` is a choice, `[x]` is
@@ -492,7 +518,16 @@ String _normalize(String s) => s
 (List<String>, int) _sequence(String s, int start, String? close) {
   final done = <String>[];
   var current = [''];
+  var altStart = start;
   var i = start;
+  void endAlternative() {
+    final raw = s.substring(altStart, i);
+    if (close != null && raw.isNotEmpty && raw.trim().isEmpty) {
+      throw FormatException('an alternative is only white space', s, altStart);
+    }
+  }
+
+  List<String> trimmed() => [for (final a in current) a.trimRight()];
   while (i < s.length) {
     final c = s[i];
     if (c == '(' || c == '[') {
@@ -507,12 +542,18 @@ String _normalize(String s) => s
     }
     if (c == ')' || c == ']') {
       if (c != close) throw FormatException('unexpected "$c"', s, i);
-      return ([...done, ...current], i + 1);
+      endAlternative();
+      return ([...done, ...trimmed()], i + 1);
     }
     if (c == '|') {
       if (close == null) throw FormatException('"|" outside a group', s, i);
-      done.addAll(current);
+      endAlternative();
+      done.addAll(trimmed());
       current = [''];
+      altStart = i + 1;
+      while (i + 1 < s.length && s[i + 1].trim().isEmpty) {
+        i++;
+      }
     } else {
       current = [for (final a in current) a + c];
     }
@@ -525,13 +566,12 @@ String _normalize(String s) => s
 /// A YAML map of the pack at [path]; [_whole] refuses the keys that its
 /// builder did not read.
 final class _Map {
-  final YamlMap _map;
+  final Map _map;
   final String path;
   final Language language;
   final _read = <String>{};
 
-  _Map(Object? node, this.path, this.language)
-    : _map = _cast<YamlMap>(node, path);
+  _Map(Object? node, this.path, this.language) : _map = _cast<Map>(node, path);
 
   bool has(String key) => _map.containsKey(key);
 
@@ -551,16 +591,15 @@ final class _Map {
   }
 
   T map<T>(String key, T Function(_Map) build) =>
-      _whole(_Map(req<YamlMap>(key), '$path.$key', language), build);
+      _whole(_Map(req<Map>(key), '$path.$key', language), build);
 
   List<T> maps<T>(String key, T Function(_Map) build) => [
-    for (final (i, m) in req<YamlList>(key).indexed)
+    for (final (i, m) in req<List>(key).indexed)
       _whole(_Map(m, '$path.$key[$i]', language), build),
   ];
 
   List<T> list<T>(String key) => [
-    for (final (i, v) in req<YamlList>(key).indexed)
-      _cast<T>(v, '$path.$key[$i]'),
+    for (final (i, v) in req<List>(key).indexed) _cast<T>(v, '$path.$key[$i]'),
   ];
 
   List<T> nonEmpty<T>(String key) {
@@ -608,68 +647,72 @@ T _cast<T>(Object? value, String path) {
 }
 
 Exam _exam(_Map m) {
-  if (m.req<Object>('schema') != 1) {
-    throw ExamError(ExamRule.schema, '${m.path}.schema', 'schema is not 1');
+  if (m.req<Object>('schema') != 2) {
+    throw ExamError(
+      ExamRule.schema,
+      '${m.path}.schema',
+      'schema is not 1 or 2',
+    );
   }
   final (von, bis) = m.map(
-    'lektionen',
-    (l) => (l.req<int>('von'), l.req<int>('bis')),
+    'lessons',
+    (l) => (l.req<int>('from'), l.req<int>('to')),
   );
   final (hilfen, saetze) = m.map(
-    'uebersetzung',
-    (u) => (u.maps('hilfen', _hilfe), u.maps('saetze', _sentence)),
+    'translation',
+    (u) => (u.maps('glosses', _hilfe), u.maps('sentences', _sentence)),
   );
   return Exam(
     id: m.req('id'),
-    kurs: m.opt('kurs'),
-    titel: m.req('titel'),
+    kurs: m.opt('course'),
+    titel: m.req('title'),
     von: von,
     bis: bis,
-    schwerpunkte: m.list('schwerpunkte'),
-    schwerpunkt: m.req('schwerpunkt'),
-    thema: m.req('thema'),
-    zeitMin: m.req('zeit_min'),
-    punkteUebersetzung: m.req('punkte_uebersetzung'),
-    punkteGesamt: m.req('punkte_gesamt'),
+    schwerpunkte: m.list('topics'),
+    schwerpunkt: m.req('focus'),
+    thema: m.req('theme'),
+    zeitMin: m.req('time_min'),
+    punkteUebersetzung: m.req('points_translation'),
+    punkteGesamt: m.req('points_total'),
     hilfen: hilfen,
     saetze: saetze,
-    aufgaben: m.maps('aufgaben', _task),
+    aufgaben: m.maps('tasks', _task),
   );
 }
 
 Hilfe _hilfe(_Map m) =>
-    Hilfe(m.req('lemma'), m.req('angabe'), m.req('de'), m.list('tokens'));
+    Hilfe(m.req('lemma'), m.req('grammar'), m.req('meaning'), m.list('tokens'));
 
 ExamSentence _sentence(_Map m) => ExamSentence(
   m.req('id'),
   m.maps('tokens', _token),
-  m.maps('teilsaetze', _clause),
-  m.nonEmpty('de'),
+  m.maps('clauses', _clause),
+  m.nonEmpty('meaning'),
 );
 
 final _letterOrDigit = RegExp(r'[\p{L}\p{N}_]', unicode: true);
 
 ExamToken _token(_Map m) {
   final String id = m.req('id');
-  final String la = m.req('la');
+  final String text = m.req('text');
   if (!m.has('lemma')) {
-    if (m._map.length != 2 || _letterOrDigit.hasMatch(la)) {
+    if (m._map.length != 2 || _letterOrDigit.hasMatch(text)) {
       throw ExamError(
         ExamRule.punctuation,
         m.path,
-        'a token without lemma has only id and la, and no letters',
+        'a token without lemma has only id and text, and no letters',
       );
     }
-    return PunctuationToken(id, la);
+    return PunctuationToken(id, text);
   }
   return WordToken(
     id,
-    la,
+    text,
     m.req('lemma'),
-    m.map('analyse', _analyse),
-    rolle: m.optCode('rolle', m.language.rolle) as String?,
-    bezug: m.opt('bezug'),
-    verbform: m.opt<YamlList>('verbform') == null ? null : m.list('verbform'),
+    m.map('analysis', _analyse),
+    rolle: m.optCode('role', m.language.rolle) as String?,
+    bezug: m.opt('head'),
+    verbform: m.opt<List>('verb_form') == null ? null : m.list('verb_form'),
   );
 }
 
@@ -690,35 +733,36 @@ Codes _features(_Map m) => {
 
 Clause _clause(_Map m) => Clause(
   id: m.req('id'),
-  art: m.code('art', m.language.clauseArt) as String,
+  art: m.code('type', m.language.clauseArt) as String,
   tokens: m.list('tokens'),
-  uebergeordnet: m.opt('uebergeordnet'),
-  sinnrichtung: m.optCode('sinnrichtung', m.language.sinnrichtung) as String?,
-  de: m.list('de'),
+  uebergeordnet: m.opt('parent'),
+  sinnrichtung: m.optCode('sense', m.language.sinnrichtung) as String?,
+  de: m.list('meaning'),
   ausrichtung: m.maps(
-    'ausrichtung',
-    (a) => Alignment(a.list('tokens'), a.req('de')),
+    'alignment',
+    (a) => Alignment(a.list('tokens'), a.req('meaning')),
   ),
 );
 
 ExamTask _task(_Map m) {
   final String id = m.req('id');
-  final String titel = m.req('titel');
-  final int punkte = m.req('punkte');
-  final String frage = m.req('frage');
-  final List<String> loesung = m.list('loesung');
-  final String art = m.req('art');
-  if (art == 'ordnen') {
-    return OrdnenTask(id, titel, punkte, frage, loesung, m.list('elemente'));
+  final String titel = m.req('title');
+  final int punkte = m.req('points');
+  final String frage = m.req('prompt');
+  final List<String> loesung = m.list('solution');
+  final String type = m.req('type');
+  if (type == 'order') {
+    return OrdnenTask(id, titel, punkte, frage, loesung, m.list('elements'));
   }
-  if (art == 'frei') return FreiTask(id, titel, punkte, frage, loesung);
+  if (type == 'free') return FreiTask(id, titel, punkte, frage, loesung);
   final itemArt =
-      ItemArt.values.where((a) => a.code == art).firstOrNull ??
+      _itemTypes[type] ??
       (throw ExamError(
         ExamRule.code,
-        '${m.path}.art',
-        '$art is not one of ${ItemArt.values}',
+        '${m.path}.type',
+        '$type is not one of ${[..._itemTypes.keys, 'order', 'free']}',
       ));
+  if (itemArt == ItemArt.vokabel) m.code('direction', const [_vocabDirection]);
   final items = m.maps('items', (i) => _item(i, itemArt));
   if (items.isEmpty) {
     throw ExamError(ExamRule.empty, '${m.path}.items', 'the list is empty');
@@ -727,11 +771,11 @@ ExamTask _task(_Map m) {
 }
 
 TaskItem _item(_Map m, ItemArt art) {
-  final int punkte = m.req('punkte');
+  final int punkte = m.req('points');
   return switch (art) {
     ItemArt.bestimmen => BestimmenItem(
       m.req('token'),
-      m.list('merkmale'),
+      m.list('features'),
       punkte,
     ),
     ItemArt.stammformen => StammformenItem(
@@ -741,48 +785,56 @@ TaskItem _item(_Map m, ItemArt art) {
     ),
     ItemArt.bilden => BildenItem(
       m.req('lemma'),
-      m.map('merkmale', _features),
+      m.map('features', _features),
       m.req('form'),
       punkte,
     ),
     ItemArt.umformen => UmformenItem(
-      m.req('vorgabe'),
-      m.nonEmpty('ziel'),
+      m.req('given'),
+      m.nonEmpty('target'),
       punkte,
     ),
-    ItemArt.vokabel => VokabelItem(m.req('la'), m.nonEmpty('de'), punkte),
-    ItemArt.ableitung => AbleitungItem(m.req('fremdwort'), m.req('la'), punkte),
+    ItemArt.vokabel => VokabelItem(
+      m.req('prompt'),
+      m.nonEmpty('answer'),
+      punkte,
+    ),
+    ItemArt.ableitung => AbleitungItem(
+      m.req('loanword'),
+      m.req('source'),
+      punkte,
+    ),
     ItemArt.kurzantwort => KurzantwortItem(
-      m.req('frage'),
+      m.req('prompt'),
       _stichwoerter(m),
       punkte,
     ),
     ItemArt.wissenMc => WissenMcItem(
-      m.req('frage'),
-      m.nonEmpty('optionen'),
-      m.req('richtig'),
-      m.opt('teilsatz'),
+      m.req('prompt'),
+      m.nonEmpty('options'),
+      m.req('correct'),
+      m.opt('clause'),
       punkte,
     ),
   };
 }
 
 List<String> _stammformen(_Map m) {
-  final forms = m.list<String>('stammformen');
+  final forms = m.list<String>('principal_parts');
   if (forms.length != 4) {
-    throw ExamError(ExamRule.type, '${m.path}.stammformen', 'not 4 forms');
+    throw ExamError(ExamRule.type, '${m.path}.principal_parts', 'not 4 forms');
   }
   return forms;
 }
 
 List<List<String>> _stichwoerter(_Map m) => [
-  for (final (i, group) in m.nonEmpty<YamlList>('stichwoerter').indexed)
+  for (final (i, group) in m.nonEmpty<List>('keywords').indexed)
     if (group.isEmpty)
-      throw ExamError(ExamRule.empty, '${m.path}.stichwoerter[$i]', 'empty')
+      throw ExamError(ExamRule.empty, '${m.path}.keywords[$i]', 'empty')
     else
       [
         for (final (j, w) in group.indexed)
-          _cast<String>(w, '${m.path}.stichwoerter[$i][$j]'),
+          _cast<String>(w, '${m.path}.keywords[$i][$j]'),
       ],
 ];
 
@@ -841,20 +893,20 @@ final class _Checker {
   List<ExamError> run() {
     ids();
     for (final (i, h) in exam.hilfen.indexed) {
-      hilfe(h, 'exam.uebersetzung.hilfen[$i]');
+      hilfe(h, 'exam.translation.glosses[$i]');
     }
     for (final (i, s) in exam.saetze.indexed) {
-      sentence(s, 'exam.uebersetzung.saetze[$i]');
+      sentence(s, 'exam.translation.sentences[$i]');
     }
     var total = exam.punkteUebersetzung;
     for (final (i, t) in exam.aufgaben.indexed) {
       total += t.punkte;
-      task(t, 'exam.aufgaben[$i]');
+      task(t, 'exam.tasks[$i]');
     }
     if (total != exam.punkteGesamt) {
       error(
         ExamRule.pointsTotal,
-        'exam.punkte_gesamt',
+        'exam.points_total',
         'the parts sum to $total, not ${exam.punkteGesamt}',
       );
     }
@@ -871,18 +923,18 @@ final class _Checker {
     }
 
     for (final (i, s) in exam.saetze.indexed) {
-      final path = 'exam.uebersetzung.saetze[$i]';
+      final path = 'exam.translation.sentences[$i]';
       id(s.id, _sentenceId, path);
       final sid = RegExp.escape(s.id);
       for (final (j, t) in s.tokens.indexed) {
         id(t.id, RegExp('^${sid}_\\d+\$'), '$path.tokens[$j]');
       }
       for (final (j, c) in s.teilsaetze.indexed) {
-        id(c.id, RegExp('^$sid[a-z]\$'), '$path.teilsaetze[$j]');
+        id(c.id, RegExp('^$sid[a-z]\$'), '$path.clauses[$j]');
       }
     }
     for (final (i, t) in exam.aufgaben.indexed) {
-      id(t.id, _taskId, 'exam.aufgaben[$i]');
+      id(t.id, _taskId, 'exam.tasks[$i]');
     }
   }
 
@@ -917,7 +969,7 @@ final class _Checker {
     final ownClauses = {for (final c in s.teilsaetze) c.id};
     final seen = <String, int>{};
     for (final (k, c) in s.teilsaetze.indexed) {
-      final cpath = '$path.teilsaetze[$k]';
+      final cpath = '$path.clauses[$k]';
       clause(c, cpath, ownClauses);
       for (final (j, id) in c.tokens.indexed) {
         if (!own.contains(id)) {
@@ -938,9 +990,9 @@ final class _Checker {
         error(ExamRule.tokenNoClause, '$path.tokens[$j]', 'in no clause');
       }
       final tpath = '$path.tokens[$j]';
-      if (t.la.isEmpty) error(ExamRule.laEmpty, tpath, 'la is empty');
+      if (t.la.isEmpty) error(ExamRule.laEmpty, tpath, 'text is empty');
       if (_space.hasMatch(t.la)) {
-        error(ExamRule.oneForm, tpath, 'la holds more than one form');
+        error(ExamRule.oneForm, tpath, 'text holds more than one form');
       }
       if (_sentenceEnds.contains(t.la) &&
           clauseOf[t.id]?.uebergeordnet != null) {
@@ -953,7 +1005,7 @@ final class _Checker {
       if (t is WordToken) token(t, tpath, own);
     }
     for (final (j, v) in s.de.indexed) {
-      variant(v, '$path.de[$j]');
+      variant(v, '$path.meaning[$j]');
     }
   }
 
@@ -966,30 +1018,22 @@ final class _Checker {
       if (c.sinnrichtung == null ||
           c.uebergeordnet == null ||
           participles.length != 1) {
-        error(
-          ExamRule.pc,
-          path,
-          'needs sinnrichtung, uebergeordnet and one participle',
-        );
+        error(ExamRule.pc, path, 'needs sense, parent and one participle');
       } else if (participles.single.rolle !=
           (p.rolleBySinnrichtung[c.sinnrichtung] ?? p.otherRolle)) {
         error(
           ExamRule.pcRolle,
           path,
-          'the participle role does not fit the sinnrichtung',
+          'the participle role does not fit the sense',
         );
       }
     } else if (c.sinnrichtung != null) {
-      error(
-        ExamRule.sinnrichtung,
-        '$path.sinnrichtung',
-        'only a pc clause has one',
-      );
+      error(ExamRule.sinnrichtung, '$path.sense', 'only a pc clause has one');
     }
     if (c.uebergeordnet case final u? when !siblings.contains(u)) {
       error(
         ExamRule.refUebergeordnet,
-        '$path.uebergeordnet',
+        '$path.parent',
         'no clause "$u" in the sentence',
       );
     }
@@ -997,16 +1041,16 @@ final class _Checker {
       error(ExamRule.uebergeordnet, path, 'a subordinate clause needs one');
     }
     for (final (j, v) in c.de.indexed) {
-      variant(v, '$path.de[$j]');
+      variant(v, '$path.meaning[$j]');
     }
     final aligned = <String>[];
     for (final (j, a) in c.ausrichtung.indexed) {
-      variant(a.de, '$path.ausrichtung[$j].de');
+      variant(a.de, '$path.alignment[$j].meaning');
       for (final (n, id) in a.tokens.indexed) {
         if (!c.tokens.contains(id)) {
           error(
             ExamRule.refAlignment,
-            '$path.ausrichtung[$j].tokens[$n]',
+            '$path.alignment[$j].tokens[$n]',
             '"$id" is outside the clause',
           );
         }
@@ -1020,7 +1064,7 @@ final class _Checker {
     if (!_sameMultiset(aligned, want)) {
       error(
         ExamRule.alignment,
-        '$path.ausrichtung',
+        '$path.alignment',
         'does not cover each word once',
       );
     }
@@ -1028,13 +1072,13 @@ final class _Checker {
 
   void token(WordToken t, String path, Set<String> own) {
     if (t.bezug case final b? when !own.contains(b)) {
-      error(ExamRule.refBezug, '$path.bezug', 'no token "$b" in the sentence');
+      error(ExamRule.refBezug, '$path.head', 'no token "$b" in the sentence');
     }
     for (final (j, id) in (t.verbform ?? const <String>[]).indexed) {
       if (!own.contains(id)) {
         error(
           ExamRule.refVerbform,
-          '$path.verbform[$j]',
+          '$path.verb_form[$j]',
           'no token "$id" in the sentence',
         );
       }
@@ -1046,18 +1090,18 @@ final class _Checker {
       error(
         ExamRule.bezugMissing,
         path,
-        'an attribute, praedikativum or relative pronoun needs bezug',
+        'an attribute, praedikativum or relative pronoun needs head',
       );
     }
     if (rules.noRole.contains(f[wordClass]) && t.rolle != null) {
-      error(ExamRule.rolleNone, path, '${f[wordClass]} has no rolle');
+      error(ExamRule.rolleNone, path, '${f[wordClass]} has no role');
     }
     if (rules.compound case final c?) {
       if (matches(f, c.verb) && isCompound(f) && t.verbform == null) {
         error(
           ExamRule.verbformMissing,
           path,
-          'a compound passive needs verbform',
+          'a compound passive needs verb_form',
         );
       }
       if (c.perfectPassive(f) && !c.marks.every(f.containsKey)) {
@@ -1077,7 +1121,7 @@ final class _Checker {
       final c?,
       final pair?,
     ) when pair.every(own.contains)) {
-      verbform(c, t, pair, '$path.verbform');
+      verbform(c, t, pair, '$path.verb_form');
     }
     if (rules.participle case final p? when isParticiple(f)) {
       participle(p, t, path);
@@ -1137,20 +1181,20 @@ final class _Checker {
       error(
         ExamRule.participle,
         path,
-        'needs a bezug outside its pc clause and no verbform',
+        'needs a head outside its pc clause and no verb_form',
       );
       return;
     }
     final f = b is WordToken ? b.analyse.codes : const <String, Object>{};
     if (rule.agrees.any((key) => p[key] != f[key])) {
-      error(ExamRule.participleKng, path, 'KNG differs from its bezug');
+      error(ExamRule.participleKng, path, 'KNG differs from its head');
     }
   }
 
   void task(ExamTask t, String path) {
     switch (t) {
       case OrdnenTask(:final elemente) when elemente.length < 3:
-        error(ExamRule.ordnen, '$path.elemente', 'fewer than 3 elements');
+        error(ExamRule.ordnen, '$path.elements', 'fewer than 3 elements');
       case OrdnenTask() || FreiTask():
         break;
       case ItemTask(:final items):
@@ -1158,7 +1202,7 @@ final class _Checker {
         if (sum != t.punkte) {
           error(
             ExamRule.pointsTask,
-            '$path.punkte',
+            '$path.points',
             'the items sum to $sum, not ${t.punkte}',
           );
         }
@@ -1186,38 +1230,38 @@ final class _Checker {
           if (!annotated) {
             error(
               ExamRule.merkmal,
-              '$path.merkmale[$j]',
+              '$path.features[$j]',
               '"$m" is not annotated',
             );
           }
         }
       case WissenMcItem(:final optionen, :final richtig, :final teilsatz):
         if (!optionen.contains(richtig)) {
-          error(ExamRule.mcRichtig, '$path.richtig', 'not one of the optionen');
+          error(ExamRule.mcRichtig, '$path.correct', 'not one of the options');
         }
         if (teilsatz != null) {
           final c = clauses[teilsatz];
           if (c == null) {
             error(
               ExamRule.refItemTeilsatz,
-              '$path.teilsatz',
+              '$path.clause',
               'no clause "$teilsatz"',
             );
           } else if (c.sinnrichtung != richtig) {
             error(
               ExamRule.mcSinnrichtung,
-              '$path.richtig',
-              'not the sinnrichtung of $teilsatz',
+              '$path.correct',
+              'not the sense of $teilsatz',
             );
           }
         }
       case UmformenItem(:final ziel):
         for (final (j, v) in ziel.indexed) {
-          variant(v, '$path.ziel[$j]');
+          variant(v, '$path.target[$j]');
         }
       case VokabelItem(:final de):
         for (final (j, v) in de.indexed) {
-          variant(v, '$path.de[$j]');
+          variant(v, '$path.answer[$j]');
         }
       case BildenItem(:final merkmale, :final form):
         if (isCompound(merkmale) && _word.allMatches(form).length != 2) {

@@ -31,7 +31,7 @@ Iterable<(String, Pack)> _cases() sync* {
     'synthetic',
     jsonDecode(
           jsonEncode(
-            examToYaml(
+            schema1Yaml(
               parseExam(
                 File('test/fixtures/exam/synthetic.exam').readAsStringSync(),
                 latinLang,

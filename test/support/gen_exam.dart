@@ -14,7 +14,7 @@ export 'latin_course.dart' show latinLang;
 /// The codes of the `analyse` key [key] of [latinLang].
 List<Object> codes(String key) => latinLang.analyse[key]!;
 
-/// Draws valid `.exam` packs as the YAML data model of [examToYaml], and
+/// Draws valid `.exam` packs as the schema 1 data model of [schema1Yaml], and
 /// counts in [reach] which features it drew.
 final class ExamGen {
   final Random r;
@@ -82,6 +82,48 @@ final class ExamGen {
   /// A well-formed variant string of nesting [depth] at most.
   String variant([int depth = 2, bool marks = false]) => _seq(depth, 0, marks);
 
+  /// [alternatives] joined by `|`, each non-empty one padded with drawn white
+  /// space on the sides that touch a `|` or the closing bracket.
+  String joinAlternatives(List<String> alternatives) => [
+    for (final (i, a) in alternatives.indexed)
+      if (a.isEmpty) '' else '${i > 0 ? _space() : ''}$a${_space()}',
+  ].join('|');
+
+  String _space() => List.filled(r.nextInt(3), pick([' ', ' ', '\t'])).join();
+
+  /// A glued group `(a | b)x` or `[a | b]x`, with drawn white space around
+  /// the `|`, and the readings it must expand to: each alternative joined to
+  /// `x` without a gap.
+  (String, List<String>) gluedGroup() {
+    final alternatives = [
+      for (var j = 0; j <= 1 + r.nextInt(2); j++) pick(_german),
+    ];
+    final optional = chance(0.3);
+    final tail = pick(_german);
+    final open = optional ? '[' : '(', close = optional ? ']' : ')';
+    return (
+      '$open${joinAlternatives(alternatives)}$close$tail',
+      [
+        for (final a in [...alternatives, if (optional) '']) '$a$tail',
+      ],
+    );
+  }
+
+  /// A group with one alternative that is only white space, in `(` or `[`.
+  String whiteSpaceAlternative() {
+    final alternatives = [for (var j = 0; j < r.nextInt(3); j++) pick(_german)];
+    final parts = alternatives.isEmpty
+        ? <String>[]
+        : joinAlternatives(alternatives).split('|');
+    parts.insert(
+      r.nextInt(parts.length + 1),
+      List.filled(1 + r.nextInt(3), pick([' ', '\t'])).join(),
+    );
+    final (open, close) = chance(0.3) ? ('[', ']') : ('(', ')');
+    final tail = chance(0.5) ? pick(_german) : '';
+    return '${pick(_german)}$open${parts.join('|')}$close$tail';
+  }
+
   /// A variant string with a group (choice, with or without an empty
   /// alternative, or optional) directly before [mark], with or without a
   /// word after the mark, and the readings it must expand to.
@@ -93,8 +135,8 @@ final class ExamGen {
     final shape = r.nextInt(3);
     if (shape == 1) alternatives.insert(r.nextInt(alternatives.length + 1), '');
     final group = shape == 2
-        ? '[${alternatives.join(' | ')}]'
-        : '(${alternatives.join(' | ')})';
+        ? '[${joinAlternatives(alternatives)}]'
+        : '(${joinAlternatives(alternatives)})';
     final readings = [...alternatives, if (shape == 2) ''];
     final quoted = chance(0.3);
     final tail = chance(0.5) ? pick(_german) : null;
@@ -125,14 +167,14 @@ final class ExamGen {
             _seq(depth, level + 1, marks),
         ];
         if (inner.length > 1) hit('choice in brackets');
-        parts.add('[${inner.join(' | ')}]');
+        parts.add('[${joinAlternatives(inner)}]');
       } else {
         final alternatives = [
           for (var j = 0; j <= 1 + r.nextInt(2); j++)
             chance(0.15) ? '' : _seq(depth, level + 1, marks),
         ];
         if (alternatives.contains('')) hit('empty alternative');
-        parts.add('(${alternatives.join(' | ')})');
+        parts.add('(${joinAlternatives(alternatives)})');
       }
     }
     if (marks && chance(0.15)) {
@@ -531,7 +573,7 @@ final class ExamGen {
   ) {
     final arts = [
       for (final a in ItemArt.values)
-        if (a != ItemArt.bestimmen || words.isNotEmpty) a.code,
+        if (a != ItemArt.bestimmen || words.isNotEmpty) a.schema1Code,
       'ordnen',
       'frei',
     ];
@@ -669,6 +711,180 @@ final class _Kind {
   _Kind(this.name, this.clause);
 }
 
+/// The `art` of a task of schema 1: the name of the item kind in snake case.
+extension Schema1Code on ItemArt {
+  String get schema1Code =>
+      name.replaceAllMapped(RegExp('[A-Z]'), (m) => '_${m[0]!.toLowerCase()}');
+}
+
+/// The pack as the schema 1 data model (German keys), which [ExamGen] draws.
+Map<String, Object> schema1Yaml(Exam e) => {
+  'schema': 1,
+  'id': e.id,
+  if (e.kurs != null) 'kurs': e.kurs!,
+  'titel': e.titel,
+  'lektionen': {'von': e.von, 'bis': e.bis},
+  'schwerpunkte': e.schwerpunkte,
+  'schwerpunkt': e.schwerpunkt,
+  'thema': e.thema,
+  'zeit_min': e.zeitMin,
+  'punkte_uebersetzung': e.punkteUebersetzung,
+  'punkte_gesamt': e.punkteGesamt,
+  'uebersetzung': {
+    'hilfen': [
+      for (final h in e.hilfen)
+        {'lemma': h.lemma, 'angabe': h.angabe, 'de': h.de, 'tokens': h.tokens},
+    ],
+    'saetze': [for (final s in e.saetze) _sentence1(s)],
+  },
+  'aufgaben': [for (final t in e.aufgaben) _task1(t)],
+};
+
+Map<String, Object> _sentence1(ExamSentence s) => {
+  'id': s.id,
+  'tokens': [
+    for (final t in s.tokens)
+      switch (t) {
+        PunctuationToken() => {'id': t.id, 'la': t.la},
+        WordToken() => {
+          'id': t.id,
+          'la': t.la,
+          'lemma': t.lemma,
+          'analyse': t.analyse.codes,
+          'rolle': ?t.rolle,
+          'bezug': ?t.bezug,
+          'verbform': ?t.verbform,
+        },
+      },
+  ],
+  'teilsaetze': [
+    for (final c in s.teilsaetze)
+      {
+        'id': c.id,
+        'art': c.art,
+        'tokens': c.tokens,
+        'uebergeordnet': ?c.uebergeordnet,
+        'sinnrichtung': ?c.sinnrichtung,
+        'de': c.de,
+        'ausrichtung': [
+          for (final a in c.ausrichtung) {'tokens': a.tokens, 'de': a.de},
+        ],
+      },
+  ],
+  'de': s.de,
+};
+
+Map<String, Object> _task1(ExamTask t) => {
+  'id': t.id,
+  'titel': t.titel,
+  'punkte': t.punkte,
+  'art': switch (t) {
+    ItemTask() => t.art.schema1Code,
+    OrdnenTask() => 'ordnen',
+    FreiTask() => 'frei',
+  },
+  'frage': t.frage,
+  if (t is ItemTask) 'items': [for (final i in t.items) _item1(i)],
+  if (t is OrdnenTask) 'elemente': t.elemente,
+  'loesung': t.loesung,
+};
+
+Map<String, Object> _item1(TaskItem i) => {
+  ...switch (i) {
+    BestimmenItem() => {'token': i.token, 'merkmale': i.merkmale},
+    StammformenItem() => {'lemma': i.lemma, 'stammformen': i.stammformen},
+    BildenItem() => {'lemma': i.lemma, 'merkmale': i.merkmale, 'form': i.form},
+    UmformenItem() => {'vorgabe': i.vorgabe, 'ziel': i.ziel},
+    VokabelItem() => {'la': i.la, 'de': i.de},
+    AbleitungItem() => {'fremdwort': i.fremdwort, 'la': i.la},
+    KurzantwortItem() => {'frage': i.frage, 'stichwoerter': i.stichwoerter},
+    WissenMcItem() => {
+      'frage': i.frage,
+      'teilsatz': ?i.teilsatz,
+      'optionen': i.optionen,
+      'richtig': i.richtig,
+    },
+  },
+  'punkte': i.punkte,
+};
+
+/// The schema 2 name of each schema 1 key, per kind of node: the names that
+/// the paths of [breakRule] use.
+const _enHead = {
+  'schema': 'schema',
+  'id': 'id',
+  'titel': 'title',
+  'lektionen': 'lessons',
+  'schwerpunkte': 'topics',
+  'zeit_min': 'time_min',
+  'uebersetzung': 'translation',
+  'aufgaben': 'tasks',
+};
+const _enSentence = {
+  'id': 'id',
+  'tokens': 'tokens',
+  'teilsaetze': 'clauses',
+  'de': 'meaning',
+};
+const _enToken = {
+  'id': 'id',
+  'la': 'text',
+  'lemma': 'lemma',
+  'analyse': 'analysis',
+};
+const _enClause = {
+  'id': 'id',
+  'art': 'type',
+  'tokens': 'tokens',
+  'de': 'meaning',
+  'ausrichtung': 'alignment',
+};
+const _enGloss = {
+  'lemma': 'lemma',
+  'angabe': 'grammar',
+  'de': 'meaning',
+  'tokens': 'tokens',
+};
+const _enTask = {
+  'id': 'id',
+  'titel': 'title',
+  'punkte': 'points',
+  'art': 'type',
+  'frage': 'prompt',
+  'loesung': 'solution',
+  'elemente': 'elements',
+  'items': 'items',
+};
+const _enItem = {
+  'bestimmen': {'token': 'token', 'merkmale': 'features', 'punkte': 'points'},
+  'stammformen': {
+    'lemma': 'lemma',
+    'stammformen': 'principal_parts',
+    'punkte': 'points',
+  },
+  'bilden': {
+    'lemma': 'lemma',
+    'merkmale': 'features',
+    'form': 'form',
+    'punkte': 'points',
+  },
+  'umformen': {'vorgabe': 'given', 'ziel': 'target', 'punkte': 'points'},
+  'vokabel': {'la': 'prompt', 'de': 'answer', 'punkte': 'points'},
+  'ableitung': {'fremdwort': 'loanword', 'la': 'source', 'punkte': 'points'},
+  'kurzantwort': {
+    'frage': 'prompt',
+    'stichwoerter': 'keywords',
+    'punkte': 'points',
+  },
+  'wissen_mc': {
+    'frage': 'prompt',
+    'teilsatz': 'clause',
+    'optionen': 'options',
+    'richtig': 'correct',
+    'punkte': 'points',
+  },
+};
+
 typedef _Site = ({Map<String, dynamic> node, String path, String sid});
 
 /// Breaks [rule] in [exam], a mutable copy of a valid pack, and returns the
@@ -679,14 +895,14 @@ String? breakRule(ExamRule rule, Map<String, dynamic> exam, Random r) {
   final tokens = <_Site>[];
   final clauses = <_Site>[];
   for (final (i, s) in (exam['uebersetzung']['saetze'] as List).indexed) {
-    final path = 'exam.uebersetzung.saetze[$i]';
+    final path = 'exam.translation.sentences[$i]';
     final sid = s['id'] as String;
     saetze.add((node: s, path: path, sid: sid));
     for (final (j, t) in (s['tokens'] as List).indexed) {
       tokens.add((node: t, path: '$path.tokens[$j]', sid: sid));
     }
     for (final (k, c) in (s['teilsaetze'] as List).indexed) {
-      clauses.add((node: c, path: '$path.teilsaetze[$k]', sid: sid));
+      clauses.add((node: c, path: '$path.clauses[$k]', sid: sid));
     }
   }
   final clauseOf = {
@@ -697,18 +913,18 @@ String? breakRule(ExamRule rule, Map<String, dynamic> exam, Random r) {
     for (final (i, h) in (exam['uebersetzung']['hilfen'] as List).indexed)
       (
         node: h as Map<String, dynamic>,
-        path: 'exam.uebersetzung.hilfen[$i]',
+        path: 'exam.translation.glosses[$i]',
         sid: '',
       ),
   ];
   final tasks = [
     for (final (i, t) in (exam['aufgaben'] as List).indexed)
-      (node: t as Map<String, dynamic>, path: 'exam.aufgaben[$i]', sid: ''),
+      (node: t as Map<String, dynamic>, path: 'exam.tasks[$i]', sid: ''),
   ];
-  List<_Site> items(String art) => [
+  List<_Site> items(String? art) => [
     for (final t in tasks)
-      if (t.node['art'] == art)
-        for (final (j, item) in (t.node['items'] as List).indexed)
+      if (art == null || t.node['art'] == art)
+        for (final (j, item) in (t.node['items'] as List? ?? const []).indexed)
           (
             node: item as Map<String, dynamic>,
             path: '${t.path}.items[$j]',
@@ -742,7 +958,7 @@ String? breakRule(ExamRule rule, Map<String, dynamic> exam, Random r) {
     case ExamRule.yaml:
       throw ArgumentError.value(rule, 'rule', 'breaks the text: breakYaml');
     case ExamRule.schema:
-      exam['schema'] = 2;
+      exam['schema'] = 3;
       return 'exam.schema';
     case ExamRule.field:
       switch (r.nextInt(3)) {
@@ -754,42 +970,66 @@ String? breakRule(ExamRule rule, Map<String, dynamic> exam, Random r) {
           t.node.remove('la');
           return t.path;
       }
-      final required = <(Map<String, dynamic>, String, String)>[
+      final required = <(Map<String, dynamic>, String, String, Map)>[
         for (final key in ['schema', 'id', 'titel', 'lektionen', 'zeit_min'])
-          (exam, key, 'exam'),
+          (exam, key, 'exam', _enHead),
         for (final key in ['schwerpunkte', 'uebersetzung', 'aufgaben'])
-          (exam, key, 'exam'),
+          (exam, key, 'exam', _enHead),
         for (final key in ['hilfen', 'saetze'])
-          (exam['uebersetzung'], key, 'exam.uebersetzung'),
+          (
+            exam['uebersetzung'],
+            key,
+            'exam.translation',
+            {'hilfen': 'glosses', 'saetze': 'sentences'},
+          ),
         for (final key in ['von', 'bis'])
-          (exam['lektionen'], key, 'exam.lektionen'),
+          (
+            exam['lektionen'],
+            key,
+            'exam.lessons',
+            {'von': 'from', 'bis': 'to'},
+          ),
         for (final s in saetze)
           for (final key in ['id', 'tokens', 'teilsaetze', 'de'])
-            (s.node, key, s.path),
+            (s.node, key, s.path, _enSentence),
         for (final t in tokens)
           for (final key in ['id', 'la', 'lemma', 'analyse'])
-            if (t.node.containsKey(key)) (t.node, key, t.path),
+            if (t.node.containsKey(key)) (t.node, key, t.path, _enToken),
         for (final t in words)
-          (t.node['analyse'], 'wortart', '${t.path}.analyse'),
+          (
+            t.node['analyse'],
+            'wortart',
+            '${t.path}.analysis',
+            {'wortart': 'wortart'},
+          ),
         for (final c in clauses)
           for (final key in ['id', 'art', 'tokens', 'de', 'ausrichtung'])
-            (c.node, key, c.path),
+            (c.node, key, c.path, _enClause),
         for (final h in hilfen)
-          for (final key in h.node.keys) (h.node, key, h.path),
+          for (final key in h.node.keys) (h.node, key, h.path, _enGloss),
         for (final t in tasks)
-          for (final key in t.node.keys) (t.node, key, t.path),
+          for (final key in t.node.keys) (t.node, key, t.path, _enTask),
         for (final t in tasks)
           for (final (j, i) in (t.node['items'] as List? ?? []).indexed)
             for (final key in (i as Map<String, dynamic>).keys)
-              if (key != 'teilsatz') (i, key, '${t.path}.items[$j]'),
+              if (key != 'teilsatz')
+                (i, key, '${t.path}.items[$j]', _enItem[t.node['art']]!),
       ];
-      final (node, key, path) = pick(required);
+      final (node, key, path, names) = pick(required);
       node[key] = null;
-      return '$path.$key';
+      return '$path.${names[key]}';
     case ExamRule.key:
-      final c = pick(clauses);
-      c.node['extra'] = 'x';
-      return '${c.path}.extra';
+      final site = pick([
+        (node: exam, path: 'exam', sid: ''),
+        ...saetze,
+        ...tokens,
+        ...clauses,
+        ...hilfen,
+        ...tasks,
+        ...items(null),
+      ]);
+      site.node['extra'] = 'x';
+      return '${site.path}.extra';
     case ExamRule.type:
       if (r.nextBool()) {
         final s = pick(saetze);
@@ -797,45 +1037,45 @@ String? breakRule(ExamRule rule, Map<String, dynamic> exam, Random r) {
         return '${s.path}.id';
       }
       final lists = <(List, String)>[
-        (exam['schwerpunkte'], 'exam.schwerpunkte'),
+        (exam['schwerpunkte'], 'exam.topics'),
         for (final s in saetze) ...[
-          (s.node['de'], '${s.path}.de'),
+          (s.node['de'], '${s.path}.meaning'),
           (s.node['tokens'], '${s.path}.tokens'),
         ],
         for (final c in clauses) ...[
           (c.node['tokens'], '${c.path}.tokens'),
-          (c.node['de'], '${c.path}.de'),
+          (c.node['de'], '${c.path}.meaning'),
         ],
         for (final h in hilfen) (h.node['tokens'], '${h.path}.tokens'),
-        for (final t in tasks) (t.node['loesung'], '${t.path}.loesung'),
+        for (final t in tasks) (t.node['loesung'], '${t.path}.solution'),
       ];
       final (list, path) = pick(lists);
       return '$path${add(list, null)}';
     case ExamRule.code:
       final sites = <(Map, String, String, List<Object>)>[
         for (final c in clauses) ...[
-          (c.node, 'art', c.path, latinLang.clauseArt),
+          (c.node, 'art', '${c.path}.type', latinLang.clauseArt),
           if (c.node.containsKey('sinnrichtung'))
-            (c.node, 'sinnrichtung', c.path, latinLang.sinnrichtung),
+            (c.node, 'sinnrichtung', '${c.path}.sense', latinLang.sinnrichtung),
         ],
         for (final t in words) ...[
           if (t.node.containsKey('rolle'))
-            (t.node, 'rolle', t.path, latinLang.rolle),
+            (t.node, 'rolle', '${t.path}.role', latinLang.rolle),
           for (final key in (t.node['analyse'] as Map).keys)
-            (t.node['analyse'], key, '${t.path}.analyse', codes(key)),
+            (t.node['analyse'], key, '${t.path}.analysis.$key', codes(key)),
         ],
         for (final i in items('bilden'))
           for (final key in (i.node['merkmale'] as Map).keys)
-            (i.node['merkmale'], key, '${i.path}.merkmale', codes(key)),
+            (i.node['merkmale'], key, '${i.path}.features.$key', codes(key)),
       ];
       final (node, key, path, valid) = pick(sites);
       node[key] = valid.first is int ? valid.length + 1 : '${node[key]}_x';
       assert(!valid.contains(node[key]));
-      return '$path.$key';
+      return path;
     case ExamRule.empty:
       final s = pick(saetze);
       s.node['de'] = [];
-      return '${s.path}.de';
+      return '${s.path}.meaning';
     case ExamRule.idShape:
       final c = pick(clauses);
       c.node['id'] = '${c.node['id']}x';
@@ -854,7 +1094,7 @@ String? breakRule(ExamRule rule, Map<String, dynamic> exam, Random r) {
           for (final (j, a) in (c.node['ausrichtung'] as List).indexed)
             (
               node: a as Map<String, dynamic>,
-              path: '${c.path}.ausrichtung[$j]',
+              path: '${c.path}.alignment[$j]',
               sid: c.sid,
             ),
       ];
@@ -870,7 +1110,7 @@ String? breakRule(ExamRule rule, Map<String, dynamic> exam, Random r) {
     case ExamRule.refBezug:
       return from(words, (t) {
         t.node['bezug'] = '${t.sid}_999';
-        return '${t.path}.bezug';
+        return '${t.path}.head';
       });
     case ExamRule.refVerbform:
       return from(
@@ -880,13 +1120,13 @@ String? breakRule(ExamRule rule, Map<String, dynamic> exam, Random r) {
         ],
         (t) {
           t.node['verbform'][1] = '${t.sid}_999';
-          return '${t.path}.verbform[1]';
+          return '${t.path}.verb_form[1]';
         },
       );
     case ExamRule.refUebergeordnet:
       final c = pick(clauses);
       c.node['uebergeordnet'] = '${c.sid}z';
-      return '${c.path}.uebergeordnet';
+      return '${c.path}.parent';
     case ExamRule.uebergeordnet:
       return from(
         [
@@ -906,7 +1146,7 @@ String? breakRule(ExamRule rule, Map<String, dynamic> exam, Random r) {
     case ExamRule.refItemTeilsatz:
       return from(items('wissen_mc'), (i) {
         i.node['teilsatz'] = 's999a';
-        return '${i.path}.teilsatz';
+        return '${i.path}.clause';
       });
     case ExamRule.tokenTwice:
       final s = pick(saetze);
@@ -941,7 +1181,7 @@ String? breakRule(ExamRule rule, Map<String, dynamic> exam, Random r) {
         ],
         (c) {
           (c.node['ausrichtung'] as List).removeAt(0);
-          return '${c.path}.ausrichtung';
+          return '${c.path}.alignment';
         },
       );
     case ExamRule.hilfeLemma:
@@ -968,17 +1208,27 @@ String? breakRule(ExamRule rule, Map<String, dynamic> exam, Random r) {
       );
     case ExamRule.variant:
       final sites = <(List, int, String)>[
-        for (final s in saetze) (s.node['de'] as List, 0, '${s.path}.de[0]'),
+        for (final s in saetze)
+          (s.node['de'] as List, 0, '${s.path}.meaning[0]'),
         for (final c in clauses)
           for (final (j, _) in (c.node['ausrichtung'] as List).indexed)
-            ([c.node['ausrichtung'][j]], -1, '${c.path}.ausrichtung[$j].de'),
+            ([c.node['ausrichtung'][j]], -1, '${c.path}.alignment[$j].meaning'),
         for (final i in items('umformen'))
-          (i.node['ziel'] as List, 0, '${i.path}.ziel[0]'),
+          (i.node['ziel'] as List, 0, '${i.path}.target[0]'),
         for (final i in items('vokabel'))
-          (i.node['de'] as List, 0, '${i.path}.de[0]'),
+          (i.node['de'] as List, 0, '${i.path}.answer[0]'),
       ];
       final (list, index, path) = pick(sites);
-      final bad = pick(['a | b', '(a', 'a)', '(a]', '[a)', ']', 'x (a | b']);
+      final bad = pick([
+        'a | b',
+        '(a',
+        'a)',
+        '(a]',
+        '[a)',
+        ']',
+        'x (a | b',
+        ExamGen(r).whiteSpaceAlternative(),
+      ]);
       if (index < 0) {
         list.single['de'] = bad;
       } else {
@@ -1069,7 +1319,7 @@ String? breakRule(ExamRule rule, Map<String, dynamic> exam, Random r) {
           switch (r.nextInt(7)) {
             case 0:
               esse.node['rolle'] = 'subjekt';
-              return '${esse.path}.verbform';
+              return '${esse.path}.verb_form';
             case 1:
               esse.node.remove('verbform');
             case 2:
@@ -1077,7 +1327,7 @@ String? breakRule(ExamRule rule, Map<String, dynamic> exam, Random r) {
             case 3 when thirds.isNotEmpty:
               final third = pick(thirds);
               third.node['verbform'] = pair;
-              return '${third.path}.verbform';
+              return '${third.path}.verb_form';
             case 4:
               ppp.node['verbform'] = [pair[0]];
             case 5:
@@ -1089,7 +1339,7 @@ String? breakRule(ExamRule rule, Map<String, dynamic> exam, Random r) {
                 t.node['verbform'] = [pair[1], pair[1]];
               }
           }
-          return '${ppp.path}.verbform';
+          return '${ppp.path}.verb_form';
         },
       );
     case ExamRule.bezugMissing:
@@ -1122,7 +1372,7 @@ String? breakRule(ExamRule rule, Map<String, dynamic> exam, Random r) {
                       .node['lemma'] =
                   'ire';
           }
-          return '${t.path}.verbform';
+          return '${t.path}.verb_form';
         },
       );
     case ExamRule.verbformEsse:
@@ -1137,7 +1387,7 @@ String? breakRule(ExamRule rule, Map<String, dynamic> exam, Random r) {
           } else {
             t.node['analyse'].remove('genus_verbi');
           }
-          return '${t.path}.verbform';
+          return '${t.path}.verb_form';
         },
       );
     case ExamRule.pppKasusGenus:
@@ -1213,7 +1463,7 @@ String? breakRule(ExamRule rule, Map<String, dynamic> exam, Random r) {
             case 'person':
               a['person'] = other(a['person'], [1, 2, 3]);
           }
-          return '${t.path}.verbform';
+          return '${t.path}.verb_form';
         },
       );
     case ExamRule.pc:
@@ -1242,7 +1492,7 @@ String? breakRule(ExamRule rule, Map<String, dynamic> exam, Random r) {
     case ExamRule.sinnrichtung:
       return from(clauses.where((c) => c.node['art'] != 'pc').toList(), (c) {
         c.node['sinnrichtung'] = 'kausal';
-        return '${c.path}.sinnrichtung';
+        return '${c.path}.sense';
       });
     case ExamRule.participle:
       return from(participles, (t) {
@@ -1294,12 +1544,12 @@ String? breakRule(ExamRule rule, Map<String, dynamic> exam, Random r) {
       ];
       return from(
         sites,
-        (s) => '${s.$1.path}.merkmale${add(s.$1.node['merkmale'], s.$2)}',
+        (s) => '${s.$1.path}.features${add(s.$1.node['merkmale'], s.$2)}',
       );
     case ExamRule.mcRichtig:
       return from(items('wissen_mc'), (i) {
         i.node['richtig'] = 'keine';
-        return '${i.path}.richtig';
+        return '${i.path}.correct';
       });
     case ExamRule.mcSinnrichtung:
       if (pcs.isEmpty) return null;
@@ -1312,7 +1562,7 @@ String? breakRule(ExamRule rule, Map<String, dynamic> exam, Random r) {
         i.node['teilsatz'] = c.node['id'];
         i.node['richtig'] = wrong;
         (i.node['optionen'] as List).add(wrong);
-        return '${i.path}.richtig';
+        return '${i.path}.correct';
       });
     case ExamRule.ordnen:
       return from(
@@ -1322,7 +1572,7 @@ String? breakRule(ExamRule rule, Map<String, dynamic> exam, Random r) {
         ],
         (t) {
           t.node['elemente'] = (t.node['elemente'] as List).take(2).toList();
-          return '${t.path}.elemente';
+          return '${t.path}.elements';
         },
       );
     case ExamRule.pointsTask:
@@ -1333,13 +1583,48 @@ String? breakRule(ExamRule rule, Map<String, dynamic> exam, Random r) {
         ],
         (t) {
           t.node['items'][0]['punkte'] += 1;
-          return '${t.path}.punkte';
+          return '${t.path}.points';
         },
       );
     case ExamRule.pointsTotal:
       exam['punkte_gesamt'] += 1;
-      return 'exam.punkte_gesamt';
+      return 'exam.points_total';
   }
+}
+
+/// Adds to a node of [exam], a mutable copy of a valid schema 1 pack, a key
+/// that only schema 2 has, and returns the path its error names.
+String addSchema2Key(Map<String, dynamic> exam, Random r) {
+  final sites = <(Map, String, Map<String, String>)>[(exam, 'exam', _enHead)];
+  final translation = exam['uebersetzung'] as Map;
+  for (final (i, s) in (translation['saetze'] as List).indexed) {
+    final path = 'exam.translation.sentences[$i]';
+    sites.add((s, path, _enSentence));
+    for (final (j, t) in (s['tokens'] as List).indexed) {
+      sites.add((t, '$path.tokens[$j]', _enToken));
+    }
+    for (final (k, c) in (s['teilsaetze'] as List).indexed) {
+      sites.add((c, '$path.clauses[$k]', _enClause));
+    }
+  }
+  for (final (i, h) in (translation['hilfen'] as List).indexed) {
+    sites.add((h, 'exam.translation.glosses[$i]', _enGloss));
+  }
+  for (final (i, t) in (exam['aufgaben'] as List).indexed) {
+    final path = 'exam.tasks[$i]';
+    sites.add((t, path, _enTask));
+    for (final (j, item) in (t['items'] as List? ?? const []).indexed) {
+      sites.add((item, '$path.items[$j]', _enItem[t['art']]!));
+    }
+  }
+  final (node, path, names) = sites[r.nextInt(sites.length)];
+  final renamed = [
+    for (final e in names.entries)
+      if (e.key != e.value) e.value,
+  ];
+  final key = renamed[r.nextInt(renamed.length)];
+  node[key] = 'x';
+  return '$path.$key';
 }
 
 /// Writes one optional key that [exam] lacks without a value, which leaves

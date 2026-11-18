@@ -11,7 +11,7 @@ const _packs = 300;
 const _variants = 3000;
 
 /// The fixed packs the seeded loops run first.
-Map<String, Object> _synthetic() => examToYaml(
+Map<String, Object> _synthetic() => schema1Yaml(
   parseExam(
     File('test/fixtures/exam/synthetic.exam').readAsStringSync(),
     latinLang,
@@ -87,19 +87,19 @@ void main() {
       final withNull = _copy(yaml);
       nullKeys.add(nullOptional(withNull, Random(seed++)));
       expect(
-        examToYaml(parseExam(jsonEncode(withNull), latinLang)),
+        schema1Yaml(parseExam(jsonEncode(withNull), latinLang)),
         equals(yaml),
         reason: name,
       );
       final exam = parseExam(jsonEncode(yaml), latinLang);
-      expect(examToYaml(exam), equals(yaml), reason: name);
+      expect(schema1Yaml(exam), equals(yaml), reason: name);
       expect(
-        examToYaml(parseExam(serializeExam(exam), latinLang)),
+        schema1Yaml(parseExam(serializeExam(exam), latinLang)),
         equals(yaml),
         reason: name,
       );
       expect(
-        examToYaml(parseExam(blockYaml(yaml), latinLang)),
+        schema1Yaml(parseExam(blockYaml(yaml), latinLang)),
         equals(yaml),
         reason: name,
       );
@@ -107,7 +107,7 @@ void main() {
     }
     final wanted = [
       ...ExamGen.reachKeys,
-      for (final a in ItemArt.values) 'task ${a.code}',
+      for (final a in ItemArt.values) 'task ${a.schema1Code}',
       'task ordnen',
       'task frei',
       for (final a in latinLang.clauseArt) 'clause $a',
@@ -178,6 +178,21 @@ void main() {
                   ' ab()[]|'.codeUnitAt(r.nextInt(8)),
               ]),
     ];
+    for (final (s, want) in _readings) {
+      expect(expand(s), unorderedEquals(want), reason: s);
+      expect(_Oracle(s).readings(), unorderedEquals(want), reason: s);
+    }
+    for (final s in _refused) {
+      expect(() => expand(s), throwsFormatException, reason: s);
+      expect(_Oracle(s).readings(), isNull, reason: s);
+    }
+    final glue = ExamGen(Random(17));
+    for (var i = 0; i < _variants; i++) {
+      final (s, want) = glue.gluedGroup();
+      expect(expand(s), unorderedEquals(want), reason: s);
+      final blank = glue.whiteSpaceAlternative();
+      expect(() => expand(blank), throwsFormatException, reason: blank);
+    }
     var malformed = 0;
     for (final s in strings) {
       final want = _Oracle(s).readings();
@@ -256,6 +271,20 @@ void main() {
   });
 }
 
+const _readings = <(String, List<String>)>[
+  (
+    'hierher (hinab | herab)gestiegen.',
+    ['hierher hinabgestiegen.', 'hierher herabgestiegen.'],
+  ),
+  ('(Ariadne | Ariadna)s Worte', ['Ariadnes Worte', 'Ariadnas Worte']),
+  ('Mann (, | und) Frau', ['Mann, Frau', 'Mann und Frau']),
+  ('(fort | weg |)!', ['fort!', 'weg!', '!']),
+  ('(| ein | das)', ['', 'ein', 'das']),
+  ('(a | b [c])', ['a', 'b c', 'b']),
+];
+
+const _refused = ['laid(-| )back', '(-| )', '( | a)', '[ ]'];
+
 int _depth(String s) {
   var depth = 0, most = 0;
   for (final c in s.split('')) {
@@ -311,12 +340,18 @@ final class _Oracle {
 
   List<String>? _alts() {
     final out = <String>[];
+    var from = i;
     while (true) {
       final text = _text();
       if (text == null) return null;
-      out.addAll(text);
+      final raw = s.substring(from, i);
+      if (raw.isNotEmpty && raw.trim().isEmpty) return null;
+      out.addAll([for (final t in text) t.trimRight()]);
       if (i < s.length && s[i] == '|') {
-        i++;
+        from = ++i;
+        while (i < s.length && s[i].trim().isEmpty) {
+          i++;
+        }
       } else {
         return out;
       }

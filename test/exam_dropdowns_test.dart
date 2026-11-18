@@ -31,7 +31,7 @@ typedef Asked = ({
   Map<String, dynamic> codes,
 });
 
-const _packs = 8;
+const _packs = 12;
 
 /// The synthetic pack first, as a static example, then drawn packs that have
 /// at least one dropdown item.
@@ -40,7 +40,7 @@ Iterable<(String, Pack)> _cases() sync* {
     'synthetic',
     jsonDecode(
           jsonEncode(
-            examToYaml(
+            schema1Yaml(
               parseExam(
                 File('test/fixtures/exam/synthetic.exam').readAsStringSync(),
                 latinLang,
