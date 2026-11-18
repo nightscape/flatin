@@ -380,8 +380,18 @@ void main() {
           clause,
         );
         final hilfe = exam.hilfen.where((h) => h.lemma == token.lemma);
-        if (hilfe.any((h) => h.angabe.isEmpty || h.de.isEmpty)) {
-          hit('empty hilfe text');
+        if (hilfe.any((h) => h.angabe.isEmpty)) hit('empty hilfe angabe');
+        final hilfeDe = hilfe.firstOrNull?.de;
+        final courseMeaning = items
+            .where((i) => i.lemma == token.lemma)
+            .firstOrNull
+            ?.translation;
+        if (hilfeDe != null && hilfeDe.isEmpty) {
+          hit(
+            courseMeaning != null && courseMeaning.isNotEmpty
+                ? 'empty hilfe de with course meaning'
+                : 'empty hilfe de without course meaning',
+          );
         }
         final shownSheet = [
           for (final t in tester.widgetList<Text>(
@@ -397,11 +407,7 @@ void main() {
           _sheetLines(
             token,
             ruleLessons,
-            hilfe.firstOrNull?.de ??
-                items
-                    .where((i) => i.lemma == token.lemma)
-                    .firstOrNull
-                    ?.translation,
+            hilfeDe != null && hilfeDe.isNotEmpty ? hilfeDe : courseMeaning,
             hilfe.firstOrNull,
           ),
           reason: '$why: the whole sheet equals the lines of the rule copy',
@@ -488,7 +494,9 @@ void main() {
       'several type or form lines',
       'word line of a homograph',
       'no form line',
-      'empty hilfe text',
+      'empty hilfe angabe',
+      'empty hilfe de with course meaning',
+      'empty hilfe de without course meaning',
     ]) {
       expect(seen[what], greaterThan(0), reason: 'drawn cases reach "$what"');
     }

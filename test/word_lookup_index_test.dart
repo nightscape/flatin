@@ -58,9 +58,10 @@ void main() {
           observers: [counter],
           overrides: [
             dataLanguageProvider.overrideWith((ref) => 'de'),
-            courseLanguageProvider.overrideWith(
-              (ref) async => language ??= await loadLanguage(),
-            ),
+            if (seed.isOdd)
+              courseLanguageProvider.overrideWith(
+                (ref) async => language ??= await loadLanguage(),
+              ),
           ],
         );
         addTearDown(c.dispose);

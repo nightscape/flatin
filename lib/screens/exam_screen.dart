@@ -341,9 +341,10 @@ class _ExamScreenState extends ConsumerState<ExamScreen> {
       context: context,
       builder: (context) => Consumer(
         builder: (context, ref, _) {
-          final meaning =
-              hilfe?.de ??
-              ref.watch(examWordsProvider).value?[t.lemma]?.meaning;
+          final meaning = switch (hilfe?.de) {
+            final de? when de.isNotEmpty => de,
+            _ => ref.watch(examWordsProvider).value?[t.lemma]?.meaning,
+          };
           final lessons = switch (ref.watch(lessonLookupProvider)) {
             AsyncData(:final value) => value.of(t, _clauseOf[t.id]!),
             AsyncError(:final error) => throw error,
