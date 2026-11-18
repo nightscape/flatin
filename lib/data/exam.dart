@@ -543,7 +543,7 @@ String _normalize(String s) => s
     if (c == ')' || c == ']') {
       if (c != close) throw FormatException('unexpected "$c"', s, i);
       endAlternative();
-      return ([...done, ...trimmed()], i + 1);
+      return ([...done, ...current], i + 1);
     }
     if (c == '|') {
       if (close == null) throw FormatException('"|" outside a group', s, i);

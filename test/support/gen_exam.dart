@@ -86,7 +86,10 @@ final class ExamGen {
   /// space on the sides that touch a `|` or the closing bracket.
   String joinAlternatives(List<String> alternatives) => [
     for (final (i, a) in alternatives.indexed)
-      if (a.isEmpty) '' else '${i > 0 ? _space() : ''}$a${_space()}',
+      if (a.isEmpty)
+        ''
+      else
+        '${i > 0 ? _space() : ''}$a${i < alternatives.length - 1 ? _space() : ''}',
   ].join('|');
 
   String _space() => List.filled(r.nextInt(3), pick([' ', ' ', '\t'])).join();

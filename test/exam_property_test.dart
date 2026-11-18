@@ -225,6 +225,16 @@ void main() {
     }
   });
 
+  test('P4c: white space inside an optional group without "|" is kept', () {
+    final r = Random(19);
+    for (final (s, want) in [
+      ('[die ]Frau', ['die Frau', 'Frau']),
+      for (var i = 0; i < 200; i++) spacedOptional(r),
+    ]) {
+      expect(expand(s), unorderedEquals(want), reason: s);
+    }
+  });
+
   test('P5: the matcher refuses a reading changed by one word', () {
     final gen = ExamGen(Random(11));
     final texts = <(String, String, String)>[
@@ -281,6 +291,10 @@ const _readings = <(String, List<String>)>[
   ('(fort | weg |)!', ['fort!', 'weg!', '!']),
   ('(| ein | das)', ['', 'ein', 'das']),
   ('(a | b [c])', ['a', 'b c', 'b']),
+  ('(a | b )x', ['ax', 'b x']),
+  ('(der )Mann', ['der Mann']),
+  ('[die ]Frau', ['Frau', 'die Frau']),
+  ('( a| b)x', ['ax', 'bx']),
 ];
 
 const _refused = ['laid(-| )back', '(-| )', '( | a)', '[ ]'];
@@ -303,8 +317,10 @@ final class _Oracle {
   _Oracle(this.s);
 
   List<String>? readings() {
-    final text = _text();
-    if (text == null || i != s.length) return null;
+    final strict = _text();
+    if (strict == null || i != s.length) return null;
+    final text = _Oracle(s.replaceAll(RegExp(r'\s*\|\s*'), '|'))._text();
+    if (text == null) return null;
     return [
       for (final t in text)
         t
@@ -346,15 +362,23 @@ final class _Oracle {
       if (text == null) return null;
       final raw = s.substring(from, i);
       if (raw.isNotEmpty && raw.trim().isEmpty) return null;
-      out.addAll([for (final t in text) t.trimRight()]);
+      out.addAll(text);
       if (i < s.length && s[i] == '|') {
         from = ++i;
-        while (i < s.length && s[i].trim().isEmpty) {
-          i++;
-        }
       } else {
         return out;
       }
     }
   }
+}
+
+/// `[w<white space>]x`: an optional word whose trailing white space is not
+/// next to a `|`, so both readings keep the word apart from `x`.
+(String, List<String>) spacedOptional(Random r) {
+  String word() => String.fromCharCodes([
+    for (var i = 0; i <= r.nextInt(5); i++) 'abcdefg'.codeUnitAt(r.nextInt(7)),
+  ]);
+  final w = word(), x = word();
+  final space = [for (var i = 0; i <= r.nextInt(2); i++) ' \t'[r.nextInt(2)]];
+  return ('[$w${space.join()}]$x', ['$w $x', x]);
 }

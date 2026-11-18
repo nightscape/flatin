@@ -53,7 +53,9 @@ is removed, so a group next to such a mark leaves no gap. Variant strings are
 `answer` in tasks.
 
 White space next to `|` only separates and is dropped, so every
-alternative joins its neighbours alike: `(hinab | hinunter)steigen`. A space
+alternative joins its neighbours alike: `(hinab | hinunter)steigen`. White space
+not next to a `|` is kept: `[die ]Frau` reads `die Frau`, `(a | b )x` reads
+`ax` or `b x`. A space
 that all alternatives need stands outside the group: `Mann (, | und) Frau`.
 An empty alternative is allowed (`(fort | weg |)`, `(| ein | das)`); an
 alternative that is only white space (`laid(-| )back`, `[ ]`) is refused
