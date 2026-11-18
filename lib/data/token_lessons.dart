@@ -48,11 +48,11 @@ final class LessonLookup {
     return byFold;
   }();
 
-  /// The lessons of [lemma] in each of [files], with the form that [formOf]
+  /// The lessons of the word [wordKey] in each of [files], with the form that [formOf]
   /// names in that file; the distinct lessons of several files are all
   /// returned, and [TokenLessons.syntax] is empty.
   TokenLessons lessonsOf(
-    String lemma,
+    String wordKey,
     Iterable<WordFile> files,
     FormKey? Function(WordFile file) formOf,
   ) {
@@ -68,13 +68,13 @@ final class LessonLookup {
       if (form != null) forms.add(form);
     }
     List<int> sorted(Iterable<int> xs) => xs.toList()..sort();
-    final exactWord = lessons.wordToLesson[lemma];
+    final exactWord = lessons.wordToLesson[wordKey];
     final both = types.intersection(forms);
     return (
       word: sorted(
         exactWord != null
             ? [exactWord]
-            : _foldedWordLessons[language.fold(lemma)] ?? const <int>{},
+            : _foldedWordLessons[language.fold(wordKey)] ?? const <int>{},
       ),
       typeAndForm: sorted(both),
       type: sorted(types.difference(both)),

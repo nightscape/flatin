@@ -65,7 +65,7 @@ final class CourseFilter {
       settings.overrideOfTopic(topic.key) == Override.forcedOff;
 
   bool wordPracticed(PracticeItem item) =>
-      switch (settings.overrideOfWord(item.lemma)) {
+      switch (settings.overrideOfWord(item.wordKey)) {
         Override.forcedOff => false,
         Override.forcedOn => true,
         Override.none => wordInRange(item),
@@ -154,7 +154,7 @@ final class CourseFilter {
   CourseGap? wordGap(PracticeItem item) {
     final id = item.dataFileId;
     final lesson = lessons.lessonNumberOf(item);
-    if (settings.overrideOfWord(item.lemma) != Override.forcedOn &&
+    if (settings.overrideOfWord(item.wordKey) != Override.forcedOn &&
         !wordInRange(item)) {
       return const OutsideRange();
     }

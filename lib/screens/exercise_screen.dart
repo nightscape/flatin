@@ -109,6 +109,8 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
             padding: const EdgeInsets.all(16),
             children: [
               ExerciseQuestion(exercise),
+              if (widget.word.note case final note?)
+                Text(note, key: const Key('exercise.note')),
               const SizedBox(height: 16),
               switch (exercise.answer) {
                 ChoiceAnswer() => _choices(exercise.answer as ChoiceAnswer),

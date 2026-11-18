@@ -16,6 +16,10 @@ part 'lookup_provider.g.dart';
 typedef WordAnalysis = ({
   String spelling,
   String lemma,
+
+  /// The word's key in the lessons; see [PracticeItem.wordKey].
+  String wordKey,
+  String? note,
   String meaning,
   WordFile file,
   FormKey? form,
@@ -47,16 +51,20 @@ Future<FormIndex> formIndex(Ref ref) async {
   );
   final index = <String, List<WordAnalysis>>{};
   for (final item in items) {
-    for (final (i, spelling) in item.forms.indexed) {
+    for (final (i, spellings) in item.acceptedForms.indexed) {
       final label = item.formLabels[i];
-      (index[language.foldLower(spelling)] ??= []).add((
-        spelling: spelling,
-        lemma: item.lemma,
-        meaning: item.translation,
-        file: (dataFileId: item.dataFileId, type: item.type),
-        form: item.isVocab ? null : label.key,
-        formName: item.isVocab ? null : label.displayName,
-      ));
+      for (final spelling in spellings) {
+        (index[language.foldLower(spelling)] ??= []).add((
+          spelling: spelling,
+          lemma: item.lemma,
+          wordKey: item.wordKey,
+          note: item.note,
+          meaning: item.translation,
+          file: (dataFileId: item.dataFileId, type: item.type),
+          form: item.isVocab ? null : label.key,
+          formName: item.isVocab ? null : label.displayName,
+        ));
+      }
     }
   }
   return FormIndex(language, index);

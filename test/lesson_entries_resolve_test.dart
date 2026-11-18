@@ -295,7 +295,7 @@ void main() {
     'every entry of every lesson list resolves to a practice item',
     () async {
       final lessons = await loadLessonData(latinCourse.books);
-      final lemmas = {for (final i in await loadAllPracticeItems()) i.lemma};
+      final lemmas = {for (final i in await loadAllPracticeItems()) i.wordKey};
 
       final unresolved = {
         for (final MapEntry(key: lesson, value: words)

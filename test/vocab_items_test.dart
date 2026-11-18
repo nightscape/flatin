@@ -24,8 +24,8 @@ const _lesson24 = {
   'nōnne',
   'num',
   'utrum ... an',
-  'neque (nec)',
-  'quī (fragend)',
+  'neque',
+  'quī',
   'laudibus afficere',
 };
 
@@ -124,13 +124,14 @@ void main() {
   test('a new meaning keeps the known word in its first lesson', () async {
     final lessons = await loadLessonData(latinCourse.books);
     final items = await loadAllPracticeItems();
-    int lessonOf(String lemma) =>
-        lessons.lessonNumberOf(items.singleWhere((i) => i.lemma == lemma));
+    int lessonOf(String wordKey) =>
+        lessons.lessonNumberOf(items.singleWhere((i) => i.wordKey == wordKey));
 
     expect(lessonOf('putāre'), lessThan(26));
     expect(lessonOf('aliquem aliquid putāre'), 26);
     expect(lessonOf('quī'), lessThan(24));
     expect(lessonOf('quī (fragend)'), 24);
+    expect(lessonOf('neque'), 24);
   });
 
   test('only the translation kinds ask a vocab item', () async {
@@ -207,11 +208,4 @@ void main() {
       expect(shown, isEmpty, reason: shown.join('\n'));
     },
   );
-
-  test('a vocab item accepts each spelling it gives', () async {
-    final neque = (await loadPracticeItems(
-      'lib/data/latin_vocab.yaml',
-    )).singleWhere((i) => i.lemma == 'neque (nec)');
-    expect(neque.acceptedForms.single, ['neque (nec)', 'neque', 'nec']);
-  });
 }

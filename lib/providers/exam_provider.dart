@@ -108,15 +108,15 @@ typedef ExamWord = ({
   List<WordFile> files,
 });
 
-/// The app's words by lemma: the meaning in the UI language, and the word
+/// The app's words by word key (the lemma, for a word without a note): the meaning in the UI language, and the word
 /// card id and data file, one per data file that lists the lemma.
 @riverpod
 Future<Map<String, ExamWord>> examWords(Ref ref) async {
   final language = await ref.watch(dataLanguageProvider.future);
   final words = <String, ExamWord>{};
   for (final item in await loadAllPracticeItems(language: language)) {
-    final known = words[item.lemma];
-    words[item.lemma] = (
+    final known = words[item.wordKey];
+    words[item.wordKey] = (
       meaning: known?.meaning ?? item.translation,
       cardIds: [...?known?.cardIds, PracticeItemCard.generateItemId(item)],
       files: [...?known?.files, (dataFileId: item.dataFileId, type: item.type)],

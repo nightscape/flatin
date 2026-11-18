@@ -142,9 +142,11 @@ silently dropping the section. `shared:` is the one key the loader only
 accepts: it holds anchors that items alias (`absent: *ohne_steigerung`), and it
 sits above `items:` because a YAML alias resolves only below its anchor.
 
-An item has no other keys than `id`, `type`, `translation`, `parts`, `forms`,
-`absent`, `passiv`, `deponent`, `de_verb`, `de_noun`, `slots`, the key named
-by `genus_axis` (S26) and `regular_type`; any other one throws.
+An item has no other keys than `id`, `type`, `translation`, `note`, `parts`,
+`forms`, `absent`, `passiv`, `deponent`, `de_verb`, `de_noun`, `slots`, the key
+named by `genus_axis` (S26) and `regular_type`; any other one throws. A `note`
+is a `{de, en}` text that tells an item from another one with the same lemma;
+no spelling of the lemma part has brackets, so such text is a `note`.
 
 Loading a file resolves which keys every item has — `GrammarFile.keysByItem`,
 one `ItemKeys` per item, after S4, S10, S13, S14 and S15. That set is the
@@ -296,7 +298,7 @@ an abstract type each throw, naming the type and the file.
 
 **S20. Languages.** Every text a learner reads — an axis `name`, a value text
 (also in a label override), a part `label`, a stem `display`, a sandhi
-`explain`, a type `display` and an item `translation` — is a map from each data
+`explain`, a type `display`, an item `translation` and an item `note` — is a map from each data
 language (`dataLanguages` in `lib/grammar/schema.dart`) to a non-empty text. A
 plain string, a missing or extra language and an empty text each throw. A
 parse picks one language; ids, codes and type names stay the same in every

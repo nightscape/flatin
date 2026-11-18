@@ -548,6 +548,10 @@ final class GrammarItem {
   final String id;
   final String translation;
 
+  /// What tells the item from another one with the same lemma; null for most
+  /// items.
+  final String? note;
+
   /// Part name → spellings; the first is shown and traced (S9).
   final Map<String, List<String>> parts;
 
@@ -590,6 +594,7 @@ final class GrammarItem {
   GrammarItem({
     required this.id,
     required this.translation,
+    this.note,
     required this.parts,
     required this.forms,
     required this.absent,
@@ -765,11 +770,15 @@ GrammarFile parseGrammarFile(
 }) => parseGrammarFiles({path: source}, lang: lang, language: language).single;
 
 /// Parses all data files together and runs the cross-file checks (S12). The
-/// texts come in [language]; S20 checks every language on every parse.
+/// texts come in [language]; S20 checks every language on every parse. A
+/// lemma spelling has no brackets when [refuseBracketLemmas]: the course gives
+/// the text in brackets as the item's note. A German gloss file names a word
+/// with its comment in brackets, so it parses without the check.
 List<GrammarFile> parseGrammarFiles(
   Map<String, String> sourceByPath, {
   required Language lang,
   String language = courseLanguage,
+  bool refuseBracketLemmas = false,
 }) {
   assert(dataLanguages.contains(language), 'no data language "$language"');
   final files = <GrammarFile>[];
@@ -789,6 +798,7 @@ List<GrammarFile> parseGrammarFiles(
         documents.single.contents as YamlMap,
         language,
         lang,
+        refuseBracketLemmas: refuseBracketLemmas,
       ).parse(),
     );
   }
@@ -812,7 +822,15 @@ class _FileParser {
   final String language;
   final Language lang;
 
-  _FileParser(this.path, this.root, this.language, this.lang);
+  final bool refuseBracketLemmas;
+
+  _FileParser(
+    this.path,
+    this.root,
+    this.language,
+    this.lang, {
+    this.refuseBracketLemmas = false,
+  });
 
   String _norm(String text) => lang.foldLower(text);
 
@@ -868,6 +886,7 @@ class _FileParser {
     'id',
     'type',
     'translation',
+    'note',
     'parts',
     'forms',
     'absent',
@@ -1946,6 +1965,15 @@ class _FileParser {
       if (lemma == null) {
         _bad('S3', 'item ${spec['parts']} lacks the lemma part "$lemmaPart"');
       }
+      for (final spelling in parts[lemmaPart]!) {
+        if (refuseBracketLemmas && RegExp('[()]').hasMatch(spelling)) {
+          _bad(
+            'S3',
+            'the lemma spelling "$spelling" has brackets: give the text in '
+                'brackets as the item\'s "note"',
+          );
+        }
+      }
       final id = spec['id'] as String? ?? _norm(lemma);
       if (!ids.add(id)) _bad('S5', 'two items share the id "$id"', item: id);
 
@@ -2019,6 +2047,9 @@ class _FileParser {
         GrammarItem(
           id: id,
           translation: _text(spec['translation'], 'item $id translation'),
+          note: spec['note'] == null
+              ? null
+              : _text(spec['note'], 'item $id note'),
           parts: parts,
           forms: forms,
           absent: absent,
@@ -2277,6 +2308,7 @@ class _Linker {
     return GrammarItem(
       id: item.id,
       translation: item.translation,
+      note: item.note,
       parts: item.parts,
       forms: item.forms,
       absent: item.absent,

@@ -68,9 +68,10 @@ class _LookupScreenState extends ConsumerState<LookupScreen> {
                 key: Key('lookup.result.$i'),
                 spelling: r.spelling,
                 lemma: r.lemma,
+                note: r.note,
                 meaning: r.meaning,
                 analysis: r.formName,
-                lessons: lookup.lessonsOf(r.lemma, [r.file], (_) => r.form),
+                lessons: lookup.lessonsOf(r.wordKey, [r.file], (_) => r.form),
               );
             },
           ),

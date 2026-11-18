@@ -59,9 +59,9 @@ class _WordList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final byLemma = <String, PracticeItem>{};
+    final byWord = <String, PracticeItem>{};
     for (final item in items) {
-      byLemma.putIfAbsent(item.lemma, () => item);
+      byWord.putIfAbsent(item.wordKey, () => item);
     }
     final needle = items.isEmpty
         ? ''
@@ -73,11 +73,11 @@ class _WordList extends ConsumerWidget {
       // A word several lessons list belongs to the one that introduces it,
       // so it gets one row and one toggle.
       final matches = [
-        for (final lemma in words)
-          if (byLemma.containsKey(lemma) &&
-              filter.lessons.wordToLesson[lemma] == lesson &&
-              byLemma[lemma]!.lang.fold(lemma).toLowerCase().contains(needle))
-            byLemma[lemma]!,
+        for (final word in words)
+          if (byWord.containsKey(word) &&
+              filter.lessons.wordToLesson[word] == lesson &&
+              byWord[word]!.lang.fold(word).toLowerCase().contains(needle))
+            byWord[word]!,
       ];
       if (matches.isEmpty) continue;
       rows
@@ -107,17 +107,24 @@ class _WordList extends ConsumerWidget {
   Widget _wordTile(BuildContext context, WidgetRef ref, PracticeItem item) {
     final gap = filter.wordGap(item);
     return CheckboxListTile(
-      key: Key('word.${item.lemma}'),
+      key: Key('word.${item.wordKey}'),
       dense: true,
       title: Text(
         item.lemma,
         style: TextStyle(color: rowTextColor(context, greyed: gap != null)),
       ),
+      secondary: item.note == null
+          ? null
+          : Text(
+              item.note!,
+              key: Key('word.note.${item.wordKey}'),
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
       subtitle: gap == null ? null : Text(gapText(context, gap)),
       value: filter.wordPracticed(item),
       onChanged: (_) => ref
           .read(settingsProvider.notifier)
-          .toggleWord(item.lemma, inRange: filter.wordInRange(item)),
+          .toggleWord(item.wordKey, inRange: filter.wordInRange(item)),
       checkColor: Colors.black,
     );
   }

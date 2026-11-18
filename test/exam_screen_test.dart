@@ -368,7 +368,7 @@ void main() {
       final cards = (await tester.runAsync(FsrsStorage.loadCards))!;
       final queuedIds = {
         for (final item in items)
-          if (helped.contains(item.lemma)) item.id,
+          if (helped.contains(item.wordKey)) item.id,
       };
       expect(queuedIds, isNotEmpty, reason: 'seed $seed');
       for (final item in items) {

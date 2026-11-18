@@ -191,13 +191,13 @@ final class ExamAxesProvider
 
 String _$examAxesHash() => r'98fe63bc8f734c121468fa6e74c03dcc810b829c';
 
-/// The app's words by lemma: the meaning in the UI language, and the word
+/// The app's words by word key (the lemma, for a word without a note): the meaning in the UI language, and the word
 /// card id and data file, one per data file that lists the lemma.
 
 @ProviderFor(examWords)
 final examWordsProvider = ExamWordsProvider._();
 
-/// The app's words by lemma: the meaning in the UI language, and the word
+/// The app's words by word key (the lemma, for a word without a note): the meaning in the UI language, and the word
 /// card id and data file, one per data file that lists the lemma.
 
 final class ExamWordsProvider
@@ -210,7 +210,7 @@ final class ExamWordsProvider
     with
         $FutureModifier<Map<String, ExamWord>>,
         $FutureProvider<Map<String, ExamWord>> {
-  /// The app's words by lemma: the meaning in the UI language, and the word
+  /// The app's words by word key (the lemma, for a word without a note): the meaning in the UI language, and the word
   /// card id and data file, one per data file that lists the lemma.
   ExamWordsProvider._()
     : super(
@@ -238,7 +238,7 @@ final class ExamWordsProvider
   }
 }
 
-String _$examWordsHash() => r'a9cf6e6fa1dc32ed0e3b17cb12c6c22d73b7580b';
+String _$examWordsHash() => r'aef2401af7bf5d77b638f057d8e034e0e19cf34c';
 
 /// Where the course teaches its words.
 

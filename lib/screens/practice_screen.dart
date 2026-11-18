@@ -450,6 +450,8 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
               ),
             ),
           ),
+          if (widget.item.note case final note?)
+            Text(note, key: const Key('practice.note')),
 
           // Practice table
           Flexible(

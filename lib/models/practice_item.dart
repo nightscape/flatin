@@ -5,6 +5,10 @@ import 'form_label.dart';
 
 export 'form_label.dart';
 
+/// The lesson and settings key of a word with [lemma] and [note].
+String wordKeyOf(String lemma, String? note) =>
+    note == null ? lemma : '$lemma ($note)';
+
 /// Generic practice item loaded directly from YAML
 class PracticeItem {
   /// `<dataFileId>:<lemma without quantity marks, lower case>`.
@@ -15,6 +19,17 @@ class PracticeItem {
 
   final String type;
   final String translation;
+
+  /// What tells the item from another one with the same [lemma], shown beside
+  /// it; null for most items.
+  final String? note;
+
+  /// [note] in the course language.
+  final String? bookNote;
+
+  /// The key of the word in the lessons and in the settings: the [lemma],
+  /// with the course-language [note] when there is one.
+  String get wordKey => wordKeyOf(lemma, bookNote);
 
   /// [translation] in the course language: the book's meaning, which decides
   /// whether two vocab items overlap in every UI language.
@@ -66,6 +81,8 @@ class PracticeItem {
     required this.lemma,
     required this.type,
     required this.translation,
+    this.note,
+    this.bookNote,
     required this.bookTranslation,
     required this.principalParts,
     required this.forms,

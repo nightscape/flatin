@@ -199,7 +199,7 @@ List<PracticeItem> _itemsOf(_Loaded all, String assetPath, String language) {
   final file = loaded.file(dataFile.id);
   final book = {
     for (final item in all.parsed(courseLanguage).file(file.dataFileId).items)
-      item.id: item.translation,
+      item.id: item,
   };
   final cached = loaded.itemsByFile[file.dataFileId];
   if (cached != null) return cached;
@@ -239,7 +239,7 @@ PracticeItem _practiceItem(
   GrammarFile file,
   DataFileRole role,
   GrammarItem item,
-  String bookTranslation,
+  GrammarItem bookItem,
   Map<String, List<EndingSet>> endings,
 ) {
   final derivation = engine.of(file.dataFileId, item.id);
@@ -259,7 +259,9 @@ PracticeItem _practiceItem(
     lemma: item.lemma,
     type: item.typeName,
     translation: item.translation,
-    bookTranslation: bookTranslation,
+    note: item.note,
+    bookNote: bookItem.note,
+    bookTranslation: bookItem.translation,
     principalParts: [
       for (final name in partNames)
         (

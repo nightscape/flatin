@@ -9,6 +9,9 @@ import '../data/token_lessons.dart';
 class WordSheet extends StatelessWidget {
   final String spelling;
   final String lemma;
+
+  /// What tells the word from another one with the same lemma.
+  final String? note;
   final String? meaning;
 
   /// The dictionary entry an exam gives for the word.
@@ -22,6 +25,7 @@ class WordSheet extends StatelessWidget {
     super.key,
     required this.spelling,
     required this.lemma,
+    this.note,
     this.meaning,
     this.entry,
     this.analysis,
@@ -47,6 +51,7 @@ class WordSheet extends StatelessWidget {
       children: [
         Text(spelling, style: Theme.of(context).textTheme.headlineSmall),
         Text(t('exam.sheet.lemma', {'lemma': lemma})),
+        if (note case final n?) Text(n, key: const Key('exam.sheet.note')),
         if (meaning case final m? when m.isNotEmpty)
           Text(t('exam.sheet.meaning', {'meaning': m})),
         if (entry case final e? when e.isNotEmpty)

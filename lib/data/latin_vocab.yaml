@@ -45,11 +45,14 @@ items:
   - parts: {wort: "utrum ... an"}
     type: Vokabel
     translation: {de: "… oder?", en: "… or?"}
-  - parts: {wort: ["neque (nec)", "neque", "nec"]}
+  - parts: {wort: ["neque", "nec"]}
+    id: "neque (nec)"  # the card id of stored reviews; do not change
     type: Vokabel
     translation: {de: "und nicht, auch nicht; aber nicht", en: "and not, nor; but not"}
-  - parts: {wort: ["quī (fragend)", "quī"]}
+  - parts: {wort: "quī"}
+    id: "qui (fragend)"  # the card id of stored reviews; do not change
     type: Vokabel
+    note: {de: "fragend", en: "interrogative"}
     translation: {de: "welcher, welche, welches", en: "which"}
   - parts: {wort: "laudibus afficere"}
     type: Vokabel

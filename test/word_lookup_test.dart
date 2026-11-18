@@ -19,7 +19,7 @@ import 'support/key_echo_i18n.dart';
 import 'support/latin_course.dart';
 import 'support/word_classification_harness.dart';
 
-typedef _Reading = (PracticeItem, int);
+typedef _Reading = (PracticeItem, int, String);
 
 const _marks = {'ā': 'a', 'ē': 'e', 'ī': 'i', 'ō': 'o', 'ū': 'u', 'ȳ': 'y'};
 
@@ -28,12 +28,13 @@ const _marks = {'ā': 'a', 'ē': 'e', 'ī': 'i', 'ō': 'o', 'ū': 'u', 'ȳ': 'y'
 String _plain(String w) =>
     w.toLowerCase().split('').map((c) => _marks[c] ?? c).join();
 
-/// Every form of every item that spells [query] up to case and quantity
-/// marks, found by a scan of all forms, in course order.
+/// Every accepted spelling of every form of every item that spells [query]
+/// up to case and quantity marks, found by a scan, in course order.
 List<_Reading> _scan(List<PracticeItem> items, String query) => [
   for (final item in items)
-    for (final (j, form) in item.forms.indexed)
-      if (_plain(form) == _plain(query.trim())) (item, j),
+    for (final (j, spellings) in item.acceptedForms.indexed)
+      for (final spelling in spellings)
+        if (_plain(spelling) == _plain(query.trim())) (item, j, spelling),
 ];
 
 /// The lesson lines of [reading] as (key, text) in the order of the sheet,
@@ -43,13 +44,13 @@ List<(String, String)> _lessonLines(
   LessonData lessons,
   Curriculum curriculum,
 ) {
-  final (item, j) = reading;
-  final exact = lessons.wordToLesson[item.lemma];
+  final (item, j, _) = reading;
+  final exact = lessons.wordToLesson[item.wordKey];
   final word = exact != null
       ? {exact}
       : {
           for (final MapEntry(:key, :value) in lessons.wordToLesson.entries)
-            if (_plain(key) == _plain(item.lemma)) value,
+            if (_plain(key) == _plain(item.wordKey)) value,
         };
   final grammar = curriculum.hasGrammar(item.dataFileId);
   final type = grammar
@@ -75,10 +76,11 @@ List<(String?, String)> _expectedSheet(
   LessonData lessons,
   Curriculum curriculum,
 ) {
-  final (item, j) = reading;
+  final (item, j, spelling) = reading;
   return [
-    (null, item.forms[j]),
+    (null, spelling),
     (null, keyEcho('exam.sheet.lemma', {'lemma': item.lemma})),
+    if (item.note case final note?) ('exam.sheet.note', note),
     (null, keyEcho('exam.sheet.meaning', {'meaning': item.translation})),
     if (!item.isVocab)
       (
@@ -139,10 +141,15 @@ void main() {
         '  amō ',
         'xqzunlisted',
         '   ',
+        for (final item in items)
+          if (item.isVocab &&
+              (item.note != null || item.acceptedForms.single.length > 1))
+            ...item.acceptedForms.single,
         for (var n = 0; n < 6; n++)
           ...() {
             final item = pick();
-            final f = item.forms[r.nextInt(item.forms.length)];
+            final spellings = item.acceptedForms[r.nextInt(item.forms.length)];
+            final f = spellings[r.nextInt(spellings.length)];
             return [
               f,
               _plain(f),
@@ -187,9 +194,13 @@ void main() {
         if (readings.isEmpty) hit('no reading');
         if (readings.length > 1) hit('several readings');
         if (readings.any((x) => x.$1.isVocab)) hit('vocab reading');
+        if (readings.any((x) => x.$3 != x.$1.forms[x.$2])) {
+          hit('variant reading');
+        }
+        if (readings.any((x) => x.$1.note != null)) hit('noted reading');
         if (readings.isNotEmpty &&
             !readings.any(
-              (x) => x.$1.forms[x.$2].toLowerCase() == q.trim().toLowerCase(),
+              (x) => x.$3.toLowerCase() == q.trim().toLowerCase(),
             )) {
           hit('found only by the fold');
         }
@@ -209,6 +220,8 @@ void main() {
       'no reading',
       'several readings',
       'vocab reading',
+      'variant reading',
+      'noted reading',
       'found only by the fold',
       'word line',
       'no word line',
