@@ -21,16 +21,22 @@ final class Language {
   /// Matches a word made of the letters of the language and nothing else.
   final RegExp letters;
 
-  /// The codes of each `analyse` key, in display order.
+  /// How an answer is compared with the expected text; null when the language
+  /// gives no answer rules.
+  final AnswerRules? answerRules;
+
+  /// The codes of each `analyse` key, in display order. This and every field
+  /// below are empty (or throw, for [wordClass] and [rules]) in a language
+  /// without a token analysis.
   final Map<String, List<Object>> analyse;
-  final String wordClass;
+  final String? _wordClass;
 
   /// The `analyse` keys a `bilden` item names.
   final List<String> form;
   final List<String> rolle;
   final List<String> clauseArt;
   final List<String> sinnrichtung;
-  final ExamRules rules;
+  final ExamRules? _rules;
 
   /// The constructions a sentence of the corpus illustrates, by code.
   final Map<String, ConstructionRule> constructions;
@@ -47,17 +53,25 @@ final class Language {
     this._fold,
     this._foldKeys,
     this.letters,
+    this.answerRules,
     this.analyse,
-    this.wordClass,
+    this._wordClass,
     this.form,
     this.rolle,
     this.clauseArt,
     this.sinnrichtung,
-    this.rules,
+    this._rules,
     this.constructions,
     this.meanings,
     this.mistakes,
   );
+
+  /// The one key every `analyse` has.
+  String get wordClass =>
+      _wordClass ?? (throw StateError('language $id has no token analysis'));
+
+  ExamRules get rules =>
+      _rules ?? (throw StateError('language $id has no token analysis'));
 
   /// Every code list by its path in the language file.
   Map<String, List<Object>> get axes => {
@@ -94,28 +108,50 @@ final class Language {
         );
       }
     }
+    final hasAnalysis = y.containsKey('analyse');
+    const analysisKeys = [
+      'word_class',
+      'form',
+      'rolle',
+      'clause',
+      'rules',
+      'constructions',
+      'meanings',
+      'mistakes',
+    ];
+    for (final key in analysisKeys) {
+      if (y.containsKey(key) != hasAnalysis) {
+        throw FormatException(
+          'language ${y['id']}: "$key" and "analyse" are given together or '
+          'not at all',
+        );
+      }
+    }
     final analyse = {
-      for (final MapEntry(:key, :value) in (y['analyse'] as YamlMap).entries)
-        key as String: List<Object>.unmodifiable(value as YamlList),
+      if (hasAnalysis)
+        for (final MapEntry(:key, :value) in (y['analyse'] as YamlMap).entries)
+          key as String: List<Object>.unmodifiable(value as YamlList),
     };
-    final clause = y['clause'] as YamlMap;
+    final clause = hasAnalysis ? y['clause'] as YamlMap : null;
     final language = Language._(
       y['id'] as String,
       Map<String, String>.unmodifiable(y['name'] as YamlMap),
       fold,
       RegExp('[${fold.keys.join()}]'),
       RegExp('^[${y['letters'] as String}]+\$', caseSensitive: false),
+      AnswerRules._parse(y),
       analyse,
-      y['word_class'] as String,
+      y['word_class'] as String?,
       _strings(y['form']),
       _strings(y['rolle']),
-      _strings(clause['art']),
-      _strings(clause['sinnrichtung']),
-      ExamRules._parse(y['rules'] as YamlMap),
+      _strings(clause?['art']),
+      _strings(clause?['sinnrichtung']),
+      hasAnalysis ? ExamRules._parse(y['rules'] as YamlMap) : null,
       Map.unmodifiable({
-        for (final MapEntry(:key, :value)
-            in (y['constructions'] as YamlMap).entries)
-          key as String: ConstructionRule._parse(key, value as YamlMap),
+        if (hasAnalysis)
+          for (final MapEntry(:key, :value)
+              in (y['constructions'] as YamlMap).entries)
+            key as String: ConstructionRule._parse(key, value as YamlMap),
       }),
       _strings(y['meanings']),
       _strings(y['mistakes']),
@@ -126,6 +162,7 @@ final class Language {
 
   /// Throws when a rule names a key or code the language lacks.
   void _check() {
+    if (_rules == null) return;
     final codesOf = {
       ...analyse,
       'rolle': rolle,
@@ -358,6 +395,55 @@ final class CompoundRule {
       matches(f, passive) && tenseMap.containsKey(f[tense]);
 }
 
-List<String> _strings(Object? y) => List.unmodifiable(y as YamlList);
+List<String> _strings(Object? y) =>
+    y == null ? const [] : List.unmodifiable(y as YamlList);
+
+/// How two spellings of an answer count as the same: the language's `fold`
+/// applies, and nothing else is normalized.
+final class AnswerRules {
+  /// Trim, and every inner run of whitespace becomes one space.
+  final bool collapseSpaces;
+
+  /// Only `first_letter` exists: the case of the first character is ignored.
+  final bool ignoreFirstLetterCase;
+
+  AnswerRules._(this.collapseSpaces, this.ignoreFirstLetterCase);
+
+  /// Null when [y] has neither `collapse_spaces` nor `ignore_case`.
+  static AnswerRules? _parse(YamlMap y) {
+    if (y.containsKey('collapse_spaces') != y.containsKey('ignore_case')) {
+      throw FormatException(
+        'language ${y['id']}: "collapse_spaces" and "ignore_case" are given '
+        'together or not at all',
+      );
+    }
+    if (!y.containsKey('ignore_case')) return null;
+    if (y['ignore_case'] != 'first_letter') {
+      throw FormatException(
+        'language ${y['id']}: ignore_case "${y['ignore_case']}" is not '
+        '"first_letter"',
+      );
+    }
+    return AnswerRules._(y['collapse_spaces'] as bool, true);
+  }
+}
+
+final _whitespaceRun = RegExp(r'\s+');
+
+/// [text] as [language]'s answer rules compare it; throws when the language
+/// gives none.
+String normalizeAnswer(Language language, String text) {
+  final rules =
+      language.answerRules ??
+      (throw StateError('language ${language.id} has no answer rules'));
+  var out = language.fold(text);
+  if (rules.collapseSpaces) {
+    out = out.trim().replaceAll(_whitespaceRun, ' ');
+  }
+  if (rules.ignoreFirstLetterCase && out.isNotEmpty) {
+    out = out[0].toLowerCase() + out.substring(1);
+  }
+  return out;
+}
 
 Codes _codes(Object? y) => Map.unmodifiable((y as YamlMap).cast());

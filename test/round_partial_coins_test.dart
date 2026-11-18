@@ -130,8 +130,8 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   final rules = GameRules.parse(
-    File(latinCourse.gameRules).readAsStringSync(),
-    latinCourse.gameRules,
+    File(latinCourse.gameRulesFile).readAsStringSync(),
+    latinCourse.gameRulesFile,
   );
 
   test('through the round, a first attempt of a sentence kind pays 10 when '

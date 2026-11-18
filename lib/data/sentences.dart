@@ -83,7 +83,7 @@ final class SentenceCorpus {
 }
 
 Future<SentenceCorpus> loadSentenceCorpus() async => parseSentenceCorpus(
-  await loadAssetText((await loadCourse()).sentences),
+  await loadAssetText((await loadCourse()).sentencesFile),
   await loadLanguage(),
 );
 

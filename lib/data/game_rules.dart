@@ -6,7 +6,7 @@ import 'asset_text.dart';
 import 'unlock_graph.dart';
 
 Future<GameRules> loadGameRules() async {
-  final path = (await loadCourse()).gameRules;
+  final path = (await loadCourse()).gameRulesFile;
   return GameRules.parse(await loadAssetText(path), path);
 }
 

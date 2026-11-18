@@ -227,10 +227,10 @@ Future<GermanForms> germanForms(Ref ref) async {
   Future<GrammarFile> latin(DataFileRole role) =>
       loadGrammarFile(course.ofRole(role).id);
   return GrammarGermanForms(
-    await loadAssetText(course.glossFiles[DataFileRole.verb]!),
+    await loadAssetText(course.glossFile(DataFileRole.verb)),
     await latin(DataFileRole.verb),
     nouns: (
-      yaml: await loadAssetText(course.glossFiles[DataFileRole.noun]!),
+      yaml: await loadAssetText(course.glossFile(DataFileRole.noun)),
       latin: await latin(DataFileRole.noun),
     ),
   );

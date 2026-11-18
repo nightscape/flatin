@@ -49,7 +49,7 @@ final class LessonDataProvider
   }
 }
 
-String _$lessonDataHash() => r'2470f48f2a53b77a9b01386a4d5b8e12e3a1b4f2';
+String _$lessonDataHash() => r'4b584abdf612226c936172cad53aab004fdbef52';
 
 /// Every practice item of the loaded data files, nouns first.
 

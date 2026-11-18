@@ -14,6 +14,10 @@ import 'lesson_provider.dart';
 
 part 'settings_provider.g.dart';
 
+/// The course length of a course without books, which has no lesson to
+/// choose: the exam settings do not read it.
+const noBooksLastLesson = 1;
+
 @riverpod
 class SettingsNotifier extends _$SettingsNotifier {
   static const String _settingsKey = 'practice_settings';
@@ -22,8 +26,11 @@ class SettingsNotifier extends _$SettingsNotifier {
 
   @override
   Future<Settings> build() async {
-    _key = (await ref.watch(courseScopeProvider.future)).key(_settingsKey);
-    final lastLesson = (await ref.watch(lessonDataProvider.future)).lastLesson;
+    final scope = await ref.watch(courseScopeProvider.future);
+    _key = scope.key(_settingsKey);
+    final lastLesson = scope.active.books.isEmpty
+        ? noBooksLastLesson
+        : (await ref.watch(lessonDataProvider.future)).lastLesson;
     return await _loadSettings(lastLesson);
   }
 

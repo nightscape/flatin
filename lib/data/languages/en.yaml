@@ -1,0 +1,14 @@
+# The English language: how an answer is spelled and compared. It has no token
+# analysis, so a pack's tokens carry no analysis.
+id: en
+name: {de: Englisch, en: English}
+
+# Spellings that count as the same: the typographic apostrophe is the plain one.
+fold: {"’": "'"}
+
+# The body of a character class: the letters a word is made of.
+letters: "a-z'’-"
+
+# How an answer is compared with the expected text.
+collapse_spaces: true
+ignore_case: first_letter

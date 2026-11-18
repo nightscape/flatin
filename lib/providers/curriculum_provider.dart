@@ -13,7 +13,12 @@ part 'curriculum_provider.g.dart';
 /// The grammar progression of the configured volumes.
 @riverpod
 Future<Curriculum> curriculum(Ref ref) async {
-  return loadCurriculum((await ref.watch(courseProvider.future)).books);
+  final course = await ref.watch(courseProvider.future);
+  assert(
+    course.books.isNotEmpty,
+    '${course.path} has no books, so no curriculum',
+  );
+  return loadCurriculum(course.books);
 }
 
 /// What the learner practises at the current course position.

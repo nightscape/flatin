@@ -556,12 +556,25 @@ The language file (`lib/data/languages/la.yaml`, read by
   `mistakes` are the code lists a sentence's `meaning` and `mistake` draw
   from. A language without a sentence corpus gives `{}` and `[]`.
 
+A language without a token analysis (`en.yaml`) leaves out `analyse`,
+`word_class`, `form`, `rolle`, `clause`, `rules`, `constructions`, `meanings`
+and `mistakes` together; the parse refuses a partial set. Answer rules are the
+keys `collapse_spaces` (trim, and every whitespace run becomes one space) and
+`ignore_case: first_letter`, given together, and `fold` applies; the function
+`normalizeAnswer` applies them and nothing else is normalized.
+
 The parsed grammar file carries its language (`GrammarFile.lang`), and a
 `Grammar`, a `Derivation` and a `PracticeItem` reach it from there; nothing
 holds a language outside the data that uses it.
 
-The keys above are the whole set, all required; an entry of `data_files` has
-exactly `id`, `path` and `role`. `role` is `noun`, `verb` or `vocab` and says
+`id`, `name`, `language` and `data_files` are required. `gloss_files`,
+`books`, `sentences` and `game_rules` are optional: an absent key means the
+course has no such data (no empty placeholder file), and `data_files` may be an
+empty list. A course with no data file is exam-only: its home screen offers the
+course switcher and the exams, nothing else, and a provider that needs the
+missing data (lessons, curriculum, game rules, sentences, gloss files) throws
+when it is reached. An entry of `data_files` has exactly `id`, `path` and
+`role`. `role` is `noun`, `verb` or `vocab` and says
 what the app does with the items: a `vocab` file has no grammar progression
 and no screen of its own.
 

@@ -6,7 +6,7 @@ Feature: Home Screen
   Scenario: User sees home screen with practice options
     Given the app is running
     When I am on the "home" screen
-    Then I should see "app.title" in the app bar
+    Then I should see "course.active" in the app bar
     And I should see a button with text "home.nouns.button"
     And I should see a button with text "home.verbs.button"
     And I should see a button with text "home.wordClassification.button"

@@ -602,8 +602,8 @@ runFeatures() {
         widgetTester,
         'Home Screen',
         'User sees home screen with practice options',
-        'Then I should see "app.title" in the app bar',
-        steps.iShouldSeeInAppBar(widgetTester, 'app.title'),
+        'Then I should see "course.active" in the app bar',
+        steps.iShouldSeeInAppBar(widgetTester, 'course.active'),
       );
       await step(
         widgetTester,

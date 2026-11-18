@@ -15,8 +15,8 @@ typedef CourseSpec = ({
   List<DataFileSpec> dataFiles,
   Map<DataFileRole, String> glossFiles,
   List<String> books,
-  String sentences,
-  String gameRules,
+  String? sentences,
+  String? gameRules,
   List<String> earnDataFiles,
 });
 
@@ -24,11 +24,16 @@ typedef CourseSpec = ({
 /// their ids prefixed with [dir] so that courses of distinct [dir]s share no
 /// id, a gloss
 /// file for any subset of the roles, 0..3 books, and game rules that name
-/// 0..2 of the course's data file ids.
-CourseSpec drawCourse(Random rng, String dir) {
-  final fileCount = 1 + rng.nextInt(4);
+/// 0..2 of the course's data file ids. With [anyShape] a course has 0..4 data
+/// files and each of `books`, `sentences` and `game_rules` is absent or
+/// present by a coin toss.
+CourseSpec drawCourse(Random rng, String dir, {bool anyShape = false}) {
+  final fileCount = (anyShape ? 0 : 1) + rng.nextInt(anyShape ? 5 : 4);
   final bookCount = rng.nextInt(4);
-  final earnCount = rng.nextInt(3);
+  final hasBooks = !anyShape || rng.nextBool();
+  final hasSentences = !anyShape || rng.nextBool();
+  final hasRules = !anyShape || rng.nextBool();
+  final earnCount = fileCount == 0 || !hasRules ? 0 : rng.nextInt(3);
   final dataFiles = [
     for (var i = 0; i < fileCount; i++)
       (
@@ -47,9 +52,12 @@ CourseSpec drawCourse(Random rng, String dir) {
       for (final role in DataFileRole.values)
         if (rng.nextBool()) role: '$dir/gloss_${role.name}.yaml',
     },
-    books: [for (var i = 0; i < bookCount; i++) '$dir/book$i.yaml'],
-    sentences: '$dir/sentences.yaml',
-    gameRules: '$dir/game_rules.yaml',
+    books: [
+      if (hasBooks)
+        for (var i = 0; i < bookCount; i++) '$dir/book$i.yaml',
+    ],
+    sentences: hasSentences ? '$dir/sentences.yaml' : null,
+    gameRules: hasRules ? '$dir/game_rules.yaml' : null,
     earnDataFiles: [
       for (var i = 0; i < earnCount; i++)
         dataFiles[rng.nextInt(dataFiles.length)].id,
@@ -98,10 +106,12 @@ String courseYaml(CourseSpec course, Random rng) {
     'name: {${[for (final MapEntry(:key, :value) in course.name.entries) '$key: $value'].join(', ')}}',
     'language: ${course.language}',
     'data_files:${list([for (final f in course.dataFiles) '{id: ${f.id}, path: ${f.path}, role: ${f.role.name}}'])}',
-    'gloss_files: {${[for (final MapEntry(:key, :value) in course.glossFiles.entries) '${key.name}: $value'].join(', ')}}',
-    'books:${list(course.books)}',
-    'sentences: ${course.sentences}',
-    'game_rules: ${course.gameRules}',
+    if (course.glossFiles.isNotEmpty || rng.nextBool())
+      'gloss_files: {${[for (final MapEntry(:key, :value) in course.glossFiles.entries) '${key.name}: $value'].join(', ')}}',
+    if (course.books.isNotEmpty || rng.nextBool())
+      'books:${list(course.books)}',
+    if (course.sentences case final sentences?) 'sentences: $sentences',
+    if (course.gameRules case final rules?) 'game_rules: $rules',
   ].join('\n');
 }
 
@@ -127,13 +137,13 @@ Map<String, String> courseListAssets(List<CourseSpec> courses, Random rng) => {
       : [for (final c in courses) '- ${c.path}'].join('\n'),
   for (final c in courses) ...{
     c.path: courseYaml(c, rng),
-    c.gameRules: gameRulesYaml(c.earnDataFiles),
+    ?c.gameRules: gameRulesYaml(c.earnDataFiles),
   },
 };
 
 /// [course] as the [CourseSpec] parts the loader gives back, for deep
 /// equality with [specView].
-Map<String, Object> courseView(Course course) => {
+Map<String, Object?> courseView(Course course) => {
   'path': course.path,
   'id': course.id,
   'name': course.name,
@@ -147,7 +157,7 @@ Map<String, Object> courseView(Course course) => {
   'gameRules': course.gameRules,
 };
 
-Map<String, Object> specView(CourseSpec spec) => {
+Map<String, Object?> specView(CourseSpec spec) => {
   'path': spec.path,
   'id': spec.id,
   'name': spec.name,

@@ -34,9 +34,27 @@ const CourseSpec _latin = (
   earnDataFiles: [],
 );
 
+const CourseSpec _english = (
+  path: 'lib/data/course_en.yaml',
+  id: 'englisch',
+  name: {'de': 'Englisch', 'en': 'English'},
+  language: 'lib/data/languages/en.yaml',
+  dataFiles: [],
+  glossFiles: {},
+  books: [],
+  sentences: null,
+  gameRules: null,
+  earnDataFiles: [],
+);
+
 /// The repo's own list, manifest and game rules.
 Map<String, String> _repoAssets() => {
-  for (final path in [coursesAsset, _latin.path, _latin.gameRules])
+  for (final path in [
+    coursesAsset,
+    _latin.path,
+    _english.path,
+    _latin.gameRules!,
+  ])
     path: File(path).readAsStringSync(),
 };
 
@@ -53,10 +71,10 @@ void _serve(Map<String, String> assets) {
 /// The fixed case first, then [_seeds] drawn ones: the name, the assets the
 /// loader reads and the courses they list.
 Iterable<(String, Map<String, String>, List<CourseSpec>)> _oneCourse() sync* {
-  yield ('the repo course', _repoAssets(), [_latin]);
+  yield ('the repo courses', _repoAssets(), [_latin, _english]);
   for (var seed = 1; seed <= _seeds; seed++) {
     final rng = Random(seed);
-    final course = drawCourse(rng, 'c0');
+    final course = drawCourse(rng, 'c0', anyShape: true);
     yield ('seed $seed', courseListAssets([course], rng), [course]);
   }
 }
@@ -188,7 +206,7 @@ void main() {
       _serve(courseListAssets(courses, rng));
       await expectLater(
         loadCourses(),
-        _stateError([courses[at].gameRules, '"$id"']),
+        _stateError([courses[at].gameRules!, '"$id"']),
         reason: 'seed $seed',
       );
     }
@@ -224,11 +242,11 @@ void main() {
       seed++;
       final course = drawCourse(Random(seed), 'c0');
       final assets = courseListAssets([course], Random(seed));
-      assets[course.gameRules] = gameRulesYaml([], kinds: [kind]);
+      assets[course.gameRules!] = gameRulesYaml([], kinds: [kind]);
       _serve(assets);
       await expectLater(
         loadCourses(),
-        _stateError([course.gameRules, '"$kind"']),
+        _stateError([course.gameRules!, '"$kind"']),
         reason: kind,
       );
     }
@@ -240,14 +258,14 @@ void main() {
     final spec = drawCourse(rng, 'c0');
     final course = Course.parse(spec.path, courseYaml(spec, rng));
     GameRules rules(String kind) =>
-        GameRules.parse(gameRulesYaml([], kinds: [kind]), spec.gameRules);
+        GameRules.parse(gameRulesYaml([], kinds: [kind]), spec.gameRules!);
     for (final kind in ExerciseKind.values) {
       checkCourses([(course, rules(kind.name))]);
     }
     for (final kind in unknownKinds(rng)) {
       expect(
         () => checkCourses([(course, rules(kind))]),
-        _stateError([spec.gameRules, '"$kind"']),
+        _stateError([spec.gameRules!, '"$kind"']),
       );
     }
   });

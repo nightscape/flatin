@@ -40,13 +40,18 @@ final class Course {
   /// In load order, which is also the display order.
   final List<DataFile> dataFiles;
 
-  /// The translation files for the items of a role.
+  /// The translation files for the items of a role; empty when the course
+  /// names none.
   final Map<DataFileRole, String> glossFiles;
 
-  /// In reading order.
+  /// In reading order; empty when the course has no books.
   final List<String> books;
-  final String sentences;
-  final String gameRules;
+
+  /// Null when the course has no sentence corpus.
+  final String? sentences;
+
+  /// Null when the course has no game rules.
+  final String? gameRules;
 
   const Course({
     required this.path,
@@ -60,21 +65,14 @@ final class Course {
     required this.gameRules,
   });
 
-  static const _keys = {
-    'id',
-    'name',
-    'language',
-    'data_files',
-    'gloss_files',
-    'books',
-    'sentences',
-    'game_rules',
-  };
+  static const _required = {'id', 'name', 'language', 'data_files'};
+  static const _optional = {'gloss_files', 'books', 'sentences', 'game_rules'};
 
-  /// Throws a [StateError] naming [path] for a key that is unknown or missing.
+  /// Throws a [StateError] naming [path] for a key that is unknown, or a
+  /// required key that is missing.
   factory Course.parse(String path, String source) {
     final yaml = _map(loadYaml(source), path);
-    _keysExactly(yaml, _keys, path);
+    _keysAmong(yaml, _required, _optional, path);
     final id = _string(yaml['id'], '$path: id');
     if (!_courseId.hasMatch(id)) {
       throw StateError('$path: id "$id" is not a lowercase slug');
@@ -100,25 +98,34 @@ final class Course {
       name: name,
       language: _string(yaml['language'], '$path: language'),
       dataFiles: [
-        for (final (i, entry) in _list(yaml['data_files'], path).indexed)
+        for (final (i, entry) in _list(
+          yaml['data_files'],
+          '$path: data_files',
+        ).indexed)
           _dataFile(entry, '$path: data_files[$i]'),
       ],
       glossFiles: {
-        for (final MapEntry(:key, :value) in _map(
-          yaml['gloss_files'],
-          '$path: gloss_files',
-        ).entries)
-          _role(key, '$path: gloss_files'): _string(
-            value,
-            '$path: gloss_files.$key',
-          ),
+        if (yaml.containsKey('gloss_files'))
+          for (final MapEntry(:key, :value) in _map(
+            yaml['gloss_files'],
+            '$path: gloss_files',
+          ).entries)
+            _role(key, '$path: gloss_files'): _string(
+              value,
+              '$path: gloss_files.$key',
+            ),
       },
       books: [
-        for (final (i, book) in _list(yaml['books'], path).indexed)
-          _string(book, '$path: books[$i]'),
+        if (yaml.containsKey('books'))
+          for (final (i, book) in _list(yaml['books'], '$path: books').indexed)
+            _string(book, '$path: books[$i]'),
       ],
-      sentences: _string(yaml['sentences'], '$path: sentences'),
-      gameRules: _string(yaml['game_rules'], '$path: game_rules'),
+      sentences: yaml.containsKey('sentences')
+          ? _string(yaml['sentences'], '$path: sentences')
+          : null,
+      gameRules: yaml.containsKey('game_rules')
+          ? _string(yaml['game_rules'], '$path: game_rules')
+          : null,
     );
   }
 
@@ -143,6 +150,19 @@ final class Course {
     orElse: () => throw StateError('$path names no data file $assetPath'),
   );
 
+  /// The translation file of [role]; throws when the manifest names none.
+  String glossFile(DataFileRole role) =>
+      glossFiles[role] ??
+      (throw StateError('$path names no ${role.name} gloss file'));
+
+  /// The sentence corpus file; throws when the course has none.
+  String get sentencesFile =>
+      sentences ?? (throw StateError('$path names no sentences file'));
+
+  /// The game rules file; throws when the course has none.
+  String get gameRulesFile =>
+      gameRules ?? (throw StateError('$path names no game rules file'));
+
   DataFile ofRole(DataFileRole role) => dataFiles.singleWhere(
     (f) => f.role == role,
     orElse: () => throw StateError('$path has no ${role.name} data file'),
@@ -165,9 +185,17 @@ DataFileRole _role(Object? name, String where) =>
       orElse: () => throw StateError('$where: unknown role "$name"'),
     );
 
-void _keysExactly(YamlMap map, Set<String> keys, String where) {
-  final unknown = map.keys.toSet().difference(keys);
-  final missing = keys.difference(map.keys.toSet());
+void _keysExactly(YamlMap map, Set<String> keys, String where) =>
+    _keysAmong(map, keys, const {}, where);
+
+void _keysAmong(
+  YamlMap map,
+  Set<String> required,
+  Set<String> optional,
+  String where,
+) {
+  final unknown = map.keys.toSet().difference({...required, ...optional});
+  final missing = required.difference(map.keys.toSet());
   if (unknown.isNotEmpty || missing.isNotEmpty) {
     throw StateError('$where: unknown keys $unknown, missing keys $missing');
   }
@@ -186,7 +214,7 @@ String _string(Object? value, String where) =>
 /// [courses] (naming the manifest of the repeat), when a game rule's `when`
 /// names a data file or an exercise kind its course does not have (naming the
 /// game rules file), and then when the list is empty.
-void checkCourses(List<(Course, GameRules)> courses) {
+void checkCourses(List<(Course, GameRules?)> courses) {
   final seen = <String>{};
   final ids = <String>{};
   for (final (course, rules) in courses) {
@@ -202,14 +230,14 @@ void checkCourses(List<(Course, GameRules)> courses) {
       'dataFile': {for (final f in course.dataFiles) f.id},
       'kind': {for (final k in ExerciseKind.values) k.name},
     };
-    for (final (i, rule) in rules.earn.indexed) {
+    for (final (i, rule) in (rules?.earn ?? const <EarnRule>[]).indexed) {
       for (final MapEntry(key: field, value: names) in allowed.entries) {
         final value = rule.when[field];
         if (value == null) continue;
         for (final name in value is List ? value : [value]) {
           if (!names.contains(name)) {
             throw StateError(
-              '${course.gameRules}: earn[$i].when.$field "$name" is not one '
+              '${course.gameRulesFile}: earn[$i].when.$field "$name" is not one '
               'of $names',
             );
           }
@@ -240,15 +268,16 @@ Future<List<Course>> loadCourses() async {
     loadYaml(await loadAssetText(coursesAsset)),
     coursesAsset,
   );
-  final courses = <(Course, GameRules)>[];
+  final courses = <(Course, GameRules?)>[];
   for (final (i, path) in paths.indexed) {
     final course = Course.parse(
       _string(path, '$coursesAsset[$i]'),
       await loadAssetText(path as String),
     );
+    final rules = course.gameRules;
     courses.add((
       course,
-      GameRules.parse(await loadAssetText(course.gameRules), course.gameRules),
+      rules == null ? null : GameRules.parse(await loadAssetText(rules), rules),
     ));
   }
   checkCourses(courses);

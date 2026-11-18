@@ -65,7 +65,7 @@ drawnSentenceLanguage(Random r) {
       renames.mistakes[m]!,
   ];
 
-  final corpus = _json(latinCourse.sentences);
+  final corpus = _json(latinCourse.sentencesFile);
   for (final s in corpus['sentences'] as List) {
     final c = s['construction'] as Map<String, dynamic>;
     c['kind'] = renames.constructions[c['kind']]!;

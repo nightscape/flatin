@@ -128,8 +128,8 @@ void main() {
           TownView(
             RewardLedger(buildings: ids),
             GameRules.parse(
-              File(latinCourse.gameRules).readAsStringSync(),
-              latinCourse.gameRules,
+              File(latinCourse.gameRulesFile).readAsStringSync(),
+              latinCourse.gameRulesFile,
             ),
           ),
         ),

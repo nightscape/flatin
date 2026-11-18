@@ -9,7 +9,9 @@ part 'lesson_provider.g.dart';
 /// The lesson → word mapping of the configured volumes.
 @riverpod
 Future<LessonData> lessonData(Ref ref) async {
-  return loadLessonData((await ref.watch(courseProvider.future)).books);
+  final course = await ref.watch(courseProvider.future);
+  assert(course.books.isNotEmpty, '${course.path} has no books, so no lessons');
+  return loadLessonData(course.books);
 }
 
 /// Every practice item of the loaded data files, nouns first.

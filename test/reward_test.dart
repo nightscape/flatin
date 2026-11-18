@@ -13,8 +13,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'support/latin_course.dart';
 
 final _rules = GameRules.parse(
-  File(latinCourse.gameRules).readAsStringSync(),
-  latinCourse.gameRules,
+  File(latinCourse.gameRulesFile).readAsStringSync(),
+  latinCourse.gameRulesFile,
 );
 
 RewardLedger _send(RewardLedger ledger, RewardEvent event) => [

@@ -9,7 +9,7 @@ import 'package:yaml/yaml.dart';
 /// bundle.
 final Course latinCourse = () {
   final path =
-      (loadYaml(File(coursesAsset).readAsStringSync()) as YamlList).single
+      (loadYaml(File(coursesAsset).readAsStringSync()) as YamlList).first
           as String;
   return Course.parse(path, File(path).readAsStringSync());
 }();

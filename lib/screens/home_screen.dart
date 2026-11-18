@@ -34,18 +34,22 @@ class HomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final isMobile = MediaQuery.of(context).size.width < 600;
     final titleFontSize = isMobile ? 20.0 : 24.0;
-    final (showTown, showCoins) = switch (ref.watch(settingsProvider)) {
-      AsyncData(:final value) => (
-        value.isRewardEnabled('town'),
-        value.isRewardEnabled('points'),
-      ),
-      AsyncError(:final error) => throw error,
-      _ => (false, false),
-    };
+    final examOnly =
+        ref.watch(courseProvider).value?.dataFiles.isEmpty ?? false;
+    final (showTown, showCoins) = examOnly
+        ? (false, false)
+        : switch (ref.watch(settingsProvider)) {
+            AsyncData(:final value) => (
+              value.isRewardEnabled('town'),
+              value.isRewardEnabled('points'),
+            ),
+            AsyncError(:final error) => throw error,
+            _ => (false, false),
+          };
 
     final severalCourses = (ref.watch(coursesProvider).value?.length ?? 1) > 1;
     return Scaffold(
-      drawer: buildAppDrawer(context),
+      drawer: examOnly ? null : buildAppDrawer(context),
       appBar: AppBar(
         title: severalCourses
             ? CourseSwitcher(fontSize: titleFontSize)
@@ -54,7 +58,9 @@ class HomeScreen extends ConsumerWidget {
                 FlutterI18n.translate(context, 'app.title'),
                 style: TextStyle(fontSize: titleFontSize),
               ),
-        actions: [const KursstandChip(), if (showCoins) const _Coins()],
+        actions: examOnly
+            ? null
+            : [const KursstandChip(), if (showCoins) const _Coins()],
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(isMobile ? 16 : 24),
@@ -63,6 +69,17 @@ class HomeScreen extends ConsumerWidget {
             constraints: const BoxConstraints(maxWidth: 560),
             child: LayoutBuilder(
               builder: (context, box) {
+                final exams = _MenuButton(
+                  buttonKey: const Key('home.exam.button'),
+                  icon: Icons.assignment,
+                  label: FlutterI18n.translate(context, 'exam.home'),
+                  onPressed: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const ExamListScreen(),
+                    ),
+                  ),
+                );
+                if (examOnly) return exams;
                 final menu = Column(
                   children: [
                     _PracticeStart(
@@ -95,16 +112,7 @@ class HomeScreen extends ConsumerWidget {
                       ),
                     ),
                     const SizedBox(height: 14),
-                    _MenuButton(
-                      buttonKey: const Key('home.exam.button'),
-                      icon: Icons.assignment,
-                      label: FlutterI18n.translate(context, 'exam.home'),
-                      onPressed: () => Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const ExamListScreen(),
-                        ),
-                      ),
-                    ),
+                    exams,
                     const SizedBox(height: 14),
                     _MenuButton(
                       buttonKey: const Key('home.lookup.button'),

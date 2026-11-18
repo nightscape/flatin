@@ -238,8 +238,8 @@ void main() {
 
   test('every building has a unique id, an image and a name in de and en', () {
     final rules = GameRules.parse(
-      File(latinCourse.gameRules).readAsStringSync(),
-      latinCourse.gameRules,
+      File(latinCourse.gameRulesFile).readAsStringSync(),
+      latinCourse.gameRulesFile,
     );
     expect(rules.buildings, hasLength(22));
     for (final b in rules.buildings) {
@@ -262,8 +262,8 @@ void main() {
 
   test('every building has a town slot and every slot a building', () {
     final rules = GameRules.parse(
-      File(latinCourse.gameRules).readAsStringSync(),
-      latinCourse.gameRules,
+      File(latinCourse.gameRulesFile).readAsStringSync(),
+      latinCourse.gameRulesFile,
     );
     final ids = {for (final b in rules.buildings) b.id};
     final slotted = {for (final s in townSprites) s.building};

@@ -128,8 +128,8 @@ List<_Step> _sequence(Random random) {
 
 void main() {
   final rules = GameRules.parse(
-    File(latinCourse.gameRules).readAsStringSync(),
-    latinCourse.gameRules,
+    File(latinCourse.gameRulesFile).readAsStringSync(),
+    latinCourse.gameRulesFile,
   );
 
   test('the rule file lists the buildings with their prices in order', () {

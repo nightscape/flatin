@@ -83,6 +83,7 @@ flutter:
   assets:
     - lib/data/courses.yaml
     - lib/data/course.yaml
+    - lib/data/course_en.yaml
     - lib/data/latin_nouns.yaml
     - lib/data/latin_verbs.yaml
     - lib/data/latin_vocab.yaml
@@ -94,6 +95,7 @@ flutter:
     - lib/data/sentences.yaml
     - lib/data/game_rules.yaml
     - lib/data/languages/la.yaml
+    - lib/data/languages/en.yaml
     - assets/flutter_i18n/
     - assets/town/
 

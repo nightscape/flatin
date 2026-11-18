@@ -477,7 +477,7 @@ final class GermanFormsProvider
   }
 }
 
-String _$germanFormsHash() => r'92e58062202e26ed10083ecfcccdfeabe6a4d260';
+String _$germanFormsHash() => r'429b45b6e9605042a77f71af93e06dc679524d88';
 
 /// The randomness of the grammar exercises; a test overrides it with a seed.
 

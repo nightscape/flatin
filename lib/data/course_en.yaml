@@ -1,0 +1,5 @@
+# The English course: exams only; SCHEMA.md "Course manifest".
+id: englisch
+name: {de: Englisch, en: English}
+language: lib/data/languages/en.yaml
+data_files: []
