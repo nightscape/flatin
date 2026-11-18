@@ -523,10 +523,12 @@ class Settings {
         ) ??
         <String, Set<String>>{};
     final deselectedWords = wordList != null
-        ? Set<String>.from(wordList.map((e) => e as String))
+        ? Set<String>.from(wordList.map((e) => _currentWordKey(e as String)))
         : <String>{};
     final forcedOnWords = forcedWordList != null
-        ? Set<String>.from(forcedWordList.map((e) => e as String))
+        ? Set<String>.from(
+            forcedWordList.map((e) => _currentWordKey(e as String)),
+          )
         : <String>{};
     final forcedOnTypes =
         forcedTypeMap?.map(
@@ -693,3 +695,9 @@ Map<String, Set<String>> _withKey(
   next[dataFileId] = _withEntry(next[dataFileId] ?? const {}, key, present);
   return next;
 }
+
+/// Word keys that were stored under a lemma which has since lost the text in
+/// its brackets.
+const _renamedWordKeys = {'neque (nec)': 'neque'};
+
+String _currentWordKey(String stored) => _renamedWordKeys[stored] ?? stored;

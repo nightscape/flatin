@@ -77,7 +77,14 @@ class _Loaded {
   }
 
   _Parsed parsed(String language) => _byLanguage[language] ??= _Parsed(
-    GrammarEngine(parseGrammarFiles(sources, lang: lang, language: language)),
+    GrammarEngine(
+      parseGrammarFiles(
+        sources,
+        lang: lang,
+        language: language,
+        refuseBracketLemmas: true,
+      ),
+    ),
   );
 }
 

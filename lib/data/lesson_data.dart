@@ -180,4 +180,18 @@ void assertLessonsCoverItems(LessonData lessons, List<PracticeItem> items) {
   if (strays.isNotEmpty) {
     throw StateError('no single item has the noted lesson word: $strays');
   }
+  final notedKeys = {
+    for (final item in items)
+      if (item.bookNote != null) item.wordKey,
+  };
+  final plainClashes = [
+    for (final key in lessons.wordToLesson.keys)
+      if (notedKeys.contains(key) && !lessons.notedWords.contains(key)) key,
+  ];
+  if (plainClashes.isNotEmpty) {
+    throw StateError(
+      'a plain lesson word spells the key of a noted word, use '
+      '{word, note}: $plainClashes',
+    );
+  }
 }
