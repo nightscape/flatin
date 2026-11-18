@@ -253,6 +253,16 @@ jobs:
           cd ios
           bundle exec fastlane "$IOS_LANE"
 
+      - name: Show IPA signature
+        if: inputs.ios_signing_check
+        shell: bash
+        run: |
+          ipas=(build/ios/ipa/*.ipa)
+          [ "${#ipas[@]}" -eq 1 ] && [ -f "${ipas[0]}" ] || { echo "::error::Expected one IPA, found: ${ipas[*]}"; exit 1; }
+          echo "IPA ${ipas[0]} $(stat -f %z "${ipas[0]}") bytes"
+          unzip -q "${ipas[0]}" -d "$RUNNER_TEMP/ipa"
+          codesign -dvv "$RUNNER_TEMP"/ipa/Payload/*.app 2>&1 | grep -E '^(Authority|TeamIdentifier)=' | cut -d: -f1
+
       - name: Remove App Store Connect key
         if: always()
         run: rm -f "$RUNNER_TEMP/asc-api-key.p8"

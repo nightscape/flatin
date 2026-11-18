@@ -23,7 +23,7 @@ platform :ios do
     )
   end
 
-  desc "Build the signed iOS app (App Store Connect API key, automatic signing)"
+  desc "Build the iOS app unsigned and sign it at export (App Store Connect API key, cloud-managed signing)"
   lane :build do |options|
     team_id = CredentialsManager::AppfileConfig.try_fetch_value(:team_id)
     UI.user_error!("team_id is missing in ios/fastlane/Appfile") if team_id.to_s.empty?
@@ -46,8 +46,11 @@ platform :ios do
       export_team_id: team_id,
       export_options: { signingStyle: "automatic" },
       skip_profile_detection: true,
-      # gym appends xcargs to the archive and the export command, so the key goes here once.
-      xcargs: "DEVELOPMENT_TEAM=#{team_id} #{key_args}",
+      # A signing archive step makes a new Development certificate on every fresh runner.
+      # So only the export signs, with the cloud-managed distribution certificate.
+      skip_codesigning: true,
+      xcargs: "DEVELOPMENT_TEAM=#{team_id}",
+      export_xcargs: key_args,
       output_directory: "#{project_root}/build/ios/ipa"
     )
   end
