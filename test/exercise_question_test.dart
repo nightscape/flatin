@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -83,8 +85,8 @@ void main() {
   });
 
   testWidgets('in every stem marking the question shows exactly its form '
-      'params as form texts in that marking, and a shown form with a stem '
-      'split carries it', (tester) async {
+      'params as form texts in that marking, and each word of a shown split '
+      'form follows the Q1 row of the marking', (tester) async {
     final picked = firstPerKindAndClass([
       ...drawn.where((d) => d.$2.stemSplits.isNotEmpty),
       ...drawn,
@@ -109,17 +111,6 @@ void main() {
         final forms = tester.widgetList<FormText>(find.byType(FormText));
         expect(forms.map((f) => f.mode), everyElement(mode), reason: reason);
         expect(
-          {
-            for (final f in forms)
-              if (f.split != null) f.text: f.split,
-          },
-          {
-            for (final MapEntry(:key, :value) in e.stemSplits.entries)
-              ..._splitWords(e.questionParams[key]!, value.stemLength),
-          },
-          reason: reason,
-        );
-        expect(
           [for (final f in forms) f.text]..sort(),
           [
             for (final p in e.formParams)
@@ -131,6 +122,55 @@ void main() {
           reason: reason,
         );
         expect(find.byKey(ExerciseQuestion.questionKey), findsOneWidget);
+        for (final MapEntry(:key, :value) in e.stemSplits.entries) {
+          final form = e.questionParams[key]!;
+          final words = form.split(' ');
+          Finder word(String w) =>
+              find.byWidgetPredicate((x) => x is FormText && x.text == w).first;
+          final tertiary = Theme.of(
+            tester.element(word(words.first)),
+          ).colorScheme.tertiary;
+          expect(
+            [for (final w in words) _coloured(tester, word(w), tertiary)],
+            [
+              for (final w in words)
+                mode == StemMarking.zeigen
+                    ? _endingIn(form, value.stemLength, w)
+                    : '',
+            ],
+            reason: '$reason "$form" coloured',
+          );
+          final stemWord = _wordAt(form, value.stemLength - 1);
+          for (final w in words) {
+            int bars() => find
+                .descendant(
+                  of: word(w),
+                  matching: find.byKey(FormText.separatorKey),
+                )
+                .evaluate()
+                .length;
+            final before = bars();
+            await tester.tapAt(tester.getRect(word(w)).center);
+            await tester.pump();
+            expect(
+              bars() - before,
+              mode == StemMarking.selbstMarkieren && w == stemWord ? 1 : 0,
+              reason: '$reason "$w" of "$form" tapped',
+            );
+          }
+          await tester.pumpWidget(const SizedBox());
+          await tester.pumpWidget(
+            wrapInApp(
+              Scaffold(body: ExerciseQuestion(e)),
+              forcedLocale: const Locale('de'),
+              overrides: [
+                if (mode != StemMarking.zeigen)
+                  stemMarkingProvider.overrideWithValue(mode),
+              ],
+            ),
+          );
+          await tester.pumpAndSettle();
+        }
       }
     }
   });
@@ -201,16 +241,37 @@ void main() {
   });
 }
 
-/// The word of a shown form that holds the end of its stem, with the stem
-/// letters in that word.
-Map<String, int> _splitWords(String form, int stemLength) {
+/// The letters of [word] that come after the first [stemLength] letters of
+/// [form], whose words are separated by single spaces.
+String _endingIn(String form, int stemLength, String word) {
   var before = 0;
   for (final w in form.split(' ')) {
     final n = w.characters.length;
-    if (stemLength < before + n) return {w: stemLength - before};
+    if (w == word) return w.characters.skip(max(0, stemLength - before)).string;
     before += n + 1;
   }
-  throw StateError('the stem of "$form" is longer than the form');
+  throw StateError('"$word" is not a word of "$form"');
+}
+
+/// The word of [form] that holds its letter number [index].
+String _wordAt(String form, int index) => form.split(
+  ' ',
+)[form.characters.take(index + 1).string.split(' ').length - 1];
+
+/// The text that the form text under [finder] shows in [colour].
+String _coloured(WidgetTester tester, Finder finder, Color colour) {
+  final text = tester.widget<Text>(
+    find.descendant(of: finder, matching: find.byKey(FormText.textKey)),
+  );
+  if (text.data != null) return text.style?.color == colour ? text.data! : '';
+  final out = StringBuffer();
+  text.textSpan!.visitChildren((span) {
+    if (span is TextSpan && span.text != null && span.style?.color == colour) {
+      out.write(span.text);
+    }
+    return true;
+  });
+  return out.toString();
 }
 
 Object? _texts(ExerciseResponse r) => switch (r) {

@@ -66,8 +66,8 @@ class ExerciseQuestion extends ConsumerWidget {
   static final _word = RegExp(r'[\p{L}\p{M}]{2,}', unicode: true);
 
   // The WidgetSpan already scales its child by the text scaler; FormText must
-  // not scale a second time. A split form of several words splits only the
-  // word that holds the end of the stem.
+  // not scale a second time. A split form of several words splits the word
+  // that holds the end of the stem; the words after it are all ending.
   static Iterable<InlineSpan> _wordSpans(
     BuildContext context,
     String text,
@@ -84,7 +84,7 @@ class ExerciseQuestion extends ConsumerWidget {
     ).copyWith(textScaler: TextScaler.noScaling);
     var at = 0;
     for (final m in _word.allMatches(text)) {
-      final own = seam != null && m.start < seam && seam < m.end ? split : null;
+      final own = seam != null && m.start < seam ? split : null;
       yield TextSpan(text: text.substring(at, m.start));
       yield WidgetSpan(
         alignment: PlaceholderAlignment.middle,
@@ -92,8 +92,10 @@ class ExerciseQuestion extends ConsumerWidget {
           data: unscaled,
           child: FormText(
             text: m[0]!,
-            split: own == null
+            split: seam == null
                 ? null
+                : seam <= m.start
+                ? 0
                 : text.substring(m.start, seam).characters.length,
             mode: mode,
             onMark: own == null ? null : (right) => onMark(own.card, right),

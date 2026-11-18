@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import '../models/settings.dart' show StemMarking;
 
 /// A target-language form. [split] is the number of letters (grapheme
-/// clusters) in the stem; null means the form has no known stem.
+/// clusters) in the stem; null means the form has no known stem, and 0 means
+/// the whole text is ending, as in the later words of a form of several
+/// words: [StemMarking.zeigen] colours all of it, and no mode takes taps.
 ///
 /// [StemMarking.aus] shows the plain [text] and takes no taps.
 ///
@@ -31,7 +33,9 @@ class FormText extends StatefulWidget {
     this.onMark,
     this.style,
   }) : assert(
-         mode != StemMarking.selbstMarkieren || split == null || onMark != null,
+         mode != StemMarking.selbstMarkieren ||
+             (split ?? 0) == 0 ||
+             onMark != null,
          'a split form in selbstMarkieren needs onMark',
        );
 
@@ -73,14 +77,24 @@ class _FormTextState extends State<FormText> {
     final letters = widget.text.characters;
     final split = widget.split;
     assert(
-      split == null || (split > 0 && split < letters.length),
-      'split $split outside 1..${letters.length - 1} of "${widget.text}"',
+      split == null || (split >= 0 && split < letters.length),
+      'split $split outside 0..${letters.length - 1} of "${widget.text}"',
     );
+    final scheme = Theme.of(context).colorScheme;
+    if (split == 0 && widget.mode == StemMarking.zeigen) {
+      return Text(
+        widget.text,
+        key: FormText.textKey,
+        style: (widget.style ?? const TextStyle()).copyWith(
+          color: scheme.tertiary,
+        ),
+      );
+    }
     if (widget.mode == StemMarking.aus ||
+        split == 0 ||
         (split == null && letters.length < 2)) {
       return Text(widget.text, key: FormText.textKey, style: widget.style);
     }
-    final scheme = Theme.of(context).colorScheme;
     final style = DefaultTextStyle.of(context).style.merge(widget.style);
     final direction = Directionality.of(context);
     final scaler = MediaQuery.textScalerOf(context);

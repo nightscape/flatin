@@ -10,6 +10,7 @@ import 'package:latin_practice/models/course_filter.dart';
 import 'package:latin_practice/models/derivation.dart';
 import 'package:latin_practice/models/exercise.dart';
 import 'package:latin_practice/models/fsrs_card.dart';
+import 'package:latin_practice/models/lesson_range.dart';
 import 'package:latin_practice/models/practice_item.dart';
 import 'package:latin_practice/models/settings.dart';
 import 'package:latin_practice/providers/round_providers.dart';
@@ -65,6 +66,7 @@ void main() {
   late List<PracticeItem> items;
   late Map<String, PracticeItemCard> fresh;
   late CourseFilter filter;
+  late List<(CourseFilter, BundleIndex, Set<String>)> courses;
 
   setUpAll(() async {
     TestWidgetsFlutterBinding.ensureInitialized();
@@ -72,23 +74,40 @@ void main() {
     items = await loadAllPracticeItems();
     await FsrsStorage.syncCards(items);
     fresh = await FsrsStorage.syncGrammarCards(items);
+    final curriculum = await loadCurriculum(latinCourse.books);
+    final lessons = await loadLessonData(latinCourse.books);
     filter = CourseFilter(
       Settings(lastLesson: latinLastLesson),
-      await loadCurriculum(latinCourse.books),
-      await loadLessonData(latinCourse.books),
+      curriculum,
+      lessons,
     );
+    courses = [
+      for (final f in [
+        filter,
+        for (final end in drawCourseEnds(Random(4184), 3))
+          CourseFilter(
+            Settings(
+              lastLesson: latinLastLesson,
+              courseWords: LessonRange(1, end),
+            ),
+            curriculum,
+            lessons,
+          ),
+      ])
+        (f, BundleIndex(items, f), _shownStems(items, f)),
+    ];
   });
 
   test('only in selbst markieren does a due stem card move its own word '
       'card, and only its due, to the earlier date, when a practised form '
       'shows the stem split and the word was last reviewed before', () {
     final rng = Random(4180);
-    final shown = _shownStems(items, filter);
     var raised = 0;
     var notShown = 0;
     var reviewedSince = 0;
     for (var i = 0; i < 60; i++) {
       final now = DateTime.now().toUtc();
+      final (filter, _, shown) = courses[rng.nextInt(courses.length)];
       final (store, stems) = _drawStore(rng, items, fresh, now);
       final cards = {...store.cards, ...stems};
       for (final mode in StemMarking.values) {
@@ -138,9 +157,9 @@ void main() {
   test('in every stem marking, the stem cards in the store change the '
       'selected pair only through the due dates they raise', () {
     final rng = Random(4181);
-    final index = BundleIndex(items, filter);
     for (var i = 0; i < 60; i++) {
       final now = DateTime.now().toUtc();
+      final (filter, index, _) = courses[rng.nextInt(courses.length)];
       final (store, stems) = _drawStore(rng, items, fresh, now);
       double r(PracticeItemCard c) => store.r[c.itemId]!;
       for (final mode in StemMarking.values) {
@@ -187,11 +206,11 @@ void main() {
   test('in selbst markieren with no confirmed mark, a word is selected '
       'raised to a stem due date at most once', () {
     final rng = Random(4182);
-    final index = BundleIndex(items, filter);
     const steps = [Duration(minutes: 1), Duration(hours: 1), Duration(days: 1)];
     var served = 0;
-    for (var i = 0; i < 10; i++) {
+    for (var i = 0; i < 24; i++) {
       var now = DateTime.now().toUtc();
+      final (filter, index, _) = courses[rng.nextInt(courses.length)];
       final (store, stems) = _drawStore(rng, items, fresh, now);
       final cards = {...store.cards, ...stems};
       final raisesServed = <(String, DateTime)>{};
@@ -228,4 +247,59 @@ void main() {
     }
     expect(served, greaterThan(0));
   });
+
+  test(
+    'in selbst markieren a due stem card that no practised form shows '
+    'split leaves its word card as it is, at every drawn course range',
+    () async {
+      final rng = Random(4183);
+      final curriculum = await loadCurriculum(latinCourse.books);
+      final lessons = await loadLessonData(latinCourse.books);
+      final everyShown = _shownStems(items, filter);
+      var shownOnlyUnpractised = 0;
+      final moved = <String>[];
+      for (final lesson in drawCourseEnds(rng, 8)) {
+        final narrow = CourseFilter(
+          Settings(
+            lastLesson: latinLastLesson,
+            courseWords: LessonRange(1, lesson),
+          ),
+          curriculum,
+          lessons,
+        );
+        final practised = _shownStems(items, narrow);
+        final now = DateTime.now().toUtc();
+        final (store, stems) = _drawStore(rng, items, fresh, now);
+        final cards = {...store.cards, ...stems};
+        final got = withStemPriority(
+          cards,
+          items,
+          narrow,
+          StemMarking.selbstMarkieren,
+          now,
+        );
+        final byWord = <String, List<String>>{};
+        for (final MapEntry(key: id, value: s) in stems.entries) {
+          if (!s.due.isAfter(now)) {
+            byWord.putIfAbsent(StemCardId.wordCardOf(id), () => []).add(id);
+          }
+        }
+        for (final MapEntry(key: word, value: due) in byWord.entries) {
+          if (due.any(practised.contains)) continue;
+          if (due.any(everyShown.contains)) {
+            shownOnlyUnpractised++;
+          }
+          if (got[word]!.due != cards[word]!.due) moved.add('$lesson $word');
+        }
+      }
+      expect(shownOnlyUnpractised, greaterThan(0));
+      expect(moved, isEmpty);
+    },
+  );
 }
+
+/// Drawn ends of the course's word range, which the grammar range follows,
+/// so that some forms are not practised.
+List<int> drawCourseEnds(Random rng, int n) => [
+  for (var i = 0; i < n; i++) 1 + rng.nextInt(latinLastLesson),
+];
