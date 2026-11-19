@@ -1,0 +1,3 @@
+* New English course: import practice exams as packs and work through them to the end.
+* New task types: gap fills, vocabulary in both directions (English–German and German–English) and free writing.
+* Word lookup and answer checks now find words like "neque (nec)" by "neque" or "nec" too.

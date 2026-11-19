@@ -1,0 +1,3 @@
+* Neuer Kurs Englisch: Übungs-Schulaufgaben als Pakete importieren und bis zum Ende durcharbeiten.
+* Neue Aufgabenarten: Lückentexte, Vokabeln in beide Richtungen (Englisch–Deutsch und Deutsch–Englisch) und freie Texte.
+* Wortsuche und Abfrage finden Wörter wie „neque (nec)“ jetzt auch über „neque“ oder „nec“.
