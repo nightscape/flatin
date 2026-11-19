@@ -47,7 +47,7 @@ final class Course {
   /// In reading order; empty only when the course has no data files.
   final List<String> books;
 
-  /// Null when the course has no sentence corpus.
+  /// Null only when the course has no data files.
   final String? sentences;
 
   /// Null only when the course has no data files.
@@ -129,11 +129,13 @@ final class Course {
           : null,
     );
     if (course.dataFiles.isNotEmpty) {
+      for (final key in ['gloss_files', 'sentences', 'game_rules']) {
+        if (!yaml.containsKey(key)) {
+          throw StateError('$path: a course with data files needs $key');
+        }
+      }
       if (course.books.isEmpty) {
         throw StateError('$path: a course with data files needs books');
-      }
-      if (course.gameRules == null) {
-        throw StateError('$path: a course with data files needs game_rules');
       }
     }
     return course;

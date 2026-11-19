@@ -25,15 +25,15 @@ typedef CourseSpec = ({
 /// id, a gloss
 /// file for any subset of the roles, 0..3 books, and game rules that name
 /// 0..2 of the course's data file ids. With [anyShape] a course has 0..4 data
-/// files; `sentences` is absent or present by a coin toss, and so are `books`
-/// and `game_rules` when it has no data file (a course with data files has
-/// 1..3 books and game rules).
+/// files; `sentences`, `books` and `game_rules` are absent or present by a
+/// coin toss when it has no data file (a course with data files has 1..3
+/// books, sentences and game rules, and always writes `gloss_files`).
 CourseSpec drawCourse(Random rng, String dir, {bool anyShape = false}) {
   final fileCount = (anyShape ? 0 : 1) + rng.nextInt(anyShape ? 5 : 4);
   final hasData = fileCount > 0;
   final bookCount = (hasData ? 1 : 0) + rng.nextInt(hasData ? 3 : 4);
   final hasBooks = hasData || !anyShape || rng.nextBool();
-  final hasSentences = !anyShape || rng.nextBool();
+  final hasSentences = hasData || !anyShape || rng.nextBool();
   final hasRules = hasData || !anyShape || rng.nextBool();
   final earnCount = fileCount == 0 || !hasRules ? 0 : rng.nextInt(3);
   final dataFiles = [
@@ -127,7 +127,11 @@ CourseSpec withEarnDataFile(CourseSpec course, String id) => (
 );
 
 /// The manifest text of [course]; [rng] picks flow or block style per list.
-String courseYaml(CourseSpec course, Random rng) {
+String courseYaml(
+  CourseSpec course,
+  Random rng, {
+  Set<String> omit = const {},
+}) {
   String list(List<String> items) => rng.nextBool() || items.isEmpty
       ? ' [${items.join(', ')}]'
       : items.map((i) => '\n  - $i').join();
@@ -136,12 +140,17 @@ String courseYaml(CourseSpec course, Random rng) {
     'name: {${[for (final MapEntry(:key, :value) in course.name.entries) '$key: $value'].join(', ')}}',
     'language: ${course.language}',
     'data_files:${list([for (final f in course.dataFiles) '{id: ${f.id}, path: ${f.path}, role: ${f.role.name}}'])}',
-    if (course.glossFiles.isNotEmpty || rng.nextBool())
+    if (!omit.contains('gloss_files') &&
+        (course.dataFiles.isNotEmpty ||
+            course.glossFiles.isNotEmpty ||
+            rng.nextBool()))
       'gloss_files: {${[for (final MapEntry(:key, :value) in course.glossFiles.entries) '${key.name}: $value'].join(', ')}}',
-    if (course.books.isNotEmpty || rng.nextBool())
+    if (!omit.contains('books') && (course.books.isNotEmpty || rng.nextBool()))
       'books:${list(course.books)}',
-    if (course.sentences case final sentences?) 'sentences: $sentences',
-    if (course.gameRules case final rules?) 'game_rules: $rules',
+    if (!omit.contains('sentences'))
+      if (course.sentences case final sentences?) 'sentences: $sentences',
+    if (!omit.contains('game_rules'))
+      if (course.gameRules case final rules?) 'game_rules: $rules',
   ].join('\n');
 }
 

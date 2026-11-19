@@ -226,6 +226,11 @@ void main() {
         await boot(tester, assets, 'examonly');
         expect(find.byKey(const Key('course.switcher')), findsOneWidget);
         expect(find.byKey(const Key('home.exam.button')), findsOneWidget);
+        expect(
+          find.textContaining('home.error'),
+          findsNothing,
+          reason: '$mask',
+        );
         for (final key in hidden) {
           expect(find.byKey(Key(key)), findsNothing, reason: '$mask $key');
         }
@@ -234,6 +239,11 @@ void main() {
         await letItLoad(tester);
         expect(find.byType(ExamListScreen), findsOneWidget, reason: '$mask');
         expect(tester.takeException(), isNull);
+        expect(
+          find.textContaining('home.error'),
+          findsNothing,
+          reason: '$mask',
+        );
 
         final dataId = RegExp(
           r'drawn/([^/]+)/course.yaml',
@@ -246,7 +256,7 @@ void main() {
       }
     });
   });
-  group('data course without optional keys', () {
+  group('data course without a manifest key', () {
     const optional = ['gloss_files', 'books', 'sentences', 'game_rules'];
 
     ({Map<String, String> assets, String id}) dataCourseWithout(
@@ -271,22 +281,23 @@ void main() {
       return (assets: assets, id: courses.single.id);
     }
 
+    const checkOrder = ['gloss_files', 'sentences', 'game_rules', 'books'];
+
     Set<String> subset(int mask) => {
       for (var i = 0; i < 4; i++)
         if (mask >> i & 1 == 1) optional[i],
     };
 
-    test('the loader refuses a manifest without books or without game rules '
-        'and names the manifest and the key', () async {
-      // Generators: all 16 subsets of the optional keys (exhaustive); the
-      // data course is drawnCourses (reused).
+    test('the loader refuses a data course without any of the four keys and '
+        'names the manifest and the first missing key', () async {
+      // Generators: all 16 subsets of the four keys (exhaustive, so no
+      // random draw); the data course is drawnCourses (reused).
       for (var mask = 0; mask < 16; mask++) {
         final dropped = subset(mask);
         final d = dataCourseWithout(Random(mask), dropped);
         injectToyCourse(served: d.assets);
-        final missing = ['books', 'game_rules'].where(dropped.contains);
-        if (missing.isEmpty) {
-          expect((await loadCourses()).single.id, d.id, reason: '$dropped');
+        if (dropped.isEmpty) {
+          expect((await loadCourses()).single.id, d.id);
         } else {
           await expectLater(
             loadCourses(),
@@ -296,7 +307,7 @@ void main() {
                 'message',
                 allOf(
                   contains('drawn/${d.id}/course.yaml'),
-                  contains(missing.first),
+                  contains(checkOrder.firstWhere(dropped.contains)),
                 ),
               ),
             ),
@@ -305,44 +316,45 @@ void main() {
         }
       }
     });
-
-    testWidgets('every screen its home screen offers opens without an '
-        'exception, for any subset of sentences and gloss files', (
-      tester,
-    ) async {
-      // Generators: all 4 subsets of the keys the loader leaves optional
-      // for a course with data files; the data course is drawnCourses.
-      const offered = [
-        'home.grammar.button',
-        'home.wordClassification.button',
-        'home.lookup.button',
-        'home.exam.button',
-      ];
-      for (var mask = 0; mask < 4; mask++) {
-        final dropped = {
-          if (mask & 1 == 1) 'sentences',
-          if (mask & 2 == 2) 'gloss_files',
-        };
-        final d = dataCourseWithout(Random(mask), dropped);
-        for (final key in offered) {
-          resetPracticeData();
-          SharedPreferences.setMockInitialValues({activeCourseKey: d.id});
-          injectToyCourse(served: d.assets);
-          tester.view.physicalSize = const Size(1200, 4000);
-          tester.view.devicePixelRatio = 1.0;
-          addTearDown(tester.view.reset);
-          await tester.pumpWidget(
-            KeyedSubtree(
-              key: UniqueKey(),
-              child: wrapInKeyEchoAppWith(const HomeScreen()),
-            ),
-          );
-          await letItLoad(tester);
-          expect(tester.takeException(), isNull, reason: '$dropped home');
-          await tester.tap(find.byKey(Key(key)));
-          await letItLoad(tester);
-          expect(tester.takeException(), isNull, reason: '$dropped $key');
+    test('the loader refuses the Latin manifest without any of the four '
+        'keys and names the manifest and the first missing key', () async {
+      // Generators: all 15 non-empty subsets of the four keys (exhaustive).
+      final manifest = File('lib/data/course.yaml').readAsStringSync();
+      for (var mask = 1; mask < 16; mask++) {
+        final dropped = subset(mask);
+        final kept = <String>[];
+        var inDropped = false;
+        for (final line in manifest.split('\n')) {
+          if (dropped.any((k) => line.startsWith('$k:'))) {
+            inDropped = true;
+            continue;
+          }
+          if (inDropped && (line.startsWith('  ') || line.startsWith('- '))) {
+            continue;
+          }
+          inDropped = false;
+          kept.add(line);
         }
+        injectToyCourse(
+          served: {
+            coursesAsset: '- lib/data/course.yaml',
+            'lib/data/course.yaml': kept.join('\n'),
+          },
+        );
+        await expectLater(
+          loadCourses(),
+          throwsA(
+            isA<StateError>().having(
+              (e) => e.message,
+              'message',
+              allOf(
+                contains('lib/data/course.yaml'),
+                contains(checkOrder.firstWhere(dropped.contains)),
+              ),
+            ),
+          ),
+          reason: '$dropped',
+        );
       }
     });
   });

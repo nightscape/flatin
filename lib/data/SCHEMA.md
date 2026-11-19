@@ -567,12 +567,11 @@ The parsed grammar file carries its language (`GrammarFile.lang`), and a
 `Grammar`, a `Derivation` and a `PracticeItem` reach it from there; nothing
 holds a language outside the data that uses it.
 
-`id`, `name`, `language` and `data_files` are required. `gloss_files` and
-`sentences` are optional for every course: an absent key means the course has
-no such data (no empty placeholder file). `books` (a non-empty list) and
-`game_rules` are required for a course with data files, and the loader refuses
-a manifest that lacks one, naming the manifest and the key. Only a course with
-`data_files: []` may omit them. Such a course is exam-only: its home screen
+`id`, `name`, `language` and `data_files` are required. A course is one of
+two classes. A course with data files has all four of `books` (a non-empty
+list), `sentences`, `game_rules` and `gloss_files` (an empty map is allowed),
+and the loader refuses a manifest that lacks one, naming the manifest and the
+key. Only a course with `data_files: []` may omit any of the four. Such a course is exam-only: its home screen
 offers the course switcher and the exams, nothing else, and a provider that
 needs the missing data (lessons, curriculum, game rules, sentences, gloss
 files) throws when it is reached. An entry of `data_files` has exactly `id`, `path` and

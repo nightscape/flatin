@@ -195,18 +195,30 @@ void main() {
     }
   });
 
-  test('a course with data files and no books, or no game rules, throws and '
-      'names the manifest and the key', () async {
+  test('a course with data files and without any one of books, sentences, '
+      'game_rules or gloss_files throws and names the manifest and the key; '
+      'an empty books list is refused too', () async {
+    const keys = ['books', 'sentences', 'game_rules', 'gloss_files'];
     for (var seed = 1; seed <= _seeds; seed++) {
       final rng = Random(seed);
       final spec = drawCourse(rng, 'c0');
-      final (broken, key) = rng.nextBool()
-          ? (withoutBooks(spec), 'books')
-          : (withoutGameRules(spec), 'game_rules');
-      _serve(courseListAssets([broken], rng));
+      final key = keys[seed % keys.length];
+      final assets = courseListAssets([spec], rng);
+      assets[spec.path] = courseYaml(spec, rng, omit: {key});
+      _serve(assets);
       await expectLater(
         loadCourses(),
         _stateError([spec.path, key]),
+        reason: 'seed $seed $key',
+      );
+    }
+    for (var seed = 1; seed <= _seeds; seed++) {
+      final rng = Random(seed);
+      final spec = withoutBooks(drawCourse(rng, 'c0'));
+      _serve(courseListAssets([spec], rng));
+      await expectLater(
+        loadCourses(),
+        _stateError([spec.path, 'books']),
         reason: 'seed $seed',
       );
     }
