@@ -27,7 +27,8 @@ typedef CourseSpec = ({
 /// 0..2 of the course's data file ids. With [anyShape] a course has 0..4 data
 /// files; `sentences`, `books` and `game_rules` are absent or present by a
 /// coin toss when it has no data file (a course with data files has 1..3
-/// books, sentences and game rules, and always writes `gloss_files`).
+/// books, sentences, game rules and gloss files for the noun and verb roles,
+/// and always writes `gloss_files`).
 CourseSpec drawCourse(Random rng, String dir, {bool anyShape = false}) {
   final fileCount = (anyShape ? 0 : 1) + rng.nextInt(anyShape ? 5 : 4);
   final hasData = fileCount > 0;
@@ -52,7 +53,8 @@ CourseSpec drawCourse(Random rng, String dir, {bool anyShape = false}) {
     dataFiles: dataFiles,
     glossFiles: {
       for (final role in DataFileRole.values)
-        if (rng.nextBool()) role: '$dir/gloss_${role.name}.yaml',
+        if (rng.nextBool() || (hasData && role != DataFileRole.vocab))
+          role: '$dir/gloss_${role.name}.yaml',
     },
     books: [
       if (hasBooks)
@@ -93,6 +95,22 @@ CourseSpec withoutBooks(CourseSpec course) => (
   dataFiles: course.dataFiles,
   glossFiles: course.glossFiles,
   books: [],
+  sentences: course.sentences,
+  gameRules: course.gameRules,
+  earnDataFiles: course.earnDataFiles,
+);
+
+/// [course] whose gloss files are those of [roles].
+CourseSpec withGlossRoles(CourseSpec course, Set<DataFileRole> roles) => (
+  path: course.path,
+  id: course.id,
+  name: course.name,
+  language: course.language,
+  dataFiles: course.dataFiles,
+  glossFiles: {
+    for (final role in roles) role: '${course.id}/gloss_${role.name}.yaml',
+  },
+  books: course.books,
   sentences: course.sentences,
   gameRules: course.gameRules,
   earnDataFiles: course.earnDataFiles,

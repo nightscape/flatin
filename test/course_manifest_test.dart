@@ -224,6 +224,40 @@ void main() {
     }
   });
 
+  test(
+    'a course with data files whose gloss files lack the noun or the verb '
+    'role throws and names the manifest and the first missing role',
+    () async {
+      // Generators: the gloss roles are every subset of the three roles that
+      // misses noun or verb, the empty set included (exhaustive over 6).
+      final subsets =
+          [
+            for (var mask = 0; mask < 8; mask++)
+              {
+                for (var i = 0; i < 3; i++)
+                  if (mask >> i & 1 == 1) DataFileRole.values[i],
+              },
+          ].where(
+            (r) =>
+                !(r.contains(DataFileRole.noun) &&
+                    r.contains(DataFileRole.verb)),
+          );
+      for (var seed = 1; seed <= _seeds; seed++) {
+        for (final roles in subsets) {
+          final rng = Random(seed);
+          final spec = withGlossRoles(drawCourse(rng, 'c0'), roles);
+          _serve(courseListAssets([spec], rng));
+          final first = roles.contains(DataFileRole.noun) ? 'verb' : 'noun';
+          await expectLater(
+            loadCourses(),
+            _stateError([spec.path, first]),
+            reason: 'seed $seed $roles',
+          );
+        }
+      }
+    },
+  );
+
   test('a game rule that names a data file id its course lacks throws and '
       'names the game rules file and the id', () async {
     for (var seed = 1; seed <= _seeds; seed++) {

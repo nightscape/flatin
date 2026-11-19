@@ -69,8 +69,9 @@ final class Course {
   static const _optional = {'gloss_files', 'books', 'sentences', 'game_rules'};
 
   /// Throws a [StateError] naming [path] for a key that is unknown, a
-  /// required key that is missing, or a course with data files that has no
-  /// books or no game rules.
+  /// required key that is missing, or a course with data files that lacks
+  /// `books` (non-empty), `sentences`, `game_rules` or `gloss_files`, or whose
+  /// `gloss_files` names no file for the noun role or the verb role.
   factory Course.parse(String path, String source) {
     final yaml = _map(loadYaml(source), path);
     _keysAmong(yaml, _required, _optional, path);
@@ -132,6 +133,13 @@ final class Course {
       for (final key in ['gloss_files', 'sentences', 'game_rules']) {
         if (!yaml.containsKey(key)) {
           throw StateError('$path: a course with data files needs $key');
+        }
+      }
+      for (final role in [DataFileRole.noun, DataFileRole.verb]) {
+        if (!course.glossFiles.containsKey(role)) {
+          throw StateError(
+            '$path: a course with data files needs a ${role.name} gloss file',
+          );
         }
       }
       if (course.books.isEmpty) {

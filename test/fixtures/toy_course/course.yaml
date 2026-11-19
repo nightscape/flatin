@@ -1,10 +1,10 @@
-# The toy course: one word class and no gloss files.
+# The toy course: one word class; its gloss files are the Latin ones.
 id: toy
 name: {de: Spielkurs, en: Toy course}
 language: test/fixtures/toy_course/toy_language.yaml
 data_files:
   - {id: toy_words, path: test/fixtures/toy_course/toy_words.yaml, role: noun}
-gloss_files: {}
+gloss_files: {noun: lib/data/german_nouns.yaml, verb: lib/data/german_verbs.yaml}
 books:
   - test/fixtures/toy_course/toy_book_1.yaml
   - test/fixtures/toy_course/toy_book_2.yaml

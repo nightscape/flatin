@@ -357,5 +357,47 @@ void main() {
         );
       }
     });
+    test('the loader refuses the Latin manifest whose gloss files lack the '
+        'noun or the verb role and names the manifest and the first missing '
+        'role', () async {
+      // Generators: the gloss roles are every subset of {noun, verb} that
+      // misses one (exhaustive over 3).
+      final manifest = File('lib/data/course.yaml').readAsStringSync();
+      final files = {
+        'noun': 'lib/data/german_nouns.yaml',
+        'verb': 'lib/data/german_verbs.yaml',
+      };
+      for (final roles in [
+        <String>{},
+        {'noun'},
+        {'verb'},
+      ]) {
+        final map = [for (final r in roles) '$r: ${files[r]}'].join(', ');
+        final edited = manifest.replaceFirst(
+          RegExp(r'^gloss_files: .*$', multiLine: true),
+          'gloss_files: {$map}',
+        );
+        injectToyCourse(
+          served: {
+            coursesAsset: '- lib/data/course.yaml',
+            'lib/data/course.yaml': edited,
+          },
+        );
+        await expectLater(
+          loadCourses(),
+          throwsA(
+            isA<StateError>().having(
+              (e) => e.message,
+              'message',
+              allOf(
+                contains('lib/data/course.yaml'),
+                contains(roles.contains('noun') ? 'verb' : 'noun'),
+              ),
+            ),
+          ),
+          reason: '$roles',
+        );
+      }
+    });
   });
 }

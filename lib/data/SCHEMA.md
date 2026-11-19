@@ -529,7 +529,7 @@ name: {de: Latein, en: Latin}              # one text per UI language
 language: lib/data/languages/la.yaml       # the codes and rules of the exam packs
 data_files:                                # load order = display order
   - {id: nouns, path: lib/data/latin_nouns.yaml, role: noun}
-gloss_files: {verb: lib/data/german_verbs.yaml}   # translation files by role
+gloss_files: {noun: lib/data/german_nouns.yaml, verb: lib/data/german_verbs.yaml}
 books: [lib/data/agite_1.yaml]             # in reading order
 sentences: lib/data/sentences.yaml
 game_rules: lib/data/game_rules.yaml
@@ -569,9 +569,9 @@ holds a language outside the data that uses it.
 
 `id`, `name`, `language` and `data_files` are required. A course is one of
 two classes. A course with data files has all four of `books` (a non-empty
-list), `sentences`, `game_rules` and `gloss_files` (an empty map is allowed),
-and the loader refuses a manifest that lacks one, naming the manifest and the
-key. Only a course with `data_files: []` may omit any of the four. Such a course is exam-only: its home screen
+list), `sentences`, `game_rules` and `gloss_files`, and `gloss_files` names a file for the `noun`
+role and for the `verb` role (the roles the grammar round reads), and the loader refuses a manifest that lacks one, naming the manifest and the
+key or the role. Only a course with `data_files: []` may omit any of the four. Such a course is exam-only: its home screen
 offers the course switcher and the exams, nothing else, and a provider that
 needs the missing data (lessons, curriculum, game rules, sentences, gloss
 files) throws when it is reached. An entry of `data_files` has exactly `id`, `path` and
