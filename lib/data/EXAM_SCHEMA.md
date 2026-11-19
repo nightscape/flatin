@@ -52,11 +52,13 @@ is removed, so a group next to such a mark leaves no gap. Variant strings are
 `clause.meaning`, `sentence.meaning`, `alignment[].meaning`, and `target` and
 `answer` in tasks.
 
-White space next to `|` only separates and is dropped, so every
-alternative joins its neighbours alike: `(hinab | hinunter)steigen`. White space
-not next to a `|` is kept: `[die ]Frau` reads `die Frau`, `(a | b )x` reads
-`ax` or `b x`. A space
-that all alternatives need stands outside the group: `Mann (, | und) Frau`.
+White space directly after `|` in the source is skipped. Each reading of the
+choice before `|` loses its white space at the end. White space before `)` or
+`]` is kept. Then each whole reading is normalized: runs of white space become
+one space, no space before , . ; : ! ? “ or after „, and the ends are trimmed.
+So `(hinab | hinunter)steigen` joins both alternatives to `steigen`, `[die ]Frau`
+reads `die Frau`, and `(a | b )x` reads `ax` or `b x`. A space that all
+alternatives need stands outside the group: `Mann (, | und) Frau`.
 An empty alternative is allowed (`(fort | weg |)`, `(| ein | das)`); an
 alternative that is only white space (`laid(-| )back`, `[ ]`) is refused
 (rule E-variant): write the spaced form as its own entry.
@@ -82,7 +84,7 @@ mark.
 - `verb_form: [ppp id, esse id]`: a compound passive form (`portātus est`,
   `portātum esse`) is two tokens, the PPP and the `esse` token.
 - A participium coniunctum is one token with `modus: part` in a clause of
-  `art: pc`.
+  `type: pc`.
 
 ### Clauses: `clauses[]`
 

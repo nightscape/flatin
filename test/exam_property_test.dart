@@ -235,6 +235,33 @@ void main() {
     }
   });
 
+  test('P4d: a nested group keeps the white space before its closing '
+      'bracket, and a choice drops it at "|"', () {
+    final r = Random(23);
+    for (final (s, want) in [
+      ('([a ] | b)c', ['ac', 'bc', 'c']),
+      ('(a | [b ])c', ['ac', 'b c', 'c']),
+      ('([a ]x | b)c', ['a xc', 'bc', 'xc']),
+      ('(b | [ a]x)c', ['axc', 'bc', 'xc']),
+      for (var i = 0; i < 200; i++) nestedEdgeSpace(r),
+    ]) {
+      expect(expand(s), unorderedEquals(want), reason: s);
+      expect(_Oracle(s).readings(), unorderedEquals(want), reason: s);
+    }
+  });
+
+  test('P4e: a group has its readings at the start, in the middle and at the '
+      'end of a string', () {
+    final r = Random(29);
+    for (final (s, want) in [
+      ('y(b | [ a]x)c', ['y axc', 'ybc', 'yxc']),
+      for (var i = 0; i < 300; i++) positionedGroup(r),
+    ]) {
+      expect(expand(s), unorderedEquals(want), reason: s);
+      expect(_Oracle(s).readings(), unorderedEquals(want), reason: s);
+    }
+  });
+
   test('P5: the matcher refuses a reading changed by one word', () {
     final gen = ExamGen(Random(11));
     final texts = <(String, String, String)>[
@@ -295,6 +322,7 @@ const _readings = <(String, List<String>)>[
   ('(der )Mann', ['der Mann']),
   ('[die ]Frau', ['Frau', 'die Frau']),
   ('( a| b)x', ['ax', 'bx']),
+  ('y(b | [ a]x)c', ['y axc', 'ybc', 'yxc']),
 ];
 
 const _refused = ['laid(-| )back', '(-| )', '( | a)', '[ ]'];
@@ -308,6 +336,12 @@ int _depth(String s) {
   return most;
 }
 
+String _normalized(String t) => t
+    .replaceAll(RegExp(r'\s+'), ' ')
+    .replaceAllMapped(RegExp(r' +([,.;:!?“])'), (m) => m[1]!)
+    .replaceAllMapped(RegExp(r'„ +'), (_) => '„')
+    .trim();
+
 /// A recursive-descent reading of the variant grammar:
 /// `text := part*`, `part := char | '(' alts ')' | '[' alts ']'`,
 /// `alts := text ('|' text)*`; null when [s] is not in the grammar.
@@ -319,16 +353,9 @@ final class _Oracle {
   List<String>? readings() {
     final strict = _text();
     if (strict == null || i != s.length) return null;
-    final text = _Oracle(s.replaceAll(RegExp(r'\s*\|\s*'), '|'))._text();
+    final text = _Oracle(s.replaceAll(RegExp(r'\|\s+'), '|'))._text();
     if (text == null) return null;
-    return [
-      for (final t in text)
-        t
-            .replaceAll(RegExp(r'\s+'), ' ')
-            .replaceAllMapped(RegExp(r' +([,.;:!?“])'), (m) => m[1]!)
-            .replaceAllMapped(RegExp(r'„ +'), (_) => '„')
-            .trim(),
-    ];
+    return [for (final t in text) _normalized(t)];
   }
 
   List<String>? _text() {
@@ -362,8 +389,11 @@ final class _Oracle {
       if (text == null) return null;
       final raw = s.substring(from, i);
       if (raw.isNotEmpty && raw.trim().isEmpty) return null;
-      out.addAll(text);
-      if (i < s.length && s[i] == '|') {
+      final piped = i < s.length && s[i] == '|';
+      out.addAll([
+        for (final t in text) piped ? t.replaceFirst(RegExp(r'\s+$'), '') : t,
+      ]);
+      if (piped) {
         from = ++i;
       } else {
         return out;
@@ -381,4 +411,49 @@ final class _Oracle {
   final w = word(), x = word();
   final space = [for (var i = 0; i <= r.nextInt(2); i++) ' \t'[r.nextInt(2)]];
   return ('[$w${space.join()}]$x', ['$w $x', x]);
+}
+
+/// A group with `|` whose choice is or starts with an optional group that has
+/// white space at its edge; the readings are those of the reference checker.
+(String, List<String>) nestedEdgeSpace(Random r) {
+  String word() => String.fromCharCodes([
+    for (var i = 0; i <= r.nextInt(4); i++) 'abcdefg'.codeUnitAt(r.nextInt(7)),
+  ]);
+  final w = word(), u = word(), v = word(), x = word();
+  final space = [for (var i = 0; i <= r.nextInt(2); i++) ' \t'[r.nextInt(2)]];
+  final ws = space.join();
+  return switch (r.nextInt(4)) {
+    0 => ('([$w$ws] | $v)$x', ['$w$x', '$v$x', x]),
+    1 => ('($v | [$w$ws])$x', ['$v$x', '$w $x', x]),
+    2 => ('([$w$ws]$u | $v)$x', ['$w $u$x', '$v$x', '$u$x']),
+    _ => ('($v | [$ws$w]$u)$x', ['$w$u$x', '$v$x', '$u$x']),
+  };
+}
+
+/// A group with white space at its edges, with a drawn word before it, after
+/// it, both, or neither (the group at the start, in the middle, at the end of
+/// the string, or alone), and the readings of the reference checker.
+(String, List<String>) positionedGroup(Random r) {
+  String word() => String.fromCharCodes([
+    for (var i = 0; i <= r.nextInt(4); i++) 'abcdefg'.codeUnitAt(r.nextInt(7)),
+  ]);
+  String space() =>
+      [for (var i = 0; i <= r.nextInt(2); i++) ' \t'[r.nextInt(2)]].join();
+  String gap() => r.nextBool() ? '' : ' ';
+  final w = word(), u = word(), v = word(), ws = space();
+  final (group, raw) = switch (r.nextInt(7)) {
+    0 => ('[$w$ws]', ['$w$ws', '']),
+    1 => ('($v | $w$ws)', [v, '$w$ws']),
+    2 => ('($v$ws| $w)', [v, w]),
+    3 => ('([$w$ws] | $v)', [w, '', v]),
+    4 => ('($v | [$w$ws])', [v, '$w$ws', '']),
+    5 => ('([$w$ws]$u | $v)', ['$w$ws$u', u, v]),
+    _ => ('($v | [$ws$w]$u)', [v, '$ws$w$u', u]),
+  };
+  final before = r.nextBool() ? '' : '${word()}${gap()}';
+  final after = r.nextBool() ? '' : '${gap()}${word()}';
+  return (
+    '$before$group$after',
+    [for (final x in raw) _normalized('$before$x$after')],
+  );
 }

@@ -86,10 +86,7 @@ final class ExamGen {
   /// space on the sides that touch a `|` or the closing bracket.
   String joinAlternatives(List<String> alternatives) => [
     for (final (i, a) in alternatives.indexed)
-      if (a.isEmpty)
-        ''
-      else
-        '${i > 0 ? _space() : ''}$a${i < alternatives.length - 1 ? _space() : ''}',
+      if (a.isEmpty) '' else '${i > 0 ? _space() : ''}$a${_space()}',
   ].join('|');
 
   String _space() => List.filled(r.nextInt(3), pick([' ', ' ', '\t'])).join();
@@ -104,10 +101,14 @@ final class ExamGen {
     final optional = chance(0.3);
     final tail = pick(_german);
     final open = optional ? '[' : '(', close = optional ? ']' : ')';
+    final body = joinAlternatives(alternatives);
+    final gap = body.endsWith(' ') || body.endsWith('\t') ? ' ' : '';
     return (
-      '$open${joinAlternatives(alternatives)}$close$tail',
+      '$open$body$close$tail',
       [
-        for (final a in [...alternatives, if (optional) '']) '$a$tail',
+        for (final (i, a) in alternatives.indexed)
+          i == alternatives.length - 1 ? '$a$gap$tail' : '$a$tail',
+        if (optional) tail,
       ],
     );
   }
