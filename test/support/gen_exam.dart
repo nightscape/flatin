@@ -1883,7 +1883,6 @@ final class EnglishExamGen {
     'task vocab de-en',
     'task vocab en-de',
     'task vocab la-de',
-    'task vocab without direction',
     'task transform',
     'task short_answer',
     'task multiple_choice',
@@ -2070,9 +2069,9 @@ final class EnglishExamGen {
       }
     }
     if (kind == 'vocab') {
-      final direction = pick(['de-en', 'en-de', 'la-de', null]);
-      hit('task vocab ${direction ?? 'without direction'}');
-      if (direction != null) head['direction'] = direction;
+      final direction = pick(['de-en', 'en-de', 'la-de']);
+      hit('task vocab $direction');
+      head['direction'] = direction;
     }
     final gap = kind == 'gap_markers' || kind == 'gap_sentences';
     final items = [
@@ -2177,6 +2176,7 @@ enum EnglishBreak {
   languageMismatch,
   languageWithoutCourse,
   unknownDirection,
+  directionMissing,
   promptMissing,
   writingPrompt,
 }
@@ -2284,6 +2284,11 @@ enum EnglishBreak {
       final t = pick(vocab);
       t.node['direction'] = pick(['de-la', 'en-en', 'x']);
       return (ExamRule.code, '${t.path}.direction');
+    case EnglishBreak.directionMissing:
+      if (vocab.isEmpty) return null;
+      final t = pick(vocab);
+      t.node.remove('direction');
+      return (ExamRule.field, t.path);
     case EnglishBreak.promptMissing:
       final t = pick(prompted);
       t.node.remove('prompt');

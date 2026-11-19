@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latin_practice/data/exam.dart';
+import 'package:latin_practice/data/exam_conversion.dart';
 import 'package:latin_practice/data/languages/language.dart';
 import 'package:latin_practice/main.dart' show noRetry;
 import 'package:latin_practice/models/course.dart';
@@ -101,6 +102,28 @@ void main() {
 
   test('a broken English pack is refused with its rule id and path, once', () {
     // Generators: EnglishExamGen over seeds 0..199, one EnglishBreak each.
+    // Static example: a converted Latin pack, whose vocab task lacks
+    // direction.
+    final latin = jsonDecode(
+      jsonEncode(
+        convertSchema1(
+          loadYaml(File('test/fixtures/exam/synthetic.exam').readAsStringSync())
+              as Map,
+        ),
+      ),
+    );
+    final i = (latin['tasks'] as List).indexWhere((t) => t['type'] == 'vocab');
+    (latin['tasks'][i] as Map).remove('direction');
+    expect(
+      () => parseExam(jsonEncode(latin), latinLang),
+      throwsA(
+        isA<ExamRejected>().having(
+          (e) => [for (final x in e.errors) '${x.rule.id} ${x.path}'],
+          'errors',
+          ['E-field exam.tasks[$i]'],
+        ),
+      ),
+    );
     final reached = <EnglishBreak>{};
     for (final how in EnglishBreak.values) {
       for (var seed = 0; seed < _packs; seed++) {

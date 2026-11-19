@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -9,6 +10,7 @@ import 'package:latin_practice/data/languages/language.dart';
 import 'package:latin_practice/models/course.dart';
 import 'package:latin_practice/models/settings.dart';
 import 'package:latin_practice/providers/settings_provider.dart';
+import 'package:latin_practice/screens/exam_list_screen.dart';
 import 'package:latin_practice/screens/exam_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -23,21 +25,61 @@ final _en = Language.parse(
 
 const _seeds = 8;
 
-Exam _pack(int seed) => parseExam(
-  jsonEncode(
-    EnglishExamGen(
-      Random(seed),
-    ).exam(include: {...EnglishExamGen.kinds, 'gap_markers', 'writing'}),
-  ),
-  _en,
+String _source(int seed) => jsonEncode(
+  EnglishExamGen(
+    Random(seed),
+  ).exam(include: {...EnglishExamGen.kinds, 'gap_markers', 'writing'}),
 );
+
+Exam _pack(int seed) => parseExam(_source(seed), _en);
 
 Future<Map<String, Object>> _stored() async {
   final prefs = await SharedPreferences.getInstance();
   return {for (final k in prefs.getKeys()) k: prefs.get(k)!};
 }
 
+Future<void> _openFromList(WidgetTester tester, int seed) async {
+  SharedPreferences.setMockInitialValues({
+    activeCourseKey: 'englisch',
+    'practice_settings.englisch': jsonEncode(
+      Settings(lastLesson: noBooksLastLesson).toJson(),
+    ),
+  });
+  tester.view.physicalSize = const Size(1200, 4000);
+  tester.view.devicePixelRatio = 1.0;
+  addTearDown(tester.view.reset);
+  final pack = _pack(seed);
+  final drawn = jsonDecode(_source(seed)) as Map<String, dynamic>;
+  drawn['course'] = 'englisch';
+  final bytes = utf8.encode(jsonEncode(drawn));
+  await tester.pumpWidget(
+    wrapInKeyEchoAppWith(
+      ExamListScreen(pickBytes: () async => Uint8List.fromList(bytes)),
+      dataLanguage: 'en',
+    ),
+  );
+  await letItLoad(tester);
+  await tester.tap(find.byKey(const Key('exam.import')));
+  await letItLoad(tester);
+  expect(find.byKey(const Key('exam.import.refused')), findsNothing);
+  await tester.tap(find.byKey(Key('exam.list.${pack.id}')));
+  await letItLoad(tester);
+  expect(
+    find.byKey(Key('exam.task.${pack.aufgaben.first.id}')),
+    findsOneWidget,
+  );
+  expect(tester.takeException(), isNull);
+}
+
 void main() {
+  for (var seed = 0; seed < 3; seed++) {
+    testWidgets('an English pack imported on the English course opens from the '
+        'exam list (seed $seed)', (tester) async {
+      // Generators: EnglishExamGen with every kind of task, seeds 0..2.
+      await _openFromList(tester, seed);
+    });
+  }
+
   for (var seed = 0; seed < _seeds; seed++) {
     testWidgets('the English exam screen takes input in every task, counts the '
         'words of a text, checks the gaps and finishes without changing the '

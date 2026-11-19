@@ -787,9 +787,7 @@ class _ExamScreenState extends ConsumerState<ExamScreen> {
                 PunctuationToken() => null,
               },
               StammformenItem(:final lemma) => lemma,
-              VokabelItem(:final la)
-                  when t.richtung == null || t.richtung == 'la-de' =>
-                la,
+              VokabelItem(:final la) when t.richtung == 'la-de' => la,
               _ => null,
             },
     };

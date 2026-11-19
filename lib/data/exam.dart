@@ -1024,7 +1024,7 @@ ExamTask _task(_Map m, {required bool solutionRequired}) {
         '$type is not one of ${[..._itemTypes.keys, ..._promptTypes, 'writing']}',
       ));
   final richtung = itemArt == ItemArt.vokabel
-      ? m.optCode('direction', _vocabDirections) as String?
+      ? m.code('direction', _vocabDirections) as String
       : null;
   final wortkasten =
       itemArt == ItemArt.luecke && m.opt<List>('word_box') != null
