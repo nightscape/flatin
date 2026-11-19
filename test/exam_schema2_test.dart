@@ -147,7 +147,7 @@ void main() {
     }
     expect(_schema1Keys.difference(keys), isEmpty);
     expect(types, {
-      for (final a in ItemArt.values) a.schema1Code,
+      for (final a in schema1Arts) a.schema1Code,
       'ordnen',
       'frei',
     });
@@ -202,7 +202,7 @@ void main() {
   test('each broken rule is refused with the same rule and path in schema 1 '
       'and in schema 2', () {
     final reached = <ExamRule>{};
-    for (final rule in ExamRule.values) {
+    for (final rule in latinRules) {
       if (rule == ExamRule.yaml) continue;
       var seed = 0;
       for (final c in cases.where((c) => c.language == latinLang)) {
@@ -220,7 +220,7 @@ void main() {
     }
     expect(
       {
-        for (final rule in ExamRule.values)
+        for (final rule in latinRules)
           if (rule != ExamRule.yaml) rule,
       }.difference(reached),
       isEmpty,

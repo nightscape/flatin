@@ -1,9 +1,9 @@
 # Exam pack schema 2
 
-An exam pack is one YAML file with the extension `.exam` (UTF-8). It holds a
-Latin text to translate, its annotation, and the companion tasks. The app
+An exam pack is one YAML file with the extension `.exam` (UTF-8). It holds
+tasks and, in a Latin pack, a Latin text to translate with its annotation. The app
 imports a pack from a file; packs are never bundled. `test/fixtures/exam/synthetic.exam`
-uses every feature.
+and `test/fixtures/exam/synthetic_en.exam` use every feature.
 
 The sections up to Tasks describe the fields. The codes of `analysis`,
 `role`, clause `type` and `sense`, and the values the rules name (`haupt`,
@@ -21,7 +21,8 @@ this schema.
 
 ## General
 
-- Every field below is required unless it says optional. A required list may
+- Every field below is required unless it says optional. The Latin fields of
+  the Head table are required together or not at all. A required list may
   be empty unless it says non-empty.
 - Ids are strings, because YAML reads `1.3` or `1_3` as a number. Shapes:
   sentence `s3`, token `s3_5` (its sentence id, `_`, a number), clause `s3b`
@@ -34,13 +35,27 @@ this schema.
 | `schema` | the int 2 (a pack of schema 1 is converted first) |
 | `id`, `title` | string |
 | `course` | optional string: the id of the course the pack belongs to; without it the pack belongs to the first course of the list. The import refuses a pack of another course than the active one |
+| `language` | optional string: the id of the language of the course that `course` names; a pack with `language` and no `course` is refused |
+| `scope` | optional `{book, pages, grammar}`: what the exam covers; the app keeps the values as written |
+| `time_min` | int |
+| `points_total` | int |
+| `tasks` | list of tasks |
+
+The Latin group is all or none of `lessons`, `topics`, `focus`, `theme`,
+`points_translation` and `translation`:
+
+| Field | Value |
+|---|---|
 | `lessons` | `{from, to}`, ints: the first lesson of the block and the lesson of the focus |
 | `topics` | list of strings: app topic ids (`verbs:2`) and grammar section ids (`L2.1`) |
 | `focus`, `theme` | string: plain text for the PDF |
-| `time_min` | int |
-| `points_translation`, `points_total` | int |
+| `points_translation` | int |
 | `translation` | `{glosses, sentences}` |
-| `tasks` | list of tasks |
+
+A pack without the group has no translation section: the exam screen lists
+the tasks only and `points_total` is the sum of the task points. A pack with
+the group lists the PDF `solution` of every task; a pack without it may leave
+`solution` out.
 
 ## Variant strings
 
@@ -113,10 +128,25 @@ helps with. The list `glosses` may be empty.
 
 ## Tasks: `tasks[]`
 
-`{id, title, points, type, prompt, items, solution}`: `points` an int,
-`solution` a list of PDF lines. A `vocab` task also has `direction`, which is
-`la-de`. Every task except `order` and `free` has a non-empty list `items`,
-and every item has the int `points`. The items of each `type`:
+`{id, title, points, type, prompt, text, listening, items, solution}`:
+`points` an int, `prompt` a string that every task except `writing` has,
+`solution` a list of lines (see the Head table for when it is required).
+Optional on every task except `writing`:
+
+- `text`: Markdown shown above the items. The app renders paragraphs
+  (separated by a blank line), `**bold**`, `*italic*` and `{{n}}` markers
+  only.
+- `listening`: `{repeat, voices, lines}`: `repeat` an int, `voices` a map of
+  speaker to voice name, `lines` a list of `[speaker, text]` pairs. The app
+  plays no audio: it shows a line that points to the HTML page of the exam,
+  and the script `lines` with the solution.
+
+A `vocab` task also has `direction`: `la-de`, `de-en` or `en-de`. A
+`gap_fill` task may have `word_box`, a list of strings shown above the gaps.
+Every task except `order`, `free` and `writing` has a non-empty list `items`,
+and every item has the int `points` and may have `source`, a string: a
+revision reference such as `S183`. The `source` of a `derivation` item is its
+Latin word. The items of each `type`:
 
 | `type` | Item |
 |---|---|
@@ -126,12 +156,33 @@ and every item has the int `points`. The items of each `type`:
 | `transform` | `{given, target}`: `target` a non-empty list of variant strings |
 | `vocab` | `{prompt, answer}`: `answer` a non-empty list of variant strings |
 | `derivation` | `{loanword, source}` |
-| `short_answer` | `{prompt, keywords}`: a non-empty list of non-empty lists of equivalent words; one word of each inner list must occur in the answer |
+| `short_answer` | `{prompt, keywords, answer}`: `keywords` a non-empty list of non-empty lists of equivalent words, one word of each inner list must occur in the answer; `answer` a non-empty list of variant strings, the model answer. An item has at least one of the two |
 | `multiple_choice` | `{prompt, clause (optional), options, correct}`: `options` non-empty, `clause` a clause id |
+| `gap_fill` | `{sentence (optional), answer}`: `answer` a non-empty list of variant strings; see below |
 
 `order` has no `items` but `elements`: strings in the right order; the app
 shuffles them. `free` has no `items`; the student checks it against
 `solution`.
+
+A `gap_fill` task has one gap per item, in one of two styles. In the marker
+style the task `text` holds `{{1}}`, `{{2}}`, ... in order, one per item, and
+no item has a `sentence`. In the sentence style no marker occurs and each
+item has a `sentence` with `___` at the gap. The app checks the gaps: an
+input is right when it equals a reading of one `answer` variant after the
+answer rules of the language file (`fold`, white space, the case of the first
+letter) apply to both.
+
+A `writing` task has `{id, title, points, type, situation, requirements,
+words, rubric, model_answer}` and no `prompt`, `text`, `listening`, `items` or
+`solution`. `situation` is a string; `requirements` and `model_answer` are a
+string or a list of strings; `words` is `{min, max}`, ints; `rubric` is a
+list of `{criterion, points}`. The student writes in the app, which counts
+the words, and marks each rubric line after the model answer is shown; the
+earned points are the sum of the marked lines.
+
+A task of any other type earns its `points` when the student marks it done,
+except `analyze` (dropdown checks) and `gap_fill` (the `points` of each right
+gap).
 
 ## Rules
 
@@ -142,7 +193,10 @@ shuffles them. `free` has no `items`; the student checks it against
 - [E-schema] `schema` is 1 or 2; a schema-1 pack is converted first (section
   Schema 1).
 - [E-field] Every required field is present and has a value; an optional
-  field without a value counts as absent.
+  field without a value counts as absent. `language` is the id of the
+  language of the course `course` names, and needs `course`.
+- [E-latin-group] The Latin group of the Head table is all present or all
+  absent.
 - [E-key] A field the sections above do not name is refused.
 - [E-type] Every value has the type the sections above give it.
 - [E-code] A code is one of its list in the language file.
@@ -151,8 +205,8 @@ shuffles them. `free` has no `items`; the student checks it against
 - [E-id-twice] Sentence, token, clause and task ids are unique together.
 - [E-variant] A variant string has balanced, uncrossed brackets and `|` only
   inside a group; no alternative is only white space.
-- [E-points-total] `points_total` is `points_translation` plus the
-  `points` of all tasks.
+- [E-points-total] `points_total` is `points_translation` (0 without the
+  Latin group) plus the `points` of all tasks.
 
 ### Tokens
 
@@ -230,6 +284,15 @@ shuffles them. `free` has no `items`; the student checks it against
   `genus_verbi: pass`, `tempus` `perf`, `plusq` or `fut2` and no `modus:
   part` is two words (`spectātae sunt`).
 - [E-ordnen] `order` has at least three `elements`.
+- [E-gap-style] A `gap_fill` task uses one style: with `{{n}}` markers in the
+  `text` no item has a `sentence`; without markers every item has a
+  `sentence` with `___`.
+- [E-gap-marker-order] The markers of the `text` read `{{1}}`, `{{2}}`, ... in
+  order.
+- [E-gap-marker-count] The `text` has as many markers as the task has items.
+- [E-writing-words] `words.min` is at most `words.max`.
+- [E-writing-rubric] The `points` of the `rubric` lines sum to the task's
+  `points`.
 
 ## Schema 1
 

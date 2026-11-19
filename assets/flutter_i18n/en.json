@@ -467,7 +467,21 @@
       "taskPoints": "{n} pts",
       "finish": "Finish the exam",
       "finished": "{n} words come back tomorrow.",
-      "tryAgain": "Not quite yet. Try again."
+      "tryAgain": "Not quite yet. Try again.",
+      "listening": "Audio: use the HTML page of this exam.",
+      "script": "Audio script",
+      "wordBox": "Words to choose from",
+      "checkGaps": "Check the gaps",
+      "gapCorrect": "correct",
+      "gapWrong": "not yet",
+      "yourText": "Your text",
+      "requirements": "Requirements",
+      "wordCount": "{n} words (required: {min} to {max})",
+      "showWriting": "Show the model answer and the rubric",
+      "modelAnswer": "Model answer",
+      "rubric": "Rubric",
+      "rubricLine": "{criterion} ({n} pts)",
+      "source": "Source {n}: {source}"
     },
     "sheet": {
       "lemma": "Dictionary form: {lemma}",

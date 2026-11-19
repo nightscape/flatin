@@ -576,7 +576,7 @@ final class ExamGen {
     List<Map<String, Object>> pcs,
   ) {
     final arts = [
-      for (final a in ItemArt.values)
+      for (final a in schema1Arts)
         if (a != ItemArt.bestimmen || words.isNotEmpty) a.schema1Code,
       'ordnen',
       'frei',
@@ -627,6 +627,7 @@ final class ExamGen {
         'merkmale': annotated.take(1 + r.nextInt(annotated.length)).toList(),
       };
     }(),
+    ItemArt.luecke => throw StateError('schema 2 only'),
     ItemArt.stammformen => {
       'lemma': pick(_latin),
       'stammformen': [for (var i = 0; i < 4; i++) pick(_latin)],
@@ -721,18 +722,39 @@ extension Schema1Code on ItemArt {
       name.replaceAllMapped(RegExp('[A-Z]'), (m) => '_${m[0]!.toLowerCase()}');
 }
 
+/// The item kinds a schema 1 pack has.
+final schema1Arts = [
+  for (final a in ItemArt.values)
+    if (a != ItemArt.luecke) a,
+];
+
+/// The rules that only a schema 2 pack of a task type of its own can break.
+const englishOnlyRules = {
+  ExamRule.gapStyle,
+  ExamRule.gapMarkerOrder,
+  ExamRule.gapMarkerCount,
+  ExamRule.writingWords,
+  ExamRule.writingRubric,
+};
+
+/// The rules [breakRule] breaks on a Latin pack.
+final latinRules = [
+  for (final rule in ExamRule.values)
+    if (!englishOnlyRules.contains(rule)) rule,
+];
+
 /// The pack as the schema 1 data model (German keys), which [ExamGen] draws.
 Map<String, Object> schema1Yaml(Exam e) => {
   'schema': 1,
   'id': e.id,
   if (e.kurs != null) 'kurs': e.kurs!,
   'titel': e.titel,
-  'lektionen': {'von': e.von, 'bis': e.bis},
-  'schwerpunkte': e.schwerpunkte,
-  'schwerpunkt': e.schwerpunkt,
-  'thema': e.thema,
+  'lektionen': {'von': e.latin!.von, 'bis': e.latin!.bis},
+  'schwerpunkte': e.latin!.schwerpunkte,
+  'schwerpunkt': e.latin!.schwerpunkt,
+  'thema': e.latin!.thema,
   'zeit_min': e.zeitMin,
-  'punkte_uebersetzung': e.punkteUebersetzung,
+  'punkte_uebersetzung': e.latin!.punkteUebersetzung,
   'punkte_gesamt': e.punkteGesamt,
   'uebersetzung': {
     'hilfen': [
@@ -778,20 +800,26 @@ Map<String, Object> _sentence1(ExamSentence s) => {
   'de': s.de,
 };
 
-Map<String, Object> _task1(ExamTask t) => {
-  'id': t.id,
-  'titel': t.titel,
-  'punkte': t.punkte,
-  'art': switch (t) {
-    ItemTask() => t.art.schema1Code,
-    OrdnenTask() => 'ordnen',
-    FreiTask() => 'frei',
-  },
-  'frage': t.frage,
-  if (t is ItemTask) 'items': [for (final i in t.items) _item1(i)],
-  if (t is OrdnenTask) 'elemente': t.elemente,
-  'loesung': t.loesung,
-};
+Map<String, Object> _task1(ExamTask t) {
+  final PromptTask p = switch (t) {
+    PromptTask() => t,
+    SchreibenTask() => throw StateError('schema 2 only'),
+  };
+  return {
+    'id': p.id,
+    'titel': p.titel,
+    'punkte': p.punkte,
+    'art': switch (p) {
+      ItemTask() => p.art.schema1Code,
+      OrdnenTask() => 'ordnen',
+      FreiTask() => 'frei',
+    },
+    'frage': p.frage,
+    if (p is ItemTask) 'items': [for (final i in p.items) _item1(i)],
+    if (p is OrdnenTask) 'elemente': p.elemente,
+    'loesung': p.loesung!,
+  };
+}
 
 Map<String, Object> _item1(TaskItem i) => {
   ...switch (i) {
@@ -808,6 +836,7 @@ Map<String, Object> _item1(TaskItem i) => {
       'optionen': i.optionen,
       'richtig': i.richtig,
     },
+    LueckeItem() => throw StateError('schema 2 only'),
   },
   'punkte': i.punkte,
 };
@@ -967,7 +996,7 @@ String? breakRule(ExamRule rule, Map<String, dynamic> exam, Random r) {
     case ExamRule.field:
       switch (r.nextInt(3)) {
         case 0:
-          exam.remove('thema');
+          exam.remove('zeit_min');
           return 'exam';
         case 1:
           final t = pick(tokens);
@@ -975,9 +1004,7 @@ String? breakRule(ExamRule rule, Map<String, dynamic> exam, Random r) {
           return t.path;
       }
       final required = <(Map<String, dynamic>, String, String, Map)>[
-        for (final key in ['schema', 'id', 'titel', 'lektionen', 'zeit_min'])
-          (exam, key, 'exam', _enHead),
-        for (final key in ['schwerpunkte', 'uebersetzung', 'aufgaben'])
+        for (final key in ['schema', 'id', 'titel', 'zeit_min', 'aufgaben'])
           (exam, key, 'exam', _enHead),
         for (final key in ['hilfen', 'saetze'])
           (
@@ -1022,6 +1049,24 @@ String? breakRule(ExamRule rule, Map<String, dynamic> exam, Random r) {
       final (node, key, path, names) = pick(required);
       node[key] = null;
       return '$path.${names[key]}';
+    case ExamRule.latinGroup:
+      exam.remove(
+        pick([
+          'lektionen',
+          'schwerpunkte',
+          'schwerpunkt',
+          'thema',
+          'punkte_uebersetzung',
+          'uebersetzung',
+        ]),
+      );
+      return 'exam';
+    case ExamRule.gapStyle ||
+        ExamRule.gapMarkerOrder ||
+        ExamRule.gapMarkerCount ||
+        ExamRule.writingWords ||
+        ExamRule.writingRubric:
+      return null;
     case ExamRule.key:
       final site = pick([
         (node: exam, path: 'exam', sid: ''),
@@ -1813,3 +1858,440 @@ LessonData withoutWords(LessonData lessons, Set<String> dropped) => LessonData(
   bookByLesson: lessons.bookByLesson,
   books: lessons.books,
 );
+
+/// Draws valid schema 2 packs of the English course as the plain YAML data
+/// model (English keys), and counts in [reach] which features it drew.
+final class EnglishExamGen {
+  final Random r;
+  final reach = <String, int>{};
+
+  EnglishExamGen(this.r);
+
+  static const kinds = [
+    'vocab',
+    'transform',
+    'short_answer',
+    'multiple_choice',
+    'gap_markers',
+    'gap_sentences',
+    'order',
+    'free',
+    'writing',
+  ];
+
+  static const reachKeys = [
+    'task vocab de-en',
+    'task vocab en-de',
+    'task vocab la-de',
+    'task vocab without direction',
+    'task transform',
+    'task short_answer',
+    'task multiple_choice',
+    'task gap_markers',
+    'task gap_sentences',
+    'task order',
+    'task free',
+    'task writing',
+    'short_answer answer only',
+    'short_answer keywords only',
+    'short_answer both',
+    'word_box',
+    'listening',
+    'text',
+    'solution',
+    'item source',
+    'scope',
+    'language',
+    'writing lists',
+    'writing strings',
+    'choice variant',
+    'optional variant',
+    'apostrophe answer',
+    'capital answer',
+  ];
+
+  static const _words = [
+    'went',
+    'home',
+    'was',
+    'warm',
+    'run',
+    'jog',
+    'house',
+    'sunny',
+    'friend',
+    'letter',
+    'coast',
+    'swim',
+    'lost',
+    'keys',
+    'happy',
+  ];
+
+  void hit(String what) => reach[what] = (reach[what] ?? 0) + 1;
+  T pick<T>(List<T> xs) => xs[r.nextInt(xs.length)];
+  bool chance(double p) => r.nextDouble() < p;
+
+  String phrase([int max = 3]) =>
+      [for (var i = 0; i <= r.nextInt(max); i++) pick(_words)].join(' ');
+
+  /// A variant string and the readings it stands for.
+  (String, List<String>) answer() {
+    final a = pick(_words);
+    var b = pick(_words);
+    while (b == a) {
+      b = pick(_words);
+    }
+    switch (r.nextInt(5)) {
+      case 0:
+        hit('choice variant');
+        return ('($a | $b)', [a, b]);
+      case 1:
+        hit('optional variant');
+        return ('[$a ]$b', ['$a $b', b]);
+      case 2:
+        hit('apostrophe answer');
+        return ("$a's $b", ["$a's $b"]);
+      case 3:
+        hit('capital answer');
+        final c = '${a[0].toUpperCase()}${a.substring(1)} $b';
+        return (c, [c]);
+      default:
+        return ('$a $b', ['$a $b']);
+    }
+  }
+
+  List<String> answers([int max = 2]) => [
+    for (var i = 0; i <= r.nextInt(max); i++) answer().$1,
+  ];
+
+  String markdown() {
+    String run() => switch (r.nextInt(4)) {
+      0 => '**${pick(_words)}**',
+      1 => '*${pick(_words)}*',
+      _ => pick(_words),
+    };
+    return [
+      for (var p = 0; p <= r.nextInt(2); p++)
+        [for (var i = 0; i <= 1 + r.nextInt(3); i++) run()].join(' '),
+    ].join('\n\n');
+  }
+
+  Map<String, Object> exam({Set<String> include = const {}}) {
+    final chosen = [
+      ...include,
+      for (var i = 0; i < r.nextInt(4); i++) pick(kinds),
+    ];
+    final tasks = [
+      for (final (i, kind) in chosen.indexed)
+        task(kind, '${'abcdefgh'[i % 8]}${i + 1}'),
+    ];
+    final both = chance(0.6);
+    if (both) hit('language');
+    final points = tasks.fold<int>(0, (s, t) => s + (t['points'] as int));
+    return {
+      'schema': 2,
+      'id': 'en${r.nextInt(1000)}',
+      if (both || chance(0.5)) 'course': 'englisch',
+      if (both) 'language': 'en',
+      'title': phrase(),
+      if (chance(0.5))
+        'scope': () {
+          hit('scope');
+          return {
+            'book': phrase(2),
+            'pages': chance(0.5)
+                ? '${r.nextInt(50)}-${50 + r.nextInt(50)}'
+                : [r.nextInt(50)],
+            'grammar': [phrase(2)],
+          };
+        }(),
+      'time_min': 10 + r.nextInt(50),
+      'points_total': points,
+      'tasks': tasks,
+    };
+  }
+
+  Map<String, Object> task(String kind, String id) {
+    hit('task $kind');
+    final head = <String, Object>{
+      'id': id,
+      'title': phrase(),
+      'type': switch (kind) {
+        'gap_markers' || 'gap_sentences' => 'gap_fill',
+        _ => kind,
+      },
+    };
+    if (kind == 'writing') return writing(head);
+    head['prompt'] = phrase();
+    if (chance(0.4)) {
+      hit('text');
+      head['text'] = markdown();
+    }
+    if (chance(0.3)) {
+      hit('listening');
+      head['listening'] = {
+        'repeat': 1 + r.nextInt(3),
+        'voices': {'A': phrase(1), 'B': phrase(1)},
+        'lines': [
+          for (var i = 0; i <= r.nextInt(3); i++)
+            [
+              pick(['A', 'B']),
+              phrase(),
+            ],
+        ],
+      };
+    }
+    if (chance(0.4)) {
+      hit('solution');
+      head['solution'] = [for (var i = 0; i <= r.nextInt(2); i++) phrase()];
+    }
+    if (kind == 'order') {
+      return {
+        ...head,
+        'elements': [for (var i = 0; i < 3 + r.nextInt(3); i++) phrase(1)],
+        'points': r.nextInt(5),
+      };
+    }
+    if (kind == 'free') return {...head, 'points': r.nextInt(5)};
+    final markers = kind == 'gap_markers';
+    final count = 1 + r.nextInt(3);
+    if (markers) {
+      head['text'] = [
+        for (var n = 1; n <= count; n++) '${phrase(1)} {{$n}} ${phrase(1)}',
+      ].join(r.nextBool() ? ' ' : '\n\n');
+    }
+    if (kind == 'gap_markers' || kind == 'gap_sentences') {
+      if (chance(0.5)) {
+        hit('word_box');
+        head['word_box'] = [
+          for (var i = 0; i <= r.nextInt(4); i++) pick(_words),
+        ];
+      }
+    }
+    if (kind == 'vocab') {
+      final direction = pick(['de-en', 'en-de', 'la-de', null]);
+      hit('task vocab ${direction ?? 'without direction'}');
+      if (direction != null) head['direction'] = direction;
+    }
+    final gap = kind == 'gap_markers' || kind == 'gap_sentences';
+    final items = [
+      for (var i = 0; i < (gap ? count : 1 + r.nextInt(3)); i++)
+        item(kind, markers),
+    ];
+    return {
+      ...head,
+      'items': items,
+      'points': items.fold<int>(0, (s, i) => s + (i['points'] as int)),
+    };
+  }
+
+  Map<String, Object> item(String kind, bool markers) {
+    final base = <String, Object>{'points': r.nextInt(4)};
+    if (chance(0.3)) {
+      hit('item source');
+      base['source'] = 'S${r.nextInt(300)}';
+    }
+    switch (kind) {
+      case 'vocab':
+        return {'prompt': phrase(1), 'answer': answers(), ...base};
+      case 'transform':
+        return {'given': phrase(), 'target': answers(), ...base};
+      case 'multiple_choice':
+        final options = {
+          for (var i = 0; i < 2 + r.nextInt(3); i++) pick(_words),
+        }.toList();
+        while (options.length < 2) {
+          options.add('${pick(_words)}x');
+        }
+        return {
+          'prompt': phrase(),
+          'options': options,
+          'correct': pick(options),
+          ...base,
+        };
+      case 'short_answer':
+        final both = r.nextInt(3);
+        final keywords = [
+          for (var i = 0; i <= r.nextInt(2); i++)
+            [for (var j = 0; j <= r.nextInt(2); j++) pick(_words)],
+        ];
+        hit(
+          both == 0
+              ? 'short_answer answer only'
+              : both == 1
+              ? 'short_answer keywords only'
+              : 'short_answer both',
+        );
+        return {
+          'prompt': phrase(),
+          if (both != 1) 'answer': [answer().$1],
+          if (both != 0) 'keywords': keywords,
+          ...base,
+        };
+      default:
+        return {
+          if (!markers) 'sentence': '${phrase(1)} ___ ${phrase(1)}',
+          'answer': [answer().$1],
+          ...base,
+        };
+    }
+  }
+
+  Map<String, Object> writing(Map<String, Object> head) {
+    final lines = [
+      for (var i = 0; i <= r.nextInt(3); i++)
+        {'criterion': phrase(), 'points': r.nextInt(4)},
+    ];
+    final min = r.nextInt(50);
+    Object lines0() {
+      if (chance(0.5)) {
+        hit('writing lists');
+        return [for (var i = 0; i <= r.nextInt(2); i++) phrase()];
+      }
+      hit('writing strings');
+      return phrase();
+    }
+
+    return {
+      ...head,
+      'points': lines.fold<int>(0, (s, l) => s + (l['points'] as int)),
+      'situation': phrase(),
+      'requirements': lines0(),
+      'words': {'min': min, 'max': min + r.nextInt(80)},
+      'rubric': lines,
+      'model_answer': lines0(),
+    };
+  }
+}
+
+/// The ways [breakEnglish] breaks a pack of [EnglishExamGen].
+enum EnglishBreak {
+  gapStyleMarkersAndSentence,
+  gapStyleNoBlank,
+  gapMarkerOrder,
+  gapMarkerCount,
+  writingWords,
+  writingRubric,
+  latinGroupPartial,
+  languageMismatch,
+  languageWithoutCourse,
+  unknownDirection,
+  promptMissing,
+  writingPrompt,
+}
+
+/// Breaks the mutable [exam] drawn by [EnglishExamGen] one way, and returns
+/// the rule and the path the parser must name; null when [exam] has no node
+/// to break.
+(ExamRule, String)? breakEnglish(
+  EnglishBreak how,
+  Map<String, dynamic> exam,
+  Random r,
+) {
+  final tasks = [
+    for (final (i, t) in (exam['tasks'] as List).indexed)
+      (node: t as Map<String, dynamic>, path: 'exam.tasks[$i]'),
+  ];
+  final gaps = [
+    for (final t in tasks)
+      if (t.node['type'] == 'gap_fill') t,
+  ];
+  final marked = [
+    for (final t in gaps)
+      if (t.node['text'] != null && t.node['text'].contains('{{')) t,
+  ];
+  final sentences = [
+    for (final t in gaps)
+      if (!marked.contains(t)) t,
+  ];
+  final writing = [
+    for (final t in tasks)
+      if (t.node['type'] == 'writing') t,
+  ];
+  final vocab = [
+    for (final t in tasks)
+      if (t.node['type'] == 'vocab') t,
+  ];
+  final prompted = [
+    for (final t in tasks)
+      if (t.node['type'] != 'writing') t,
+  ];
+  T pick<T>(List<T> xs) => xs[r.nextInt(xs.length)];
+
+  switch (how) {
+    case EnglishBreak.gapStyleMarkersAndSentence:
+      if (marked.isEmpty) return null;
+      final t = pick(marked);
+      (t.node['items'][0] as Map)['sentence'] = 'a ___ b';
+      return (ExamRule.gapStyle, '${t.path}.items[0].sentence');
+    case EnglishBreak.gapStyleNoBlank:
+      if (sentences.isEmpty) return null;
+      final t = pick(sentences);
+      (t.node['items'][0] as Map)['sentence'] = 'no blank here';
+      return (ExamRule.gapStyle, '${t.path}.items[0].sentence');
+    case EnglishBreak.gapMarkerOrder:
+      if (marked.isEmpty) return null;
+      final t = pick(marked);
+      t.node['text'] = (t.node['text'] as String).replaceFirst(
+        '{{1}}',
+        '{{9}}',
+      );
+      return (ExamRule.gapMarkerOrder, '${t.path}.text');
+    case EnglishBreak.gapMarkerCount:
+      if (marked.isEmpty) return null;
+      final t = pick(marked);
+      final items = t.node['items'] as List;
+      items.add({
+        'answer': ['x'],
+        'points': 0,
+      });
+      return (ExamRule.gapMarkerCount, '${t.path}.items');
+    case EnglishBreak.writingWords:
+      if (writing.isEmpty) return null;
+      final t = pick(writing);
+      final words = t.node['words'] as Map;
+      words['min'] = (words['max'] as int) + 1;
+      return (ExamRule.writingWords, '${t.path}.words');
+    case EnglishBreak.writingRubric:
+      if (writing.isEmpty) return null;
+      final t = pick(writing);
+      final rubric = t.node['rubric'] as List;
+      (rubric[0] as Map)['points'] += 1;
+      return (ExamRule.writingRubric, '${t.path}.rubric');
+    case EnglishBreak.latinGroupPartial:
+      exam[pick([
+        'lessons',
+        'topics',
+        'focus',
+        'theme',
+        'points_translation',
+      ])] = pick([
+        'x',
+        1,
+      ]);
+      return (ExamRule.latinGroup, 'exam');
+    case EnglishBreak.languageMismatch:
+      if (exam['language'] == null) return null;
+      exam['language'] = pick(['la', 'de', 'english']);
+      return (ExamRule.field, 'exam.language');
+    case EnglishBreak.languageWithoutCourse:
+      if (exam['language'] == null) return null;
+      exam.remove('course');
+      return (ExamRule.field, 'exam.language');
+    case EnglishBreak.unknownDirection:
+      if (vocab.isEmpty) return null;
+      final t = pick(vocab);
+      t.node['direction'] = pick(['de-la', 'en-en', 'x']);
+      return (ExamRule.code, '${t.path}.direction');
+    case EnglishBreak.promptMissing:
+      final t = pick(prompted);
+      t.node.remove('prompt');
+      return (ExamRule.field, t.path);
+    case EnglishBreak.writingPrompt:
+      if (writing.isEmpty) return null;
+      final t = pick(writing);
+      t.node['prompt'] = 'x';
+      return (ExamRule.key, '${t.path}.prompt');
+  }
+}

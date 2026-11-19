@@ -55,6 +55,12 @@ enum ExamRule {
   mcRichtig('E-mc-richtig'),
   mcSinnrichtung('E-mc-sinnrichtung'),
   ordnen('E-ordnen'),
+  latinGroup('E-latin-group'),
+  gapStyle('E-gap-style'),
+  gapMarkerOrder('E-gap-marker-order'),
+  gapMarkerCount('E-gap-marker-count'),
+  writingWords('E-writing-words'),
+  writingRubric('E-writing-rubric'),
   pointsTask('E-points-task'),
   pointsTotal('E-points-total');
 
@@ -93,10 +99,15 @@ const _itemTypes = {
   'derivation': ItemArt.ableitung,
   'short_answer': ItemArt.kurzantwort,
   'multiple_choice': ItemArt.wissenMc,
+  'gap_fill': ItemArt.luecke,
 };
 
-/// The only `direction` of a `vocab` task: Latin prompt, German answer.
-const _vocabDirection = 'la-de';
+/// The `direction` values of a `vocab` task, as the prompt language and the
+/// answer language.
+const _vocabDirections = ['la-de', 'de-en', 'en-de'];
+
+/// The `type` of a task that has no items and one prompt.
+const _promptTypes = ['order', 'free'];
 
 /// The `analyse` of a word token: a code per key of the language, in the
 /// language's order.
@@ -187,11 +198,16 @@ enum ItemArt {
   ableitung,
   kurzantwort,
   wissenMc,
+  luecke,
 }
 
 sealed class TaskItem {
   final int punkte;
-  const TaskItem(this.punkte);
+
+  /// A revision reference such as `S183`; null on every `derivation` item,
+  /// whose `source` is its Latin word.
+  final String? quelle;
+  const TaskItem(this.punkte, this.quelle);
 }
 
 final class BestimmenItem extends TaskItem {
@@ -199,46 +215,68 @@ final class BestimmenItem extends TaskItem {
 
   /// Feature names of the token's analysis, `lemma` or `bezug`.
   final List<String> merkmale;
-  const BestimmenItem(this.token, this.merkmale, super.punkte);
+  const BestimmenItem(this.token, this.merkmale, super.punkte, super.quelle);
 }
 
 final class StammformenItem extends TaskItem {
   final String lemma;
   final List<String> stammformen;
-  const StammformenItem(this.lemma, this.stammformen, super.punkte);
+  const StammformenItem(
+    this.lemma,
+    this.stammformen,
+    super.punkte,
+    super.quelle,
+  );
 }
 
 final class BildenItem extends TaskItem {
   final String lemma;
   final Codes merkmale;
   final String form;
-  const BildenItem(this.lemma, this.merkmale, this.form, super.punkte);
+  const BildenItem(
+    this.lemma,
+    this.merkmale,
+    this.form,
+    super.punkte,
+    super.quelle,
+  );
 }
 
 final class UmformenItem extends TaskItem {
   final String vorgabe;
   final List<String> ziel;
-  const UmformenItem(this.vorgabe, this.ziel, super.punkte);
+  const UmformenItem(this.vorgabe, this.ziel, super.punkte, super.quelle);
 }
 
 final class VokabelItem extends TaskItem {
   final String la;
   final List<String> de;
-  const VokabelItem(this.la, this.de, super.punkte);
+  const VokabelItem(this.la, this.de, super.punkte, super.quelle);
 }
 
 final class AbleitungItem extends TaskItem {
   final String fremdwort;
   final String la;
-  const AbleitungItem(this.fremdwort, this.la, super.punkte);
+  const AbleitungItem(this.fremdwort, this.la, super.punkte, super.quelle);
 }
 
 final class KurzantwortItem extends TaskItem {
   final String frage;
 
-  /// Each inner list holds equivalent words; one of each must occur.
+  /// Each inner list holds equivalent words; one of each must occur. Empty
+  /// when the item gives [antworten] only.
   final List<List<String>> stichwoerter;
-  const KurzantwortItem(this.frage, this.stichwoerter, super.punkte);
+
+  /// Variant strings of the model answer; empty when the item gives
+  /// [stichwoerter] only.
+  final List<String> antworten;
+  const KurzantwortItem(
+    this.frage,
+    this.stichwoerter,
+    this.antworten,
+    super.punkte,
+    super.quelle,
+  );
 }
 
 final class WissenMcItem extends TaskItem {
@@ -254,57 +292,170 @@ final class WissenMcItem extends TaskItem {
     this.richtig,
     this.teilsatz,
     super.punkte,
+    super.quelle,
   );
+}
+
+/// One gap of a `gap_fill` task: [antworten] are variant strings.
+final class LueckeItem extends TaskItem {
+  final List<String> antworten;
+
+  /// The sentence with `___` at the gap; null when the task text holds the
+  /// gaps as `{{n}}` markers.
+  final String? satz;
+  const LueckeItem(this.antworten, this.satz, super.punkte, super.quelle);
+}
+
+/// The audio script of a task: [lines] are (speaker, text) pairs, [voices]
+/// names a voice per speaker.
+final class Listening {
+  final int repeat;
+  final Map<String, String> voices;
+  final List<(String, String)> lines;
+  const Listening(this.repeat, this.voices, this.lines);
 }
 
 sealed class ExamTask {
   final String id;
   final String titel;
   final int punkte;
-  final String frage;
+  const ExamTask(this.id, this.titel, this.punkte);
+}
 
-  /// Lines of the PDF solution.
-  final List<String> loesung;
-  const ExamTask(this.id, this.titel, this.punkte, this.frage, this.loesung);
+/// A task with a prompt, an optional Markdown [text] above its items and an
+/// optional [listening] script.
+sealed class PromptTask extends ExamTask {
+  final String frage;
+  final String? text;
+  final Listening? listening;
+
+  /// Lines of the PDF solution; null when the pack gives none.
+  final List<String>? loesung;
+  const PromptTask(
+    super.id,
+    super.titel,
+    super.punkte,
+    this.frage,
+    this.text,
+    this.listening,
+    this.loesung,
+  );
 }
 
 /// A task of [art] whose items are all of the item class of [art].
-final class ItemTask extends ExamTask {
+final class ItemTask extends PromptTask {
   final ItemArt art;
   final List<TaskItem> items;
+
+  /// Of a `vocab` task, one of [_vocabDirections]; null on every other task.
+  final String? richtung;
+
+  /// The words offered to a `gap_fill` task; null when it has no word box.
+  final List<String>? wortkasten;
   const ItemTask(
     super.id,
     super.titel,
     super.punkte,
     super.frage,
+    super.text,
+    super.listening,
     super.loesung,
     this.art,
     this.items,
+    this.richtung,
+    this.wortkasten,
   );
 }
 
 /// [elemente] in the right order.
-final class OrdnenTask extends ExamTask {
+final class OrdnenTask extends PromptTask {
   final List<String> elemente;
   const OrdnenTask(
     super.id,
     super.titel,
     super.punkte,
     super.frage,
+    super.text,
+    super.listening,
     super.loesung,
     this.elemente,
   );
 }
 
 /// A task the student checks against [loesung] alone.
-final class FreiTask extends ExamTask {
+final class FreiTask extends PromptTask {
   const FreiTask(
     super.id,
     super.titel,
     super.punkte,
     super.frage,
+    super.text,
+    super.listening,
     super.loesung,
   );
+}
+
+/// One line of a `writing` rubric.
+final class Kriterium {
+  final String kriterium;
+  final int punkte;
+  const Kriterium(this.kriterium, this.punkte);
+}
+
+/// A free text the learner writes and marks against [rubrik].
+final class SchreibenTask extends ExamTask {
+  final String situation;
+
+  /// A string or a list of strings, as the pack wrote it.
+  final Object anforderungen;
+  final int minWoerter;
+  final int maxWoerter;
+  final List<Kriterium> rubrik;
+
+  /// A string or a list of strings, as the pack wrote it.
+  final Object musterantwort;
+  const SchreibenTask(
+    super.id,
+    super.titel,
+    super.punkte,
+    this.situation,
+    this.anforderungen,
+    this.minWoerter,
+    this.maxWoerter,
+    this.rubrik,
+    this.musterantwort,
+  );
+}
+
+/// The header fields of a Latin pack: the lesson block, the focus, and the
+/// translation text with its annotation.
+final class LatinPart {
+  final int von;
+  final int bis;
+  final List<String> schwerpunkte;
+  final String schwerpunkt;
+  final String thema;
+  final int punkteUebersetzung;
+  final List<Hilfe> hilfen;
+  final List<ExamSentence> saetze;
+  const LatinPart({
+    required this.von,
+    required this.bis,
+    required this.schwerpunkte,
+    required this.schwerpunkt,
+    required this.thema,
+    required this.punkteUebersetzung,
+    required this.hilfen,
+    required this.saetze,
+  });
+}
+
+/// What an exam covers; the app keeps the values as the pack wrote them.
+final class ExamScope {
+  final Object book;
+  final Object pages;
+  final Object grammar;
+  const ExamScope(this.book, this.pages, this.grammar);
 }
 
 final class Exam {
@@ -312,35 +463,32 @@ final class Exam {
 
   /// The id of the course the pack belongs to; null: the first course.
   final String? kurs;
+
+  /// The id of the language of the pack; null when the pack names none.
+  final String? sprache;
   final String titel;
-  final int von;
-  final int bis;
-  final List<String> schwerpunkte;
-  final String schwerpunkt;
-  final String thema;
+  final ExamScope? umfang;
   final int zeitMin;
-  final int punkteUebersetzung;
   final int punkteGesamt;
-  final List<Hilfe> hilfen;
-  final List<ExamSentence> saetze;
+
+  /// Null in a pack without translation text.
+  final LatinPart? latin;
   final List<ExamTask> aufgaben;
 
   const Exam({
     required this.id,
     this.kurs,
+    this.sprache,
     required this.titel,
-    required this.von,
-    required this.bis,
-    required this.schwerpunkte,
-    required this.schwerpunkt,
-    required this.thema,
+    this.umfang,
     required this.zeitMin,
-    required this.punkteUebersetzung,
     required this.punkteGesamt,
-    required this.hilfen,
-    required this.saetze,
+    this.latin,
     required this.aufgaben,
   });
+
+  List<ExamSentence> get saetze => latin?.saetze ?? const [];
+  List<Hilfe> get hilfen => latin?.hilfen ?? const [];
 }
 
 /// Parses a `.exam` pack and checks every rule of EXAM_SCHEMA.md with the
@@ -401,26 +549,32 @@ Map<String, Object> examToYaml(Exam e) => {
   'schema': 2,
   'id': e.id,
   if (e.kurs != null) 'course': e.kurs!,
+  if (e.sprache != null) 'language': e.sprache!,
   'title': e.titel,
-  'lessons': {'from': e.von, 'to': e.bis},
-  'topics': e.schwerpunkte,
-  'focus': e.schwerpunkt,
-  'theme': e.thema,
-  'time_min': e.zeitMin,
-  'points_translation': e.punkteUebersetzung,
-  'points_total': e.punkteGesamt,
-  'translation': {
-    'glosses': [
-      for (final h in e.hilfen)
-        {
-          'lemma': h.lemma,
-          'grammar': h.angabe,
-          'meaning': h.de,
-          'tokens': h.tokens,
-        },
-    ],
-    'sentences': [for (final s in e.saetze) _sentenceToYaml(s)],
+  if (e.umfang case final u?)
+    'scope': {'book': u.book, 'pages': u.pages, 'grammar': u.grammar},
+  if (e.latin case final l?) ...{
+    'lessons': {'from': l.von, 'to': l.bis},
+    'topics': l.schwerpunkte,
+    'focus': l.schwerpunkt,
+    'theme': l.thema,
   },
+  'time_min': e.zeitMin,
+  if (e.latin case final l?) 'points_translation': l.punkteUebersetzung,
+  'points_total': e.punkteGesamt,
+  if (e.latin case final l?)
+    'translation': {
+      'glosses': [
+        for (final h in l.hilfen)
+          {
+            'lemma': h.lemma,
+            'grammar': h.angabe,
+            'meaning': h.de,
+            'tokens': h.tokens,
+          },
+      ],
+      'sentences': [for (final s in l.saetze) _sentenceToYaml(s)],
+    },
   'tasks': [for (final t in e.aufgaben) _taskToYaml(t)],
 };
 
@@ -466,12 +620,37 @@ Map<String, Object> _taskToYaml(ExamTask t) => {
     ItemTask() => _itemTypeOf(t.art),
     OrdnenTask() => 'order',
     FreiTask() => 'free',
+    SchreibenTask() => 'writing',
   },
-  if (t is ItemTask && t.art == ItemArt.vokabel) 'direction': _vocabDirection,
-  'prompt': t.frage,
-  if (t is ItemTask) 'items': [for (final i in t.items) _itemToYaml(i)],
-  if (t is OrdnenTask) 'elements': t.elemente,
-  'solution': t.loesung,
+  ...switch (t) {
+    PromptTask() => {
+      if (t is ItemTask) 'direction': ?t.richtung,
+      if (t is ItemTask) 'word_box': ?t.wortkasten,
+      'prompt': t.frage,
+      'text': ?t.text,
+      if (t.listening case final l?)
+        'listening': {
+          'repeat': l.repeat,
+          'voices': l.voices,
+          'lines': [
+            for (final (speaker, text) in l.lines) [speaker, text],
+          ],
+        },
+      if (t is ItemTask) 'items': [for (final i in t.items) _itemToYaml(i)],
+      if (t is OrdnenTask) 'elements': t.elemente,
+      'solution': ?t.loesung,
+    },
+    SchreibenTask() => {
+      'situation': t.situation,
+      'requirements': t.anforderungen,
+      'words': {'min': t.minWoerter, 'max': t.maxWoerter},
+      'rubric': [
+        for (final k in t.rubrik)
+          {'criterion': k.kriterium, 'points': k.punkte},
+      ],
+      'model_answer': t.musterantwort,
+    },
+  },
 };
 
 String _itemTypeOf(ItemArt art) =>
@@ -485,15 +664,21 @@ Map<String, Object> _itemToYaml(TaskItem i) => {
     UmformenItem() => {'given': i.vorgabe, 'target': i.ziel},
     VokabelItem() => {'prompt': i.la, 'answer': i.de},
     AbleitungItem() => {'loanword': i.fremdwort, 'source': i.la},
-    KurzantwortItem() => {'prompt': i.frage, 'keywords': i.stichwoerter},
+    KurzantwortItem() => {
+      'prompt': i.frage,
+      if (i.antworten.isNotEmpty) 'answer': i.antworten,
+      if (i.stichwoerter.isNotEmpty) 'keywords': i.stichwoerter,
+    },
     WissenMcItem() => {
       'prompt': i.frage,
       'clause': ?i.teilsatz,
       'options': i.optionen,
       'correct': i.richtig,
     },
+    LueckeItem() => {'sentence': ?i.satz, 'answer': i.antworten},
   },
   'points': i.punkte,
+  'source': ?i.quelle,
 };
 
 /// The readings of a variant string: `(a | b)` is a choice, `[x]` is
@@ -575,6 +760,9 @@ final class _Map {
 
   bool has(String key) => _map.containsKey(key);
 
+  /// Whether [key] has a value; a field without one counts as absent.
+  bool present(String key) => _map[key] != null;
+
   T req<T>(String key) {
     if (!_map.containsKey(key)) {
       throw ExamError(ExamRule.field, path, '"$key" is missing');
@@ -646,6 +834,15 @@ T _cast<T>(Object? value, String path) {
   return value;
 }
 
+const _latinKeys = [
+  'lessons',
+  'topics',
+  'focus',
+  'theme',
+  'points_translation',
+  'translation',
+];
+
 Exam _exam(_Map m) {
   if (m.req<Object>('schema') != 2) {
     throw ExamError(
@@ -654,6 +851,56 @@ Exam _exam(_Map m) {
       'schema is not 1 or 2',
     );
   }
+  final sprache = m.opt<String>('language');
+  final kurs = m.opt<String>('course');
+  if (sprache != null && kurs == null) {
+    throw ExamError(
+      ExamRule.field,
+      '${m.path}.language',
+      '"language" needs "course"',
+    );
+  }
+  if (sprache != null && sprache != m.language.id) {
+    throw ExamError(
+      ExamRule.field,
+      '${m.path}.language',
+      '"$sprache" is not the language "${m.language.id}" of the course',
+    );
+  }
+  final absent = [
+    for (final key in _latinKeys)
+      if (!m.present(key)) key,
+  ];
+  if (absent.isNotEmpty && absent.length < _latinKeys.length) {
+    throw ExamError(
+      ExamRule.latinGroup,
+      m.path,
+      '${_latinKeys.join(', ')} come together; missing: ${absent.join(', ')}',
+    );
+  }
+  for (final key in absent) {
+    m.opt<Object>(key);
+  }
+  return Exam(
+    id: m.req('id'),
+    kurs: kurs,
+    sprache: sprache,
+    titel: m.req('title'),
+    umfang: m.opt<Map>('scope') == null ? null : m.map('scope', _scope),
+    zeitMin: m.req('time_min'),
+    latin: absent.isEmpty ? _latin(m) : null,
+    punkteGesamt: m.req('points_total'),
+    aufgaben: m.maps(
+      'tasks',
+      (t) => _task(t, solutionRequired: absent.isEmpty),
+    ),
+  );
+}
+
+ExamScope _scope(_Map m) =>
+    ExamScope(m.req('book'), m.req('pages'), m.req('grammar'));
+
+LatinPart _latin(_Map m) {
   final (von, bis) = m.map(
     'lessons',
     (l) => (l.req<int>('from'), l.req<int>('to')),
@@ -662,21 +909,15 @@ Exam _exam(_Map m) {
     'translation',
     (u) => (u.maps('glosses', _hilfe), u.maps('sentences', _sentence)),
   );
-  return Exam(
-    id: m.req('id'),
-    kurs: m.opt('course'),
-    titel: m.req('title'),
+  return LatinPart(
     von: von,
     bis: bis,
     schwerpunkte: m.list('topics'),
     schwerpunkt: m.req('focus'),
     thema: m.req('theme'),
-    zeitMin: m.req('time_min'),
     punkteUebersetzung: m.req('points_translation'),
-    punkteGesamt: m.req('points_total'),
     hilfen: hilfen,
     saetze: saetze,
-    aufgaben: m.maps('tasks', _task),
   );
 }
 
@@ -744,70 +985,163 @@ Clause _clause(_Map m) => Clause(
   ),
 );
 
-ExamTask _task(_Map m) {
+/// A pack with a Latin translation part, as every schema 1 pack is, lists the
+/// PDF solution of each task; the other packs may leave it to the items.
+ExamTask _task(_Map m, {required bool solutionRequired}) {
   final String id = m.req('id');
   final String titel = m.req('title');
   final int punkte = m.req('points');
-  final String frage = m.req('prompt');
-  final List<String> loesung = m.list('solution');
   final String type = m.req('type');
+  if (type == 'writing') return _writing(m, id, titel, punkte);
+  final String frage = m.req('prompt');
+  final String? text = m.opt('text');
+  final listening = m.opt<Map>('listening') == null
+      ? null
+      : m.map('listening', _listening);
+  final loesung = solutionRequired || m.opt<List>('solution') != null
+      ? m.list<String>('solution')
+      : null;
   if (type == 'order') {
-    return OrdnenTask(id, titel, punkte, frage, loesung, m.list('elements'));
+    return OrdnenTask(
+      id,
+      titel,
+      punkte,
+      frage,
+      text,
+      listening,
+      loesung,
+      m.list('elements'),
+    );
   }
-  if (type == 'free') return FreiTask(id, titel, punkte, frage, loesung);
+  if (type == 'free') {
+    return FreiTask(id, titel, punkte, frage, text, listening, loesung);
+  }
   final itemArt =
       _itemTypes[type] ??
       (throw ExamError(
         ExamRule.code,
         '${m.path}.type',
-        '$type is not one of ${[..._itemTypes.keys, 'order', 'free']}',
+        '$type is not one of ${[..._itemTypes.keys, ..._promptTypes, 'writing']}',
       ));
-  if (itemArt == ItemArt.vokabel) m.code('direction', const [_vocabDirection]);
+  final richtung = itemArt == ItemArt.vokabel
+      ? m.optCode('direction', _vocabDirections) as String?
+      : null;
+  final wortkasten =
+      itemArt == ItemArt.luecke && m.opt<List>('word_box') != null
+      ? m.list<String>('word_box')
+      : null;
   final items = m.maps('items', (i) => _item(i, itemArt));
   if (items.isEmpty) {
     throw ExamError(ExamRule.empty, '${m.path}.items', 'the list is empty');
   }
-  return ItemTask(id, titel, punkte, frage, loesung, itemArt, items);
+  return ItemTask(
+    id,
+    titel,
+    punkte,
+    frage,
+    text,
+    listening,
+    loesung,
+    itemArt,
+    items,
+    richtung,
+    wortkasten,
+  );
 }
+
+Listening _listening(_Map m) => Listening(
+  m.req('repeat'),
+  {
+    for (final MapEntry(:key, :value) in m.req<Map>('voices').entries)
+      _cast<String>(key, '${m.path}.voices'): _cast<String>(
+        value,
+        '${m.path}.voices.$key',
+      ),
+  },
+  [
+    for (final (i, line) in m.list<List>('lines').indexed)
+      if (line.length == 2)
+        (
+          _cast<String>(line[0], '${m.path}.lines[$i][0]'),
+          _cast<String>(line[1], '${m.path}.lines[$i][1]'),
+        )
+      else
+        throw ExamError(
+          ExamRule.type,
+          '${m.path}.lines[$i]',
+          'not a [speaker, text] pair',
+        ),
+  ],
+);
+
+SchreibenTask _writing(_Map m, String id, String titel, int punkte) {
+  final (min, max) = m.map(
+    'words',
+    (w) => (w.req<int>('min'), w.req<int>('max')),
+  );
+  return SchreibenTask(
+    id,
+    titel,
+    punkte,
+    m.req('situation'),
+    _stringOrLines(m, 'requirements'),
+    min,
+    max,
+    m.maps('rubric', (k) => Kriterium(k.req('criterion'), k.req('points'))),
+    _stringOrLines(m, 'model_answer'),
+  );
+}
+
+Object _stringOrLines(_Map m, String key) =>
+    m.req<Object>(key) is List ? m.list<String>(key) : m.req<String>(key);
 
 TaskItem _item(_Map m, ItemArt art) {
   final int punkte = m.req('points');
+  final String? quelle = art == ItemArt.ableitung ? null : m.opt('source');
   return switch (art) {
     ItemArt.bestimmen => BestimmenItem(
       m.req('token'),
       m.list('features'),
       punkte,
+      quelle,
     ),
     ItemArt.stammformen => StammformenItem(
       m.req('lemma'),
       _stammformen(m),
       punkte,
+      quelle,
     ),
     ItemArt.bilden => BildenItem(
       m.req('lemma'),
       m.map('features', _features),
       m.req('form'),
       punkte,
+      quelle,
     ),
     ItemArt.umformen => UmformenItem(
       m.req('given'),
       m.nonEmpty('target'),
       punkte,
+      quelle,
     ),
     ItemArt.vokabel => VokabelItem(
       m.req('prompt'),
       m.nonEmpty('answer'),
       punkte,
+      quelle,
     ),
     ItemArt.ableitung => AbleitungItem(
       m.req('loanword'),
       m.req('source'),
       punkte,
+      quelle,
     ),
     ItemArt.kurzantwort => KurzantwortItem(
       m.req('prompt'),
-      _stichwoerter(m),
+      m.opt<List>('keywords') == null ? const [] : _stichwoerter(m),
+      m.opt<List>('answer') == null ? const [] : m.nonEmpty('answer'),
       punkte,
+      quelle,
     ),
     ItemArt.wissenMc => WissenMcItem(
       m.req('prompt'),
@@ -815,6 +1149,13 @@ TaskItem _item(_Map m, ItemArt art) {
       m.req('correct'),
       m.opt('clause'),
       punkte,
+      quelle,
+    ),
+    ItemArt.luecke => LueckeItem(
+      m.nonEmpty('answer'),
+      m.opt('sentence'),
+      punkte,
+      quelle,
     ),
   };
 }
@@ -841,22 +1182,27 @@ List<List<String>> _stichwoerter(_Map m) => [
 final _sentenceId = RegExp(r'^s\d+$');
 final _taskId = RegExp(r'^[a-z]\d+$');
 
+/// A gap marker of a task `text`: `{{n}}`.
+final gapMarker = RegExp(r'\{\{(\d+)\}\}');
+
 final _space = RegExp(r'\s');
 const _sentenceEnds = {'.', '?', '!'};
 final _word = RegExp(r'\S+');
 
 final class _Checker {
   final Exam exam;
-  final ExamRules rules;
-  final String wordClass;
+  final Language language;
+
+  /// A language without token analysis throws on first use: only a pack with
+  /// sentences needs them.
+  late final ExamRules rules = language.rules;
+  late final String wordClass = language.wordClass;
   final errors = <ExamError>[];
   final tokens = <String, ExamToken>{};
   final clauseOf = <String, Clause>{};
   final clauses = <String, Clause>{};
 
-  _Checker(this.exam, Language language)
-    : rules = language.rules,
-      wordClass = language.wordClass {
+  _Checker(this.exam, this.language) {
     for (final s in exam.saetze) {
       for (final t in s.tokens) {
         tokens[t.id] = t;
@@ -898,7 +1244,7 @@ final class _Checker {
     for (final (i, s) in exam.saetze.indexed) {
       sentence(s, 'exam.translation.sentences[$i]');
     }
-    var total = exam.punkteUebersetzung;
+    var total = exam.latin?.punkteUebersetzung ?? 0;
     for (final (i, t) in exam.aufgaben.indexed) {
       total += t.punkte;
       task(t, 'exam.tasks[$i]');
@@ -1209,6 +1555,67 @@ final class _Checker {
         for (final (j, i) in items.indexed) {
           item(i, '$path.items[$j]');
         }
+        if (t.art == ItemArt.luecke) gaps(t, path);
+      case SchreibenTask():
+        if (t.minWoerter > t.maxWoerter) {
+          error(
+            ExamRule.writingWords,
+            '$path.words',
+            'min ${t.minWoerter} is above max ${t.maxWoerter}',
+          );
+        }
+        final sum = t.rubrik.fold(0, (s, k) => s + k.punkte);
+        if (sum != t.punkte) {
+          error(
+            ExamRule.writingRubric,
+            '$path.rubric',
+            'the criteria sum to $sum, not ${t.punkte}',
+          );
+        }
+    }
+  }
+
+  /// The gaps of a `gap_fill` task are either the `{{n}}` markers of its
+  /// text or the `___` of each item's sentence, never both.
+  void gaps(ItemTask t, String path) {
+    final markers = [
+      for (final m in gapMarker.allMatches(t.text ?? '')) int.parse(m[1]!),
+    ];
+    final items = t.items.cast<LueckeItem>();
+    final marked = markers.isNotEmpty;
+    for (final (j, i) in items.indexed) {
+      final sentence = i.satz;
+      if (marked && sentence != null) {
+        error(
+          ExamRule.gapStyle,
+          '$path.items[$j].sentence',
+          'the text has {{n}} markers, so an item has no sentence',
+        );
+      } else if (!marked && (sentence == null || !sentence.contains('___'))) {
+        error(
+          ExamRule.gapStyle,
+          '$path.items[$j].sentence',
+          'without {{n}} markers in the text, an item has a sentence with ___',
+        );
+      }
+    }
+    if (!marked) return;
+    for (final (k, n) in markers.indexed) {
+      if (n != k + 1) {
+        error(
+          ExamRule.gapMarkerOrder,
+          '$path.text',
+          'marker ${k + 1} reads {{$n}}',
+        );
+        break;
+      }
+    }
+    if (markers.length != items.length) {
+      error(
+        ExamRule.gapMarkerCount,
+        '$path.items',
+        '${markers.length} markers, ${items.length} items',
+      );
     }
   }
 
@@ -1271,7 +1678,18 @@ final class _Checker {
             'a compound passive is two words',
           );
         }
-      case StammformenItem() || AbleitungItem() || KurzantwortItem():
+      case KurzantwortItem(:final antworten, :final stichwoerter):
+        if (antworten.isEmpty && stichwoerter.isEmpty) {
+          error(ExamRule.field, path, '"answer" or "keywords" is missing');
+        }
+        for (final (j, v) in antworten.indexed) {
+          variant(v, '$path.answer[$j]');
+        }
+      case LueckeItem(:final antworten):
+        for (final (j, v) in antworten.indexed) {
+          variant(v, '$path.answer[$j]');
+        }
+      case StammformenItem() || AbleitungItem():
         break;
     }
   }

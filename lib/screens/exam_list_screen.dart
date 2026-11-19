@@ -126,7 +126,7 @@ class _ExamListScreenState extends ConsumerState<ExamListScreen> {
               ListTile(
                 key: Key('exam.list.${exam.id}'),
                 title: Text(exam.titel),
-                subtitle: Text(exam.thema),
+                subtitle: exam.latin == null ? null : Text(exam.latin!.thema),
                 onTap: () => Navigator.of(context).push(
                   MaterialPageRoute(builder: (_) => ExamScreen(exam: exam)),
                 ),

@@ -114,6 +114,7 @@ typedef ExamWord = ({
 Future<Map<String, ExamWord>> examWords(Ref ref) async {
   final language = await ref.watch(dataLanguageProvider.future);
   final words = <String, ExamWord>{};
+  if ((await ref.watch(courseProvider.future)).dataFiles.isEmpty) return words;
   for (final item in await loadAllPracticeItems(language: language)) {
     final known = words[item.wordKey];
     words[item.wordKey] = (
@@ -161,8 +162,9 @@ Map<String, PracticeItemCard> queueHelpedWords(
 /// lemmas have a word card. A lemma the app does not list is not queued.
 Future<int> queueHelpedLemmas(WidgetRef ref, Set<String> lemmas) async {
   final words = await ref.read(examWordsProvider.future);
-  final cards = await ref.read(fsrsCardsProvider.future);
   final known = lemmas.where(words.containsKey);
+  if (known.isEmpty) return 0;
+  final cards = await ref.read(fsrsCardsProvider.future);
   final ids = {for (final lemma in known) ...words[lemma]!.cardIds};
   await FsrsStorage.saveCards(queueHelpedWords(cards, ids, DateTime.now()));
   ref.invalidate(fsrsCardsProvider);

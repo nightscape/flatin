@@ -107,7 +107,7 @@ void main() {
     }
     final wanted = [
       ...ExamGen.reachKeys,
-      for (final a in ItemArt.values) 'task ${a.schema1Code}',
+      for (final a in schema1Arts) 'task ${a.schema1Code}',
       'task ordnen',
       'task frei',
       for (final a in latinLang.clauseArt) 'clause $a',
@@ -137,7 +137,7 @@ void main() {
 
   test('P2: each broken rule is refused with its rule id and path', () {
     final reached = <ExamRule, int>{};
-    for (final rule in ExamRule.values) {
+    for (final rule in latinRules) {
       var seed = 0;
       for (final (name, yaml, _) in cases) {
         final broken = _broken(rule, yaml, Random(seed++));
@@ -158,7 +158,7 @@ void main() {
       }
     }
     expect([
-      for (final rule in ExamRule.values)
+      for (final rule in latinRules)
         if (!reached.containsKey(rule)) rule.id,
     ], isEmpty);
   });

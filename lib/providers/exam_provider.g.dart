@@ -238,7 +238,7 @@ final class ExamWordsProvider
   }
 }
 
-String _$examWordsHash() => r'aef2401af7bf5d77b638f057d8e034e0e19cf34c';
+String _$examWordsHash() => r'535aee43234e73d7bbf63c96941f77c95ac9d238';
 
 /// Where the course teaches its words.
 

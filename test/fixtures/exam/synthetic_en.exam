@@ -1,0 +1,114 @@
+schema: 2
+id: synthetic-en
+course: englisch
+language: en
+title: Practice pack - A day out
+scope:
+  book: Synthetic Book
+  pages: 10-12
+  grammar: [past simple, present continuous]
+time_min: 30
+points_total: 21
+tasks:
+- id: a1
+  title: Words
+  points: 2
+  type: vocab
+  direction: de-en
+  prompt: Translate into English.
+  text: |-
+    Translate the **German** words.
+
+    Use the *simple* form.
+  items:
+  - {prompt: Haus, answer: [house], points: 1, source: S12}
+  - {prompt: laufen, answer: ['(run | jog)'], points: 1}
+- id: b1
+  title: Holiday
+  points: 3
+  type: gap_fill
+  prompt: Fill in the gaps.
+  text: |-
+    Last *summer* we {{1}} to the coast.
+
+    The weather {{2}} warm and we {{3}} swimming.
+  word_box: [went, was, go, were]
+  items:
+  - {answer: [went], points: 1, source: S20}
+  - {answer: ['(was | were)'], points: 1}
+  - {answer: [went], points: 1}
+- id: c1
+  title: Sentences
+  points: 2
+  type: gap_fill
+  prompt: Complete each sentence.
+  items:
+  - {sentence: She ___ her keys yesterday., answer: [lost], points: 1}
+  - {sentence: They ___ at home., answer: [are, "'re"], points: 1}
+- id: d1
+  title: Questions
+  points: 2
+  type: short_answer
+  prompt: Answer in a full sentence.
+  items:
+  - prompt: What is the weather like?
+    keywords: [[sun, sunny], [warm, hot]]
+    answer: [It is sunny and warm.]
+    points: 2
+  - prompt: Where are you?
+    answer: [I am at home.]
+    points: 0
+- id: e1
+  title: Change the sentence
+  points: 2
+  type: transform
+  prompt: Use the present continuous.
+  items:
+  - {given: She sings., target: [She is singing.], points: 2}
+- id: f1
+  title: Listening
+  points: 1
+  type: multiple_choice
+  prompt: Listen and choose.
+  listening:
+    repeat: 2
+    voices: {A: Amy, B: Ben}
+    lines:
+    - [A, Hello Ben.]
+    - [B, Hi Amy.]
+  solution: [b]
+  items:
+  - prompt: Who speaks first?
+    options: [Ben, Amy]
+    correct: Amy
+    points: 1
+- id: g1
+  title: Order
+  points: 2
+  type: order
+  prompt: Put the words in order.
+  elements: [We, went, home]
+  solution: [We went home]
+- id: h1
+  title: Free
+  points: 1
+  type: free
+  prompt: Say what you like.
+  text: Any answer that fits is right.
+  solution: [Any sensible answer.]
+- id: w1
+  title: Letter
+  points: 6
+  type: writing
+  situation: You write to a friend about your day out.
+  requirements:
+  - Say where you went.
+  - Say what you did.
+  words: {min: 40, max: 80}
+  rubric:
+  - {criterion: Content, points: 3}
+  - {criterion: Language, points: 2}
+  - {criterion: Form, points: 1}
+  model_answer:
+  - Dear Sam,
+  - we went to the coast.
